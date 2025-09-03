@@ -107,6 +107,11 @@
             padding: 5px 0;
         }
         
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
         @keyframes scroll-text {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -378,6 +383,17 @@
             </div>
             
             <h1>🛍️ ANDU-XARA</h1>
+            <a href="quiz.html" style="
+                display: inline-block;
+                background: #FFD700;
+                color: #000;
+                padding: 10px 20px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-weight: bold;
+                margin: 10px 0;
+                animation: pulse 2s infinite;
+            ">🎯 Joue et Gagne 20%</a>
             <p>Collection Exclusive - Catalogue Officiel</p>
             
 <!-- Nouvelle section innovation -->
