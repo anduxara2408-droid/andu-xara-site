@@ -204,7 +204,7 @@
         <!-- ÉTAPE 1 : QUIZ CULTUREL -->
         <div class="quiz-header">
             <h1>🎯 QUIZ CULTUREL ANDU-XARA</h1>
-            <p>Découvrez la richesse des langues africaines</p>
+            <p>Découvrez la richesse des cultures ouest-africaines</p>
         </div>
         
         <div id="step1" class="quiz-step">
@@ -216,9 +216,10 @@
                 <div class="option" onclick="selectAnswer(1, 'force')">La force du guerrier</div>
                 <div class="option" onclick="selectAnswer(1, 'beaute')">La beauté éternelle</div>
                 <div class="option" onclick="selectAnswer(1, 'sagesse')">La sagesse ancestrale</div>
-                <div class="option" onclick="selectAnswer(1, 'culture')">Le patrimoine culturel</div>
+                <div class="option" onclick="selectAnswer(1, 'patrimoine')">Le patrimoine culturel</div>
+                <div class="option" onclick="selectAnswer(1, 'connaissance')">La connaissance de soi</div>
             </div>
-            <p class="cultural-note">Le Soninké est une langue ouest-africaine parlée en Mauritanie, Mali, Sénégal</p>
+            <p class="cultural-note">Le Soninké est une langue mandée parlée en Mauritanie, Mali, Sénégal, Gambie</p>
         </div>
         
         <div id="step2" class="quiz-step hidden">
@@ -231,22 +232,24 @@
                 <div class="option" onclick="selectAnswer(2, 'tradition')">La tradition pure</div>
                 <div class="option" onclick="selectAnswer(2, 'modernite')">La modernité africaine</div>
                 <div class="option" onclick="selectAnswer(2, 'harmonie')">L'harmonie identitaire</div>
+                <div class="option" onclick="selectAnswer(2, 'unite')">L'unité culturelle</div>
             </div>
-            <p class="cultural-note">Xara symbolise l'équilibre entre tradition et modernité</p>
+            <p class="cultural-note">Xara symbolise l'équilibre entre héritage et innovation</p>
         </div>
         
         <div id="step3" class="quiz-step hidden">
-            <h2>📝 Question 3/4 - Inspiration</h2>
+            <h2>📝 Question 3/4 - Inspiration Culturelle</h2>
             <div class="question">
-                <h3>Quelle culture influence principalement les motifs Andu-Xara ?</h3>
+                <h3>Quelles cultures influencent principalement les motifs Andu-Xara ?</h3>
             </div>
             <div class="options">
-                <div class="option" onclick="selectAnswer(3, 'arabe')">La culture arabo-andalouse</div>
-                <div class="option" onclick="selectAnswer(3, 'peule')">La culture peule et toucouleur</div>
-                <div class="option" onclick="selectAnswer(3, 'wolof')">La culture wolof et soninké</div>
-                <div class="option" onclick="selectAnswer(3, 'mandingue')">La culture mandingue</div>
+                <div class="option" onclick="selectAnswer(3, 'arabe')">La culture arabo-andalouse uniquement</div>
+                <div class="option" onclick="selectAnswer(3, 'peule')">La culture peule et toucouleur uniquement</div>
+                <div class="option" onclick="selectAnswer(3, 'multiculturelle')">Un mélange wolof, halpulaar, soninké, hassanya et arabe</div>
+                <div class="option" onclick="selectAnswer(3, 'mandingue')">La culture mandingue exclusivement</div>
+                <div class="option" onclick="selectAnswer(3, 'occidentale')">Les tendances occidentales modernes</div>
             </div>
-            <p class="cultural-note">Inspiration transsaharienne et multi-ethnique</p>
+            <p class="cultural-note">Inspiration transsaharienne et multi-ethnique de la Mauritanie et du Sénégal</p>
         </div>
         
         <div id="step4" class="quiz-step hidden">
@@ -259,8 +262,9 @@
                 <div class="option" onclick="selectAnswer(4, 'andu-hoorema')">Andu-Hoorema</div>
                 <div class="option" onclick="selectAnswer(4, 'arav-raassak')">Arav-Raassak</div>
                 <div class="option" onclick="selectAnswer(4, 'gandal-ngurndaam')">Gandal-Ngurndaam</div>
+                <div class="option" onclick="selectAnswer(4, 'ndimaagu')">Ndimaagu</div>
             </div>
-            <p class="cultural-note">Le Haalpulaar est la langue peule parlée en Mauritanie, Sénégal, Mali</p>
+            <p class="cultural-note">Le Haalpulaar (Pulaar) est la langue peule parlée en Mauritanie, Sénégal, Mali, Guinée</p>
         </div>
         
         <!-- ÉTAPE 2 : COORDONNÉES -->
@@ -347,10 +351,10 @@
     let sharesCount = 0;
     let contestNumber = '';
     const correctAnswers = {
-        1: 'sagesse',        // Andu-Xara en Soninké = La sagesse ancestrale
-        2: 'harmonie',       // Xara = L'harmonie identitaire
-        3: 'peule',          // Inspiration principale = Culture peule et toucouleur
-        4: 'andu-hoorema'    // Andu-Xara en Haalpulaar = Andu-Hoorema
+        1: 'connaissance',        // Andu-Xara en Soninké = La connaissance de soi
+        2: 'harmonie',           // Xara = L'harmonie identitaire
+        3: 'multiculturelle',    // Inspiration = Mélange wolof, halpulaar, soninké, hassanya, arabe
+        4: 'andu-hoorema'        // Andu-Xara en Haalpulaar = Andu-Hoorema
     };
     
     function selectAnswer(questionNumber, answer) {
@@ -403,7 +407,7 @@
         
         switch(platform) {
             case 'whatsapp':
-                shareText = `🎯 QUIZ CULTUREL ANDU-XARA ! 🛍️\n\nJe découvre les significations profondes :\n• Andu-Xara en Soninké : Sagesse ancestrale\n• En Haalpulaar : Andu-Hoorema\n• Philosophie d'harmonie identitaire\n\nTestez votre culture : ${shareUrl}\n\n#AnduXara #CultureAfricaine #Langues`;
+                shareText = `🎯 QUIZ CULTUREL ANDU-XARA ! 🛍️\n\nJe découvre les significations profondes :\n• Andu-Xara en Soninké : Connaissance de soi\n• En Haalpulaar : Andu-Hoorema\n• Inspiration multi-culturelle ouest-africaine\n\nTestez votre culture : ${shareUrl}\n\n#AnduXara #CultureAfricaine #Langues`;
                 window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
                 break;
             case 'facebook':
@@ -411,7 +415,7 @@
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
                 break;
             case 'instagram':
-                shareText = "🎯 Andu-Xara : Sagesse ancestrale en Soninké, Andu-Hoorema en Peul ✨\n\nJe découvre la richesse culturelle derrière cette marque 💫\n\n➡️ andu-xara.github.io\n\n@andu_xara #CultureAfricaine #AnduXara";
+                shareText = "🎯 Andu-Xara : Connaissance de soi en Soninké, Andu-Hoorema en Peul ✨\n\nJe découvre la richesse culturelle derrière cette marque 💫\n\n➡️ andu-xara.github.io\n\n@andu_xara #CultureAfricaine #AnduXara";
                 alert("📸 Copiez ce message pour votre story Instagram:\n\n" + shareText);
                 break;
             case 'tiktok':
@@ -464,7 +468,7 @@
     }
     
     function shareVictory() {
-        const shareText = `🎯 JE VIENS DE DÉCOUVRIR LES SECRETS LINGUISTIQUES D'ANDU-XARA ! 🛍️\n\n• Andu-Xara en Soninké = Sagesse ancestrale\n• En Haalpulaar = Andu-Hoorema\n\nNuméro de participation: ${contestNumber}\n\nTestez vos connaissances : https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html\n\n#AnduXara #CultureAfricaine #Langues`;
+        const shareText = `🎯 JE VIENS DE DÉCOUVRIR LES SECRETS LINGUISTIQUES D'ANDU-XARA ! 🛍️\n\n• Andu-Xara en Soninké = Connaissance de soi\n• En Haalpulaar = Andu-Hoorema\n• Inspiration multi-culturelle ouest-africaine\n\nNuméro de participation: ${contestNumber}\n\nTestez vos connaissances : https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html\n\n#AnduXara #CultureAfricaine #Langues`;
         window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
     }
     </script>
