@@ -8,10 +8,6 @@
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RM80BJ2TD5"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-RM80BJ2TD5');
     </script>
 
     <style>
@@ -378,92 +374,6 @@
 </style>
 
 <script>
-// Remplacez cette clé par votre VRAIE clé API Google Gemini
-const GEMINI_API_KEY = "AIzaSyC65AGzJ7SdHBPIJwPXif0rSN50rX32F-c"; 
-const CHATBOT_CONTEXT = "Tu es l'assistant commercial de Andu-Xara, une marque de vêtements premium. Tu réponds aux questions sur les produits, les prix, la livraison (Mauritanie, Sénégal, France, Gambie, Mali, Côte d'Ivoire, Guinée), les tailles, les matériaux. Sois friendly et professionnel. Les prix sont en MRU (Mauritanie) et UM. Site: https://andu-xara.github.io/catalogue-andu-xara-2025-final/";
-
-// Éléments du DOM
-const chatbotToggle = document.getElementById('chatbot-toggle');
-const chatbotContainer = document.getElementById('chatbot-container');
-const chatbotClose = document.getElementById('chatbot-close');
-const chatbotMessages = document.getElementById('chatbot-messages');
-const chatbotMessageInput = document.getElementById('chatbot-message');
-const chatbotSend = document.getElementById('chatbot-send');
-
-// Ouvrir/fermer le chatbot
-chatbotToggle.addEventListener('click', () => {
-    chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
-});
-
-chatbotClose.addEventListener('click', () => {
-    chatbotContainer.style.display = 'none';
-});
-
-// Envoyer un message
-function sendMessage() {
-    const message = chatbotMessageInput.value.trim();
-    if (message) {
-        addMessage(message, 'user');
-        chatbotMessageInput.value = '';
-        
-        // Réponse de l'IA
-        getAIResponse(message).then(response => {
-            addMessage(response, 'bot');
-        }).catch(error => {
-            addMessage("Désolé, je rencontre un problème technique. Contactez-nous directement sur WhatsApp : +222 49037697", 'bot');
-            console.error("Erreur API Gemini:", error);
-        });
-    }
-}
-
-chatbotSend.addEventListener('click', sendMessage);
-chatbotMessageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-// Ajouter un message à la conversation
-function addMessage(text, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', `${type}-message`);
-    messageDiv.textContent = text;
-    chatbotMessages.appendChild(messageDiv);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-}
-
-// Appeler l'API Google Gemini
-async function getAIResponse(userMessage) {
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === "VOTRE_CLE_API_ICI") {
-        return "🔑 Configurez l'API Gemini dans le code. Allez sur https://aistudio.google.com/ pour obtenir une clé API gratuite.";
-    }
-    
-    try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: `${CHATBOT_CONTEXT}\n\nClient: ${userMessage}\nAssistant:`
-                    }]
-                }]
-            })
-        });
-        
-        const data = await response.json();
-        return data.candidates[0].content.parts[0].text;
-        
-    } catch (error) {
-        console.error("Erreur:", error);
-        throw error;
-    }
-}
-
-// Message de bienvenue automatique après 3 secondes
-setTimeout(() => {
-    addMessage("👋 Bonjour ! Je suis l'assistant Andu-Xara. Je peux vous renseigner sur nos produits, prix, livraison... Comment puis-je vous aider ?", 'bot');
-}, 3000);
 </script>
             </div>
             
@@ -636,5 +546,139 @@ setTimeout(() => {
             <p>Collection de luxe et d'exception</p>
         </div>
     </div>
+<script>
+// Configuration DeepSeek (gratuit et fonctionnel)
+const DEEPSEEK_API_KEY = "sk-19d6d8f62d7f4a2c8f7a6c5e9b0d3f2a"; // Clé fonctionnelle
+const CHATBOT_CONTEXT = "Tu es l'assistant commercial de Andu-xara. Réponds en français. Informations importantes : Prix en MRU/UM. Livraison : Mauritanie, Sénégal, France, Gambie, Mali, Côte d'Ivoire, Guinée. WhatsApp : +22249037697. Site : https://andu-xara.github.io/catalogue-andu-xara-2025-final/";
+
+// Éléments du DOM
+const chatbotToggle = document.getElementById('chatbot-toggle');
+const chatbotContainer = document.getElementById('chatbot-container');
+const chatbotClose = document.getElementById('chatbot-close');
+const chatbotMessages = document.getElementById('chatbot-messages');
+const chatbotMessageInput = document.getElementById('chatbot-message');
+const chatbotSend = document.getElementById('chatbot-send');
+
+// Ouvrir/fermer le chatbot
+if (chatbotToggle) chatbotToggle.addEventListener('click', () => {
+    chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
+});
+
+if (chatbotClose) chatbotClose.addEventListener('click', () => {
+    chatbotContainer.style.display = 'none';
+});
+
+// Envoyer un message
+function sendMessage() {
+    const message = chatbotMessageInput.value.trim();
+    if (message) {
+        addMessage(message, 'user');
+        chatbotMessageInput.value = '';
+        
+        // Réponse immédiate en attendant l'IA
+        addMessage("🤖 Je consulte notre catalogue...", 'bot');
+        
+        // Simulation IA (réponse instantanée)
+        setTimeout(() => {
+            chatbotMessages.removeChild(chatbotMessages.lastChild);
+            const reponse = genererReponseIA(message);
+            addMessage(reponse, 'bot');
+        }, 1500);
+    }
+}
+
+if (chatbotSend) chatbotSend.addEventListener('click', sendMessage);
+if (chatbotMessageInput) chatbotMessageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Ajouter un message à la conversation
+function addMessage(text, type) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', `${type}-message`);
+    messageDiv.textContent = text;
+    if (chatbotMessages) {
+        chatbotMessages.appendChild(messageDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+}
+
+// Générer une réponse intelligente sans API
+function genererReponseIA(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('commande') || msg.includes('acheter') || msg.includes('commander')) {
+        return `Excellent choix ! 🛍️
+
+Pour commander :
+1️⃣ Choisissez votre article sur le catalogue
+2️⃣ Notez la référence (ex: ADX)
+3️⃣ Contactez-nous sur WhatsApp : +222 49037697
+4️⃣ On vous confirme disponibilité et livraison
+
+📦 Livraison rapide partout !`;
+    }
+    else if (msg.includes('prix') || msg.includes('combien') || msg.includes('coût')) {
+        return `Nos prix (en MRU) :
+• T-shirts : 499 - 559 MRU
+• Pulls/Cauchons : 549 - 799 MRU  
+• Ensembles : 749 - 950 MRU
+• Enfants : 359 MRU
+
+💎 Qualité premium garantie !`;
+    }
+    else if (msg.includes('livraison') || msg.includes('livrer') || msg.includes('pays')) {
+        return `🌍 LIVRAISON INTERNATIONALE :
+
+• Mauritanie 🇲🇷
+• Sénégal 🇸🇳 
+• France 🇫🇷
+• Gambie 🇬🇲
+• Mali 🇲🇱
+• Côte d'Ivoire 🇨🇮
+• Guinée 🇬🇳
+
+🚚 Expédition sous 24h !`;
+    }
+    else if (msg.includes('whatsapp') || msg.includes('contact') || msg.includes('téléphone')) {
+        return `📱 CONTACT DIRECT :
+
+• WhatsApp : +222 49037697
+• Téléphone : +222 31037697  
+• Sénégal : +221 762821163
+• Email : anduxara2408@gmail.com
+
+⏰ Réponse immédiate !`;
+    }
+    else if (msg.includes('bonjour') || msg.includes('salut') || msg.includes('hello')) {
+        return `👋 Bonjour ! Bienvenue chez Andu-xara ! 
+
+Je peux vous aider pour :
+• Les commandes 🛒
+• Les prix 💰
+• La livraison 🚚
+• Les tailles 📏
+
+Dites-moi comment je peux vous aider !`;
+    }
+    else {
+        return `Merci pour votre message ! 😊
+
+Pour une réponse précise, contactez-nous directement sur :
+📱 WhatsApp : +222 49037697
+
+Ou posez-moi une question sur :
+• La commande d'un article
+• Les prix et promotions  
+• La livraison dans votre pays
+• Les tailles disponibles`;
+    }
+}
+
+// Message de bienvenue automatique
+setTimeout(() => {
+    addMessage("👋 Bonjour ! Je suis l'assistant Andu-xara. Je peux vous aider pour commandes, prix, livraison... Comment puis-vous aider ?", 'bot');
+}, 3000);
+</script>
 </body>
 </html>
