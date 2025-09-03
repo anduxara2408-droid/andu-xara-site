@@ -233,6 +233,75 @@
     </style>
 </head>
 <body>
+<!-- Barre promotion -->
+<div class="promo-bar">
+    🚀 LIVRAISON OFFERTE À PARTIR DE 2 ARTICLES • 📦 RETOURS GRATUITS • ⭐ SATISFACTION GARANTIE
+</div>
+<style>
+.promo-bar {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+</style>
+<!-- Menu navigation -->
+<nav class="main-nav">
+    <div class="nav-container">
+        <a href="#accueil">Accueil</a>
+        <a href="#catalogue">Catalogue</a>
+        <a href="#nouveautes">Nouveautés</a>
+        <a href="#best-sellers">Best-Sellers</a>
+        <a href="#contact">Contact</a>
+    </div>
+</nav>
+<style>
+.main-nav {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+.nav-container a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+.nav-container a:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+@media (max-width: 768px) {
+    .nav-container {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .nav-container a {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+</style>
 <!-- Personnage de bienvenue -->
 <div id="welcome-character" class="welcome-character">
     <div class="character">
