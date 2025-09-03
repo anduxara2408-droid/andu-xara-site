@@ -11,11 +11,13 @@
             margin: 0;
             padding: 20px;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .quiz-container {
             max-width: 600px;
-            margin: 40px auto;
             background: white;
             border-radius: 20px;
             padding: 40px;
@@ -39,11 +41,13 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
         
         .option:hover {
             border-color: #667eea;
             background: #f8f9ff;
+            transform: translateY(-2px);
         }
         
         .correct {
@@ -65,17 +69,19 @@
             gap: 15px;
             justify-content: center;
             margin: 30px 0;
+            flex-wrap: wrap;
         }
         
         .share-btn {
-            padding: 12px 25px;
+            padding: 15px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.3s ease;
         }
         
         .whatsapp-btn {
@@ -83,32 +89,63 @@
             color: white;
         }
         
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+        
         .facebook-btn {
             background: #3b5998;
             color: white;
         }
         
+        .facebook-btn:hover {
+            background: #2d4373;
+            transform: translateY(-2px);
+        }
+        
         .coupon-code {
-            font-size: 1.5em;
+            font-size: 1.8em;
             font-weight: bold;
             color: #e74c3c;
             margin: 20px 0;
-            padding: 15px;
-            border: 2px dashed #e74c3c;
-            border-radius: 10px;
+            padding: 20px;
+            border: 3px dashed #e74c3c;
+            border-radius: 15px;
+            background: #fffaf0;
+        }
+        
+        .winner-animation {
+            animation: celebrate 2s ease-in-out;
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="quiz-container">
         <h1>🎯 QUIZ ANDU-XARA</h1>
-        <p>Réponds correctement et gagne <strong>20% de réduction</strong> sur ta première commande !</p>
+        <p>Réponds correctement et gagne <strong style="color: #e74c3c;">20% de réduction</strong> sur ta première commande !</p>
         
         <div id="quiz-content">
             <div class="question">
                 <h3>Question 1/3 : En quelle année Andu-Xara a été créée ?</h3>
                 <div class="options">
-                    <div class="option" onclick="checkAnswer(1, 2022)">2022</div>
+                    <div class="option" onclick="checkAnswer(1, 2022)">🏆 2022</div>
                     <div class="option" onclick="checkAnswer(1, 2020)">2020</div>
                     <div class="option" onclick="checkAnswer(1, 2023)">2023</div>
                 </div>
@@ -118,7 +155,7 @@
                 <h3>Question 2/3 : Combien de pays livrez-vous ?</h3>
                 <div class="options">
                     <div class="option" onclick="checkAnswer(2, 5)">5 pays</div>
-                    <div class="option" onclick="checkAnswer(2, 9)">9 pays ou plus</div>
+                    <div class="option" onclick="checkAnswer(2, 9)">🌍 9 pays ou plus</div>
                     <div class="option" onclick="checkAnswer(2, 3)">3 pays</div>
                 </div>
             </div>
@@ -126,7 +163,7 @@
             <div class="question hidden" id="question3">
                 <h3>Question 3/3 : Quel est le prix moyen d'un t-shirt Andu-Xara ?</h3>
                 <div class="options">
-                    <div class="option" onclick="checkAnswer(3, 499)">499 MRU</div>
+                    <div class="option" onclick="checkAnswer(3, 499)">💎 499 MRU</div>
                     <div class="option" onclick="checkAnswer(3, 799)">799 MRU</div>
                     <div class="option" onclick="checkAnswer(3, 299)">299 MRU</div>
                 </div>
@@ -134,31 +171,49 @@
         </div>
         
         <div id="success-message" class="hidden">
-            <h2>🎉 FÉLICITATIONS !</h2>
-            <p>Tu as gagné <strong>20% de réduction</strong> sur ta première commande !</p>
+            <h2 class="winner-animation">🎉 FÉLICITATIONS !</h2>
+            <p>Tu as gagné <strong style="color: #e74c3c;">20% de réduction</strong> sur ta première commande !</p>
             
             <div class="coupon-code" id="coupon-code">ANDU20-XXXXXX</div>
             
-            <p>Partage cette bonne nouvelle pour valider ton code :</p>
+            <p>📱 Partage cette bonne nouvelle pour valider ton code :</p>
             
             <div class="share-buttons">
                 <button class="share-btn whatsapp-btn" onclick="shareOnWhatsApp()">
-                    📱 WhatsApp
+                    📱 Partager sur WhatsApp
                 </button>
                 <button class="share-btn facebook-btn" onclick="shareOnFacebook()">
-                    📘 Facebook
+                    📘 Partager sur Facebook
                 </button>
             </div>
             
-            <p><small>Le code sera activé après partage sur les réseaux</small></p>
+            <p style="margin-top: 20px; font-size: 14px; color: #7f8c8d;">
+                💡 Montre ce code à notre équipe WhatsApp : <strong>+22249037697</strong>
+            </p>
         </div>
         
-        <a href="https://andu-xara.github.io/catalogue-andu-xara-2025-final/" style="
-            display: inline-block;
-            margin-top: 30px;
-            color: #667eea;
-            text-decoration: none;
-        ">← Retour au Catalogue</a>
+        <div style="margin-top: 40px;">
+            <a href="https://andu-xara.github.io/catalogue-andu-xara-2025-final/" style="
+                display: inline-block;
+                background: #667eea;
+                color: white;
+                padding: 12px 25px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-weight: bold;
+                margin-right: 15px;
+            ">← Retour à la Boutique</a>
+            
+            <button onclick="location.reload()" style="
+                background: #95a5a6;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                cursor: pointer;
+                font-weight: bold;
+            ">🔄 Rejouer</button>
+        </div>
     </div>
 
     <script>
@@ -204,36 +259,38 @@
             // Envoyer une notification à Andu-Xara
             sendNotification(couponCode, score);
         } else {
-            alert('❌ Presque ! Réessaie pour gagner ta réduction.');
-            location.reload();
+            alert('❌ Presque ! Tu as eu ' + score + '/3. Réessaie pour gagner ta réduction de 20% !');
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
         }
     }
     
     function shareOnWhatsApp() {
-        const text = "🎯 J'ai gagné 20% de réduction chez Andu-Xara ! Découvre cette marque incroyable : https://andu-xara.github.io/catalogue-andu-xara-2025-final/";
+        const text = "🎯 J'ai gagné 20% de réduction chez Andu-Xara ! 🛍️\\n\\nCode: " + document.getElementById('coupon-code').textContent + "\\n\\nDécouvre cette marque incroyable : https://andu-xara.github.io/catalogue-andu-xara-2025-final/\\n\\n#AnduXara #Mode #Réduction";
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         trackShare('whatsapp');
     }
     
     function shareOnFacebook() {
+        const text = "🎯 J'ai gagné 20% de réduction chez Andu-Xara !";
         const url = "https://andu-xara.github.io/catalogue-andu-xara-2025-final/";
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
         trackShare('facebook');
     }
     
     function sendNotification(couponCode, score) {
-        // Envoi simple par email (solution low-cost)
-        const subject = "🎯 Nouveau gagnant Quiz Andu-Xara";
-        const body = `Un client a gagné le quiz!\nCode: ${couponCode}\nScore: ${score}/3\n\n📧 Contactez-le pour la réduction.`;
+        const subject = "🎯 NOUVEAU GAGNANT QUIZ - 20% DE RÉDUCTION";
+        const body = `Un client a gagné le quiz Andu-Xara !\\n\\n🔑 Code: ${couponCode}\\n📊 Score: ${score}/3\\n⏰ Date: ${new Date().toLocaleString()}\\n\\n📱 Contactez-le pour appliquer la réduction de 20%.`;
         
-        // Créer un lien mailto
+        // Envoyer email
         setTimeout(() => {
             window.location.href = `mailto:anduxara2408@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }, 2000);
+        }, 3000);
     }
     
     function trackShare(platform) {
-        alert('✅ Merci pour le partage ! Ton code de réduction est maintenant activé.\n\n📱 Montre ce code à notre équipe WhatsApp : +22249037697');
+        alert('✅ Merci pour le partage ! Ton code de réduction est maintenant activé.\\n\\n📱 Montre ce code à notre équipe WhatsApp : +22249037697\\n\\n🛍️ Félicitations pour ta réduction de 20% !');
     }
     </script>
 </body>
