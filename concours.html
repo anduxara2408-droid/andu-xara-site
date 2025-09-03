@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Concours Andu-Xara</title>
+    <title>Quiz Culturel Andu-Xara</title>
     <style>
         * {
             margin: 0;
@@ -32,7 +32,7 @@
         }
         
         .quiz-header {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -48,11 +48,13 @@
         
         .question {
             margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
         }
         
         .options {
             display: grid;
-            gap: 15px;
+            gap: 12px;
             margin: 20px 0;
         }
         
@@ -63,6 +65,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
+            text-align: left;
         }
         
         .option:hover {
@@ -182,6 +185,13 @@
             background: #fffaf0;
         }
         
+        .cultural-note {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
         @media (max-width: 768px) {
             .share-buttons {
                 grid-template-columns: 1fr;
@@ -191,46 +201,52 @@
 </head>
 <body>
     <div class="quiz-container">
-        <!-- ÉTAPE 1 : QUIZ -->
+        <!-- ÉTAPE 1 : QUIZ CULTUREL -->
         <div class="quiz-header">
-            <h1>🎯 QUIZ CONCOURS ANDU-XARA</h1>
-            <p>Répondez correctement et tentez de gagner un produit GRATUIT !</p>
+            <h1>🎯 QUIZ CULTUREL ANDU-XARA</h1>
+            <p>"Andu-Xara" signifie "Connaissance de Soi" en Peul</p>
         </div>
         
         <div id="step1" class="quiz-step">
-            <h2>📝 Question 1/3</h2>
+            <h2>📝 Question 1/3 - Culture Générale</h2>
             <div class="question">
-                <h3>En quelle année Andu-Xara a été créée ?</h3>
+                <h3>Quelle est la signification de "Andu-Xara" en langue Peul ?</h3>
             </div>
             <div class="options">
-                <div class="option" onclick="selectAnswer(1, 2020)">🏆 2020</div>
-                <div class="option" onclick="selectAnswer(1, 2022)">2022</div>
-                <div class="option" onclick="selectAnswer(1, 2023)">2023</div>
+                <div class="option" onclick="selectAnswer(1, 'force')">La force intérieure</div>
+                <div class="option" onclick="selectAnswer(1, 'beauté')">La beauté naturelle</div>
+                <div class="option" onclick="selectAnswer(1, 'connaissance')">La connaissance de soi</div>
+                <div class="option" onclick="selectAnswer(1, 'sagesse')">La sagesse ancestrale</div>
             </div>
+            <p class="cultural-note">Andu-Xara représente le voyage vers la découverte de soi</p>
         </div>
         
         <div id="step2" class="quiz-step hidden">
-            <h2>📝 Question 2/3</h2>
+            <h2>📝 Question 2/3 - Philosophie</h2>
             <div class="question">
-                <h3>Combien de pays Andu-Xara livre-t-elle ?</h3>
+                <h3>Selon la philosophie Andu-Xara, que signifie "porter ses valeurs" ?</h3>
             </div>
             <div class="options">
-                <div class="option" onclick="selectAnswer(2, 3)">3 pays</div>
-                <div class="option" onclick="selectAnswer(2, 5)">5 pays</div>
-                <div class="option" onclick="selectAnswer(2, 9)">🌍 9 pays ou plus</div>
+                <div class="option" onclick="selectAnswer(2, 'luxe')">Afficher son statut social</div>
+                <div class="option" onclick="selectAnswer(2, 'authenticite')">Exprimer son authenticité</div>
+                <div class="option" onclick="selectAnswer(2, 'tendance')">Suivre les tendances mode</div>
+                <div class="option" onclick="selectAnswer(2, 'tradition')">Rester dans la tradition</div>
             </div>
+            <p class="cultural-note">Chaque vêtement raconte une histoire personnelle</p>
         </div>
         
         <div id="step3" class="quiz-step hidden">
-            <h2>📝 Question 3/3</h2>
+            <h2>📝 Question 3/3 - Histoire</h2>
             <div class="question">
-                <h3>Quel est le prix moyen d'un t-shirt Andu-Xara ?</h3>
+                <h3>Quel pays inspire principalement les designs Andu-Xara ?</h3>
             </div>
             <div class="options">
-                <div class="option" onclick="selectAnswer(3, 299)">299 MRU</div>
-                <div class="option" onclick="selectAnswer(3, 499)">💎 499 MRU</div>
-                <div class="option" onclick="selectAnswer(3, 799)">799 MRU</div>
+                <div class="option" onclick="selectAnswer(3, 'france')">La France</div>
+                <div class="option" onclick="selectAnswer(3, 'usa')">Les États-Unis</div>
+                <div class="option" onclick="selectAnswer(3, 'mauritanie')">La Mauritanie</div>
+                <div class="option" onclick="selectAnswer(3, 'japon')">Le Japon</div>
             </div>
+            <p class="cultural-note">Inspiration afro-moderne avec des racines mauritaniennes</p>
         </div>
         
         <!-- ÉTAPE 2 : COORDONNÉES -->
@@ -316,7 +332,11 @@
     let userInfo = {};
     let sharesCount = 0;
     let contestNumber = '';
-    const correctAnswers = {1: 2020, 2: 9, 3: 499};
+    const correctAnswers = {
+        1: 'connaissance',    // Andu-Xara = Connaissance de soi
+        2: 'authenticite',    // Porter ses valeurs = Exprimer son authenticité
+        3: 'mauritanie'       // Inspiration principale = Mauritanie
+    };
     
     function selectAnswer(questionNumber, answer) {
         answers[questionNumber] = answer;
@@ -325,7 +345,7 @@
         const options = document.querySelectorAll(`#step${questionNumber} .option`);
         options.forEach(opt => {
             opt.classList.remove('selected');
-            if (parseInt(opt.textContent) === answer || opt.textContent.includes(answer)) {
+            if (opt.textContent.includes(answer) || answers[questionNumber] === answer) {
                 opt.classList.add('selected');
             }
         });
@@ -368,19 +388,19 @@
         
         switch(platform) {
             case 'whatsapp':
-                shareText = `🎯 JE PARTICIPE AU QUIZ CONCOURS ANDU-XARA ! 🛍️\n\nTentez de gagner un produit GRATUIT !\n\n👉 ${shareUrl}\n\n#AnduXara #Concours #Quiz`;
+                shareText = `🎯 JE DÉCOUVRE ANDU-XARA : "CONNAISSANCE DE SOI" ! 🛍️\n\nJ'ai participé au quiz culturel Andu-Xara et j'ai appris que :\n• Andu-Xara signifie "Connaissance de soi" en Peul\n• C'est une marque qui valorise l'authenticité\n• Inspiration mauritano-sénégalaise\n\nTestez vos connaissances : ${shareUrl}\n\n#AnduXara #ConnaissanceDeSoi #Culture`;
                 window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
                 break;
             case 'facebook':
-                shareText = "Je participe au concours Andu-Xara pour gagner un produit gratuit !";
+                shareText = "Je découvre la philosophie Andu-Xara : Connaissance de soi et authenticité !";
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
                 break;
             case 'instagram':
-                shareText = "🎯 Je participe au concours Andu-Xara ! Tentez de gagner un produit gratuit ➡️ andu-xara.github.io";
-                alert("📸 Copiez ce message pour votre story Instagram:\n\n" + shareText + "\n\nN'oubliez pas de taguer @andu_xara !");
+                shareText = "🎯 Andu-Xara = Connaissance de soi ✨\n\nJe participe au quiz culturel et je découvre la philosophie derrière cette marque inspirante 💫\n\n➡️ andu-xara.github.io\n\n@andu_xara #ConnaissanceDeSoi #AnduXara";
+                alert("📸 Copiez ce message pour votre story Instagram:\n\n" + shareText);
                 break;
             case 'tiktok':
-                shareText = "Je participe au concours Andu-Xara 🎯 Produit gratuit à gagner ! #AnduXara #Concours";
+                shareText = "Découvrez Andu-Xara : bien plus qu'une marque, une philosophie ! #ConnaissanceDeSoi #AnduXara #Culture";
                 alert("🎵 Copiez ce message pour votre TikTok:\n\n" + shareText + "\n\nLien: " + shareUrl);
                 break;
         }
@@ -421,15 +441,15 @@
     }
     
     function sendParticipation(score) {
-        const subject = "🎯 NOUVEAU PARTICIPANT QUIZ CONCOURS";
-        const body = `QUIZ CONCOURS - NOUVEAU PARTICIPANT !\n\n📋 Nom: ${userInfo.name}\n📱 WhatsApp: ${userInfo.phone}\n📧 Email: ${userInfo.email || 'Non renseigné'}\n🎯 Score: ${score}/3\n🎫 Numéro: ${contestNumber}\n📢 Partages: ${sharesCount} réseau(x)\n⏰ Date: ${new Date().toLocaleString()}\n\n📞 CONTACT: https://wa.me/${userInfo.phone.replace(/[^0-9]/g, '')}`;
+        const subject = "🎯 NOUVEAU PARTICIPANT QUIZ CULTUREL";
+        const body = `QUIZ CULTUREL ANDU-XARA - NOUVEAU PARTICIPANT !\n\n📋 Nom: ${userInfo.name}\n📱 WhatsApp: ${userInfo.phone}\n📧 Email: ${userInfo.email || 'Non renseigné'}\n🎯 Score: ${score}/3\n🎫 Numéro: ${contestNumber}\n📢 Partages: ${sharesCount} réseau(x)\n⏰ Date: ${new Date().toLocaleString()}\n\n📞 CONTACT: https://wa.me/${userInfo.phone.replace(/[^0-9]/g, '')}`;
         
         // Envoyer email
         window.location.href = `mailto:anduxara2408@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
     
     function shareVictory() {
-        const shareText = `🎯 JE VIENS DE PARTICIPER AU QUIZ CONCOURS ANDU-XARA ! 🛍️\n\nNuméro: ${contestNumber}\n\nTentez votre chance vous aussi : https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html\n\n#AnduXara #Quiz #Concours`;
+        const shareText = `🎯 JE VIENS DE DÉCOUVRIR LA PHILOSOPHIE ANDU-XARA ! 🛍️\n\n"Andu-Xara" signifie "Connaissance de soi" en Peul\n\nNuméro de participation: ${contestNumber}\n\nTestez vos connaissances : https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html\n\n#AnduXara #ConnaissanceDeSoi #Culture`;
         window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
     }
     </script>
