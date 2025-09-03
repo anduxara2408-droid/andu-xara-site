@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concours Andu-Xara - Gagne un Produit Gratuit !</title>
+    <title>Concours Andu-Xara</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,355 +15,48 @@
             justify-content: center;
             align-items: center;
         }
-        
-        .contest-container {
-            max-width: 600px;
+        .container {
             background: white;
-            border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 20px;
             text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
-        .contest-header {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+        h1 {
+            color: #e74c3c;
+            margin-bottom: 20px;
         }
-        
-        .contest-step {
-            margin: 30px 0;
-            padding: 20px;
-            border: 2px solid #eee;
-            border-radius: 15px;
-        }
-        
-        .contest-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .contest-form input {
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-        
-        .contest-btn {
+        .btn {
             background: #25D366;
             color: white;
-            border: none;
             padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-        
-        .contest-btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-        }
-        
-        .contest-btn:hover:not(:disabled) {
-            background: #128C7E;
-            transform: translateY(-2px);
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .winner-section {
-            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
-            padding: 30px;
-            border-radius: 15px;
-            border: 3px solid #25D366;
-        }
-        
-        .share-required {
-            background: #fffaf0;
-            border: 2px solid #FFD700;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
-        .prize-animation {
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .share-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .share-btn {
-            padding: 12px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 18px;
             cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
         }
-        
-        .share-btn:hover {
-            transform: scale(1.05);
-        }
-        
-        .whatsapp-btn {
-            background: #25D366;
-            color: white;
-        }
-        
-        .facebook-btn {
-            background: #3b5998;
-            color: white;
-        }
-        
-        .instagram-btn {
-            background: #E1306C;
-            color: white;
-        }
-        
-        .success-badge {
-            background: #25D366;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            margin-left: 10px;
+        .btn:hover {
+            background: #128C7E;
         }
     </style>
 </head>
 <body>
-    <div class="contest-container">
-        <div class="contest-header">
-            <h1>🎁 CONCOURS ANDU-XARA</h1>
-            <p>Tentez de gagner un produit GRATUIT !<br>Partagez pour augmenter vos chances</p>
-        </div>
-        
-        <div id="step1" class="contest-step">
-            <h2>📝 Question de Style</h2>
-            <p>Quel style de vêtement Andu-Xara préférez-vous ?</p>
-            
-            <div class="contest-form">
-                <select id="styleChoice" style="padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
-                    <option value="">Choisissez votre style</option>
-                    <option value="classique">👔 Classique</option>
-                    <option value="sportswear">🏃 Sportswear</option>
-                    <option value="traditionnel">🌍 Traditionnel</option>
-                    <option value="moderne">🔥 Moderne</option>
-                    <option value="mixte">🎯 Mixte</option>
-                </select>
-                <button class="contest-btn" onclick="nextStep()">Jouer →</button>
-            </div>
-        </div>
-        
-        <div id="step2" class="contest-step hidden">
-            <h2>📋 Vos Coordonnées</h2>
-            <p>Remplissez vos informations pour valider votre participation</p>
-            
-            <div class="contest-form">
-                <input type="text" id="userName" placeholder="Votre nom complet" required>
-                <input type="tel" id="userPhone" placeholder="Votre numéro WhatsApp *" required>
-                <input type="email" id="userEmail" placeholder="Votre email">
-                <button class="contest-btn" onclick="validateParticipation()">🎯 Valider ma participation</button>
-            </div>
-        </div>
-        
-        <div id="step3" class="contest-step hidden">
-            <h2>📢 Partage Obligatoire</h2>
-            <div class="share-required">
-                <p>⚠️ <strong>PARTAGEZ POUR VALIDER VOTRE PARTICIPATION</strong></p>
-                <p>Vous devez partager le concours sur au moins 1 réseau social pour être éligible au tirage au sort.</p>
-            </div>
-            
-            <div class="share-buttons">
-                <button class="share-btn whatsapp-btn" onclick="shareOnPlatform('whatsapp')">
-                    📱 Partager sur WhatsApp
-                </button>
-                <button class="share-btn facebook-btn" onclick="shareOnPlatform('facebook')">
-                    📘 Partager sur Facebook
-                </button>
-                <button class="share-btn instagram-btn" onclick="shareOnPlatform('instagram')">
-                    📸 Partager sur Instagram
-                </button>
-            </div>
-            
-            <p id="shareStatus" style="color: #e74c3c; font-weight: bold; margin-top: 20px;">
-                ❌ Partage non effectué
-            </p>
-            
-            <button class="contest-btn" id="finalizeBtn" disabled onclick="finalizeParticipation()">
-                🎯 Finaliser ma participation
-            </button>
-        </div>
-        
-        <div id="step4" class="contest-step hidden winner-section">
-            <h2 class="prize-animation">🎉 PARTICIPATION CONFIRMÉE !</h2>
-            <p>Votre participation au concours est validée !</p>
-            
-            <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                <h3>🏆 Vous courez la chance de gagner :</h3>
-                <p>• 1 produit Andu-Xara au choix<br>• Livraison OFFERTE worldwide<br>• Collection exclusive</p>
-            </div>
-            
-            <p><strong>🎫 Numéro de participation :</strong><br>
-            <span style="font-size: 1.5em; color: #e74c3c; font-weight: bold;" id="contestNumber"></span></p>
-            
-            <p>📅 Prochain tirage : <strong>Vendredi 18h</strong></p>
-            <p>📞 Le gagnant sera contacté sur WhatsApp</p>
-            
-            <div class="share-buttons">
-                <button class="share-btn whatsapp-btn" onclick="shareVictory()">
-                    📱 Partager ma participation
-                </button>
-            </div>
-        </div>
-        
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee;">
-            <a href="https://andu-xara.github.io/catalogue-andu-xara-2025-final/" style="
-                display: inline-block;
-                background: #667eea;
-                color: white;
-                padding: 12px 25px;
-                border-radius: 25px;
-                text-decoration: none;
-                font-weight: bold;
-            ">← Retour à la Boutique</a>
-        </div>
+    <div class="container">
+        <h1>🎁 CONCOURS ANDU-XARA</h1>
+        <p>Tentez de gagner un produit GRATUIT !</p>
+        <p>Partagez sur les réseaux sociaux pour participer</p>
+        <br>
+        <a href="https://wa.me/?text=Je%20participe%20au%20concours%20Andu-Xara%20!%20🎯%20https://andu-xara.github.io/catalogue-andu-xara-2025-final/" class="btn" target="_blank">
+            📱 Partager sur WhatsApp
+        </a>
+        <br><br>
+        <a href="https://andu-xara.github.io/catalogue-andu-xara-2025-final/" class="btn">
+            ← Retour à la boutique
+        </a>
     </div>
-
-    <script>
-    let participantData = {};
-    let hasShared = false;
-    let contestNumber = '';
-    
-    function nextStep() {
-        const styleChoice = document.getElementById('styleChoice').value;
-        if (!styleChoice) {
-            alert('Veuillez choisir votre style préféré !');
-            return;
-        }
-        participantData.style = styleChoice;
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-    }
-    
-    function validateParticipation() {
-        const name = document.getElementById('userName').value;
-        const phone = document.getElementById('userPhone').value;
-        const email = document.getElementById('userEmail').value;
-        
-        if (!name || !phone) {
-            alert('Veuillez remplir au moins votre nom et numéro WhatsApp !');
-            return;
-        }
-        
-        participantData.name = name;
-        participantData.phone = phone;
-        participantData.email = email;
-        
-        // Générer numéro de participation
-        contestNumber = 'AX-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-        
-        document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step3').classList.remove('hidden');
-    }
-    
-    function shareOnPlatform(platform) {
-        const shareUrl = "https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html";
-        let shareText = "";
-        
-        switch(platform) {
-            case 'whatsapp':
-                shareText = `🎯 JE PARTICIPE AU CONCOURS ANDU-XARA ! 🛍️\n\nTentez de gagner un produit GRATUIT !\n\n👉 ${shareUrl}\n\n#AnduXara #Concours #Mode`;
-                window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
-                break;
-            case 'facebook':
-                shareText = "Je participe au concours Andu-Xara pour gagner un produit gratuit !";
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
-                break;
-            case 'instagram':
-                alert("📸 Prenez une screenshot et partagez-la en story Instagram en taggant @andu_xara !");
-                break;
-        }
-        
-        // Marquer comme partagé
-        hasShared = true;
-        document.getElementById('shareStatus').innerHTML = '✅ Partage effectué <span class="success-badge">+1 chance</span>';
-        document.getElementById('shareStatus').style.color = '#25D366';
-        document.getElementById('finalizeBtn').disabled = false;
-        
-        // Message de confirmation
-        setTimeout(() => {
-            alert('✅ Merci pour le partage ! Vos chances de gagner sont augmentées 🍀');
-        }, 1000);
-    }
-    
-    function finalizeParticipation() {
-        if (!hasShared) {
-            alert('❌ Vous devez partager le concours pour participer !');
-            return;
-        }
-        
-        // Envoyer les infos à Andu-Xara IMMÉDIATEMENT
-        sendContestSubmission();
-        
-        // Afficher l'écran de confirmation
-        document.getElementById('contestNumber').textContent = contestNumber;
-        document.getElementById('step3').classList.add('hidden');
-        document.getElementById('step4').classList.remove('hidden');
-    }
-    
-    function sendContestSubmission() {
-        const subject = "🎯 NOUVEAU GAGNANT POTENTIEL - CONCOURS";
-        const body = `🚨 NOUVEAU PARTICIPANT AU CONCOURS !\n\n📋 Nom: ${participantData.name}\n📱 WhatsApp: ${participantData.phone}\n📧 Email: ${participantData.email || 'Non renseigné'}\n🎨 Style préféré: ${participantData.style}\n🎫 Numéro: ${contestNumber}\n📢 A partagé: ${hasShared ? 'OUI' : 'NON'}\n⏰ Date: ${new Date().toLocaleString()}\n\n🏆 CHANCE DE GAGNER : ${hasShared ? 'ÉLEVÉE' : 'FAIBLE'}\n\n📞 CONTACTER LE PARTICIPANT : https://wa.me/${participantData.phone.replace(/[^0-9]/g, '')}`;
-        
-        // Envoyer par email IMMÉDIAT
-        window.location.href = `mailto:anduxara2408@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        // Envoyer aussi un WhatsApp automatique (optionnel)
-        setTimeout(() => {
-            const whatsappMsg = `Bonjour ${participantData.name} ! 🎯\n\nVotre participation au concours Andu-Xara est confirmée !\n\n🎫 Numéro: ${contestNumber}\n📅 Tirage: Vendredi 18h\n📞 Nous vous contacterons sur ce numéro si vous gagnez\n\nBonne chance ! 🍀`;
-            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-        }, 2000);
-    }
-    
-    function shareVictory() {
-        const shareText = `🎯 JE VIENS DE PARTICIPER AU CONCOURS ANDU-XARA ! 🛍️\n\nNuméro: ${contestNumber}\n\nTentez votre chance vous aussi : https://andu-xara.github.io/catalogue-andu-xara-2025-final/concours.html\n\n#AnduXara #Concours #Gagnant`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
-    }
-    
-    // Animation d'entrée
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('.contest-container').style.opacity = '0';
-        document.querySelector('.contest-container').style.transform = 'translateY(20px)';
-        document.querySelector('.contest-container').style.transition = 'all 0.5s ease';
-        
-        setTimeout(() => {
-            document.querySelector('.contest-container').style.opacity = '1';
-            document.querySelector('.contest-container').style.transform = 'translateY(0)';
-        }, 100);
-    });
-    </script>
 </body>
 </html>
