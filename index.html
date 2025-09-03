@@ -233,6 +233,189 @@
     </style>
 </head>
 <body>
+<!-- Personnage de bienvenue -->
+<div id="welcome-character" class="welcome-character">
+    <div class="character">
+        <div class="face">
+            <div class="eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+            </div>
+            <div class="smile"></div>
+        </div>
+        <div class="body">
+            <div class="hand"></div>
+        </div>
+    </div>
+    <div class="speech-bubble">
+        <p>Bismillah a nka Andu-xara!</p>
+        <small>Bienvenue chez Andu-xara!</small>
+    </div>
+</div>
+
+<style>
+/* Personnage de bienvenue */
+.welcome-character {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    animation: float 3s ease-in-out infinite;
+}
+
+.character {
+    position: relative;
+    width: 80px;
+    height: 120px;
+}
+
+.face {
+    width: 60px;
+    height: 60px;
+    background: #FFD700;
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto;
+    border: 3px solid #2c3e50;
+}
+
+.eyes {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+}
+
+.eye {
+    width: 8px;
+    height: 8px;
+    background: #2c3e50;
+    border-radius: 50%;
+    animation: blink 4s infinite;
+}
+
+.smile {
+    width: 20px;
+    height: 10px;
+    border-bottom: 3px solid #2c3e50;
+    border-radius: 0 0 50% 50%;
+    margin: 8px auto 0;
+}
+
+.body {
+    width: 50px;
+    height: 40px;
+    background: #25D366;
+    border-radius: 20px 20px 0 0;
+    margin: -5px auto 0;
+    position: relative;
+}
+
+.hand {
+    position: absolute;
+    right: -15px;
+    top: 5px;
+    width: 20px;
+    height: 8px;
+    background: #FFD700;
+    border-radius: 10px;
+    transform-origin: left center;
+    animation: wave 2s ease-in-out infinite;
+}
+
+.speech-bubble {
+    position: absolute;
+    bottom: 130px;
+    left: 70px;
+    background: white;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 2px solid #25D366;
+    min-width: 180px;
+    opacity: 0;
+    animation: appear 1s ease-in-out 0.5s forwards;
+}
+
+.speech-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 20px;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: white transparent transparent;
+}
+
+.speech-bubble p {
+    margin: 0;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.speech-bubble small {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(20deg); }
+}
+
+@keyframes blink {
+    0%, 95%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+}
+
+@keyframes appear {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .welcome-character {
+        bottom: 10px;
+        left: 10px;
+        transform: scale(0.8);
+    }
+    
+    .speech-bubble {
+        left: 60px;
+        bottom: 110px;
+        min-width: 160px;
+    }
+}
+</style>
+
+<script>
+// Cacher le personnage après 8 secondes
+setTimeout(() => {
+    document.getElementById("welcome-character").style.opacity = "0";
+    document.getElementById("welcome-character").style.transition = "opacity 1s ease-in-out";
+    
+    setTimeout(() => {
+        document.getElementById("welcome-character").style.display = "none";
+    }, 1000);
+}, 8000);
+
+// Réapparaitre quand on scroll en bas
+window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        document.getElementById("welcome-character").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("welcome-character").style.opacity = "1";
+        }, 50);
+    }
+});
+</script>
     <div class="container">
         <div class="header">
             <!-- Icônes réseaux sociaux avec vrais logos -->
