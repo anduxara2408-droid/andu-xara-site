@@ -512,8 +512,7 @@
         <button id="sendMessage">Envoyer</button>
     </div>
 </div>
-<script>
-<script>
+<script><script>
 // Chat functionality with intelligent responses
 const chatIcon = document.getElementById('chatIcon');
 const chatWindow = document.getElementById('chatWindow');
@@ -541,7 +540,7 @@ function getIntelligentResponse(message) {
         if (lowerMessage.includes('t-shirt') || lowerMessage.includes('tshirt')) {
             return "Nos T-shirts coûtent entre 400 et 600 MRU selon le modèle et la qualité.";
         } else if (lowerMessage.includes('pull') || lowerMessage.includes('sweat')) {
-            return "Nos pulls coûtent entre 600 et 800 MRU.";
+            return "Nos pulls coûtent entre 600 and 800 MRU.";
         } else if (lowerMessage.includes('ensemble') || lowerMessage.includes('complet')) {
             return "Nos ensembles complets (haut + bas) coûtent entre 1000 et 1500 MRU.";
         } else {
@@ -637,7 +636,6 @@ sendMessage.addEventListener('click', sendMessageHandler);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessageHandler();
 });
-</script>
 </script>
 </body>
 </html>
