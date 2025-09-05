@@ -5,6 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu-xara - Collection Exclusive</title>
     <style>
+/* ===== CHAT ICON STYLES ===== */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.chat-icon:hover {
+    transform: scale(1.1);
+}
+
+.chat-icon i {
+    color: white;
+    font-size: 28px;
+}
+
+/* Chat Window Style */
+.chat-window {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.chat-header {
+    background-color: #25d366;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.chat-close {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.received {
+    background-color: #e5e5e5;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.sent {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input button {
+    margin-left: 10px;
+    background-color: #25d366;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
         * {
             margin: 0;
             padding: 0;
@@ -379,6 +492,71 @@
             </p>
             <p>Collection de luxe et d'exception</p>
         </div>
+    </div><!-- Chat Icon -->
+<div class="chat-icon" id="chatIcon">
+    <i class="fas fa-comments"></i>
+</div>
+
+<!-- Chat Window -->
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        <span>Support Client</span>
+        <span class="chat-close" id="chatClose">×</span>
     </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="message received">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Tapez votre message...">
+        <button id="sendMessage">Envoyer</button>
+    </div>
+</div>
+<script>
+// Chat functionality
+const chatIcon = document.getElementById('chatIcon');
+const chatWindow = document.getElementById('chatWindow');
+const chatClose = document.getElementById('chatClose');
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendMessage = document.getElementById('sendMessage');
+
+// Open chat
+chatIcon.addEventListener('click', () => {
+    chatWindow.style.display = 'flex';
+});
+
+// Close chat
+chatClose.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+});
+
+// Send message
+function sendMessageHandler() {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'sent');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
+        
+        // Auto reply
+        setTimeout(() => {
+            const responseElement = document.createElement('div');
+            responseElement.classList.add('message', 'received');
+            responseElement.textContent = "Merci pour votre message. Nous vous répondrons sous peu !";
+            chatMessages.appendChild(responseElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+        
+        messageInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+sendMessage.addEventListener('click', sendMessageHandler);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessageHandler();
+});
+</script>
 </body>
 </html>
