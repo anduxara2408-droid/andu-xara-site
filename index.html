@@ -83,18 +83,558 @@
     transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
-/* Add text labels to the wheel */
-.wheel-circle::before {
-    content: '';
+.wheel-pointer {
     position: absolute;
-    width: 90%;
-    height: 90%;
-    top: 5%;
-    left: 5%;
-    border-radius: 50%;
-    background: transparent;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    background: #ff4757;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
+.spin-button {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: transform 0.2s;
+}
+
+.spin-button:hover {
+    transform: scale(1.05);
+}
+
+.wheel-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.wheel-email-form {
+    margin: 20px 0;
+}
+
+.wheel-email-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+.wheel-email-input:focus {
+    border-color: #ff6b6b;
+    outline: none;
+}
+
+.wheel-social-share {
+    margin: 20px 0;
+}
+
+.wheel-social-btn {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: #25d366;
+    color: white;
+    border-radius: 50%;
+    margin: 0 5px;
+    text-decoration: none;
+    line-height: 40px;
+    font-weight: bold;
+}
+
+.prize-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff6b6b;
+    margin: 20px 0;
+}
+/* ===== CHAT ICON STYLES ===== */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.chat-icon:hover {
+    transform: scale(1.1);
+}
+
+.chat-icon i {
+    color: white;
+    font-size: 28px;
+}
+
+/* Chat Window Style */
+.chat-window {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.chat-header {
+    background-color: #25d366;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.chat-close {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.received {
+    background-color: #e5e5e5;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.sent {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input button {
+    margin-left: 10px;
+    background-color: #25d366;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .social-icons {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .social-icons a {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-icons a:hover {
+            background: white;
+            transform: scale(1.15);
+        }
+        
+        .social-icons svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .social-icons a:hover svg {
+            fill: #2c3e50;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        /* Animation texte défilant */
+        .welcome-banner {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 12px 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .scrolling-text {
+            white-space: nowrap;
+            animation: scroll-text 25s linear infinite;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 5px 0;
+        }
+        
+        @keyframes scroll-text {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .scrolling-text:hover {
+            animation-play-state: paused;
+        }
+        
+        .catalogue {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+        
+        .produit {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        
+        .produit:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .produit-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .produit-content {
+            padding: 25px;
+        }
+        
+        .produit h2 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .produit .description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        
+        .produit .reference {
+            color: #95a5a6;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .produit .prix {
+            color: #e74c3c;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .catalogue {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .social-icons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+        }
+/* Lucky Wheel Styles */
+.wheel-container {
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.wheel-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.wheel-icon:hover {
+    transform: scale(1.1);
+}
+
+.wheel-icon i {
+    color: white;
+    font-size: 28px;
+}
+
+.wheel-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.wheel-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.wheel {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 20px auto;
+}
+
+.wheel-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+        #ff6b6b 0deg 45deg, 
+        #4ecdc4 45deg 90deg,
+        #45b7d1 90deg 135deg,
+        #96ceb4 135deg 180deg,
+        #feca57 180deg 225deg,
+        #ff9ff3 225deg 270deg,
+        #54a0ff 270deg 315deg,
+        #5f27cd 315deg 360deg
+    );
+    position: relative;
+    transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    background: #ff4757;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.spin-button {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: transform 0.2s;
+}
+
+.spin-button:hover {
+    transform: scale(1.05);
+}
+
+.wheel-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.wheel-email-form {
+    margin: 20px 0;
+}
+
+.wheel-email-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+.wheel-email-input:focus {
+    border-color: #ff6b6b;
+    outline: none;
+}
+
+.wheel-social-share {
+    margin: 20px 0;
+}
+
+.wheel-social-btn {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: #25d366;
+    color: white;
+    border-radius: 50%;
+    margin: 0 5px;
+    text-decoration: none;
+    line-height: 40px;
+    font-weight: bold;
+}
+
+.prize-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff6b6b;
+    margin: 20px 0;
+}
+
+/* Wheel labels */
 .wheel-label {
     position: absolute;
     top: 50%;
@@ -105,6 +645,7 @@
     font-size: 12px;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     text-align: center;
+    width: 60px;
 }
 
 .wheel-label-1 { transform: translate(-50%, -50%) rotate(22.5deg); }
@@ -440,6 +981,81 @@ sendMessage.addEventListener('click', sendMessageHandler);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessageHandler();
 });
+// Lucky Wheel functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const wheelIcon = document.getElementById('wheelIcon');
+    const wheelModal = document.getElementById('wheelModal');
+    const wheelClose = document.getElementById('wheelClose');
+    const wheelCircle = document.getElementById('wheelCircle');
+    const spinButton = document.getElementById('spinButton');
+    const emailForm = document.getElementById('emailForm');
+    const socialShare = document.getElementById('socialShare');
+    const prizeMessage = document.getElementById('prizeMessage');
+
+    // Open wheel modal
+    wheelIcon.addEventListener('click', () => {
+        wheelModal.style.display = 'flex';
+    });
+
+    // Close wheel modal
+    wheelClose.addEventListener('click', () => {
+        wheelModal.style.display = 'none';
+        resetWheel();
+    });
+
+    // Spin the wheel
+    spinButton.addEventListener('click', spinWheel);
+
+    function spinWheel() {
+        // 95% chance to lose, 5% to win
+        const isWinner = Math.random() < 0.05;
+        const degrees = isWinner ? 1440 + 45 : 1440 + 225; // Different sectors
+        
+        wheelCircle.style.transform = `rotate(${degrees}deg)`;
+        
+        setTimeout(() => {
+            if (isWinner) {
+                prizeMessage.textContent = "🎉 Félicitations ! Vous avez gagné un article gratuit !";
+                emailForm.style.display = 'block';
+                spinButton.style.display = 'none';
+            } else {
+                prizeMessage.textContent = "😢 Presque ! Partagez pour rejouer ?";
+                socialShare.style.display = 'block';
+                spinButton.textContent = "REJOUER (Partager)";
+            }
+        }, 3000);
+    }
+
+    function resetWheel() {
+        wheelCircle.style.transform = 'rotate(0deg)';
+        emailForm.style.display = 'none';
+        socialShare.style.display = 'none';
+        prizeMessage.textContent = '';
+        spinButton.style.display = 'block';
+        spinButton.textContent = 'TOURNER LA ROUE (1€)';
+    }
+
+    window.submitEmail = function() {
+        const email = document.getElementById('wheelEmail').value;
+        if (email) {
+            // Envoyer l'email à votre adresse
+            prizeMessage.textContent = "✅ Merci ! Vous recevrez votre gain par email.";
+            setTimeout(() => {
+                wheelModal.style.display = 'none';
+                resetWheel();
+            }, 2000);
+            
+            // Envoyer une notification à votre email
+            sendEmailNotification(email);
+        }
+    }
+
+    function sendEmailNotification(userEmail) {
+        // Cette fonction peut être connectée à un service d'email
+        console.log("Nouveau gagnant ! Email:", userEmail);
+        // Envoyer un email à : anduxar2408a@Gmail.com
+    }
+});
 </script>
 <!-- Lucky Wheel Icon -->
 <div class="wheel-container">
@@ -455,18 +1071,27 @@ messageInput.addEventListener('keypress', (e) => {
         <h2>🎯 Tournez la Roue de la Chance !</h2>
         <p>Tentez de gagner un article gratuit !</p>
         
-<div class="wheel">
-    <div class="wheel-circle" id="wheelCircle">
-        <div class="wheel-label wheel-label-1">T-SHIRT</div>
-        <div class="wheel-label wheel-label-2">PULL</div>
-        <div class="wheel-label wheel-label-3">-20%</div>
-        <div class="wheel-label wheel-label-4">ENSEMBLE</div>
-        <div class="wheel-label wheel-label-5">-10%</div>
-        <div class="wheel-label wheel-label-6">CASQUETTE</div>
-        <div class="wheel-label wheel-label-7">LIVRAISON</div>
-        <div class="wheel-label wheel-label-8">-30%</div>
+        <div class="wheel">
+            <div class="wheel-circle" id="wheelCircle"></div>
+            <div class="wheel-pointer"></div>
+        </div>
+        
+        <button class="spin-button" id="spinButton">TOURNER LA ROUE (1€)</button>
+        
+        <div class="wheel-email-form" id="emailForm" style="display: none;">
+            <input type="email" class="wheel-email-input" id="wheelEmail" placeholder="Votre email pour recevoir votre gain" required>
+            <button class="spin-button" onclick="submitEmail()">VALIDER</button>
+        </div>
+        
+        <div class="wheel-social-share" id="socialShare" style="display: none;">
+            <p>Partagez pour augmenter vos chances !</p>
+            <a href="#" class="wheel-social-btn">F</a>
+            <a href="#" class="wheel-social-btn">T</a>
+            <a href="#" class="wheel-social-btn">W</a>
+        </div>
+        
+        <div id="prizeMessage" class="prize-message"></div>
     </div>
-    <div class="wheel-pointer"></div>
 </div>
 <script>
 // Lucky Wheel functionality
@@ -545,5 +1170,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<!-- Lucky Wheel Icon -->
+<div class="wheel-container">
+    <div class="wheel-icon" id="wheelIcon">
+        <i class="fas fa-gift"></i>
+    </div>
+</div>
+
+<!-- Wheel Modal -->
+<div class="wheel-modal" id="wheelModal">
+    <div class="wheel-content">
+        <button class="wheel-close" id="wheelClose">×</button>
+        <h2>🎯 Tournez la Roue de la Chance !</h2>
+        <p>Tentez de gagner un article gratuit !</p>
+        
+        <div class="wheel">
+            <div class="wheel-circle" id="wheelCircle">
+                <div class="wheel-label wheel-label-1">T-SHIRT</div>
+                <div class="wheel-label wheel-label-2">PULL</div>
+                <div class="wheel-label wheel-label-3">-20%</div>
+                <div class="wheel-label wheel-label-4">ENSEMBLE</div>
+                <div class="wheel-label wheel-label-5">-10%</div>
+                <div class="wheel-label wheel-label-6">CASQUETTE</div>
+                <div class="wheel-label wheel-label-7">LIVRAISON</div>
+                <div class="wheel-label wheel-label-8">-30%</div>
+            </div>
+            <div class="wheel-pointer"></div>
+        </div>
+        
+        <button class="spin-button" id="spinButton">TOURNER LA ROUE (1€)</button>
+        
+        <div class="wheel-email-form" id="emailForm" style="display: none;">
+            <input type="email" class="wheel-email-input" id="wheelEmail" placeholder="Votre email pour recevoir votre gain" required>
+            <button class="spin-button" onclick="submitEmail()">VALIDER</button>
+        </div>
+        
+        <div class="wheel-social-share" id="socialShare" style="display: none;">
+            <p>Partagez pour augmenter vos chances !</p>
+            <a href="#" class="wheel-social-btn">F</a>
+            <a href="#" class="wheel-social-btn">T</a>
+            <a href="#" class="wheel-social-btn">W</a>
+        </div>
+        
+        <div id="prizeMessage" class="prize-message"></div>
+    </div>
+ </div>
 </body>
 </html>
