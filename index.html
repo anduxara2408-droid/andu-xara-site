@@ -197,190 +197,48 @@
                 margin-bottom: 15px;
             }
         }
-/* Lucky Wheel Styles */
-.wheel-container {
+/* Chat Styles */
+.chat-icon {
     position: fixed;
-    bottom: 90px;
-    left: 20px;
-    z-index: 1000;
-}
-
-.wheel-icon {
+    bottom: 20px;
+    right: 20px;
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    background-color: #25d366;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: transform 0.3s ease;
+    z-index: 1000;
 }
 
-.wheel-icon:hover {
+.chat-icon:hover {
     transform: scale(1.1);
 }
 
-.wheel-icon i {
+.chat-icon i {
     color: white;
     font-size: 28px;
 }
 
-.wheel-modal {
+.chat-window {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.wheel-content {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-}
-
-.wheel {
+    bottom: 90px;
+    right: 20px;
     width: 300px;
-    height: 300px;
-    position: relative;
-    margin: 20px auto;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
 }
 
-.wheel-circle {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: conic-gradient(
-        #ff6b6b 0deg 45deg, 
-        #4ecdc4 45deg 90deg,
-        #45b7d1 90deg 135deg,
-        #96ceb4 135deg 180deg,
-        #feca57 180deg 225deg,
-        #ff9ff3 225deg 270deg,
-        #54a0ff 270deg 315deg,
-        #5f27cd 315deg 360deg
-    );
-    position: relative;
-    transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-}
-
-.wheel-pointer {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 40px;
-    background: #ff4757;
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.spin-button {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 20px 0;
-    transition: transform 0.2s;
-}
-
-.spin-button:hover {
-    transform: scale(1.05);
-}
-
-.wheel-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #ff4757;
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.wheel-email-form {
-    margin: 20px 0;
-}
-
-.wheel-email-input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    margin: 10px 0;
-    text-align: center;
-    font-size: 16px;
-}
-
-.wheel-email-input:focus {
-    border-color: #ff6b6b;
-    outline: none;
-}
-
-.wheel-social-share {
-    margin: 20px 0;
-}
-
-.wheel-social-btn {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: #25d366;
-    color: white;
-    border-radius: 50%;
-    margin: 0 5px;
-    text-decoration: none;
-    line-height: 40px;
-    font-weight: bold;
-}
-
-.prize-message {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff6b6b;
-    margin: 20px 0;
-}
-
-/* Wheel labels */
-.wheel-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: left center;
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    text-align: center;
-    width: 60px;
-}
-
-.wheel-label-1 { transform: translate(-50%, -50%) rotate(22.5deg); }
-.wheel-label-2 { transform: translate(-50%, -50%) rotate(67.5deg); }
-.wheel-label-3 { transform: translate(-50%, -50%) rotate(112.5deg); }
-.wheel-label-4 { transform: translate(-50%, -50%) rotate(157.5deg); }
-.wheel-label-5 { transform: translate(-50%, -50%) rotate(202.5deg); }
-.wheel-label-6 { transform: translate(-50%, -50%) rotate(247.5deg); }
-.wheel-label-7 { transform: translate(-50%, -50%) rotate(292.5deg); }
-.wheel-label-8 { transform: translate(-50%, -50%) rotate(337.5deg); }
+/* ... (ajouter tout le CSS du chat et de la roue) ... */
     </style>
 </head>
 <body>
@@ -564,120 +422,128 @@
             <p>Collection de luxe et d'exception</p>
         </div>
     </div>
+<!-- Chat Icon -->
+<div class="chat-container-fixed">
+    <div class="chat-icon" id="chatIcon">
+        <i class="fas fa-comments"></i>
+    </div>
+</div>
+
 <!-- Lucky Wheel Icon -->
 <div class="wheel-container">
     <div class="wheel-icon" id="wheelIcon">
         <i class="fas fa-gift"></i>
     </div>
 </div>
-
-<!-- Wheel Modal -->
-<div class="wheel-modal" id="wheelModal">
-    <div class="wheel-content">
-        <button class="wheel-close" id="wheelClose">×</button>
-        <h2>🎯 Tournez la Roue de la Chance !</h2>
-        <p>Tentez de gagner un article gratuit !</p>
-        
-        <div class="wheel">
-            <div class="wheel-circle" id="wheelCircle">
-                <div class="wheel-label wheel-label-1">T-SHIRT</div>
-                <div class="wheel-label wheel-label-2">PULL</div>
-                <div class="wheel-label wheel-label-3">-20%</div>
-                <div class="wheel-label wheel-label-4">ENSEMBLE</div>
-                <div class="wheel-label wheel-label-5">-10%</div>
-                <div class="wheel-label wheel-label-6">CASQUETTE</div>
-                <div class="wheel-label wheel-label-7">LIVRAISON</div>
-                <div class="wheel-label wheel-label-8">-30%</div>
-            </div>
-            <div class="wheel-pointer"></div>
-        </div>
-        
-        <button class="spin-button" id="spinButton">TOURNER LA ROUE (1€)</button>
-        
-        <div class="wheel-email-form" id="emailForm" style="display: none;">
-            <input type="email" class="wheel-email-input" id="wheelEmail" placeholder="Votre email pour recevoir votre gain" required>
-            <button class="spin-button" onclick="submitEmail()">VALIDER</button>
-        </div>
-        
-        <div class="wheel-social-share" id="socialShare" style="display: none;">
-            <p>Partagez pour augmenter vos chances !</p>
-            <a href="#" class="wheel-social-btn">F</a>
-            <a href="#" class="wheel-social-btn">T</a>
-            <a href="#" class="wheel-social-btn">W</a>
-        </div>
-        
-        <div id="prizeMessage" class="prize-message"></div>
-    </div>
-</div>
 <script>
-// Lucky Wheel functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const wheelIcon = document.getElementById('wheelIcon');
-    const wheelModal = document.getElementById('wheelModal');
-    const wheelClose = document.getElementById('wheelClose');
-    const wheelCircle = document.getElementById('wheelCircle');
-    const spinButton = document.getElementById('spinButton');
-    const emailForm = document.getElementById('emailForm');
-    const socialShare = document.getElementById('socialShare');
-    const prizeMessage = document.getElementById('prizeMessage');
+// Chat functionality
+const chatIcon = document.getElementById('chatIcon');
+const chatWindow = document.getElementById('chatWindow');
+const chatClose = document.getElementById('chatClose');
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendMessage = document.getElementById('sendMessage');
 
-    // Open wheel modal
-    wheelIcon.addEventListener('click', () => {
-        wheelModal.style.display = 'flex';
-    });
-
-    // Close wheel modal
-    wheelClose.addEventListener('click', () => {
-        wheelModal.style.display = 'none';
-        resetWheel();
-    });
-
-    // Spin the wheel
-    spinButton.addEventListener('click', spinWheel);
-
-    function spinWheel() {
-        // 95% chance to lose, 5% to win
-        const isWinner = Math.random() < 0.05;
-        const degrees = isWinner ? 1440 + 45 : 1440 + 225;
-        
-        wheelCircle.style.transform = `rotate(${degrees}deg)`;
-        
-        setTimeout(() => {
-            if (isWinner) {
-                prizeMessage.textContent = "🎉 Félicitations ! Vous avez gagné un article gratuit !";
-                emailForm.style.display = 'block';
-                spinButton.style.display = 'none';
-            } else {
-                prizeMessage.textContent = "😢 Presque ! Partagez pour rejouer ?";
-                socialShare.style.display = 'block';
-                spinButton.textContent = "REJOUER (Partager)";
-            }
-        }, 3000);
-    }
-
-    function resetWheel() {
-        wheelCircle.style.transform = 'rotate(0deg)';
-        emailForm.style.display = 'none';
-        socialShare.style.display = 'none';
-        prizeMessage.textContent = '';
-        spinButton.style.display = 'block';
-        spinButton.textContent = 'TOURNER LA ROUE (1€)';
-    }
-
-    window.submitEmail = function() {
-        const email = document.getElementById('wheelEmail').value;
-        if (email) {
-            prizeMessage.textContent = "✅ Merci ! Vous recevrez votre gain par email.";
-            setTimeout(() => {
-                wheelModal.style.display = 'none';
-                resetWheel();
-            }, 2000);
-            console.log("Nouveau gagnant ! Email:", email);
-        }
-    }
+// Open chat
+chatIcon.addEventListener('click', () => {
+    chatWindow.style.display = 'flex';
 });
+
+// Close chat
+chatClose.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+});
+
+// Send message
+function sendMessageHandler() {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'sent');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
+        
+        // Auto response
+        setTimeout(() => {
+            const responseElement = document.createElement('div');
+            responseElement.classList.add('message', 'received');
+            responseElement.textContent = "Merci pour votre message. Nous vous répondrons sous peu !";
+            chatMessages.appendChild(responseElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+        
+        messageInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+sendMessage.addEventListener('click', sendMessageHandler);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessageHandler();
+});
+
+// Wheel functionality
+const wheelIcon = document.getElementById('wheelIcon');
+const wheelModal = document.getElementById('wheelModal');
+const wheelClose = document.getElementById('wheelClose');
+const wheelCircle = document.getElementById('wheelCircle');
+const spinButton = document.getElementById('spinButton');
+const emailForm = document.getElementById('emailForm');
+const socialShare = document.getElementById('socialShare');
+const prizeMessage = document.getElementById('prizeMessage');
+
+// Open wheel modal
+wheelIcon.addEventListener('click', () => {
+    wheelModal.style.display = 'flex';
+});
+
+// Close wheel modal
+wheelClose.addEventListener('click', () => {
+    wheelModal.style.display = 'none';
+    resetWheel();
+});
+
+// Spin the wheel
+spinButton.addEventListener('click', spinWheel);
+
+function spinWheel() {
+    const isWinner = Math.random() < 0.05;
+    const degrees = isWinner ? 1440 + 45 : 1440 + 225;
+    
+    wheelCircle.style.transform = `rotate(${degrees}deg)`;
+    
+    setTimeout(() => {
+        if (isWinner) {
+            prizeMessage.textContent = "🎉 Félicitations ! Vous avez gagné !";
+            emailForm.style.display = 'block';
+            spinButton.style.display = 'none';
+        } else {
+            prizeMessage.textContent = "😢 Presque ! Partagez pour rejouer ?";
+            socialShare.style.display = 'block';
+            spinButton.textContent = "REJOUER";
+        }
+    }, 3000);
+}
+
+function resetWheel() {
+    wheelCircle.style.transform = 'rotate(0deg)';
+    emailForm.style.display = 'none';
+    socialShare.style.display = 'none';
+    prizeMessage.textContent = '';
+    spinButton.style.display = 'block';
+    spinButton.textContent = 'TOURNER LA ROUE';
+}
+
+window.submitEmail = function() {
+    const email = document.getElementById('wheelEmail').value;
+    if (email) {
+        prizeMessage.textContent = "✅ Merci !";
+        setTimeout(() => {
+            wheelModal.style.display = 'none';
+            resetWheel();
+        }, 2000);
+    }
+}
 </script>
-</body>
-</html>
 </body>
 </html>
