@@ -8,43 +8,13 @@
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RM80BJ2TD5"></script>
     <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RM80BJ2TD5');
     </script>
 
     <style>
-.quiz-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.quiz-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.contest-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.contest-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
         * {
             margin: 0;
             padding: 0;
@@ -114,6 +84,17 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        /* Animation texte défilant */
+        .welcome-banner {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
             padding: 12px 0;
             margin: 20px 0;
@@ -130,11 +111,6 @@
             padding: 5px 0;
         }
         
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
         @keyframes scroll-text {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -142,6 +118,26 @@
         
         .scrolling-text:hover {
             animation-play-state: paused;
+        }
+
+        /* Style du bouton quiz */
+        .quiz-button {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: black;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .quiz-button:hover {
+            transform: scale(1.05);
         }
         
         .catalogue {
@@ -164,16 +160,12 @@
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
+        
         .produit-image {
             width: 100%;
             height: 250px;
             object-fit: cover;
             border-bottom: 3px solid #667eea;
-            transition: transform 0.3s ease;
-        }
-        
-        .produit:hover .produit-image {
-            transform: scale(1.05);
         }
         
         .produit-content {
@@ -205,23 +197,6 @@
             font-size: 1.5em;
             font-weight: bold;
             margin: 15px 0;
-        }
-
-        /* Style pour les boutons Commander */
-        .bouton-commander {
-            display: inline-block;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        .bouton-commander:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.4);
         }
         
         .footer {
@@ -255,433 +230,30 @@
     </style>
 </head>
 <body>
-<!-- Barre promotion -->
-<div class="promo-bar">
-    🚀 LIVRAISON OFFERTE À PARTIR DE 2 ARTICLES • 📦 RETOURS GRATUITS • ⭐ SATISFACTION GARANTIE
-</div>
-<style>
-.quiz-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.quiz-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.contest-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.contest-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.promo-bar {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    position: relative;
-    animation: slideIn 0.5s ease-out;
-}
-@keyframes slideIn {
-    from { transform: translateY(-100%); }
-    to { transform: translateY(0); }
-}
-</style>
-<!-- Menu navigation -->
-<nav class="main-nav">
-    <div class="nav-container">
-        <a href="#accueil">Accueil</a>
-        <a href="#catalogue">Catalogue</a>
-        <a href="#nouveautes">Nouveautés</a>
-        <a href="#best-sellers">Best-Sellers</a>
-        <a href="#contact">Contact</a>
-    </div>
-</nav>
-<style>
-.quiz-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.quiz-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.contest-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.contest-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.main-nav {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-.nav-container a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-.nav-container a:hover {
-    background: rgba(255,255,255,0.1);
-    transform: translateY(-2px);
-}
-@media (max-width: 768px) {
-    .nav-container {
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-    .nav-container a {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-}
-</style>
-<!-- Personnage de bienvenue -->
-<div id="welcome-character" class="welcome-character">
-    <div class="character">
-        <div class="face">
-            <div class="eyes">
-                <div class="eye"></div>
-                <div class="eye"></div>
-            </div>
-            <div class="smile"></div>
-        </div>
-        <div class="body">
-            <div class="hand"></div>
-        </div>
-    </div>
-    <div class="speech-bubble">
-        <p>Bismillah a nka Andu-xara!</p>
-        <small>Bienvenue chez Andu-xara!</small>
-    </div>
-</div>
-
-<style>
-.quiz-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.quiz-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.contest-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.contest-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-/* Personnage de bienvenue */
-.welcome-character {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    animation: float 3s ease-in-out infinite;
-}
-
-.character {
-    position: relative;
-    width: 80px;
-    height: 120px;
-}
-
-.face {
-    width: 60px;
-    height: 60px;
-    background: #FFD700;
-    border-radius: 50%;
-    position: relative;
-    margin: 0 auto;
-    border: 3px solid #2c3e50;
-}
-
-.eyes {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 20px;
-}
-
-.eye {
-    width: 8px;
-    height: 8px;
-    background: #2c3e50;
-    border-radius: 50%;
-    animation: blink 4s infinite;
-}
-
-.smile {
-    width: 20px;
-    height: 10px;
-    border-bottom: 3px solid #2c3e50;
-    border-radius: 0 0 50% 50%;
-    margin: 8px auto 0;
-}
-
-.body {
-    width: 50px;
-    height: 40px;
-    background: #25D366;
-    border-radius: 20px 20px 0 0;
-    margin: -5px auto 0;
-    position: relative;
-}
-
-.hand {
-    position: absolute;
-    right: -15px;
-    top: 5px;
-    width: 20px;
-    height: 8px;
-    background: #FFD700;
-    border-radius: 10px;
-    transform-origin: left center;
-    animation: wave 2s ease-in-out infinite;
-}
-
-.speech-bubble {
-    position: absolute;
-    bottom: 130px;
-    left: 70px;
-    background: white;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 2px solid #25D366;
-    min-width: 180px;
-    opacity: 0;
-    animation: appear 1s ease-in-out 0.5s forwards;
-}
-
-.speech-bubble::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 20px;
-    border-width: 10px 10px 0;
-    border-style: solid;
-    border-color: white transparent transparent;
-}
-
-.speech-bubble p {
-    margin: 0;
-    font-weight: bold;
-    color: #2c3e50;
-    font-size: 1.1em;
-}
-
-.speech-bubble small {
-    color: #7f8c8d;
-    font-style: italic;
-}
-
-/* Animations */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(20deg); }
-}
-
-@keyframes blink {
-    0%, 95%, 100% { transform: scaleY(1); }
-    97% { transform: scaleY(0.1); }
-}
-
-@keyframes appear {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .welcome-character {
-        bottom: 10px;
-        left: 10px;
-        transform: scale(0.8);
-    }
-    
-    .speech-bubble {
-        left: 60px;
-        bottom: 110px;
-        min-width: 160px;
-    }
-}
-</style>
-
-<script>
-// Cacher le personnage après 8 secondes
-setTimeout(() => {
-    document.getElementById("welcome-character").style.opacity = "0";
-    document.getElementById("welcome-character").style.transition = "opacity 1s ease-in-out";
-    
-    setTimeout(() => {
-        document.getElementById("welcome-character").style.display = "none";
-    }, 1000);
-}, 8000);
-
-// Réapparaitre quand on scroll en bas
-window.addEventListener("scroll", () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-        document.getElementById("welcome-character").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("welcome-character").style.opacity = "1";
-        }, 50);
-    }
-});
-</script>
     <div class="container">
+        <div class="header">
+            <!-- Icônes réseaux sociaux avec vrais logos -->
+            <div class="social-icons">
+                <a href="https://www.facebook.com/share/1HxCMHr3bE/?mibextid=wwXIfr" target="_blank" title="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/andu_xara?igsh=cTFrcTFhMHQ3ZTlx&utm_source=qr" target="_blank" title="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://youtube.com/@andu-xaratv5737?si=FNjY4FhBKpCClpHw" target="_blank" title="YouTube">
+                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@andu_xara?_t=ZM-8zPDsFqJpRQ&_r=" target="_blank" title="TikTok">
+                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                </a>
+                <a href="https://sites.google.com/view/andu-xara-marque-mauritanienne/accueil" target="_blank" title="Site Web">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </a>
             </div>
             
             <h1>🛍️ ANDU-XARA</h1>
             <p>Collection Exclusive - Catalogue Officiel</p>
             
-<!-- Nouvelle section innovation -->
-<div class="innovation-section">
-    <h2>🚀 INNOVATION EXCLUSIVE : Le Vêtement qui Évolue</h2>
-    <p>Chez Andu-Xara, nous créons l'histoire avec vous :</p>
-    <ul>
-        <li>✅ Chaque vêtement a une identité NFT unique</li>
-        <li>✅ Votre histoire s'écrit à chaque portage</li>
-        <li>✅ Débloquez des avantages exclusifs dans le temps</li>
-        <li>✅ Devenez membre de la communauté Évolution</li>
-    </ul>
-    <a href="systeme-evolution.html" class="bouton-innovation">Découvrir le Concept</a>
-</div>
-
-<style>
-.quiz-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.quiz-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.contest-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    padding: 20px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    animation: pulse 2s infinite;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-    transition: all 0.3s ease;
-}
-.contest-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-}
-.innovation-section { 
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-    color: white; 
-    padding: 40px; 
-    text-align: center; 
-    margin: 20px 0; 
-    border-radius: 15px; 
-}
-.bouton-innovation { 
-    display: inline-block; 
-    background: #25D366; 
-    color: white; 
-    padding: 15px 30px; 
-    border-radius: 30px; 
-    text-decoration: none; 
-    font-weight: bold; 
-    margin-top: 20px; 
-}
-</style>
             <!-- Texte de bienvenue défilant -->
             <div class="welcome-banner">
                 <div class="scrolling-text">
@@ -692,90 +264,14 @@ window.addEventListener("scroll", () => {
                 </div>
             </div>
         </div>
+
+        <!-- Bouton Quiz -->
+        <button class="quiz-button" onclick="startQuiz()">
+            🎯 QUIZ EXCLUSIVE - 20% DE RÉDUCTION
+        </button>
         
-<!-- Section Accueil -->
-<div style="text-align: center; margin: 30px 0;">
-    <a href="concours.html" target="_blank" class="quiz-button">🎯 QUIZ CULTUREL - PRODUIT GRATUIT !</a>
-</div>
-    <div style="text-align: center; margin: 30px 0;">
-    </div>
-            display: inline-block;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: black;
-            padding: 20px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2em;
-            animation: pulse 2s infinite;
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-        ">
-    </div>
-<section id="accueil" class="section">
-    <div class="hero-section">
-        <h1>🛍️ ANDU-XARA</h1>
-        <p>Collection Exclusive - L'Excellence Mauritano-Sénégalaise</p>
-        
-        <!-- Barre de recherche -->
-        <div class="search-bar">
-            <input type="text" placeholder="🔍 Rechercher un produit..." id="searchInput">
-            <button onclick="searchProducts()">Rechercher</button>
-        </div>
-    </div>
-</section>
-
-<!-- Section Nouveautés -->
-<section id="nouveautes" class="section">
-    <div class="section-header">
-        <h2>🌟 NOUVEAUTÉS</h2>
-        <p>Découvrez nos dernières créations</p>
-    </div>
-    <div class="catalogue">
-        <!-- Les produits seront insérés ici -->
-    </div>
-</section>
-
-<!-- Section Best-Sellers -->
-<section id="best-sellers" class="section">
-    <div class="section-header">
-        <h2>🔥 BEST-SELLERS</h2>
-        <p>Les préférés de nos clients</p>
-    </div>
-    <div class="catalogue">
-        <!-- Les produits seront insérés ici -->
-    </div>
-</section>
-
-<!-- Section Catalogue Complet -->
-<section id="catalogue" class="section">
-    <div class="section-header">
-        <h2>📦 CATALOGUE COMPLET</h2>
-        <p>Toute notre collection</p>
-    </div>
-    
-    <!-- Catégories -->
-    <div class="categories">
-        <h2>📂 CATÉGORIES</h2>
-        <div class="category-grid">
-            <div class="category-item" onclick="filterProducts('all')">
-                <span>🌟 TOUS</span>
-            </div>
-            <div class="category-item" onclick="filterProducts('t-shirt')">
-                <span>👕 T-SHIRTS</span>
-            </div>
-            <div class="category-item" onclick="filterProducts('pull')">
-                <span>🧥 PULLS</span>
-            </div>
-            <div class="category-item" onclick="filterProducts('ensemble')">
-                <span>👖 ENSEMBLES</span>
-            </div>
-            <div class="category-item" onclick="filterProducts('enfant')">
-                <span>👶 ENFANTS</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="catalogue">
+        <div class="catalogue">
+            <!-- Vos produits ici -->
             <div class="produit">
                 <img src="photos/cauchon-blanc.jpeg" alt="Cauchon Blanc" class="produit-image">
                 <div class="produit-content">
@@ -783,102 +279,70 @@ window.addEventListener("scroll", () => {
                     <p class="reference">Référence: ADX</p>
                     <p class="description">Cauchon Blanc Andu-xara</p>
                     <div class="prix">549 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Cauchon%20Blanc%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
                 </div>
             </div>
 
-            <div class="produit">
-                <img src="photos/ensemble-capuchon-gris.jpeg" alt="Ensemble Capuchon Gris" class="produit-image">
-                <div class="produit-content">
-                    <h2>Ensemble Capuchon Gris</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble capuchon gris premium</p>
-                    <div class="prix">950 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Ensemble%20Capuchon%20Gris%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
+            <!-- ... autres produits ... -->
 
-            <div class="produit">
-                <img src="photos/ensemble-capuchon-noir-fr.jpeg" alt="Ensemble Capuchon Noir FR" class="produit-image">
-                <div class="produit-content">
-                    <h2>Ensemble Capuchon Noir FR</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble capuchon noir français</p>
-                    <div class="prix">950 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Ensemble%20Capuchon%20Noir%20FR%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 Andu-xara - Tous droits réservés</p>
+            <p>📧 Email: <a href="mailto:anduxara2408@gmail.com">anduxara2408@gmail.com</a></p>
+            <p>📱 WhatsApp: <a href="https://wa.me/22249037697">+222 49037697</a></p>
+            <p>📞 Téléphone: <a href="tel:+22231037697">+222 31037697</a></p>
+            <p>📞 Sénégal: <a href="tel:+221762821163">+221 762821163</a></p>
+            <p>🌍 Nous livrons dans : 
+                <img src="https://flagcdn.com/w40/mr.png" alt="Mauritanie" title="Mauritanie" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/sn.png" alt="Sénégal" title="Sénégal" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/fr.png" alt="France" title="France" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/gm.png" alt="Gambie" title="Gambie" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/ml.png" alt="Mali" title="Mali" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/ci.png" alt="Côte d'Ivoire" title="Côte d'Ivoire" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/gn.png" alt="Guinée" title="Guinée" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/gw.png" alt="Guinée-Bissau" title="Guinée-Bissau" style="width:20px; margin:0 2px;">
+                <img src="https://flagcdn.com/w40/gq.png" alt="Guinée équatoriale" title="Guinée équatoriale" style="width:20px; margin:0 2px;">
+                etc.
+            </p>
+            <p>Collection de luxe et d'exception</p>
+        </div>
+    </div>
 
-            <div class="produit">
-                <img src="photos/ensemble-pull-blanc-jogging-noir.jpeg" alt="Pull Blanc Jogging Noir" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull Blanc Jogging Noir</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble pull blanc + jogging noir</p>
-                    <div class="prix">749 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Pull%20Blanc%20Jogging%20Noir%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
+    <!-- Script du Quiz -->
+    <script>
+        function startQuiz() {
+            const questions = [
+                {
+                    question: "🎯 Quel est votre style vestimentaire préféré ?",
+                    options: ["Classique", "Sportswear", "Traditionnel", "Moderne"],
+                    correct: 3
+                },
+                {
+                    question: "🌟 Quelle matière préférez-vous ?",
+                    options: ["Coton", "Cuir", "Laine", "Soie"],
+                    correct: 0
+                }
+            ];
 
-            <div class="produit">
-                <img src="photos/pull-bleu.jpeg" alt="Pull Bleu" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull Bleu</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Pull bleu Andu-xara</p>
-                    <div class="prix">549 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Pull%20Bleu%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const answer = prompt(`${q.question}\n\nOptions:\n${q.options.map((opt, i) => `${i + 1}. ${opt}`).join('\n')}\n\nEntrez le numéro de votre réponse:`);
+                
+                if (parseInt(answer) - 1 === q.correct) {
+                    score++;
+                    alert("✅ Bonne réponse !");
+                } else {
+                    alert("❌ Réponse incorrecte");
+                }
+            });
 
-            <div class="produit">
-                <img src="photos/pull-et-tshirt-combines.jpeg" alt="Pull et T-shirt Combinés" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull et T-shirt Combinés</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble pull + t-shirt combinés</p>
-                    <div class="prix">799 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20Pull%20et%20T-shirt%20Combinés%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/tshirt-blanc-et-jogging-noir.jpeg" alt="T-shirt Blanc Jogging" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Blanc Jogging</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt blanc + jogging noir</p>
-                    <div class="prix">699 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20T-shirt%20Blanc%20Jogging%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/tshirt-noir-arabe.jpeg" alt="T-shirt Noir Arabe" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Arabe</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir style arabe</p>
-                    <div class="prix">499 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20T-shirt%20Noir%20Arabe%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/tshirt-noir-logo-arabe-1.jpeg" alt="T-shirt Noir Logo Arabe" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Logo Arabe</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir logo arabe</p>
-                    <div class="prix">499 MRU UM</div>
-                    <a href="https://wa.me/22249037697?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20le%20produit%20T-shirt%20Noir%20Logo%20Arabe%20(Réf.:%20ADX)" class="bouton-commander" target="_blank">💬 Commander sur WhatsApp</a>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/tshirt-noir-logo-arabe-2.jpeg" alt="T-shirt Noir Logo" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Logo</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T
-
+            if (score === questions.length) {
+                alert("🎉 Félicitations ! Vous avez gagné 20% de réduction sur votre prochaine commande !\n\nCode: ANDU20");
+            } else {
+                alert(`Merci d'avoir participé ! Vous avez ${score}/${questions.length} bonnes réponses.`);
+            }
+        }
+    </script>
+</body>
+</html>
