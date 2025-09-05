@@ -513,7 +513,8 @@
     </div>
 </div>
 <script>
-// Chat functionality
+<script>
+// Chat functionality with intelligent responses
 const chatIcon = document.getElementById('chatIcon');
 const chatWindow = document.getElementById('chatWindow');
 const chatClose = document.getElementById('chatClose');
@@ -531,20 +532,98 @@ chatClose.addEventListener('click', () => {
     chatWindow.style.display = 'none';
 });
 
+// Intelligent response system
+function getIntelligentResponse(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Prix des produits
+    if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
+        if (lowerMessage.includes('t-shirt') || lowerMessage.includes('tshirt')) {
+            return "Nos T-shirts coûtent entre 400 et 600 MRU selon le modèle et la qualité.";
+        } else if (lowerMessage.includes('pull') || lowerMessage.includes('sweat')) {
+            return "Nos pulls coûtent entre 600 et 800 MRU.";
+        } else if (lowerMessage.includes('ensemble') || lowerMessage.includes('complet')) {
+            return "Nos ensembles complets (haut + bas) coûtent entre 1000 et 1500 MRU.";
+        } else {
+            return "Nos prix varient selon les produits : T-shirts (400-600 MRU), Pulls (600-800 MRU), Ensembles (1000-1500 MRU).";
+        }
+    }
+    
+    // Tailles disponibles
+    else if (lowerMessage.includes('taille') || lowerMessage.includes('size') || lowerMessage.includes('measure')) {
+        return "Nous avons toutes les tailles : XS, S, M, L, XL, XXL. Tailles européennes et africaines disponibles.";
+    }
+    
+    // Livraison pays
+    else if (lowerMessage.includes('livraison') || lowerMessage.includes('pays') || lowerMessage.includes('shipping') || lowerMessage.includes('country')) {
+        return "Nous livrons dans toute l'Afrique : Mauritanie, Sénégal, Mali, Maroc, Côte d'Ivoire, etc. Et en Europe : France, Espagne, Belgique, Allemagne.";
+    }
+    
+    // Contacts et téléphones
+    else if (lowerMessage.includes('téléphone') || lowerMessage.includes('phone') || lowerMessage.includes('contact') || lowerMessage.includes('whatsapp') || lowerMessage.includes('numéro')) {
+        return "📞 Nos numéros :\nMauritanie : +222 49037697 / +222 31037697\nSénégal : +221 76 282 11 63\nWhatsApp disponible sur tous les numéros !";
+    }
+    
+    // Commandes
+    else if (lowerMessage.includes('commande') || lowerMessage.includes('order') || lowerMessage.includes('acheter') || lowerMessage.includes('buy')) {
+        return "Pour commander, contactez-nous par WhatsApp au +222 49037697. Nous acceptons les paiements par Wave, Orange Money, et virement bancaire.";
+    }
+    
+    // Qualité
+    else if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || lowerMessage.includes('coton') || lowerMessage.includes('tissu')) {
+        return "Nos produits sont 100% coton de haute qualité, importés directement. Impression haute définition résistante aux lavages.";
+    }
+    
+    // Délais
+    else if (lowerMessage.includes('délai') || lowerMessage.includes('temps') || lowerMessage.includes('when') || lowerMessage.includes('quand')) {
+        return "Délai de livraison : 2-3 jours en ville, 5-7 jours en région. International : 1-2 semaines.";
+    }
+    
+    // Salutations
+    else if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+        return "Bonjour ! 😊 Comment puis-je vous aider aujourd'hui ?";
+    }
+    
+    // Remerciements
+    else if (lowerMessage.includes('merci') || lowerMessage.includes('thanks') || lowerMessage.includes('thank')) {
+        return "Avec plaisir ! N'hésitez pas si vous avez d'autres questions. 😊";
+    }
+    
+    // Réponse par défaut
+    else {
+        return "Merci pour votre message ! Pour plus d'informations sur nos produits, prix, tailles ou livraison, n'hésitez pas à me poser des questions spécifiques. 😊";
+    }
+}
+
 // Send message
 function sendMessageHandler() {
     const message = messageInput.value.trim();
     if (message) {
+        // Add user message
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', 'sent');
         messageElement.textContent = message;
         chatMessages.appendChild(messageElement);
         
-        // Auto reply
+        // Get intelligent response
+        const response = getIntelligentResponse(message);
+        
+        // Add bot response
         setTimeout(() => {
             const responseElement = document.createElement('div');
             responseElement.classList.add('message', 'received');
-            responseElement.textContent = "Merci pour votre message. Nous vous répondrons sous peu !";
+            
+            // Handle multi-line responses
+            if (response.includes('\n')) {
+                response.split('\n').forEach(line => {
+                    const lineElement = document.createElement('div');
+                    lineElement.textContent = line;
+                    responseElement.appendChild(lineElement);
+                });
+            } else {
+                responseElement.textContent = response;
+            }
+            
             chatMessages.appendChild(responseElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 1000);
@@ -558,6 +637,7 @@ sendMessage.addEventListener('click', sendMessageHandler);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessageHandler();
 });
+</script>
 </script>
 </body>
 </html>
