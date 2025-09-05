@@ -380,5 +380,82 @@
             <p>Collection de luxe et d'exception</p>
         </div>
     </div>
+<script>
+// Enhanced Wheel Functionality
+const wheelIcon = document.getElementById('wheelIcon');
+const wheelModal = document.getElementById('wheelModal');
+const wheelClose = document.getElementById('wheelClose');
+const wheelCircle = document.getElementById('wheelCircle');
+const spinButton = document.getElementById('spinButton');
+const wheelFormContainer = document.getElementById('wheelFormContainer');
+const prizeMessage = document.getElementById('prizeMessage');
+
+// Open wheel
+wheelIcon.addEventListener('click', () => {
+    wheelModal.style.display = 'flex';
+});
+
+// Close wheel
+wheelClose.addEventListener('click', () => {
+    wheelModal.style.display = 'none';
+    resetWheel();
+});
+
+// Spin wheel
+spinButton.addEventListener('click', spinWheel);
+
+function spinWheel() {
+    const isWinner = Math.random() < 0.05; // 5% de chance
+    const degrees = isWinner ? 1440 + 45 : 1440 + 225;
+    
+    wheelCircle.style.transform = `rotate(${degrees}deg)`;
+    
+    setTimeout(() => {
+        if (isWinner) {
+            prizeMessage.innerHTML = "🎉 FÉLICITATIONS !<br>Vous avez gagné un article GRATUIT !";
+            wheelFormContainer.style.display = 'block';
+            spinButton.style.display = 'none';
+        } else {
+            prizeMessage.innerHTML = "😢 Presque !<br>Partagez sur WhatsApp pour rejouer ?";
+            spinButton.textContent = "PARTAGER POUR REJOUER";
+            spinButton.classList.add('whatsapp-redirect');
+            spinButton.onclick = () => window.open('https://wa.me/?text=Je viens de jouer sur Andu-Xara !');
+        }
+    }, 3000);
+}
+
+function resetWheel() {
+    wheelCircle.style.transform = 'rotate(0deg)';
+    wheelFormContainer.style.display = 'none';
+    prizeMessage.innerHTML = '';
+    spinButton.style.display = 'block';
+    spinButton.textContent = 'JOUER (1€)';
+    spinButton.classList.remove('whatsapp-redirect');
+    spinButton.onclick = spinWheel;
+}
+
+function submitWinningForm() {
+    const size = document.getElementById('productSize').value;
+    const color = document.getElementById('productColor').value;
+    const email = document.getElementById('winnerEmail').value;
+    const phone = document.getElementById('winnerPhone').value;
+    
+    if (size && color && email && phone) {
+        // Envoyer l'email à anduxara2408@gmail.com
+        const message = `🎉 NOUVEAU GAGNANT !\n\nProduit: ${prizeMessage.textContent}\nTaille: ${size}\nCouleur: ${color}\nEmail: ${email}\nTéléphone: ${phone}`;
+        
+        // Redirection WhatsApp
+        prizeMessage.innerHTML = "✅ MERCI !<br>Nous vous contacterons dans 24h sur WhatsApp !";
+        setTimeout(() => {
+            window.open(`https://wa.me/22249037697?text=Je viens de gagner sur le site !`);
+            wheelModal.style.display = 'none';
+            resetWheel();
+        }, 2000);
+        
+        // Log pour debug
+        console.log("GAGNANT:", message);
+    }
+}
+</script>
 </body>
 </html>
