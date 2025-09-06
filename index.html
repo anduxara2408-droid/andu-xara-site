@@ -510,7 +510,7 @@
     </div>
 
     <script>
-    // Chat functionality
+    // Chat functionality with AI responses
     const chatIcon = document.getElementById('chatIcon');
     const chatWindow = document.getElementById('chatWindow');
     const chatClose = document.getElementById('chatClose');
@@ -528,23 +528,136 @@
         chatWindow.style.display = 'none';
     });
 
+    // Intelligent AI response system
+    function getAIResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        // Salutations
+        if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || 
+            lowerMessage.includes('hello') || lowerMessage.includes('hi') || 
+            lowerMessage.includes('coucou')) {
+            return "Bonjour ! 😊 Je suis l'assistant Andu-Xara. Comment puis-je vous aider aujourd'hui ?";
+        }
+        
+        // Prix et produits
+        if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || 
+            lowerMessage.includes('combien') || lowerMessage.includes('cout')) {
+            if (lowerMessage.includes('t-shirt') || lowerMessage.includes('tshirt')) {
+                return "Nos T-shirts sont entre 400 et 600 MRU selon le modèle. Lequel vous intéresse ?";
+            } else if (lowerMessage.includes('pull') || lowerMessage.includes('sweat')) {
+                return "Nos pulls coûtent entre 600 et 800 MRU. Je peux vous conseiller !";
+            } else if (lowerMessage.includes('ensemble') || lowerMessage.includes('complet')) {
+                return "Les ensembles complets (haut + bas) sont entre 1000 et 1500 MRU. Quelle taille cherchez-vous ?";
+            } else {
+                return "Nos prix varient selon les articles : T-shirts (400-600 MRU), Pulls (600-800 MRU), Ensembles (1000-1500 MRU). Quel produit vous intrigue ?";
+            }
+        }
+        
+        // Tailles
+        if (lowerMessage.includes('taille') || lowerMessage.includes('size') || 
+            lowerMessage.includes('grandeur') || lowerMessage.includes('measure')) {
+            return "Nous avons toutes les tailles : XS, S, M, L, XL, XXL. 📏 Je peux vous aider à choisir la bonne taille si vous me donnez vos mesures !";
+        }
+        
+        // Livraison
+        if (lowerMessage.includes('livraison') || lowerMessage.includes('shipping') || 
+            lowerMessage.includes('delivery') || lowerMessage.includes('expédition')) {
+            return "🚚 Nous livrons partout ! En Mauritanie : 2-3 jours. International : 1-2 semaines. Où êtes-vous situé ?";
+        }
+        
+        // Paiement
+        if (lowerMessage.includes('paiement') || lowerMessage.includes('payment') || 
+            lowerMessage.includes('payer') || lowerMessage.includes('pay')) {
+            return "💳 Nous acceptons : Wave, Orange Money, virement bancaire, et cash à la livraison. Quelle méthode vous convient ?";
+        }
+        
+        // Contact
+        if (lowerMessage.includes('contact') || lowerMessage.includes('téléphone') || 
+            lowerMessage.includes('phone') || lowerMessage.includes('whatsapp') || 
+            lowerMessage.includes('numéro')) {
+            return "📞 Contactez-nous au +222 49037697 (WhatsApp disponible). Nous répondons 7j/7 de 8h à 22h !";
+        }
+        
+        // Qualité
+        if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || 
+            lowerMessage.includes('coton') || lowerMessage.includes('tissu')) {
+            return "🎯 Nos produits sont 100% coton premium, importés directement. Impression haute définition résistante aux lavages !";
+        }
+        
+        // Commander
+        if (lowerMessage.includes('commander') || lowerMessage.includes('order') || 
+            lowerMessage.includes('acheter') || lowerMessage.includes('buy')) {
+            return "🛒 Excellent choix ! Pour commander, dites-moi quel produit vous intéresse et je vous guiderai étape par étape !";
+        }
+        
+        // Remerciements
+        if (lowerMessage.includes('merci') || lowerMessage.includes('thanks') || 
+            lowerMessage.includes('thank you') || lowerMessage.includes('remerciement')) {
+            return "Avec plaisir ! 😊 N'hésitez pas si vous avez d'autres questions. Je suis là pour vous aider !";
+        }
+        
+        // Humour
+        if (lowerMessage.includes('blague') || lowerMessage.includes('rire') || 
+            lowerMessage.includes('drôle') || lowerMessage.includes('funny')) {
+            const blagues = [
+                "Pourquoi les T-shirts Andu-Xara sont-ils si intelligents ? Parce qu'ils ont toujours la bonne réponse ! 😄",
+                "Qu'est-ce qu'un pull Andu-Xara dit à un autre pull ? 'Tu es super cotton !' 🧶",
+                "Pourquoi nos clients sourient-ils toujours ? Parce que nos prix sont aussi beaux que nos designs ! 😊"
+            ];
+            return blagues[Math.floor(Math.random() * blagues.length)];
+        }
+        
+        // Question personnelle
+        if (lowerMessage.includes('ça va') || lowerMessage.includes('comment vas-tu') || 
+            lowerMessage.includes('how are you')) {
+            return "Je vais très bien, merci ! 😊 Prêt à vous aider à trouver les meilleurs produits Andu-Xara ! Et vous, comment allez-vous aujourd'hui ?";
+        }
+        
+        // Default intelligent response
+        const defaultResponses = [
+            "Intéressant ! Dites-moi en plus sur ce que vous cherchez 😊",
+            "Bonne question ! Chez Andu-Xara, nous nous efforçons de répondre à tous vos besoins. Quel produit vous attire ?",
+            "Je comprends votre demande. Laissez-moi vous guider vers la meilleure solution !",
+            "Excellente réflexion ! Nos clients adorent cette particularité de nos produits.",
+            "Je note votre intérêt ! Souhaitez-vous en savoir plus sur nos collections ?",
+            "Très pertinent ! Andu-Xara excelle justement dans ce domaine."
+        ];
+        
+        return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    }
+
     // Send message
     function sendMessageHandler() {
         const message = messageInput.value.trim();
         if (message) {
+            // Add user message
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', 'sent');
             messageElement.textContent = message;
             chatMessages.appendChild(messageElement);
             
-            // Auto response
+            // Get AI response
+            const response = getAIResponse(message);
+            
+            // Add AI response with typing effect
             setTimeout(() => {
-                const responseElement = document.createElement('div');
-                responseElement.classList.add('message', 'received');
-                responseElement.textContent = "Merci pour votre message. Nous vous répondrons sous peu !";
-                chatMessages.appendChild(responseElement);
+                const typingIndicator = document.createElement('div');
+                typingIndicator.classList.add('message', 'received');
+                typingIndicator.innerHTML = "Andu-Xara écrit...";
+                typingIndicator.style.opacity = "0.7";
+                chatMessages.appendChild(typingIndicator);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
+                
+                // Show actual response after delay
+                setTimeout(() => {
+                    chatMessages.removeChild(typingIndicator);
+                    const responseElement = document.createElement('div');
+                    responseElement.classList.add('message', 'received');
+                    responseElement.textContent = response;
+                    chatMessages.appendChild(responseElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1500);
+            }, 500);
             
             messageInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -555,83 +668,6 @@
     messageInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessageHandler();
     });
-
-    // Wheel functionality
-    const wheelIcon = document.getElementById('wheelIcon');
-    const wheelModal = document.getElementById('wheelModal');
-    const wheelClose = document.getElementById('wheelClose');
-    const wheelCircle = document.getElementById('wheelCircle');
-    const spinButton = document.getElementById('spinButton');
-    const wheelFormContainer = document.getElementById('wheelFormContainer');
-    const prizeMessage = document.getElementById('prizeMessage');
-
-    // Open wheel modal
-    wheelIcon.addEventListener('click', () => {
-        wheelModal.style.display = 'flex';
-    });
-
-    // Close wheel modal
-    wheelClose.addEventListener('click', () => {
-        wheelModal.style.display = 'none';
-        resetWheel();
-    });
-
-    // Spin wheel
-    spinButton.addEventListener('click', spinWheel);
-
-    function spinWheel() {
-        const isWinner = Math.random() < 0.05; // 5% de chance
-        const degrees = isWinner ? 1440 + 45 : 1440 + 225;
-        
-        wheelCircle.style.transform = `rotate(${degrees}deg)`;
-        
-        setTimeout(() => {
-            if (isWinner) {
-                prizeMessage.innerHTML = "🎉 FÉLICITATIONS !<br>Vous avez gagné un article GRATUIT !";
-                wheelFormContainer.style.display = 'block';
-                spinButton.style.display = 'none';
-            } else {
-                prizeMessage.innerHTML = "😢 Presque !<br>Partagez sur WhatsApp pour rejouer ?";
-                spinButton.textContent = "PARTAGER POUR REJOUER";
-                spinButton.classList.add('whatsapp-redirect');
-                spinButton.onclick = () => window.open('https://wa.me/?text=Je viens de jouer sur Andu-Xara !');
-            }
-        }, 3000);
-    }
-
-    function resetWheel() {
-        wheelCircle.style.transform = 'rotate(0deg)';
-        wheelFormContainer.style.display = 'none';
-        prizeMessage.innerHTML = '';
-        spinButton.style.display = 'block';
-        spinButton.textContent = 'JOUER (1€)';
-        spinButton.classList.remove('whatsapp-redirect');
-        spinButton.onclick = spinWheel;
-    }
-
-    function submitWinningForm() {
-        const size = document.getElementById('productSize').value;
-        const color = document.getElementById('productColor').value;
-        const email = document.getElementById('winnerEmail').value;
-        const phone = document.getElementById('winnerPhone').value;
-        
-        if (size && color && email && phone) {
-            // Envoyer l'email à anduxara2408@gmail.com
-            const message = `🎉 NOUVEAU GAGNANT !\n\nTaille: ${size}\nCouleur: ${color}\nEmail: ${email}\nTéléphone: ${phone}`;
-            
-            // Redirection WhatsApp
-            prizeMessage.innerHTML = "✅ MERCI !<br>Nous vous contacterons dans 24h sur WhatsApp !";
-            setTimeout(() => {
-                window.open(`https://wa.me/22249037697?text=Bonjour, je viens de gagner sur le site Andu-Xara !`);
-                wheelModal.style.display = 'none';
-                resetWheel();
-            }, 2000);
-            
-            // Log pour debug
-            console.log("🎉 GAGNANT:", message);
-            alert("Notification envoyée à anduxara2408@gmail.com !");
-        }
-    }
     </script>
 </body>
 </html>
