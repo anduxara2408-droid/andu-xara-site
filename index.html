@@ -197,6 +197,298 @@
                 margin-bottom: 15px;
             }
         }
+/* Chat et Roue Styles */
+.chat-container-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chat-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.chat-icon:hover {
+    transform: scale(1.1);
+}
+
+.chat-icon i {
+    color: white;
+    font-size: 28px;
+}
+
+.chat-window {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    background-color: #25d366;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-close {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.received {
+    background-color: #e5e5e5;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.sent {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: white;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input button {
+    margin-left: 10px;
+    background-color: #25d366;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+/* Wheel Styles */
+.wheel-container {
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.wheel-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.wheel-icon:hover {
+    transform: scale(1.1);
+}
+
+.wheel-icon i {
+    color: white;
+    font-size: 28px;
+}
+
+.wheel-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.wheel-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.wheel-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.wheel {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 20px auto;
+}
+
+.wheel-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+        #ff6b6b 0deg 45deg, 
+        #4ecdc4 45deg 90deg,
+        #45b7d1 90deg 135deg,
+        #96ceb4 135deg 180deg,
+        #feca57 180deg 225deg,
+        #ff9ff3 225deg 270deg,
+        #54a0ff 270deg 315deg,
+        #5f27cd 315deg 360deg
+    );
+    position: relative;
+    transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    background: #ff4757;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.spin-button {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: transform 0.2s;
+}
+
+.spin-button:hover {
+    transform: scale(1.05);
+}
+
+.wheel-form-container {
+    display: none;
+    margin: 20px 0;
+}
+
+.wheel-form select, .wheel-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.wheel-form button {
+    background: linear-gradient(135deg, #25d366, #128C7E);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.prize-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff6b6b;
+    margin: 15px 0;
+    min-height: 50px;
+}
+
+.whatsapp-redirect {
+    background: linear-gradient(135deg, #25d366, #128C7E) !important;
+}
+
+.wheel-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    width: 70px;
+    text-align: center;
+}
+
+.wheel-label-1 { transform: translate(-50%, -50%) rotate(22.5deg) translateY(-110px) rotate(-22.5deg); }
+.wheel-label-2 { transform: translate(-50%, -50%) rotate(67.5deg) translateY(-110px) rotate(-67.5deg); }
+.wheel-label-3 { transform: translate(-50%, -50%) rotate(112.5deg) translateY(-110px) rotate(-112.5deg); }
+.wheel-label-4 { transform: translate(-50%, -50%) rotate(157.5deg) translateY(-110px) rotate(-157.5deg); }
+.wheel-label-5 { transform: translate(-50%, -50%) rotate(202.5deg) translateY(-110px) rotate(-202.5deg); }
+.wheel-label-6 { transform: translate(-50%, -50%) rotate(247.5deg) translateY(-110px) rotate(-247.5deg); }
+.wheel-label-7 { transform: translate(-50%, -50%) rotate(292.5deg) translateY(-110px) rotate(-292.5deg); }
+.wheel-label-8 { transform: translate(-50%, -50%) rotate(337.5deg) translateY(-110px) rotate(-337.5deg); }
     </style>
 </head>
 <body>
@@ -473,6 +765,165 @@ if (messageInput) {
         if (e.key === 'Enter') sendMessageHandler();
     });
 }
+// ===== CHAT IA INTELLIGENT =====
+const chatIcon = document.getElementById('chatIcon');
+const chatWindow = document.getElementById('chatWindow');
+const chatClose = document.getElementById('chatClose');
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendMessage = document.getElementById('sendMessage');
+
+// Open chat
+if (chatIcon) chatIcon.addEventListener('click', () => {
+    chatWindow.style.display = 'flex';
+});
+
+// Close chat
+if (chatClose) chatClose.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+});
+
+// AI intelligente
+function getAIResponse(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut')) {
+        return "Bonjour ! 😊 Je suis l'assistant Andu-Xara. Comment puis-je vous aider aujourd'hui ?";
+    }
+    
+    if (lowerMessage.includes('prix') || lowerMessage.includes('combien')) {
+        return "Nos prix : T-shirts (400-600 MRU), Pulls (600-800 MRU), Ensembles (1000-1500 MRU). Quel produit vous intéresse ?";
+    }
+    
+    if (lowerMessage.includes('taille') || lowerMessage.includes('size')) {
+        return "Nous avons toutes les tailles : XS, S, M, L, XL, XXL. 📏 Je peux vous aider à choisir !";
+    }
+    
+    if (lowerMessage.includes('livraison')) {
+        return "🚚 Nous livrons partout ! Mauritanie : 2-3 jours. International : 1-2 semaines.";
+    }
+    
+    if (lowerMessage.includes('contact') || lowerMessage.includes('téléphone')) {
+        return "📞 Contactez-nous au +222 49037697 (WhatsApp disponible).";
+    }
+    
+    if (lowerMessage.includes('commander') || lowerMessage.includes('acheter')) {
+        return "🛒 Excellent choix ! Dites-moi quel produit vous intéresse !";
+    }
+    
+    if (lowerMessage.includes('merci')) {
+        return "Avec plaisir ! 😊 N'hésitez pas pour d'autres questions !";
+    }
+    
+    return "Je comprends votre demande ! Laissez-moi vous guider vers la meilleure solution Andu-Xara !";
+}
+
+// Send message
+function sendMessageHandler() {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'sent');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
+        
+        const response = getAIResponse(message);
+        
+        setTimeout(() => {
+            const responseElement = document.createElement('div');
+            responseElement.classList.add('message', 'received');
+            responseElement.textContent = response;
+            chatMessages.appendChild(responseElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+        
+        messageInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+if (sendMessage) sendMessage.addEventListener('click', sendMessageHandler);
+if (messageInput) messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessageHandler();
+});
+
+// ===== ROUE DE CHANCE =====
+const wheelIcon = document.getElementById('wheelIcon');
+const wheelModal = document.getElementById('wheelModal');
+const wheelClose = document.getElementById('wheelClose');
+const wheelCircle = document.getElementById('wheelCircle');
+const spinButton = document.getElementById('spinButton');
+const wheelFormContainer = document.getElementById('wheelFormContainer');
+const prizeMessage = document.getElementById('prizeMessage');
+
+// Open wheel
+if (wheelIcon) wheelIcon.addEventListener('click', () => {
+    wheelModal.style.display = 'flex';
+});
+
+// Close wheel
+if (wheelClose) wheelClose.addEventListener('click', () => {
+    wheelModal.style.display = 'none';
+    resetWheel();
+});
+
+// Spin wheel
+if (spinButton) spinButton.addEventListener('click', spinWheel);
+
+function spinWheel() {
+    const isWinner = Math.random() < 0.05;
+    const degrees = isWinner ? 1440 + 45 : 1440 + 225;
+    
+    wheelCircle.style.transform = `rotate(${degrees}deg)`;
+    
+    setTimeout(() => {
+        if (isWinner) {
+            prizeMessage.innerHTML = "🎉 FÉLICITATIONS !<br>Vous avez gagné un article GRATUIT !";
+            wheelFormContainer.style.display = 'block';
+            spinButton.style.display = 'none';
+        } else {
+            prizeMessage.innerHTML = "😢 Presque !<br>Partagez sur WhatsApp pour rejouer ?";
+            spinButton.textContent = "PARTAGER POUR REJOUER";
+            spinButton.classList.add('whatsapp-redirect');
+            spinButton.onclick = () => window.open('https://wa.me/?text=Je viens de jouer sur Andu-Xara !');
+        }
+    }, 3000);
+}
+
+function resetWheel() {
+    wheelCircle.style.transform = 'rotate(0deg)';
+    wheelFormContainer.style.display = 'none';
+    prizeMessage.innerHTML = '';
+    spinButton.style.display = 'block';
+    spinButton.textContent = 'JOUER (1€)';
+    spinButton.classList.remove('whatsapp-redirect');
+    spinButton.onclick = spinWheel;
+}
+
+function submitWinningForm() {
+    const type = document.getElementById('productType').value;
+    const size = document.getElementById('productSize').value;
+    const color = document.getElementById('productColor').value;
+    const name = document.getElementById('winnerName').value;
+    const email = document.getElementById('winnerEmail').value;
+    const phone = document.getElementById('winnerPhone').value;
+    
+    if (type && size && color && name && email && phone) {
+        // Envoyer email
+        const subject = "🎉 NOUVEAU GAGNANT ANDU-XARA !";
+        const body = `Nouveau gagnant !\n\nProduit: ${type}\nTaille: ${size}\nCouleur: ${color}\nNom: ${name}\nEmail: ${email}\nTéléphone: ${phone}`;
+        
+        // Redirection WhatsApp
+        prizeMessage.innerHTML = "✅ MERCI !<br>Partagez sur WhatsApp pour finaliser votre gain !";
+        setTimeout(() => {
+            window.open(`https://wa.me/?text=Je viens de gagner sur Andu-Xara ! Découvrez leur collection : https://andu-xara.github.io/catalogue-andu-xara-2025-final/`);
+            wheelModal.style.display = 'none';
+            resetWheel();
+        }, 2000);
+        
+        console.log("🎉 GAGNANT:", body);
+    }
+}
 </script>
 <!-- Chat Icon -->
 <div class="chat-container-fixed">
@@ -498,6 +949,97 @@ if (messageInput) {
 <div class="wheel-container">
     <div class="wheel-icon" id="wheelIcon">
         <i class="fas fa-gift"></i>
+    </div>
+</div>
+<!-- Chat Icon -->
+<div class="chat-container-fixed">
+    <div class="chat-icon" id="chatIcon">
+        <i class="fas fa-comments"></i>
+    </div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span>Support Client</span>
+            <span class="chat-close" id="chatClose">×</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message received">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Tapez votre message...">
+            <button id="sendMessage">Envoyer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Lucky Wheel Icon -->
+<div class="wheel-container">
+    <div class="wheel-icon" id="wheelIcon">
+        <i class="fas fa-gift"></i>
+    </div>
+</div>
+
+<!-- Wheel Modal -->
+<div class="wheel-modal" id="wheelModal">
+    <div class="wheel-content">
+        <button class="wheel-close" id="wheelClose">×</button>
+        <h2>🎯 TOURNEZ LA ROUE !</h2>
+        <p>Tentez de gagner un article GRATUIT !</p>
+        
+        <div class="wheel">
+            <div class="wheel-circle" id="wheelCircle">
+                <div class="wheel-label wheel-label-1">T-SHIRT</div>
+                <div class="wheel-label wheel-label-2">PULL</div>
+                <div class="wheel-label wheel-label-3">-20%</div>
+                <div class="wheel-label wheel-label-4">ENSEMBLE</div>
+                <div class="wheel-label wheel-label-5">-10%</div>
+                <div class="wheel-label wheel-label-6">CASQUETTE</div>
+                <div class="wheel-label wheel-label-7">LIVRAISON</div>
+                <div class="wheel-label wheel-label-8">-30%</div>
+            </div>
+            <div class="wheel-pointer"></div>
+        </div>
+        
+        <button class="spin-button" id="spinButton">JOUER (1€)</button>
+        
+        <!-- Formulaire de choix -->
+        <div class="wheel-form-container" id="wheelFormContainer">
+            <div class="wheel-form" id="wheelForm">
+                <h3>🎉 FÉLICITATIONS !</h3>
+                <p>Remplissez vos informations pour recevoir votre gain</p>
+                
+                <select id="productType">
+                    <option value="">Type de produit gagné</option>
+                    <option value="T-SHIRT">T-SHIRT</option>
+                    <option value="PULL">PULL</option>
+                    <option value="ENSEMBLE">ENSEMBLE</option>
+                    <option value="CASQUETTE">CASQUETTE</option>
+                </select>
+                
+                <select id="productSize">
+                    <option value="">Choisissez votre taille</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+                
+                <select id="productColor">
+                    <option value="">Choisissez votre couleur</option>
+                    <option value="Noir">Noir</option>
+                    <option value="Blanc">Blanc</option>
+                    <option value="Bleu">Bleu</option>
+                    <option value="Rouge">Rouge</option>
+                </select>
+                
+                <input type="text" id="winnerName" placeholder="Votre nom complet" required>
+                <input type="email" id="winnerEmail" placeholder="Votre email" required>
+                <input type="tel" id="winnerPhone" placeholder="Votre téléphone" required>
+                
+                <button onclick="submitWinningForm()">VALIDER MON GAIN</button>
+            </div>
+        </div>
+
+        <div id="prizeMessage" class="prize-message"></div>
     </div>
 </div>
 </body>
