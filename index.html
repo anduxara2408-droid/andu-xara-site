@@ -177,6 +177,47 @@
             border-top: 1px solid #eee;
         }
         
+        /* ===== EFFETS DE SURVOL AMÉLIORÉS ===== */
+        .produit {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .produit:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .produit-image {
+            transition: transform 0.5s ease;
+        }
+
+        .produit:hover .produit-image {
+            transform: scale(1.1);
+        }
+
+        .produit-content {
+            transition: all 0.3s ease;
+        }
+
+        .produit:hover .produit-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .produit:hover h2,
+        .produit:hover .description,
+        .produit:hover .reference,
+        .produit:hover .prix {
+            color: white !important;
+        }
+
+        /* Effet de "zoom" sur l'image au survol */
+        .produit:hover .produit-image {
+            transform: scale(1.15);
+            transition: transform 0.5s ease;
+        }
         @media (max-width: 768px) {
             .catalogue {
                 grid-template-columns: 1fr;
@@ -225,7 +266,22 @@
             <p>Collection Exclusive - Catalogue Officiel</p>
             
             <!-- Texte de bienvenue défilant -->
-            <div class="welcome-banner">
+            <div class="welcome-banner"
+            </div>   <!-- Ceci ferme le welcome-banner -->
+
+            <!-- ===== BARRE DE RECHERCHE ===== -->
+            <div class="search-container" style="display: flex; justify-content: center; margin: 20px 0;">
+                <input type="text" id="search-input" placeholder="🔍 Rechercher un produit..." 
+                       style="padding: 12px 20px; border: 2px solid #ddd; border-radius: 25px 0 0 25px; 
+                              outline: none; width: 300px; font-size: 16px; background: #f8f9fa;">
+                <button id="search-button" 
+                        style="padding: 12px 20px; background: #667eea; border: 2px solid #667eea; 
+                               border-radius: 0 25px 25px 0; cursor: pointer; color: white; font-weight: bold;">
+                    Rechercher
+                </button>
+            </div>
+
+        </div>       <!-- Ceci ferme le header -->>
                 <div class="scrolling-text">
                     🏆 ANDU-XARA - EXCELLENCE DEPUIS 2022 • 🌟 CRÉATIONS HAUT DE GAMME • 💎 MATIÈRES PREMIUM • 
                     🚀 EXPÉDITION SOUS 24H • 🌍 LIVRAISON MONDIALE : Mauritanie • Sénégal • France • Gambie • Mali • Côte d'Ivoire • Guinée •
@@ -359,26 +415,97 @@
     
         </div>
         
-        <div class="footer">
-            <p>© 2025 Andu-xara - Tous droits réservés</p>
-            <p>📧 Email: <a href="mailto:anduxara2408@gmail.com">anduxara2408@gmail.com</a></p>
-            <p>📱 WhatsApp: <a href="https://wa.me/22249037697">+222 49037697</a></p>
-            <p>📞 Téléphone: <a href="tel:+22231037697">+222 31037697</a></p>
-            <p>📞 Sénégal: <a href="tel:+221762821163">+221 762821163</a></p>
-            <p>🌍 Nous livrons dans : 
-                <img src="https://flagcdn.com/w40/mr.png" alt="Mauritanie" title="Mauritanie" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/sn.png" alt="Sénégal" title="Sénégal" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/fr.png" alt="France" title="France" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/gm.png" alt="Gambie" title="Gambie" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/ml.png" alt="Mali" title="Mali" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/ci.png" alt="Côte d'Ivoire" title="Côte d'Ivoire" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/gn.png" alt="Guinée" title="Guinée" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/gw.png" alt="Guinée-Bissau" title="Guinée-Bissau" style="width:20px; margin:0 2px;">
-                <img src="https://flagcdn.com/w40/gq.png" alt="Guinée équatoriale" title="Guinée équatoriale" style="width:20px; margin:0 2px;">
-                etc.
+        <!-- ===== FOOTER AMÉLIORÉ ===== -->
+        <div class="footer" style="text-align: center; padding: 40px 20px; background: #f8f9fa; margin-top: 60px; border-top: 2px solid #e0e0e0;">
+            <!-- Nom de marque -->
+            <div style="font-size: 24px; font-weight: bold; color: #667eea; margin-bottom: 20px;">
+                ANDU XARA
+            </div>
+            
+            <!-- Liens légaux -->
+            <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
+                <a href="mentions-legales.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Mentions légales</a>
+                <a href="conditions-generales.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Conditions générales</a>
+                <a href="contact.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Contact</a>
+                <a href="politique-confidentialite.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Politique de confidentialité</a>
+                <a href="livraison-retours.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Livraison & Retours</a>
+            </div>
+
+            <!-- Copyright -->
+            <p style="color: #666; font-size: 14px; margin: 0;">
+                © 2025 ANDU XARA - Tous droits réservés
             </p>
-            <p>Collection de luxe et d'exception</p>
+
+            <!-- Réseaux sociaux -->
+            <div style="margin-top: 20px;">
+                <!-- WhatsApp -->
+                <a href="https://wa.me/22249037697" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
+                    📱 WhatsApp
+                </a>
+                
+                <!-- Facebook -->
+                <a href="https://facebook.com/anduxara" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
+                    💬 Facebook
+                </a>
+                
+                <!-- Instagram -->
+                <a href="https://instagram.com/anduxara" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
+                    📸 Instagram
+                </a>
+            </div>
+
+            <!-- Coordonnées -->
+            <div style="margin-top: 20px; color: #666; font-size: 14px;">
+                <p>📧 Email: <a href="mailto:anduxara2408@gmail.com" style="color: #667eea;">anduxara2408@gmail.com</a></p>
+                <p>📞 Téléphone: <a href="tel:+22231037697" style="color: #667eea;">+222 31037697</a></p>
+                <p>📞 Sénégal: <a href="tel:+221762821163" style="color: #667eea;">+221 762821163</a></p>
+                <p>🌍 Livraison internationale disponible</p>
+            </div>
         </div>
-    </div>
+    <script>
+    // ===== FONCTIONNALITÉ DE RECHERCHE =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const produits = document.querySelectorAll('.produit');
+        
+        function effectuerRecherche() {
+            const terme = searchInput.value.toLowerCase().trim();
+            console.log('Recherche en cours pour:', terme);
+            
+            let resultatsTrouves = false;
+            
+            produits.forEach(function(produit) {
+                const nom = produit.querySelector('h2') ? produit.querySelector('h2').textContent.toLowerCase() : '';
+                const description = produit.querySelector('.description') ? produit.querySelector('.description').textContent.toLowerCase() : '';
+                const prix = produit.querySelector('.prix') ? produit.querySelector('.prix').textContent.toLowerCase() : '';
+                
+                const texteComplet = nom + ' ' + description + ' ' + prix;
+                
+                if (terme === '' || texteComplet.includes(terme)) {
+                    produit.style.display = 'block';
+                    resultatsTrouves = true;
+                } else {
+                    produit.style.display = 'none';
+                }
+            });
+            
+            if (!resultatsTrouves && terme !== '') {
+                alert('Aucun produit trouvé pour : "' + terme + '"');
+            }
+        }
+        
+        if (searchInput && searchButton) {
+            searchInput.addEventListener('input', effectuerRecherche);
+            searchButton.addEventListener('click', effectuerRecherche);
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    effectuerRecherche();
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>
