@@ -4,6 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu-xara - Collection Exclusive</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6TZ69QHQTY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6TZ69QHQTY');
+    </script>
+    <!-- Google Analytics -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6TZ69QHQTY');
+    </script>
+
+    <!-- Meta SEO -->
+    <meta name="description" content="ANDU XARA - Collection exclusive de vêtements premium mauritaniens. Découvrez nos cauchons, pulls, t-shirts et ensembles de haute qualité.">
+    <meta name="keywords" content="andu xara, vêtements mauritanie, mode premium, cauchon, pull, t-shirt, collection exclusive, vêtements qualité">
+    <meta name="author" content="ANDU XARA">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
+    <meta property="og:title" content="ANDU XARA - Collection Exclusive">
+    <meta property="og:description" content="Découvrez la collection exclusive de vêtements premium ANDU XARA">
+    <meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/photos/Cauchon%20Blanc.jpeg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
+    <meta property="twitter:title" content="ANDU XARA - Collection Exclusive">
+    <meta property="twitter:description" content="Découvrez la collection exclusive de vêtements premium ANDU XARA">
+    <meta property="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/photos/Cauchon%20Blanc.jpeg">
+
+    <style>
+        * {
+            margin: 0;
+
     <style>
         * {
             margin: 0;
@@ -25,8 +66,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-        }
-        
+        }        
         .header {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
@@ -137,6 +177,15 @@
             object-fit: cover;
             border-bottom: 3px solid #667eea;
         }
+        /* ===== IMAGES CLICABLES ===== */
+        .produit-image {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .produit-image:hover {
+            transform: scale(1.05);
+        }
         
         .produit-content {
             padding: 25px;
@@ -241,6 +290,13 @@
     </style>
 </head>
 <body>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-VOTRE-ID"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="container">
     <div class="container">
         <div class="header">
             <!-- Icônes réseaux sociaux avec vrais logos -->
@@ -607,6 +663,101 @@
         updateCartCount();
         console.log('Fonctionnalité panier activée !');
     });
+    </script>
+    <script>
+    // ===== LIGHTBOX POUR LES IMAGES =====
+    function openLightbox(imageSrc, productName) {
+        // Créer la lightbox
+        const lightbox = document.createElement('div');
+        lightbox.style.position = 'fixed';
+        lightbox.style.top = '0';
+        lightbox.style.left = '0';
+        lightbox.style.width = '100%';
+        lightbox.style.height = '100%';
+        lightbox.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        lightbox.style.display = 'flex';
+        lightbox.style.justifyContent = 'center';
+        lightbox.style.alignItems = 'center';
+        lightbox.style.zIndex = '10000';
+        lightbox.style.cursor = 'pointer';
+        
+        // Créer l'image agrandie
+        const img = document.createElement('img');
+        img.src = imageSrc;
+        img.alt = productName;
+        img.style.maxWidth = '90%';
+        img.style.maxHeight = '90%';
+        img.style.objectFit = 'contain';
+        img.style.borderRadius = '10px';
+        img.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)';
+        
+        // Créer le bouton fermer
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '20px';
+        closeBtn.style.right = '30px';
+        closeBtn.style.background = '#e74c3c';
+        closeBtn.style.color = 'white';
+        closeBtn.style.border = 'none';
+        closeBtn.style.borderRadius = '50%';
+        closeBtn.style.width = '50px';
+        closeBtn.style.height = '50px';
+        closeBtn.style.fontSize = '30px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.zIndex = '10001';
+        
+        // Ajouter les éléments
+        lightbox.appendChild(img);
+        document.body.appendChild(lightbox);
+        document.body.appendChild(closeBtn);
+        
+        // Fermer au clic
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+        
+        closeBtn.addEventListener('click', closeLightbox);
+        
+        // Empêcher le scroll
+        document.body.style.overflow = 'hidden';
+        
+        function closeLightbox() {
+            document.body.removeChild(lightbox);
+            document.body.removeChild(closeBtn);
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Fermer avec la touche Échap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    }
+
+    // ===== RENDRE TOUTES LES IMAGES CLICABLES =====
+    function makeImagesClickable() {
+        const productImages = document.querySelectorAll('.produit-image');
+        
+        productImages.forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function() {
+                const productName = this.alt;
+                const imageSrc = this.src;
+                openLightbox(imageSrc, productName);
+            });
+        });
+    }
+
+    // Initialiser au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+        makeImagesClickable();
+        console.log('Lightbox activée !');
+    });
+    </script>
     </script>
 </body>
 </html>
