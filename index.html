@@ -444,30 +444,37 @@ document.getElementById('search-input').addEventListener('input', function() {
     });
 });
 
-// Fonctionnalité des catégories
+// Fonctionnalité des catégories - VERSION DEBUG
 document.querySelectorAll('.category-btn').forEach(button => {
     button.addEventListener('click', function() {
+        console.log('=== DÉBUT FILTRAGE ===');
+        
         document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
 
-        const category = this.textContent.toLowerCase();
+        const category = this.textContent.trim().toLowerCase();
+        console.log('Catégorie sélectionnée:', category);
+        
         const products = document.querySelectorAll('.product-card');
+        console.log('Nombre de produits trouvés:', products.length);
 
-        products.forEach(product => {
+        products.forEach((product, index) => {
+            const productCategory = product.getAttribute('data-category');
+            console.log(`Produit ${index + 1}:`, product.querySelector('.product-title').textContent);
+            console.log(`Catégorie data:`, productCategory);
+            
             if (category === 'tous') {
+                console.log(`→ Affichage: TOUS`);
+                product.style.display = 'block';
+            } else if (productCategory === category) {
+                console.log(`→ Affichage: OUI (catégorie match)`);
                 product.style.display = 'block';
             } else {
-                product.style.display = (product.getAttribute('data-category') === category) ? 'block' : 'none';
+                console.log(`→ Affichage: NON`);
+                product.style.display = 'none';
             }
         });
-    });
-}); // <--- CETTE LIGNE EST CORRECTE MAIS ENLEVEZ LE COMMENTAIRE SI BESOIN
-
-// Fonctionnalité d'ajout au panier
-document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', function() {
-        const product = this.closest('.product-card');
-        const productName = product.querySelector('.product-title').textContent;
-        alert(`${productName} a été ajouté au panier !`);
+        
+        console.log('=== FIN FILTRAGE ===');
     });
 });
