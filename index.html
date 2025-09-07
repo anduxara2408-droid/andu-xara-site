@@ -444,34 +444,38 @@
             });
         });
         
-        // Fonctionnalité des catégories
-        document.querySelectorAll('.category-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                const category = this.textContent;
-                const products = document.querySelectorAll('.product-card');
-                
-                products.forEach(product => {
-                    if (category === 'Tous') {
-                        product.style.display = 'block';
-                    } else {
-                        // Simuler un filtrage par catégorie
-                        product.style.display = 'block';
-                    }
-                });
-            });
+// Fonctionnalité des catégories
+document.querySelectorAll('.category-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        const category = this.textContent.toLowerCase();
+        const products = document.querySelectorAll('.product-card');
+
+        products.forEach(product => {
+            const title = product.querySelector('.product-title').textContent.toLowerCase();
+            const description = product.querySelector('.product-description').textContent.toLowerCase();
+
+            if (category === 'tous') {
+                product.style.display = 'block';
+            } else if (category === 't-shirts') {
+                product.style.display = (title.includes('t-shirt') || description.includes('t-shirt')) ? 'block' : 'none';
+            } else if (category === 'ensembles') {
+                product.style.display = (title.includes('ensemble') || description.includes('ensemble') ||
+                                      title.includes('combinaison') || description.includes('combinaison')) ? 'block' : 'none';
+            } else if (category === 'enfants') {
+                product.style.display = (title.includes('enfant') || description.includes('enfant')) ? 'block' : 'none';
+            }
         });
-        
-        // Fonctionnalité d'ajout au panier
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', function() {
-                const product = this.closest('.product-card');
-                const productName = product.querySelector('.product-title').textContent;
-                alert(`${productName} a été ajouté au panier !`);
-            });
-        });
-    </script>
-</body>
-</html>
+    });
+}); // <--- AJOUTEZ CETTE LIGNE
+
+// Fonctionnalité d'ajout au panier
+document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', function() {
+        const product = this.closest('.product-card');
+        const productName = product.querySelector('.product-title').textContent;
+        alert(`${productName} a été ajouté au panier !`);
+    });
+});
