@@ -381,6 +381,47 @@
             padding: 2rem 0;
             margin-top: 50px;
         }
+/* ===== PANIER ===== */
+.cart-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+    z-index: 1000;
+}
+
+#cart-counter {
+    background: #ff0066;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cart-icon {
+        top: 15px;
+        right: 15px;
+        padding: 8px 12px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-icon {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -409,6 +450,9 @@
                 <h1>Catalogue Andu-Xara 2025</h1>
                 <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
             </div>
+              <div class="cart-icon">
+          🛒 <span id="cart-counter">0</span>
+      </div>
         </div>
     </div>
 </header>    
@@ -626,7 +670,9 @@ function addToCart(name, price) {
 
 function updateCartCounter() {
     const counter = document.getElementById('cart-counter');
-    if (counter) counter.textContent = cart.length;
+    if (counter) {
+        counter.textContent = cart.length;
+    }
 }
     </script>
 </body>
