@@ -5,52 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu Xara 2025</title>
     <style>
-        /* Bandeau défilant FONCTIONNEL avec dégradé animé */
+        /* Bandeau défilant AVEC TRANSITIONS */
         .marquee-container {
-            background: linear-gradient(90deg, #6a11cb, #2575fc, #ff0066, #ff6600, #ffcc00, #66cc00);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(90deg, #2c3e50, #34495e);
             color: white;
-            padding: 12px 0;
+            padding: 15px 0;
             overflow: hidden;
             position: relative;
             font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
             width: 100%;
             z-index: 1000;
         }
 
-        .marquee {
+        .marquee-content {
+            display: flex;
+            animation: marquee-scroll 45s linear infinite;
             white-space: nowrap;
-            display: inline-block;
-            animation: marquee-scroll 30s linear infinite;
-            padding-left: 100%;
         }
 
-        .marquee span {
-            display: inline-block;
-            padding-right: 30px;
+        .marquee-section {
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .welcome {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            padding: 8px 25px;
+            border-radius: 20px;
+            animation: colorChangeWelcome 10s infinite;
+        }
+
+        .promotion {
+            background: linear-gradient(90deg, #ff0066, #ff6600);
+            padding: 8px 25px;
+            border-radius: 20px;
+            animation: colorChangePromo 10s infinite;
+        }
+
+        .original {
+            background: linear-gradient(90deg, #00b09b, #96c93d);
+            padding: 8px 25px;
+            border-radius: 20px;
+            animation: colorChangeOriginal 10s infinite;
         }
 
         @keyframes marquee-scroll {
-            0% { transform: translateX(0); }
+            0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes colorChangeWelcome {
+            0%, 100% { background: linear-gradient(90deg, #6a11cb, #2575fc); }
+            50% { background: linear-gradient(90deg, #2575fc, #6a11cb); }
+        }
+
+        @keyframes colorChangePromo {
+            0%, 100% { background: linear-gradient(90deg, #ff0066, #ff6600); }
+            50% { background: linear-gradient(90deg, #ff6600, #ff0066); }
+        }
+
+        @keyframes colorChangeOriginal {
+            0%, 100% { background: linear-gradient(90deg, #00b09b, #96c93d); }
+            50% { background: linear-gradient(90deg, #96c93d, #00b09b); }
+        }
+
+        .separator {
+            font-size: 20px;
+            margin: 0 15px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .marquee {
-                animation-duration: 20s;
+            .marquee-content {
+                animation-duration: 35s;
+            }
+            
+            .marquee-section {
+                padding: 0 20px;
+                font-size: 12px;
+            }
+            
+            .separator {
+                font-size: 16px;
+                margin: 0 8px;
+            }
+            
+            .welcome, .promotion, .original {
+                padding: 6px 15px;
             }
         }
 
-        /* Le reste de votre CSS reste inchangé */
+        /* Styles principaux */
         * {
             margin: 0;
             padding: 0;
@@ -230,10 +285,27 @@
     </style>
 </head>
 <body>
-    <!-- Texte défilant amélioré avec message de bienvenue et promotion spéciale -->
+    <!-- Nouveau texte défilant avec transitions -->
     <div class="marquee-container">
-        <div class="marquee">
-            <span>🌟 BIENVENUE CHEZ ANDU XARA - VOTRE CATALOGUE DE VÊTEMENTS EXCLUSIFS 2025 🌟 🎉 OFFRE SPÉCIALE : À l'occasion du lancement officiel le 25 septembre pour la Journée Internationale de la Langue Soninké, profitez de 40% DE RÉDUCTION sur toute la collection ! 🎉 🌟 PROMOTION EXCEPTIONNELLE : 40% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 30 SEPTEMBRE 2025 🌟</span>
+        <div class="marquee-content">
+            <!-- Message de bienvenue -->
+            <div class="marquee-section welcome">
+                🌟 BIENVENUE CHEZ ANDU XARA - VOTRE CATALOGUE DE MODE EXCLUSIVE 2025 🌟
+            </div>
+            
+            <div class="separator">✨</div>
+            
+            <!-- Message de promotion spéciale -->
+            <div class="marquee-section promotion">
+                🎉 OFFRE SPÉCIALE : À l'occasion du lancement officiel le 25 septembre, journée internationale de la langue Soninké décrétée par l'UNESCO, bénéficiez de 40% DE RÉDUCTION sur toute la collection ! 🎉
+            </div>
+            
+            <div class="separator">✨</div>
+            
+            <!-- Message original -->
+            <div class="marquee-section original">
+                🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟
+            </div>
         </div>
     </div>
     
