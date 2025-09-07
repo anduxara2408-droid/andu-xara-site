@@ -3,763 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue Andu-xara - Collection Exclusive</title>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6TZ69QHQTY"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6TZ69QHQTY');
-    </script>
-    <!-- Google Analytics -->
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6TZ69QHQTY');
-    </script>
-
-    <!-- Meta SEO -->
-    <meta name="description" content="ANDU XARA - Collection exclusive de vêtements premium mauritaniens. Découvrez nos cauchons, pulls, t-shirts et ensembles de haute qualité.">
-    <meta name="keywords" content="andu xara, vêtements mauritanie, mode premium, cauchon, pull, t-shirt, collection exclusive, vêtements qualité">
-    <meta name="author" content="ANDU XARA">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
-    <meta property="og:title" content="ANDU XARA - Collection Exclusive">
-    <meta property="og:description" content="Découvrez la collection exclusive de vêtements premium ANDU XARA">
-    <meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/photos/Cauchon%20Blanc.jpeg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
-    <meta property="twitter:title" content="ANDU XARA - Collection Exclusive">
-    <meta property="twitter:description" content="Découvrez la collection exclusive de vêtements premium ANDU XARA">
-    <meta property="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/photos/Cauchon%20Blanc.jpeg">
-
+    <title>Catalogue Andu Xara 2025</title>
     <style>
-        * {
-            margin: 0;
+        /* Bandeau défilant FONCTIONNEL */
+        .marquee-container {
+            background: linear-gradient(90deg, #ff0066, #ff6600, #ffcc00, #66cc00, #0066ff, #6600ff);
+            color: white;
+            padding: 12px 0;
+            overflow: hidden;
+            position: relative;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            width: 100%;
+            z-index: 1000;
+        }
 
-    <style>
+        .marquee {
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee-scroll 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-right: 30px;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .marquee {
+                animation-duration: 15s;
+            }
+        }
+
+        /* Styles principaux */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }        
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
+            padding: 20px;
         }
         
-        .social-icons {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            display: flex;
-            gap: 12px;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
         
-        .social-icons a {
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-        
-        .social-icons a:hover {
-            background: white;
-            transform: scale(1.15);
-        }
-        
-        .social-icons svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-        }
-        
-        .social-icons a:hover svg {
-            fill: #2c3e50;
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-        
-        .header p {
-            font-size: 1.2em;
+        .subtitle {
+            font-size: 1.2rem;
             opacity: 0.9;
-            margin-bottom: 10px;
+            margin-bottom: 1.5rem;
         }
         
-        /* Animation texte défilant */
-        .welcome-banner {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            padding: 12px 0;
+        .search-bar {
+            display: flex;
+            justify-content: center;
             margin: 20px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
         
-.scrolling-text {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-text 25s linear infinite;
-    font-size: 1.1em;
-    font-weight: 500;
-    padding: 5px 0;
-    padding-left: 100%;
-    box-sizing: border-box;
-}
-        
-@keyframes scroll-text {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}        
-        .scrolling-text:hover {
-            animation-play-state: paused;
-        }
-        
-        .catalogue {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 40px;
-        }
-        
-        .produit {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #eee;
-        }
-        
-        .produit:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .produit-image {
+        .search-bar input {
+            padding: 12px 20px;
             width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: 3px solid #667eea;
+            max-width: 500px;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
         }
-        /* ===== IMAGES CLICABLES ===== */
-        .produit-image {
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .category-btn {
+            padding: 8px 20px;
+            background-color: white;
+            border: none;
+            border-radius: 20px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .produit-image:hover {
-            transform: scale(1.05);
-        }
-        
-        .produit-content {
-            padding: 25px;
-        }
-        
-        .produit h2 {
-            font-size: 1.4em;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .produit .description {
-            color: #7f8c8d;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-        }
-        
-        .produit .reference {
-            color: #95a5a6;
-            font-size: 0.85em;
-            margin-bottom: 10px;
-        }
-        
-        .produit .prix {
-            color: #e74c3c;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 30px;
-            background: #f8f9fa;
-            color: #7f8c8d;
-            border-top: 1px solid #eee;
-        }
-        
-        /* ===== EFFETS DE SURVOL AMÉLIORÉS ===== */
-        .produit {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .produit:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        .produit-image {
-            transition: transform 0.5s ease;
-        }
-
-        .produit:hover .produit-image {
-            transform: scale(1.1);
-        }
-
-        .produit-content {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-
-        .produit:hover .produit-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: #6a11cb;
             color: white;
         }
-
-        .produit:hover h2,
-        .produit:hover .description,
-        .produit:hover .reference,
-        .produit:hover .prix {
-            color: white !important;
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
-
-        /* Effet de "zoom" sur l'image au survol */
-        .produit:hover .produit-image {
-            transform: scale(1.15);
-            transition: transform 0.5s ease;
+        
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .product-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: #6a11cb;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #2575fc;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 50px;
+        }
+        
         @media (max-width: 768px) {
-            .catalogue {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-grid {
                 grid-template-columns: 1fr;
-                padding: 20px;
             }
             
-            .header {
-                padding: 30px 20px;
+            .categories {
+                flex-direction: column;
+                align-items: center;
             }
             
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .social-icons {
-                position: static;
-                justify-content: center;
-                margin-bottom: 15px;
+            .category-btn {
+                width: 80%;
+                margin-bottom: 5px;
             }
         }
     </style>
 </head>
 <body>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-VOTRE-ID"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    <!-- Texte défilant en haut de la page -->
+    <div class="marquee-container">
+        <div class="marquee">
+            <span>🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟</span>
+        </div>
+    </div>
     
-    <div class="container">
-    <div class="container">
-        <div class="header">
-            <!-- Icônes réseaux sociaux avec vrais logos -->
-            <div class="social-icons">
-                <a href="https://www.facebook.com/share/1HxCMHr3bE/?mibextid=wwXIfr" target="_blank" title="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/andu_xara?igsh=cTFrcTFhMHQ3ZTlx&utm_source=qr" target="_blank" title="Instagram">
-                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-                <a href="https://youtube.com/@andu-xaratv5737?si=FNjY4FhBKpCClpHw" target="_blank" title="YouTube">
-                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                </a>
-                <a href="https://www.tiktok.com/@andu_xara?_t=ZM-8zPDsFqJpRQ&_r=" target="_blank" title="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                </a>
-                <a href="https://sites.google.com/view/andu-xara-marque-mauritanienne/accueil" target="_blank" title="Site Web">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                </a>
+    <header>
+        <div class="container">
+            <h1>Catalogue Andu Xara 2025</h1>
+            <p class="subtitle">Découvrez nos produits exclusifs pour l'année 2025</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher un produit..." id="search-input">
+        </div>
+        
+        <div class="categories">
+            <button class="category-btn active">Tous</button>
+            <button class="category-btn">Électronique</button>
+            <button class="category-btn">Mode</button>
+            <button class="category-btn">Maison</button>
+            <button class="category-btn">Sport</button>
+        </div>
+        
+        <div class="products-grid" id="products-container">
+            <!-- Produit 1 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Smartphone+Ultra+X" alt="Smartphone Ultra X" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Smartphone Ultra X</h3>
+                    <p class="product-description">Le dernier smartphone avec écran 6.7 pouces et appareil photo 108MP.</p>
+                    <p class="product-price">899€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
             </div>
             
-            <h1>🛍️ ANDU-XARA</h1>
-            <p>Collection Exclusive - Catalogue Officiel</p>
-            
-            <!-- Texte de bienvenue défilant -->
-            <div class="welcome-banner"
-            </div>   <!-- Ceci ferme le welcome-banner -->
-
-            <!-- ===== BARRE DE RECHERCHE ===== -->
-            <div class="search-container" style="display: flex; justify-content: center; margin: 20px 0;">
-                <input type="text" id="search-input" placeholder="🔍 Rechercher un produit..." 
-                       style="padding: 12px 20px; border: 2px solid #ddd; border-radius: 25px 0 0 25px; 
-                              outline: none; width: 300px; font-size: 16px; background: #f8f9fa;">
-                <button id="search-button" 
-                        style="padding: 12px 20px; background: #667eea; border: 2px solid #667eea; 
-                               border-radius: 0 25px 25px 0; cursor: pointer; color: white; font-weight: bold;">
-                    Rechercher
-                </button>
+            <!-- Produit 2 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Montre+Connectée" alt="Montre Connectée Pro" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Montre Connectée Pro</h3>
+                    <p class="product-description">Surveillez votre santé et restez connecté avec cette montre haut de gamme.</p>
+                    <p class="product-price">249€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
             </div>
-
-        </div>       <!-- Ceci ferme le header -->>
-                <div class="scrolling-text">
-                    🏆 ANDU-XARA - EXCELLENCE DEPUIS 2022 • 🌟 CRÉATIONS HAUT DE GAMME • 💎 MATIÈRES PREMIUM • 
-                    🚀 EXPÉDITION SOUS 24H • 🌍 LIVRAISON MONDIALE : Mauritanie • Sénégal • France • Gambie • Mali • Côte d'Ivoire • Guinée •
-                    ⭐ GARANTIE SATISFACTION • 💫 STYLE UNIQUE • 🤝 CONSEIL PERSONNALISÉ • 
-                    🏆 ANDU-XARA - VOTRE RÉFÉRENCE MODE PREMIUM
+            
+            <!-- Produit 3 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Sneakers+Edition" alt="Sneakers Limited Edition" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Sneakers Limited Edition</h3>
+                    <p class="product-description">Des sneakers confortables et stylées pour un look urbain.</p>
+                    <p class="product-price">129€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <!-- Produit 4 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Sac+Ecologique" alt="Sac à Dos Écologique" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Sac à Dos Écologique</h3>
+                    <p class="product-description">Un sac à dos spacieux fabriqué à partir de matériaux recyclés.</p>
+                    <p class="product-price">79€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <!-- Produit 5 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Machine+Café" alt="Machine à Café Automatique" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Machine à Café Automatique</h3>
+                    <p class="product-description">Préparez un café parfait en une touche avec cette machine automatique.</p>
+                    <p class="product-price">299€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <!-- Produit 6 -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200?text=Vélo+Electrique" alt="Vélo de Ville Électrique" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Vélo de Ville Électrique</h3>
+                    <p class="product-description">Parcourez la ville sans effort avec ce vélo électrique élégant.</p>
+                    <p class="product-price">1499€</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
                 </div>
             </div>
         </div>
-        
-        <div class="catalogue">
-
-            <div class="produit">
-                <img src="photos/Cauchon Blanc.jpeg" alt="Cauchon Blanc" class="produit-image">
-                <div class="produit-content">
-                    <h2>Cauchon Blanc</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Cauchon Blanc Andu-xara</p>
-                    <div class="prix">549 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Cauchon Blanc', 549, 'photos/Cauchon Blanc.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Ensemble Capuchon gris.jpeg" alt="Ensemble Capuchon Gris" class="produit-image">
-                <div class="produit-content">
-                    <h2>Ensemble Capuchon Gris</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble capuchon gris premium</p>
-                    <div class="prix">950 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Ensemble Capuchon Gris', 950, 'photos/Ensemble Capuchon gris.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Ensemble Capuchon noir fr.jpeg" alt="Ensemble Capuchon Noir FR" class="produit-image">
-                <div class="produit-content">
-                    <h2>Ensemble Capuchon Noir FR</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble capuchon noir français</p>
-                    <div class="prix">950 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Ensemble Capuchon Noir FR', 950, 'photos/Ensemble Capuchon noir fr.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Ensemble pull blanc jogging noir et Capuchon.jpeg" alt="Pull Blanc Jogging Noir" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull Blanc Jogging Noir</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble pull blanc + jogging noir</p>
-                    <div class="prix">749 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Pull Blanc Jogging Noir', 749, 'photos/Ensemble pull blanc jogging noir et Capuchon.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Pull Bleu .jpeg" alt="Pull Bleu" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull Bleu</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Pull bleu Andu-xara</p>
-                    <div class="prix">549 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Pull Bleu', 549, 'photos/Pull Bleu .jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Pull et T-shirt combinés.jpeg" alt="Pull et T-shirt Combinés" class="produit-image">
-                <div class="produit-content">
-                    <h2>Pull et T-shirt Combinés</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">Ensemble pull + t-shirt combinés</p>
-                    <div class="prix">799 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('Pull et T-shirt Combinés', 799, 'photos/Pull et T-shirt combinés.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/Tshirt Blanc et Jogging noir.jpeg" alt="T-shirt Blanc Jogging" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Blanc Jogging</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt blanc + jogging noir</p>
-                    <div class="prix">699 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Blanc Jogging', 699, 'photos/Tshirt Blanc et Jogging noir.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/t-shirt noir arabe.jpeg" alt="T-shirt Noir Arabe" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Arabe</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir style arabe</p>
-                    <div class="prix">499 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Noir Arabe', 499, 'photos/t-shirt noir arabe.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/T-shirt noir logo arabe .jpeg" alt="T-shirt Noir Logo Arabe" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Logo Arabe</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir logo arabe</p>
-                    <div class="prix">499 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Noir Logo Arabe', 499, 'photos/T-shirt noir logo arabe .jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/T-shirt noir logo arabe.jpeg" alt="T-shirt Noir Logo" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Logo</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir avec logo</p>
-                    <div class="prix">499 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Noir Logo', 499, 'photos/T-shirt noir logo arabe.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/t-shirt noir logo avec motif.jpeg" alt="T-shirt Noir Motif" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Noir Motif</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt noir avec motif</p>
-                    <div class="prix">559 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Noir Motif', 559, 'photos/t-shirt noir logo avec motif.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-            <div class="produit">
-                <img src="photos/T-shrt Enfant.jpeg" alt="T-shirt Enfant" class="produit-image">
-                <div class="produit-content">
-                    <h2>T-shirt Enfant</h2>
-                    <p class="reference">Référence: ADX</p>
-                    <p class="description">T-shirt Andu-xara enfant</p>
-                    <div class="prix">359 MRU UM</div>
-                    <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 359, 'photos/T-shrt Enfant.jpeg')">
-                        🛒 Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
-        
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Andu Xara - Tous droits réservés</p>
+            <p>Contact: info@andu-xara.com | Tel: +33 1 23 45 67 89</p>
         </div>
-        
-        <!-- ===== FOOTER AMÉLIORÉ ===== -->
-        <div class="footer" style="text-align: center; padding: 40px 20px; background: #f8f9fa; margin-top: 60px; border-top: 2px solid #e0e0e0;">
-            <!-- Nom de marque -->
-            <div style="font-size: 24px; font-weight: bold; color: #667eea; margin-bottom: 20px;">
-                ANDU XARA
-            </div>
-            
-            <!-- Liens légaux -->
-            <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
-                <a href="mentions-legales.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Mentions légales</a>
-                <a href="conditions-generales.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Conditions générales</a>
-                <a href="contact.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Contact</a>
-                <a href="politique-confidentialite.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Politique de confidentialité</a>
-                <a href="livraison-retours.html" style="color: #667eea; text-decoration: none; font-weight: 500;">Livraison & Retours</a>
-            </div>
+    </footer>
 
-            <!-- Copyright -->
-            <p style="color: #666; font-size: 14px; margin: 0;">
-                © 2025 ANDU XARA - Tous droits réservés
-            </p>
-
-            <!-- Réseaux sociaux -->
-            <div style="margin-top: 20px;">
-                <!-- WhatsApp -->
-                <a href="https://wa.me/22249037697" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
-                    📱 WhatsApp
-                </a>
-                
-                <!-- Facebook -->
-                <a href="https://facebook.com/anduxara" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
-                    💬 Facebook
-                </a>
-                
-                <!-- Instagram -->
-                <a href="https://instagram.com/anduxara" style="color: #667eea; text-decoration: none; margin: 0 15px; font-size: 24px;">
-                    📸 Instagram
-                </a>
-            </div>
-
-            <!-- Coordonnées -->
-            <div style="margin-top: 20px; color: #666; font-size: 14px;">
-                <p>📧 Email: <a href="mailto:anduxara2408@gmail.com" style="color: #667eea;">anduxara2408@gmail.com</a></p>
-                <p>📞 Téléphone: <a href="tel:+22231037697" style="color: #667eea;">+222 31037697</a></p>
-                <p>📞 Sénégal: <a href="tel:+221762821163" style="color: #667eea;">+221 762821163</a></p>
-                <p>🌍 Livraison internationale disponible</p>
-            </div>
-        </div>
     <script>
-    // ===== FONCTIONNALITÉ DE RECHERCHE =====
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-input');
-        const searchButton = document.getElementById('search-button');
-        const produits = document.querySelectorAll('.produit');
-        
-        function effectuerRecherche() {
-            const terme = searchInput.value.toLowerCase().trim();
-            console.log('Recherche en cours pour:', terme);
+        // Fonctionnalité de recherche
+        document.getElementById('search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
             
-            let resultatsTrouves = false;
-            
-            produits.forEach(function(produit) {
-                const nom = produit.querySelector('h2') ? produit.querySelector('h2').textContent.toLowerCase() : '';
-                const description = produit.querySelector('.description') ? produit.querySelector('.description').textContent.toLowerCase() : '';
-                const prix = produit.querySelector('.prix') ? produit.querySelector('.prix').textContent.toLowerCase() : '';
+            products.forEach(product => {
+                const title = product.querySelector('.product-title').textContent.toLowerCase();
+                const description = product.querySelector('.product-description').textContent.toLowerCase();
                 
-                const texteComplet = nom + ' ' + description + ' ' + prix;
-                
-                if (terme === '' || texteComplet.includes(terme)) {
-                    produit.style.display = 'block';
-                    resultatsTrouves = true;
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    product.style.display = 'block';
                 } else {
-                    produit.style.display = 'none';
+                    product.style.display = 'none';
                 }
             });
-            
-            if (!resultatsTrouves && terme !== '') {
-                alert('Aucun produit trouvé pour : "' + terme + '"');
-            }
-        }
-        
-        if (searchInput && searchButton) {
-            searchInput.addEventListener('input', effectuerRecherche);
-            searchButton.addEventListener('click', effectuerRecherche);
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    effectuerRecherche();
-                }
-            });
-        }
-    });
-    </script>
-    <script>
-    // ===== FONCTIONNALITÉ PANIER =====
-    let cart = [];
-
-    function addToCart(nom, prix, image) {
-        cart.push({ nom, prix, image });
-        updateCartCount();
-        alert('✅ ' + nom + ' ajouté au panier !');
-        console.log('Panier:', cart);
-    }
-
-    function updateCartCount() {
-        const cartCount = document.getElementById('cart-count');
-        if (cartCount) {
-            cartCount.textContent = cart.length;
-        }
-    }
-
-    function openCart() {
-        if (cart.length === 0) {
-            alert('🛒 Votre panier est vide');
-            return;
-        }
-        
-        let message = '🛒 VOTRE PANIER :\n\n';
-        let total = 0;
-        
-        cart.forEach((item, index) => {
-            message += `${index + 1}. ${item.nom} - ${item.prix} MRU\n`;
-            total += item.prix;
         });
         
-        message += `\n💵 TOTAL: ${total} MRU`;
-        message += `\n\n📞 Contactez-nous au +22249037697 pour commander`;
-        
-        alert(message);
-    }
-
-    // ===== ICÔNE PANIER DANS LE HEADER =====
-    function addCartIcon() {
-        const header = document.querySelector('.header');
-        if (!header) return;
-        
-        const cartIcon = document.createElement('div');
-        cartIcon.innerHTML = `
-            <div style="position: absolute; top: 20px; left: 30px; z-index: 1000;">
-                <button onclick="openCart()" style="background: #e74c3c; color: white; border: none; 
-                    padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 18px;
-                    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);">
-                    🛒 <span id="cart-count">0</span>
-                </button>
-            </div>
-        `;
-        header.style.position = 'relative';
-        header.appendChild(cartIcon);
-    }
-
-    // Initialiser le panier au chargement
-    document.addEventListener('DOMContentLoaded', function() {
-        addCartIcon();
-        updateCartCount();
-        console.log('Fonctionnalité panier activée !');
-    });
-    </script>
-    <script>
-    // ===== LIGHTBOX POUR LES IMAGES =====
-    function openLightbox(imageSrc, productName) {
-        // Créer la lightbox
-        const lightbox = document.createElement('div');
-        lightbox.style.position = 'fixed';
-        lightbox.style.top = '0';
-        lightbox.style.left = '0';
-        lightbox.style.width = '100%';
-        lightbox.style.height = '100%';
-        lightbox.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-        lightbox.style.display = 'flex';
-        lightbox.style.justifyContent = 'center';
-        lightbox.style.alignItems = 'center';
-        lightbox.style.zIndex = '10000';
-        lightbox.style.cursor = 'pointer';
-        
-        // Créer l'image agrandie
-        const img = document.createElement('img');
-        img.src = imageSrc;
-        img.alt = productName;
-        img.style.maxWidth = '90%';
-        img.style.maxHeight = '90%';
-        img.style.objectFit = 'contain';
-        img.style.borderRadius = '10px';
-        img.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)';
-        
-        // Créer le bouton fermer
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = '×';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '20px';
-        closeBtn.style.right = '30px';
-        closeBtn.style.background = '#e74c3c';
-        closeBtn.style.color = 'white';
-        closeBtn.style.border = 'none';
-        closeBtn.style.borderRadius = '50%';
-        closeBtn.style.width = '50px';
-        closeBtn.style.height = '50px';
-        closeBtn.style.fontSize = '30px';
-        closeBtn.style.cursor = 'pointer';
-        closeBtn.style.zIndex = '10001';
-        
-        // Ajouter les éléments
-        lightbox.appendChild(img);
-        document.body.appendChild(lightbox);
-        document.body.appendChild(closeBtn);
-        
-        // Fermer au clic
-        lightbox.addEventListener('click', function(e) {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
-        });
-        
-        closeBtn.addEventListener('click', closeLightbox);
-        
-        // Empêcher le scroll
-        document.body.style.overflow = 'hidden';
-        
-        function closeLightbox() {
-            document.body.removeChild(lightbox);
-            document.body.removeChild(closeBtn);
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Fermer avec la touche Échap
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
-        });
-    }
-
-    // ===== RENDRE TOUTES LES IMAGES CLICABLES =====
-    function makeImagesClickable() {
-        const productImages = document.querySelectorAll('.produit-image');
-        
-        productImages.forEach(img => {
-            img.style.cursor = 'pointer';
-            img.addEventListener('click', function() {
-                const productName = this.alt;
-                const imageSrc = this.src;
-                openLightbox(imageSrc, productName);
+        // Fonctionnalité des catégories
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.textContent;
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (category === 'Tous') {
+                        product.style.display = 'block';
+                    } else {
+                        // Simuler un filtrage par catégorie
+                        product.style.display = 'block';
+                    }
+                });
             });
         });
-    }
-
-    // Initialiser au chargement
-    document.addEventListener('DOMContentLoaded', function() {
-        makeImagesClickable();
-        console.log('Lightbox activée !');
-    });
-    </script>
+        
+        // Fonctionnalité d'ajout au panier
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const product = this.closest('.product-card');
+                const productName = product.querySelector('.product-title').textContent;
+                alert(`${productName} a été ajouté au panier !`);
+            });
+        });
     </script>
 </body>
 </html>
