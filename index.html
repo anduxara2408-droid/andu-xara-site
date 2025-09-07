@@ -422,27 +422,28 @@
     <footer>
         <div class="container">
             <p>© 2025 Andu-Xara - Tous droits réservés</p>
-            <p>Contact: info@andu-xara.com | Tel: +222 49 03 76 97</p>    Tel: +221 76 282 11 33</p>
+            <p>Contact: anduxara2408@gmail.com | Tel: +222 49 03 76 97 / +221 76 282 11 33</p>
         </div>
     </footer>
 
     <script>
-        // Fonctionnalité de recherche
-        document.getElementById('search-input').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const products = document.querySelectorAll('.product-card');
-            
-            products.forEach(product => {
-                const title = product.querySelector('.product-title').textContent.toLowerCase();
-                const description = product.querySelector('.product-description').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-        });
+         // Fonctionnalité de recherche
+document.getElementById('search-input').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const products = document.querySelectorAll('.product-card');
+
+    products.forEach(product => {
+        const title = product.querySelector('.product-title').textContent.toLowerCase();
+        const description = product.querySelector('.product-description').textContent.toLowerCase();
+
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+});
+
 // Fonctionnalité des catégories
 document.querySelectorAll('.category-btn').forEach(button => {
     button.addEventListener('click', function() {
@@ -460,8 +461,7 @@ document.querySelectorAll('.category-btn').forEach(button => {
             }
         });
     });
-});        
- // <--- AJOUTEZ CETTE LIGNE
+}); // <--- CETTE LIGNE EST CORRECTE MAIS ENLEVEZ LE COMMENTAIRE SI BESOIN
 
 // Fonctionnalité d'ajout au panier
 document.querySelectorAll('.add-to-cart').forEach(button => {
