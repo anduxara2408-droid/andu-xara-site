@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu-Xara 2025</title>
     <style>
-        /* Bandeau défilant AVEC TRANSITIONS */
+        /* Bandeau défilant */
         .marquee-container {
             background: linear-gradient(90deg, #2c3e50, #34495e);
             color: white;
@@ -36,73 +36,23 @@
             background: linear-gradient(90deg, #6a11cb, #2575fc);
             padding: 8px 25px;
             border-radius: 20px;
-            animation: colorChangeWelcome 10s infinite;
         }
 
         .promotion {
             background: linear-gradient(90deg, #ff0066, #ff6600);
             padding: 8px 25px;
             border-radius: 20px;
-            animation: colorChangePromo 10s infinite;
         }
 
         .original {
             background: linear-gradient(90deg, #00b09b, #96c93d);
             padding: 8px 25px;
             border-radius: 20px;
-            animation: colorChangeOriginal 10s infinite;
         }
 
         @keyframes marquee-scroll {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
-        }
-
-        @keyframes colorChangeWelcome {
-            0%, 100% { background: linear-gradient(90deg, #6a11cb, #2575fc); }
-            50% { background: linear-gradient(90deg, #2575fc, #6a11cb); }
-        }
-
-        @keyframes colorChangePromo {
-            0%, 100% { background: linear-gradient(90deg, #ff0066, #ff6600); }
-            50% { background: linear-gradient(90deg, #ff6600, #ff0066); }
-        }
-
-        @keyframes colorChangeOriginal {
-            0%, 100% { background: linear-gradient(90deg, #00b09b, #96c93d); }
-            50% { background: linear-gradient(90deg, #96c93d, #00b09b); }
-        }
-
-        .separator {
-            font-size: 20px;
-            margin: 0 15px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-3px); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .marquee-content {
-                animation-duration: 35s;
-            }
-            
-            .marquee-section {
-                padding: 0 20px;
-                font-size: 12px;
-            }
-            
-            .separator {
-                font-size: 16px;
-                margin: 0 8px;
-            }
-            
-            .welcome, .promotion, .original {
-                padding: 6px 15px;
-            }
         }
 
         /* Styles principaux */
@@ -256,53 +206,18 @@
             padding: 2rem 0;
             margin-top: 50px;
         }
-        
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .categories {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .category-btn {
-                width: 80%;
-                margin-bottom: 5px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Nouveau texte défilant avec transitions -->
+    <!-- Texte défilant -->
     <div class="marquee-container">
         <div class="marquee-content">
-            <!-- Message de bienvenue -->
             <div class="marquee-section welcome">
                 🌟 BIENVENUE CHEZ ANDU-XARA - VOTRE CATALOGUE DE MODE EXCLUSIVE 2025 🌟
             </div>
-            
-            <div class="separator">✨</div>
-            
-            <!-- Message de promotion spéciale -->
             <div class="marquee-section promotion">
-                🎉 OFFRE SPÉCIALE : À l'occasion de la journée internationale de la langue soninké décretée par l'Unesco, bénéficiez de 40% DE RÉDUCTION sur toute nos collection diponibles ! 🎉
+                🎉 OFFRE SPÉCIALE : À l'occasion de la journée internationale de la langue Soninké le 25 septembre décrétée par l'UNESCO, bénéficiez de 40% DE RÉDUCTION sur toute nos collection ! 🎉
             </div>
-            
-            <div class="separator">✨</div>
-            
-            <!-- Message original -->
             <div class="marquee-section original">
                 🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟
             </div>
@@ -311,7 +226,7 @@
     
     <header>
         <div class="container">
-            <h1>Catalogue Andu-Xara 2025</h1>
+            <h1>Catalogue Andu- Xara 2025</h1>
             <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
         </div>
     </header>
@@ -322,159 +237,154 @@
         </div>
         
         <div class="categories">
-            <button class="category-btn active">Tous</button>
-            <button class="category-btn">T-shirts</button>
-            <button class="category-btn">Ensembles</button>
-            <button class="category-btn">Enfants</button>
+            <button class="category-btn active" data-category="tous">Tous</button>
+            <button class="category-btn" data-category="t-shirts">T-shirts</button>
+            <button class="category-btn" data-category="ensembles">Ensembles</button>
+            <button class="category-btn" data-category="enfants">Enfants</button>
         </div>
         
-<div class="products-grid" id="products-container">
-    <!-- Produit 1 - T-shirt -->
-    <div class="product-card" data-category="t-shirts">
-        <img src="images/T-shirt%20logo%20arabe.jpeg" alt="T-shirt logo arabe" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">T-shirt logo arabe</h3>
-            <p class="product-description">T-shirt coton avec logo arabe design exclusif</p>
-            <p class="product-price">499 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+        <div class="products-grid" id="products-container">
+            <!-- Produits -->
+            <div class="product-card" data-category="t-shirts">
+                <img src="images/T-shirt%20logo%20arabe.jpeg" alt="T-shirt logo arabe" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">T-shirt logo arabe</h3>
+                    <p class="product-description">T-shirt coton avec logo arabe design exclusif</p>
+                    <p class="product-price">499 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 2 - Ensemble -->
-    <div class="product-card" data-category="ensembles">
-        <img src="images/Ensemble%20capuchon%20arabe.jpeg" alt="Ensemble capuche style arabe" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">Ensemble capuche style arabe</h3>
-            <p class="product-description">Ensemble complet avec capuchon style arabe</p>
-            <p class="product-price">599 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="ensembles">
+                <img src="images/Ensemble%20capuchon%20arabe.jpeg" alt="Ensemble capuche style arabe" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Ensemble capuche style arabe</h3>
+                    <p class="product-description">Ensemble complet avec capuchon style arabe</p>
+                    <p class="product-price">599 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 3 - Ensemble -->
-    <div class="product-card" data-category="ensembles">
-        <img src="images/Combinaison%20.jpeg" alt="Combinaison T-shirt et Capuche" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
-            <p class="product-description">T-shirt coton et Capuche Bleu</p>
-            <p class="product-price">599 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="ensembles">
+                <img src="images/Combinaison%20.jpeg" alt="Combinaison T-shirt et Capuche" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
+                    <p class="product-description">T-shirt coton et Capuche Bleu</p>
+                    <p class="product-price">599 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 4 - Enfant -->
-    <div class="product-card" data-category="enfants">
-        <img src="images/T-shirt%20Enfant.jpeg" alt="T-shirt Enfant" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">T-shirt Enfant</h3>
-            <p class="product-description">T-shirt coton pour ton enfant</p>
-            <p class="product-price">399 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="enfants">
+                <img src="images/T-shirt%20Enfant.jpeg" alt="T-shirt Enfant" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">T-shirt Enfant</h3>
+                    <p class="product-description">T-shirt coton pour ton enfant</p>
+                    <p class="product-price">399 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 5 - Ensemble -->
-    <div class="product-card" data-category="ensembles">
-        <img src="images/T-shirt%20blanc%20jogging%20noir%20.jpeg" alt="Ensemble T-shirt et jogging" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">Ensemble T-shirt et jogging</h3>
-            <p class="product-description">Ensemble coton pour toi</p>
-            <p class="product-price">799 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="ensembles">
+                <img src="images/T-shirt%20blanc%20jogging%20noir%20.jpeg" alt="Ensemble T-shirt et jogging" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Ensemble T-shirt et jogging</h3>
+                    <p class="product-description">Ensemble coton pour toi</p>
+                    <p class="product-price">799 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 6 - T-shirt -->
-    <div class="product-card" data-category="t-shirts">
-        <img src="images/Pull%20bleu.jpeg" alt="Pull bleu" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">Pull bleu</h3>
-            <p class="product-description">Pull chaud et confortable de couleur bleue</p>
-            <p class="product-price">699 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="t-shirts">
+                <img src="images/Pull%20bleu.jpeg" alt="Pull bleu" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Pull bleu</h3>
+                    <p class="product-description">Pull chaud et confortable de couleur bleue</p>
+                    <p class="product-price">699 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 7 - T-shirt -->
-    <div class="product-card" data-category="t-shirts">
-        <img src="images/Capuchon%20blanc%20.jpeg" alt="Capuchon blanc" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">Capuchon blanc</h3>
-            <p class="product-description">Capuchon style urbain en couleur blanche</p>
-            <p class="product-price">299 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="t-shirts">
+                <img src="images/Capuchon%20blanc%20.jpeg" alt="Capuchon blanc" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Capuchon blanc</h3>
+                    <p class="product-description">Capuchon style urbain en couleur blanche</p>
+                    <p class="product-price">299 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
 
-    <!-- Produit 8 - Ensemble -->
-    <div class="product-card" data-category="ensembles">
-        <img src="images/T-shirt%20et%20jogging.jpeg" alt="T-shirt et jogging" class="product-image">
-        <div class="product-info">
-            <h3 class="product-title">T-shirt et jogging</h3>
-            <p class="product-description">Ensemble complet T-shirt et jogging assorti</p>
-            <p class="product-price">899 Mru</p>
-            <button class="add-to-cart">Ajouter au panier</button>
+            <div class="product-card" data-category="ensembles">
+                <img src="images/T-shirt%20et%20jogging.jpeg" alt="T-shirt et jogging" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">T-shirt et jogging</h3>
+                    <p class="product-description">Ensemble complet T-shirt et jogging assorti</p>
+                    <p class="product-price">899 Mru</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </main>
     
     <footer>
         <div class="container">
-            <p>© 2025 Andu-Xara - Tous droits réservés</p>
+            <p>© 2025 Andu Xara - Tous droits réservés</p>
             <p>Contact: anduxara2408@gmail.com | Tel: +222 49 03 76 97 / +221 76 282 11 33</p>
         </div>
     </footer>
 
     <script>
-         // Fonctionnalité de recherche
-document.getElementById('search-input').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const products = document.querySelectorAll('.product-card');
-
-    products.forEach(product => {
-        const title = product.querySelector('.product-title').textContent.toLowerCase();
-        const description = product.querySelector('.product-description').textContent.toLowerCase();
-
-        if (title.includes(searchTerm) || description.includes(searchTerm)) {
-            product.style.display = 'block';
-        } else {
-            product.style.display = 'none';
-        }
-    });
-});
-
-// Fonctionnalité des catégories - VERSION DEBUG
-document.querySelectorAll('.category-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        console.log('=== DÉBUT FILTRAGE ===');
-        
-        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-
-        const category = this.textContent.trim().toLowerCase();
-        console.log('Catégorie sélectionnée:', category);
-        
-        const products = document.querySelectorAll('.product-card');
-        console.log('Nombre de produits trouvés:', products.length);
-
-        products.forEach((product, index) => {
-            const productCategory = product.getAttribute('data-category');
-            console.log(`Produit ${index + 1}:`, product.querySelector('.product-title').textContent);
-            console.log(`Catégorie data:`, productCategory);
+        // Fonctionnalité de recherche
+        document.getElementById('search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
             
-            if (category === 'tous') {
-                console.log(`→ Affichage: TOUS`);
-                product.style.display = 'block';
-            } else if (productCategory === category) {
-                console.log(`→ Affichage: OUI (catégorie match)`);
-                product.style.display = 'block';
-            } else {
-                console.log(`→ Affichage: NON`);
-                product.style.display = 'none';
-            }
+            products.forEach(product => {
+                const title = product.querySelector('.product-title').textContent.toLowerCase();
+                const description = product.querySelector('.product-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
         });
         
-        console.log('=== FIN FILTRAGE ===');
-    });
-});
+        // Fonctionnalité des catégories - SIMPLIFIÉE
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Retirer active de tous les boutons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Ajouter active au bouton cliqué
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (category === 'tous') {
+                        product.style.display = 'block';
+                    } else {
+                        const productCategory = product.getAttribute('data-category');
+                        product.style.display = (productCategory === category) ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+        
+        // Fonctionnalité d'ajout au panier
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const product = this.closest('.product-card');
+                const productName = product.querySelector('.product-title').textContent;
+                alert(`${productName} a été ajouté au panier !`);
+            });
+        });
+    </script>
+</body>
+</html>
