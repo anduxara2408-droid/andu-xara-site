@@ -1,0 +1,5 @@
+# Fichiers de sauvegarde et cache
+index-backup*
+*~
+.DS_Store
+main
