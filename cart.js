@@ -9,7 +9,7 @@ function displayCartItems() {
 
     if (cartItems.length === 0) {
         cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
-        totalElement.textContent = '0';
+        totalElement.textContent = '0 Mru';
         return;
     }
 
@@ -21,15 +21,15 @@ function displayCartItems() {
         itemElement.className = 'cart-item';
         itemElement.innerHTML = `
             <h4>${item.name}</h4>
-            <p>Prix unitaire: ${item.price} €</p>
+            <p>Prix unitaire: ${item.price} Mru</p>
             <p>Quantité: ${item.quantity}</p>
-            <p>Sous-total: ${itemTotal.toFixed(2)} €</p>
+            <p>Sous-total: ${itemTotal.toFixed(2)} Mru</p>
             <button onclick="removeFromCart(${item.id})">Supprimer</button>
         `;
         cartContainer.appendChild(itemElement);
     });
 
-    totalElement.textContent = total.toFixed(2);
+    totalElement.textContent = total.toFixed(2) + ' Mru';
 }
 
 // Fonction pour supprimer un article du panier
@@ -47,13 +47,13 @@ function placeOrder() {
     let message = "Bonjour Andu-Xara !\n\nJe souhaite commander les produits suivants :\n\n";
 
     cartItems.forEach(item => {
-        message += `- ${item.name} x ${item.quantity} : ${(item.price * item.quantity).toFixed(2)} €\n`;
+        message += `- ${item.name} x ${item.quantity} : ${(item.price * item.quantity).toFixed(2)} Mru\n`;
         total += item.price * item.quantity;
     });
 
-    message += `\nTotal : ${total.toFixed(2)} €\n\nCordialement.`;
+    message += `\nTotal : ${total.toFixed(2)} Mru\n\nCordialement.`;
 
-    const email = "anduxara2408@gmail.com"; // Remplacez par l'email de Andu-Xara
+    const email = "anduxara2408@gmail.com";
     const subject = "Nouvelle commande";
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
 
@@ -67,14 +67,14 @@ function placeOrderViaWhatsApp() {
     let message = "Bonjour Andu-Xara !%0A%0AJ'aimerais commander les produits suivants :%0A%0A";
 
     cartItems.forEach(item => {
-        let ligneProduit = `- ${item.name} x ${item.quantity} : ${(item.price * item.quantity).toFixed(2)} €%0A`;
+        let ligneProduit = `- ${item.name} x ${item.quantity} : ${(item.price * item.quantity).toFixed(2)} Mru%0A`;
         message += ligneProduit;
         total += item.price * item.quantity;
     });
 
-    message += `%0A*Total : ${total.toFixed(2)} €*%0A%0ACordialement.`;
+    message += `%0A*Total : ${total.toFixed(2)} Mru*%0A%0ACordialement.`;
 
-    let numeroWhatsApp = "22249037697"; // ⚠️ REMPLACEZ CE NUMÉRO !
+    let numeroWhatsApp = "22249037697";
     let url = `https://wa.me/${numeroWhatsApp}?text=${message}`;
 
     window.open(url, '_blank');
