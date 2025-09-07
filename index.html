@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu Xara 2025</title>
     <style>
-        /* Bandeau défilant FONCTIONNEL */
+        /* Bandeau défilant FONCTIONNEL avec dégradé animé */
         .marquee-container {
-            background: linear-gradient(90deg, #ff0066, #ff6600, #ffcc00, #66cc00, #0066ff, #6600ff);
+            background: linear-gradient(90deg, #6a11cb, #2575fc, #ff0066, #ff6600, #ffcc00, #66cc00);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: white;
             padding: 12px 0;
             overflow: hidden;
@@ -21,7 +23,7 @@
         .marquee {
             white-space: nowrap;
             display: inline-block;
-            animation: marquee-scroll 20s linear infinite;
+            animation: marquee-scroll 30s linear infinite;
             padding-left: 100%;
         }
 
@@ -35,14 +37,20 @@
             100% { transform: translateX(-100%); }
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .marquee {
-                animation-duration: 15s;
+                animation-duration: 20s;
             }
         }
 
-        /* Styles principaux */
+        /* Le reste de votre CSS reste inchangé */
         * {
             margin: 0;
             padding: 0;
@@ -222,10 +230,10 @@
     </style>
 </head>
 <body>
-    <!-- Texte défilant en haut de la page -->
+    <!-- Texte défilant amélioré avec message de bienvenue et promotion spéciale -->
     <div class="marquee-container">
         <div class="marquee">
-            <span>🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟</span>
+            <span>🌟 BIENVENUE CHEZ ANDU XARA - VOTRE CATALOGUE DE VÊTEMENTS EXCLUSIFS 2025 🌟 🎉 OFFRE SPÉCIALE : À l'occasion du lancement officiel le 25 septembre pour la Journée Internationale de la Langue Soninké, profitez de 40% DE RÉDUCTION sur toute la collection ! 🎉 🌟 PROMOTION EXCEPTIONNELLE : 40% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 30 SEPTEMBRE 2025 🌟</span>
         </div>
     </div>
     
@@ -342,8 +350,7 @@
     <footer>
         <div class="container">
             <p>© 2025 Andu Xara - Tous droits réservés</p>
-            <p>Contact: anduxara2408@gmail.com | Tel: +222 49 03 76 97</p>  Tel: +221 76 282 11 63</p>
-
+            <p>Contact: info@andu-xara.com | Tel: +33 1 23 45 67 89</p>
         </div>
     </footer>
 
