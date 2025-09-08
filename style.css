@@ -39,3 +39,41 @@ button.whatsapp-btn:hover {
     background-color: #128C7E;
     cursor: pointer;
 }
+/* ===== NOTIFICATIONS MODERNES ===== */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #25D366;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification.error {
+    background: #ff4757;
+}
+
+.notification.warning {
+    background: #ffa502;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+}

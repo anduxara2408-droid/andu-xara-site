@@ -759,9 +759,10 @@ function addToCart(productName, productPrice) {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     
     // Mettre à jour le compteur
-    updateCartCounter();
+    updateCartCounter(); 
+
+showNotification(`${productName} a été ajouté au panier !`);
     
-    alert(`${productName} a été ajouté au panier !`);
 }
 
 // Mettre à jour le compteur
@@ -785,6 +786,22 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
 document.addEventListener('DOMContentLoaded', function() {
     updateCartCounter();
 });
+// Fonction pour les notifications modernes
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <span class="notification-icon">${type === 'success' ? '✅' : '⚠️'}</span>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Supprimer après 3 secondes
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
     </script>
 <!-- Modal de commande -->
 <div id="order-modal" class="modal">
