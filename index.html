@@ -732,7 +732,6 @@
                 });
             });
         });
-
 // ===== PANIER =====
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
@@ -759,10 +758,9 @@ function addToCart(productName, productPrice) {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     
     // Mettre à jour le compteur
-    updateCartCounter(); 
-
-showNotification(`${productName} a été ajouté au panier !`);
+    updateCartCounter();
     
+    showNotification(`${productName} a été ajouté au panier !`);
 }
 
 // Mettre à jour le compteur
@@ -786,6 +784,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
 document.addEventListener('DOMContentLoaded', function() {
     updateCartCounter();
 });
+
 // Fonction pour les notifications modernes
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
