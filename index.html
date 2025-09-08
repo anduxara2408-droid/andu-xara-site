@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Andu-Xara 2025</title>
-    <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion. Livraison partout en Mauritania.">
+    <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion. Livraison partout en Mauritanie.">
     <meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott, vêtements traditionnels modernes">
     <meta name="author" content="Andu-Xara">
     <meta name="robots" content="index, follow">
@@ -17,18 +17,17 @@
     <meta name="twitter:title" content="Catalogue Andu-Xara 2025">
     <meta name="twitter:description" content="Vêtements exclusifs mauritaniens - Collections 2025">
     <meta name="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/optimized_logo.png">
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PHD32EKVYS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-PHD32EKVYS');
-    </script>
-
     <link rel="icon" href="images/optimized_logo.png" type="image/png">
     
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VOTRE_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VOTRE_ID');
+    </script>
+
     <style>
         /* ===== STYLES OPTIMISÉS ===== */
         * {
@@ -792,7 +791,7 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-PHD32EKVYS');
+        gtag('config', 'G-VOTRE_ID'); // Remplacez par votre ID Google Analytics
 
         // ===== FONCTIONNALITÉS PRINCIPALES =====
         document.addEventListener('DOMContentLoaded', function() {
@@ -940,7 +939,7 @@
 
         // Intersection Observer pour le lazy loading
         if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const img = entry.target;
@@ -952,6 +951,13 @@
 
             document.querySelectorAll('img[data-src]').forEach(img => {
                 observer.observe(img);
+            });
+        }
+
+        // ===== OFFLINE SUPPORT =====
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(console.error);
             });
         }
     </script>
