@@ -56,16 +56,17 @@ function placeOrder() {
     const email = "anduxara2408@gmail.com";
     const subject = "Nouvelle commande";
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-// Ouvrir l'email
-window.location.href = mailtoLink;
 
-// Ouvrir la page de confirmation dans un NOUVEL ONGLET
-setTimeout(() => {
-    window.open('commande-confirmee.html', '_blank');
-}, 2000);
+    // Ouvrir l'email
+    window.location.href = mailtoLink;
 
-// Vider le panier après la commande
-localStorage.removeItem('cartItems');
+    // Ouvrir la page de confirmation dans un NOUVEL ONGLET
+    setTimeout(() => {
+        window.open('commande-confirmee.html', '_blank');
+    }, 2000);
+
+    // Vider le panier après la commande
+    localStorage.removeItem('cartItems');
 }
 
 // NOUVELLE FONCTION pour commander via WhatsApp
@@ -82,16 +83,20 @@ function placeOrderViaWhatsApp() {
 
     message += `%0A*Total : ${total.toFixed(2)} Mru*%0A%0ACordialement.`;
 
-let numeroWhatsApp = "22249037697";
-let url = `https://wa.me/${numeroWhatsApp}?text=${message}`;
+    let numeroWhatsApp = "22249037697";
+    let url = `https://wa.me/${numeroWhatsApp}?text=${message}`;
 
-// Ouvrir WhatsApp
-window.open(url, '_blank');
+    // Ouvrir WhatsApp
+    window.open(url, '_blank');
 
-// Ouvrir la page de confirmation dans un nouvel onglet
-setTimeout(() => {
-    window.open('commande-confirmee.html', '_blank');
-}, 1000);
+    // Ouvrir la page de confirmation dans un nouvel onglet
+    setTimeout(() => {
+        window.open('commande-confirmee.html', '_blank');
+    }, 1000);
 
-// Vider le panier après commande
-localStorage.removeItem('cartItems');
+    // Vider le panier après commande
+    localStorage.removeItem('cartItems');
+}
+
+// Afficher les articles au chargement de la page
+document.addEventListener('DOMContentLoaded', displayCartItems);
