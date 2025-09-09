@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue Andu-Xara 2025</title>
-    <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion. Livraison partout en Mauritanie.">
-    <meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott, vêtements traditionnels modernes">
-    <meta name="author" content="Andu-Xara">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Catalogue Andu-Xara 2025 - Vêtements Exclusifs">
-    <meta property="og:description" content="Découvrez nos collections exclusives de vêtements mauritaniens pour 2025. T-shirts, ensembles et vêtements enfants en promotion.">
-    <meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
-    <meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large image">
-    <meta name="twitter:title" content="Catalogue Andu-Xara 2025">
-    <meta name="twitter:description" content="Vêtements exclusifs mauritaniens - Collections 2025">
-    <meta name="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
-    <link rel="icon" href="images/logo.png" type="image/png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6a11cb">
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue Andu-Xara 2025</title>
+<meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion">
+<meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott">
+<meta name="author" content="Andu-Xara">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Catalogue Andu-Xara 2025 - Vêtements Exclusifs">
+<meta property="og:description" content="Découvrez nos collections exclusives de vêtements mauritaniens pour 2025. T-shirts, ensembles et vêtements">
+<meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
+<meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Catalogue Andu-Xara 2025">
+<meta name="twitter:description" content="Vêtements exclusifs mauritaniens - Collections 2025">
+<meta name="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
+
+<link rel="icon" href="images/logo.png" type="image/png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6a11cb">
+
     <style>
         * {
             margin: 0;
@@ -662,7 +665,91 @@
             padding: 12px;
             background: #6a11cb;
             color: white;
+               z-index: 10000;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float img {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* ===== NEWSLETTER POPUP ===== */
+        .newsletter-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
             border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .popup-content h3 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .popup-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .popup-content input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .popup-content button {
+            width: 100%;
+            padding: 12px;
+            background: #6a11cb;
+            color: white;
+            border: none;
+         border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
@@ -859,6 +946,78 @@
                 height: 200px;
             }
         }
+
+
+ {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.marquee-container {
+    background: linear-gradient(90deg, #2c3e50, #34495e);
+    color: white;
+    padding: 12px 0;
+    overflow: hidden;
+    position: relative;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    width: 100%;
+    z-index: 1000;
+}
+
+.marquee-content {
+    display: flex;
+    animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.marquee-section {
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.welcome {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    padding: 6px 20px;
+    border-radius: 18px;
+    font-size: 14px;
+    color: white;
+}
+
+.promotion {
+    background: linear-gradient(90deg, #ff0066, #ff6600);
+    padding: 6px 20px;
+    border-radius: 18px;
+    font-size: 14px;
+    color: white;
+}
+
+.original {
+    background: linear-gradient(90deg, #00b09b, #96c93d);
+    padding: 6px 20px;
+    border-radius: 18px;
+    font-size: 14px;
+    color: white;
+}
+
+<style>
+
     </style>
 </head>
 <body>
@@ -1155,14 +1314,6 @@
         </div>
     </main>
 
-    <!-- Popup Newsletter -->
-    <div class="newsletter-popup" id="newsletterPopup">
-        <div class="popup-content">
-            <button class="close-popup" onclick="closeNewsletter()">×</button>
-            <h3>🎉 10% DE RÉDUCTION !</h3>
-            <p>Inscrivez-vous à notre newsletter et obtenez 10% de réduction sur votre première commande</p>
-            <input type="email" placeholder="Votre email" id="newsletterEmail">
-            <button onclick="subscribeNewsletter()">S'abonner et économiser</button>
         </div>
     </div>
 
@@ -1755,6 +1906,37 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(console.error);
     });
 }
-    </script>
+// ===== BANDEAU DÉFILANT =====
+document.addEventListener("DOMContentLoaded", function() {
+    const marquee = document.querySelector(".marquee-content");
+    if (!marquee) return; // Si aucun bandeau, ne rien faire
+
+    let scrollAmount = 0;
+
+    function scrollMarquee() {
+        scrollAmount++;
+        if(scrollAmount >= marquee.scrollWidth / 2) {
+            scrollAmount = 0;
+        }
+        marquee.style.transform = `translateX(-${scrollAmount}px)`;
+        requestAnimationFrame(scrollMarquee);
+    }
+
+    scrollMarquee();
+});
+
+</script> <!-- Fin de ton JavaScript principal -->
+
+<!-- Popup Newsletter -->
+<div id="newsletter-popup" class="newsletter-popup">
+    <div class="newsletter-content">
+        <button class="close-popup" onclick="closeNewsletter()">×</button>
+        <h2>Abonnez-vous à notre Newsletter</h2>
+        <p>Recevez nos nouveautés et promotions directement dans votre boîte mail !</p>
+        <input type="email" id="newsletter-email" placeholder="Votre e-mail">
+        <button onclick="subscribeNewsletter()">S'inscrire</button>
+    </div>
+</div>
+
 </body>
 </html>
