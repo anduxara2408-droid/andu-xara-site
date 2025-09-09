@@ -1248,301 +1248,513 @@
     </footer>
 
     <script>
-        // ===== FONCTIONNALITÉS PRINCIPALES =====
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCounter();
-            updateWishlistCounter();
-            showNewsletterPopup();
-            initVariationButtons();
-            initChat();
+// ===== FONCTIONNALITÉS PRINCIPALES =====
+document.addEventListener('DOMContentLoaded', function() {
+    updateCartCounter();
+    updateWishlistCounter();
+    showNewsletterPopup();
+    initVariationButtons();
+    initChat();
+    initCartFunctionality(); // AJOUT IMPORTANT
+});
+
+// ===== WISHLIST =====
+let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+
+function toggleWishlist(productId) {
+    const index = wishlistItems.indexOf(productId);
+    const button = event.currentTarget;
+    
+    if (index > -1) {
+        wishlistItems.splice(index, 1);
+        button.classList.remove('active');
+        showNotification('Retiré des favoris', 'warning');
+    } else {
+        wishlistItems.push(productId);
+        button.classList.add('active');
+        showNotification('Ajouté aux favoris ❤️');
+    }
+    
+    localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+    updateWishlistCounter();
+}
+
+function updateWishlistCounter() {
+    document.getElementById('wishlist-counter').textContent = wishlistItems.length;
+}
+
+// ===== PANIER =====
+let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+function addToCart(productName, productPrice) {
+    if (navigator.vibrate) {
+        navigator.vibrate(50);
+    }
+    
+    const price = parseFloat(productPrice);
+    const existingItem = cartItems.find(item => item.name === productName);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cartItems.push({
+            id: Date.now(),
+            name: productName,
+            price: price,
+            quantity: 1,
+            size: getSelectedSize()
+        });
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    updateCartCounter();
+    showNotification(productName + ' ajouté au panier 🛒'); // CORRECTION ICI
+}
+
+function updateCartCounter() {
+    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+    document.getElementById('cart-counter').textContent = totalItems;
+}
+
+// ===== INITIALISATION DU PANIER =====
+function initCartFunctionality() {
+    const cartIcon = document.querySelector('.cart-icon');
+    if (cartIcon) {
+        cartIcon.addEventListener('click', showCartModal);
+    }
+}
+
+// ===== MODAL DU PANIER =====
+function showCartModal() {
+    console.log('Ouverture du panier');
+    
+    // Créer le modal s'il n'existe pas
+    let cartModal = document.getElementById('cart-modal');
+    
+    if (!cartModal) {
+        cartModal = document.createElement('div');
+        cartModal.id = 'cart-modal';
+        cartModal.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            z-index: 10001;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        `;
+        
+        // Overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'cart-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+        `;
+        overlay.onclick = closeCartModal;
+        
+        document.body.appendChild(overlay);
+        document.body.appendChild(cartModal);
+    }
+    
+    // Mettre à jour le contenu du panier
+    updateCartModalContent();
+    cartModal.style.display = 'block';
+    document.getElementById('cart-overlay').style.display = 'block';
+}
+
+function closeCartModal() {
+    const cartModal = document.getElementById('cart-modal');
+    const overlay = document.getElementById('cart-overlay');
+    
+    if (cartModal) cartModal.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
+}
+
+function updateCartModalContent() {
+    const cartModal = document.getElementById('cart-modal');
+    if (!cartModal) return;
+    
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    
+    if (cartItems.length === 0) {
+        cartModal.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <h3>🛒 Votre panier est vide</h3>
+                <p>Ajoutez des produits pour les voir ici</p>
+                <button onclick="closeCartModal()" style="
+                    padding: 10px 20px;
+                    background: #6a11cb;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    margin-top: 15px;
+                ">Continuer vos achats</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let total = 0;
+    let html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>🛒 Votre Panier</h3>
+            <button onclick="closeCartModal()" style="
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #999;
+            ">×</button>
+        </div>
+    `;
+    
+    cartItems.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        html += `
+            <div style="
+                border: 1px solid #eee;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 5px 0; color: #333;">${item.name}</h4>
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                        Taille: ${item.size || 'M'} | 
+                        Prix: ${item.price} Mru × ${item.quantity}
+                    </p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: bold; color: #6a11cb;">${itemTotal} Mru</span>
+                    <button onclick="removeFromCart(${index})" style="
+                        background: #ff4757;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 5px 10px;
+                        cursor: pointer;
+                    ">×</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `
+        <div style="border-top: 2px solid #6a11cb; padding-top: 15px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
+                <span>Total:</span>
+                <span>${total} Mru</span>
+            </div>
+            <button onclick="checkout()" style="
+                width: 100%;
+                padding: 15px;
+                background: #25D366;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 15px;
+            ">
+                🛍️ Commander via WhatsApp
+            </button>
+            <button onclick="closeCartModal()" style="
+                width: 100%;
+                padding: 10px;
+                background: #f1f3f5;
+                color: #666;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-top: 10px;
+            ">
+                Continuer mes achats
+            </button>
+        </div>
+    `;
+    
+    cartModal.innerHTML = html;
+}
+
+function removeFromCart(index) {
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    cartItems.splice(index, 1);
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    updateCartCounter();
+    updateCartModalContent();
+    showNotification('Produit retiré du panier', 'warning');
+}
+
+function checkout() {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    if (cartItems.length === 0) {
+        showNotification('Votre panier est vide', 'error');
+        return;
+    }
+    
+    let message = "Bonjour ! Je souhaite commander les produits suivants :%0A%0A";
+    let total = 0;
+    
+    cartItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        message += `• ${item.name} (Taille: ${item.size || 'M'}) - ${item.quantity} × ${item.price} Mru = ${itemTotal} Mru%0A`;
+    });
+    
+    message += `%0ATotal : ${total} Mru%0A%0A`;
+    message += "Merci de me confirmer la disponibilité et les délais de livraison.";
+    
+    const phoneNumber = "22249037697";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+    window.open(whatsappUrl, '_blank');
+    closeCartModal();
+}
+
+// ===== VARIATIONS PRODUITS =====
+function initVariationButtons() {
+    document.querySelectorAll('.variation-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const parent = this.closest('.variation-selector');
+            parent.querySelectorAll('.variation-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+}
+
+function getSelectedSize() {
+    const activeSize = document.querySelector('.variation-btn.active[data-size]');
+    return activeSize ? activeSize.dataset.size : 'M';
+}
+
+// ===== NEWSLETTER POPUP =====
+function showNewsletterPopup() {
+    const alreadyShown = localStorage.getItem('newsletterShown');
+    if (!alreadyShown) {
+        setTimeout(() => {
+            document.getElementById('newsletterPopup').classList.add('active');
+            localStorage.setItem('newsletterShown', 'true');
+        }, 3000);
+    }
+}
+
+function closeNewsletter() {
+    document.getElementById('newsletterPopup').classList.remove('active');
+}
+
+function subscribeNewsletter() {
+    const email = document.getElementById('newsletterEmail').value;
+    if (email && email.includes('@')) {
+        let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers')) || [];
+        subscribers.push(email);
+        localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+        showNotification('Merci pour votre inscription ! ✅');
+        closeNewsletter();
+    } else {
+        showNotification('Veuillez entrer un email valide', 'error');
+    }
+}
+
+// ===== CHAT WHATSAPP INTELLIGENT =====
+function initChat() {
+    document.querySelector('.chat-header').addEventListener('click', function(e) {
+        if (e.target.classList.contains('chat-toggle')) {
+            toggleChat();
+        }
+    });
+}
+
+function toggleChat() {
+    const chat = document.getElementById('whatsappChat');
+    chat.classList.toggle('open');
+    const toggleBtn = chat.querySelector('.chat-toggle');
+    toggleBtn.textContent = chat.classList.contains('open') ? '▼' : '▲';
+}
+
+function handleChatInput(event) {
+    if (event.key === 'Enter') {
+        sendChatMessage();
+    }
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (message) {
+        addChatMessage(message, 'user');
+        input.value = '';
+        
+        setTimeout(() => {
+            const response = generateIntelligentResponse(message);
+            addChatMessage(response, 'bot');
+        }, 1000);
+    }
+}
+
+function generateIntelligentResponse(userMessage) {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello')) {
+        return "👋 Bonjour ! Je suis ravi de vous aider. De quoi avez-vous besoin aujourd'hui ?";
+    }
+    
+    if (lowerMessage.includes('merci') || lowerMessage.includes('remercie')) {
+        return "😊 Je vous en prie ! N'hésitez pas si vous avez d'autres questions.";
+    }
+    
+    if (lowerMessage.includes('commande') || lowerMessage.includes('acheter') || lowerMessage.includes('achat')) {
+        return "🛒 Excellent choix ! Pour passer commande, vous pouvez :\n• Ajouter les articles au panier\n• Nous contacter directement sur WhatsApp\n• Profiter de nos promotions en cours 🎉";
+    }
+    
+    if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
+        return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 5000 Mru";
+    }
+    
+    if (lowerMessage.includes('taille') || lowerMessage.includes('tailles') || lowerMessage.includes('size')) {
+        return "📏 Nos tailles :\n• S (Small)\n• M (Medium)\n• L (Large)\n• XL (Extra Large)\nBesoin d'aide pour choisir ? Dites-moi votre morphologie !";
+    }
+    
+    if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
+        return "💰 Nos prix sont très compétitifs !\n• T-shirts : à partir de 499 Mru\n• Ensembles : à partir de 599 Mru\n• Enfants : à partir de 399 Mru\nPromotions en cours : -30% 🎉";
+    }
+    
+    if (lowerMessage.includes('couleur') || lowerMessage.includes('couleurs') || lowerMessage.includes('color')) {
+        return "🎨 Nous avons une large gamme de couleurs :\n• Noir, Blanc, Bleu, Rouge\n• Vert, Jaune, Orange\n• Et bien d'autres !\nQuelle couleur vous intéresse ?";
+    }
+    
+    if (lowerMessage.includes('promo') || lowerMessage.includes('réduction') || lowerMessage.includes('solde')) {
+        return "🎉 PROMOTION EXCEPTIONNELLE !\n30% de réduction sur tout le catalogue\nValable jusqu'au 31 Décembre 2025\nProfitez-en vite ! 🚀";
+    }
+    
+    if (lowerMessage.includes('contact') || lowerMessage.includes('appeler') || lowerMessage.includes('whatsapp')) {
+        return "📞 Contactez-nous :\n• Tel: +222 49 03 76 97\n• WhatsApp: +222 49 03 76 97\n• Email: anduxara2408@gmail.com\nNous sommes disponibles 7j/7 !";
+    }
+    
+    if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || lowerMessage.includes('coton')) {
+        return "⭐ Nos produits sont de qualité premium :\n• 100% coton égyptien\n• Coutures renforcées\n• Teintures résistantes\n• Lavage en machine possible";
+    }
+    
+    const defaultResponses = [
+        "🤔 Je comprends votre demande. Pouvez-vous me donner plus de détails pour que je puisse mieux vous aider ?",
+        "💡 Je serais ravi de vous aider ! De quoi avez-vous besoin précisément ?",
+        "👕 Concernant nos produits Andu-Xara, je peux vous renseigner sur :\n• Les tailles disponibles\n• Les matériaux utilisés\n• Les délais de livraison\n• Les promotions en cours\nQue vous intéresse-t-il ?",
+        "🚀 Excellent ! Pour une assistance personnalisée, je vous recommande de contacter directement notre équipe sur WhatsApp. Ils pourront vous aider en temps réel !",
+        "😊 Merci pour votre message ! Notre équipe est là pour vous aider. Souhaitez-vous des informations sur un produit particulier ?"
+    ];
+    
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+}
+
+function addChatMessage(text, type) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message ' + type;
+    
+    const formattedText = text.replace(/\n/g, '<br>');
+    messageDiv.innerHTML = formattedText;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function openWhatsApp() {
+    const phoneNumber = "22249037697";
+    const message = "Bonjour, je suis intéressé par vos produits Andu-Xara. Pouvez-vous m'aider ?";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// ===== RECHERCHE =====
+document.getElementById('search-input').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const products = document.querySelectorAll('.product-card');
+
+    products.forEach(product => {
+        const title = product.querySelector('.product-title').textContent.toLowerCase();
+        const description = product.querySelector('.product-description').textContent.toLowerCase();
+
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+});
+
+// ===== CATÉGORIES =====
+document.querySelectorAll('.category-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.remove('active');
         });
 
-        // ===== WISHLIST =====
-        let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
-
-        function toggleWishlist(productId) {
-            const index = wishlistItems.indexOf(productId);
-            const button = event.currentTarget;
-            
-            if (index > -1) {
-                wishlistItems.splice(index, 1);
-                button.classList.remove('active');
-                showNotification('Retiré des favoris', 'warning');
+        this.classList.add('active');
+        const category = this.getAttribute('data-category');
+        const products = document.querySelectorAll('.product-card');
+        
+        products.forEach(product => {
+            if (category === 'tous') {
+                product.style.display = 'block';
             } else {
-                wishlistItems.push(productId);
-                button.classList.add('active');
-                showNotification('Ajouté aux favoris ❤️');
+                const productCategory = product.getAttribute('data-category');
+                product.style.display = (productCategory === category) ? 'block' : 'none';
             }
-            
-            localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
-            updateWishlistCounter();
-        }
-
-        function updateWishlistCounter() {
-            document.getElementById('wishlist-counter').textContent = wishlistItems.length;
-        }
-
-        // ===== PANIER =====
-        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-        function addToCart(productName, productPrice) {
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-            
-            const price = parseFloat(productPrice);
-            const existingItem = cartItems.find(item => item.name === productName);
-
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cartItems.push({
-                    id: Date.now(),
-                    name: productName,
-                    price: price,
-                    quantity: 1,
-                    size: getSelectedSize()
-                });
-            }
-
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            updateCartCounter();
-            showNotification(`${productName} ajouté au panier 🛒`);
-        }
-
-        function updateCartCounter() {
-            const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cart-counter').textContent = totalItems;
-        }
-
-        // ===== VARIATIONS PRODUITS =====
-        function initVariationButtons() {
-            document.querySelectorAll('.variation-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const parent = this.closest('.variation-selector');
-                    parent.querySelectorAll('.variation-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
-        }
-
-        function getSelectedSize() {
-            const activeSize = document.querySelector('.variation-btn.active[data-size]');
-            return activeSize ? activeSize.dataset.size : 'M';
-        }
-
-        // ===== NEWSLETTER POPUP =====
-        function showNewsletterPopup() {
-            const alreadyShown = localStorage.getItem('newsletterShown');
-            if (!alreadyShown) {
-                setTimeout(() => {
-                    document.getElementById('newsletterPopup').classList.add('active');
-                    localStorage.setItem('newsletterShown', 'true');
-                }, 3000);
-            }
-        }
-
-        function closeNewsletter() {
-            document.getElementById('newsletterPopup').classList.remove('active');
-        }
-
-        function subscribeNewsletter() {
-            const email = document.getElementById('newsletterEmail').value;
-            if (email && email.includes('@')) {
-                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers')) || [];
-                subscribers.push(email);
-                localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-                showNotification('Merci pour votre inscription ! ✅');
-                closeNewsletter();
-            } else {
-                showNotification('Veuillez entrer un email valide', 'error');
-            }
-        }
-
-        // ===== CHAT WHATSAPP INTELLIGENT =====
-        function initChat() {
-            document.querySelector('.chat-header').addEventListener('click', function(e) {
-                if (e.target.classList.contains('chat-toggle')) {
-                    toggleChat();
-                }
-            });
-        }
-
-        function toggleChat() {
-            const chat = document.getElementById('whatsappChat');
-            chat.classList.toggle('open');
-            const toggleBtn = chat.querySelector('.chat-toggle');
-            toggleBtn.textContent = chat.classList.contains('open') ? '▼' : '▲';
-        }
-
-        function handleChatInput(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                addChatMessage(message, 'user');
-                input.value = '';
-                
-                setTimeout(() => {
-                    const response = generateIntelligentResponse(message);
-                    addChatMessage(response, 'bot');
-                }, 1000);
-            }
-        }
-
-        function generateIntelligentResponse(userMessage) {
-            const lowerMessage = userMessage.toLowerCase();
-            
-            // Réponses intelligentes basées sur le contenu du message
-            if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello')) {
-                return "👋 Bonjour ! Je suis ravi de vous aider. De quoi avez-vous besoin aujourd'hui ?";
-            }
-            
-            if (lowerMessage.includes('merci') || lowerMessage.includes('remercie')) {
-                return "😊 Je vous en prie ! N'hésitez pas si vous avez d'autres questions.";
-            }
-            
-            if (lowerMessage.includes('commande') || lowerMessage.includes('acheter') || lowerMessage.includes('achat')) {
-                return "🛒 Excellent choix ! Pour passer commande, vous pouvez :\n• Ajouter les articles au panier\n• Nous contacter directement sur WhatsApp\n• Profiter de nos promotions en cours 🎉";
-            }
-            
-            if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
-                return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 1000 Mru";
-            }
-            
-            if (lowerMessage.includes('taille') || lowerMessage.includes('tailles') || lowerMessage.includes('size')) {
-                return "📏 Nos tailles :\n• S (Small)\n• M (Medium)\n• L (Large)\n• XL (Extra Large)\nBesoin d'aide pour choisir ? Dites-moi votre morphologie !";
-            }
-            
-            if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
-                return "💰 Nos prix sont très compétitifs !\n• T-shirts : à partir de 499 Mru\n• Ensembles : à partir de 599 Mru\n• Enfants : à partir de 399 Mru\nPromotions en cours : -30% 🎉";
-            }
-            
-            if (lowerMessage.includes('couleur') || lowerMessage.includes('couleurs') || lowerMessage.includes('color')) {
-                return "🎨 Nous avons une large gamme de couleurs :\n• Noir, Blanc, Bleu, Rouge\n• Vert, Jaune, Orange\n• Et bien d'autres !\nQuelle couleur vous intéresse ?";
-            }
-            
-            if (lowerMessage.includes('promo') || lowerMessage.includes('réduction') || lowerMessage.includes('solde')) {
-                return "🎉 PROMOTION EXCEPTIONNELLE !\n30% de réduction sur tout le catalogue\nValable jusqu'au 31 Décembre 2025\nProfitez-en vite ! 🚀";
-            }
-            
-            if (lowerMessage.includes('contact') || lowerMessage.includes('appeler') || lowerMessage.includes('whatsapp')) {
-                return "📞 Contactez-nous :\n• Tel: +222 49 03 76 97\n• WhatsApp: +222 49 03 76 97\n• Email: anduxara2408@gmail.com\nNous sommes disponibles 7j/7 !";
-            }
-            
-            if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || lowerMessage.includes('coton')) {
-                return "⭐ Nos produits sont de qualité premium :\n• 100% coton égyptien\n• Coutures renforcées\n• Teintures résistantes\n• Lavage en machine possible";
-            }
-            
-            // Réponse par défaut intelligente
-            const defaultResponses = [
-                "🤔 Je comprends votre demande. Pouvez-vous me donner plus de détails pour que je puisse mieux vous aider ?",
-                "💡 Je serais ravi de vous aider ! De quoi avez-vous besoin précisément ?",
-                "👕 Concernant nos produits Andu-Xara, je peux vous renseigner sur :\n• Les tailles disponibles\n• Les matériaux utilisés\n• Les délais de livraison\n• Les promotions en cours\nQue vous intéresse-t-il ?",
-                "🚀 Excellent ! Pour une assistance personnalisée, je vous recommande de contacter directement notre équipe sur WhatsApp. Ils pourront vous aider en temps réel !",
-                "😊 Merci pour votre message ! Notre équipe est là pour vous aider. Souhaitez-vous des informations sur un produit particulier ?"
-            ];
-            
-            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
-        }
-
-        function addChatMessage(text, type) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            // Permettre les sauts de ligne dans le texte
-            const formattedText = text.replace(/\n/g, '<br>');
-            messageDiv.innerHTML = formattedText;
-            
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function openWhatsApp() {
-            const phoneNumber = "22249037697";
-            const message = "Bonjour, je suis intéressé par vos produits Andu-Xara. Pouvez-vous m'aider ?";
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // ===== RECHERCHE =====
-        document.getElementById('search-input').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const products = document.querySelectorAll('.product-card');
-
-            products.forEach(product => {
-                const title = product.querySelector('.product-title').textContent.toLowerCase();
-                const description = product.querySelector('.product-description').textContent.toLowerCase();
-
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
         });
+    });
+});
 
-        // ===== CATÉGORIES =====
-        document.querySelectorAll('.category-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+// ===== BANNIÈRES CATÉGORIES =====
+document.querySelectorAll('.category-banner').forEach(banner => {
+    banner.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        document.querySelector(`.category-btn[data-category="${category}"]`).click();
+        window.scrollTo({ top: document.querySelector('.products-grid').offsetTop - 100, behavior: 'smooth' });
+    });
+});
 
-                this.classList.add('active');
-                const category = this.getAttribute('data-category');
-                const products = document.querySelectorAll('.product-card');
-                
-                products.forEach(product => {
-                    if (category === 'tous') {
-                        product.style.display = 'block';
-                    } else {
-                        const productCategory = product.getAttribute('data-category');
-                        product.style.display = (productCategory === category) ? 'block' : 'none';
-                    }
-                });
-            });
-        });
+// ===== NOTIFICATIONS =====
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = 'notification ' + type;
+    notification.innerHTML = `
+        <span class="notification-icon">${type === 'success' ? '✅' : '⚠️'}</span>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(notification);
 
-        // ===== BANNIÈRES CATÉGORIES =====
-        document.querySelectorAll('.category-banner').forEach(banner => {
-            banner.addEventListener('click', function() {
-                const category = this.getAttribute('data-category');
-                document.querySelector(`.category-btn[data-category="${category}"]`).click();
-                window.scrollTo({ top: document.querySelector('.products-grid').offsetTop - 100, behavior: 'smooth' });
-            });
-        });
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
 
-        // ===== NOTIFICATIONS =====
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <span class="notification-icon">${type === 'success' ? '✅' : '⚠️'}</span>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // ===== SERVICE WORKER PWA =====
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(console.error);
-            });
-        }
+// ===== SERVICE WORKER PWA =====
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(console.error);
+    });
+}
     </script>
 </body>
 </html>
