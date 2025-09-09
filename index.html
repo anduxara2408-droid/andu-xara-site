@@ -24,7 +24,8 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6a11cb">
 
-    <style>
+   <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -1017,10 +1018,37 @@ body {
 }
 
 <style>
+/* ===== TOAST ===== */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+}
+
 
     </style>
 </head>
 <body>
+<!-- Toast confirmation ajout au panier -->
+<div id="toast" class="toast">Produit ajouté au panier !</div>
+
     <!-- Texte défilant -->
     <div class="marquee-container">
         <div class="marquee-content">
@@ -1923,6 +1951,27 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     scrollMarquee();
+});
+
+// ===== TOAST CONFIRMATION AJOUT AU PANIER =====
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000); // le toast disparaît après 3 secondes
+}
+
+// Exemple : détecter tous les boutons "Ajouter au panier"
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        showToast('Produit ajouté au panier !');
+        // Ici tu peux aussi appeler ta fonction d'ajout réel au panier
+        // initCartFunctionality(); si besoin
+    });
 });
 
 </script> <!-- Fin de ton JavaScript principal -->
