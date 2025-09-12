@@ -25,6 +25,76 @@
 <meta name="theme-color" content="#6a11cb">
 
    <style>
+.modal {
+  display: none; /* caché par défaut */
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal .close:hover {
+  color: #000;
+}
+
+.legal-section {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+}
+
+.legal-section h2 {
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.legal-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.legal-section ul li {
+    margin: 5px 0;
+}
+
+.legal-section ul li a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.legal-section ul li a:hover {
+    color: #667eea;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 
 /* ===== Compteur Promotion ===== */
 .promo-countdown {
@@ -1153,6 +1223,25 @@ body {
     font-size: 14px;
     color: white;
 }
+.legal-links ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.legal-links ul li {
+  margin: 5px 0;
+}
+
+.legal-links ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.legal-links ul li a:hover {
+  color: #667eea;
+}
 
 <style>
 .partenaires {
@@ -1317,237 +1406,234 @@ body {
                 </div>
             </div>
         </div>
+<div class="products-grid" id="products-container">
 
-        <div class="products-grid" id="products-container">
-            <!-- Produits (même contenu que précédemment) -->
-            <!-- Produit 1 -->
-            <div class="product-card" data-category="t-shirts">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt logo arabe</h3>
-                    <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">499 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 2 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Ensemble capuche style arabe</h3>
-                    <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">599 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 599)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 3 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
-                    <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">599 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 599)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 4 -->
-            <div class="product-card" data-category="enfants">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt Enfant</h3>
-                    <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Âge:</span>
-                            <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
-                            <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
-                            <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">399 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 399)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 5 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Ensemble T-shirt et jogging</h3>
-                    <p class="product-description">Ensemble coton premium - Style décontracté</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">799 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 799)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 6 -->
-            <div class="product-card" data-category="t-shirts">
-                <div class="product-image-container">
-                    <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Pull bleu</h3>
-                    <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">699 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Pull bleu', 699)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 7 -->
-            <div class="product-card" data-category="accessoires">
-                <div class="product-image-container">
-                    <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Capuchon blanc</h3>
-                    <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="Unique">Unique</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">299 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 299)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 8 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt et jogging</h3>
-                    <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">899 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 899)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Produit 1 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
         </div>
-    </main>
-
+        <div class="product-info">
+            <h3 class="product-title">T-shirt logo arabe</h3>
+            <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">499 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">349 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 349)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
         </div>
     </div>
+
+    <!-- Produit 2 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble capuche style arabe</h3>
+            <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 3 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
+            <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 4 -->
+    <div class="product-card" data-category="enfants">
+        <div class="product-image-container">
+            <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt Enfant</h3>
+            <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Âge:</span>
+                    <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
+                    <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
+                    <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">399 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">279 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 279)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 5 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble T-shirt et jogging</h3>
+            <p class="product-description">Ensemble coton premium - Style décontracté</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">799 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">559 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 559)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 6 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Pull bleu</h3>
+            <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">699 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">489 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Pull bleu', 489)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 7 -->
+    <div class="product-card" data-category="accessoires">
+        <div class="product-image-container">
+            <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Capuchon blanc</h3>
+            <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="Unique">Unique</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">299 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">209 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 209)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 8 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt et jogging</h3>
+            <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">899 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">629 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 629)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
     <!-- Chat WhatsApp -->
     <div class="whatsapp-chat" id="whatsappChat">
@@ -1633,11 +1719,12 @@ body {
 </section>
 
     <footer>
+
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Andu-Xara</h3>
-                    <p>Votre marque mauritanienne de vêtements exclusifs depuis 2023</p>
+                    <p>Votre marque mauritanienne de vêtements exclusifs depuis 2020</p>
                     <p>Qualité · Style · Tradition Moderne</p>
                 </div>
 
@@ -1679,6 +1766,20 @@ body {
                 <p>Contact: anduxara2408@gmail.com | Tel: +222 49 03 76 97 / +221 76 282 11 33</p>
             </div>
         </div>
+<footer>
+  <p>&copy; 2025 Andu-xara - Tous droits réservés</p>
+
+  <div class="legal-links">
+<ul>
+    <li><a href="conditions-generales.html">Conditions Générales de Vente et Utilisation</a></li>
+    <li><a href="mentions-legales.html">Mentions légales</a></li>
+    <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+    <li><a href="suivi-livraison.html">Suivi de livraison</a></li>
+</ul>
+
+  </div>
+</footer>
+
     </footer>
 
     <script>
@@ -2295,5 +2396,107 @@ addToCartButtons.forEach(button => {
         document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
     }, 1000);
 </script>
+<!-- Section Légale -->
+<section class="legal-section">
+    <h2>Informations Légales</h2>
+    <ul>
+        <li><a href="#">Conditions Générales de Vente et Utilisation</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Suivi de livraison</a></li>
+    </ul>
+</section>
+<script>
+function toggleLegal(id) {
+  // cacher tout
+  document.querySelectorAll('.legal-content').forEach(div => {
+    div.style.display = "none";
+  });
+  // afficher seulement celui cliqué
+  document.getElementById(id).style.display = "block";
+}
+</script>
+<!-- Modal Conditions Générales -->
+<div id="modal-cgv" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-cgv')">&times;</span>
+    <h2>Conditions Générales de Vente et Utilisation</h2>
+    <p>Ici le texte complet de vos CGV...</p>
+  </div>
+</div>
+
+<!-- Modal Mentions légales -->
+<div id="modal-mentions" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-mentions')">&times;</span>
+    <h2>Mentions légales</h2>
+    <p>Texte des mentions légales...</p>
+  </div>
+</div>
+
+<!-- Modal Politique de confidentialité -->
+<div id="modal-confidentialite" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-confidentialite')">&times;</span>
+    <h2>Politique de confidentialité</h2>
+    <p>Texte de la politique de confidentialité...</p>
+  </div>
+</div>
+
+<!-- Modal Suivi de livraison -->
+<div id="modal-suivi" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-suivi')">&times;</span>
+    <h2>Suivi de livraison</h2>
+    <p>Texte du suivi de livraison...</p>
+  </div>
+</div>
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+</script>
+<!-- Fenêtre popup d'abonnement -->
+<div id="subscribe-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:400px; text-align:center; box-shadow:0 5px 25px rgba(0,0,0,0.3);">
+        <h2 style="color:#667eea;">Abonnez-vous</h2>
+        <p>Recevez nos nouveautés et promotions directement par email !</p>
+        <form onsubmit="subscribeEmail(event)">
+            <input type="email" id="subscribe-email" placeholder="Votre email" required 
+                style="padding:10px; width:80%; margin:10px 0; border:1px solid #ccc; border-radius:8px;">
+            <br>
+            <button type="submit" style="padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">S'abonner</button>
+        </form>
+        <button onclick="closePopup()" style="margin-top:15px; background:transparent; border:none; color:#666; cursor:pointer;">Fermer ❌</button>
+    </div>
+</div>
+
+<script>
+    // Affiche le popup après 30 secondes
+    window.onload = function() {
+        setTimeout(function() {
+            document.getElementById('subscribe-popup').style.display = 'flex';
+        }, 30000); // 30 000 ms = 30 secondes
+    };
+
+    // Fermer le popup
+    function closePopup() {
+        document.getElementById('subscribe-popup').style.display = 'none';
+    }
+
+    // Gestion de l'abonnement (à améliorer selon tes besoins)
+    function subscribeEmail(event) {
+        event.preventDefault();
+        let email = document.getElementById('subscribe-email').value;
+        alert("Merci pour votre abonnement : " + email);
+        closePopup();
+    }
+  
+<script>
+
 </body>
 </html>
