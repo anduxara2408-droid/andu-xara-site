@@ -25,6 +25,105 @@
 <meta name="theme-color" content="#6a11cb">
 
    <style>
+
+/* ===== Compteur Promotion ===== */
+.promo-countdown {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.promo-countdown h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+#countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 1.4rem;
+}
+
+#countdown span {
+    background: rgba(0,0,0,0.2);
+    padding: 15px 20px;
+    border-radius: 10px;
+    min-width: 60px;
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.temoignages-section h2 {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.temoignages-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.temoignage {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 300px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.temoignage p {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.temoignage h4 {
+  color: #222;
+  font-weight: bold;
+}
+
+.faq-section {
+  padding: 40px;
+  background-color: #fff;
+  margin-top: 40px;
+}
+
+.faq-section h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.faq-item h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.faq-item p {
+  font-size: 1em;
+  color: #555;
+}
+
+
 .about-section {
     padding: 60px 20px;
     background: #f9f9f9;
@@ -1056,6 +1155,40 @@ body {
 }
 
 <style>
+.partenaires {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f5f5f5;
+}
+
+.partenaires h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.partenaires-logos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.partenaires-logos img {
+    width: 150px; /* ou adapte selon la taille souhaitée */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.depliant-images,
+.partenaires-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+
 /* ===== TOAST ===== */
 .toast {
     visibility: hidden;
@@ -1079,11 +1212,44 @@ body {
     visibility: visible;
     opacity: 1;
 }
+/* Media Queries pour smartphones */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+    }
+    .depliant-images img,
+    .partenaires-logos img {
+        max-width: 150px;
+    }
+    nav ul {
+        flex-direction: column;
+    }
+}
+
+/* Media Queries pour tablettes */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .depliant-images img,
+    .partenaires-logos img {
+        max-width: 200px;
+    }
+}
+
 
 
     </style>
 </head>
 <body>
+<!-- Section Compteur Promotion -->
+<section class="promo-countdown">
+    <h2>Promotion spéciale se termine bientôt !</h2>
+    <div id="countdown">
+        <span id="days">00</span> jours
+        <span id="hours">00</span> heures
+        <span id="minutes">00</span> minutes
+        <span id="seconds">00</span> secondes
+    </div>
+</section>
+
 <!-- Toast confirmation ajout au panier -->
 <div id="toast" class="toast">Produit ajouté au panier !</div>
 
@@ -1414,6 +1580,57 @@ body {
     <div class="whatsapp-float" onclick="openWhatsApp()">
         <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE3LjQ3MiAxNC4zODRDMTcuMDEgMTMuOTc4IDE2LjY2NSAxMy44NzIgMTYuMDMgMTQuMzg0QzE1LjQ5NSAxNC44MTIgMTQuNDkgMTUuNzggMTQuMzIzIDE1Ljk0OEMxNC4xNzkgMTYuMDg5IDEzLjk5NSAxNi4xMDIgMTMuNzc0IDE1Ljk0OEMxMy41NTQgMTUuNzk0IDEyLjY0NyAxNS4yMjYgMTEuNjQyIDE0LjMyM0MxMC43OTEgMTMuNTQ3IDEwLjIxNiAxMi42NTIgMTAuMDYgMTMuNDEzQzE5LjkwNCAxMi4yNTggOS45MDQgMTIuMjU4IDEwLjA2IDExLjQxM0MxMC4xMDIgMTEuMTc5IDEwLjI2OSAxMC45ODQgMTAuNDk2IDEwLjg3OUMxMC43NzYgMTAuNzM2IDExLjMxMiAxMC41MDIgMTEuMzEyIDEwLjUwMkMxMS40NTYgMTAuNDIxIDExLjYxMiAxMC4yNDQgMTEuNjUyIDEwLjA1OUMxMS42OTIgOS44NzM1IDExLjYxNCA5LjY4ODUgMTEuNDc3IDkuNTU0MUMxMS4yMjggOS4yOTk1IDEwLjg2MiA4Ljg4ODUgMTAuNjg3IDguNjg0NUMxMC40NDIgOC40MDM1IDEwLjE5NiA4LjM5NzUgOS45NjcgOC41MjM1QzkuNzM4IDguNjQ5NSA5LjA0MSA4Ljk5MTUgOC44NzkgOS4wODA1QzguNTYyIDkuMjQxNSA4LjMyMiA5LjI4MzUgOC4xMjYgOS4wODA1QzcuOTMgOC44Nzc1IDcuNDUyIDguMzYzNSA3LjIyOSA4LjEyMDVDNi44ODIgNy43NDc1IDYuNTM1IDcuNzQ3NSA2LjI4NCA3Ljc0NzVDNi4wNzMgNy43NDc1IDUuODYyIDcuNzc5NSA1LjY3NiA3Ljk5MDVDNS4xMjMgOC41MjM1IDQuODc3IDkuMTc4NSA0Ljg3NyA5Ljg0NzVDNC44NzcgMTAuNTE2IDUuMTIzIDExLjE3MSA1LjM3MiAxMS42ODVDNS42MiAxMi4xOTkgNi45MjYgMTQuNDQzIDkuMDYyIDE1Ljk0OUMxMC44MjYgMTcuMjE2IDEyLjI0NSAxNy42NjcgMTMuNDA0IDE3Ljg2OUMxMy44NzIgMTcuOTUyIDE0LjMwNCAxNy45MDQgMTQuNjg0IDE3Ljc0M0MxNS4yMjYgMTcuNTExIDE2LjE2NSAxNi45MjYgMTYuNDE0IDE2LjI1N0MxNi41MjggMTUuOTU2IDE2LjQ1NSAxNS43MDQgMTYuMzI5IDE1LjUwMUMxNi4yMDMgMTUuMjk4IDE2LjAzNyAxNS4wNDYgMTUuODcxIDE0Ljg5MkMxNS43MDUgMTQuNzM4IDE1LjU1MyAxNC42NTIgMTUuNDI3IDE0Ljc5NEMxNS4zMDEgMTQuOTM2IDE1LjQyNyAxNS4xODggMTUuNTUzIDE1LjM1MkMxNS42OCAxNS41MTYgMTUuODU4IDE1Ljc1OCAxNS45ODQgMTUuOTAyQzE2LjI1OCAxNi4yMDIgMTYuNDU1IDE2LjI1NyAxNi43MDQgMTYuMTQzQzE2Ljk1MyAxNi4wMjkgMTcuNzQyIDE1LjUyNSAxOC4xOTQgMTUuMDQ2QzE4LjcyMiAxNC40ODcgMTguOTQ1IDEzLjk5IDE4Ljg4NiAxMy41ODRDMTguODI3IDEzLjE3OCAxOC40NzMgMTMuMDQ0IDE4LjA3NSAxMi45MUwxNy40NzIgMTQuMzg0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WhatsApp">
     </div>
+<!-- Section FAQ -->
+<section id="faq" class="faq-section">
+  <h2>Foire aux Questions (FAQ)</h2>
+
+  <div class="faq-item">
+    <h3>Quels sont vos délais de livraison ?</h3>
+    <p>Nos délais varient entre 3 à 7 jours ouvrables selon la destination.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Quels modes de paiement acceptez-vous ?</h3>
+    <p>Nous acceptons les paiements par mobile money, carte bancaire et espèces à la livraison (selon la zone).</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Puis-je retourner un produit ?</h3>
+    <p>Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact.</p>
+  </div>
+</section>
+
+<!-- Section Témoignages -->
+<section id="temoignages" class="temoignages-section">
+  <h2>Ils nous font confiance</h2>
+
+  <div class="temoignages-container">
+    <div class="temoignage">
+      <p>"Produits de très bonne qualité, livraison rapide et service client au top !"</p>
+      <h4>- Awa D.</h4>
+    </div>
+
+    <div class="temoignage">
+      <p>"J’ai commandé plusieurs fois et je suis toujours satisfait. Bravo à l’équipe Andu-xara 👏"</p>
+      <h4>- Mamadou B.</h4>
+    </div>
+
+    <div class="temoignage">
+      <p>"Une marque jeune mais déjà très professionnelle. Je recommande à 100%."</p>
+      <h4>- Khadija S.</h4>
+    </div>
+  </div>
+</section>
+<!-- Section Partenaires -->
+<section class="partenaires">
+    <h2>Nos Partenaires</h2>
+    <div class="partenaires-logos">
+        <img src="images/partenaires/hawa.jpeg" alt="Hawa">
+        <img src="images/partenaires/kenzo.jpeg" alt="Kenzo">
+        <img src="images/partenaires/nafore.jpeg" alt="Nafore">
+        <img src="images/partenaires/vizeho.jpeg" alt="Vizeho">
+    </div>
+</section>
 
     <footer>
         <div class="container">
@@ -2053,7 +2270,30 @@ addToCartButtons.forEach(button => {
             capacités créatives et entrepreneuriales.
         </p>
     </div>
-</section>
+<script>
+    // Date de fin de la promotion
+    const promoEndDate = new Date("2025-09-25T23:59:59").getTime();
 
+    const countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = promoEndDate - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown").innerHTML = "Promotion terminée !";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = days.toString().padStart(2, '0');
+        document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
+</script>
 </body>
 </html>
