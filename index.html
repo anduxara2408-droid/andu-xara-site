@@ -1,4 +1,4 @@
-x<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -1402,6 +1402,22 @@ body {
     max-width: 300px;        /* environ 15 cm sur la plupart des écrans */
     width: 100%;             /* s’adapte à l’écran sans dépasser 300px */
 }
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+
+.chat-header .chat-icon {
+    width: 18px;   /* plus petit qu’avant */
+    height: 18px;
+    margin-right: 6px; /* espace entre l’icône et le bouton ▼ */
+}
 
 <style>
 .partenaires {
@@ -1486,8 +1502,45 @@ body {
 
 
     </style>
-</head>
+<style>
+    /* Fenêtre du chat (réduite et masquée par défaut) */
+    .chat-box {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 280px;           /* largeur réduite */
+        max-height: 350px;      /* hauteur réduite */
+        background: #222;
+        color: white;
+        border-radius: 12px;
+        display: none;          /* masquée au départ */
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    /* Zone des messages */
+    .chat-messages {
+        padding: 10px;
+        flex: 1;
+        overflow-y: auto;       /* permet de scroller si trop de messages */
+        font-size: 14px;
+    }
+</style>
+
+<head>
 <body>
+<div id="chatBox" class="chat-box">
+    <div class="chat-messages" id="chatMessages">
+        <!-- Les messages apparaissent ici -->
+    </div>
+    <input type="text" id="chatInput" placeholder="Écrire un message...">
+</div>
+
+<!-- Bouton du chat -->
+<div class="chat-button" onclick="toggleChat()">💬</div>
+
 <!-- Section Compteur Promotion -->
 <section class="promo-countdown">
     <h2>Promotion spéciale se termine bientôt !</h2>
@@ -1797,10 +1850,10 @@ body {
 
     <!-- Chat WhatsApp -->
     <div class="whatsapp-chat" id="whatsappChat">
-        <div class="chat-header" onclick="toggleChat()">
-            <span>💬 Assistant Andu-Xara</span>
-            <button class="chat-toggle">▼</button>
-        </div>
+<div class="chat-header" onclick="toggleChat()">
+    <img src="images/message-icon.png" alt="Message" class="chat-icon">
+    <button class="chat-toggle">▼</button>
+</div>
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
                 👋 Bonjour ! Je suis l'assistant virtuel Andu-Xara. 
@@ -1822,10 +1875,6 @@ body {
         </div>
     </div>
 
-    <!-- Bouton flottant WhatsApp -->
-    <div class="whatsapp-float" onclick="openWhatsApp()">
-        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE3LjQ3MiAxNC4zODRDMTcuMDEgMTMuOTc4IDE2LjY2NSAxMy44NzIgMTYuMDMgMTQuMzg0QzE1LjQ5NSAxNC44MTIgMTQuNDkgMTUuNzggMTQuMzIzIDE1Ljk0OEMxNC4xNzkgMTYuMDg5IDEzLjk5NSAxNi4xMDIgMTMuNzc0IDE1Ljk0OEMxMy41NTQgMTUuNzk0IDEyLjY0NyAxNS4yMjYgMTEuNjQyIDE0LjMyM0MxMC43OTEgMTMuNTQ3IDEwLjIxNiAxMi42NTIgMTAuMDYgMTMuNDEzQzE5LjkwNCAxMi4yNTggOS45MDQgMTIuMjU4IDEwLjA2IDExLjQxM0MxMC4xMDIgMTEuMTc5IDEwLjI2OSAxMC45ODQgMTAuNDk2IDEwLjg3OUMxMC43NzYgMTAuNzM2IDExLjMxMiAxMC41MDIgMTEuMzEyIDEwLjUwMkMxMS40NTYgMTAuNDIxIDExLjYxMiAxMC4yNDQgMTEuNjUyIDEwLjA1OUMxMS42OTIgOS44NzM1IDExLjYxNCA5LjY4ODUgMTEuNDc3IDkuNTU0MUMxMS4yMjggOS4yOTk1IDEwLjg2MiA4Ljg4ODUgMTAuNjg3IDguNjg0NUMxMC40NDIgOC40MDM1IDEwLjE5NiA4LjM5NzUgOS45NjcgOC41MjM1QzkuNzM4IDguNjQ5NSA5LjA0MSA4Ljk5MTUgOC44NzkgOS4wODA1QzguNTYyIDkuMjQxNSA4LjMyMiA5LjI4MzUgOC4xMjYgOS4wODA1QzcuOTMgOC44Nzc1IDcuNDUyIDguMzYzNSA3LjIyOSA4LjEyMDVDNi44ODIgNy43NDc1IDYuNTM1IDcuNzQ3NSA2LjI4NCA3Ljc0NzVDNi4wNzMgNy43NDc1IDUuODYyIDcuNzc5NSA1LjY3NiA3Ljk5MDVDNS4xMjMgOC41MjM1IDQuODc3IDkuMTc4NSA0Ljg3NyA5Ljg0NzVDNC44NzcgMTAuNTE2IDUuMTIzIDExLjE3MSA1LjM3MiAxMS42ODVDNS42MiAxMi4xOTkgNi45MjYgMTQuNDQzIDkuMDYyIDE1Ljk0OUMxMC44MjYgMTcuMjE2IDEyLjI0NSAxNy42NjcgMTMuNDA0IDE3Ljg2OUMxMy44NzIgMTcuOTUyIDE0LjMwNCAxNy45MDQgMTQuNjg0IDE3Ljc0M0MxNS4yMjYgMTcuNTExIDE2LjE2NSAxNi45MjYgMTYuNDE0IDE2LjI1N0MxNi41MjggMTUuOTU2IDE2LjQ1NSAxNS43MDQgMTYuMzI5IDE1LjUwMUMxNi4yMDMgMTUuMjk4IDE2LjAzNyAxNS4wNDYgMTUuODcxIDE0Ljg5MkMxNS43MDUgMTQuNzM4IDE1LjU1MyAxNC42NTIgMTUuNDI3IDE0Ljc5NEMxNS4zMDEgMTQuOTM2IDE1LjQyNyAxNS4xODggMTUuNTUzIDE1LjM1MkMxNS42OCAxNS41MTYgMTUuODU4IDE1Ljc1OCAxNS45ODQgMTUuOTAyQzE2LjI1OCAxNi4yMDIgMTYuNDU1IDE2LjI1NyAxNi43MDQgMTYuMTQzQzE2Ljk1MyAxNi4wMjkgMTcuNzQyIDE1LjUyNSAxOC4xOTQgMTUuMDQ2QzE4LjcyMiAxNC40ODcgMTguOTQ1IDEzLjk5IDE4Ljg4NiAxMy41ODRDMTguODI3IDEzLjE3OCAxOC40NzMgMTMuMDQ0IDE4LjA3NSAxMi45MUwxNy40NzIgMTQuMzg0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WhatsApp">
-    </div>
 <!-- Section FAQ -->
 <section id="faq" class="faq-section">
   <h2>Foire aux Questions (FAQ)</h2>
@@ -2663,6 +2712,12 @@ function closeModal(id) {
 <img src="images/icons/message-icon.png" alt="Message" class="message-icon">
 
 </button>
+<script>
+function toggleChat() {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
+}
+</script>
 
 </body>
 </html>
