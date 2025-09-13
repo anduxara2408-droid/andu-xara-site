@@ -25,6 +25,21 @@
 <meta name="theme-color" content="#6a11cb">
 
    <style>
+/* Style du bouton / icône du message */
+.message-icon {
+    width: 20px;           /* taille minuscule */
+    height: 20px;          /* taille minuscule */
+    vertical-align: middle; /* aligne avec le texte */
+    margin-left: 5px;      /* espace entre texte et icône */
+}
+
+/* Optionnel : si l'icône est un bouton flottant */
+.floating-message {
+    display: inline-flex;
+    align-items: center; /* centre l'icône et le texte */
+    font-size: 0.9em;    /* taille texte plus petite si besoin */
+}
+
 .modal {
   display: none; /* caché par défaut */
   position: fixed;
@@ -1241,6 +1256,119 @@ body {
 
 .legal-links ul li a:hover {
   color: #667eea;
+}
+/* Ajustements pour smartphones et tablettes */
+@media (max-width: 1200px) {
+    body {
+        padding: 10px;
+    }
+
+    .container, .products-grid, .product-card {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .product-card {
+        margin-bottom: 20px;
+    }
+
+    .product-info h3 {
+        font-size: 1em;
+    }
+
+    .product-info p {
+        font-size: 0.9em;
+    }
+
+    .product-price {
+        font-size: 0.9em;
+    }
+
+    .product-variations button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
+
+    .floating-message {
+        bottom: 15px;
+        right: 15px;
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .floating-message .message-icon {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* Pour les petits écrans mobiles */
+@media (max-width: 768px) {
+    header, footer, .container {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .product-info h3 {
+        font-size: 0.9em;
+    }
+
+    .product-info p {
+        font-size: 0.8em;
+    }
+}
+
+/* Bloquer le défilement horizontal et garder responsive */
+body, html {
+    overflow-x: hidden; /* empêche le défilement horizontal */
+    width: 100vw;       /* largeur fixe de l'écran */
+}
+
+/* S'assurer que toutes les sections prennent la largeur disponible */
+.container, .products-grid, .product-card, header, footer, section {
+    max-width: 100%;
+    box-sizing: border-box; /* inclut padding et border dans la largeur */
+}
+
+/* Ajustement du texte et images pour smartphone */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2, h3 {
+        font-size: 1.2em;
+    }
+
+    p, .product-description, .product-price {
+        font-size: 0.9em;
+    }
+
+    .product-card {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    .product-image-container img {
+        width: 100%;   /* images à l’échelle de l’écran */
+        height: auto;
+    }
+
+    .product-variations button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
 }
 
 <style>
@@ -2497,6 +2625,12 @@ function closeModal(id) {
     }
   
 <script>
+<!-- Bouton flottant pour messages -->
+<button class="floating-message">
+    Message
+<img src="images/icons/message-icon.png" alt="Message" class="message-icon">
+
+</button>
 
 </body>
 </html>
