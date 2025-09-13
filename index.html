@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+x<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Catalogue Andu-Xara 2025</title>
 <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion">
 <meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott">
@@ -1369,6 +1369,38 @@ body, html {
         font-size: 0.8em;
         padding: 5px 8px;
     }
+}
+/* Empêche le scroll horizontal et ajuste sur mobile */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    -webkit-text-size-adjust: 100%; /* garde la taille du texte correcte */
+}
+
+/* Style du chrono */
+#countdown {
+    font-size: 16px;       /* diminue la taille (tu peux mettre 14px si tu veux encore plus petit) */
+    font-weight: bold;     /* garde le texte bien visible */
+    color: #ff0000;        /* rouge pour bien attirer l’œil (change si tu veux une autre couleur) */
+    text-align: center;    /* bien centré en haut */
+    margin: 10px 0;        /* espace autour pour ne pas coller aux bords */
+}
+/* Style du rectangle du chrono */
+#countdown {
+    display: inline-block;
+    background: #ff0000;     /* couleur de fond */
+    color: #fff;             /* texte blanc */
+    font-size: 16px;         /* taille du texte */
+    font-weight: bold;
+    padding: 5px 10px;       /* espace intérieur */
+    border-radius: 8px;      /* arrondi */
+    text-align: center;
+
+    max-width: 300px;        /* environ 15 cm sur la plupart des écrans */
+    width: 100%;             /* s’adapte à l’écran sans dépasser 300px */
 }
 
 <style>
