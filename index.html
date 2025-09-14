@@ -1,28 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Catalogue Andu-Xara 2025</title>
-<meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion">
-<meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott">
-<meta name="author" content="Andu-Xara">
-<meta name="robots" content="index, follow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catalogue Andu-Xara 2025</title>
+    <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens.">
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6a11cb">
+    <style>
+        /* Hamburger */
+        .hamburger {
+            width: 30px;
+            height: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+        }
+        .hamburger .bar {
+            height: 3px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+        /* Menu */
+        .nav-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background: #fff;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+        .nav-menu ul { list-style: none; padding: 0; }
+        .nav-menu ul li { margin: 20px; }
+        .nav-menu ul li a { text-decoration: none; color: #333; font-weight: bold; }
+        .nav-menu.show { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Hamburger -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
 
-<meta property="og:title" content="Catalogue Andu-Xara 2025 - Vêtements Exclusifs">
-<meta property="og:description" content="Découvrez nos collections exclusives de vêtements mauritaniens pour 2025. T-shirts, ensembles et vêtements">
-<meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
-<meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
-<meta property="og:type" content="website">
+    <!-- Menu -->
+    <nav class="nav-menu" id="navMenu">
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="communaute.html">Communauté</a></li>
+            <li><a href="blog.html">Blog / Podcast</a></li>
+            <li><a href="cadeau.html">Acheter & Offrir</a></li>
+            <li><a href="lite.html">Mode Légère</a></li>
+        </ul>
+    </nav>
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Catalogue Andu-Xara 2025">
-<meta name="twitter:description" content="Vêtements exclusifs mauritaniens - Collections 2025">
-<meta name="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('show');
+        }
+    </script>
 
-<link rel="icon" href="images/logo.png" type="image/png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6a11cb">
 
    <style>
 /* Style du bouton / icône du message */
@@ -246,7 +295,6 @@ body {
     margin-bottom: 8px;
     color: #444;
 }
-
 
         * {
             margin: 0;
@@ -1550,7 +1598,16 @@ body {
         <span id="minutes">00</span> minutes
         <span id="seconds">00</span> secondes
     </div>
+
 </section>
+<div class="audio-welcome" style="text-align:center; margin-top:20px;">
+  <h3>🎧 Message de bienvenue</h3>
+  <audio controls>
+    <source src="audios/bienvenue.mp4" type="audio/mp4">
+    Votre navigateur ne supporte pas la lecture audio.
+  </audio>
+</div>
+
 
 <!-- Toast confirmation ajout au panier -->
 <div id="toast" class="toast">Produit ajouté au panier !</div>
@@ -1926,6 +1983,23 @@ body {
         <img src="images/partenaires/vizeho.jpeg" alt="Vizeho">
     </div>
 </section>
+<article>
+  <h3>Mode africaine : Héritage et modernité</h3>
+  <p>La mode africaine inspire le monde. Andu-xara célèbre l’héritage tout en innovant.</p>
+  <audio controls>
+      <source src="audios/mode-africaine.m4a" type="audio/mp4">
+      Votre navigateur ne supporte pas l’audio.
+  </audio>
+</article>
+
+<article>
+  <h3>Entrepreneuriat Jeune</h3>
+  <p>Nos jeunes entrepreneurs africains réinventent le commerce.</p>
+  <audio controls>
+      <source src="audios/entrepreneuriat-jeune.m4a" type="audio/mp4">
+      Votre navigateur ne supporte pas l’audio.
+  </audio>
+</article>
 
     <footer>
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communauté Andu-xara</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0; text-align:center; }
+    h1 { color:#667eea; margin:20px; }
+    .gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding:20px; }
+    .gallery img { width:200px; height:200px; object-fit:cover; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+    .upload-box { margin:20px; }
+    .upload-box input { padding:8px; border-radius:6px; border:1px solid #ccc; }
+    .upload-box button { padding:10px 20px; background:#667eea; color:white; border:none; border-radius:6px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <h1>Communauté Andu-xara 👥</h1>
+  <p>Partagez vos photos en portant Andu-xara !</p>
+  
+  <div class="upload-box">
+    <input type="file" id="fileInput">
+    <button onclick="uploadPhoto()">📸 Publier</button>
+  </div>
+  
+  <div class="gallery" id="gallery">
+    <!-- Les photos apparaissent ici -->
+  </div>
+  
+  <script>
+    function uploadPhoto(){
+      const input = document.getElementById('fileInput');
+      if(input.files.length > 0){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          document.getElementById("gallery").appendChild(img);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+</body>
+</html>

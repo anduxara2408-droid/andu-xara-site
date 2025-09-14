@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acheter & Offrir - Andu-xara</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:20px; }
+    h1 { text-align:center; color:#667eea; }
+    form { max-width:500px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1);}
+    input, textarea, select { width:100%; margin:10px 0; padding:10px; border:1px solid #ccc; border-radius:6px; }
+    button { background:#667eea; color:white; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; }
+  </style>
+</head>
+<body>
+<section id="offrir" style="padding:30px; background:#f9f9f9; border-radius:10px; margin:30px 0;">
+  <h2>🎁 Acheter et Offrir</h2>
+  <form action="https://formspree.io/f/xeoldwyv" method="POST">
+    
+    <label for="produit">Produit :</label><br>
+    <input type="text" id="produit" name="produit" required 
+           style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;"><br>
+
+    <label for="nom_destinataire">Nom du destinataire :</label><br>
+    <input type="text" id="nom_destinataire" name="nom_destinataire" required 
+           style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;"><br>
+
+    <label for="adresse_destinataire">Adresse du destinataire :</label><br>
+    <textarea id="adresse_destinataire" name="adresse_destinataire" required 
+              style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;"></textarea><br>
+
+    <label for="message">Message personnalisé :</label><br>
+    <textarea id="message" name="message" required 
+              style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;"></textarea><br>
+
+    <button type="submit" 
+            style="padding:12px 25px; background:#667eea; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">
+      Envoyer 🎁
+    </button>
+  </form>
+</section>
+
+</body>
+</html>
