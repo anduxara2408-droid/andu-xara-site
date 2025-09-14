@@ -1,46 +1,103 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Communauté Andu-xara</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0; text-align:center; }
-    h1 { color:#667eea; margin:20px; }
-    .gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding:20px; }
-    .gallery img { width:200px; height:200px; object-fit:cover; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-    .upload-box { margin:20px; }
-    .upload-box input { padding:8px; border-radius:6px; border:1px solid #ccc; }
-    .upload-box button { padding:10px 20px; background:#667eea; color:white; border:none; border-radius:6px; cursor:pointer; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Communauté Andu-Xara</title>
+<style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin:0; padding:20px;}
+    h1 { text-align:center; color:#667eea; }
+    .post-form { background:white; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+    input, textarea { width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; }
+    button { padding:10px 20px; background:#667eea; color:white; border:none; border-radius:6px; cursor:pointer; }
+    .posts-container { display:flex; flex-direction:column; gap:20px; }
+    .post-card { background:white; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+    .post-card img { max-width:100%; border-radius:8px; margin-top:10px;}
+    .post-card h3 { margin:0 0 5px 0; color:#333; }
+    .post-card p { margin:0; }
+</style>
 </head>
 <body>
-  <h1>Communauté Andu-xara 👥</h1>
-  <p>Partagez vos photos en portant Andu-xara !</p>
-  
-  <div class="upload-box">
-    <input type="file" id="fileInput">
-    <button onclick="uploadPhoto()">📸 Publier</button>
-  </div>
-  
-  <div class="gallery" id="gallery">
-    <!-- Les photos apparaissent ici -->
-  </div>
-  
-  <script>
-    function uploadPhoto(){
-      const input = document.getElementById('fileInput');
-      if(input.files.length > 0){
-        const reader = new FileReader();
-        reader.onload = function(e){
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          document.getElementById("gallery").appendChild(img);
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
+
+<h1>Communauté Andu-Xara</h1>
+
+<div class="post-form">
+    <h2>Publier une photo</h2>
+    <input type="text" id="username" placeholder="Votre nom">
+    <textarea id="comment" rows="2" placeholder="Votre commentaire"></textarea>
+    <input type="file" id="imageFile">
+    <button onclick="publishPost()">Publier</button>
+</div>
+
+<div class="posts-container" id="postsContainer"></div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbxClu9HO8cbeN9kCx6X4xVLohRe55B5mz8CX0O4uTyZBumSIM9xs8daI_FgyYm1zH72/exec";
+
+// Publier une nouvelle publication
+async function publishPost() {
+    const username = document.getElementById('username').value.trim();
+    const comment = document.getElementById('comment').value.trim();
+    const imageFile = document.getElementById('imageFile').files[0];
+
+    if (!username || !comment) {
+        alert("Veuillez entrer votre nom et un commentaire.");
+        return;
     }
-  </script>
+
+    let imageData = "";
+    if (imageFile) {
+        imageData = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.readAsDataURL(imageFile);
+        });
+    }
+
+    const formData = new FormData();
+    formData.append("nom", username);
+    formData.append("commentaire", comment);
+    formData.append("image", imageData);
+
+    fetch(scriptURL, { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === "success") {
+                alert("Publication réussie !");
+                document.getElementById('username').value = "";
+                document.getElementById('comment').value = "";
+                document.getElementById('imageFile').value = "";
+                loadPosts(); // Recharge les posts
+            } else {
+                alert("Erreur : " + data.message);
+            }
+        })
+        .catch(err => alert("Erreur réseau : " + err));
+}
+
+// Récupérer toutes les publications
+function loadPosts() {
+    fetch(scriptURL + "?action=get") // Ton Apps Script doit gérer GET pour renvoyer toutes les publications
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = "";
+            data.posts.reverse().forEach(post => {
+                const card = document.createElement('div');
+                card.className = "post-card";
+                let imgHtml = post.image ? `<img src="${post.image}" alt="Photo de ${post.nom}">` : "";
+                card.innerHTML = `<h3>${post.nom}</h3>
+                                  <p>${post.commentaire}</p>
+                                  ${imgHtml}`;
+                container.appendChild(card);
+            });
+        })
+        .catch(err => console.error("Erreur récupération posts :", err));
+}
+
+// Charger les publications au démarrage
+window.onload = loadPosts;
+</script>
+
 </body>
 </html>
