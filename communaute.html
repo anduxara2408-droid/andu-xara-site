@@ -32,7 +32,8 @@
 <div class="posts-container" id="postsContainer"></div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxClu9HO8cbeN9kCx6X4xVLohRe55B5mz8CX0O4uTyZBumSIM9xs8daI_FgyYm1zH72/exec";
+// ⚠️ Mets ici ton URL Google Apps Script après le déploiement
+const scriptURL = "https://script.google.com/macros/s/TON_DEPLOIEMENT/exec";
 
 // Publier une nouvelle publication
 async function publishPost() {
@@ -62,14 +63,14 @@ async function publishPost() {
     fetch(scriptURL, { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            if(data.status === "success") {
-                alert("Publication réussie !");
+            if(data.result === "success") {
+                alert("✅ Publication réussie !");
                 document.getElementById('username').value = "";
                 document.getElementById('comment').value = "";
                 document.getElementById('imageFile').value = "";
                 loadPosts(); // Recharge les posts
             } else {
-                alert("Erreur : " + data.message);
+                alert("❌ Erreur : " + data.message);
             }
         })
         .catch(err => alert("Erreur réseau : " + err));
@@ -77,18 +78,19 @@ async function publishPost() {
 
 // Récupérer toutes les publications
 function loadPosts() {
-    fetch(scriptURL + "?action=get") // Ton Apps Script doit gérer GET pour renvoyer toutes les publications
+    fetch(scriptURL + "?action=get")
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('postsContainer');
             container.innerHTML = "";
-            data.posts.reverse().forEach(post => {
+            data.reverse().forEach(post => {
                 const card = document.createElement('div');
                 card.className = "post-card";
-                let imgHtml = post.image ? `<img src="${post.image}" alt="Photo de ${post.nom}">` : "";
+                let imgHtml = post.image ? <img src="${post.image}" alt="Photo de ${post.nom}"> : "";
                 card.innerHTML = `<h3>${post.nom}</h3>
                                   <p>${post.commentaire}</p>
-                                  ${imgHtml}`;
+                                  ${imgHtml}
+                                  <small>Publié le : ${new Date(post.date).toLocaleString()}</small>`;
                 container.appendChild(card);
             });
         })
