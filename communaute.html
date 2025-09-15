@@ -6,15 +6,22 @@
 <title>Communauté Andu-Xara</title>
 <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin:0; padding:20px;}
-    h1 { text-align:center; color:#667eea; }
+    h1 { text-align:center; color:#667eea; font-size: 1.8rem; }
     .post-form { background:white; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-    input, textarea { width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; }
-    button { padding:10px 20px; background:#667eea; color:white; border:none; border-radius:6px; cursor:pointer; }
+    input, textarea { width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; font-size:1rem;}
+    button { padding:10px 20px; background:#667eea; color:white; border:none; border-radius:6px; cursor:pointer; font-size:1rem; }
     .posts-container { display:flex; flex-direction:column; gap:20px; }
     .post-card { background:white; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
     .post-card img { max-width:100%; border-radius:8px; margin-top:10px;}
-    .post-card h3 { margin:0 0 5px 0; color:#333; }
-    .post-card p { margin:0; }
+    .post-card h3 { margin:0 0 5px 0; color:#333; font-size:1.1rem; }
+    .post-card p { margin:0; font-size:0.95rem; }
+    .post-card small { color:#666; font-size:0.8rem; }
+    @media (max-width:600px) {
+        body { padding:10px; }
+        .post-form, .post-card { padding:10px; }
+        h1 { font-size:1.5rem; }
+        input, textarea, button { font-size:0.95rem; }
+    }
 </style>
 </head>
 <body>
@@ -22,18 +29,18 @@
 <h1>Communauté Andu-Xara</h1>
 
 <div class="post-form">
-    <h2>Publier une photo</h2>
+    <h2>Publier une photo ou un commentaire</h2>
     <input type="text" id="username" placeholder="Votre nom">
     <textarea id="comment" rows="2" placeholder="Votre commentaire"></textarea>
-    <input type="file" id="imageFile">
+    <input type="file" id="imageFile" accept="image/*"> 
     <button onclick="publishPost()">Publier</button>
 </div>
 
 <div class="posts-container" id="postsContainer"></div>
 
 <script>
-// ⚠️ Mets ici ton URL Google Apps Script après le déploiement
-const scriptURL = "https://script.google.com/macros/s/TON_DEPLOIEMENT/exec";
+// Ton URL Apps Script (version déployée)
+const scriptURL = "https://script.google.com/macros/s/AKfycbwFJpNs-QJ1OXTe2AUgLecctsbYMFe6TnOM2NtvdHVR/dev";
 
 // Publier une nouvelle publication
 async function publishPost() {
@@ -53,7 +60,7 @@ async function publishPost() {
             reader.onload = e => resolve(e.target.result);
             reader.readAsDataURL(imageFile);
         });
-    }
+    }  
 
     const formData = new FormData();
     formData.append("nom", username);
@@ -73,17 +80,18 @@ async function publishPost() {
                 alert("❌ Erreur : " + data.message);
             }
         })
-        .catch(err => alert("Erreur réseau : " + err));
+        .catch(err => alert("❌ Erreur réseau : " + err));
 }
 
 // Récupérer toutes les publications
 function loadPosts() {
-    fetch(scriptURL + "?action=get")
+    fetch(scriptURL)
         .then(response => response.json())
         .then(data => {
-            const container = document.getElementById('postsContainer');
+            const posts = data.posts || [];
+            const container = document.getElementById('postsContainer'); 
             container.innerHTML = "";
-            data.reverse().forEach(post => {
+            posts.reverse().forEach(post => {
                 const card = document.createElement('div');
                 card.className = "post-card";
                 let imgHtml = post.image ? <img src="${post.image}" alt="Photo de ${post.nom}"> : "";
