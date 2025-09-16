@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic - Problèmes de Mise à Jour du Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .problem-section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .solution-card {
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        code {
+            background: #2d3e50;
+            color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        pre {
+            background: #2d3e50;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cache-check {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f1f1;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Diagnostic des Problèmes de Mise à Jour</h1>
+            <p class="subtitle">Résolution des problèmes d'affichage des modifications sur votre site web</p>
+        </header>
+        
+        <div class="content">
+            <div class="problem-section">
+                <h2>Problème Identifié</h2>
+                <p>Votre site n'affiche pas les dernières modifications, que ce soit en ligne ou localement. Cela est généralement causé par :</p>
+                
+                <div class="solution-card">
+                    <h3>1. Cache du navigateur</h3>
+                    <p>Le navigateur conserve une ancienne version des fichiers en cache.</p>
+                </div>
+                
+                <div class="solution-card">
+                    <h3>2. Cache du service worker (si existant)</h3>
+                    <p>Un service worker peut servir une version ancienne du site.</p>
+                </div>
+                
+                <div class="solution-card">
+                    <h3>3. Problèmes de déploiement GitHub Pages</h3>
+                    <p>Les modifications n'ont pas été correctement déployées sur GitHub Pages.</p>
+                </div>
+            </div>
+            
+            <div class="problem-section">
+                <h2>Solutions</h2>
+                
+                <h3>Vider le cache du navigateur</h3>
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <p>Ouvrez les outils de développement (F12), allez dans l'onglet "Application" et cliquez sur "Vider le stockage" puis "Effacer les données de site".</p>
+                    </div>
+                </div>
+                
+                <h3>Forcer un rechargement sans cache</h3>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <p>Utilisez <code>Ctrl + F5</code> (Windows) ou <code>Cmd + Shift + R</code> (Mac) pour recharger la page en ignorant le cache.</p>
+                    </div>
+                </div>
+                
+                <h3>Vérifier le déploiement GitHub Pages</h3>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <p>Assurez-vous que vos modifications ont été correctement poussées sur GitHub :</p>
+                        <pre>git add .
+git commit -m "Description des modifications"
+git push</pre>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <p>Vérifiez l'onglet "Settings" de votre dépôt GitHub, puis "Pages" pour confirmer que le déploiement est actif et provient de la bonne branche.</p>
+                    </div>
+                </div>
+                
+                <h3>Solution technique pour éviter la mise en cache</h3>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div>
+                        <p>Ajoutez une version unique à vos fichiers pour éviter la mise en cache :</p>
+                        <pre>&lt;link rel="stylesheet" href="styles.css?v=1.1"&gt;
+&lt;script src="script.js?v=1.1"&gt;&lt;/script&gt;</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cache-check">
+                <h2>Vérification immédiate</h2>
+                <p>Cliquez sur le bouton ci-dessous pour forcer un rechargement complet de la page actuelle :</p>
+                <button class="button" onclick="location.reload(true)">Recharger sans cache</button>
+                <p>Cette action va recharger la page en ignorant le cache du navigateur.</p>
+            </div>
+            
+            <div class="problem-section">
+                <h2>Vérification de votre site</h2>
+                <p>Visitez votre site après avoir appliqué ces correctifs :</p>
+                <a href="https://andu-xara.github.io/catalogue-andu-xara-2025-final/index.html" class="button" target="_blank">Ouvrir mon site web</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 - Diagnostic de problèmes de mise à jour de site web</p>
+        </footer>
+    </div>
+</body>
+</html>
