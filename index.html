@@ -9,6 +9,49 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
+.faq-section {
+    padding: 40px;
+    background-color: #eef2f3;
+    font-family: Arial, sans-serif;
+}
+
+.faq-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+}
+
+.faq-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.faq-item p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+#notre-histoire {
+    padding: 40px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+#notre-histoire h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#notre-histoire p {
+    font-size: 16px;
+    line-height: 1.6;
+}
         /* Hamburger */
         .hamburger {
             width: 30px;
@@ -54,16 +97,47 @@
         <div class="bar"></div>
     </div>
 
-    <!-- Menu -->
-    <nav class="nav-menu" id="navMenu">
-        <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="communaute.html">Communauté</a></li>
-            <li><a href="blog.html">Blog / Podcast</a></li>
-            <li><a href="cadeau.html">Acheter & Offrir</a></li>
-            <li><a href="lite.html">Mode Légère</a></li>
-        </ul>
-    </nav>
+<!-- Menu -->
+<nav class="nav-menu" id="navMenu">
+    <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="notre histoire.html">notre histoire</a></li>
+        <li><a href="blog.html">Blog / Podcast</a></li>
+        <li><a href="cadeau.html">Acheter & Offrir</a></li>
+        <li><a href="lite.html">Mode Légère</a></li>
+        <li><a href="faq.html">faq</a></li>
+
+    </ul>
+</nav>
+
+<!-- Notre histoire -->
+<section id="notre-histoire">
+    <h2>Notre histoire</h2>
+    <p>
+        Andu-Xara a été créé le 18-10-2020. Nous avons commencé avec de petites équipes qui ne comprenaient pas toujours le sens du projet, et après plusieurs ajustements, nous avons formé l’équipe actuelle. Notre mission est de valoriser la culture locale tout en inspirant les jeunes à croire en leurs capacités.
+    </p>
+</section>
+<!-- Section FAQ -->
+<section id="faq" class="faq-section">
+    <h2>Foire aux Questions (FAQ)</h2>
+    
+    <div class="faq-item">
+        <h3>Question 1 : Comment passer une commande ?</h3>
+        <p>Réponse : Vous pouvez passer une commande en cliquant sur "Acheter & Offrir" dans le menu et en suivant les instructions.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Question 2 : Quels sont les modes de paiement acceptés ?</h3>
+        <p>Réponse : Nous acceptons le paiement par carte bancaire, PayPal et mobile money.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Question 3 : Comment suivre ma commande ?</h3>
+        <p>Réponse : Après la commande, vous recevrez un numéro de suivi pour suivre votre livraison.</p>
+    </div>
+
+</section>
+
 
     <script>
         function toggleMenu() {
@@ -2780,6 +2854,12 @@ function closeModal(id) {
     }
   
 <script>
+<!-- Section Notre Histoire -->
+<section id="notre-histoire">
+  <h2>Notre Histoire</h2>
+  <p>Andu-Xara a été créé le 18-10-2020. Tout a commencé avec...</p>
+</section>
+
 <!-- Bouton flottant pour messages -->
 <button class="floating-message">
     Message
