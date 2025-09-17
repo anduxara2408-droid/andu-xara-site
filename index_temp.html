@@ -1,30 +1,373 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalogue Andu-Xara 2025</title>
-<meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens. T-shirts, ensembles et vêtements enfants en promotion">
-<meta name="keywords" content="andu-xara, vêtements mauritaniens, mode afrique, t-shirts mauritanie, ensembles, vêtements enfants, mode nouakchott">
-<meta name="author" content="Andu-Xara">
-<meta name="robots" content="index, follow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catalogue Andu-Xara 2025</title>
+    <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens.">
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6a11cb">
+    <style>
+.faq-section {
+    padding: 40px;
+    background-color: #eef2f3;
+    font-family: Arial, sans-serif;
+}
 
-<meta property="og:title" content="Catalogue Andu-Xara 2025 - Vêtements Exclusifs">
-<meta property="og:description" content="Découvrez nos collections exclusives de vêtements mauritaniens pour 2025. T-shirts, ensembles et vêtements">
-<meta property="og:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
-<meta property="og:url" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/">
-<meta property="og:type" content="website">
+.faq-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Catalogue Andu-Xara 2025">
-<meta name="twitter:description" content="Vêtements exclusifs mauritaniens - Collections 2025">
-<meta name="twitter:image" content="https://andu-xara.github.io/catalogue-andu-xara-2025-final/images/logo.png">
+.faq-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+}
 
-<link rel="icon" href="images/logo.png" type="image/png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6a11cb">
+.faq-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.faq-item p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+#notre-histoire {
+    padding: 40px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+#notre-histoire h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#notre-histoire p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+        /* Hamburger */
+        .hamburger {
+            width: 30px;
+            height: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+        }
+        .hamburger .bar {
+            height: 3px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+        /* Menu */
+        .nav-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background: #fff;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+        .nav-menu ul { list-style: none; padding: 0; }
+        .nav-menu ul li { margin: 20px; }
+        .nav-menu ul li a { text-decoration: none; color: #333; font-weight: bold; }
+        .nav-menu.show { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Hamburger -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+<!-- Menu -->
+<nav class="nav-menu" id="navMenu">
+    <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="histoire.html">Notre Histoire</a></li>
+        <li><a href="blog.html">Blog / Podcast</a></li>
+        <li><a href="cadeau.html">Acheter & Offrir</a></li>
+        <li><a href="lite.html">Mode Légère</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+    </ul>
+</nav>
+
+<!-- Notre histoire -->
+<section id="notre-histoire">
+    <h2>Notre histoire</h2>
+    <p>
+        Andu-Xara a été créé le 18-10-2020. Nous avons commencé avec de petites équipes qui ne comprenaient pas toujours le sens du projet, et après plusieurs ajustements, nous avons formé l’équipe actuelle. Notre mission est de valoriser la culture locale tout en inspirant les jeunes à croire en leurs capacités.
+    </p>
+</section>
+<!-- Section FAQ -->
+<section id="faq" class="faq-section">
+    <h2>Foire aux Questions (FAQ)</h2>
+    
+    <div class="faq-item">
+        <h3>Question 1 : Comment passer une commande ?</h3>
+        <p>Réponse : Vous pouvez passer une commande en cliquant sur "Acheter & Offrir" dans le menu et en suivant les instructions.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Question 2 : Quels sont les modes de paiement acceptés ?</h3>
+        <p>Réponse : Nous acceptons le paiement par carte bancaire, PayPal et mobile money.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Question 3 : Comment suivre ma commande ?</h3>
+        <p>Réponse : Après la commande, vous recevrez un numéro de suivi pour suivre votre livraison.</p>
+    </div>
+
+</section>
+
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('show');
+        }
+    </script>
+
 
    <style>
+/* Style du bouton / icône du message */
+.message-icon {
+    width: 20px;           /* taille minuscule */
+    height: 20px;          /* taille minuscule */
+    vertical-align: middle; /* aligne avec le texte */
+    margin-left: 5px;      /* espace entre texte et icône */
+}
+
+/* Optionnel : si l'icône est un bouton flottant */
+.floating-message {
+    display: inline-flex;
+    align-items: center; /* centre l'icône et le texte */
+    font-size: 0.9em;    /* taille texte plus petite si besoin */
+}
+
+.modal {
+  display: none; /* caché par défaut */
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal .close:hover {
+  color: #000;
+}
+
+.legal-section {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+}
+
+.legal-section h2 {
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.legal-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.legal-section ul li {
+    margin: 5px 0;
+}
+
+.legal-section ul li a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.legal-section ul li a:hover {
+    color: #667eea;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+
+/* ===== Compteur Promotion ===== */
+.promo-countdown {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.promo-countdown h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+#countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 1.4rem;
+}
+
+#countdown span {
+    background: rgba(0,0,0,0.2);
+    padding: 15px 20px;
+    border-radius: 10px;
+    min-width: 60px;
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.temoignages-section h2 {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.temoignages-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.temoignage {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 300px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.temoignage p {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.temoignage h4 {
+  color: #222;
+  font-weight: bold;
+}
+
+.faq-section {
+  padding: 40px;
+  background-color: #fff;
+  margin-top: 40px;
+}
+
+.faq-section h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.faq-item h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.faq-item p {
+  font-size: 1em;
+  color: #555;
+}
+
+
+.about-section {
+    padding: 60px 20px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+.about-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.about-team {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+    display: inline-block;
+}
+
+.about-team li {
+    font-size: 1.05em;
+    margin-bottom: 8px;
+    color: #444;
+}
 
         * {
             margin: 0;
@@ -1016,8 +1359,222 @@ body {
     font-size: 14px;
     color: white;
 }
+.legal-links ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.legal-links ul li {
+  margin: 5px 0;
+}
+
+.legal-links ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.legal-links ul li a:hover {
+  color: #667eea;
+}
+/* Ajustements pour smartphones et tablettes */
+@media (max-width: 1200px) {
+    body {
+        padding: 10px;
+    }
+
+    .container, .products-grid, .product-card {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .product-card {
+        margin-bottom: 20px;
+    }
+
+    .product-info h3 {
+        font-size: 1em;
+    }
+
+    .product-info p {
+        font-size: 0.9em;
+    }
+
+    .product-price {
+        font-size: 0.9em;
+    }
+
+    .product-variations button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
+
+    .floating-message {
+        bottom: 15px;
+        right: 15px;
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .floating-message .message-icon {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* Pour les petits écrans mobiles */
+@media (max-width: 768px) {
+    header, footer, .container {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .product-info h3 {
+        font-size: 0.9em;
+    }
+
+    .product-info p {
+        font-size: 0.8em;
+    }
+}
+
+/* Bloquer le défilement horizontal et garder responsive */
+body, html {
+    overflow-x: hidden; /* empêche le défilement horizontal */
+    width: 100vw;       /* largeur fixe de l'écran */
+}
+
+/* S'assurer que toutes les sections prennent la largeur disponible */
+.container, .products-grid, .product-card, header, footer, section {
+    max-width: 100%;
+    box-sizing: border-box; /* inclut padding et border dans la largeur */
+}
+
+/* Ajustement du texte et images pour smartphone */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2, h3 {
+        font-size: 1.2em;
+    }
+
+    p, .product-description, .product-price {
+        font-size: 0.9em;
+    }
+
+    .product-card {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    .product-image-container img {
+        width: 100%;   /* images à l’échelle de l’écran */
+        height: auto;
+    }
+
+    .product-variations button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
+}
+/* Empêche le scroll horizontal et ajuste sur mobile */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    -webkit-text-size-adjust: 100%; /* garde la taille du texte correcte */
+}
+
+/* Style du chrono */
+#countdown {
+    font-size: 16px;       /* diminue la taille (tu peux mettre 14px si tu veux encore plus petit) */
+    font-weight: bold;     /* garde le texte bien visible */
+    color: #ff0000;        /* rouge pour bien attirer l’œil (change si tu veux une autre couleur) */
+    text-align: center;    /* bien centré en haut */
+    margin: 10px 0;        /* espace autour pour ne pas coller aux bords */
+}
+/* Style du rectangle du chrono */
+#countdown {
+    display: inline-block;
+    background: #ff0000;     /* couleur de fond */
+    color: #fff;             /* texte blanc */
+    font-size: 16px;         /* taille du texte */
+    font-weight: bold;
+    padding: 5px 10px;       /* espace intérieur */
+    border-radius: 8px;      /* arrondi */
+    text-align: center;
+
+    max-width: 300px;        /* environ 15 cm sur la plupart des écrans */
+    width: 100%;             /* s’adapte à l’écran sans dépasser 300px */
+}
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+
+.chat-header .chat-icon {
+    width: 18px;   /* plus petit qu’avant */
+    height: 18px;
+    margin-right: 6px; /* espace entre l’icône et le bouton ▼ */
+}
 
 <style>
+.partenaires {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f5f5f5;
+}
+
+.partenaires h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.partenaires-logos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.partenaires-logos img {
+    width: 150px; /* ou adapte selon la taille souhaitée */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.depliant-images,
+.partenaires-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+
 /* ===== TOAST ===== */
 .toast {
     visibility: hidden;
@@ -1041,149 +1598,88 @@ body {
     visibility: visible;
     opacity: 1;
 }
+/* Media Queries pour smartphones */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+    }
+    .depliant-images img,
+    .partenaires-logos img {
+        max-width: 150px;
+    }
+    nav ul {
+        flex-direction: column;
+    }
+}
+
+/* Media Queries pour tablettes */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .depliant-images img,
+    .partenaires-logos img {
+        max-width: 200px;
+    }
+}
+
 
 
     </style>
-<link rel="stylesheet" href="css/style.css?v=2">
-<script src="cart.js?v=2"></script>
-
-</head>      
-
 <style>
-.depliant-section {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #ffffff;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
+    /* Fenêtre du chat (réduite et masquée par défaut) */
+    .chat-box {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 280px;           /* largeur réduite */
+        max-height: 350px;      /* hauteur réduite */
+        background: #222;
+        color: white;
+        border-radius: 12px;
+        display: none;          /* masquée au départ */
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        z-index: 1000;
+        overflow: hidden;
+    }
 
-#depliant-container {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    height: 100%;
-}
-
-.depliant-images, .depliant-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.depliant-images {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-}
-
-.depliant-images.hide {
-    opacity: 0;
-}
-
-.depliant-text {
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-.depliant-text.show {
-    opacity: 1;
-}
-
-.depliant-img {
-    max-width: 250px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-}
-
-.depliant-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
-
-.depliant-text {
-    display: none;
-    text-align: center;
-    animation: fadeIn 1s forwards;
-}
-
-.depliant-text.show {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Ajustement pour les images */
-.depliant-images.show {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.depliant-img {
-    max-width: 250px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-}
-
-.depliant-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
-
-.depliant-section {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #f5f7fa;
-}
-
-.depliant-section h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-/* Slider */
-.slider {
-    width: 90%;
-    margin: 0 auto;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.slides {
-    display: flex;
-    width: calc(3 * 100%);
-    animation: slide 9s infinite;
-}
-
-.depliant-img {
-    width: 100%;
-    flex-shrink: 0;
-    object-fit: cover;
-}
-
-@keyframes slide {
-    0% { transform: translateX(0); }
-    33% { transform: translateX(-100%); }
-    66% { transform: translateX(-200%); }
-    100% { transform: translateX(0); }
-}
+    /* Zone des messages */
+    .chat-messages {
+        padding: 10px;
+        flex: 1;
+        overflow-y: auto;       /* permet de scroller si trop de messages */
+        font-size: 14px;
+    }
 </style>
+
+<head>
+<body>
+<div id="chatBox" class="chat-box">
+    <div class="chat-messages" id="chatMessages">
+        <!-- Les messages apparaissent ici -->
+    </div>
+    <input type="text" id="chatInput" placeholder="Écrire un message...">
+</div>
+
+<!-- Bouton du chat -->
+<div class="chat-button" onclick="toggleChat()">💬</div>
+
+<!-- Section Compteur Promotion -->
+<section class="promo-countdown">
+    <h2>Promotion spéciale se termine bientôt !</h2>
+    <div id="countdown">
+        <span id="days">00</span> jours
+        <span id="hours">00</span> heures
+        <span id="minutes">00</span> minutes
+        <span id="seconds">00</span> secondes
+    </div>
+
+</section>
+<div class="audio-welcome" style="text-align:center; margin-top:20px;">
+  <h3>🎧 Message de bienvenue</h3>
+  <audio controls>
+    <source src="audios/bienvenue.mp4" type="audio/mp4">
+    Votre navigateur ne supporte pas la lecture audio.
+  </audio>
+</div>
 
 
 <!-- Toast confirmation ajout au panier -->
@@ -1253,244 +1749,241 @@ body {
                 </div>
             </div>
         </div>
+<div class="products-grid" id="products-container">
 
-        <div class="products-grid" id="products-container">
-            <!-- Produits (même contenu que précédemment) -->
-            <!-- Produit 1 -->
-            <div class="product-card" data-category="t-shirts">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt logo arabe</h3>
-                    <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">499 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 2 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Ensemble capuche style arabe</h3>
-                    <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">599 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 599)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 3 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
-                    <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">599 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 599)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 4 -->
-            <div class="product-card" data-category="enfants">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt Enfant</h3>
-                    <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Âge:</span>
-                            <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
-                            <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
-                            <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">399 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 399)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 5 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Ensemble T-shirt et jogging</h3>
-                    <p class="product-description">Ensemble coton premium - Style décontracté</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">799 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 799)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 6 -->
-            <div class="product-card" data-category="t-shirts">
-                <div class="product-image-container">
-                    <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Pull bleu</h3>
-                    <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                            <button class="variation-btn" data-size="XL">XL</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">699 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Pull bleu', 699)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 7 -->
-            <div class="product-card" data-category="accessoires">
-                <div class="product-image-container">
-                    <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Capuchon blanc</h3>
-                    <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="Unique">Unique</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">299 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 299)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 8 -->
-            <div class="product-card" data-category="ensembles">
-                <div class="product-image-container">
-                    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-image" loading="lazy">
-                    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">T-shirt et jogging</h3>
-                    <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
-                    
-                    <div class="product-variations">
-                        <div class="variation-selector">
-                            <span>Taille:</span>
-                            <button class="variation-btn" data-size="S">S</button>
-                            <button class="variation-btn" data-size="M">M</button>
-                            <button class="variation-btn" data-size="L">L</button>
-                        </div>
-                    </div>
-                    
-                    <p class="product-price">899 Mru</p>
-                    
-                    <div class="product-actions">
-                        <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 899)">Ajouter au panier</button>
-                        <button class="quick-view">👁️</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Produit 1 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
         </div>
-    </main>
-
+        <div class="product-info">
+            <h3 class="product-title">T-shirt logo arabe</h3>
+            <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">499 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">349 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 349)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
         </div>
     </div>
 
+    <!-- Produit 2 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble capuche style arabe</h3>
+            <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 3 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
+            <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 4 -->
+    <div class="product-card" data-category="enfants">
+        <div class="product-image-container">
+            <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt Enfant</h3>
+            <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Âge:</span>
+                    <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
+                    <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
+                    <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">399 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">279 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 279)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 5 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble T-shirt et jogging</h3>
+            <p class="product-description">Ensemble coton premium - Style décontracté</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">799 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">559 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 559)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 6 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Pull bleu</h3>
+            <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">699 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">489 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Pull bleu', 489)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 7 -->
+    <div class="product-card" data-category="accessoires">
+        <div class="product-image-container">
+            <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Capuchon blanc</h3>
+            <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="Unique">Unique</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">299 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">209 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 209)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produit 8 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt et jogging</h3>
+            <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">899 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">629 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 629)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
     <!-- Chat WhatsApp -->
     <div class="whatsapp-chat" id="whatsappChat">
-        <div class="chat-header" onclick="toggleChat()">
-            <span>💬 Assistant Andu-Xara</span>
-            <button class="chat-toggle">▼</button>
-        </div>
+<div class="chat-header" onclick="toggleChat()">
+    <img src="images/message-icon.png" alt="Message" class="chat-icon">
+    <button class="chat-toggle">▼</button>
+</div>
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
                 👋 Bonjour ! Je suis l'assistant virtuel Andu-Xara. 
@@ -1512,17 +2005,82 @@ body {
         </div>
     </div>
 
-    <!-- Bouton flottant WhatsApp -->
-    <div class="whatsapp-float" onclick="openWhatsApp()">
-        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE3LjQ3MiAxNC4zODRDMTcuMDEgMTMuOTc4IDE2LjY2NSAxMy44NzIgMTYuMDMgMTQuMzg0QzE1LjQ5NSAxNC44MTIgMTQuNDkgMTUuNzggMTQuMzIzIDE1Ljk0OEMxNC4xNzkgMTYuMDg5IDEzLjk5NSAxNi4xMDIgMTMuNzc0IDE1Ljk0OEMxMy41NTQgMTUuNzk0IDEyLjY0NyAxNS4yMjYgMTEuNjQyIDE0LjMyM0MxMC43OTEgMTMuNTQ3IDEwLjIxNiAxMi42NTIgMTAuMDYgMTMuNDEzQzE5LjkwNCAxMi4yNTggOS45MDQgMTIuMjU4IDEwLjA2IDExLjQxM0MxMC4xMDIgMTEuMTc5IDEwLjI2OSAxMC45ODQgMTAuNDk2IDEwLjg3OUMxMC43NzYgMTAuNzM2IDExLjMxMiAxMC41MDIgMTEuMzEyIDEwLjUwMkMxMS40NTYgMTAuNDIxIDExLjYxMiAxMC4yNDQgMTEuNjUyIDEwLjA1OUMxMS42OTIgOS44NzM1IDExLjYxNCA5LjY4ODUgMTEuNDc3IDkuNTU0MUMxMS4yMjggOS4yOTk1IDEwLjg2MiA4Ljg4ODUgMTAuNjg3IDguNjg0NUMxMC40NDIgOC40MDM1IDEwLjE5NiA4LjM5NzUgOS45NjcgOC41MjM1QzkuNzM4IDguNjQ5NSA5LjA0MSA4Ljk5MTUgOC44NzkgOS4wODA1QzguNTYyIDkuMjQxNSA4LjMyMiA5LjI4MzUgOC4xMjYgOS4wODA1QzcuOTMgOC44Nzc1IDcuNDUyIDguMzYzNSA3LjIyOSA4LjEyMDVDNi44ODIgNy43NDc1IDYuNTM1IDcuNzQ3NSA2LjI4NCA3Ljc0NzVDNi4wNzMgNy43NDc1IDUuODYyIDcuNzc5NSA1LjY3NiA3Ljk5MDVDNS4xMjMgOC41MjM1IDQuODc3IDkuMTc4NSA0Ljg3NyA5Ljg0NzVDNC44NzcgMTAuNTE2IDUuMTIzIDExLjE3MSA1LjM3MiAxMS42ODVDNS42MiAxMi4xOTkgNi45MjYgMTQuNDQzIDkuMDYyIDE1Ljk0OUMxMC44MjYgMTcuMjE2IDEyLjI0NSAxNy42NjcgMTMuNDA0IDE3Ljg2OUMxMy44NzIgMTcuOTUyIDE0LjMwNCAxNy45MDQgMTQuNjg0IDE3Ljc0M0MxNS4yMjYgMTcuNTExIDE2LjE2NSAxNi45MjYgMTYuNDE0IDE2LjI1N0MxNi41MjggMTUuOTU2IDE2LjQ1NSAxNS43MDQgMTYuMzI5IDE1LjUwMUMxNi4yMDMgMTUuMjk4IDE2LjAzNyAxNS4wNDYgMTUuODcxIDE0Ljg5MkMxNS43MDUgMTQuNzM4IDE1LjU1MyAxNC42NTIgMTUuNDI3IDE0Ljc5NEMxNS4zMDEgMTQuOTM2IDE1LjQyNyAxNS4xODggMTUuNTUzIDE1LjM1MkMxNS42OCAxNS41MTYgMTUuODU4IDE1Ljc1OCAxNS45ODQgMTUuOTAyQzE2LjI1OCAxNi4yMDIgMTYuNDU1IDE2LjI1NyAxNi43MDQgMTYuMTQzQzE2Ljk1MyAxNi4wMjkgMTcuNzQyIDE1LjUyNSAxOC4xOTQgMTUuMDQ2QzE4LjcyMiAxNC40ODcgMTguOTQ1IDEzLjk5IDE4Ljg4NiAxMy41ODRDMTguODI3IDEzLjE3OCAxOC40NzMgMTMuMDQ0IDE4LjA3NSAxMi45MUwxNy40NzIgMTQuMzg0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WhatsApp">
+<!-- Section FAQ -->
+<section id="faq" class="faq-section">
+  <h2>Foire aux Questions (FAQ)</h2>
+
+  <div class="faq-item">
+    <h3>Quels sont vos délais de livraison ?</h3>
+    <p>Nos délais varient entre 3 à 7 jours ouvrables selon la destination.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Quels modes de paiement acceptez-vous ?</h3>
+    <p>Nous acceptons les paiements par mobile money, carte bancaire et espèces à la livraison (selon la zone).</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Puis-je retourner un produit ?</h3>
+    <p>Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact.</p>
+  </div>
+</section>
+
+<!-- Section Témoignages -->
+<section id="temoignages" class="temoignages-section">
+  <h2>Ils nous font confiance</h2>
+
+  <div class="temoignages-container">
+    <div class="temoignage">
+      <p>"Produits de très bonne qualité, livraison rapide et service client au top !"</p>
+      <h4>- Awa D.</h4>
     </div>
 
+    <div class="temoignage">
+      <p>"J’ai commandé plusieurs fois et je suis toujours satisfait. Bravo à l’équipe Andu-xara 👏"</p>
+      <h4>- Mamadou B.</h4>
+    </div>
+
+    <div class="temoignage">
+      <p>"Une marque jeune mais déjà très professionnelle. Je recommande à 100%."</p>
+      <h4>- Khadija S.</h4>
+    </div>
+  </div>
+</section>
+<!-- Section Partenaires -->
+<section class="partenaires">
+    <h2>Nos Partenaires</h2>
+    <div class="partenaires-logos">
+        <img src="images/partenaires/hawa.jpeg" alt="Hawa">
+        <img src="images/partenaires/kenzo.jpeg" alt="Kenzo">
+        <img src="images/partenaires/nafore.jpeg" alt="Nafore">
+        <img src="images/partenaires/vizeho.jpeg" alt="Vizeho">
+    </div>
+</section>
+<article>
+  <h3>Mode africaine : Héritage et modernité</h3>
+  <p>La mode africaine inspire le monde. Andu-xara célèbre l’héritage tout en innovant.</p>
+  <audio controls>
+      <source src="audios/mode-africaine.m4a" type="audio/mp4">
+      Votre navigateur ne supporte pas l’audio.
+  </audio>
+</article>
+
+<article>
+  <h3>Entrepreneuriat Jeune</h3>
+  <p>Nos jeunes entrepreneurs africains réinventent le commerce.</p>
+  <audio controls>
+      <source src="audios/entrepreneuriat-jeune.m4a" type="audio/mp4">
+      Votre navigateur ne supporte pas l’audio.
+  </audio>
+</article>
+
     <footer>
+
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Andu-Xara</h3>
-                    <p>Votre marque mauritanienne de vêtements exclusifs depuis 2023</p>
+                    <p>Votre marque mauritanienne de vêtements exclusifs depuis 2020</p>
                     <p>Qualité · Style · Tradition Moderne</p>
                 </div>
 
@@ -1538,32 +2096,7 @@ body {
                     <h3>Suivez-nous</h3>
                     <div class="social-links">
                         <a href="https://www.instagram.com/andu_xara?igsh=cTFrcTFhMHQ3ZTlx&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-link">
-      <button class="chat-toggle">▼</button>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                👋 Bonjour ! Je suis l'assistant virtuel Andu-Xara.
-            </div>
-            <div class="message bot">
-                🤖 Je peux vous aider pour :
-                • Informations produits 📦
-                • Commandes et tailles 📏
-                • Livraisons 🚚
-                • Promotions en cours 🎉
-            </div>
-            <div class="message bot">
-                💡 Tapez votre question ou cliquez sur le logo WhatsApp pour discuter directement avec notre équipe !
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Tapez votre message..." id="chatInput" onkeypress="handleChatInput(event)">
-            <button onclick="sendChatMessage()">➤</button>
-        </div>
-    </div>
-
-    <!-- Bouton flottant WhatsApp -->
-    <div class="whatsapp-float" onclick="openWhatsApp()">
-                          <span>📷</span> Instagram
+                            <span>📷</span> Instagram
                         </a>
                         <a href="https://www.tiktok.com/@andu_xara?_t=ZM-8zPDsFqJpRQ&_r=" target="_blank" rel="noopener noreferrer" class="social-link">
                             <span>🎵</span> TikTok
@@ -1589,6 +2122,20 @@ body {
                 <p>Contact: anduxara2408@gmail.com | Tel: +222 49 03 76 97 / +221 76 282 11 33</p>
             </div>
         </div>
+<footer>
+  <p>&copy; 2025 Andu-xara - Tous droits réservés</p>
+
+  <div class="legal-links">
+<ul>
+    <li><a href="conditions-generales.html">Conditions Générales de Vente et Utilisation</a></li>
+    <li><a href="mentions-legales.html">Mentions légales</a></li>
+    <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+    <li><a href="suivi-livraison.html">Suivi de livraison</a></li>
+</ul>
+
+  </div>
+</footer>
+
     </footer>
 
     <script>
@@ -1973,7 +2520,7 @@ function generateIntelligentResponse(userMessage) {
     }
     
     if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
-        return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 5000 Mru";
+        return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 1000 Mru";
     }
     
     if (lowerMessage.includes('taille') || lowerMessage.includes('tailles') || lowerMessage.includes('size')) {
@@ -2130,51 +2677,14 @@ function showToast(message) {
 }
 
 // Exemple : détecter tous les boutons "Ajouter au panier"
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
 addToCartButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const productName = button.dataset.productName; // si tu as un data-product-name
-        const productPrice = button.dataset.productPrice; // ou prix
-        addToCart(productName, productPrice); // ajoute au panier
         showToast('Produit ajouté au panier !');
+        // Ici tu peux aussi appeler ta fonction d'ajout réel au panier
+        // initCartFunctionality(); si besoin
     });
 });
-
-const depliantImages = document.querySelector('.depliant-images');
-
-function switchDepliant() {
-    // Affiche texte et cache images
-    depliantImages.classList.remove('show');
-    depliantText.classList.add('show');
-
-    // Après 5 secondes, retour aux images
-    setTimeout(() => {
-        depliantText.classList.remove('show');
-        depliantImages.classList.add('show');
-    }, 5000);
-}
-
-// Déclencher toutes les 10 secondes
-setInterval(switchDepliant, 10000);
-
-const depliantImages = document.querySelector('.depliant-images');
-const depliantText = document.querySelector('.depliant-text');
-
-function switchDepliant() {
-    // Images disparaissent
-    depliantImages.classList.add('hide');
-    
-    // Texte apparaît
-    depliantText.classList.add('show');
-
-    // Après 10 secondes, retour aux images
-    setTimeout(() => {
-        depliantText.classList.remove('show');
-        depliantImages.classList.remove('hide');
-    }, 5000);
-}
-
-// Déclenche toutes les 10 secondes
-setInterval(switchDepliant, 10000);
 
 </script> <!-- Fin de ton JavaScript principal -->
 
@@ -2187,8 +2697,180 @@ setInterval(switchDepliant, 10000);
         <input type="email" id="newsletter-email" placeholder="Votre e-mail">
         <button onclick="subscribeNewsletter()">S'inscrire</button>
     </div>
- </div>
+</div>
+<!-- Section À propos -->
+<section class="about-section" id="apropos">
+    <div class="about-container">
+        <h2>À propos de Andu-xara</h2>
+        <p>
+            La marque <strong>Andu-xara</strong> a été fondée le <strong>18 octobre 2020</strong> par des jeunes visionnaires
+            animés par la passion de la culture, de l’innovation et de l’entrepreneuriat. 
+            Elle incarne un pont entre tradition et modernité, mettant en avant des produits
+            qui reflètent notre identité et notre savoir-faire local.
+        </p>
+        <p>
+            Notre équipe est composée de membres engagés qui travaillent ensemble pour bâtir une
+            communauté forte autour de nos créations :
+        </p>
+        <ul class="about-team">
+            <li><strong>Cheikhou Diabira</strong> – Président et Fondateur</li>
+            <li><strong>Bocar Ba</strong> – Vice-Président et Co-Fondateur</li>
+            <li><strong>Fatimetou Soumaré</strong> – Community Manager / Communication Digitale</li>
+            <li><strong>Halima Sokhona</strong> – Trésorière</li>
+            <li><strong>Khadija Diallo</strong> – Secrétaire</li>
+            <li><strong>Mouna Diekhete</strong> – Responsable Production</li>
+            <li><strong>Bonco Sokhona</strong> – Responsable Production</li>
+            <li><strong>Botkhol Daffa</strong> – Responsable Commercial / Vente</li>
+        </ul>
+        <p>
+            Notre mission est de valoriser la culture tout en inspirant les jeunes à croire en leurs
+            capacités créatives et entrepreneuriales.
+        </p>
+    </div>
+<script>
+    // Date de fin de la promotion
+    const promoEndDate = new Date("2025-09-25T23:59:59").getTime();
+
+    const countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = promoEndDate - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown").innerHTML = "Promotion terminée !";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = days.toString().padStart(2, '0');
+        document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
 </script>
-<script src="cart.js?v=1.1"></script>
+<!-- Section Légale -->
+<section class="legal-section">
+    <h2>Informations Légales</h2>
+    <ul>
+        <li><a href="#">Conditions Générales de Vente et Utilisation</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Suivi de livraison</a></li>
+    </ul>
+</section>
+<script>
+function toggleLegal(id) {
+  // cacher tout
+  document.querySelectorAll('.legal-content').forEach(div => {
+    div.style.display = "none";
+  });
+  // afficher seulement celui cliqué
+  document.getElementById(id).style.display = "block";
+}
+</script>
+<!-- Modal Conditions Générales -->
+<div id="modal-cgv" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-cgv')">&times;</span>
+    <h2>Conditions Générales de Vente et Utilisation</h2>
+    <p>Ici le texte complet de vos CGV...</p>
+  </div>
+</div>
+
+<!-- Modal Mentions légales -->
+<div id="modal-mentions" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-mentions')">&times;</span>
+    <h2>Mentions légales</h2>
+    <p>Texte des mentions légales...</p>
+  </div>
+</div>
+
+<!-- Modal Politique de confidentialité -->
+<div id="modal-confidentialite" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-confidentialite')">&times;</span>
+    <h2>Politique de confidentialité</h2>
+    <p>Texte de la politique de confidentialité...</p>
+  </div>
+</div>
+
+<!-- Modal Suivi de livraison -->
+<div id="modal-suivi" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-suivi')">&times;</span>
+    <h2>Suivi de livraison</h2>
+    <p>Texte du suivi de livraison...</p>
+  </div>
+</div>
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+</script>
+<!-- Fenêtre popup d'abonnement -->
+<div id="subscribe-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:400px; text-align:center; box-shadow:0 5px 25px rgba(0,0,0,0.3);">
+        <h2 style="color:#667eea;">Abonnez-vous</h2>
+        <p>Recevez nos nouveautés et promotions directement par email !</p>
+        <form onsubmit="subscribeEmail(event)">
+            <input type="email" id="subscribe-email" placeholder="Votre email" required 
+                style="padding:10px; width:80%; margin:10px 0; border:1px solid #ccc; border-radius:8px;">
+            <br>
+            <button type="submit" style="padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">S'abonner</button>
+        </form>
+        <button onclick="closePopup()" style="margin-top:15px; background:transparent; border:none; color:#666; cursor:pointer;">Fermer ❌</button>
+    </div>
+</div>
+
+<script>
+    // Affiche le popup après 30 secondes
+    window.onload = function() {
+        setTimeout(function() {
+            document.getElementById('subscribe-popup').style.display = 'flex';
+        }, 30000); // 30 000 ms = 30 secondes
+    };
+
+    // Fermer le popup
+    function closePopup() {
+        document.getElementById('subscribe-popup').style.display = 'none';
+    }
+
+    // Gestion de l'abonnement (à améliorer selon tes besoins)
+    function subscribeEmail(event) {
+        event.preventDefault();
+        let email = document.getElementById('subscribe-email').value;
+        alert("Merci pour votre abonnement : " + email);
+        closePopup();
+    }
+  
+<script>
+<!-- Section Notre Histoire -->
+<section id="notre-histoire">
+  <h2>Notre Histoire</h2>
+  <p>Andu-Xara a été créé le 18-10-2020. Tout a commencé avec...</p>
+</section>
+
+<!-- Bouton flottant pour messages -->
+<button class="floating-message">
+    Message
+<img src="images/icons/message-icon.png" alt="Message" class="message-icon">
+
+</button>
+<script>
+function toggleChat() {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
+}
+</script>
+
 </body>
 </html>
