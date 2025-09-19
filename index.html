@@ -9,6 +9,36 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
+.cart {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 1000;
+}
+
+.cart.active {
+  display: block;
+}
+
+.cart-icon {
+  cursor: pointer;
+  font-size: 20px;
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  background: #6a11cb;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
 
 /* ==== Styles globaux pour plein écran ==== */
 html, body {
@@ -1351,7 +1381,9 @@ body {
         <li><a href="blog.html">Blog / Podcast</a></li>
         <li><a href="acheter.html">Acheter & Offrir</a></li>
         <li><a href="histoire.html">Notre Histoire</a></li>
+        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
         <li><a href="faq.html">FAQ</a></li>
+
     </ul>
 </nav>
 
@@ -1541,9 +1573,25 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 </div>
 
 
-<!-- Toast confirmation ajout au panier -->
-<div id="toast" class="toast">Produit ajouté au panier !</div>
+// ===== TOAST CONFIRMATION AJOUT AU PANIER =====
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
 
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000); // le toast disparaît après 3 secondes
+}
+
+// Exemple : détecter tous les boutons "Ajouter au panier"
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        showToast('Produit ajouté au panier !');
+        // Ici tu peux aussi appeler ta fonction d'ajout réel au panier
+        // initCartFunctionality(); si besoin
+    });
     <!-- Texte défilant -->
     <div class="marquee-container">
         <div class="marquee-content">
@@ -1569,9 +1617,10 @@ mobileMenu.querySelectorAll('a').forEach(link => {
                     <h1>Catalogue Andu-Xara 2025</h1>
                     <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
                 </div>
-                <div class="cart-icon">
-                    🛒 <span id="cart-counter">0</span>
-                </div>
+<div class="cart-icon" onclick="showCartModal()">
+    🛒 <span id="cart-counter">0</span>
+</div>
+
                 <div class="wishlist-icon">
                     ❤️ <span id="wishlist-counter">0</span>
                 </div>
@@ -2020,7 +2069,7 @@ function updateCartCounter() {
     document.getElementById('cart-counter').textContent = totalItems;
 }
 
-// ===== INITIALISATION DU PANIER =====
+/ ===== INITIALISATION DU PANIER =====
 function initCartFunctionality() {
     const cartIcon = document.querySelector('.cart-icon');
     if (cartIcon) {
@@ -2028,7 +2077,7 @@ function initCartFunctionality() {
     }
 }
 
-// ===== MODAL DU PANIER =====
+/ ===== MODAL DU PANIER =====
 function showCartModal() {
     console.log('Ouverture du panier');
     
@@ -2072,7 +2121,7 @@ function showCartModal() {
         document.body.appendChild(cartModal);
     }
     
-    // Mettre à jour le contenu du panier
+// Mettre à jour le contenu du panier
     updateCartModalContent();
     cartModal.style.display = 'block';
     document.getElementById('cart-overlay').style.display = 'block';
@@ -2161,40 +2210,42 @@ function updateCartModalContent() {
         `;
     });
     
-    html += `
-        <div style="border-top: 2px solid #6a11cb; padding-top: 15px; margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
-                <span>Total:</span>
-                <span>${total} Mru</span>
-            </div>
-            <button onclick="checkout()" style="
-                width: 100%;
-                padding: 15px;
-                background: #25D366;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 1.1rem;
-                font-weight: bold;
-                cursor: pointer;
-                margin-top: 15px;
-            ">
-                🛍️ Commander via WhatsApp
-            </button>
-            <button onclick="closeCartModal()" style="
-                width: 100%;
-                padding: 10px;
-                background: #f1f3f5;
-                color: #666;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                margin-top: 10px;
-            ">
-                Continuer mes achats
-            </button>
+html += `
+    <div style="border-top: 2px solid #6a11cb; padding-top: 15px; margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
+            <span>Total:</span>
+            <span>${total} Mru</span>
         </div>
-    `;
+
+        <button onclick="checkout()" style="
+            width: 100%;
+            padding: 15px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        ">
+            🛍️ Commander via WhatsApp
+        </button>
+
+        <button onclick="closeCartModal()" style="
+            width: 100%;
+            padding: 10px;
+            background: #f1f3f5;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        ">
+            Continuer mes achats
+        </button>
+    </div>
+`;
     
     cartModal.innerHTML = html;
 }
@@ -2498,6 +2549,26 @@ addToCartButtons.forEach(button => {
         // initCartFunctionality(); si besoin
     });
 });
+function checkout() {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    if (cartItems.length === 0) {
+        alert("Votre panier est vide !");
+        return;
+    }
+
+    let message = "🛍️ Nouvelle commande Andu-Xara :\n\n";
+    let total = 0;
+
+    cartItems.forEach(item => {
+        message += `• ${item.name} (Taille: ${item.size || 'M'}) - ${item.price} Mru × ${item.quantity}\n`;
+        total += item.price * item.quantity;
+    });
+
+    message += `\n💰 Total : ${total} Mru`;
+
+    const whatsappUrl = `https://wa.me/22212345678?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+}
 
 </script> <!-- Fin de ton JavaScript principal -->
 
@@ -2669,6 +2740,13 @@ function closeModal(id) {
 </script>
 
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        updateCartCounter();  // met à jour le compteur au chargement
+        initCartFunctionality(); // active l'écouteur sur l'icône
+    });
+</script>
+<script src="js/ton-fichier.js"></script>
 </body>
 </html>
 
@@ -2749,9 +2827,9 @@ function sendMessage(){
 // Événements
 chatSend.addEventListener("click", sendMessage);
 chatInput.addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
+<script>
+    // Toutes les fonctions : addToCart, showCartModal, updateCartCounter, updateCartModalContent
+    // Ensuite le code qui ajoute les listeners sur les boutons
 </script>
-
-</html>
-
 </body>
 </html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réductions & Cadeaux - Andu-Xara</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; }
+    .container { max-width: 900px; margin: auto; padding: 20px; text-align: center; }
+    h1 { color: #6a11cb; margin-bottom: 10px; }
+    p { color: #444; line-height: 1.6; }
+    .illustration { width: 100%; max-height: 300px; object-fit: cover; margin-bottom: 20px; border-radius: 10px; }
+    .promo-box { background: #fff; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .promo-box h2 { margin-bottom: 10px; color: #333; }
+    .highlight { color: #6a11cb; font-weight: bold; }
+    .steps { text-align: left; margin-top: 20px; }
+    .steps li { margin: 10px 0; }
+    .share { margin-top: 20px; font-weight: bold; }
+    .code-box { background: #eee; padding: 10px; border-radius: 8px; margin-top: 10px; display:flex; justify-content:space-between; align-items:center; }
+    .code { font-size: 18px; font-weight: bold; }
+    .copy-btn { background:#6a11cb; color:white; border:none; padding:8px 12px; cursor:pointer; border-radius:6px; }
+    .copy-btn:hover { background:#4a0f9c; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Réductions & Cadeaux 🎁</h1>
+    <img src="images/reduction.jpg" alt="Illustration Réductions" class="illustration">
+
+    <div class="promo-box">
+      <h2>Saisir le code promotionnel</h2>
+      <input type="text" placeholder="Entrez votre code..." style="padding:10px;width:70%;border-radius:6px;border:1px solid #ccc;">
+      <button style="padding:10px 15px;background:#6a11cb;color:white;border:none;border-radius:6px;margin-left:10px;cursor:pointer;">Obtenir une réduction</button>
+    </div>
+
+    <div class="promo-box">
+      <h2>Profitez de <span class="highlight">30% de réduction</span></h2>
+      <p>Participez et gagnez des réductions exclusives sur vos achats Andu-Xara.</p>
+      <ul class="steps">
+        <li><strong>1. Invitez un ami :</strong> Votre ami recevra une réduction de 10% sur son premier achat.</li>
+        <li><strong>2. Profitez de 50% de réduction :</strong> Une fois qu'il aura effectué son premier achat, vous bénéficierez d'une réduction de 50% sur votre prochain achat.</li>
+      </ul>
+      <p class="share">📢 Partagez vite, il reste <span class="highlight" id="codesLeft">50</span> codes promotionnels !</p>
+      <div class="code-box">
+        <span class="code" id="promoCode">ANDU50</span>
+        <button class="copy-btn" onclick="copyCode()">Copier</button>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <a href="index.html" style="color:#6a11cb;text-decoration:none;font-weight:bold;">← Retour à l’accueil</a>
+    </div>
+  </div>
+<script>
+  let codesLeft = 50; // nombre initial de codes
+
+  function copyCode() {
+    if (codesLeft > 0) {
+      const code = document.getElementById("promoCode").innerText;
+      navigator.clipboard.writeText(code);
+
+      // Réduire le nombre de codes
+      codesLeft--;
+      document.getElementById("codesLeft").innerText = codesLeft;
+
+      alert("Code copié : " + code + "\nIl reste " + codesLeft + " codes.");
+    } else {
+      alert("Désolé 😢, il n'y a plus de codes promotionnels disponibles.");
+    }
+  }
+
+  </script>
+</body>
+</html>
