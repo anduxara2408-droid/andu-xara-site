@@ -9,156 +9,49 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
-        /* Hamburger */
-        .hamburger {
-            width: 30px;
-            height: 22px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1000;
-        }
-        .hamburger .bar {
-            height: 3px;
-            background: #667eea;
-            border-radius: 2px;
-        }
-        /* Menu */
-        .nav-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background: #fff;
-            padding-top: 60px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-            z-index: 999;
-        }
-        .nav-menu ul { list-style: none; padding: 0; }
-        .nav-menu ul li { margin: 20px; }
-        .nav-menu ul li a { text-decoration: none; color: #333; font-weight: bold; }
-        .nav-menu.show { display: block; }
-    </style>
-</head>
-<body>
-    <!-- Hamburger -->
-    <div class="hamburger" onclick="toggleMenu()">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
 
-<!-- Menu -->
-<nav class="nav-menu" id="navMenu">
-    <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="histoire.html">Notre Histoire</a></li>
-        <li><a href="blog.html">Blog / Podcast</a></li>
-        <li><a href="cadeau.html">Acheter & Offrir</a></li>
-        <li><a href="lite.html">Mode Légère</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-    </ul>
-</nav>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('show');
-        }
-    </script>
-
-
-   <style>
-/* Style du bouton / icône du message */
-.message-icon {
-    width: 20px;           /* taille minuscule */
-    height: 20px;          /* taille minuscule */
-    vertical-align: middle; /* aligne avec le texte */
-    margin-left: 5px;      /* espace entre texte et icône */
-}
-
-/* Optionnel : si l'icône est un bouton flottant */
-.floating-message {
-    display: inline-flex;
-    align-items: center; /* centre l'icône et le texte */
-    font-size: 0.9em;    /* taille texte plus petite si besoin */
-}
-
-.modal {
-  display: none; /* caché par défaut */
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.6);
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.modal .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.modal .close:hover {
-  color: #000;
-}
-
-.legal-section {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
-    margin-top: 40px;
-    border-top: 1px solid #ddd;
-}
-
-.legal-section h2 {
-    margin-bottom: 15px;
-    font-size: 1.3em;
-}
-
-.legal-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.legal-section ul li {
-    margin: 5px 0;
-}
-
-.legal-section ul li a {
-    text-decoration: none;
-    color: #333;
-    transition: color 0.3s;
-}
-
-.legal-section ul li a:hover {
-    color: #667eea;
-}
-
-body {
+/* ==== Styles globaux pour plein écran ==== */
+html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
     overflow-x: hidden;
 }
+
+/* Conteneur principal pour gérer toutes les sections */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+/* Sections pleine largeur */
+section, .promo-countdown, .faq-container, #timeline {
+    width: 100%;
+    max-width: 1200px;  /* limite sur grand écran */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Images fluides */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Tout s’assure dans la boîte */
+* {
+    box-sizing: border-box;
+}
+
 
 
 /* ===== Compteur Promotion ===== */
@@ -739,134 +632,6 @@ body {
 
         .quick-view:hover {
             background-color: #e9ecef;
-        }
-
-        /* ===== CHAT WHATSAPP ===== */
-        .whatsapp-chat {
-            position: fixed;
-            bottom: 140px;
-            right: 20px;
-            width: 350px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-            z-index: 10000;
-            overflow: hidden;
-            transform: translateY(calc(100% - 50px));
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-chat.open {
-            transform: translateY(0);
-        }
-
-        .chat-header {
-            background: #25D366;
-            color: white;
-            padding: 15px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .chat-header span {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .chat-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .chat-messages {
-            height: 250px;
-            overflow-y: auto;
-            padding: 15px;
-            background: #f0f2f5;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .message {
-            padding: 10px 15px;
-            border-radius: 10px;
-            max-width: 80%;
-            word-wrap: break-word;
-            line-height: 1.4;
-        }
-
-        .message.bot {
-            background: white;
-            align-self: flex-start;
-            border: 1px solid #e0e0e0;
-        }
-
-        .message.user {
-            background: #dcf8c6;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid #e0e0e0;
-            background: white;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            outline: none;
-            margin-right: 10px;
-        }
-
-        .chat-input button {
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-            z-index: 10000;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-        }
-
-        .whatsapp-float img {
-            width: 30px;
-            height: 30px;
-            filter: brightness(0) invert(1);
         }
 
         /* ===== NEWSLETTER POPUP ===== */
@@ -1577,18 +1342,185 @@ body {
         font-size: 14px;
     }
 </style>
+<!-- MENU GLOBAL -->
+<button class="menu-toggle">☰</button>
+<div class="menu-overlay"></div>
+<nav class="mobile-menu">
+    <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="blog.html">Blog / Podcast</a></li>
+        <li><a href="acheter.html">Acheter & Offrir</a></li>
+        <li><a href="histoire.html">Notre Histoire</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+    </ul>
+</nav>
 
-<head>
+<script>
+const toggleBtn = document.querySelector('.menu-toggle');
+const mobileMenu = document.querySelector('.mobile-menu');
+const overlay = document.querySelector('.menu-overlay');
+
+// Ouvrir/fermer le menu mobile
+toggleBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    overlay.classList.toggle('active');
+});
+
+// Fermer le menu si on clique sur l'overlay
+overlay.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    overlay.classList.remove('active');
+});
+
+// Fermer le menu quand on clique sur un lien
+mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+});
+
+</script>
+
+<style>
+/* MENU MOBILE */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: white;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    z-index: 1100;
+    transition: left 0.3s ease;
+    padding-top: 60px;
+    overflow-y: auto;
+}
+
+.mobile-menu.open { left: 0; }
+
+.mobile-menu ul { list-style: none; padding: 0; margin: 0; }
+.mobile-menu li { border-bottom: 1px solid #ddd; }
+.mobile-menu a { display: block; text-decoration: none; color: #1f2937; padding: 15px 20px; font-weight: 500; }
+.chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    font-size: 22px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 2000;
+}
+
+.chat-box {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 2000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-header {
+    background: #667eea;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 5px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+
+.chat-input-area button {
+    padding: 8px 12px;
+    border: none;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+</style>
+<style>
+/* Bouton flottant */
+  position: fixed;
+  bottom: 20px;
+  right: 20px; /* changement ici */
+  background: #667eea;
+  color: white;
+  font-size: 22px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 2000;
+}
+
+/* Fenêtre de chat */
+.chat-box {
+  position: fixed;
+  bottom: 80px;
+  right: 20px; /* changement ici */
+  width: 300px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 2000;
+}
+</style>
+
+</head>
 <body>
-<div id="chatBox" class="chat-box">
-    <div class="chat-messages" id="chatMessages">
-        <!-- Les messages apparaissent ici -->
-    </div>
-    <input type="text" id="chatInput" placeholder="Écrire un message...">
+<div id="userOnline" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; animation: blink 1s infinite;">
+  👥 Utilisateurs en ligne: <span id="userCount">0</span>
 </div>
 
-<!-- Bouton du chat -->
-<div class="chat-button" onclick="toggleChat()">💬</div>
+<style>
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+</style>
+
 
 <!-- Section Compteur Promotion -->
 <section class="promo-countdown">
@@ -1600,11 +1532,10 @@ body {
         <span id="seconds">00</span> secondes
     </div>
 
-</section>
 <div class="audio-welcome" style="text-align:center; margin-top:20px;">
   <h3>🎧 Message de bienvenue</h3>
   <audio controls>
-    <source src="audios/bienvenue.mp4" type="audio/mp4">
+    <source src="audio/bienvenue.mp4" type="audio/mp4">
     Votre navigateur ne supporte pas la lecture audio.
   </audio>
 </div>
@@ -1905,34 +1836,6 @@ body {
 
 </div>
 
-
-    <!-- Chat WhatsApp -->
-    <div class="whatsapp-chat" id="whatsappChat">
-<div class="chat-header" onclick="toggleChat()">
-    <img src="images/message-icon.png" alt="Message" class="chat-icon">
-    <button class="chat-toggle">▼</button>
-</div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                👋 Bonjour ! Je suis l'assistant virtuel Andu-Xara. 
-            </div>
-            <div class="message bot">
-                🤖 Je peux vous aider pour :
-                • Informations produits 📦
-                • Commandes et tailles 📏
-                • Livraisons 🚚
-                • Promotions en cours 🎉
-            </div>
-            <div class="message bot">
-                💡 Tapez votre question ou cliquez sur le logo WhatsApp pour discuter directement avec notre équipe !
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Tapez votre message..." id="chatInput" onkeypress="handleChatInput(event)">
-            <button onclick="sendChatMessage()">➤</button>
-        </div>
-    </div>
-
 <!-- Section FAQ -->
 <section id="faq" class="faq-section">
   <h2>Foire aux Questions (FAQ)</h2>
@@ -1984,24 +1887,6 @@ body {
         <img src="images/partenaires/vizeho.jpeg" alt="Vizeho">
     </div>
 </section>
-<article>
-  <h3>Mode africaine : Héritage et modernité</h3>
-  <p>La mode africaine inspire le monde. Andu-xara célèbre l’héritage tout en innovant.</p>
-  <audio controls>
-      <source src="audios/mode-africaine.m4a" type="audio/mp4">
-      Votre navigateur ne supporte pas l’audio.
-  </audio>
-</article>
-
-<article>
-  <h3>Entrepreneuriat Jeune</h3>
-  <p>Nos jeunes entrepreneurs africains réinventent le commerce.</p>
-  <audio controls>
-      <source src="audios/entrepreneuriat-jeune.m4a" type="audio/mp4">
-      Votre navigateur ne supporte pas l’audio.
-  </audio>
-</article>
-
     <footer>
 
         <div class="container">
@@ -2780,25 +2665,93 @@ function closeModal(id) {
         closePopup();
     }
   
-<script>
-<!-- Section Notre Histoire -->
-<section id="notre-histoire">
-  <h2>Notre Histoire</h2>
-  <p>Andu-Xara a été créé le 18-10-2020. Tout a commencé avec...</p>
-</section>
-
-<!-- Bouton flottant pour messages -->
-<button class="floating-message">
-    Message
-<img src="images/icons/message-icon.png" alt="Message" class="message-icon">
-
-</button>
-<script>
-function toggleChat() {
-    const chatBox = document.getElementById("chatBox");
-    chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
-}
+};
 </script>
+
+</html>
+</body>
+</html>
+
+<!-- Chat Button -->
+<div id="smartChat">
+  <div id="smartChatHeader">💬 Chat avec Andu-Xara</div>
+  <div id="smartChatMessages"></div>
+  <div id="smartChatInputArea">
+    <input type="text" id="smartChatInput" placeholder="Écris ton message...">
+    <button id="smartChatSend">Envoyer</button>
+  </div>
+</div>
+
+<style>
+#smartChat { 
+  position: fixed; bottom: 20px; right: 20px; 
+  width: 350px; max-height: 500px; 
+  background: white; border-radius: 12px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+  display: flex; flex-direction: column;
+  font-family: 'Segoe UI', sans-serif;
+}
+#smartChatHeader { background: #667eea; color: white; padding: 12px; text-align: center; font-weight: bold; border-radius: 12px 12px 0 0; }
+#smartChatMessages { flex: 1; padding: 10px; overflow-y: auto; background: #f9f9f9; }
+.smartMessage { margin: 5px 0; padding: 10px 14px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
+.smartMessage.user { background: #667eea; color: white; align-self: flex-end; }
+.smartMessage.bot { background: #e2e8f0; color: #1f2937; align-self: flex-start; }
+#smartChatInputArea { display: flex; border-top: 1px solid #ddd; }
+#smartChatInput { flex: 1; padding: 10px; border: none; outline: none; font-size: 0.95em; border-radius: 0; }
+#smartChatSend { background: #667eea; color: white; border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; }
+#smartChatSend:hover { background: #556cd6; }
+</style>
+
+<script>
+// Variables
+const chatInput = document.getElementById("smartChatInput");
+const chatSend = document.getElementById("smartChatSend");
+const chatMessages = document.getElementById("smartChatMessages");
+
+// Réponses prédéfinies
+const replies = {
+  "bonjour": "Bonjour 👋 ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider aujourd'hui ?",
+  "salut": "Salut ! Je suis là pour répondre à toutes vos questions sur nos produits et services.",
+  "commande": "Combien de commandes souhaitez-vous passer ? Nous livrons partout en Afrique.",
+  "livraison": "Nous livrons partout en Afrique. Pour la Mauritanie, nous utilisons Bankily et Masrvi ; au Sénégal, Wave et Orange Money ; pour les autres pays, des virements bancaires sont possibles.",
+  "paiement": "Nous acceptons les paiements par Bankily, Masrvi, Wave, Orange Money et virements bancaires selon votre pays.",
+  "merci": "Avec plaisir ! N'hésitez pas si vous avez d'autres questions.",
+  "retour": "Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact."
+};
+
+// Fonction ajouter message
+function addMessage(text, sender){
+  const msg = document.createElement("div");
+  msg.classList.add("smartMessage", sender);
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Envoyer message
+function sendMessage(){
+  const text = chatInput.value.trim().toLowerCase();
+  if(!text) return;
+  addMessage(text, "user");
+  chatInput.value = "";
+
+  // Réponse simulée
+  let reply = "Désolé, je n'ai pas compris. Pouvez-vous reformuler ?";
+  for(const key in replies){
+      if(text.includes(key)){
+          reply = replies[key];
+          break;
+      }
+  }
+  addMessage(reply, "bot");
+}
+
+// Événements
+chatSend.addEventListener("click", sendMessage);
+chatInput.addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
+</script>
+
+</html>
 
 </body>
 </html>
