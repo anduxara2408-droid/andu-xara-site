@@ -1,105 +1,153 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Réductions & Cadeaux - Andu-Xara</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; }
-    .container { max-width: 900px; margin: auto; padding: 20px; text-align: center; }
-    h1 { color: #6a11cb; margin-bottom: 10px; }
-    p { color: #444; line-height: 1.6; }
-    .promo-box { background: #fff; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .promo-box h2 { margin-bottom: 10px; color: #333; }
-    .highlight { color: #6a11cb; font-weight: bold; }
-    .input-code { padding:10px; width:70%; border-radius:6px; border:1px solid #ccc; }
-    .btn-apply { padding:10px 15px; background:#6a11cb; color:white; border:none; border-radius:6px; margin-left:10px; cursor:pointer; }
-    .btn-apply:hover { background:#4a0f9c; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réductions & Cadeaux - Andu-Xara</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f9f9f9; margin:0; padding:0; }
+.container { max-width:900px; margin:auto; padding:20px; }
+h1 { color:#6a11cb; text-align:center; }
+.box { background:#fff; padding:20px; border-radius:12px; margin:20px 0; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+input { padding:10px; width:70%; border-radius:6px; border:1px solid #ccc; }
+button { padding:10px 15px; border:none; border-radius:6px; background:#6a11cb; color:#fff; cursor:pointer; margin-left:10px; }
+button:hover { background:#4a0f9c; }
+p { margin-top:10px; }
+.highlight { font-weight:bold; color:#6a11cb; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Réductions & Cadeaux 🎁</h1>
 
-    <!-- Boîte de saisie du code -->
-    <div class="promo-box">
-      <h2>Saisir le code promotionnel</h2>
-      <input id="inputCode" type="text" placeholder="Entrez votre code..." class="input-code">
-      <button class="btn-apply" onclick="applyCode()">Obtenir une réduction</button>
-      <p id="message" style="margin-top:10px; font-weight:bold;"></p>
-      <p class="share">📢 Il reste <span class="highlight" id="codesLeft">--</span> codes promotionnels !</p>
-    </div>
+<div class="container">
+  <h1>Réductions & Cadeaux 🎁</h1>
 
-    <div style="margin-top:20px;">
-      <a href="index.html" style="color:#6a11cb;text-decoration:none;font-weight:bold;">← Retour à l’accueil</a>
-    </div>
+  <!-- ===== Zone 1 : Saisir un code promo ===== -->
+  <div class="box">
+    <h2>Saisir votre code promotionnel</h2>
+    <input id="inputCode" type="text" placeholder="Entrez votre code...">
+    <button onclick="applyPromoCode()">Activer</button>
+    <p id="promoMessage"></p>
+    <p>📢 Codes promotionnels restants : <span id="codesLeft" class="highlight">--</span></p>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    // Import Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <!-- ===== Zone 2 : Parrainage ===== -->
+  <div class="box">
+    <h2>Profitez de 50% de réduction</h2>
+    <ol>
+      <li>Invitez un ami : votre ami reçoit 10% sur son premier achat.</li>
+      <li>Quand votre ami achète, vous recevez 50% de réduction sur votre prochain achat.</li>
+    </ol>
+    <button onclick="generateReferral()">Obtenir mon code de parrainage</button>
+    <div id="referralMessage"></div> <!-- affichage du code et bouton copier -->
+  </div>
 
-    // Config Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
-      authDomain: "andu-xara-2fc48.firebaseapp.com",
-      projectId: "andu-xara-2fc48",
-      storageBucket: "andu-xara-2fc48.firebasestorage.app",
-      messagingSenderId: "873034669698",
-      appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
-    };
+  <!-- ===== Zone 3 : Achat test ===== -->
+  <div class="box">
+    <h2>Achat test</h2>
+    <button onclick="acheterProduit('USER_TEST','Produit A',7000)">Acheter Produit A (7000 MRU)</button>
+    <p>Après l'achat, la réduction du parrain sera appliquée automatiquement si applicable.</p>
+  </div>
+</div>
 
-    // Initialiser Firebase et Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, addDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // Fonction pour vérifier un code
-    async function applyCode() {
-      const entered = document.getElementById("inputCode").value.trim().toUpperCase();
-      const message = document.getElementById("message");
+// ======= Configuration Firebase =======
+const firebaseConfig = {
+  apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
+  authDomain: "andu-xara-2fc48.firebaseapp.com",
+  projectId: "andu-xara-2fc48",
+  storageBucket: "andu-xara-2fc48.firebasestorage.app",
+  messagingSenderId: "873034669698",
+  appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
+};
 
-      if (!entered) {
-        message.style.color = "red";
-        message.innerText = "❌ Veuillez entrer un code.";
-        return;
-      }
+// ======= Initialisation Firebase =======
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-      const docRef = doc(db, "codesPromo", entered);
-      const docSnap = await getDoc(docRef);
+// ===== Zone 1 : Activation du code promo =====
+async function applyPromoCode(){
+  const code = document.getElementById("inputCode").value.trim().toUpperCase();
+  const msg = document.getElementById("promoMessage");
+  if(!code){ msg.style.color="red"; msg.innerText="❌ Veuillez entrer un code."; return; }
 
-      if (!docSnap.exists()) {
-        message.style.color = "red";
-        message.innerText = "❌ Code invalide.";
-        return;
-      }
+  const docRef = doc(db, "codesPromo", code);
+  const docSnap = await getDoc(docRef);
 
-      const data = docSnap.data();
-      if (data.utilise === true) {
-        message.style.color = "red";
-        message.innerText = "😢 Ce code a déjà été utilisé.";
-      } else {
-        await updateDoc(docRef, { utilise: true });
-        message.style.color = "green";
-        message.innerText = "✅ Code accepté ! Vous bénéficiez de 30% de réduction 🎉";
-        updateCounter();
-      }
+  if(!docSnap.exists()){ msg.style.color="red"; msg.innerText="❌ Code invalide."; return; }
+
+  const data = docSnap.data();
+  if(data.utilisé){ msg.style.color="red"; msg.innerText="😢 Ce code a déjà été utilisé."; return; }
+
+  await updateDoc(docRef, { utilisé:true });
+  msg.style.color="green";
+  msg.innerText="✅ Félicitations ! Votre réduction a été appliquée 🎉";
+  updateCounter();
+}
+
+// ===== Compteur codes restants =====
+async function updateCounter(){
+  const colRef = collection(db,"codesPromo");
+  const snapshot = await getDocs(colRef);
+  let restant=0;
+  snapshot.forEach(doc=>{if(!doc.data().utilisé) restant++;});
+  document.getElementById("codesLeft").innerText = restant;
+}
+updateCounter();
+
+// ===== Zone 2 : Parrainage =====
+function generateCode(length=8){return Math.random().toString(36).substring(2,length+2).toUpperCase();}
+
+async function generateReferral(){
+  const currentUserId = "USER_TEST";
+  const newCode = generateCode();
+  await setDoc(doc(db,"partages",newCode),{ parrainId: currentUserId, utilisé:false });
+  const msg = document.getElementById("referralMessage");
+  msg.innerHTML = `<p>Votre code de parrainage : <span class="highlight">${newCode}</span></p>
+                   <button onclick="copyCode('${newCode}')">Copier le code</button>
+                   <p>Partagez ce code partout (WhatsApp, Messenger, Email, etc.)</p>`;
+}
+
+// Copier code
+function copyCode(code){
+  navigator.clipboard.writeText(code).then(()=>{alert("Code copié ! Vous pouvez le partager.");});
+}
+
+// ===== Vérification lien parrainage =====
+(async function checkReferral(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  if(refCode){
+    const docSnap = await getDoc(doc(db,"partages",refCode));
+    if(docSnap.exists() && !docSnap.data().utilisé){
+      const currentUserId = "USER_TEST";
+      await updateDoc(doc(db,"users",currentUserId),{ parrain: docSnap.data().parrainId });
+      console.log("Filleul lié au parrain :", docSnap.data().parrainId);
     }
+  }
+})();
 
-    // Fonction pour compter les codes restants
-    async function updateCounter() {
-      const colRef = collection(db, "codesPromo");
-      const snapshot = await getDocs(colRef);
-      let restant = 0;
-      snapshot.forEach(doc => {
-        if (!doc.data().utilise) restant++;
-      });
-      document.getElementById("codesLeft").innerText = restant;
-    }
+// ===== Zone 3 : Achat test =====
+async function validerAchat(userId,montant,produit){
+  await addDoc(collection(db,"achats"),{userId,produit,montant,date:new Date().toISOString()});
+  const userRef = doc(db,"users",userId);
+  const userSnap = await getDoc(userRef);
+  const userData = userSnap.data();
+  if(userData.parrain){
+    const parrainId = userData.parrain;
+    const parrainRef = doc(db,"users",parrainId);
+    await updateDoc(parrainRef,{reduction:50,filleuls:arrayUnion(userId)});
+    console.log(`Réduction 50% appliquée pour le parrain ${parrainId}`);
+  }
+}
 
-    // Charger le compteur au démarrage
-    updateCounter();
-  </script>
+async function acheterProduit(userId,produit,montant){
+  await validerAchat(userId,montant,produit);
+  alert("✅ Achat effectué ! Réduction du parrain appliquée si applicable.");
+}
+</script>
+
 </body>
 </html>

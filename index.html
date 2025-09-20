@@ -1524,6 +1524,44 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 
   // 4️⃣ Firestore
   const db = getFirestore(app);
+
+
+
+// ===== Zone 1 : Activer un code promo =====
+async function applyPromoCode() {
+  const code = document.getElementById("inputCode").value.trim().toUpperCase();
+  const msg = document.getElementById("promoMessage");
+
+  if(!code){
+    msg.style.color = "red";
+    msg.innerText = "❌ Veuillez entrer un code.";
+    return;
+  }
+
+  const docRef = doc(db, "codesPromo", code);
+  const docSnap = await getDoc(docRef);
+
+  if(!docSnap.exists()){
+    msg.style.color = "red";
+    msg.innerText = "❌ Code invalide.";
+    return;
+  }
+
+const data = docSnap.data();
+if(data.utilisé){  // ← doit correspondre exactement à Firestore
+  msg.style.color="red";
+  msg.innerText="😢 Ce code a déjà été utilisé.";
+  return;
+}
+
+  await updateDoc(docRef, { utilisé: true });
+  msg.style.color = "green";
+  msg.innerText = "✅ Félicitations ! Votre réduction a été appliquée 🎉";
+
+  // Ici tu pourras appeler une fonction pour appliquer la réduction dans le panier
+}
+
+
 </script>
 
 <style>
