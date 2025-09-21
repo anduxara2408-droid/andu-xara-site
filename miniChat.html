@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Chat Andu-Xara</title>
     <style>
-        /* Coin flottant */
+        /* Coin flottant (bouton rond 💬) */
         #miniMessage {
             position: fixed;
             top: 50%;
@@ -24,6 +24,7 @@
             z-index: 2000;
             transition: transform 0.2s;
         }
+
         #miniMessage:hover {
             transform: translateY(-50%) scale(1.2);
         }
@@ -38,10 +39,15 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: none;
+            display: none !important;   /* caché par défaut */
             flex-direction: column;
             font-family: 'Segoe UI', sans-serif;
             z-index: 2001;
+        }
+
+        /* Quand le chat est ouvert */
+        #miniChatWindow.open {
+            display: flex !important;
         }
 
         #miniChatHeader {
@@ -107,7 +113,7 @@
 </head>
 <body>
 
-<!-- Coin flottant -->
+<!-- Bouton flottant -->
 <div id="miniMessage" title="Chat avec Andu-Xara">💬</div>
 
 <!-- Fenêtre de chat -->
@@ -128,26 +134,28 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatSend = document.getElementById("miniChatSend");
     const chatMessages = document.getElementById("miniChatMessages");
 
+    // Réponses automatiques
     const replies = {
-        "bonjour": "Bonjour 👋 ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider ?",
+        "bonjour": "👋 Bonjour ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider ?",
         "salut": "Salut ! Je suis là pour répondre à vos questions sur nos produits.",
-        "t-shirt": "Nos T-shirts sont en coton premium, disponibles en S, M, L, XL.",
-        "ensemble": "Nos ensembles sont élégants et confortables, disponibles en plusieurs tailles.",
-        "prix": "Nos prix : T-shirts dès 499 Mru, Ensembles dès 599 Mru, Enfants dès 399 Mru.",
-        "livraison": "Nous livrons partout en Mauritanie et en Afrique. Délais : Nouakchott 24-48h, autres villes 3-5 jours.",
-        "paiement": "Paiement via Bankily, Masrvi, Wave, Orange Money et virements bancaires.",
-        "promo": "Promotion : 30% de réduction sur tout le catalogue jusqu'au 31 Décembre 2025 !",
-        "taille": "Tailles disponibles : S, M, L, XL. Besoin d'aide pour choisir ?",
-        "couleur": "Couleurs disponibles : Noir, Blanc, Bleu, Rouge, Vert, Jaune, Orange.",
-        "retour": "Les retours sont possibles sous 7 jours après réception, si le produit est intact.",
-        "contact": "Contact : +222 49 03 76 97 ou anduxara2408@gmail.com"
+        "t-shirt": "👕 Nos T-shirts sont en coton premium, disponibles en S, M, L, XL.",
+        "ensemble": "👔 Nos ensembles sont élégants et confortables, disponibles en plusieurs tailles.",
+        "prix": "💰 Nos prix : T-shirts dès 499 Mru, Ensembles dès 599 Mru, Enfants dès 399 Mru.",
+        "livraison": "🚚 Nous livrons partout en Mauritanie et en Afrique.\nDélais : Nouakchott 24-48h, autres villes 3-5 jours.",
+        "paiement": "💳 Paiement via Bankily, Masrvi, Wave, Orange Money et virements bancaires.",
+        "promo": "🎉 Promotion : 30% de réduction sur tout le catalogue jusqu'au 31 Décembre 2025 !",
+        "taille": "📏 Tailles disponibles : S, M, L, XL. Besoin d'aide pour choisir ?",
+        "couleur": "🎨 Couleurs disponibles : Noir, Blanc, Bleu, Rouge, Vert, Jaune, Orange.",
+        "retour": "🔄 Les retours sont possibles sous 7 jours après réception, si le produit est intact.",
+        "contact": "📞 Contact : +222 49 03 76 97 ou anduxara2408@gmail.com"
     };
 
+    // Ouvrir/fermer la fenêtre de chat
     miniMessage.addEventListener("click", () => {
-        chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
-        chatWindow.style.flexDirection = "column";
+        chatWindow.classList.toggle("open");
     });
 
+    // Ajouter un message dans la fenêtre
     function addMessage(text, sender) {
         const msgDiv = document.createElement("div");
         msgDiv.className = "miniMessage " + sender;
@@ -156,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    // Envoyer un message
     function sendMessage() {
         const text = chatInput.value.trim().toLowerCase();
         if (!text) return;
@@ -172,8 +181,11 @@ document.addEventListener("DOMContentLoaded", function() {
         addMessage(reply, "bot");
     }
 
+    // Événements
     chatSend.addEventListener("click", sendMessage);
-    chatInput.addEventListener("keypress", e => { if(e.key==="Enter") sendMessage(); });
+    chatInput.addEventListener("keypress", e => {
+        if (e.key === "Enter") sendMessage();
+    });
 });
 </script>
 
