@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<style>
-@keyframes popupAnimation {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-</style>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Catalogue Andu-Xara 2025</title>
@@ -16,66 +9,6 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
-#soninke-badge-left {
-    position: fixed;
-    bottom: 40px;
-    left: 20px;
-    background: linear-gradient(135deg, #ff9966, #ff5e62);
-    color: #fff;
-    font-weight: bold;
-    padding: 15px 20px;
-    border-radius: 30px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    cursor: default;
-    z-index: 5000;
-    transform: scale(0.8);
-    animation: popupLeft 0.6s forwards, bounceLeft 2s infinite 0.6s;
-    font-size: 1rem;
-    max-width: 200px;
-    text-align: center;
-    line-height: 1.4;
-}
-
-@keyframes popupLeft {
-    0% { opacity: 0; transform: scale(0.5) translateX(-50px);}
-    100% { opacity: 1; transform: scale(1) translateX(0);}
-}
-
-@keyframes bounceLeft {
-    0%, 100% { transform: translateY(0);}
-    50% { transform: translateY(-8px);}
-}
-
-#soninke-text-left {
-    display: inline-block;
-    transition: opacity 0.5s ease-in-out;
-}
-
-#lightbox {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
-}
-
-#lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-#lightbox-close {
-  position: absolute;
-  top: 20px; right: 30px;
-  font-size: 40px;
-  color: white;
-  cursor: pointer;
-}
-
 .cart {
   position: fixed;
   top: 60px;
@@ -1361,6 +1294,35 @@ body {
     }
 }
 
+
+
+    </style>
+<style>
+    /* Fenêtre du chat (réduite et masquée par défaut) */
+    .chat-box {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 280px;           /* largeur réduite */
+        max-height: 350px;      /* hauteur réduite */
+        background: #222;
+        color: white;
+        border-radius: 12px;
+        display: none;          /* masquée au départ */
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    /* Zone des messages */
+    .chat-messages {
+        padding: 10px;
+        flex: 1;
+        overflow-y: auto;       /* permet de scroller si trop de messages */
+        font-size: 14px;
+    }
+</style>
 <!-- MENU GLOBAL -->
 <button class="menu-toggle">☰</button>
 <div class="menu-overlay"></div>
@@ -1372,6 +1334,7 @@ body {
         <li><a href="histoire.html">Notre Histoire</a></li>
         <li><a href="reductions.html">Réductions & Cadeaux</a></li>
         <li><a href="faq.html">FAQ</a></li>
+
     </ul>
 </nav>
 
@@ -1386,7 +1349,7 @@ toggleBtn.addEventListener('click', () => {
     overlay.classList.toggle('active');
 });
 
-// Fermer le menu si on clique sur l’overlay
+// Fermer le menu si on clique sur l'overlay
 overlay.addEventListener('click', () => {
     mobileMenu.classList.remove('open');
     overlay.classList.remove('active');
@@ -1399,39 +1362,10 @@ mobileMenu.querySelectorAll('a').forEach(link => {
         overlay.classList.remove('active');
     });
 });
+
 </script>
 
 <style>
-/* BOUTON DU MENU */
-.menu-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: #667eea;
-    color: white;
-    border: none;
-    font-size: 24px;
-    width: 50px; height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 3000; /* Plus haut que le chat */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* OVERLAY FOND NOIR */
-.menu-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4);
-    display: none;
-    z-index: 1200;
-}
-.menu-overlay.active { display: block; }
-
 /* MENU MOBILE */
 .mobile-menu {
     position: fixed;
@@ -1441,124 +1375,135 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     height: 100%;
     background: white;
     box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 1500;
+    z-index: 1100;
     transition: left 0.3s ease;
     padding-top: 60px;
     overflow-y: auto;
 }
+
 .mobile-menu.open { left: 0; }
 
 .mobile-menu ul { list-style: none; padding: 0; margin: 0; }
 .mobile-menu li { border-bottom: 1px solid #ddd; }
-.mobile-menu a {
-    display: block;
-    text-decoration: none;
-    color: #1f2937;
-    padding: 15px 20px;
-    font-weight: 500;
+.mobile-menu a { display: block; text-decoration: none; color: #1f2937; padding: 15px 20px; font-weight: 500; }
+.chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    font-size: 22px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 2000;
 }
-</style>
 
-<!-- Styles Panier -->
+.chat-box {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 2000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-header {
+    background: #667eea;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 5px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+
+.chat-input-area button {
+    padding: 8px 12px;
+    border: none;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+</style>
 <style>
-#cart-popup {
+/* Bouton flottant */
   position: fixed;
-  top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.6);
-  display: none;  /* le panier est masqué par défaut */
-  justify-content: center;
+  bottom: 20px;
+  right: 20px; /* changement ici */
+  background: #667eea;
+  color: white;
+  font-size: 22px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   z-index: 2000;
 }
 
-.cart-content {
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  width: 90%; max-width:400px;
-  text-align:center;
-}
-.cart-content ul { text-align:left; }
-.cart-content button {
-  margin: 10px;
-  padding:10px 15px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+/* Fenêtre de chat */
+.chat-box {
+  position: fixed;
+  bottom: 80px;
+  right: 20px; /* changement ici */
+  width: 300px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 2000;
 }
 </style>
+
 </head>
-<!-- Bouton Panier avec compteur -->
-<button onclick="openCart()" 
-        style="position:fixed; top:20px; right:20px; background:#222; color:#fff;
-               padding:10px 15px; border:none; border-radius:8px; cursor:pointer; z-index:2100;">
-  🛒 Panier (<span id="cart-count">0</span>)
-</button>
-
-<!-- Section Panier -->
-<div id="cart-popup">
-  <div class="cart-content">
-    <h2>🛒 Mon Panier</h2>
-    <ul id="cart-items"></ul>
-    <p>Total : <span id="cart-total">0</span> MRU</p>
-    <button onclick="passerCommande()" style="background:green; color:white;">📲 Commander via WhatsApp</button>
-    <button onclick="closeCart()" style="background:red; color:white;">❌ Fermer</button>
-  </div>
-</div>
-
-</style>
-<!-- ===== HTML Code Promo ===== -->
-<div class="reduction-section">
-    <input type="text" id="promoInput" placeholder="Entrez votre code">
-    <button id="promoButton">Obtenir une réduction</button>
-    <p id="promoMessage" style="color: green; margin-top: 10px;"></p>
-</div>
-
+<body>
 <div id="userOnline" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; animation: blink 1s infinite;">
   👥 Utilisateurs en ligne: <span id="userCount">0</span>
 </div>
 
-<script type="module">
-  // 1️⃣ Import Firebase App et Realtime Database
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
-
-  // 2️⃣ Config Firebase (ajoute databaseURL)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
-    authDomain: "andu-xara-2fc48.firebaseapp.com",
-    databaseURL: "https://andu-xara-2fc48-default-rtdb.europe-west1.firebasedatabase.app", // OBLIGATOIRE pour Realtime DB
-    projectId: "andu-xara-2fc48",
-    storageBucket: "andu-xara-2fc48.firebasestorage.app",
-    messagingSenderId: "873034669698",
-    appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
-  };
-
-// 3️⃣ Initialiser Firebase
-const app = initializeApp(firebaseConfig);
-
-// 4️⃣ Initialiser Realtime Database
-const db = getDatabase(app);
-
-  // 4️⃣ Gestion des utilisateurs en ligne
-  const userId = Date.now(); // ID unique par visiteur
-  const userRef = ref(db, 'onlineUsers/' + userId);
-
-  set(userRef, { timestamp: serverTimestamp() });
-  onDisconnect(userRef).remove(); // supprime quand l'utilisateur quitte
-
-  const onlineRef = ref(db, 'onlineUsers');
-  onValue(onlineRef, (snapshot) => {
-    const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-    document.getElementById('userCount').innerText = count;
-  });
-</script>
 <style>
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
 </style>
+
 
 <!-- Section Compteur Promotion -->
 <section class="promo-countdown">
@@ -1606,6 +1551,10 @@ const db = getDatabase(app);
                     <h1>Catalogue Andu-Xara 2025</h1>
                     <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
                 </div>
+<div class="cart-icon" onclick="showCartModal()">
+    🛒 <span id="cart-counter">0</span>
+</div>
+
                 <div class="wishlist-icon">
                     ❤️ <span id="wishlist-counter">0</span>
                 </div>
@@ -1644,266 +1593,230 @@ const db = getDatabase(app);
         </div>
 <div class="products-grid" id="products-container">
 
-<!-- Icône Panier -->
-<div id="cart-icon" onclick="toggleCart()">
-  🛒 <span id="cart-count">0</span>
-</div>
+    <!-- Produit 1 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt logo arabe</h3>
+            <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">499 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">349 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 349)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
 
-<style>
-#cart-icon {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #6a11cb;
-  color: #fff;
-  padding: 10px 15px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: bold;
-  z-index: 1000;
-}
-#cart-count {
-  background: red;
-  padding: 3px 7px;
-  border-radius: 50%;
-  margin-left: 5px;
-}
-</style>
+    <!-- Produit 2 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble capuche style arabe</h3>
+            <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
+    </div>
 
-<!-- Produit 1 -->
-<div class="product-card" data-category="t-shirts">
-  <div class="product-image-container">
-    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">T-shirt logo arabe</h3>
-    <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="S">S</button>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-        <button class="variation-btn" data-size="XL">XL</button>
-      </div>
+    <!-- Produit 3 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
+            <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 419)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">499 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">349 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499, 349)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 2 -->
-<div class="product-card" data-category="ensembles">
-  <div class="product-image-container">
-    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">Ensemble capuche style arabe</h3>
-    <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-        <button class="variation-btn" data-size="XL">XL</button>
-      </div>
+    <!-- Produit 4 -->
+    <div class="product-card" data-category="enfants">
+        <div class="product-image-container">
+            <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt Enfant</h3>
+            <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Âge:</span>
+                    <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
+                    <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
+                    <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">399 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">279 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 279)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 599, 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 3 -->
-<div class="product-card" data-category="ensembles">
-  <div class="product-image-container">
-    <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
-    <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="S">S</button>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-      </div>
+    <!-- Produit 5 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Ensemble T-shirt et jogging</h3>
+            <p class="product-description">Ensemble coton premium - Style décontracté</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">799 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">559 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 559)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">599 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">419 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 599, 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 4 -->
-<div class="product-card" data-category="enfants">
-  <div class="product-image-container">
-    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">T-shirt Enfant</h3>
-    <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Âge:</span>
-        <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
-        <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
-        <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
-      </div>
+    <!-- Produit 6 -->
+    <div class="product-card" data-category="t-shirts">
+        <div class="product-image-container">
+            <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Pull bleu</h3>
+            <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                    <button class="variation-btn" data-size="XL">XL</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">699 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">489 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Pull bleu', 489)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">399 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">279 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 399, 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 5 -->
-<div class="product-card" data-category="ensembles">
-  <div class="product-image-container">
-    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">Ensemble T-shirt et jogging</h3>
-    <p class="product-description">Ensemble coton premium - Style décontracté</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="S">S</button>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-        <button class="variation-btn" data-size="XL">XL</button>
-      </div>
+    <!-- Produit 7 -->
+    <div class="product-card" data-category="accessoires">
+        <div class="product-image-container">
+            <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">Capuchon blanc</h3>
+            <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="Unique">Unique</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">299 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">209 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 209)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">799 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">559 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 799, 559)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 6 -->
-<div class="product-card" data-category="t-shirts">
-  <div class="product-image-container">
-    <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">Pull bleu</h3>
-    <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-        <button class="variation-btn" data-size="XL">XL</button>
-      </div>
+    <!-- Produit 8 -->
+    <div class="product-card" data-category="ensembles">
+        <div class="product-image-container">
+            <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-image">
+            <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">T-shirt et jogging</h3>
+            <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
+            <div class="product-variations">
+                <div class="variation-selector">
+                    <span>Taille:</span>
+                    <button class="variation-btn" data-size="S">S</button>
+                    <button class="variation-btn" data-size="M">M</button>
+                    <button class="variation-btn" data-size="L">L</button>
+                </div>
+            </div>
+            <p class="product-price">
+                <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">899 Mru</span>
+                <span class="promo-price" style="font-size:1.2em; font-weight:bold;">629 Mru</span>
+            </p>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 629)">Ajouter au panier</button>
+                <button class="quick-view">👁️</button>
+            </div>
+        </div>
     </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">699 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">489 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Pull bleu', 699, 489)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
 
-<!-- Produit 7 -->
-<div class="product-card" data-category="accessoires">
-  <div class="product-image-container">
-    <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">Capuchon blanc</h3>
-    <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="Unique">Unique</button>
-      </div>
-    </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">299 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">209 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 299, 209)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
-
-<!-- Produit 8 -->
-<div class="product-card" data-category="ensembles">
-  <div class="product-image-container">
-    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti - Collection 2025" class="product-img">
-    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
-  </div>
-  <div class="product-info">
-    <h3 class="product-title">T-shirt et jogging</h3>
-    <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
-    <div class="product-variations">
-      <div class="variation-selector">
-        <span>Taille:</span>
-        <button class="variation-btn" data-size="S">S</button>
-        <button class="variation-btn" data-size="M">M</button>
-        <button class="variation-btn" data-size="L">L</button>
-      </div>
-    </div>
-    <p class="product-price">
-      <span class="old-price" style="color:red; font-size:0.8em; text-decoration: line-through;">899 MRU</span>
-      <span class="promo-price" style="font-size:1.2em; font-weight:bold;">629 MRU</span>
-    </p>
-    <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 899, 629)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- ===== Section Panier ===== -->
-<div id="cart-popup" style="display:none;">
-  <div class="cart-content">
-    <h2>🛒 Mon Panier</h2>
-    <ul id="cart-items"></ul>
-    <p>Total : <span id="cart-total">0</span> MRU</p>
-    <button onclick="validerPanier()">📲 Commander via WhatsApp</button>
-    <button onclick="toggleCart()">❌ Fermer</button>
-  </div>
 </div>
 
 <!-- Section FAQ -->
@@ -2017,6 +1930,8 @@ const db = getDatabase(app);
 </ul>
 
   </div>
+</footer>
+
     </footer>
 
     <script>
@@ -2310,7 +2225,115 @@ function subscribeNewsletter() {
     }
 }
 
+// ===== CHAT WHATSAPP INTELLIGENT =====
+function initChat() {
+    document.querySelector('.chat-header').addEventListener('click', function(e) {
+        if (e.target.classList.contains('chat-toggle')) {
+            toggleChat();
+        }
+    });
+}
 
+function toggleChat() {
+    const chat = document.getElementById('whatsappChat');
+    chat.classList.toggle('open');
+    const toggleBtn = chat.querySelector('.chat-toggle');
+    toggleBtn.textContent = chat.classList.contains('open') ? '▼' : '▲';
+}
+
+function handleChatInput(event) {
+    if (event.key === 'Enter') {
+        sendChatMessage();
+    }
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (message) {
+        addChatMessage(message, 'user');
+        input.value = '';
+        
+        setTimeout(() => {
+            const response = generateIntelligentResponse(message);
+            addChatMessage(response, 'bot');
+        }, 1000);
+    }
+}
+
+function generateIntelligentResponse(userMessage) {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello')) {
+        return "👋 Bonjour ! Je suis ravi de vous aider. De quoi avez-vous besoin aujourd'hui ?";
+    }
+    
+    if (lowerMessage.includes('merci') || lowerMessage.includes('remercie')) {
+        return "😊 Je vous en prie ! N'hésitez pas si vous avez d'autres questions.";
+    }
+    
+    if (lowerMessage.includes('commande') || lowerMessage.includes('acheter') || lowerMessage.includes('achat')) {
+        return "🛒 Excellent choix ! Pour passer commande, vous pouvez :\n• Ajouter les articles au panier\n• Nous contacter directement sur WhatsApp\n• Profiter de nos promotions en cours 🎉";
+    }
+    
+    if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
+        return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 1000 Mru";
+    }
+    
+    if (lowerMessage.includes('taille') || lowerMessage.includes('tailles') || lowerMessage.includes('size')) {
+        return "📏 Nos tailles :\n• S (Small)\n• M (Medium)\n• L (Large)\n• XL (Extra Large)\nBesoin d'aide pour choisir ? Dites-moi votre morphologie !";
+    }
+    
+    if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
+        return "💰 Nos prix sont très compétitifs !\n• T-shirts : à partir de 499 Mru\n• Ensembles : à partir de 599 Mru\n• Enfants : à partir de 399 Mru\nPromotions en cours : -30% 🎉";
+    }
+    
+    if (lowerMessage.includes('couleur') || lowerMessage.includes('couleurs') || lowerMessage.includes('color')) {
+        return "🎨 Nous avons une large gamme de couleurs :\n• Noir, Blanc, Bleu, Rouge\n• Vert, Jaune, Orange\n• Et bien d'autres !\nQuelle couleur vous intéresse ?";
+    }
+    
+    if (lowerMessage.includes('promo') || lowerMessage.includes('réduction') || lowerMessage.includes('solde')) {
+        return "🎉 PROMOTION EXCEPTIONNELLE !\n30% de réduction sur tout le catalogue\nValable jusqu'au 31 Décembre 2025\nProfitez-en vite ! 🚀";
+    }
+    
+    if (lowerMessage.includes('contact') || lowerMessage.includes('appeler') || lowerMessage.includes('whatsapp')) {
+        return "📞 Contactez-nous :\n• Tel: +222 49 03 76 97\n• WhatsApp: +222 49 03 76 97\n• Email: anduxara2408@gmail.com\nNous sommes disponibles 7j/7 !";
+    }
+    
+    if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || lowerMessage.includes('coton')) {
+        return "⭐ Nos produits sont de qualité premium :\n• 100% coton égyptien\n• Coutures renforcées\n• Teintures résistantes\n• Lavage en machine possible";
+    }
+    
+    const defaultResponses = [
+        "🤔 Je comprends votre demande. Pouvez-vous me donner plus de détails pour que je puisse mieux vous aider ?",
+        "💡 Je serais ravi de vous aider ! De quoi avez-vous besoin précisément ?",
+        "👕 Concernant nos produits Andu-Xara, je peux vous renseigner sur :\n• Les tailles disponibles\n• Les matériaux utilisés\n• Les délais de livraison\n• Les promotions en cours\nQue vous intéresse-t-il ?",
+        "🚀 Excellent ! Pour une assistance personnalisée, je vous recommande de contacter directement notre équipe sur WhatsApp. Ils pourront vous aider en temps réel !",
+        "😊 Merci pour votre message ! Notre équipe est là pour vous aider. Souhaitez-vous des informations sur un produit particulier ?"
+    ];
+    
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+}
+
+function addChatMessage(text, type) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message ' + type;
+    
+    const formattedText = text.replace(/\n/g, '<br>');
+    messageDiv.innerHTML = formattedText;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function openWhatsApp() {
+    const phoneNumber = "22249037697";
+    const message = "Bonjour, je suis intéressé par vos produits Andu-Xara. Pouvez-vous m'aider ?";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
 
 // ===== RECHERCHE =====
 document.getElementById('search-input').addEventListener('input', function() {
@@ -2506,6 +2529,16 @@ function checkout() {
         document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
         document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
     }, 1000);
+</script>
+<!-- Section Légale -->
+<section class="legal-section">
+    <h2>Informations Légales</h2>
+    <ul>
+        <li><a href="#">Conditions Générales de Vente et Utilisation</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Suivi de livraison</a></li>
+    </ul>
 </section>
 <script>
 function toggleLegal(id) {
@@ -2515,6 +2548,50 @@ function toggleLegal(id) {
   });
   // afficher seulement celui cliqué
   document.getElementById(id).style.display = "block";
+}
+</script>
+<!-- Modal Conditions Générales -->
+<div id="modal-cgv" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-cgv')">&times;</span>
+    <h2>Conditions Générales de Vente et Utilisation</h2>
+    <p>Ici le texte complet de vos CGV...</p>
+  </div>
+</div>
+
+<!-- Modal Mentions légales -->
+<div id="modal-mentions" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-mentions')">&times;</span>
+    <h2>Mentions légales</h2>
+    <p>Texte des mentions légales...</p>
+  </div>
+</div>
+
+<!-- Modal Politique de confidentialité -->
+<div id="modal-confidentialite" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-confidentialite')">&times;</span>
+    <h2>Politique de confidentialité</h2>
+    <p>Texte de la politique de confidentialité...</p>
+  </div>
+</div>
+
+<!-- Modal Suivi de livraison -->
+<div id="modal-suivi" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-suivi')">&times;</span>
+    <h2>Suivi de livraison</h2>
+    <p>Texte du suivi de livraison...</p>
+  </div>
+</div>
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
 }
 </script>
 <!-- Fenêtre popup d'abonnement -->
@@ -2554,201 +2631,105 @@ function toggleLegal(id) {
     }
   
 };
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    updateCartCounter();  // met à jour le compteur au chargement
-    initCartFunctionality(); // active l'écouteur sur l'icône
-});
 </script>
 
-<!-- ================= PANIER ================= -->
+</html>
 <script>
-let panier = [];
-
-// Ajouter un produit au panier
-function addToCart(produit, prixNormal, prixPromo){
-  panier.push({ produit, prixNormal, prixPromo });
-  document.getElementById("cart-count").innerText = panier.length;
-  afficherPanier();
-  alert(produit + " ajouté au panier ✅");
-}
-
-// Afficher le panier
-function afficherPanier(){
-  let contenu = "";
-  let total = 0;
-
-  panier.forEach((item, index) => {
-    contenu += `<li>
-      ${item.produit} -
-      <span style="text-decoration:line-through; color:gray;">${item.prixNormal} MRU</span>
-      <b style="color:green;">${item.prixPromo} MRU</b>
-      <button onclick="removeFromCart(${index})">❌</button>
-    </li>`;
-    total += item.prixPromo;
-  });
-
-  document.getElementById("cart-items").innerHTML = contenu || "<li>Panier vide</li>";
-  document.getElementById("cart-total").innerText = total;
-}
-
-// Supprimer un produit
-function removeFromCart(index){
-  panier.splice(index, 1);
-  document.getElementById("cart-count").innerText = panier.length;
-  afficherPanier();
-}
-
-// Ouvrir/Fermer le panier
-function openCart(){ 
-  afficherPanier(); 
-  document.getElementById("cart-popup").style.display="flex"; 
-}
-function closeCart(){ 
-  document.getElementById("cart-popup").style.display="none"; 
-}
-
-// Commander via WhatsApp
-function passerCommande(){
-  if(panier.length === 0){
-    alert("❌ Votre panier est vide !");
-    return;
-  }
-  let message = "🛍️ Nouvelle commande :\n";
-  let total = 0;
-  panier.forEach(item => {
-    message += `- ${item.produit} : ${item.prixPromo} MRU (au lieu de ${item.prixNormal} MRU)\n`;
-    total += item.prixPromo;
-  });
-  message += `\n💰 Total : ${total} MRU`;
-
-  // 👉 Mets ton vrai numéro WhatsApp ici
-  let url = "https://wa.me/22249037697?text=" + encodeURIComponent(message);
-  window.open(url, "_blank");
-}
+    document.addEventListener("DOMContentLoaded", function() {
+        updateCartCounter();  // met à jour le compteur au chargement
+        initCartFunctionality(); // active l'écouteur sur l'icône
+    });
 </script>
-<!-- Fenêtre Lightbox -->
-<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:3000;">
-  <span id="lightbox-close" style="position:absolute; top:20px; right:30px; font-size:40px; color:white; cursor:pointer;">&times;</span>
-  <img id="lightbox-img" src="" style="max-width:90%; max-height:90%;" alt="Produit">
+<script src="js/ton-fichier.js"></script>
+<div id="promo-section" style="text-align:center; margin: 20px;">
+    <h3>Réductions & Cadeaux 🎁</h3>
+    <input type="text" id="promo-code-input" placeholder="Entrez votre code" style="padding:10px; width: 200px;">
+    <button id="apply-promo-btn" style="padding: 10px 20px; margin-left: 10px;">Obtenir une réduction</button>
+    <p id="promo-message" style="margin-top:15px; color:green;"></p>
 </div>
+</body>
+</html>
 
-<script>
-// Sélection des éléments lightbox
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightbox-img");
-const lightboxClose = document.getElementById("lightbox-close");
-
-// Fonction pour ouvrir l'image dans la lightbox
-function openLightbox(src) {
-  lightboxImg.src = src;
-  lightbox.style.display = "flex";
-}
-
-// Fermer la lightbox
-lightboxClose.addEventListener("click", () => {
-  lightbox.style.display = "none";
-});
-lightbox.addEventListener("click", (e) => {
-  if (e.target === lightbox) lightbox.style.display = "none";
-});
-
-// Ajouter l'événement au bouton "quick-view"
-document.querySelectorAll(".product-card").forEach(card => {
-  const btn = card.querySelector(".quick-view");
-  const img = card.querySelector(".product-img");
-  btn.addEventListener("click", () => openLightbox(img.src));
-});
-</script>
-<!-- Fenêtre lightbox -->
-<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-    background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:3000;">
-  <span id="lightbox-close" style="position:absolute; top:20px; right:30px; font-size:40px; color:white; cursor:pointer;">&times;</span>
-  <img id="lightbox-img" src="" style="max-width:90%; max-height:90%;" alt="Produit">
-</div>
-<script>
-window.addEventListener('load', () => {
-  const popup = document.getElementById('soninke-popup');
-  const closeBtn = document.getElementById('soninke-close');
-
-  // Afficher la popup après 500ms
-  setTimeout(() => {
-    popup.style.display = 'flex';
-  }, 500);
-
-  // Fermer la popup au clic
-  closeBtn.addEventListener('click', () => {
-    popup.style.display = 'none';
-  });
-
-  // Fermer si clic en dehors de la boîte
-  popup.addEventListener('click', (e) => {
-    if (e.target === popup) popup.style.display = 'none';
-  });
-});
-</script>
-<!-- Popup Journée Internationale de la Langue Soninké -->
-<div id="soninke-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:5000; flex-direction:column;">
-  <div style="background:#fff; padding:30px; border-radius:15px; max-width:500px; text-align:center; animation: popupAnimation 1s ease;">
-    <h2 style="color:#2c3e50; font-size:1.8em;">🎉 Bonne fête de la Journée Internationale de la Langue Soninké ! 🎉</h2>
-    <p style="font-size:0.9em; margin-top:15px; color:#555;">
-      Profitez de votre diversité, n'hésitez pas à passer une commande et si vous rencontrez un problème, contactez-nous.
-    </p>
-    <button id="soninke-close" style="margin-top:20px; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; background:#2c3e50; color:white;">Fermer</button>
+<!-- Chat Button -->
+<div id="smartChat">
+  <div id="smartChatHeader">💬 Chat avec Andu-Xara</div>
+  <div id="smartChatMessages"></div>
+  <div id="smartChatInputArea">
+    <input type="text" id="smartChatInput" placeholder="Écris ton message...">
+    <button id="smartChatSend">Envoyer</button>
   </div>
 </div>
-<div id="soninke-badge-left">
-    <span id="soninke-text-left">Xa kéé biré waaga Soninko</span>
-</div>
+
+<style>
+#smartChat { 
+  position: fixed; bottom: 20px; right: 20px; 
+  width: 350px; max-height: 500px; 
+  background: white; border-radius: 12px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+  display: flex; flex-direction: column;
+  font-family: 'Segoe UI', sans-serif;
+}
+#smartChatHeader { background: #667eea; color: white; padding: 12px; text-align: center; font-weight: bold; border-radius: 12px 12px 0 0; }
+#smartChatMessages { flex: 1; padding: 10px; overflow-y: auto; background: #f9f9f9; }
+.smartMessage { margin: 5px 0; padding: 10px 14px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
+.smartMessage.user { background: #667eea; color: white; align-self: flex-end; }
+.smartMessage.bot { background: #e2e8f0; color: #1f2937; align-self: flex-start; }
+#smartChatInputArea { display: flex; border-top: 1px solid #ddd; }
+#smartChatInput { flex: 1; padding: 10px; border: none; outline: none; font-size: 0.95em; border-radius: 0; }
+#smartChatSend { background: #667eea; color: white; border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; }
+#smartChatSend:hover { background: #556cd6; }
+</style>
+
 <script>
-const messagesLeft = [
-    "Xa kéé biré waaga Soninko",
-    "Bonne fête de la langue Soninké !",
-    "Profitez de votre journée !"
-];
+// Variables
+const chatInput = document.getElementById("smartChatInput");
+const chatSend = document.getElementById("smartChatSend");
+const chatMessages = document.getElementById("smartChatMessages");
 
-let indexLeft = 0;
-const textElLeft = document.getElementById('soninke-text-left');
+// Réponses prédéfinies
+const replies = {
+  "bonjour": "Bonjour 👋 ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider aujourd'hui ?",
+  "salut": "Salut ! Je suis là pour répondre à toutes vos questions sur nos produits et services.",
+  "commande": "Combien de commandes souhaitez-vous passer ? Nous livrons partout en Afrique.",
+  "livraison": "Nous livrons partout en Afrique. Pour la Mauritanie, nous utilisons Bankily et Masrvi ; au Sénégal, Wave et Orange Money ; pour les autres pays, des virements bancaires sont possibles.",
+  "paiement": "Nous acceptons les paiements par Bankily, Masrvi, Wave, Orange Money et virements bancaires selon votre pays.",
+  "merci": "Avec plaisir ! N'hésitez pas si vous avez d'autres questions.",
+  "retour": "Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact."
+};
 
-setInterval(() => {
-    textElLeft.style.opacity = 0; // fade out
-    setTimeout(() => {
-        indexLeft = (indexLeft + 1) % messagesLeft.length;
-        textElLeft.textContent = messagesLeft[indexLeft];
-        textElLeft.style.opacity = 1; // fade in
-    }, 500);
-}, 3000);
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6TZ69QHQTY"></script>
+// Fonction ajouter message
+function addMessage(text, sender){
+  const msg = document.createElement("div");
+  msg.classList.add("smartMessage", sender);
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Envoyer message
+function sendMessage(){
+  const text = chatInput.value.trim().toLowerCase();
+  if(!text) return;
+  addMessage(text, "user");
+  chatInput.value = "";
+
+  // Réponse simulée
+  let reply = "Désolé, je n'ai pas compris. Pouvez-vous reformuler ?";
+  for(const key in replies){
+      if(text.includes(key)){
+          reply = replies[key];
+          break;
+      }
+  }
+  addMessage(reply, "bot");
+}
+
+// Événements
+chatSend.addEventListener("click", sendMessage);
+chatInput.addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-6TZ69QHQTY');
-
+    // Toutes les fonctions : addToCart, showCartModal, updateCartCounter, updateCartModalContent
+    // Ensuite le code qui ajoute les listeners sur les boutons
 </script>
-<!-- ========== FIN CHAT ========== -->
-<!-- Inclusion du chat -->
-<iframe src="miniChat.html" style="all:unset;position:fixed;bottom:0;right:0;width:400px;height:500px;border:none;z-index:3000;"></iframe>
-<footer style="text-align:center; padding:15px; font-size:14px; color:#fff; background:linear-gradient(90deg, #667eea, #764ba2); margin-top:20px; border-radius:8px 8px 0 0;">
-    🚀 Ce site a été créé par l'équipe <strong>Andu-Xara</strong>.<br>
-    💡 Si vous avez des suggestions, n'hésitez pas à nous contacter.<br>
-    🌱 Le site est en évolution, de nouvelles fonctionnalités arriveront bientôt !
-</footer>
-
 </body>
-<button class="menu-toggle">&#9776;</button>
-<div class="menu-overlay"></div>
-<nav class="mobile-menu">
-    <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="blog.html">Blog / Podcast</a></li>
-        <li><a href="acheter.html">Acheter & Offrir</a></li>
-        <li><a href="histoire.html">Notre Histoire</a></li>
-        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-    </ul>
-</nav>
-
 </html>
