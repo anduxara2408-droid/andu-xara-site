@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <style>
@@ -1361,7 +1361,6 @@ body {
     }
 }
 
-
 <!-- MENU GLOBAL -->
 <button class="menu-toggle">☰</button>
 <div class="menu-overlay"></div>
@@ -1373,7 +1372,6 @@ body {
         <li><a href="histoire.html">Notre Histoire</a></li>
         <li><a href="reductions.html">Réductions & Cadeaux</a></li>
         <li><a href="faq.html">FAQ</a></li>
-
     </ul>
 </nav>
 
@@ -1388,7 +1386,7 @@ toggleBtn.addEventListener('click', () => {
     overlay.classList.toggle('active');
 });
 
-// Fermer le menu si on clique sur l'overlay
+// Fermer le menu si on clique sur l’overlay
 overlay.addEventListener('click', () => {
     mobileMenu.classList.remove('open');
     overlay.classList.remove('active');
@@ -1401,10 +1399,39 @@ mobileMenu.querySelectorAll('a').forEach(link => {
         overlay.classList.remove('active');
     });
 });
-
 </script>
 
 <style>
+/* BOUTON DU MENU */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    font-size: 24px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 3000; /* Plus haut que le chat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* OVERLAY FOND NOIR */
+.menu-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 1200;
+}
+.menu-overlay.active { display: block; }
+
 /* MENU MOBILE */
 .mobile-menu {
     position: fixed;
@@ -1414,56 +1441,24 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     height: 100%;
     background: white;
     box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 1100;
+    z-index: 1500;
     transition: left 0.3s ease;
     padding-top: 60px;
     overflow-y: auto;
 }
-
 .mobile-menu.open { left: 0; }
 
 .mobile-menu ul { list-style: none; padding: 0; margin: 0; }
 .mobile-menu li { border-bottom: 1px solid #ddd; }
-.mobile-menu a { display: block; text-decoration: none; color: #1f2937; padding: 15px 20px; font-weight: 500; }
-.chat-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #667eea;
-    color: white;
-    font-size: 22px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 2000;
+.mobile-menu a {
+    display: block;
+    text-decoration: none;
+    color: #1f2937;
+    padding: 15px 20px;
+    font-weight: 500;
 }
-
 </style>
-<style>
-/* Bouton flottant */
-  position: fixed;
-  bottom: 20px;
-  right: 20px; /* changement ici */
-  background: #667eea;
-  color: white;
-  font-size: 22px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 2000;
-}
 
-</style>
 <!-- Styles Panier -->
 <style>
 #cart-popup {
@@ -2733,123 +2728,27 @@ setInterval(() => {
   gtag('config', 'G-6TZ69QHQTY');
 
 </script>
-<!-- Code du chat à coller ici -->
-<div id="miniMessage" title="Chat avec Andu-Xara">💬</div>
-<div id="miniChatWindow"> ... </div>
-<script> ... </script>
-<style> ... </style>
-#miniMessage {
-  position: fixed;
-  right: 20px;
-  bottom: 50%;
-  transform: translateY(50%);
-  background: #667eea;
-  color: white;
-  font-size: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 2000;
-}
-
-#miniChatWindow {
-  position: fixed;
-  right: 80px;
-  bottom: 50%;
-  transform: translateY(50%);
-  width: 300px;
-  max-height: 400px;
-  background: white;
-  border-radius: 10px;
-  display: none;
-  flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 2000;
-  font-family: Arial, sans-serif;
-}
-
-.chat-header {
-  background: #667eea;
-  color: white;
-  padding: 10px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.chat-messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  border-bottom: 1px solid #ddd;
-}
-
-.chat-input-area {
-  display: flex;
-}
-
-.chat-input-area input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 0 0 0 5px;
-}
-
-.chat-input-area button {
-  padding: 8px 12px;
-  border: none;
-  background: #667eea;
-  color: white;
-  cursor: pointer;
-  border-radius: 0 0 5px 0;
-}
-</style>
-
-function sendChatMessage() {
-  const input = document.getElementById("chatInput");
-  const message = input.value.trim();
-  if (!message) return;
-
-  addChatMessage(message, "user");
-  input.value = "";
-
-  setTimeout(() => {
-    const response = generateResponse(message);
-    addChatMessage(response, "bot");
-  }, 800);
-}
-
-function addChatMessage(text, type) {
-  const container = document.getElementById("chatMessages");
-  const msg = document.createElement("div");
-  msg.className = "message " + type;
-  msg.style.margin = "5px 0";
-  msg.style.padding = "5px 8px";
-  msg.style.borderRadius = "6px";
-  msg.style.background = type === "user" ? "#e0e0e0" : "#667eea";
-  msg.style.color = type === "user" ? "black" : "white";
-  msg.innerHTML = text.replace(/\n/g, "<br>");
-  container.appendChild(msg);
-  container.scrollTop = container.scrollHeight;
-}
-
-function generateResponse(msg) {
-  const m = msg.toLowerCase();
-  if (m.includes("bonjour") || m.includes("salut")) return "👋 Bonjour ! Bienvenue chez Andu-Xara.";
-  if (m.includes("prix")) return "💰 T-shirts dès 499 MRU, Ensembles dès 599 MRU.";
-  if (m.includes("taille")) return "📏 Tailles disponibles : S, M, L, XL.";
-  if (m.includes("livraison")) return "🚚 Livraison : Nouakchott 24-48h, autres villes 3-5 jours.";
-  if (m.includes("contact")) return "📞 Contact : +222 49 03 76 97 (WhatsApp dispo).";
-  return "🤖 Merci pour votre message ! Posez-moi une question sur nos produits.";
-}
-</script>
 <!-- ========== FIN CHAT ========== -->
 <!-- Inclusion du chat -->
 <iframe src="miniChat.html" style="all:unset;position:fixed;bottom:0;right:0;width:400px;height:500px;border:none;z-index:3000;"></iframe>
+<footer style="text-align:center; padding:15px; font-size:14px; color:#fff; background:linear-gradient(90deg, #667eea, #764ba2); margin-top:20px; border-radius:8px 8px 0 0;">
+    🚀 Ce site a été créé par l'équipe <strong>Andu-Xara</strong>.<br>
+    💡 Si vous avez des suggestions, n'hésitez pas à nous contacter.<br>
+    🌱 Le site est en évolution, de nouvelles fonctionnalités arriveront bientôt !
+</footer>
 
 </body>
+<button class="menu-toggle">&#9776;</button>
+<div class="menu-overlay"></div>
+<nav class="mobile-menu">
+    <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="blog.html">Blog / Podcast</a></li>
+        <li><a href="acheter.html">Acheter & Offrir</a></li>
+        <li><a href="histoire.html">Notre Histoire</a></li>
+        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+    </ul>
+</nav>
+
 </html>
