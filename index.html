@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="fr">
 <head>
 <style>
@@ -2738,5 +2738,118 @@ setInterval(() => {
 <div id="miniChatWindow"> ... </div>
 <script> ... </script>
 <style> ... </style>
+#miniMessage {
+  position: fixed;
+  right: 20px;
+  bottom: 50%;
+  transform: translateY(50%);
+  background: #667eea;
+  color: white;
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 2000;
+}
+
+#miniChatWindow {
+  position: fixed;
+  right: 80px;
+  bottom: 50%;
+  transform: translateY(50%);
+  width: 300px;
+  max-height: 400px;
+  background: white;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 2000;
+  font-family: Arial, sans-serif;
+}
+
+.chat-header {
+  background: #667eea;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-input-area {
+  display: flex;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 0 0 0 5px;
+}
+
+.chat-input-area button {
+  padding: 8px 12px;
+  border: none;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 0 5px 0;
+}
+</style>
+
+function sendChatMessage() {
+  const input = document.getElementById("chatInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  addChatMessage(message, "user");
+  input.value = "";
+
+  setTimeout(() => {
+    const response = generateResponse(message);
+    addChatMessage(response, "bot");
+  }, 800);
+}
+
+function addChatMessage(text, type) {
+  const container = document.getElementById("chatMessages");
+  const msg = document.createElement("div");
+  msg.className = "message " + type;
+  msg.style.margin = "5px 0";
+  msg.style.padding = "5px 8px";
+  msg.style.borderRadius = "6px";
+  msg.style.background = type === "user" ? "#e0e0e0" : "#667eea";
+  msg.style.color = type === "user" ? "black" : "white";
+  msg.innerHTML = text.replace(/\n/g, "<br>");
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function generateResponse(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes("bonjour") || m.includes("salut")) return "👋 Bonjour ! Bienvenue chez Andu-Xara.";
+  if (m.includes("prix")) return "💰 T-shirts dès 499 MRU, Ensembles dès 599 MRU.";
+  if (m.includes("taille")) return "📏 Tailles disponibles : S, M, L, XL.";
+  if (m.includes("livraison")) return "🚚 Livraison : Nouakchott 24-48h, autres villes 3-5 jours.";
+  if (m.includes("contact")) return "📞 Contact : +222 49 03 76 97 (WhatsApp dispo).";
+  return "🤖 Merci pour votre message ! Posez-moi une question sur nos produits.";
+}
+</script>
+<!-- ========== FIN CHAT ========== -->
+<!-- Inclusion du chat -->
+<iframe src="miniChat.html" style="all:unset;position:fixed;bottom:0;right:0;width:400px;height:500px;border:none;z-index:3000;"></iframe>
+
 </body>
 </html>
