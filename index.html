@@ -1362,34 +1362,6 @@ body {
 }
 
 
-
-    </style>
-<style>
-    /* Fenêtre du chat (réduite et masquée par défaut) */
-    .chat-box {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 280px;           /* largeur réduite */
-        max-height: 350px;      /* hauteur réduite */
-        background: #222;
-        color: white;
-        border-radius: 12px;
-        display: none;          /* masquée au départ */
-        flex-direction: column;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        z-index: 1000;
-        overflow: hidden;
-    }
-
-    /* Zone des messages */
-    .chat-messages {
-        padding: 10px;
-        flex: 1;
-        overflow-y: auto;       /* permet de scroller si trop de messages */
-        font-size: 14px;
-    }
-</style>
 <!-- MENU GLOBAL -->
 <button class="menu-toggle">☰</button>
 <div class="menu-overlay"></div>
@@ -1471,57 +1443,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     z-index: 2000;
 }
 
-.chat-box {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 300px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 2000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.chat-header {
-    background: #667eea;
-    color: white;
-    padding: 10px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.chat-messages {
-    height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.chat-input-area {
-    display: flex;
-    padding: 5px;
-}
-
-.chat-input-area input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-}
-
-.chat-input-area button {
-    padding: 8px 12px;
-    border: none;
-    background: #667eea;
-    color: white;
-    cursor: pointer;
-    border-radius: 0 5px 5px 0;
-}
-
 </style>
 <style>
 /* Bouton flottant */
@@ -1542,20 +1463,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
   z-index: 2000;
 }
 
-/* Fenêtre de chat */
-.chat-box {
-  position: fixed;
-  bottom: 80px;
-  right: 20px; /* changement ici */
-  width: 300px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 2000;
-}
 </style>
 <!-- Styles Panier -->
 <style>
@@ -1605,7 +1512,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 </div>
 
 </style>
-<body>
 <!-- ===== HTML Code Promo ===== -->
 <div class="reduction-section">
     <input type="text" id="promoInput" placeholder="Entrez votre code">
@@ -2116,8 +2022,6 @@ const db = getDatabase(app);
 </ul>
 
   </div>
-</footer>
-
     </footer>
 
     <script>
@@ -2411,115 +2315,7 @@ function subscribeNewsletter() {
     }
 }
 
-// ===== CHAT WHATSAPP INTELLIGENT =====
-function initChat() {
-    document.querySelector('.chat-header').addEventListener('click', function(e) {
-        if (e.target.classList.contains('chat-toggle')) {
-            toggleChat();
-        }
-    });
-}
 
-function toggleChat() {
-    const chat = document.getElementById('whatsappChat');
-    chat.classList.toggle('open');
-    const toggleBtn = chat.querySelector('.chat-toggle');
-    toggleBtn.textContent = chat.classList.contains('open') ? '▼' : '▲';
-}
-
-function handleChatInput(event) {
-    if (event.key === 'Enter') {
-        sendChatMessage();
-    }
-}
-
-function sendChatMessage() {
-    const input = document.getElementById('chatInput');
-    const message = input.value.trim();
-    
-    if (message) {
-        addChatMessage(message, 'user');
-        input.value = '';
-        
-        setTimeout(() => {
-            const response = generateIntelligentResponse(message);
-            addChatMessage(response, 'bot');
-        }, 1000);
-    }
-}
-
-function generateIntelligentResponse(userMessage) {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello')) {
-        return "👋 Bonjour ! Je suis ravi de vous aider. De quoi avez-vous besoin aujourd'hui ?";
-    }
-    
-    if (lowerMessage.includes('merci') || lowerMessage.includes('remercie')) {
-        return "😊 Je vous en prie ! N'hésitez pas si vous avez d'autres questions.";
-    }
-    
-    if (lowerMessage.includes('commande') || lowerMessage.includes('acheter') || lowerMessage.includes('achat')) {
-        return "🛒 Excellent choix ! Pour passer commande, vous pouvez :\n• Ajouter les articles au panier\n• Nous contacter directement sur WhatsApp\n• Profiter de nos promotions en cours 🎉";
-    }
-    
-    if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
-        return "🚚 Nous livrons partout en Mauritanie !\nDélais :\n• Nouakchott : 24-48h\n• Autres villes : 3-5 jours\n• Livraison gratuite à partir de 1000 Mru";
-    }
-    
-    if (lowerMessage.includes('taille') || lowerMessage.includes('tailles') || lowerMessage.includes('size')) {
-        return "📏 Nos tailles :\n• S (Small)\n• M (Medium)\n• L (Large)\n• XL (Extra Large)\nBesoin d'aide pour choisir ? Dites-moi votre morphologie !";
-    }
-    
-    if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
-        return "💰 Nos prix sont très compétitifs !\n• T-shirts : à partir de 499 Mru\n• Ensembles : à partir de 599 Mru\n• Enfants : à partir de 399 Mru\nPromotions en cours : -30% 🎉";
-    }
-    
-    if (lowerMessage.includes('couleur') || lowerMessage.includes('couleurs') || lowerMessage.includes('color')) {
-        return "🎨 Nous avons une large gamme de couleurs :\n• Noir, Blanc, Bleu, Rouge\n• Vert, Jaune, Orange\n• Et bien d'autres !\nQuelle couleur vous intéresse ?";
-    }
-    
-    if (lowerMessage.includes('promo') || lowerMessage.includes('réduction') || lowerMessage.includes('solde')) {
-        return "🎉 PROMOTION EXCEPTIONNELLE !\n30% de réduction sur tout le catalogue\nValable jusqu'au 31 Décembre 2025\nProfitez-en vite ! 🚀";
-    }
-    
-    if (lowerMessage.includes('contact') || lowerMessage.includes('appeler') || lowerMessage.includes('whatsapp')) {
-        return "📞 Contactez-nous :\n• Tel: +222 49 03 76 97\n• WhatsApp: +222 49 03 76 97\n• Email: anduxara2408@gmail.com\nNous sommes disponibles 7j/7 !";
-    }
-    
-    if (lowerMessage.includes('qualité') || lowerMessage.includes('matière') || lowerMessage.includes('coton')) {
-        return "⭐ Nos produits sont de qualité premium :\n• 100% coton égyptien\n• Coutures renforcées\n• Teintures résistantes\n• Lavage en machine possible";
-    }
-    
-    const defaultResponses = [
-        "🤔 Je comprends votre demande. Pouvez-vous me donner plus de détails pour que je puisse mieux vous aider ?",
-        "💡 Je serais ravi de vous aider ! De quoi avez-vous besoin précisément ?",
-        "👕 Concernant nos produits Andu-Xara, je peux vous renseigner sur :\n• Les tailles disponibles\n• Les matériaux utilisés\n• Les délais de livraison\n• Les promotions en cours\nQue vous intéresse-t-il ?",
-        "🚀 Excellent ! Pour une assistance personnalisée, je vous recommande de contacter directement notre équipe sur WhatsApp. Ils pourront vous aider en temps réel !",
-        "😊 Merci pour votre message ! Notre équipe est là pour vous aider. Souhaitez-vous des informations sur un produit particulier ?"
-    ];
-    
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
-}
-
-function addChatMessage(text, type) {
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message ' + type;
-    
-    const formattedText = text.replace(/\n/g, '<br>');
-    messageDiv.innerHTML = formattedText;
-    
-    messagesContainer.appendChild(messageDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-function openWhatsApp() {
-    const phoneNumber = "22249037697";
-    const message = "Bonjour, je suis intéressé par vos produits Andu-Xara. Pouvez-vous m'aider ?";
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
 
 // ===== RECHERCHE =====
 document.getElementById('search-input').addEventListener('input', function() {
@@ -2715,16 +2511,6 @@ function checkout() {
         document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
         document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
     }, 1000);
-</script>
-<!-- Section Légale -->
-<section class="legal-section">
-    <h2>Informations Légales</h2>
-    <ul>
-        <li><a href="#">Conditions Générales de Vente et Utilisation</a></li>
-        <li><a href="#">Mentions légales</a></li>
-        <li><a href="#">Politique de confidentialité</a></li>
-        <li><a href="#">Suivi de livraison</a></li>
-    </ul>
 </section>
 <script>
 function toggleLegal(id) {
@@ -2734,50 +2520,6 @@ function toggleLegal(id) {
   });
   // afficher seulement celui cliqué
   document.getElementById(id).style.display = "block";
-}
-</script>
-<!-- Modal Conditions Générales -->
-<div id="modal-cgv" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal-cgv')">&times;</span>
-    <h2>Conditions Générales de Vente et Utilisation</h2>
-    <p>Ici le texte complet de vos CGV...</p>
-  </div>
-</div>
-
-<!-- Modal Mentions légales -->
-<div id="modal-mentions" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal-mentions')">&times;</span>
-    <h2>Mentions légales</h2>
-    <p>Texte des mentions légales...</p>
-  </div>
-</div>
-
-<!-- Modal Politique de confidentialité -->
-<div id="modal-confidentialite" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal-confidentialite')">&times;</span>
-    <h2>Politique de confidentialité</h2>
-    <p>Texte de la politique de confidentialité...</p>
-  </div>
-</div>
-
-<!-- Modal Suivi de livraison -->
-<div id="modal-suivi" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal-suivi')">&times;</span>
-    <h2>Suivi de livraison</h2>
-    <p>Texte du suivi de livraison...</p>
-  </div>
-</div>
-<script>
-function openModal(id) {
-  document.getElementById(id).style.display = "block";
-}
-
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
 }
 </script>
 <!-- Fenêtre popup d'abonnement -->
@@ -2817,98 +2559,12 @@ function closeModal(id) {
     }
   
 };
-</script>
-
-</html>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        updateCartCounter();  // met à jour le compteur au chargement
-        initCartFunctionality(); // active l'écouteur sur l'icône
-    });
-</script>
-<script src="js/ton-fichier.js"></script>
-<!-- Chat Button -->
-<div id="smartChat">
-  <div id="smartChatHeader">💬 Chat avec Andu-Xara</div>
-  <div id="smartChatMessages"></div>
-  <div id="smartChatInputArea">
-    <input type="text" id="smartChatInput" placeholder="Écris ton message...">
-    <button id="smartChatSend">Envoyer</button>
-  </div>
-</div>
-
-<style>
-#smartChat { 
-  position: fixed; bottom: 20px; right: 20px; 
-  width: 350px; max-height: 500px; 
-  background: white; border-radius: 12px; 
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-  display: flex; flex-direction: column;
-  font-family: 'Segoe UI', sans-serif;
-}
-#smartChatHeader { background: #667eea; color: white; padding: 12px; text-align: center; font-weight: bold; border-radius: 12px 12px 0 0; }
-#smartChatMessages { flex: 1; padding: 10px; overflow-y: auto; background: #f9f9f9; }
-.smartMessage { margin: 5px 0; padding: 10px 14px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
-.smartMessage.user { background: #667eea; color: white; align-self: flex-end; }
-.smartMessage.bot { background: #e2e8f0; color: #1f2937; align-self: flex-start; }
-#smartChatInputArea { display: flex; border-top: 1px solid #ddd; }
-#smartChatInput { flex: 1; padding: 10px; border: none; outline: none; font-size: 0.95em; border-radius: 0; }
-#smartChatSend { background: #667eea; color: white; border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; }
-#smartChatSend:hover { background: #556cd6; }
-</style>
-
-<script>
-// Variables
-const chatInput = document.getElementById("smartChatInput");
-const chatSend = document.getElementById("smartChatSend");
-const chatMessages = document.getElementById("smartChatMessages");
-
-// Réponses prédéfinies
-const replies = {
-  "bonjour": "Bonjour 👋 ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider aujourd'hui ?",
-  "salut": "Salut ! Je suis là pour répondre à toutes vos questions sur nos produits et services.",
-  "commande": "Combien de commandes souhaitez-vous passer ? Nous livrons partout en Afrique.",
-  "livraison": "Nous livrons partout en Afrique. Pour la Mauritanie, nous utilisons Bankily et Masrvi ; au Sénégal, Wave et Orange Money ; pour les autres pays, des virements bancaires sont possibles.",
-  "paiement": "Nous acceptons les paiements par Bankily, Masrvi, Wave, Orange Money et virements bancaires selon votre pays.",
-  "merci": "Avec plaisir ! N'hésitez pas si vous avez d'autres questions.",
-  "retour": "Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact."
-};
-<!-- ================= CHAT ================= -->
-<script>
-// Fonction ajouter message
-function addMessage(text, sender){
-  const msg = document.createElement("div");
-  msg.classList.add("smartMessage", sender);
-  msg.textContent = text;
-  chatMessages.appendChild(msg);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Envoyer message
-function sendMessage(){
-  const text = chatInput.value.trim().toLowerCase();
-  if(!text) return;
-  addMessage(text, "user");
-  chatInput.value = "";
-
-  // Réponse simulée
-  let reply = "Désolé, je n'ai pas compris. Pouvez-vous reformuler ?";
-  for(const key in replies){
-      if(text.includes(key)){
-          reply = replies[key];
-          break;
-      }
-  }
-  addMessage(reply, "bot");
-}
-
-// Événements
-chatSend.addEventListener("click", sendMessage);
-chatInput.addEventListener("keypress", (e) => { 
-  if(e.key === "Enter") sendMessage(); 
+document.addEventListener("DOMContentLoaded", function() {
+    updateCartCounter();  // met à jour le compteur au chargement
+    initCartFunctionality(); // active l'écouteur sur l'icône
 });
 </script>
-
 
 <!-- ================= PANIER ================= -->
 <script>
@@ -2975,15 +2631,6 @@ function passerCommande(){
   let url = "https://wa.me/22249037697?text=" + encodeURIComponent(message);
   window.open(url, "_blank");
 }
-</script>
-<!-- Section Chat -->
-<div id="chatMessages"></div>
-<input id="chatInput" type="text">
-<button id="chatSend">Envoyer</button>
-
-<script>
-chatSend.addEventListener("click", sendMessage);
-chatInput.addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
 </script>
 <!-- Fenêtre Lightbox -->
 <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:3000;">
@@ -3084,6 +2731,12 @@ setInterval(() => {
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-6TZ69QHQTY');
+
 </script>
+<!-- Code du chat à coller ici -->
+<div id="miniMessage" title="Chat avec Andu-Xara">💬</div>
+<div id="miniChatWindow"> ... </div>
+<script> ... </script>
+<style> ... </style>
 </body>
 </html>
