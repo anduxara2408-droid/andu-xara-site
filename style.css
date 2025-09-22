@@ -1,4 +1,6 @@
-/* Styles pour la page panier */
+/* ===========================
+   Styles pour la page panier
+   =========================== */
 .cart-item {
     border: 1px solid #ddd;
     padding: 15px;
@@ -27,7 +29,9 @@
     margin-right: 10px;
 }
 
-/* Style pour le bouton WhatsApp */
+/* ===========================
+   Style pour le bouton WhatsApp
+   =========================== */
 button.whatsapp-btn {
     background-color: #25D366;
     color: white;
@@ -39,7 +43,10 @@ button.whatsapp-btn:hover {
     background-color: #128C7E;
     cursor: pointer;
 }
-/* ===== NOTIFICATIONS MODERNES ===== */
+
+/* ===========================
+   NOTIFICATIONS MODERNES
+   =========================== */
 .notification {
     position: fixed;
     top: 20px;
@@ -76,4 +83,89 @@ button.whatsapp-btn:hover {
 
 .notification-icon {
     font-size: 1.2rem;
+}
+
+/* ===========================
+   Grille responsive pour produits
+   =========================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    justify-items: center;
+}
+
+/* ===========================
+   Carte produit
+   =========================== */
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===========================
+   Conteneur image produit
+   =========================== */
+.product-image-container {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===========================
+   Image produit
+   =========================== */
+.product-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===========================
+   Infos produit
+   =========================== */
+.product-info {
+    padding: 10px;
+    text-align: center;
+}
+
+/* ===========================
+   Prix
+   =========================== */
+.old-price {
+    color: red;
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.promo-price {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* ===========================
+   Boutons actions produit
+   =========================== */
+.product-actions button {
+    margin: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+/* ===========================
+   Responsive mobile
+   =========================== */
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
 }
