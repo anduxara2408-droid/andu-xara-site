@@ -1475,6 +1475,12 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     </ul>
 </nav>
 
+
+<!-- Compteur utilisateurs en ligne -->
+<div id="userOnline" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 5px 12px; border-radius: 5px; z-index:1000;">
+  👥 Utilisateurs en ligne: <span id="userCount">0</span>
+</div>
+
 <!-- Styles Panier -->
 <style>
 #cart-popup {
@@ -1504,25 +1510,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 }
 </style>
 </head>
-<!-- Bouton Panier avec compteur -->
-<button onclick="openCart()" 
-        style="position:fixed; top:20px; right:20px; background:#222; color:#fff;
-               padding:10px 15px; border:none; border-radius:8px; cursor:pointer; z-index:2100;">
-  🛒 Panier (<span id="cart-count">0</span>)
-</button>
-
-<!-- Section Panier -->
-<div id="cart-popup">
-  <div class="cart-content">
-    <h2>🛒 Mon Panier</h2>
-    <ul id="cart-items"></ul>
-    <p>Total : <span id="cart-total">0</span> MRU</p>
-    <button onclick="passerCommande()" style="background:green; color:white;">📲 Commander via WhatsApp</button>
-    <button onclick="closeCart()" style="background:red; color:white;">❌ Fermer</button>
-  </div>
-</div>
-
-</style>
 <!-- ===== HTML Code Promo ===== -->
 <div class="reduction-section">
     <input type="text" id="promoInput" placeholder="Entrez votre code">
@@ -1530,57 +1517,9 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     <p id="promoMessage" style="color: green; margin-top: 10px;"></p>
 </div>
 
-<div id="userOnline" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; animation: blink 1s infinite;">
+<div id="userOnline" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 5px 12px; bor>
   👥 Utilisateurs en ligne: <span id="userCount">0</span>
 </div>
-
-<script type="module">
-  // 1️⃣ Import Firebase App et Realtime Database
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
-
-  // 2️⃣ Config Firebase (ajoute databaseURL)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
-    authDomain: "andu-xara-2fc48.firebaseapp.com",
-    databaseURL: "https://andu-xara-2fc48-default-rtdb.europe-west1.firebasedatabase.app", // OBLIGATOIRE pour Realtime DB
-    projectId: "andu-xara-2fc48",
-    storageBucket: "andu-xara-2fc48.firebasestorage.app",
-    messagingSenderId: "873034669698",
-    appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
-  };
-
-// 3️⃣ Initialiser Firebase
-const app = initializeApp(firebaseConfig);
-
-// 4️⃣ Initialiser Realtime Database
-const db = getDatabase(app);
-
-  // 4️⃣ Gestion des utilisateurs en ligne
-  const userId = Date.now(); // ID unique par visiteur
-  const userRef = ref(db, 'onlineUsers/' + userId);
-
-  set(userRef, { timestamp: serverTimestamp() });
-  onDisconnect(userRef).remove(); // supprime quand l'utilisateur quitte
-
-  const onlineRef = ref(db, 'onlineUsers');
-  onValue(onlineRef, (snapshot) => {
-    const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-    document.getElementById('userCount').innerText = count;
-  });
-<!-- MENU GLOBAL -->
-<button class="menu-toggle">☰</button>
-<div class="menu-overlay"></div>
-<nav class="mobile-menu">
-    <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="blog.html">Blog / Podcast</a></li>
-        <li><a href="acheter.html">Acheter & Offrir</a></li>
-        <li><a href="histoire.html">Notre Histoire</a></li>
-        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-    </ul>
-</nav>
 
 </script>
 <style>
@@ -1674,11 +1613,6 @@ const db = getDatabase(app);
         </div>
 <div class="products-grid" id="products-container">
 
-<!-- Icône Panier -->
-<div id="cart-icon" onclick="toggleCart()">
-  🛒 <span id="cart-count">0</span>
-</div>
-
 <style>
 #cart-icon {
   position: fixed;
@@ -1699,177 +1633,211 @@ const db = getDatabase(app);
   margin-left: 5px;
 }
 </style>
-
-<section class="product-grid">
-  <!-- Produit 1 -->
-  <div class="product-card" data-category="t-shirts">
-    <div class="product-image-container">
-      <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
+<!-- Produit 1 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt logo arabe</h3>
+    <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="S">S</button>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
+      <button class="variation-btn" data-size="XL">XL</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">T-shirt logo arabe</h3>
-      <p class="product-description">T-shirt coton premium avec logo arabe design exclusif</p>
-      <p class="product-price">
-        <span class="old-price">499 MRU</span>
-        <span class="promo-price">349 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499, 349)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">499 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">349 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('T-shirt logo arabe', 499, 349)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 2 -->
-  <div class="product-card" data-category="ensembles">
-    <div class="product-image-container">
-      <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble capuche style arabe" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+<!-- Produit 2 -->
+<div class="product-card" data-category="ensembles">
+  <div class="product-image-container">
+    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Ensemble capuche style arabe</h3>
+    <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
+      <button class="variation-btn" data-size="XL">XL</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">Ensemble capuche style arabe</h3>
-      <p class="product-description">Ensemble complet premium avec capuchon style arabe</p>
-      <p class="product-price">
-        <span class="old-price">599 MRU</span>
-        <span class="promo-price">419 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 599, 419)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">599 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">419 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('Ensemble capuche style arabe', 599, 419)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 3 -->
-  <div class="product-card" data-category="ensembles">
-    <div class="product-image-container">
-      <img src="images/combinaison.jpeg" alt="Combinaison T-shirt et Capuche" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+<!-- Produit 3 -->
+<div class="product-card" data-category="ensembles">
+  <div class="product-image-container">
+    <img src="images/combinaison.jpeg" alt="Combinaison T-shirt et Capuche" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
+    <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="S">S</button>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
-      <p class="product-description">T-shirt coton et Capuche Bleu - Confort garanti</p>
-      <p class="product-price">
-        <span class="old-price">599 MRU</span>
-        <span class="promo-price">419 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 599, 419)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">599 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">419 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('Combinaison T-shirt et Capuche', 599, 419)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 4 -->
-  <div class="product-card" data-category="enfants">
-    <div class="product-image-container">
-      <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+<!-- Produit 4 -->
+<div class="product-card" data-category="enfants">
+  <div class="product-image-container">
+    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt Enfant</h3>
+    <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
+    <div class="product-variations">
+      <span>Âge:</span>
+      <button class="variation-btn" data-size="3-5ans">3-5 ans</button>
+      <button class="variation-btn" data-size="6-8ans">6-8 ans</button>
+      <button class="variation-btn" data-size="9-12ans">9-12 ans</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">T-shirt Enfant</h3>
-      <p class="product-description">T-shirt coton confortable pour enfants - Qualité premium</p>
-      <p class="product-price">
-        <span class="old-price">399 MRU</span>
-        <span class="promo-price">279 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 399, 279)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">399 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">279 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('T-shirt Enfant', 399, 279)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 5 -->
-  <div class="product-card" data-category="ensembles">
-    <div class="product-image-container">
-      <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble T-shirt et jogging" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+<!-- Produit 5 -->
+<div class="product-card" data-category="ensembles">
+  <div class="product-image-container">
+    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble T-shirt et jogging" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Ensemble T-shirt et jogging</h3>
+    <p class="product-description">Ensemble coton premium - Style décontracté</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="S">S</button>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
+      <button class="variation-btn" data-size="XL">XL</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">Ensemble T-shirt et jogging</h3>
-      <p class="product-description">Ensemble coton premium - Style décontracté</p>
-      <p class="product-price">
-        <span class="old-price">799 MRU</span>
-        <span class="promo-price">559 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 799, 559)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">799 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">559 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('Ensemble T-shirt et jogging', 799, 559)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 6 -->
-  <div class="product-card" data-category="t-shirts">
-    <div class="product-image-container">
-      <img src="images/pull-bleu.jpeg" alt="Pull bleu" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+<!-- Produit 6 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/pull-bleu.jpeg" alt="Pull bleu Andu-Xara" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Pull bleu</h3>
+    <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
+      <button class="variation-btn" data-size="XL">XL</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">Pull bleu</h3>
-      <p class="product-description">Pull chaud et confortable de couleur bleue - Hiver 2025</p>
-      <p class="product-price">
-        <span class="old-price">699 MRU</span>
-        <span class="promo-price">489 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('Pull bleu', 699, 489)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">699 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">489 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('Pull bleu', 699, 489)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 7 -->
-  <div class="product-card" data-category="accessoires">
-    <div class="product-image-container">
-      <img src="images/capuchon-blanc.jpeg" alt="Capuchon blanc" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+<!-- Produit 7 -->
+<div class="product-card" data-category="accessoires">
+  <div class="product-image-container">
+    <img src="images/capuchon-blanc.jpeg" alt="Capuchon blanc Andu-Xara" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Capuchon blanc</h3>
+    <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="Unique">Unique</button>
     </div>
-    <div class="product-info">
-      <h3 class="product-title">Capuchon blanc</h3>
-      <p class="product-description">Capuchon style urbain en couleur blanche - Adjustable</p>
-      <p class="product-price">
-        <span class="old-price">299 MRU</span>
-        <span class="promo-price">209 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 299, 209)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">299 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">209 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('Capuchon blanc', 299, 209)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
     </div>
   </div>
+</div>
 
-  <!-- Produit 8 -->
-  <div class="product-card" data-category="ensembles">
-    <div class="product-image-container">
-      <img src="images/t-shirt-et-jogging.jpeg" alt="T-shirt et jogging" class="product-img">
-      <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
-    </div>
-    <div class="product-info">
-      <h3 class="product-title">T-shirt et jogging</h3>
-      <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
-      <p class="product-price">
-        <span class="old-price">899 MRU</span>
-        <span class="promo-price">629 MRU</span>
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 899, 629)">Ajouter au panier</button>
-        <button class="quick-view">👁️</button>
-      </div>
-    </div>
+<!-- Produit 8 -->
+<div class="product-card" data-category="ensembles">
+  <div class="product-image-container">
+    <img src="images/t-shirt-et-jogging.jpeg" alt="T-shirt et jogging complet" class="product-image">
+    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
   </div>
-</section>
-
-<!-- ===== Section Panier ===== -->
-<div id="cart-popup" style="display:none;">
-  <div class="cart-content">
-    <h2>🛒 Mon Panier</h2>
-    <ul id="cart-items"></ul>
-    <p>Total : <span id="cart-total">0</span> MRU</p>
-    <button onclick="validerPanier()">📲 Commander via WhatsApp</button>
-    <button onclick="toggleCart()">❌ Fermer</button>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt et jogging Complet</h3>
+    <p class="product-description">Ensemble complet T-shirt et jogging assorti - Édition limitée</p>
+    <div class="product-variations">
+      <span>Taille:</span>
+      <button class="variation-btn" data-size="S">S</button>
+      <button class="variation-btn" data-size="M">M</button>
+      <button class="variation-btn" data-size="L">L</button>
+    </div>
+    <p class="product-price">
+      <span class="old-price" style="text-decoration: line-through; color:red;">899 MRU</span>
+      <span class="promo-price" style="font-weight:bold;">629 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart-btn" onclick="addToCart('T-shirt et jogging Complet', 899, 629)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
   </div>
 </div>
 
@@ -2066,11 +2034,51 @@ function initCartFunctionality() {
 // ===== MODAL DU PANIER =====
 function showCartModal() {
     console.log('Ouverture du panier');
-
+    
     // Créer le modal s'il n'existe pas
     let cartModal = document.getElementById('cart-modal');
-
-
+    
+    if (!cartModal) {
+        cartModal = document.createElement('div');
+        cartModal.id = 'cart-modal';
+        cartModal.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            z-index: 10001;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        `;
+        
+        // Overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'cart-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+        `;
+        overlay.onclick = closeCartModal;
+        
+        document.body.appendChild(overlay);
+        document.body.appendChild(cartModal);
+    }
+    
+    // Mettre à jour le contenu du panier
+    updateCartModalContent();
+    cartModal.style.display = 'block';
+    document.getElementById('cart-overlay').style.display = 'block';
 }
 
 function closeCartModal() {
@@ -2156,46 +2164,43 @@ function updateCartModalContent() {
         `;
     });
     
-html += `
-    <div style="border-top: 2px solid #6a11cb; padding-top: 15px; margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
-            <span>Total:</span>
-            <span>${total} Mru</span>
+    html += `
+        <div style="border-top: 2px solid #6a11cb; padding-top: 15px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
+                <span>Total:</span>
+                <span>${total} Mru</span>
+            </div>
+            <button onclick="checkout()" style="
+                width: 100%;
+                padding: 15px;
+                background: #25D366;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 15px;
+            ">
+                🛍️ Commander via WhatsApp
+            </button>
+            <button onclick="closeCartModal()" style="
+                width: 100%;
+                padding: 10px;
+                background: #f1f3f5;
+                color: #666;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-top: 10px;
+            ">
+                Continuer mes achats
+            </button>
         </div>
-
-        <button onclick="checkout()" style="
-            width: 100%;
-            padding: 15px;
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        ">
-            🛍️ Commander via WhatsApp
-        </button>
-
-        <button onclick="closeCartModal()" style="
-            width: 100%;
-            padding: 10px;
-            background: #f1f3f5;
-            color: #666;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-        ">
-            Continuer mes achats
-        </button>
-    </div>
-`;
+    `;
     
     cartModal.innerHTML = html;
 }
-
 function removeFromCart(index) {
     let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     cartItems.splice(index, 1);
@@ -2728,18 +2733,160 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     });
 });
 </script>
+<!-- Bouton Panier -->
+<button id="cart-button" style="position:fixed; top:20px; right:20px; z-index:1000; padding:10px 15px; background:#222; color:#fff; border:none; border-radius:8px; cursor:pointer;">
+  🛒 Panier (<span id="cart-count">0</span>)
+</button>
+
+<!-- Panier -->
+<div id="cart-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:999;">
+  <div style="background:#fff; padding:20px; border-radius:10px; width:90%; max-width:400px; max-height:80%; overflow-y:auto; position:relative;">
+    <h2>🛒 Mon Panier</h2>
+    <ul id="cart-items" style="list-style:none; padding:0; margin:0 0 10px 0;"></ul>
+    <p>Total : <span id="cart-total">0</span> MRU</p>
+    <button onclick="passerCommande()" style="background:green; color:white; padding:8px 12px; border:none; border-radius:5px; margin-right:10px;">📲 Commander via WhatsApp</button>
+    <button onclick="closeCart()" style="background:red; color:white; padding:8px 12px; border:none; border-radius:5px;">❌ Fermer</button>
+  </div>
+</div>
+
+<script>
+let cart = [];
+
+// Ouvrir/fermer le panier
+document.getElementById('cart-button').addEventListener('click', () => {
+    document.getElementById('cart-popup').style.display = 'flex';
+});
+function closeCart() {
+    document.getElementById('cart-popup').style.display = 'none';
+}
+
+// Ajouter au panier
+function addToCart(name, oldPrice, promoPrice) {
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({ name, oldPrice, promoPrice, quantity: 1 });
+    }
+    renderCart();
+}
+
+// Retirer un produit
+function removeItem(name) {
+    cart = cart.filter(item => item.name !== name);
+    renderCart();
+}
+
+// Afficher le panier
+function renderCart() {
+    const list = document.getElementById('cart-items');
+    list.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.promoPrice * item.quantity;
+
+        const li = document.createElement('li');
+        li.style.marginBottom = '10px';
+        li.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${item.name}</strong> x ${item.quantity}<br>
+              <span style="text-decoration: line-through; color:red;">${item.oldPrice} MRU</span>
+              <span style="font-weight:bold;"> ${item.promoPrice} MRU</span>
+            </div>
+            <button onclick="removeItem('${item.name}')" style="background:none; border:none; color:red; cursor:pointer;">❌</button>
+          </div>
+        `;
+        list.appendChild(li);
+    });
+
+    document.getElementById('cart-total').innerText = total;
+    document.getElementById('cart-count').innerText = cart.reduce((a,b)=>a+b.quantity,0);
+}
+
+// Commander via WhatsApp
+function passerCommande() {
+    if(cart.length === 0) {
+        alert("Votre panier est vide !");
+        return;
+    }
+    let message = "Bonjour, je souhaite commander :%0A";
+    cart.forEach(item => {
+        message += `${item.name} x${item.quantity} - ${item.promoPrice} MRU chacun%0A`;
+    });
+    message += `Total : ${cart.reduce((a,b)=>a+b.promoPrice*b.quantity,0)} MRU`;
+    window.open("https://wa.me/22249037697?text="+message, "_blank");
+}
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+  // 🔹 Configuration Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
+    authDomain: "andu-xara-2fc48.firebaseapp.com",
+    databaseURL: "https://andu-xara-2fc48-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "andu-xara-2fc48",
+    storageBucket: "andu-xara-2fc48.firebasestorage.app",
+    messagingSenderId: "873034669698",
+    appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // 🔹 Gestion des utilisateurs en ligne
+  const userId = Date.now(); // ID unique pour cet utilisateur
+  const userRef = ref(db, 'onlineUsers/' + userId);
+
+  set(userRef, { timestamp: serverTimestamp() }); // marque l'utilisateur en ligne
+  onDisconnect(userRef).remove(); // supprime automatiquement à la déconnexion
+
+  // 🔹 Mettre à jour le compteur en direct
+  const onlineRef = ref(db, 'onlineUsers');
+  onValue(onlineRef, (snapshot) => {
+    const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+    document.getElementById('userCount').innerText = count;
+  });
+</script>
+<script>
+const now = new Date();
+const targetDate = new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000);
+
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minutesEl = document.getElementById('minutes');
+const secondsEl = document.getElementById('seconds');
+
+function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if(diff <= 0){
+        daysEl.innerText = '00';
+        hoursEl.innerText = '00';
+        minutesEl.innerText = '00';
+        secondsEl.innerText = '00';
+        clearInterval(interval);
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    daysEl.innerText = String(days).padStart(2, '0');
+    hoursEl.innerText = String(hours).padStart(2, '0');
+    minutesEl.innerText = String(minutes).padStart(2, '0');
+    secondsEl.innerText = String(seconds).padStart(2, '0');
+}
+
+const interval = setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
 
 </body>
-<button class="menu-toggle">&#9776;</button>
-<div class="menu-overlay"></div>
-<nav class="mobile-menu">
-    <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="blog.html">Blog / Podcast</a></li>
-        <li><a href="acheter.html">Acheter & Offrir</a></li>
-        <li><a href="histoire.html">Notre Histoire</a></li>
-        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-    </ul>
-</nav>
 </html>
