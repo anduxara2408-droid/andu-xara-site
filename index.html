@@ -16,6 +16,66 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
+/* Bouton menu */
+.menu-toggle {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+}
+
+/* Overlay gris derrière */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+/* Menu latéral */
+.mobile-menu {
+  position: fixed;
+  top: 0; left: -250px;
+  width: 250px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+  transition: left 0.3s ease;
+  z-index: 1002;
+  padding-top: 60px;
+}
+
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-menu li {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.mobile-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
 #soninke-badge-left {
     position: fixed;
     bottom: 40px;
@@ -1510,7 +1570,21 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     <button onclick="closeCart()" style="background:red; color:white;">❌ Fermer</button>
   </div>
 </div>
-
+<!-- ===== HEADER / MENU ===== -->
+<header>
+  <button class="menu-toggle">☰</button>
+  <div class="menu-overlay"></div>
+  <nav class="mobile-menu">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="blog.html">Blog / Podcast</a></li>
+      <li><a href="acheter.html">Acheter & Offrir</a></li>
+      <li><a href="histoire.html">Notre Histoire</a></li>
+      <li><a href="reductions.html">Réductions & Cadeaux</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+</header>
 </style>
 <!-- ===== HTML Code Promo ===== -->
 <div class="reduction-section">
@@ -1617,7 +1691,6 @@ const db = getDatabase(app);
             </div>
         </div>
     </header>
-
     <main class="container">
         <div class="search-bar">
             <input type="text" placeholder="🔍 Rechercher un produit..." id="search-input" aria-label="Rechercher un produit">
@@ -1898,8 +1971,6 @@ const db = getDatabase(app);
     </div>
   </div>
 </div>
-
-
 <!-- ===== Section Panier ===== -->
 <div id="cart-popup" style="display:none;">
   <div class="cart-content">
@@ -1910,7 +1981,6 @@ const db = getDatabase(app);
     <button onclick="toggleCart()">❌ Fermer</button>
   </div>
 </div>
-
 <!-- Section FAQ -->
 <section id="faq" class="faq-section">
   <h2>Foire aux Questions (FAQ)</h2>
@@ -2738,5 +2808,71 @@ setInterval(() => {
 <div id="miniChatWindow"> ... </div>
 <script> ... </script>
 <style> ... </style>
+<script>
+  const toggleBtn = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".mobile-menu");
+  const overlay = document.querySelector(".menu-overlay");
+
+  toggleBtn.addEventListener("click", () => {
+    menu.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    menu.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+<section id="promo">
+  <h2>🎉 Promotion spéciale se termine bientôt !</h2>
+  <p id="countdown"></p>
+</section>
+
+<script>
+// Vérifier si une date de fin est déjà enregistrée
+let endDate = localStorage.getItem("promoEndDate");
+
+if (!endDate) {
+  // Si non, on définit une nouvelle date de fin (10 jours à partir de maintenant)
+  const now = new Date();
+  now.setDate(now.getDate() + 10); // +10 jours
+  endDate = now.getTime(); // en millisecondes
+  localStorage.setItem("promoEndDate", endDate);
+} else {
+  // Si oui, on récupère la date sauvegardée
+  endDate = parseInt(endDate);
+}
+
+// Fonction de mise à jour du compte à rebours
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = endDate - now;
+
+  if (distance <= 0) {
+    document.getElementById("countdown").innerHTML = "⏰ Promotion terminée !";
+    clearInterval(interval);
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+    days + "j " + hours + "h " + minutes + "m " + seconds + "s ";
+}
+
+// Mettre à jour chaque seconde
+const interval = setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
+<footer style="text-align: center; padding: 20px; font-size: 14px; color: #555;">
+  <p>
+    Ce site est une création <strong>inéluctable</strong> de l’équipe <span style="color:#c0392b;">Andu-Xara</span>.  
+    Toute reproduction est interdite.
+  </p>
+</footer>
+
 </body>
 </html>
