@@ -1,164 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Réductions & Cadeaux - Andu-Xara</title>
-<style>
-body { font-family: Arial, sans-serif; background:#f9f9f9; margin:0; padding:0; }
-.container { max-width:900px; margin:auto; padding:20px; }
-h1 { color:#6a11cb; text-align:center; }
-.box { background:#fff; padding:20px; border-radius:12px; margin:20px 0; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-input { padding:10px; width:70%; border-radius:6px; border:1px solid #ccc; }
-button { padding:10px 15px; border:none; border-radius:6px; background:#6a11cb; color:#fff; cursor:pointer; margin-left:10px; }
-button:hover { background:#4a0f9c; }
-p { margin-top:10px; }
-.highlight { font-weight:bold; color:#6a11cb; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réductions - Andu-Xara</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f9f9f9; margin:0; padding:20px; text-align:center; }
+    h1 { color:#6a11cb; }
+    .box { background:#fff; padding:30px; border-radius:12px; margin:40px auto; max-width:600px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+    p { font-size:18px; color:red; font-weight:bold; }
+    a { display:block; margin-top:20px; text-decoration:none; color:#6a11cb; font-weight:bold; }
+  </style>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-S9CBS21SVR');
-</script>
-
+    gtag('config', 'G-S9CBS21SVR');
+  </script>
 </head>
 <body>
-
-<div class="container">
   <h1>Réductions & Cadeaux 🎁</h1>
-
-  <!-- ===== Zone 1 : Saisir un code promo ===== -->
   <div class="box">
-    <h2>Saisir votre code promotionnel</h2>
-    <input id="inputCode" type="text" placeholder="Entrez votre code...">
-    <button onclick="applyPromoCode()">Activer</button>
-    <p id="promoMessage"></p>
-    <p>📢 Codes promotionnels restants : <span id="codesLeft" class="highlight">--</span></p>
+    <p>⚠️ Cette option est actuellement bloquée.<br> Les réductions seront bientôt disponibles 🎉</p>
   </div>
 
-  <!-- ===== Zone 2 : Parrainage ===== -->
-  <div class="box">
-    <h2>Profitez de 50% de réduction</h2>
-    <ol>
-      <li>Invitez un ami : votre ami reçoit 10% sur son premier achat.</li>
-      <li>Quand votre ami achète, vous recevez 50% de réduction sur votre prochain achat.</li>
-    </ol>
-    <button onclick="generateReferral()">Obtenir mon code de parrainage</button>
-    <div id="referralMessage"></div> <!-- affichage du code et bouton copier -->
-  </div>
-
-  <!-- ===== Zone 3 : Achat test ===== -->
-  <div class="box">
-    <h2>Achat test</h2>
-    <button onclick="acheterProduit('USER_TEST','Produit A',7000)">Acheter Produit A (7000 MRU)</button>
-    <p>Après l'achat, la réduction du parrain sera appliquée automatiquement si applicable.</p>
-  </div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, addDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-// ======= Configuration Firebase =======
-const firebaseConfig = {
-  apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
-  authDomain: "andu-xara-2fc48.firebaseapp.com",
-  projectId: "andu-xara-2fc48",
-  storageBucket: "andu-xara-2fc48.firebasestorage.app",
-  messagingSenderId: "873034669698",
-  appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
-};
-
-// ======= Initialisation Firebase =======
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ===== Zone 1 : Activation du code promo =====
-async function applyPromoCode(){
-  const code = document.getElementById("inputCode").value.trim().toUpperCase();
-  const msg = document.getElementById("promoMessage");
-  if(!code){ msg.style.color="red"; msg.innerText="❌ Veuillez entrer un code."; return; }
-
-  const docRef = doc(db, "codesPromo", code);
-  const docSnap = await getDoc(docRef);
-
-  if(!docSnap.exists()){ msg.style.color="red"; msg.innerText="❌ Code invalide."; return; }
-
-  const data = docSnap.data();
-  if(data.utilisé){ msg.style.color="red"; msg.innerText="😢 Ce code a déjà été utilisé."; return; }
-
-  await updateDoc(docRef, { utilisé:true });
-  msg.style.color="green";
-  msg.innerText="✅ Félicitations ! Votre réduction a été appliquée 🎉";
-  updateCounter();
-}
-
-// ===== Compteur codes restants =====
-async function updateCounter(){
-  const colRef = collection(db,"codesPromo");
-  const snapshot = await getDocs(colRef);
-  let restant=0;
-  snapshot.forEach(doc=>{if(!doc.data().utilisé) restant++;});
-  document.getElementById("codesLeft").innerText = restant;
-}
-updateCounter();
-
-// ===== Zone 2 : Parrainage =====
-function generateCode(length=8){return Math.random().toString(36).substring(2,length+2).toUpperCase();}
-
-async function generateReferral(){
-  const currentUserId = "USER_TEST";
-  const newCode = generateCode();
-  await setDoc(doc(db,"partages",newCode),{ parrainId: currentUserId, utilisé:false });
-  const msg = document.getElementById("referralMessage");
-  msg.innerHTML = `<p>Votre code de parrainage : <span class="highlight">${newCode}</span></p>
-                   <button onclick="copyCode('${newCode}')">Copier le code</button>
-                   <p>Partagez ce code partout (WhatsApp, Messenger, Email, etc.)</p>`;
-}
-
-// Copier code
-function copyCode(code){
-  navigator.clipboard.writeText(code).then(()=>{alert("Code copié ! Vous pouvez le partager.");});
-}
-
-// ===== Vérification lien parrainage =====
-(async function checkReferral(){
-  const urlParams = new URLSearchParams(window.location.search);
-  const refCode = urlParams.get('ref');
-  if(refCode){
-    const docSnap = await getDoc(doc(db,"partages",refCode));
-    if(docSnap.exists() && !docSnap.data().utilisé){
-      const currentUserId = "USER_TEST";
-      await updateDoc(doc(db,"users",currentUserId),{ parrain: docSnap.data().parrainId });
-      console.log("Filleul lié au parrain :", docSnap.data().parrainId);
-    }
-  }
-})();
-
-// ===== Zone 3 : Achat test =====
-async function validerAchat(userId,montant,produit){
-  await addDoc(collection(db,"achats"),{userId,produit,montant,date:new Date().toISOString()});
-  const userRef = doc(db,"users",userId);
-  const userSnap = await getDoc(userRef);
-  const userData = userSnap.data();
-  if(userData.parrain){
-    const parrainId = userData.parrain;
-    const parrainRef = doc(db,"users",parrainId);
-    await updateDoc(parrainRef,{reduction:50,filleuls:arrayUnion(userId)});
-    console.log(`Réduction 50% appliquée pour le parrain ${parrainId}`);
-  }
-}
-
-async function acheterProduit(userId,produit,montant){
-  await validerAchat(userId,montant,produit);
-  alert("✅ Achat effectué ! Réduction du parrain appliquée si applicable.");
-}
-</script>
-
+  <a href="index.html">⬅️ Retour au menu</a>
 </body>
 </html>
