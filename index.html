@@ -3142,44 +3142,43 @@ setInterval(() => {
   });
 </script>
 <div id="countdown"></div>
-
 <script>
-// --- COMPTE À REBOURS DE 20 JOURS À PARTIR DU PREMIER VISITEUR ---
-const countdownStartKey = "countdownStart"; // clé pour localStorage
-let countdownStart = localStorage.getItem(countdownStartKey);
+function startCountdown() {
+    const countdownElement = document.getElementById('countdown'); // ton élément HTML pour afficher le compte à rebours
+    
+    fetch('countdown.json')
+    .then(response => response.json())
+    .then(data => {
+        const startDate = new Date(data.start);
+        const endDate = new Date(startDate.getTime() + data.durationDays * 24 * 60 * 60 * 1000);
 
-if (!countdownStart) {
-  // si c'est la première visite, on définit la date de départ maintenant
-  countdownStart = new Date().getTime();
-  localStorage.setItem(countdownStartKey, countdownStart);
+        function updateCountdown() {
+            const now = new Date();
+            let diff = endDate - now;
+
+            if (diff < 0) diff = 0;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
+
+            if (diff > 0) {
+                requestAnimationFrame(updateCountdown);
+            } else {
+                countdownElement.innerHTML = "Temps écoulé !";
+            }
+        }
+
+        updateCountdown();
+    })
+    .catch(err => console.error('Erreur en lisant countdown.json:', err));
 }
 
-const countdownEnd = parseInt(countdownStart) + 20 * 24 * 60 * 60 * 1000; // 20 jours en ms
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = countdownEnd - now;
-
-  if (distance <= 0) {
-    document.getElementById("countdown").innerHTML = "Temps écoulé !";
-    clearInterval(timerInterval);
-    return;
-  }
-
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  document.getElementById("countdown").innerHTML =
-    `${days}j ${hours.toString().padStart(2,'0')}h ` +
-    `${minutes.toString().padStart(2,'0')}m ` +
-    `${seconds.toString().padStart(2,'0')}s`;
-}
-
-// --- LANCEMENT ---
-updateCountdown();
-const timerInterval = setInterval(updateCountdown, 1000);
+// Démarrage du compte à rebours
+startCountdown();
 </script>
 </body>
 </html>
