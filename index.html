@@ -16,6 +16,37 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
+.promo-countdown {
+  text-align: center;
+  background: linear-gradient(135deg, #ff9800, #e91e63);
+  color: white;
+  padding: 30px 10px;
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.countdown {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+.produit {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.produit:hover {
+  transform: scale(1.05);
+}
+
 /* Bouton menu */
 .menu-toggle {
   font-size: 24px;
@@ -1342,6 +1373,7 @@ body {
 }
 
 <style>
+
 .partenaires {
     text-align: center;
     padding: 40px 20px;
@@ -1421,20 +1453,84 @@ body {
     }
 }
 
+/* bouton menu */
+.menu-toggle {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+/* overlay noir */
+.menu-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  z-index: 1000;
+}
+
+/* menu mobile */
+.mobile-menu {
+  position: fixed;
+  top: 0; right: -250px;
+  width: 250px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  z-index: 1001;
+  padding-top: 60px;
+}
+
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-menu ul li {
+  border-bottom: 1px solid #ddd;
+}
+
+.mobile-menu ul li a {
+  display: block;
+  padding: 15px;
+  color: #333;
+  text-decoration: none;
+}
+
+.mobile-menu ul li a:hover {
+  background: #f4f4f4;
+}
+
+/* état ouvert */
+.mobile-menu.active {
+  right: 0;
+}
+
+.menu-overlay.active {
+  display: block;
+}
 
 <!-- MENU GLOBAL -->
 <button class="menu-toggle">☰</button>
 <div class="menu-overlay"></div>
 <nav class="mobile-menu">
-    <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="blog.html">Blog / Podcast</a></li>
-        <li><a href="acheter.html">Acheter & Offrir</a></li>
-        <li><a href="histoire.html">Notre Histoire</a></li>
-        <li><a href="reductions.html">Réductions & Cadeaux</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-
-    </ul>
+  <ul>
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="produits.html">Produits</a></li>
+    <li><a href="blog.html">Blog / Podcast</a></li>
+    <li><a href="acheter.html">Acheter & Offrir</a></li>
+    <li><a href="histoire.html">Notre Histoire</a></li>
+    <li><a href="reductions.html">Réductions & Cadeaux</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+  </ul>
 </nav>
 
 <script>
@@ -1594,6 +1690,7 @@ mobileMenu.querySelectorAll('a').forEach(link => {
       <li><a href="faq.html">FAQ</a></li>
     </ul>
   </nav>
+ <img src="images/soninké.jpg" alt="Bannière Andu-xara">
 </header>
 </style>
 <!-- ===== HTML Code Promo ===== -->
@@ -1981,6 +2078,187 @@ const db = getDatabase(app);
     </div>
   </div>
 </div>
+<!-- Nouveaux modèles -->
+
+<!-- Produit 9 -->
+<div class="product-card" data-category="ensembles">
+  <div class="product-image-container">
+    <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('babs')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Babs Premium</h3>
+    <p class="product-description">Tenue moderne et élégante Andu-Xara.</p>
+    <p class="product-price">
+      <span class="old-price">1499 MRU</span>
+      <span class="promo-price">1049 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('Babs Premium', 1499, 1049)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 10 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('fillenoir')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt Fille Noir</h3>
+    <p class="product-description">T-shirt noir élégant pour femme.</p>
+    <p class="product-price">
+      <span class="old-price">399 MRU</span>
+      <span class="promo-price">279 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('T-shirt Fille Noir', 399, 279)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 11 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('filleblan')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt Fille Blanc</h3>
+    <p class="product-description">T-shirt blanc classique et stylé.</p>
+    <p class="product-price">
+      <span class="old-price">599 MRU</span>
+      <span class="promo-price">419 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('T-shirt Fille Blanc', 599, 419)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 12 -->
+<div class="product-card" data-category="pulls">
+  <div class="product-image-container">
+    <img src="images/pullblanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('pullblanc')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Pull Blanc</h3>
+    <p class="product-description">Pull chaud et confortable de couleur blanche.</p>
+    <p class="product-price">
+      <span class="old-price">599 MRU</span>
+      <span class="promo-price">419 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('Pull Blanc', 599, 419)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 13 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/biegetshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img">
+
+    <button class="wishlist-btn" onclick="toggleWishlist('beigetshirt')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt Beige</h3>
+    <p class="product-description">T-shirt léger et élégant beige.</p>
+    <p class="product-price">
+      <span class="old-price">399 MRU</span>
+      <span class="promo-price">279 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('T-shirt Beige', 399, 279)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 14 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('blanctshirt')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt Blanc</h3>
+    <p class="product-description">T-shirt blanc classique intemporel.</p>
+    <p class="product-price">
+      <span class="old-price">399 MRU</span>
+      <span class="promo-price">279 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('T-shirt Blanc', 399, 279)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Produit 15 -->
+<div class="product-card" data-category="t-shirts">
+  <div class="product-image-container">
+    <img src="images/adxnoir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img">
+    <button class="wishlist-btn" onclick="toggleWishlist('adxnoir')">❤️</button>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">T-shirt ADX Noir</h3>
+    <p class="product-description">Edition spéciale Andu-Xara ADX Noir.</p>
+    <p class="product-price">
+      <span class="old-price">399 MRU</span>
+      <span class="promo-price">279 MRU</span>
+    </p>
+    <div class="product-actions">
+      <button class="add-to-cart" onclick="addToCart('Adx noir', 399, 279)">Ajouter au panier</button>
+      <button class="quick-view">👁️</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== Filtres ====== -->
+<section id="filtres" style="margin:20px; text-align:center;">
+  <label for="categorie">Catégorie :</label>
+  <select id="categorie" onchange="filtrerProduits()">
+    <option value="all">Tous</option>
+    <option value="tshirt">T-shirts</option>
+    <option value="capuchon">Capuchons</option>
+    <option value="ensemble">Ensembles</option>
+  </select>
+
+  <label for="prix">Prix max (MRU) :</label>
+  <input type="number" id="prix" value="20000" onchange="filtrerProduits()" style="width:100px;">
+</section>
+
+<!-- ====== Catalogue ====== -->
+<section id="catalogue" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px; margin:20px;">
+  
+  <!-- Exemple produit -->
+  <div class="produit" data-categorie="tshirt" data-prix="7000">
+    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt logo arabe" style="width:100%; border-radius:10px;">
+    <h3>T-shirt logo arabe</h3>
+    <p>Prix : 499 MRU</p>
+  </div>
+
+  <div class="produit" data-categorie="capuchon" data-prix="12000">
+    <img src="images/capuchon-blanc.jpeg" alt="Capuchon blanc" style="width:100%; border-radius:10px;">
+    <h3>Capuchon blanc</h3>
+    <p>Prix : 599 MRU</p>
+  </div>
+
+  <div class="produit" data-categorie="ensemble" data-prix="18000">
+    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble capuchon arabe" style="width:100%; border-radius:10px;">
+    <h3>Ensemble capuchon arabe</h3>
+    <p>Prix : 799 MRU</p>
+  </div>
+
+</section>
+
 <!-- ===== Section Panier ===== -->
 <div id="cart-popup" style="display:none;">
   <div class="cart-content">
@@ -2833,34 +3111,65 @@ setInterval(() => {
     overlay.classList.remove("active");
   });
 </script>
-<section id="promo">
-  <h2>🎉 Promotion spéciale se termine bientôt !</h2>
-  <p id="countdown"></p>
-</section>
-
+<footer style="text-align: center; padding: 20px; font-size: 14px; color: #555;">
+  <p>
+    Ce site est une création <strong>inéluctable</strong> de l’équipe <span style="color:#c0392b;">Andu-Xara</span>.  
+    Toute reproduction est interdite.
+  </p>
+</footer>
 <script>
-// Vérifier si une date de fin est déjà enregistrée
-let endDate = localStorage.getItem("promoEndDate");
+function filtrerProduits() {
+  let categorie = document.getElementById("categorie").value;
+  let prixMax = parseInt(document.getElementById("prix").value);
 
-if (!endDate) {
-  // Si non, on définit une nouvelle date de fin (10 jours à partir de maintenant)
-  const now = new Date();
-  now.setDate(now.getDate() + 10); // +10 jours
-  endDate = now.getTime(); // en millisecondes
-  localStorage.setItem("promoEndDate", endDate);
-} else {
-  // Si oui, on récupère la date sauvegardée
-  endDate = parseInt(endDate);
+  document.querySelectorAll(".produit").forEach(produit => {
+    let cat = produit.getAttribute("data-categorie");
+    let prix = parseInt(produit.getAttribute("data-prix"));
+
+    // Vérifier si le produit respecte les filtres
+    if ((categorie === "all" || categorie === cat) && prix <= prixMax) {
+      produit.style.display = "block";
+    } else {
+      produit.style.display = "none";
+    }
+  });
+}
+</script>
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const overlay = document.querySelector('.menu-overlay');
+
+  menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+  });
+
+  overlay.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+</script>
+<script>
+// Vérifie si une date de fin est enregistrée dans le navigateur
+let countdownEndDate = localStorage.getItem("countdownEndDate");
+
+// Si aucune date, on crée une nouvelle fin de promo dans 20 jours
+if (!countdownEndDate) {
+  const now = new Date().getTime();
+  const twentyDaysLater = now + (20 * 24 * 60 * 60 * 1000); // 20 jours
+  countdownEndDate = twentyDaysLater;
+  localStorage.setItem("countdownEndDate", countdownEndDate);
 }
 
-// Fonction de mise à jour du compte à rebours
+// Fonction principale pour mettre à jour le compteur
 function updateCountdown() {
   const now = new Date().getTime();
-  const distance = endDate - now;
+  const distance = countdownEndDate - now;
 
   if (distance <= 0) {
-    document.getElementById("countdown").innerHTML = "⏰ Promotion terminée !";
-    clearInterval(interval);
+    document.getElementById("countdown").innerHTML = "🎉 Promotion terminée !";
+    localStorage.removeItem("countdownEndDate");
     return;
   }
 
@@ -2869,20 +3178,15 @@ function updateCountdown() {
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  document.getElementById("countdown").innerHTML =
-    days + "j " + hours + "h " + minutes + "m " + seconds + "s ";
+  document.getElementById("days").textContent = String(days).padStart(2, '0');
+  document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+  document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+  document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
 }
 
-// Mettre à jour chaque seconde
-const interval = setInterval(updateCountdown, 1000);
+// Actualiser toutes les secondes
+setInterval(updateCountdown, 1000);
 updateCountdown();
 </script>
-<footer style="text-align: center; padding: 20px; font-size: 14px; color: #555;">
-  <p>
-    Ce site est une création <strong>inéluctable</strong> de l’équipe <span style="color:#c0392b;">Andu-Xara</span>.  
-    Toute reproduction est interdite.
-  </p>
-</footer>
-
 </body>
 </html>
