@@ -16,6 +16,17 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6a11cb">
     <style>
+.old-price {
+  text-decoration: line-through;
+  color: #888; /* gris clair pour l'ancien prix */
+  margin-right: 8px;
+}
+
+.promo-price {
+  font-weight: bold;
+  color: #e60023; /* rouge pour le prix promo */
+}
+
 .promo-countdown {
   text-align: center;
   background: linear-gradient(135deg, #ff9800, #e91e63);
@@ -1745,7 +1756,6 @@ const db = getDatabase(app);
   50% { opacity: 0.3; }
 }
 </style>
-
 <!-- Section Compteur Promotion -->
 <section class="promo-countdown">
     <h2>Promotion spéciale se termine bientôt !</h2>
@@ -2143,7 +2153,7 @@ const db = getDatabase(app);
 <!-- Produit 12 -->
 <div class="product-card" data-category="pulls">
   <div class="product-image-container">
-    <img src="images/pullblanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img">
+    <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img">
     <button class="wishlist-btn" onclick="toggleWishlist('pullblanc')">❤️</button>
   </div>
   <div class="product-info">
@@ -2163,8 +2173,7 @@ const db = getDatabase(app);
 <!-- Produit 13 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/biegetshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img">
-
+    <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img">
     <button class="wishlist-btn" onclick="toggleWishlist('beigetshirt')">❤️</button>
   </div>
   <div class="product-info">
@@ -2204,7 +2213,7 @@ const db = getDatabase(app);
 <!-- Produit 15 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/adxnoir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img">
+    <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img">
     <button class="wishlist-btn" onclick="toggleWishlist('adxnoir')">❤️</button>
   </div>
   <div class="product-info">
@@ -3118,24 +3127,6 @@ setInterval(() => {
   </p>
 </footer>
 <script>
-function filtrerProduits() {
-  let categorie = document.getElementById("categorie").value;
-  let prixMax = parseInt(document.getElementById("prix").value);
-
-  document.querySelectorAll(".produit").forEach(produit => {
-    let cat = produit.getAttribute("data-categorie");
-    let prix = parseInt(produit.getAttribute("data-prix"));
-
-    // Vérifier si le produit respecte les filtres
-    if ((categorie === "all" || categorie === cat) && prix <= prixMax) {
-      produit.style.display = "block";
-    } else {
-      produit.style.display = "none";
-    }
-  });
-}
-</script>
-<script>
   const menuToggle = document.querySelector('.menu-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');
   const overlay = document.querySelector('.menu-overlay');
@@ -3150,26 +3141,28 @@ function filtrerProduits() {
     overlay.classList.remove('active');
   });
 </script>
-<script>
-// Vérifie si une date de fin est enregistrée dans le navigateur
-let countdownEndDate = localStorage.getItem("countdownEndDate");
+<div id="countdown"></div>
 
-// Si aucune date, on crée une nouvelle fin de promo dans 20 jours
-if (!countdownEndDate) {
-  const now = new Date().getTime();
-  const twentyDaysLater = now + (20 * 24 * 60 * 60 * 1000); // 20 jours
-  countdownEndDate = twentyDaysLater;
-  localStorage.setItem("countdownEndDate", countdownEndDate);
+<script>
+// --- COMPTE À REBOURS DE 20 JOURS À PARTIR DU PREMIER VISITEUR ---
+const countdownStartKey = "countdownStart"; // clé pour localStorage
+let countdownStart = localStorage.getItem(countdownStartKey);
+
+if (!countdownStart) {
+  // si c'est la première visite, on définit la date de départ maintenant
+  countdownStart = new Date().getTime();
+  localStorage.setItem(countdownStartKey, countdownStart);
 }
 
-// Fonction principale pour mettre à jour le compteur
+const countdownEnd = parseInt(countdownStart) + 20 * 24 * 60 * 60 * 1000; // 20 jours en ms
+
 function updateCountdown() {
   const now = new Date().getTime();
-  const distance = countdownEndDate - now;
+  const distance = countdownEnd - now;
 
   if (distance <= 0) {
-    document.getElementById("countdown").innerHTML = "🎉 Promotion terminée !";
-    localStorage.removeItem("countdownEndDate");
+    document.getElementById("countdown").innerHTML = "Temps écoulé !";
+    clearInterval(timerInterval);
     return;
   }
 
@@ -3178,15 +3171,15 @@ function updateCountdown() {
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  document.getElementById("days").textContent = String(days).padStart(2, '0');
-  document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-  document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-  document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+  document.getElementById("countdown").innerHTML =
+    `${days}j ${hours.toString().padStart(2,'0')}h ` +
+    `${minutes.toString().padStart(2,'0')}m ` +
+    `${seconds.toString().padStart(2,'0')}s`;
 }
 
-// Actualiser toutes les secondes
-setInterval(updateCountdown, 1000);
+// --- LANCEMENT ---
 updateCountdown();
+const timerInterval = setInterval(updateCountdown, 1000);
 </script>
 </body>
 </html>
