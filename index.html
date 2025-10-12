@@ -2294,22 +2294,27 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
     
-    if (confirm('Payer via Bankily ?\n(Sinon WhatsApp)')) {
-        const bankilyUrl = `bankily://transfer?amount=${total}&message=Commande Andu-Xara`;
+    if (confirm('Voulez-vous payer via Bankily ?\n\nSi vous n\'avez pas Bankily, vous serez redirigé vers WhatsApp.')) {
+        // Essayer d'ouvrir Bankily
+        const bankilyUrl = `bankily://pay?amount=${total}&recipient=49037697`;
+        
+        // Ouvrir Bankily
         window.location.href = bankilyUrl;
+        
+        // Si Bankily n'est pas installé, rediriger vers WhatsApp après 2 secondes
         setTimeout(() => {
-            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
-        }, 1000);
+            if (document.hidden || document.webkitHidden) {
+                // L'utilisateur est toujours sur notre page = Bankily n'a pas fonctionné
+                const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }, 2000);
     } else {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        // Redirection directe vers WhatsApp
+        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
     }
 }
-
-// Initialisation
-document.addEventListener('DOMContentLoaded', function() {
-    updateFloatingCart();
-});
-
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
