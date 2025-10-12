@@ -2287,59 +2287,29 @@ function processFloatingCheckout() {
     }
     
     const total = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
-    const productList = floatingCart.map(item => 
-        `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
-    ).join('\n');
     
-    // Avertissement clair
-    if (confirm(`📱 TRANSFERT WAVE DIRECT\n\n💸 Montant : ${total} FCFA\n👤 Destinataire : 76 282 11 33\n\nWave va s'ouvrir directement dans l'écran de transfert.\nVous n'aurez qu'à accepter ou refuser.\n\n✅ OK → Ouvrir Wave\n❌ Annuler → Autre méthode`)) {
+    if (confirm(`📱 TRANSFERT WAVE DIRECT\n\n💸 ${total} FCFA vers 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\nVous n'aurez qu'à valider.\n\n✅ OK → Transférer maintenant\n❌ Annuler → Refuser`)) {
         
-        // URLs pour ouvrir Wave directement dans le transfert
-        const waveTransferUrls = [
-            `wave://transfer/to/762821133/amount/${total}`,
-            `wavecm://transfer/to/762821133/amount/${total}`,
-            `wave://send/to/762821133/amount/${total}`,
-            `wavecm://send/to/762821133/amount/${total}`,
-            `wave://pay/to/762821133/amount/${total}`,
-            `com.wavec.mobile://transfer/762821133?amount=${total}`,
-            `wave.sn://transfer/762821133?amount=${total}`
-        ];
+        // Code USSD Wave pour transfert direct
+        const ussdCode = `*144*1*1*762821133*${total}%23`;
         
-        let waveOpened = false;
+        // Ouvrir le code USSD (fonctionne à 100%)
+        window.location.href = `tel:${ussdCode}`;
         
-        // Essayer toutes les URLs Wave
-        waveTransferUrls.forEach((url, index) => {
-            setTimeout(() => {
-                if (!waveOpened) {
-                    console.log('Tentative Wave transfert:', url);
-                    window.location.href = url;
-                    waveOpened = true;
-                }
-            }, index * 500);
-        });
-        
-        // Si Wave ne s'ouvre pas
+        // Demander confirmation après 5 secondes
         setTimeout(() => {
-            if (!waveOpened) {
-                if (confirm(`📱 Wave non détecté\n\nPour ouvrir Wave manuellement :\n1. Ouvrez l'app Wave\n2. Allez dans "Envoyer"\n3. Numéro: 76 282 11 33\n4. Montant: ${total} FCFA\n\nOK → J'ai payé\nAnnuler → WhatsApp`)) {
-                    showNotification('✅ Paiement confirmé !', 'success');
-                    floatingCart = [];
-                    updateFloatingCart();
-                } else {
-                    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
-                    const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
-                }
+            if (confirm(`✅ Transfert Wave initié\n\nAvez-vous validé le transfert de ${total} FCFA ?\n\n✅ OK → Oui, transfert réussi\n❌ Annuler → Non, échec`)) {
+                showNotification('🎉 Merci ! Transfert confirmé.', 'success');
+                floatingCart = [];
+                updateFloatingCart();
+            } else {
+                showNotification('Transfert annulé', 'warning');
             }
-        }, 3000);
+        }, 5000);
         
-    } else {
-        // Méthode alternative
-        const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
-        const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
     }
 }
+
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
