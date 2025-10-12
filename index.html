@@ -2293,35 +2293,49 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
     
-    // Avertissement très clair
-    if (confirm(`💸 PAIEMENT IMMÉDIAT WAVE\n\n📱 Votre compte Wave sera débité de : ${total} FCFA\n👤 Bénéficiaire : Andu-Xara (76 282 11 33)\n\n✅ OK → Confirmer et payer maintenant\n❌ Annuler → Changer de méthode`)) {
+    // Avertissement clair avant paiement
+    if (confirm(`⚠️ PAIEMENT WAVE\n\n💸 Montant à retirer : ${total} FCFA\n📱 Numéro bénéficiaire : 76 282 11 33\n\nCette action débitera directement votre compte Wave.\n\nOK → Confirmer le paiement\nAnnuler → Annuler`)) {
         
-        // Essayer l'URL USSD Wave (plus fiable)
-        const ussdCode = `*144*1*1*762821133*${total}%23`;
-        const waveUssdUrl = `tel:${ussdCode}`;
+        // URLs pour ouvrir Wave avec le paiement pré-rempli
+        const wavePaymentUrls = [
+            `wave://pay/762821133?amount=${total}`,
+            `wavecm://pay/762821133?amount=${total}`,
+            `wave://send/762821133?amount=${total}`,
+            `wavecm://send/762821133?amount=${total}`,
+            `wave://transfer/762821133?amount=${total}`,
+            `com.wavec.mobile://pay/762821133?amount=${total}`
+        ];
         
-        // Ouvrir le code USSD
-        window.location.href = waveUssdUrl;
+        let waveOpened = false;
         
-        // Confirmation après tentative de paiement
+        // Essayer d'ouvrir Wave avec le paiement
+        wavePaymentUrls.forEach((url, index) => {
+            setTimeout(() => {
+                if (!waveOpened) {
+                    console.log('Tentative Wave:', url);
+                    window.location.href = url;
+                }
+            }, index * 400);
+        });
+        
+        // Si Wave ne s'ouvre pas après 3 secondes
         setTimeout(() => {
-            if (confirm(`✅ Paiement Wave initié\n\nVeuillez compléter la transaction dans Wave.\n\nAvez-vous réussi le paiement de ${total} FCFA ?\n\nOK → Oui, paiement réussi\nAnnuler → Non, problème`)) {
-                showNotification('✅ Commande confirmée ! Merci.', 'success');
-                floatingCart = [];
-                updateFloatingCart();
-            } else {
-                showNotification('Paiement annulé ou échoué', 'error');
-                const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent('Problème avec le paiement Wave - ' + message)}`;
-                window.open(whatsappUrl, '_blank');
+            if (!waveOpened) {
+                if (confirm(`📱 Wave non détecté\n\nPour payer manuellement :\n1. Ouvrez Wave\n2. Envoyez ${total} FCFA au 76 282 11 33\n3. Revenez confirmer\n\nOK → J'ai payé\nAnnuler → WhatsApp`)) {
+                    showNotification('Paiement Wave confirmé ! ✅', 'success');
+                    floatingCart = [];
+                    updateFloatingCart();
+                } else {
+                    const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                }
             }
-        }, 5000);
+        }, 3000);
         
     } else {
-        // WhatsApp alternatif
-        if (confirm(`📞 Contacter le service client ?\n\nOK → WhatsApp\nAnnuler → Retour au shopping`)) {
-            const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent('Bonjour, je souhaite commander avec une autre méthode de paiement')}`;
-            window.open(whatsappUrl, '_blank');
-        }
+        // WhatsApp si refus
+        const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
     }
 }
 
