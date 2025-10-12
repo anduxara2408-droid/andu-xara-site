@@ -2291,41 +2291,42 @@ function processFloatingCheckout() {
         `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
     ).join('\n');
     
-    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
-    
-    // Avertissement clair avant paiement
-    if (confirm(`⚠️ PAIEMENT WAVE\n\n💸 Montant à retirer : ${total} FCFA\n📱 Numéro bénéficiaire : 76 282 11 33\n\nCette action débitera directement votre compte Wave.\n\nOK → Confirmer le paiement\nAnnuler → Annuler`)) {
+    // Avertissement clair
+    if (confirm(`📱 TRANSFERT WAVE DIRECT\n\n💸 Montant : ${total} FCFA\n👤 Destinataire : 76 282 11 33\n\nWave va s'ouvrir directement dans l'écran de transfert.\nVous n'aurez qu'à accepter ou refuser.\n\n✅ OK → Ouvrir Wave\n❌ Annuler → Autre méthode`)) {
         
-        // URLs pour ouvrir Wave avec le paiement pré-rempli
-        const wavePaymentUrls = [
-            `wave://pay/762821133?amount=${total}`,
-            `wavecm://pay/762821133?amount=${total}`,
-            `wave://send/762821133?amount=${total}`,
-            `wavecm://send/762821133?amount=${total}`,
-            `wave://transfer/762821133?amount=${total}`,
-            `com.wavec.mobile://pay/762821133?amount=${total}`
+        // URLs pour ouvrir Wave directement dans le transfert
+        const waveTransferUrls = [
+            `wave://transfer/to/762821133/amount/${total}`,
+            `wavecm://transfer/to/762821133/amount/${total}`,
+            `wave://send/to/762821133/amount/${total}`,
+            `wavecm://send/to/762821133/amount/${total}`,
+            `wave://pay/to/762821133/amount/${total}`,
+            `com.wavec.mobile://transfer/762821133?amount=${total}`,
+            `wave.sn://transfer/762821133?amount=${total}`
         ];
         
         let waveOpened = false;
         
-        // Essayer d'ouvrir Wave avec le paiement
-        wavePaymentUrls.forEach((url, index) => {
+        // Essayer toutes les URLs Wave
+        waveTransferUrls.forEach((url, index) => {
             setTimeout(() => {
                 if (!waveOpened) {
-                    console.log('Tentative Wave:', url);
+                    console.log('Tentative Wave transfert:', url);
                     window.location.href = url;
+                    waveOpened = true;
                 }
-            }, index * 400);
+            }, index * 500);
         });
         
-        // Si Wave ne s'ouvre pas après 3 secondes
+        // Si Wave ne s'ouvre pas
         setTimeout(() => {
             if (!waveOpened) {
-                if (confirm(`📱 Wave non détecté\n\nPour payer manuellement :\n1. Ouvrez Wave\n2. Envoyez ${total} FCFA au 76 282 11 33\n3. Revenez confirmer\n\nOK → J'ai payé\nAnnuler → WhatsApp`)) {
-                    showNotification('Paiement Wave confirmé ! ✅', 'success');
+                if (confirm(`📱 Wave non détecté\n\nPour ouvrir Wave manuellement :\n1. Ouvrez l'app Wave\n2. Allez dans "Envoyer"\n3. Numéro: 76 282 11 33\n4. Montant: ${total} FCFA\n\nOK → J'ai payé\nAnnuler → WhatsApp`)) {
+                    showNotification('✅ Paiement confirmé !', 'success');
                     floatingCart = [];
                     updateFloatingCart();
                 } else {
+                    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
                     const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                 }
@@ -2333,12 +2334,12 @@ function processFloatingCheckout() {
         }, 3000);
         
     } else {
-        // WhatsApp si refus
+        // Méthode alternative
+        const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
         const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     }
 }
-
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
