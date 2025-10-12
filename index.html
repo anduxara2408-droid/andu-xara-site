@@ -2291,31 +2291,16 @@ function processFloatingCheckout() {
         `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
     ).join('\n');
     
-    const bankilyMessage = `Commande Andu-Xara - ${total} MRU`;
-    const whatsappMessage = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
+    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
+    const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
     
-    if (confirm(`💳 Paiement Bankily\n\nMontant : ${total} MRU\n\nOK → Ouvrir Bankily\nAnnuler → WhatsApp`)) {
-        // Essayer Bankily d'abord
-        const bankilyUrl = `bankily://transfer?amount=${total}&message=${encodeURIComponent(bankilyMessage)}`;
-        
-        // Sauvegarder l'heure actuelle
-        const startTime = Date.now();
-        
-        // Ouvrir Bankily
-        window.location.href = bankilyUrl;
-        
-        // Vérifier après 2 secondes si Bankily a fonctionné
-        setTimeout(() => {
-            // Si on est toujours sur la page après 2 secondes, Bankily n'a pas fonctionné
-            if (Date.now() - startTime > 2000) {
-                const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`;
-                window.open(whatsappUrl, '_blank');
-            }
-        }, 2000);
-        
+    // Ouvrir directement WhatsApp avec instructions Bankily
+    const bankilyInstructions = `Pour payer via Bankily :\n1. Ouvrez Bankily\n2. Transférez ${total} MRU au 49037697\n3. Confirmez ici après paiement`;
+    
+    if (confirm(`💳 Paiement de ${total} MRU\n\nOK → Instructions Bankily\nAnnuler → Commander via WhatsApp`)) {
+        alert(bankilyInstructions + `\n\nAprès paiement, revenez ici pour confirmer.`);
+        // L'utilisateur peut maintenant ouvrir Bankily manuellement
     } else {
-        // WhatsApp direct
-        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`;
         window.open(whatsappUrl, '_blank');
     }
 }
