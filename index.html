@@ -620,63 +620,6 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* ===== PANIER ===== */
-        .cart-icon {
-            cursor: pointer;
-            font-size: 20px;
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            background: #6a11cb;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            z-index: 1000;
-        }
-
-        #cart-count {
-            background: red;
-            padding: 3px 7px;
-            border-radius: 50%;
-            margin-left: 5px;
-        }
-
-        #cart-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .cart-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .cart-content ul {
-            text-align: left;
-            list-style: none;
-            margin: 15px 0;
-        }
-
-        .cart-content button {
-            margin: 10px;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
         /* ===== LIGHTBOX ===== */
         #lightbox {
             position: fixed;
@@ -920,6 +863,90 @@
             visibility: visible;
             opacity: 1;
         }
+.smart-cart.collapsed {
+    display: none;
+}
+
+.cart-header {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+ align-items: center;
+    font-weight: bold;
+}
+
+#cart-badge {
+    background: #ff4757;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.cart-body {
+    padding: 15px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item-price {
+    text-align: right;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.promo-price {
+    color: #e60023;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.cart-total {
+    border-top: 2px solid #6a11cb;
+    padding-top: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.checkout-btn, .close-cart {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+ cursor: pointer;
+    margin-top: 8px;
+}
+
+.checkout-btn {
+    background: #25D366;
+    color: white;
+}
+
+.close-cart {
+    background: #6a11cb;
+    color: white;
+}
+
+.cart-actions {
+    margin-top: 5px;
+}
 
         /* ===== NEWSLETTER POPUP ===== */
         .newsletter-popup {
@@ -1239,21 +1266,6 @@
                 max-width: 200px;
             }
         }
-/* ===== PANIER RESPONSIVE MOBILE ===== */
-@media (max-width: 768px) {
-    #cart-popup {
-        padding: 10px;
-        align-items: flex-start;
-        padding-top: 60px;
-    }
-    
-    .cart-content {
-        width: 95%;
-        max-width: 350px;
-        padding: 15px;
-        margin: 0 auto;
-    }
-    
     .cart-content h2 {
         font-size: 1.3rem;
         margin-bottom: 15px;
@@ -1300,6 +1312,152 @@
     #cart-count {
         padding: 2px 6px;
         font-size: 0.8rem;
+    }
+}
+/* ===== PANIER FLOTTANT SIMPLE ===== */
+.floating-cart {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.cart-toggle {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#cart-badge-floating {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+.cart-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    margin-top: 10px;
+    display: none;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.floating-cart.open .cart-panel {
+    display: block;
+}
+
+.cart-items-container {
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.cart-item-floating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-info h4 {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.cart-item-info p {
+    margin: 2px 0;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.cart-item-price {
+    text-align: right;
+}
+
+.remove-item {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    margin-top: 5px;
+}
+
+.cart-summary {
+    padding: 15px;
+    border-top: 2px solid #6a11cb;
+    background: #f8f9fa;
+}
+
+.cart-total-floating {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.buy-btn, .close-cart-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.buy-btn {
+    background: #25D366;
+    color: white;
+}
+
+.close-cart-btn {
+    background: #6a11cb;
+    color: white;
+}
+
+.empty-cart-floating {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .floating-cart {
+        right: 10px;
+    }
+    
+    .cart-panel {
+        width: 280px;
+        right: -50px;
     }
 }
     </style>
@@ -1361,7 +1519,23 @@
                     </div>
                 </div>
             </div>
+
         </header>
+
+<!-- Panier flottant simple -->
+<div id="floating-cart" class="floating-cart">
+    <div class="cart-toggle" onclick="toggleFloatingCart()">
+        🛒 <span id="cart-badge-floating">0</span>
+    </div>
+    <div class="cart-panel">
+        <div class="cart-items-container" id="cart-items-floating"></div>
+        <div class="cart-summary">
+            <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
+            <button class="buy-btn" onclick="processFloatingCheckout()">Acheter</button>
+            <button class="close-cart-btn" onclick="closeFloatingCart()">Fermer</button>
+        </div>
+    </div>
+</div>
 
         <!-- Main Content -->
         <main class="container">
@@ -1423,7 +1597,7 @@
                 </div>
             </div>
 
-<!-- Produit 1 optimisé -->
+<!-- Produit 1 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif" class="product-img" loading="lazy">
@@ -1441,10 +1615,10 @@
         <button class="variation-btn" data-size="XL">XL</button>
       </div>
     </div>
-   <div class="product-price">
-  <span class="old-price">499 MRU</span>
-  <span class="promo-price">349 MRU</span>
-</div>
+    <div class="product-price">
+      <span class="old-price">499 MRU</span>
+      <span class="promo-price">349 MRU</span>
+    </div>
     <div class="product-actions">
       <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499, 349)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
@@ -1452,7 +1626,7 @@
   </div>
 </div>
 
-<!-- Produit 2 optimisé -->
+<!-- Produit 2 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet" class="product-img" loading="lazy">
@@ -1480,7 +1654,7 @@
   </div>
 </div>
 
-<!-- Produit 3 optimisé -->
+<!-- Produit 3 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu" class="product-img" loading="lazy">
@@ -1508,7 +1682,7 @@
   </div>
 </div>
 
-<!-- Produit 4 optimisé -->
+<!-- Produit 4 -->
 <div class="product-card" data-category="enfants">
   <div class="product-image-container">
     <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable" class="product-img" loading="lazy">
@@ -1536,7 +1710,7 @@
   </div>
 </div>
 
-<!-- Produit 5 optimisé -->
+<!-- Produit 5 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging" class="product-img" loading="lazy">
@@ -1565,7 +1739,7 @@
   </div>
 </div>
 
-<!-- Produit 6 optimisé -->
+<!-- Produit 6 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable" class="product-img" loading="lazy">
@@ -1593,7 +1767,7 @@
   </div>
 </div>
 
-<!-- Produit 7 optimisé -->
+<!-- Produit 7 -->
 <div class="product-card" data-category="accessoires">
   <div class="product-image-container">
     <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain" class="product-img" loading="lazy">
@@ -1619,7 +1793,7 @@
   </div>
 </div>
 
-<!-- Produit 8 optimisé -->
+<!-- Produit 8 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti" class="product-img" loading="lazy">
@@ -1647,7 +1821,7 @@
   </div>
 </div>
 
-<!-- Produit 9 optimisé -->
+<!-- Produit 9 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img" loading="lazy">
@@ -1675,7 +1849,7 @@
   </div>
 </div>
 
-<!-- Produit 10 optimisé -->
+<!-- Produit 10 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir Andu-Xara" class="product-img" loading="lazy">
@@ -1703,7 +1877,7 @@
   </div>
 </div>
 
-<!-- Produit 11 optimisé -->
+<!-- Produit 11 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc Andu-Xara" class="product-img" loading="lazy">
@@ -1731,7 +1905,7 @@
   </div>
 </div>
 
-<!-- Produit 12 optimisé -->
+<!-- Produit 12 -->
 <div class="product-card" data-category="pulls">
   <div class="product-image-container">
     <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img" loading="lazy">
@@ -1759,7 +1933,7 @@
   </div>
 </div>
 
-<!-- Produit 13 optimisé -->
+<!-- Produit 13 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img" loading="lazy">
@@ -1787,7 +1961,7 @@
   </div>
 </div>
 
-<!-- Produit 14 optimisé -->
+<!-- Produit 14 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img" loading="lazy">
@@ -1815,7 +1989,7 @@
   </div>
 </div>
 
-<!-- Produit 15 optimisé -->
+<!-- Produit 15 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img" loading="lazy">
@@ -2022,6 +2196,120 @@
         let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         let panier = [];
+// ===== PANIER FLOTTANT =====
+let floatingCart = [];
+
+function addToCart(productName, oldPrice, promoPrice) {
+    const existingItem = floatingCart.find(item => item.name === productName);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        floatingCart.push({
+            name: productName,
+            oldPrice: parseFloat(oldPrice),
+            promoPrice: parseFloat(promoPrice),
+            quantity: 1
+        });
+    }
+    
+    updateFloatingCart();
+    showNotification(productName + ' ajouté au panier 🛒');
+}
+
+function updateFloatingCart() {
+    const badge = document.getElementById('cart-badge-floating');
+    const itemsContainer = document.getElementById('cart-items-floating');
+    const totalElement = document.getElementById('cart-total-floating');
+    
+    // Mettre à jour le badge
+    const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+    if (badge) badge.textContent = totalItems;
+    
+    // Mettre à jour les articles
+    if (itemsContainer && totalElement) {
+        itemsContainer.innerHTML = '';
+        let total = 0;
+        
+        if (floatingCart.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
+        } else {
+            floatingCart.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item-floating';
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Quantité: ${item.quantity}</p>
+                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
+                    </div>
+                    <div class="cart-item-price">
+                        <div style="text-decoration: line-through; color: #888; font-size: 0.8rem;">
+                            ${(item.oldPrice * item.quantity).toFixed(0)} MRU
+                        </div>
+                        <div style="color: #e60023; font-weight: bold;">
+                            ${(item.promoPrice * item.quantity).toFixed(0)} MRU
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+                total += item.promoPrice * item.quantity;
+            });
+        }
+        
+        totalElement.textContent = total.toFixed(0);
+    }
+}
+
+function removeFromFloatingCart(index) {
+    floatingCart.splice(index, 1);
+    updateFloatingCart();
+    showNotification('Produit retiré', 'warning');
+}
+
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}
+
+function processFloatingCheckout() {
+    if (floatingCart.length === 0) {
+        showNotification('Panier vide !', 'error');
+        return;
+    }
+    
+    const total = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
+    const productList = floatingCart.map(item => 
+        `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
+    ).join('\n');
+    
+    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
+    
+    if (confirm('Payer via Bankily ?\n(Sinon WhatsApp)')) {
+        const bankilyUrl = `bankily://transfer?amount=${total}&message=Commande Andu-Xara`;
+        window.location.href = bankilyUrl;
+        setTimeout(() => {
+            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        }, 1000);
+    } else {
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+    }
+}
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    updateFloatingCart();
+});
+
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
@@ -2122,88 +2410,6 @@ if (menuToggle && mobileMenu && menuOverlay) {
             if (counter) {
                 counter.textContent = wishlistItems.length;
             }
-        }
-
-        // ===== PANIER =====
-        function addToCart(productName, oldPrice, promoPrice) {
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-            
-            const price = parseFloat(promoPrice);
-            const existingItem = cartItems.find(item => item.name === productName);
-
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cartItems.push({
-                    id: Date.now(),
-                    name: productName,
-                    price: price,
-                    quantity: 1,
-                    size: getSelectedSize()
-                });
-            }
-
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            updateCartCounter();
-            showNotification(productName + ' ajouté au panier 🛒');
-        }
-
-        function updateCartCounter() {
-            const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cart-counter').textContent = totalItems;
-        }
-
-        function openCart() {
-            afficherPanier();
-            document.getElementById('cart-popup').style.display = 'flex';
-        }
-
-        function closeCart() {
-            document.getElementById('cart-popup').style.display = 'none';
-        }
-
-        function afficherPanier() {
-            let contenu = "";
-            let total = 0;
-
-            panier.forEach((item, index) => {
-                contenu += `<li>
-                    ${item.produit} -
-                    <span style="text-decoration:line-through; color:gray;">${item.prixNormal} MRU</span>
-                    <b style="color:green;">${item.prixPromo} MRU</b>
-                    <button onclick="removeFromCart(${index})">❌</button>
-                </li>`;
-                total += item.prixPromo;
-            });
-
-            document.getElementById('cart-items').innerHTML = contenu || "<li>Panier vide</li>";
-            document.getElementById('cart-total').innerText = total;
-        }
-
-        function removeFromCart(index) {
-            panier.splice(index, 1);
-            document.getElementById('cart-count').textContent = panier.length;
-            afficherPanier();
-        }
-
-        function passerCommande() {
-            if (panier.length === 0) {
-                alert("❌ Votre panier est vide !");
-                return;
-            }
-
-            let message = "🛍️ Nouvelle commande :\n";
-            let total = 0;
-            panier.forEach(item => {
-                message += `- ${item.produit} : ${item.prixPromo} MRU (au lieu de ${item.prixNormal} MRU)\n`;
-                total += item.prixPromo;
-            });
-            message += `\n💰 Total : ${total} MRU`;
-
-            const url = "https://wa.me/22249037697?text=" + encodeURIComponent(message);
-            window.open(url, "_blank");
         }
 
         // ===== LIGHTBOX =====
