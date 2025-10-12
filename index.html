@@ -2196,12 +2196,16 @@
         let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         let panier = [];
+
 // ===== PANIER FLOTTANT =====
 let floatingCart = [];
 
 function addToCart(productName, oldPrice, promoPrice) {
+    // Vibration si supporté
+    if (navigator.vibrate) navigator.vibrate(50);
+
     const existingItem = floatingCart.find(item => item.name === productName);
-    
+
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
@@ -2212,7 +2216,7 @@ function addToCart(productName, oldPrice, promoPrice) {
             quantity: 1
         });
     }
-    
+
     updateFloatingCart();
     showNotification(productName + ' ajouté au panier 🛒');
 }
@@ -2279,6 +2283,7 @@ function closeFloatingCart() {
     if (cart) {
         cart.classList.remove('open');
     }
+}
 
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
@@ -2324,23 +2329,23 @@ function confirmPayment(amount, method) {
             showNotification(`✅ Merci ! Paiement ${method} confirmé.`, 'success');
             floatingCart = [];
             updateFloatingCart();
+            closeFloatingCart();
         }
     }, 5000);
 }
 
-        // ===== INITIALISATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCounter();
-            updateWishlistCounter();
-            showNewsletterPopup();
-            initVariationButtons();
-            initMenuMobile();
-            initLightbox();
-            initCountdown();
-            initSoninkeBadge();
-            initUserCounter();
-        });
-
+// ===== INITIALISATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    updateFloatingCart(); // ← AJOUT IMPORTANT
+    updateWishlistCounter();
+    showNewsletterPopup();
+    initVariationButtons();
+    initMenuMobile();
+    initLightbox();
+    initCountdown();
+    initSoninkeBadge();
+    initUserCounter();
+});
         // ===== MENU MOBILE =====
         function initMenuMobile() {
             const toggleBtn = document.querySelector('.menu-toggle');
