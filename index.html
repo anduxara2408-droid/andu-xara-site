@@ -2293,13 +2293,15 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
     
-    if (confirm(`💳 Payer ${total} MRU via Bankily ?\n\nOK → Bankily\nAnnuler → WhatsApp`)) {
-        // Essayer différentes URLs Bankily
+    if (confirm(`💳 Payer ${total} MRU via Bankily ?\n\nOK → Ouvrir Bankily\nAnnuler → WhatsApp`)) {
+        
+        // Essayer TOUTES les URLs Bankily possibles
         const bankilyUrls = [
-            `bankily://payment?amount=${total}&phone=49037697`,
-            `bankily://transfer?amount=${total}&to=49037697`, 
-            `bankily://pay?amount=${total}&recipient=49037697`,
-            `bankily://send?amount=${total}&number=49037697`
+            'bankily://',
+            'com.bankily.mauritanie://',
+            'com.bankily://',
+            'bankily.mauritanie://',
+            'mauritanie.bankily://'
         ];
         
         let bankilyOpened = false;
@@ -2308,19 +2310,22 @@ function processFloatingCheckout() {
         bankilyUrls.forEach((url, index) => {
             setTimeout(() => {
                 if (!bankilyOpened) {
+                    console.log('Essai URL Bankily:', url);
                     window.location.href = url;
                 }
-            }, index * 500);
+            }, index * 300);
         });
         
-        // Fallback WhatsApp après 3 secondes
+        // Si Bankily ne s'ouvre pas après 2 secondes, demander à l'utilisateur
         setTimeout(() => {
-            if (!bankilyOpened) {
-                bankilyOpened = true;
+            if (!bankilyOpened && confirm("Bankily ne s'ouvre pas automatiquement.\n\nVoulez-vous :\n• OK → Ouvrir Bankily manuellement\n• Annuler → Payer via WhatsApp")) {
+                // Rediriger vers le store Bankily pour l'installer
+                window.open('https://apps.apple.com/app/bankily/id1478181589', '_blank');
+            } else if (!bankilyOpened) {
                 const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
             }
-        }, 3000);
+        }, 2000);
         
     } else {
         // WhatsApp direct
