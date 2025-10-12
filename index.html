@@ -2280,7 +2280,6 @@ function closeFloatingCart() {
         cart.classList.remove('open');
     }
 }
-
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
@@ -2292,26 +2291,31 @@ function processFloatingCheckout() {
         `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
     ).join('\n');
     
-    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
+    const bankilyMessage = `Commande Andu-Xara - ${total} MRU`;
+    const whatsappMessage = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
     
-    if (confirm('Voulez-vous payer via Bankily ?\n\nSi vous n\'avez pas Bankily, vous serez redirigé vers WhatsApp.')) {
-        // Essayer d'ouvrir Bankily
-        const bankilyUrl = `bankily://pay?amount=${total}&recipient=49037697`;
+    if (confirm(`💳 Paiement Bankily\n\nMontant : ${total} MRU\n\nOK → Ouvrir Bankily\nAnnuler → WhatsApp`)) {
+        // Essayer Bankily d'abord
+        const bankilyUrl = `bankily://transfer?amount=${total}&message=${encodeURIComponent(bankilyMessage)}`;
+        
+        // Sauvegarder l'heure actuelle
+        const startTime = Date.now();
         
         // Ouvrir Bankily
         window.location.href = bankilyUrl;
         
-        // Si Bankily n'est pas installé, rediriger vers WhatsApp après 2 secondes
+        // Vérifier après 2 secondes si Bankily a fonctionné
         setTimeout(() => {
-            if (document.hidden || document.webkitHidden) {
-                // L'utilisateur est toujours sur notre page = Bankily n'a pas fonctionné
-                const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+            // Si on est toujours sur la page après 2 secondes, Bankily n'a pas fonctionné
+            if (Date.now() - startTime > 2000) {
+                const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`;
                 window.open(whatsappUrl, '_blank');
             }
         }, 2000);
+        
     } else {
-        // Redirection directe vers WhatsApp
-        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+        // WhatsApp direct
+        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`;
         window.open(whatsappUrl, '_blank');
     }
 }
