@@ -2293,51 +2293,38 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
     
-    if (confirm(`📱 Payer ${total} MRU\n\nOK → Wave Sénégal\nAnnuler → WhatsApp`)) {
+    // Avertissement très clair
+    if (confirm(`💸 PAIEMENT IMMÉDIAT WAVE\n\n📱 Votre compte Wave sera débité de : ${total} FCFA\n👤 Bénéficiaire : Andu-Xara (76 282 11 33)\n\n✅ OK → Confirmer et payer maintenant\n❌ Annuler → Changer de méthode`)) {
         
-        // Essayer d'ouvrir Wave
-        const waveUrls = [
-            'wave://pay',
-            'wavecm://pay',
-            'com.wavec.mobile://pay',
-            'wave.sn://pay'
-        ];
+        // Essayer l'URL USSD Wave (plus fiable)
+        const ussdCode = `*144*1*1*762821133*${total}%23`;
+        const waveUssdUrl = `tel:${ussdCode}`;
         
-        let waveOpened = false;
+        // Ouvrir le code USSD
+        window.location.href = waveUssdUrl;
         
-        // Essayer chaque URL Wave
-        waveUrls.forEach((url, index) => {
-            setTimeout(() => {
-                if (!waveOpened) {
-                    console.log('Essai URL Wave:', url);
-                    window.location.href = url;
-                }
-            }, index * 300);
-        });
-        
-        // Si Wave ne s'ouvre pas, donner les instructions
+        // Confirmation après tentative de paiement
         setTimeout(() => {
-            if (!waveOpened) {
-                const waveInstructions = `💰 Paiement Wave Sénégal\n\n1. Ouvrez l'application Wave\n2. Cliquez sur "Envoyer de l'argent"\n3. Numéro: +221 76 282 11 33\n4. Montant: ${total} MRU\n5. Confirmez le transfert\n\nAprès paiement, revenez ici pour confirmer.`;
-                
-                if (confirm(waveInstructions + "\n\nOK → J'ai payé\nAnnuler → WhatsApp")) {
-                    showNotification('Merci pour votre paiement Wave ! ✅', 'success');
-                    // Ici vous pouvez vider le panier
-                    floatingCart = [];
-                    updateFloatingCart();
-                } else {
-                    const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
-                }
+            if (confirm(`✅ Paiement Wave initié\n\nVeuillez compléter la transaction dans Wave.\n\nAvez-vous réussi le paiement de ${total} FCFA ?\n\nOK → Oui, paiement réussi\nAnnuler → Non, problème`)) {
+                showNotification('✅ Commande confirmée ! Merci.', 'success');
+                floatingCart = [];
+                updateFloatingCart();
+            } else {
+                showNotification('Paiement annulé ou échoué', 'error');
+                const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent('Problème avec le paiement Wave - ' + message)}`;
+                window.open(whatsappUrl, '_blank');
             }
-        }, 2000);
+        }, 5000);
         
     } else {
-        // WhatsApp direct pour Sénégal
-        const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        // WhatsApp alternatif
+        if (confirm(`📞 Contacter le service client ?\n\nOK → WhatsApp\nAnnuler → Retour au shopping`)) {
+            const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent('Bonjour, je souhaite commander avec une autre méthode de paiement')}`;
+            window.open(whatsappUrl, '_blank');
+        }
     }
 }
+
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
