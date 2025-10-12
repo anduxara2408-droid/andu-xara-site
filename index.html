@@ -2286,30 +2286,84 @@ function processFloatingCheckout() {
         return;
     }
     
-    const total = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
+    const totalMRU = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
     
-    if (confirm(`📱 TRANSFERT WAVE DIRECT\n\n💸 ${total} FCFA vers 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\nVous n'aurez qu'à valider.\n\n✅ OK → Transférer maintenant\n❌ Annuler → Refuser`)) {
-        
-        // Code USSD Wave pour transfert direct
-        const ussdCode = `*144*1*1*762821133*${total}%23`;
-        
-        // Ouvrir le code USSD (fonctionne à 100%)
-        window.location.href = `tel:${ussdCode}`;
-        
-        // Demander confirmation après 5 secondes
-        setTimeout(() => {
-            if (confirm(`✅ Transfert Wave initié\n\nAvez-vous validé le transfert de ${total} FCFA ?\n\n✅ OK → Oui, transfert réussi\n❌ Annuler → Non, échec`)) {
-                showNotification('🎉 Merci ! Transfert confirmé.', 'success');
-                floatingCart = [];
-                updateFloatingCart();
-            } else {
-                showNotification('Transfert annulé', 'warning');
-            }
-        }, 5000);
-        
+    // Conversion MRU → FCFA (taux approximatif 1 MRU = 2.5 FCFA)
+    const totalFCFA = Math.round(totalMRU * 2.5);
+    
+    const productList = floatingCart.map(item => 
+        `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
+    ).join('\n');
+    
+    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU (environ ${totalFCFA} FCFA)`;
+    
+    // Choix de la méthode de paiement
+    const paymentChoice = confirm(`💳 CHOIX DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU / ${totalFCFA} FCFA\n\n✅ OK → Wave Sénégal (${totalFCFA} FCFA)\n❌ Annuler → Bankily Mauritanie (${totalMRU} MRU)`);
+    
+    if (paymentChoice) {
+        // WAVE SÉNÉGAL
+        processWavePayment(totalFCFA, totalMRU, message);
+    } else {
+        // BANKILY MAURITANIE
+        processBankilyPayment(totalMRU, message);
     }
 }
 
+function processWavePayment(totalFCFA, totalMRU, message) {
+    if (confirm(`📱 WAVE SÉNÉGAL\n\n💸 ${totalFCFA} FCFA (équivalent ${totalMRU} MRU)\n📞 Destinataire : 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\n\n✅ OK → Payer avec Wave\n❌ Annuler → WhatsApp`)) {
+        
+        // Code USSD Wave
+        const ussdCode = `*144*1*1*762821133*${totalFCFA}%23`;
+        window.location.href = `tel:${ussdCode}`;
+        
+        setTimeout(() => {
+            if (confirm(`✅ Paiement Wave initié\n\nAvez-vous validé ${totalFCFA} FCFA ?\n\n✅ OK → Oui, payé\n❌ Annuler → Non, problème`)) {
+                showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
+                floatingCart = [];
+                updateFloatingCart();
+            } else {
+                const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent('Problème paiement Wave - ' + message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }, 5000);
+        
+    } else {
+        const whatsappUrl = `https://wa.me/221762821133?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
+
+function processBankilyPayment(totalMRU, message) {
+    const bankilyChoice = confirm(`🏦 BANKILY MAURITANIE\n\n💸 ${totalMRU} MRU\n📞 Destinataire : 49 03 76 97\n\n✅ OK → Bankily\n❌ Annuler → WhatsApp`);
+    
+    if (bankilyChoice) {
+        // Essayer Bankily
+        const bankilyUrls = [
+            'bankily://transfer',
+            'bankily://pay',
+            'com.bankily.mauritanie://'
+        ];
+        
+        bankilyUrls.forEach(url => {
+            window.location.href = url;
+        });
+        
+        setTimeout(() => {
+            if (confirm(`✅ Paiement Bankily\n\nAvez-vous transféré ${totalMRU} MRU ?\n\n✅ OK → Oui\n❌ Annuler → Non`)) {
+                showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
+                floatingCart = [];
+                updateFloatingCart();
+            } else {
+                const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent('Problème paiement Bankily - ' + message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }, 4000);
+        
+    } else {
+        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
 // ===== MENU MOBILE =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
