@@ -2299,143 +2299,105 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU`;
     
-    // Menu organisé avec 3 options
+    // Menu organisé
     const paymentChoice = prompt(
         `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n` +
         `💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n` +
         `Tapez 1, 2 ou 3 :\n\n` +
-        `1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n` +
-        `2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n` +
+        `1️⃣ → Wave Sénégal (Ouvre votre app Wave)\n` +
+        `2️⃣ → Bankily Mauritanie (Ouvre votre app Bankily)\n` +
         `3️⃣ → WhatsApp (Discuter)\n\n` +
         `Votre choix (1/2/3) :`
     );
 
     if (paymentChoice === '1') {
-        // WAVE SÉNÉGAL
-        processWavePayment(totalFCFA, totalMRU, message);
+        // OUVRE DIRECTEMENT DANS WAVE DU CLIENT
+        openWaveApp(totalFCFA, totalMRU, message);
     } else if (paymentChoice === '2') {
-        // BANKILY MAURITANIE  
-        processBankilyPayment(totalMRU, message);
+        // OUVRE DIRECTEMENT DANS BANKILY DU CLIENT
+        openBankilyApp(totalMRU, message);
     } else if (paymentChoice === '3') {
         // WHATSAPP
-        processWhatsAppPayment(message);
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
     } else {
         showNotification('Choix annulé', 'warning');
     }
 }
 
-function processWavePayment(totalFCFA, totalMRU, message) {
-    if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Numéro : 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\n\n✅ OK → Payer maintenant avec Wave`)) {
+function openWaveApp(totalFCFA, totalMRU, message) {
+    if (confirm(`🌊 OUVERTURE DE WAVE\n\n💸 ${totalFCFA} FCFA sera pré-rempli\n📱 Destinataire : 76 282 11 33\n\nVotre application Wave va s'ouvrir directement.\n\n✅ OK → Ouvrir mon Wave`)) {
         
-        // Ouvrir Wave
-        const ussdCode = `*144*1*1*762821133*${totalFCFA}%23`;
-        window.location.href = `tel:${ussdCode}`;
+        // URLs pour ouvrir Wave directement dans l'app du client
+        const waveAppUrls = [
+            `wave://app`,
+            `wavecm://app`, 
+            `wave://home`,
+            `wavecm://home`,
+            `wave://transfer`,
+            `wavecm://transfer`,
+            `com.wavec.mobile://`,
+            `wave.sn://`
+        ];
         
-        // Confirmation
+        let waveOpened = false;
+        
+        // Essayer d'ouvrir Wave
+        waveAppUrls.forEach(url => {
+            if (!waveOpened) {
+                window.location.href = url;
+                waveOpened = true;
+            }
+        });
+        
+        // Instructions après ouverture
         setTimeout(() => {
-            if (confirm(`✅ Paiement Wave initié\n\nAvez-vous validé le paiement de ${totalFCFA} FCFA ?\n\n✅ OK → Oui, paiement réussi\n❌ Annuler → Non, problème`)) {
+            if (confirm(`📱 Votre Wave est ouvert ?\n\nPour finaliser :\n1. Allez dans "Envoyer"\n2. Numéro: 76 282 11 33\n3. Montant: ${totalFCFA} FCFA\n4. Validez\n\n✅ OK → J'ai payé\n❌ Annuler → Problème`)) {
                 showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
                 floatingCart = [];
                 updateFloatingCart();
                 closeFloatingCart();
             } else {
-                // Retour à WhatsApp en cas de problème
-                window.open(`https://wa.me/221762821133?text=${encodeURIComponent('Problème paiement Wave - ' + message)}`, '_blank');
+                window.open(`https://wa.me/221762821133?text=${encodeURIComponent('Besoin aide paiement Wave - ' + message)}`, '_blank');
             }
-        }, 5000);
-        
-    }
-}
-
-function processBankilyPayment(totalMRU, message) {
-    if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Numéro : 49 03 76 97\n\n✅ OK → Ouvrir Bankily\n❌ Annuler → WhatsApp`)) {
-        
-        // Instructions Bankily (plus fiable que l'ouverture automatique)
-        const bankilyInstructions = 
-            `🏦 INSTRUCTIONS BANKILY\n\n` +
-            `1. Ouvrez l'application Bankily\n` +
-            `2. Allez dans "Transférer"\n` +
-            `3. Numéro : 49 03 76 97\n` +
-            `4. Montant : ${totalMRU} MRU\n` +
-            `5. Message : "Commande Andu-Xara"\n\n` +
-            `Après paiement, confirmez ici.`;
-        
-        if (confirm(bankilyInstructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → WhatsApp`)) {
-            showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
-            floatingCart = [];
-            updateFloatingCart();
-            closeFloatingCart();
-        } else {
-            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
-        }
-        
-    } else {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
-    }
-}
-
-function processWhatsAppPayment(message) {
-    if (confirm(`📞 CONTACTER ANDU-XARA\n\n💬 Nous allons ouvrir WhatsApp pour discuter de votre commande.\n\n✅ OK → Ouvrir WhatsApp\n❌ Annuler → Retour`)) {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
-    }
-}
-function openWaveApp(totalFCFA, totalMRU, message) {
-    if (confirm(`🌊 OUVRIR VOTRE COMPTE WAVE\n\nVotre application Wave va s'ouvrir.\n\n💸 Montant à envoyer : ${totalFCFA} FCFA\n📱 À : 76 282 11 33\n\n✅ OK → Ouvrir mon Wave maintenant`)) {
-        
-        // Essayer d'ouvrir Wave
-        window.location.href = 'wave://app';
-        
-        // Fallback après 1 seconde
-        setTimeout(() => {
-            window.location.href = 'wavecm://app';
-        }, 1000);
-        
-        // Fallback après 2 secondes  
-        setTimeout(() => {
-            window.location.href = 'com.wavec.mobile://';
-        }, 2000);
-        
-        // Dernier fallback - ouvrir le store
-        setTimeout(() => {
-            if (confirm(`📱 Wave ne s'ouvre pas ?\n\n1. Ouvrez Wave manuellement\n2. Envoyez ${totalFCFA} FCFA au 76 282 11 33\n3. Revenez confirmer\n\n✅ OK → J'ai payé\n📲 Télécharger Wave`)) {
-                showNotification('✅ Merci ! Paiement confirmé.', 'success');
-                floatingCart = [];
-                updateFloatingCart();
-                closeFloatingCart();
-            } else {
-                window.open('https://apps.apple.com/app/wave-senegal/id1478181589', '_blank');
-            }
-        }, 4000);
+        }, 3000);
         
     }
 }
 
 function openBankilyApp(totalMRU, message) {
-    if (confirm(`🏦 OUVRIR VOTRE COMPTE BANKILY\n\nVotre application Bankily va s'ouvrir.\n\n💸 Montant à envoyer : ${totalMRU} MRU\n📱 À : 49 03 76 97\n\n✅ OK → Ouvrir mon Bankily maintenant`)) {
+    if (confirm(`🏦 OUVERTURE DE BANKILY\n\n💸 ${totalMRU} MRU à transférer\n📱 Destinataire : 49 03 76 97\n\nVotre application Bankily va s'ouvrir directement.\n\n✅ OK → Ouvrir mon Bankily`)) {
+        
+        // URLs pour ouvrir Bankily directement dans l'app du client
+        const bankilyAppUrls = [
+            `bankily://app`,
+            `bankily://main`,
+            `bankily://home`,
+            `bankily://transfer`,
+            `com.bankily.mauritanie://`,
+            `mauritanie.bankily://`
+        ];
+        
+        let bankilyOpened = false;
         
         // Essayer d'ouvrir Bankily
-        window.location.href = 'bankily://app';
+        bankilyAppUrls.forEach(url => {
+            if (!bankilyOpened) {
+                window.location.href = url;
+                bankilyOpened = true;
+            }
+        });
         
-        // Fallbacks
+        // Instructions après ouverture
         setTimeout(() => {
-            window.location.href = 'bankily://main';
-        }, 1000);
-        
-        setTimeout(() => {
-            window.location.href = 'com.bankily.mauritanie://';
-        }, 2000);
-        
-        // Instructions finales
-        setTimeout(() => {
-            if (confirm(`📱 Bankily ne s'ouvre pas ?\n\n1. Ouvrez Bankily manuellement\n2. Transférez ${totalMRU} MRU au 49 03 76 97\n3. Revenez confirmer\n\n✅ OK → J'ai payé\n📲 WhatsApp aide`)) {
-                showNotification('✅ Merci ! Paiement confirmé.', 'success');
+            if (confirm(`📱 Votre Bankily est ouvert ?\n\nPour finaliser :\n1. Allez dans "Transférer"\n2. Numéro: 49 03 76 97\n3. Montant: ${totalMRU} MRU\n4. Message: "Commande Andu-Xara"\n5. Validez\n\n✅ OK → J'ai payé\n❌ Annuler → Problème`)) {
+                showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
                 floatingCart = [];
                 updateFloatingCart();
                 closeFloatingCart();
             } else {
-                window.open(`https://wa.me/22249037697?text=${encodeURIComponent('Besoin aide ouverture Bankily')}`, '_blank');
+                window.open(`https://wa.me/22249037697?text=${encodeURIComponent('Besoin aide paiement Bankily - ' + message)}`, '_blank');
             }
-        }, 4000);
+        }, 3000);
         
     }
 }
