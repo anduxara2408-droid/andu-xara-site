@@ -2292,15 +2292,23 @@ function processFloatingCheckout() {
     ).join('\n');
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${total} MRU`;
-    const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
     
-    // Ouvrir directement WhatsApp avec instructions Bankily
-    const bankilyInstructions = `Pour payer via Bankily :\n1. Ouvrez Bankily\n2. Transférez ${total} MRU au 49037697\n3. Confirmez ici après paiement`;
-    
-    if (confirm(`💳 Paiement de ${total} MRU\n\nOK → Instructions Bankily\nAnnuler → Commander via WhatsApp`)) {
-        alert(bankilyInstructions + `\n\nAprès paiement, revenez ici pour confirmer.`);
-        // L'utilisateur peut maintenant ouvrir Bankily manuellement
+    if (confirm(`💳 Payer ${total} MRU via Bankily ?\n\nOK → Bankily\nAnnuler → WhatsApp`)) {
+        // Méthode TEL pour apps de paiement (plus universelle)
+        const telUrl = `tel:*144*1*1*49037697*${total}%23`;
+        
+        // Ouvrir le lien TEL
+        window.location.href = telUrl;
+        
+        // Fallback WhatsApp après 2 secondes
+        setTimeout(() => {
+            const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }, 2000);
+        
     } else {
+        // WhatsApp direct
+        const whatsappUrl = `https://wa.me/22249037697?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     }
 }
