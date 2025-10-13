@@ -1254,21 +1254,6 @@ body.lightbox-open {
             z-index: 2000;
         }
 
-        /* ===== POPUP SONINKÉ ===== */
-        #soninke-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-            z-index: 5000;
-            flex-direction: column;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-content {
@@ -2697,18 +2682,6 @@ function openBankilyApp(totalMRU, message) {
         
     }
 }
-// ===== INITIALISATION =====
-document.addEventListener('DOMContentLoaded', function() {
-    updateFloatingCart(); // ← AJOUT IMPORTANT
-    updateWishlistCounter();
-    showNewsletterPopup();
-    initVariationButtons();
-    initMenuMobile();
-    initLightbox();
-    initCountdown();
-    initSoninkeBadge();
-    initUserCounter();
-});
         // ===== MENU MOBILE =====
         function initMenuMobile() {
             const toggleBtn = document.querySelector('.menu-toggle');
@@ -2763,61 +2736,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-// ===== LIGHTBOX =====
-function initLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxClose = document.getElementById('lightbox-close');
-    
-    if (!lightbox || !lightboxImg || !lightboxClose) {
-        console.log('Lightbox elements manquants');
-        return;
-    }
-
-    console.log('Lightbox initialisée - Boutons trouvés:', document.querySelectorAll('.quick-view').length);
-
-    // Ajouter l'événement à tous les boutons "quick-view"
-    document.querySelectorAll('.quick-view').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const productCard = this.closest('.product-card');
-            const img = productCard.querySelector('.product-img');
-            
-            console.log('Quick-view cliqué - Image:', img?.src);
-            
-            if (img && img.src) {
-                lightboxImg.src = img.src;
-                lightboxImg.alt = img.alt || 'Image produit';
-                lightbox.style.display = 'flex';
-                document.body.classList.add('lightbox-open');
-            }
-        });
-    });
-
-    // Fermer la lightbox
-    lightboxClose.addEventListener('click', function() {
-        lightbox.style.display = 'none';
-        document.body.classList.remove('lightbox-open');
-    });
-
-    // Fermer en cliquant en dehors de l'image
-    lightbox.addEventListener('click', function(e) {
-        if (e.target === lightbox) {
-            lightbox.style.display = 'none';
-            document.body.classList.remove('lightbox-open');
-        }
-    });
-
-    // Fermer avec la touche Echap
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-            lightbox.style.display = 'none';
-            document.body.classList.remove('lightbox-open');
-        }
-    });
-}
 
         // ===== BADGE SONINKÉ =====
         function initSoninkeBadge() {
@@ -2839,29 +2757,6 @@ function initLightbox() {
                 }, 500);
             }, 3000);
 
-            // Popup Soninké
-            window.addEventListener('load', () => {
-                const popup = document.getElementById('soninke-popup');
-                const closeBtn = document.getElementById('soninke-close');
-
-                setTimeout(() => {
-                    popup.style.display = 'flex';
-                }, 500);
-
-                closeBtn.addEventListener('click', () => {
-                    popup.style.display = 'none';
-                localStorage.setItem('soninkePopupShown', 'true');
-                popup.style.display = 'none';
-                });
-
-                popup.addEventListener('click', (e) => {
-                    if (e.target === popup) {
-                        popup.style.display = 'none';
-                        localStorage.setItem('soninkePopupShown', 'true');
-                    }
-                });
-            });
-        }
 
         // ===== VARIATIONS PRODUITS =====
         function initVariationButtons() {
@@ -3198,6 +3093,58 @@ function initLightbox() {
         startCountdown();
     }
 
+</script>
+        <!-- Popup Promotion Élégant -->
+        <div id="elegant-popup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h2>🎉 Offre Spéciale Andu-Xara !</h2>
+                    <span class="popup-close" id="popup-close">&times;</span>
+                </div>
+                <div class="popup-body">
+                    <p>Profitez de <strong>30% de réduction</strong> sur toute la collection 2025</p>
+                    <p class="popup-details">📍 Livraison gratuite en Mauritanie(zones limitées)<br>
+                       ⏰ Offre valable jusqu'au 01 Novembre 2025</p>
+                </div>
+                <div class="popup-footer">
+                    <button class="popup-btn" onclick="closePopup()">Découvrir les promotions</button>
+                    <button class="popup-btn-secondary" onclick="closePopup()">Fermer</button>
+                </div>
+            </div>
+        </div>
+<script>
+// === POPUP ÉLÉGANT ===
+function showPopup() {
+    const popup = document.getElementById('elegant-popup');
+    popup.style.display = 'flex';
+    console.log('🎉 Popup affiché');
+}
+
+function closePopup() {
+    const popup = document.getElementById('elegant-popup');
+    popup.style.display = 'none';
+    console.log('❌ Popup fermé');
+}
+
+// Afficher le popup après 2 secondes
+setTimeout(showPopup, 2000);
+
+// Fermer en cliquant sur la croix
+document.getElementById('popup-close').addEventListener('click', closePopup);
+
+// Fermer en cliquant en dehors du popup
+document.getElementById('elegant-popup').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePopup();
+    }
+});
+
+// Fermer avec la touche Échap
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closePopup();
+    }
+});
 </script>
 </body>
 </html>
