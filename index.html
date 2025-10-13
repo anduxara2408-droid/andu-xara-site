@@ -1367,13 +1367,14 @@ body.lightbox-open {
         font-size: 0.8rem;
     }
 }
-/* ===== PANIER FLOTTANT SIMPLE ===== */
+/* ===== PANIER FLOTTANT AMÉLIORÉ ===== */
 .floating-cart {
     position: fixed;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
     z-index: 1000;
+    max-height: 80vh; /* Limite la hauteur totale */
 }
 
 .cart-toggle {
@@ -1409,80 +1410,111 @@ body.lightbox-open {
     position: absolute;
     top: 100%;
     right: 0;
-    width: 300px;
+    width: 350px; /* Légèrement plus large */
     background: white;
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     margin-top: 10px;
     display: none;
-    max-height: 400px;
-    overflow: hidden;
+    max-height: 70vh; /* Hauteur maximale */
+    overflow: hidden; /* Cache le débordement */
 }
 
 .floating-cart.open .cart-panel {
     display: block;
 }
 
-.cart-items-container {
-    max-height: 250px;
-    overflow-y: auto;
+/* Conteneur principal avec défilement interne */
+.cart-panel-content {
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh; /* Hauteur maximale */
+}
+
+/* Section des articles avec défilement */
+.cart-items-section {
+    flex: 1;
+    overflow-y: auto; /* Défilement vertical seulement ici */
+    max-height: 400px; /* Hauteur maximale pour les articles */
+    min-height: 100px; /* Hauteur minimale */
     padding: 15px;
+}
+
+.cart-items-container {
+    min-height: 50px;
 }
 
 .cart-item-floating {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #eee;
 }
 
 .cart-item-info h4 {
     margin: 0;
     font-size: 0.9rem;
+    max-width: 180px; /* Empêche le texte trop long */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cart-item-info p {
-    margin: 2px 0;
+    margin: 5px 0;
     font-size: 0.8rem;
     color: #666;
 }
 
 .cart-item-price {
     text-align: right;
+    flex-shrink: 0; /* Empêche le rétrécissement */
 }
 
 .remove-item {
     background: #ff4757;
     color: white;
     border: none;
-    border-radius: 3px;
-    padding: 2px 6px;
+    border-radius: 5px;
+    padding: 4px 8px;
     cursor: pointer;
     font-size: 0.7rem;
     margin-top: 5px;
 }
 
+.remove-item:hover {
+    background: #ff3742;
+}
+
+/* Section checkout TOUJOURS visible */
 .cart-summary {
     padding: 15px;
     border-top: 2px solid #6a11cb;
     background: #f8f9fa;
+    flex-shrink: 0; /* Empêche le rétrécissement */
+    position: sticky;
+    bottom: 0;
 }
 
 .cart-total-floating {
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
+    font-size: 1.1rem;
+    color: #2c3e50;
 }
 
 .buy-btn, .close-cart-btn {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .buy-btn {
@@ -1490,27 +1522,95 @@ body.lightbox-open {
     color: white;
 }
 
+.buy-btn:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+}
+
 .close-cart-btn {
     background: #6a11cb;
     color: white;
 }
 
+.close-cart-btn:hover {
+    background: #2575fc;
+}
+
 .empty-cart-floating {
     text-align: center;
     color: #888;
-    padding: 20px;
+    padding: 30px 20px;
     font-style: italic;
+}
+
+/* Barre de défilement personnalisée */
+.cart-items-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart-items-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart-items-section::-webkit-scrollbar-thumb {
+    background: #6a11cb;
+    border-radius: 10px;
+}
+
+.cart-items-section::-webkit-scrollbar-thumb:hover {
+    background: #2575fc;
+}
+
+/* Indicateur quand il y a beaucoup d'articles */
+.cart-has-many-items::after {
+    content: "↓ Défiler pour voir plus d'articles ↓";
+    display: block;
+    text-align: center;
+    color: #6a11cb;
+    font-size: 0.8rem;
+    padding: 10px;
+    background: linear-gradient(transparent, rgba(248, 249, 250, 0.9));
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid #e2e8f0;
 }
 
 /* Mobile */
 @media (max-width: 768px) {
     .floating-cart {
         right: 10px;
+        max-height: 85vh;
+    }
+
+    .cart-panel {
+        width: 320px;
+        max-height: 75vh;
+        right: -50px;
     }
     
+    .cart-items-section {
+        max-height: 350px;
+    }
+    
+    .cart-item-info h4 {
+        max-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
     .cart-panel {
-        width: 280px;
-        right: -50px;
+        width: 300px;
+        right: -80px;
+    }
+    
+    .cart-items-section {
+        max-height: 300px;
+    }
+    
+    .cart-item-info h4 {
+        max-width: 120px;
+        font-size: 0.8rem;
     }
 }
 /* === NOUVEAU STYLE POUR PRODUITS === */
@@ -2482,45 +2582,26 @@ function addToCartSimple(productName, price) {
     // Afficher une notification
     showNotification('✅ ' + productName + ' ajouté au panier !');
 
-    // Mettre à jour l'affichage du panier et l'ouvrir
-    updateFloatingCart();
-    openFloatingCart();
+    // Mettre à jour seulement le compteur, sans ouvrir le panier
+    updateFloatingCartCounter();
 }
 
-// ===== FONCTION RETIRER DU PANIER (SANS FERMER) =====
-function removeFromFloatingCart(index) {
-    floatingCart.splice(index, 1);
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    updateFloatingCart();
-    showNotification('🗑️ Produit retiré du panier');
-    // NE PAS fermer le panier ici
-}
-
-// ===== FONCTIONS D'OUVERTURE/FERMETURE =====
-function openFloatingCart() {
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.add('open');
+// ===== FONCTION POUR METTRE À JOUR SEULEMENT LE COMPTEUR =====
+function updateFloatingCartCounter() {
+    console.log('🔄 Mise à jour du compteur panier...');
+    
+    const badge = document.getElementById('cart-badge-floating');
+    
+    // Mettre à jour seulement le badge
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
     }
 }
 
-function closeFloatingCart() {
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.remove('open');
-    }
-}
-
-function toggleFloatingCart() {
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.toggle('open');
-    }
-}
-
-// ===== FONCTION UPDATE FLOATING CART =====
+// ===== FONCTION UPDATE FLOATING CART COMPLÈTE =====
 function updateFloatingCart() {
-    console.log('🔄 Mise à jour du panier flottant...');
+    console.log('🔄 Mise à jour complète du panier flottant...');
     
     const badge = document.getElementById('cart-badge-floating');
     const itemsContainer = document.getElementById('cart-items-floating');
@@ -2572,6 +2653,42 @@ function updateFloatingCart() {
     }
 }
 
+// ===== FONCTION RETIRER DU PANIER =====
+function removeFromFloatingCart(index) {
+    floatingCart.splice(index, 1);
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    updateFloatingCart(); // Mettre à jour l'affichage complet
+    showNotification('🗑️ Produit retiré du panier');
+    // NE PAS fermer le panier - il reste ouvert
+}
+// ===== FONCTIONS D'OUVERTURE/FERMETURE =====
+function openFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.add('open');
+        // Mettre à jour l'affichage complet quand on ouvre
+        updateFloatingCart();
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}
+
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        // Mettre à jour l'affichage complet quand on ouvre/ferme
+        if (cart.classList.contains('open')) {
+            updateFloatingCart();
+        }
+    }
+}
+
 // ===== CONVERSION DES PRIX =====
 function updateConvertedPrices(totalMRU) {
     const tauxMRUtoCFA = 2.5;
@@ -2582,6 +2699,7 @@ function updateConvertedPrices(totalMRU) {
         cfaElement.textContent = totalCFA.toLocaleString() + ' FCFA';
     }
 }
+
 // ===== SYSTÈME DE PAIEMENT COMPLET ET CORRIGÉ =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
@@ -2775,6 +2893,29 @@ function showNotification(message, type = 'success') {
         }, 300);
     }, 3000);
 }
+
+// ===== INITIALISATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Panier initialisé');
+
+    // Charger le panier depuis le localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+
+    // Mettre à jour l'affichage
+    updateFloatingCart();
+
+    // Fermer le panier en cliquant à l'extérieur
+    document.addEventListener('click', function(event) {
+        const cart = document.getElementById('floating-cart');
+        const toggle = document.querySelector('.cart-toggle');
+
+        if (cart && cart.classList.contains('open') &&
+            !cart.contains(event.target) &&
+            !toggle.contains(event.target)) {
+            closeFloatingCart();
+        }
+    });
+});
 
 </script>
     // ===== MENU MOBILE =====
