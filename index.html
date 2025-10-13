@@ -3199,24 +3199,5 @@ function initLightbox() {
     }
 
 </script>
-        <!-- Bouton retour en haut -->
-        <button class="back-to-top" onclick="scrollToTop()">↑</button>
-<script>
-// === BOUTON RETOUR EN HAUT ===
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-window.addEventListener('scroll', function() {
-    const backButton = document.querySelector('.back-to-top');
-    if (backButton) {
-        if (window.scrollY > 300) {
-            backButton.classList.add('show');
-        } else {
-            backButton.classList.remove('show');
-        }
-    }
-});
-</script>
 </body>
 </html>
