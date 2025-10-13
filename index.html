@@ -586,40 +586,50 @@
     font-size: 1.1rem;
 }
 
-        /* ===== COMPTEUR PROMOTION ===== */
-        .promo-countdown {
-            background: linear-gradient(135deg, #ff7e5f, #feb47b);
-            color: #fff;
-            text-align: center;
-            padding: 30px 20px;
-            border-radius: 15px;
-            margin: 20px auto;
-            max-width: 600px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
+/* === COMPTE À REBOURS PROMOTION === */
+.promo-countdown {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 20px auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: pulse 2s infinite;
+    max-width: 500px;
+}
 
-        .promo-countdown h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
+.promo-countdown h2 {
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
 
-        #countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            font-size: 1.4rem;
-        }
+#countdown {
+    font-size: 1.4em;
+    font-weight: bold;
+}
 
-        #countdown span {
-            background: rgba(0,0,0,0.2);
-            padding: 15px 20px;
-            border-radius: 10px;
-            min-width: 60px;
-            display: inline-block;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+#countdown span {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 0 5px;
+    display: inline-block;
+    min-width: 50px;
+}
+
+/* Animation pulsation */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Style quand la promotion est terminée */
+.promo-countdown.ended {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    animation: none;
+}
+
 /* ===== LIGHTBOX ===== */
 #lightbox {
     display: none;
@@ -1165,21 +1175,6 @@ body.lightbox-open {
             cursor: pointer;
         }
 
-        /* ===== UTILISATEURS EN LIGNE ===== */
-        #userOnline {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: red;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            animation: blink 1s infinite;
-            z-index: 1000;
-        }
-
         /* ===== BOUTON CHAT ===== */
         .chat-button {
             position: fixed;
@@ -1622,6 +1617,81 @@ body.lightbox-open {
         height: 140px;
     }
 }
+/* === COMPTE À REBOURS SIMPLE ET ÉLÉGANT === */
+.promo-countdown {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    text-align: center;
+    margin: 20px auto;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    max-width: 400px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.promo-countdown h2 {
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+#countdown {
+    font-size: 1.1em;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+#countdown span {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 10px;
+    border-radius: 10px;
+    min-width: 45px;
+    display: inline-block;
+}
+
+/* Style quand la promotion est terminée */
+.promo-countdown.ended {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+}
+
+.promo-countdown.ended h2 {
+    margin-bottom: 0;
+}
+/* === COMPTEUR EN LIGNE - HAUT MILIEU === */
+.mini-counter {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: fadeIn 0.5s ease;
+    white-space: nowrap;
+}
+
+.counter-number {
+    font-weight: bold;
+    color: #fff;
+    margin: 0 3px;
+    font-size: 13px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
     </style>
 
     <!-- Google Analytics -->
@@ -1634,12 +1704,6 @@ body.lightbox-open {
     </script>
 </head>
 <body>
-    <div class="main-container">
-        <!-- Utilisateurs en ligne -->
-        <div id="userOnline">
-            👥 Utilisateurs en ligne: <span id="userCount">0</span>
-        </div>
-
         <!-- Bandeau défilant -->
         <div class="marquee-container">
             <div class="marquee-content">
@@ -1682,7 +1746,13 @@ body.lightbox-open {
                 </div>
             </div>
 
+
         </header>
+
+        <!-- Compteur visiteurs réel -->
+        <div class="mini-counter">
+            👁️ <span class="counter-number" id="visitorCount">0</span> en ligne
+        </div>
 
 <!-- Panier flottant simple -->
 <div id="floating-cart" class="floating-cart">
@@ -1699,19 +1769,18 @@ body.lightbox-open {
     </div>
 </div>
 
-        <!-- Main Content -->
-        <main class="container">
-            <!-- Compteur promotion -->
-            <section class="promo-countdown">
-                <h2>Promotion spéciale se termine bientôt !</h2>
-                <div id="countdown">
-                    <span id="days">00</span> jours
-                    <span id="hours">00</span> heures
-                    <span id="minutes">00</span> minutes
-                    <span id="seconds">00</span> secondes
-                </div>
-            </section>
-
+<!-- Main Content -->
+<main class="container">
+    <!-- Compteur promotion -->
+    <section class="promo-countdown">
+        <h2>Promotion spéciale se termine bientôt !</h2>
+        <div id="countdown">
+            <span id="days">00</span>j
+            <span id="hours">00</span>h
+            <span id="minutes">00</span>m
+            <span id="seconds">00</span>s
+        </div>
+    </section>
             <!-- Audio de bienvenue -->
             <div class="audio-welcome" style="text-align:center; margin-top:20px;">
                 <h3>🎧 Message de bienvenue</h3>
@@ -2689,31 +2758,6 @@ function initLightbox() {
         }
     });
 }
-        // ===== COMPTEUR PROMOTION =====
-        function initCountdown() {
-            const promoEndDate = new Date("2025-09-25T23:59:59").getTime();
-
-            const countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = promoEndDate - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    document.getElementById("countdown").innerHTML = "Promotion terminée !";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("days").textContent = days.toString().padStart(2, '0');
-                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
-            }, 1000);
-        }
 
         // ===== BADGE SONINKÉ =====
         function initSoninkeBadge() {
@@ -2757,19 +2801,6 @@ function initLightbox() {
                     }
                 });
             });
-        }
-
-        // ===== UTILISATEURS EN LIGNE =====
-        function initUserCounter() {
-            // Simulation d'utilisateurs en ligne
-            let userCount = Math.floor(Math.random() * 50) + 10;
-            document.getElementById('userCount').textContent = userCount;
-
-            setInterval(() => {
-                userCount += Math.random() > 0.5 ? 1 : -1;
-                userCount = Math.max(5, userCount);
-                document.getElementById('userCount').textContent = userCount;
-            }, 10000);
         }
 
         // ===== VARIATIONS PRODUITS =====
@@ -2915,37 +2946,198 @@ function initLightbox() {
                 navigator.serviceWorker.register('/sw.js').catch(console.error);
             });
         }
-    </script>
+ </script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-    <!-- Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-        import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+    // Configuration Firebase - utilise ton projet andu-xara-online-counter
+    const firebaseConfig = {
+        apiKey: "AIzaSyBjzBW5ADllWk2292Xv1C3mlm4X08XyknM",
+        authDomain: "andu-xara-online-counter.firebaseapp.com",
+        databaseURL: "https://andu-xara-online-counter-default-rtdb.firebaseio.com",
+        projectId: "andu-xara-online-counter",
+        storageBucket: "andu-xara-online-counter.firebasestorage.app",
+        messagingSenderId: "89485701999",
+        appId: "1:89485701999:web:0884ea2f5d246570f1ee9a",
+        measurementId: "G-0FN2XN1QGG"
+    };
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyi0vsB3nkxxjMoNnRWeYK4IZe7hxikCU",
-            authDomain: "andu-xara-2fc48.firebaseapp.com",
-            databaseURL: "https://andu-xara-2fc48-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "andu-xara-2fc48",
-            storageBucket: "andu-xara-2fc48.firebasestorage.app",
-            messagingSenderId: "873034669698",
-            appId: "1:873034669698:web:87cfdcfa009a4146e29e9b"
-        };
+    // Initialiser Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    console.log('🚀 Initialisation du vrai compteur Firebase...');
 
-        const userId = Date.now();
-        const userRef = ref(db, 'onlineUsers/' + userId);
+    // Créer un ID unique pour cet utilisateur
+    const userId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    const userRef = ref(db, 'onlineUsers/' + userId);
 
-        set(userRef, { timestamp: serverTimestamp() });
-        onDisconnect(userRef).remove();
+    // Fonction pour mettre à jour l'affichage
+    function updateCounterDisplay(count) {
+        document.getElementById('visitorCount').textContent = count;
+        console.log('👥 Vrais utilisateurs en ligne:', count);
+    }
 
-        const onlineRef = ref(db, 'onlineUsers');
-        onValue(onlineRef, (snapshot) => {
-            const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-            document.getElementById('userCount').innerText = count;
+    // SE CONNECTER - cet utilisateur rejoint
+    set(userRef, {
+        joinedAt: serverTimestamp(),
+        lastSeen: Date.now(),
+        userAgent: navigator.userAgent.substring(0, 80)
+    }).then(() => {
+        console.log('✅ Utilisateur connecté:', userId);
+    }).catch(error => {
+        console.error('❌ Erreur connexion:', error);
+    });
+
+    // SE DÉCONNECTER AUTOMATIQUEMENT quand l'onglet se ferme
+    onDisconnect(userRef).remove().then(() => {
+        console.log('✅ Déconnexion automatique configurée');
+    });
+
+    // SURVEILLER TOUS LES UTILISATEURS EN TEMPS RÉEL
+    const onlineUsersRef = ref(db, 'onlineUsers');
+    onValue(onlineUsersRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const users = snapshot.val();
+            const realTimeCount = Object.keys(users).length;
+            console.log('📊 Vrai compteur temps réel:', realTimeCount, 'utilisateurs');
+            updateCounterDisplay(realTimeCount);
+            
+            // Nettoyer les utilisateurs inactifs (optionnel)
+            cleanInactiveUsers(users);
+        } else {
+            // Personne en ligne
+            console.log('📊 Aucun utilisateur en ligne');
+            updateCounterDisplay(0);
+        }
+    });
+
+    // Nettoyer les utilisateurs inactifs (plus de 5 minutes)
+    function cleanInactiveUsers(users) {
+        const now = Date.now();
+        const fiveMinutesAgo = now - 300000; // 5 minutes
+        
+        for (const [uid, userData] of Object.entries(users)) {
+            if (userData.lastSeen && userData.lastSeen < fiveMinutesAgo) {
+                // Supprimer l'utilisateur inactif
+                const inactiveUserRef = ref(db, 'onlineUsers/' + uid);
+                set(inactiveUserRef, null);
+                console.log('🧹 Utilisateur inactif nettoyé:', uid);
+            }
+        }
+    }
+
+    // Maintenir la connexion active
+    setInterval(() => {
+        set(userRef, {
+            lastSeen: Date.now(),
+            active: true
         });
-    </script>
+    }, 30000); // Mettre à jour toutes les 30 secondes
+</script>
+<script>
+    // === COMPTE À REBOURS 20 JOURS - VERSION FONCTIONNELLE ===
+    console.log('🎯 Initialisation compte à rebours...');
+
+    // Fonction pour créer une date de fin (maintenant + 20 jours)
+    function createEndDate() {
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 20);
+        endDate.setHours(23, 59, 59, 999); // Fin à 23:59:59
+        return endDate;
+    }
+
+    // Initialiser ou récupérer la date de fin
+    function initializeCountdown() {
+        let endDate;
+        
+        // Vérifier si une date existe dans le localStorage
+        const savedDate = localStorage.getItem('promoEndDate');
+        
+        if (savedDate) {
+            endDate = new Date(parseInt(savedDate));
+            console.log('📅 Date existante:', endDate);
+        } else {
+            // Créer une nouvelle date
+            endDate = createEndDate();
+            localStorage.setItem('promoEndDate', endDate.getTime());
+            console.log('🆕 Nouvelle date créée:', endDate);
+        }
+        
+        return endDate;
+    }
+
+    // Démarrer le compte à rebours
+    function startCountdown() {
+        const endDate = initializeCountdown();
+        const now = new Date().getTime();
+        const distance = endDate - now;
+        
+        console.log('⏰ Temps total:', distance, 'ms');
+        console.log('📆 Date de fin:', endDate);
+        console.log('🕒 Maintenant:', new Date());
+
+        // Vérifier si la promotion est déjà terminée
+        if (distance <= 0) {
+            showPromotionEnded();
+            return;
+        }
+
+        // Démarrer la mise à jour
+        updateCountdown(endDate);
+    }
+
+    // Mettre à jour l'affichage
+    function updateCountdown(endDate) {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        if (distance <= 0) {
+            showPromotionEnded();
+            return;
+        }
+
+        // Calculer jours, heures, minutes, secondes
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        console.log(`⏳ ${days}j ${hours}h ${minutes}m ${seconds}s`);
+
+        // Mettre à jour l'affichage
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+        // Mettre à jour toutes les secondes
+        setTimeout(() => updateCountdown(endDate), 1000);
+    }
+
+    // Afficher "Promotion terminée"
+    function showPromotionEnded() {
+        document.querySelector('.promo-countdown h2').textContent = 'Promotion terminée !';
+        document.querySelector('.promo-countdown').classList.add('ended');
+        console.log('🏁 Promotion terminée');
+    }
+
+    // FORCER LA RÉINITIALISATION (à utiliser une seule fois)
+    function resetCountdown() {
+        localStorage.removeItem('promoEndDate');
+        console.log('🔄 Compte à rebours réinitialisé');
+        location.reload();
+    }
+
+    // DÉMARRER - DÉCOMMENTE LA LIGNE CI-DESSOUS POUR RÉINITIALISER
+    // resetCountdown();
+
+    // Démarrer normalement
+    if (document.querySelector('.promo-countdown')) {
+        startCountdown();
+    }
+
+</script>
 </body>
 </html>
