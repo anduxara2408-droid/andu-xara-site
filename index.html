@@ -1720,6 +1720,7 @@ body.lightbox-open {
     from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+   
     </style>
 
     <!-- Google Analytics -->
@@ -1781,7 +1782,6 @@ body.lightbox-open {
         <div class="mini-counter">
             👁️ <span class="counter-number" id="visitorCount">0</span> en ligne
         </div>
-
 <!-- Panier flottant simple -->
 <div id="floating-cart" class="floating-cart">
     <div class="cart-toggle" onclick="toggleFloatingCart()">
@@ -1796,7 +1796,6 @@ body.lightbox-open {
         </div>
     </div>
 </div>
-
 <!-- Main Content -->
 <main class="container">
     <!-- Compteur promotion -->
@@ -1855,14 +1854,15 @@ body.lightbox-open {
                     </div>
                 </div>
             </div>
-<!-- AJOUTE CE CODE AVANT le premier produit -->
+
+<!-- Produits -->
 <div class="produits-container">
 
 <!-- Produit 1 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-logo-arabe')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt logo arabe</h3>
@@ -1881,7 +1881,7 @@ body.lightbox-open {
       <span class="promo-price">349 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt logo arabe', 499, 349)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt logo arabe', 349)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -1891,7 +1891,7 @@ body.lightbox-open {
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-capuchon-arabe')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Ensemble capuche style arabe</h3>
@@ -1909,7 +1909,7 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Ensemble capuche style arabe', 599, 419)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Ensemble capuche style arabe', 419)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -1919,7 +1919,7 @@ body.lightbox-open {
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('combinaison')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Combinaison T-shirt et Capuche</h3>
@@ -1937,7 +1937,7 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Combinaison T-shirt et Capuche', 599, 419)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Combinaison T-shirt et Capuche', 419)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -1947,7 +1947,7 @@ body.lightbox-open {
 <div class="product-card" data-category="enfants">
   <div class="product-image-container">
     <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-enfant')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt Enfant</h3>
@@ -1965,7 +1965,7 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Enfant', 399, 279)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Enfant', 279)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -1975,7 +1975,7 @@ body.lightbox-open {
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('t-shirt-et-jogging')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Ensemble T-shirt et jogging</h3>
@@ -1994,7 +1994,7 @@ body.lightbox-open {
       <span class="promo-price">559 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Ensemble T-shirt et jogging', 799, 559)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Ensemble T-shirt et jogging', 559)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2004,7 +2004,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('pull-bleu')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Pull bleu</h3>
@@ -2022,7 +2022,7 @@ body.lightbox-open {
       <span class="promo-price">489 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Pull bleu', 699, 489)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Pull bleu', 489)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2032,7 +2032,7 @@ body.lightbox-open {
 <div class="product-card" data-category="accessoires">
   <div class="product-image-container">
     <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('capuchon-blanc')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Capuchon blanc</h3>
@@ -2048,7 +2048,7 @@ body.lightbox-open {
       <span class="promo-price">209 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Capuchon blanc', 299, 209)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Capuchon blanc', 209)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2058,7 +2058,7 @@ body.lightbox-open {
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('ensemble-complet')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt et jogging</h3>
@@ -2076,7 +2076,7 @@ body.lightbox-open {
       <span class="promo-price">629 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt et jogging Complet', 899, 629)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt et jogging Complet', 629)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2086,7 +2086,7 @@ body.lightbox-open {
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('babs')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Babs Premium</h3>
@@ -2104,7 +2104,7 @@ body.lightbox-open {
       <span class="promo-price">1049 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Babs Premium', 1499, 1049)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Babs Premium', 1049)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2114,7 +2114,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('fillenoir')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt Fille Noir</h3>
@@ -2132,7 +2132,7 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Fille Noir', 399, 279)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Fille Noir', 279)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2142,7 +2142,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('filleblan')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt Fille Blanc</h3>
@@ -2160,7 +2160,7 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Fille Blanc', 599, 419)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Fille Blanc', 419)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2170,7 +2170,7 @@ body.lightbox-open {
 <div class="product-card" data-category="pulls">
   <div class="product-image-container">
     <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('pullblanc')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">Pull Blanc</h3>
@@ -2188,7 +2188,7 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Pull Blanc', 599, 419)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('Pull Blanc', 419)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2198,7 +2198,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('beigetshirt')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt Beige</h3>
@@ -2216,7 +2216,7 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Beige', 399, 279)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Beige', 279)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2226,7 +2226,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('blanctshirt')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt Blanc</h3>
@@ -2244,7 +2244,7 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('T-shirt Blanc', 399, 279)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Blanc', 279)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
@@ -2254,7 +2254,7 @@ body.lightbox-open {
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img" loading="lazy">
-    <button class="wishlist-btn" onclick="toggleWishlist('adxnoir')">❤️</button>
+    <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
     <h3 class="product-title">T-shirt ADX Noir</h3>
@@ -2272,13 +2272,12 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCart('Adx noir', 399, 279)">Ajouter au panier</button>
+      <button class="add-to-cart" onclick="addToCartSimple('T-shirt ADX Noir', 279)">Ajouter au panier</button>
       <button class="quick-view">👁️</button>
     </div>
   </div>
 </div>
 
-<!-- AJOUTE CE CODE APRÈS le dernier produit -->
 </div>
             <!-- Filtres -->
             <section id="filtres" style="margin:20px; text-align:center;">
@@ -2445,90 +2444,63 @@ body.lightbox-open {
             <button onclick="subscribeNewsletter()">S'inscrire</button>
         </div>
     </div>
- <script>
-        // ===== VARIABLES GLOBALES =====
-        let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
-        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        let panier = [];
+<script>
+// ===== VARIABLES GLOBALES =====
+let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 
-// ===== PANIER FLOTTANT =====
-let floatingCart = [];
+// ===== FONCTION ADD TO CART SIMPLE =====
+function addToCartSimple(productName, price) {
+    console.log('🛒 Ajout au panier simple:', productName, 'Prix:', price + ' MRU');
 
-function addToCart(productName, oldPrice, promoPrice) {
     // Vibration si supporté
     if (navigator.vibrate) navigator.vibrate(50);
 
+    // Rechercher si le produit existe déjà
     const existingItem = floatingCart.find(item => item.name === productName);
 
     if (existingItem) {
-        existingItem.quantity += 1;
+        // Limite à 20 produits maximum
+        if (existingItem.quantity < 20) {
+            existingItem.quantity += 1;
+        } else {
+            showNotification('❌ Maximum 20 produits par article atteint !', 'error');
+            return;
+        }
     } else {
         floatingCart.push({
             name: productName,
-            oldPrice: parseFloat(oldPrice),
-            promoPrice: parseFloat(promoPrice),
-            quantity: 1
+            price: price,
+            promoPrice: price, // Pour compatibilité avec votre système
+            quantity: 1,
+            addedAt: new Date().toISOString()
         });
     }
 
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+
+    // Afficher une notification
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+
+    // Mettre à jour l'affichage du panier et l'ouvrir
     updateFloatingCart();
-    showNotification(productName + ' ajouté au panier 🛒');
+    openFloatingCart();
 }
 
-function updateFloatingCart() {
-    const badge = document.getElementById('cart-badge-floating');
-    const itemsContainer = document.getElementById('cart-items-floating');
-    const totalElement = document.getElementById('cart-total-floating');
-    
-    // Mettre à jour le badge
-    const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
-    if (badge) badge.textContent = totalItems;
-    
-    // Mettre à jour les articles
-    if (itemsContainer && totalElement) {
-        itemsContainer.innerHTML = '';
-        let total = 0;
-        
-        if (floatingCart.length === 0) {
-            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
-        } else {
-            floatingCart.forEach((item, index) => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'cart-item-floating';
-                itemElement.innerHTML = `
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p>Quantité: ${item.quantity}</p>
-                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
-                    </div>
-                    <div class="cart-item-price">
-                        <div style="text-decoration: line-through; color: #888; font-size: 0.8rem;">
-                            ${(item.oldPrice * item.quantity).toFixed(0)} MRU
-                        </div>
-                        <div style="color: #e60023; font-weight: bold;">
-                            ${(item.promoPrice * item.quantity).toFixed(0)} MRU
-                        </div>
-                    </div>
-                `;
-                itemsContainer.appendChild(itemElement);
-                total += item.promoPrice * item.quantity;
-            });
-        }
-        
-        totalElement.textContent = total.toFixed(0);
-    }
-}
-
+// ===== FONCTION RETIRER DU PANIER (SANS FERMER) =====
 function removeFromFloatingCart(index) {
     floatingCart.splice(index, 1);
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
-    showNotification('Produit retiré', 'warning');
+    showNotification('🗑️ Produit retiré du panier');
+    // NE PAS fermer le panier ici
 }
 
-function toggleFloatingCart() {
+// ===== FONCTIONS D'OUVERTURE/FERMETURE =====
+function openFloatingCart() {
     const cart = document.getElementById('floating-cart');
     if (cart) {
-        cart.classList.toggle('open');
+        cart.classList.add('open');
     }
 }
 
@@ -2538,6 +2510,80 @@ function closeFloatingCart() {
         cart.classList.remove('open');
     }
 }
+
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+    }
+}
+
+// ===== FONCTION UPDATE FLOATING CART =====
+function updateFloatingCart() {
+    console.log('🔄 Mise à jour du panier flottant...');
+    
+    const badge = document.getElementById('cart-badge-floating');
+    const itemsContainer = document.getElementById('cart-items-floating');
+    const totalElement = document.getElementById('cart-total-floating');
+    const checkoutSection = document.getElementById('checkout-section');
+    
+    // Mettre à jour le badge
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+    }
+    
+    // Mettre à jour les articles
+    if (itemsContainer && totalElement) {
+        itemsContainer.innerHTML = '';
+        let total = 0;
+        
+        if (floatingCart.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
+            if (checkoutSection) checkoutSection.style.display = 'none';
+        } else {
+            floatingCart.forEach((item, index) => {
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item-floating';
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Quantité: ${item.quantity}</p>
+                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
+                    </div>
+                    <div class="cart-item-price">
+                        <div style="color: #e60023; font-weight: bold;">
+                            ${(itemPrice * item.quantity).toFixed(0)} MRU
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+                total += itemPrice * item.quantity;
+            });
+            
+            if (checkoutSection) checkoutSection.style.display = 'block';
+            
+            // Mettre à jour les prix convertis
+            updateConvertedPrices(total);
+        }
+        
+        totalElement.textContent = total.toFixed(0) + ' MRU';
+    }
+}
+
+// ===== CONVERSION DES PRIX =====
+function updateConvertedPrices(totalMRU) {
+    const tauxMRUtoCFA = 2.5;
+    const totalCFA = Math.round(totalMRU * tauxMRUtoCFA);
+    
+    const cfaElement = document.getElementById('total-cfa');
+    if (cfaElement) {
+        cfaElement.textContent = totalCFA.toLocaleString() + ' FCFA';
+    }
+}
+
+// ===== VOTRE SYSTÈME DE PAIEMENT AMÉLIORÉ =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
@@ -2553,108 +2599,149 @@ function processFloatingCheckout() {
     
     const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU`;
     
-    // Menu organisé
+    // Menu organisé avec 3 options
     const paymentChoice = prompt(
         `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n` +
         `💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n` +
         `Tapez 1, 2 ou 3 :\n\n` +
-        `1️⃣ → Wave Sénégal (Ouvre votre app Wave)\n` +
-        `2️⃣ → Bankily Mauritanie (Ouvre votre app Bankily)\n` +
+        `1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n` +
+        `2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n` +
         `3️⃣ → WhatsApp (Discuter)\n\n` +
         `Votre choix (1/2/3) :`
     );
 
     if (paymentChoice === '1') {
-        // OUVRE DIRECTEMENT DANS WAVE DU CLIENT
-        openWaveApp(totalFCFA, totalMRU, message);
+        // WAVE SÉNÉGAL
+        processWavePayment(totalFCFA, totalMRU, message);
     } else if (paymentChoice === '2') {
-        // OUVRE DIRECTEMENT DANS BANKILY DU CLIENT
-        openBankilyApp(totalMRU, message);
+        // BANKILY MAURITANIE  
+        processBankilyPayment(totalMRU, message);
     } else if (paymentChoice === '3') {
         // WHATSAPP
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        processWhatsAppPayment(message);
     } else {
         showNotification('Choix annulé', 'warning');
     }
 }
 
-function openWaveApp(totalFCFA, totalMRU, message) {
-    if (confirm(`🌊 OUVERTURE DE WAVE\n\n💸 ${totalFCFA} FCFA sera pré-rempli\n📱 Destinataire : 76 282 11 33\n\nVotre application Wave va s'ouvrir directement.\n\n✅ OK → Ouvrir mon Wave`)) {
+function processWavePayment(totalFCFA, totalMRU, message) {
+    if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Numéro : 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\n\n✅ OK → Payer maintenant avec Wave`)) {
         
-        // URLs pour ouvrir Wave directement dans l'app du client
-        const waveAppUrls = [
-            `wave://app`,
-            `wavecm://app`, 
-            `wave://home`,
-            `wavecm://home`,
-            `wave://transfer`,
-            `wavecm://transfer`,
-            `com.wavec.mobile://`,
-            `wave.sn://`
-        ];
+        // Ouvrir Wave
+        const ussdCode = `*144*1*1*762821133*${totalFCFA}%23`;
+        window.location.href = `tel:${ussdCode}`;
         
-        let waveOpened = false;
-        
-        // Essayer d'ouvrir Wave
-        waveAppUrls.forEach(url => {
-            if (!waveOpened) {
-                window.location.href = url;
-                waveOpened = true;
-            }
-        });
-        
-        // Instructions après ouverture
+        // Confirmation
         setTimeout(() => {
-            if (confirm(`📱 Votre Wave est ouvert ?\n\nPour finaliser :\n1. Allez dans "Envoyer"\n2. Numéro: 76 282 11 33\n3. Montant: ${totalFCFA} FCFA\n4. Validez\n\n✅ OK → J'ai payé\n❌ Annuler → Problème`)) {
+            if (confirm(`✅ Paiement Wave initié\n\nAvez-vous validé le paiement de ${totalFCFA} FCFA ?\n\n✅ OK → Oui, paiement réussi\n❌ Annuler → Non, problème`)) {
                 showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
                 floatingCart = [];
+                localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
                 updateFloatingCart();
                 closeFloatingCart();
             } else {
-                window.open(`https://wa.me/221762821133?text=${encodeURIComponent('Besoin aide paiement Wave - ' + message)}`, '_blank');
+                // Retour à WhatsApp en cas de problème
+                window.open(`https://wa.me/221762821133?text=${encodeURIComponent('Problème paiement Wave - ' + message)}`, '_blank');
             }
-        }, 3000);
+        }, 5000);
         
     }
 }
 
-function openBankilyApp(totalMRU, message) {
-    if (confirm(`🏦 OUVERTURE DE BANKILY\n\n💸 ${totalMRU} MRU à transférer\n📱 Destinataire : 49 03 76 97\n\nVotre application Bankily va s'ouvrir directement.\n\n✅ OK → Ouvrir mon Bankily`)) {
+function processBankilyPayment(totalMRU, message) {
+    if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Numéro : 49 03 76 97\n\n✅ OK → Ouvrir Bankily\n❌ Annuler → WhatsApp`)) {
         
-        // URLs pour ouvrir Bankily directement dans l'app du client
-        const bankilyAppUrls = [
-            `bankily://app`,
-            `bankily://main`,
-            `bankily://home`,
-            `bankily://transfer`,
-            `com.bankily.mauritanie://`,
-            `mauritanie.bankily://`
-        ];
+        // Instructions Bankily (plus fiable que l'ouverture automatique)
+        const bankilyInstructions = 
+            `🏦 INSTRUCTIONS BANKILY\n\n` +
+            `1. Ouvrez l'application Bankily\n` +
+            `2. Allez dans "Transférer"\n` +
+            `3. Numéro : 49 03 76 97\n` +
+            `4. Montant : ${totalMRU} MRU\n` +
+            `5. Message : "Commande Andu-Xara"\n\n` +
+            `Après paiement, confirmez ici.`;
         
-        let bankilyOpened = false;
+        if (confirm(bankilyInstructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → WhatsApp`)) {
+            showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
+            floatingCart = [];
+            localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+            updateFloatingCart();
+            closeFloatingCart();
+        } else {
+            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        }
         
-        // Essayer d'ouvrir Bankily
-        bankilyAppUrls.forEach(url => {
-            if (!bankilyOpened) {
-                window.location.href = url;
-                bankilyOpened = true;
-            }
-        });
-        
-        // Instructions après ouverture
-        setTimeout(() => {
-            if (confirm(`📱 Votre Bankily est ouvert ?\n\nPour finaliser :\n1. Allez dans "Transférer"\n2. Numéro: 49 03 76 97\n3. Montant: ${totalMRU} MRU\n4. Message: "Commande Andu-Xara"\n5. Validez\n\n✅ OK → J'ai payé\n❌ Annuler → Problème`)) {
-                showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
-                floatingCart = [];
-                updateFloatingCart();
-                closeFloatingCart();
-            } else {
-                window.open(`https://wa.me/22249037697?text=${encodeURIComponent('Besoin aide paiement Bankily - ' + message)}`, '_blank');
-            }
-        }, 3000);
-        
+    } else {
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
     }
 }
+
+function processWhatsAppPayment(message) {
+    if (confirm(`📞 CONTACTER ANDU-XARA\n\n💬 Nous allons ouvrir WhatsApp pour discuter de votre commande.\n\n✅ OK → Ouvrir WhatsApp\n❌ Annuler → Retour`)) {
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+    }
+}
+
+// ===== NOTIFICATION =====
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff4757' : '#25D366'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 350px;
+    `;
+    notification.innerHTML = `
+        <span>${type === 'error' ? '❌' : '✅'}</span>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// ===== INITIALISATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Panier initialisé');
+    
+    // Charger le panier depuis le localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+    
+    // Mettre à jour l'affichage
+    updateFloatingCart();
+    
+    // Fermer le panier en cliquant à l'extérieur
+    document.addEventListener('click', function(event) {
+        const cart = document.getElementById('floating-cart');
+        const toggle = document.querySelector('.cart-toggle');
+        
+        if (cart && cart.classList.contains('open') && 
+            !cart.contains(event.target) && 
+            !toggle.contains(event.target)) {
+            closeFloatingCart();
+        }
+    });
+});
+</script>
     // ===== MENU MOBILE =====
     function initMenuMobile() {
         const toggleBtn = document.querySelector('.menu-toggle');
@@ -3265,33 +3352,42 @@ document.addEventListener('keydown', function(e) {
         closePopup();
     }
 });
+
 </script>
 <script>
 // === FONCTION ADD TO CART CORRIGÉE ===
 function addToCart(productName, oldPrice, promoPrice) {
     console.log('🛒 Ajout au panier:', productName, 'Prix:', promoPrice + ' MRU');
     
-    // Récupérer le panier existant ou en créer un nouveau
-    let cart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+    // Vibration si supporté
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    // Synchroniser floatingCart avec localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
     
-    // Ajouter le produit au panier
-    cart.push({
-        name: productName,
-        price: promoPrice,
-        quantity: 1,
-        addedAt: new Date().toISOString()
-    });
+    // Rechercher si le produit existe déjà
+    const existingItem = floatingCart.find(item => item.name === productName);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        floatingCart.push({
+            name: productName,
+            price: promoPrice,
+            quantity: 1,
+            addedAt: new Date().toISOString()
+        });
+    }
     
     // Sauvegarder dans le localStorage
-    localStorage.setItem('anduxara_cart', JSON.stringify(cart));
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     
     // Afficher une notification
     showNotification('✅ ' + productName + ' ajouté au panier !');
     
-    // Mettre à jour le compteur du panier si il existe
-    updateCartCounter();
+    // Mettre à jour l'affichage du panier
+    updateFloatingCart();
 }
-
 // === NOTIFICATION ===
 function showNotification(message) {
     // Créer la notification
