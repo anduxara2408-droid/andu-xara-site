@@ -2426,14 +2426,6 @@ body.lightbox-open {
         <img id="lightbox-img" src="" alt="Produit">
     </div>
 
-    <!-- Popup Soninké -->
-    <div id="soninke-popup">
-        <div style="background:#fff; padding:30px; border-radius:15px; max-width:500px; text-align:center; animation: popupAnimation 1s ease;">
-            <h2 style="color:#2c3e50; font-size:1.8em;">🎉 Bonne fête de la Journée Internationale de la Langue Soninké ! 🎉</h2>
-            <p style="font-size:0.9em; margin-top:15px; color:#555;">Profitez de votre diversité, n'hésitez pas à passer une commande et si vous rencontrez un problème, contactez-nous.</p>
-            <button id="soninke-close" style="margin-top:20px; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; background:#2c3e50; color:white;">Fermer</button>
-        </div>
-    </div>
 
     <!-- Badge Soninké -->
     <div id="soninke-badge-left">
@@ -2453,9 +2445,7 @@ body.lightbox-open {
             <button onclick="subscribeNewsletter()">S'inscrire</button>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script>
+ <script>
         // ===== VARIABLES GLOBALES =====
         let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -2665,6 +2655,153 @@ function openBankilyApp(totalMRU, message) {
         
     }
 }
+    // ===== MENU MOBILE =====
+    function initMenuMobile() {
+        const toggleBtn = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.mobile-menu');
+        const overlay = document.querySelector('.menu-overlay');
+
+        if (toggleBtn && menu && overlay) {
+            toggleBtn.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // Fermer le menu au clic sur un lien
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+        }
+    }
+
+    // ===== BADGE SONINKÉ =====
+    function initSoninkeBadge() {
+        const messagesLeft = [
+            "Xa kéé biré waaga Soninké !",
+            "Bonne fête de la langue Soninké !",
+            "Profitez de votre journée !"
+        ];
+
+        let indexLeft = 0;
+        const textElLeft = document.getElementById('soninke-text-left');
+
+        if (textElLeft) {
+            setInterval(() => {
+                textElLeft.style.opacity = 0;
+                setTimeout(() => {
+                    indexLeft = (indexLeft + 1) % messagesLeft.length;
+                    textElLeft.textContent = messagesLeft[indexLeft];
+                    textElLeft.style.opacity = 1;
+                }, 500);
+            }, 3000);
+        }
+    }
+
+    // ===== VARIATIONS PRODUITS =====
+    function initVariationButtons() {
+        document.querySelectorAll('.variation-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const parent = this.closest('.variation-selector');
+                parent.querySelectorAll('.variation-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    }
+
+    // ===== RECHERCHE =====
+    document.getElementById('search-input')?.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const products = document.querySelectorAll('.product-card');
+
+        products.forEach(product => {
+            const title = product.querySelector('.product-title').textContent.toLowerCase();
+            const description = product.querySelector('.product-description').textContent.toLowerCase();
+
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+
+    // ===== CATÉGORIES =====
+    document.querySelectorAll('.category-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            this.classList.add('active');
+            const category = this.getAttribute('data-category');
+            const products = document.querySelectorAll('.product-card');
+            
+            products.forEach(product => {
+                if (category === 'tous') {
+                    product.style.display = 'block';
+                } else {
+                    const productCategory = product.getAttribute('data-category');
+                    product.style.display = (productCategory === category) ? 'block' : 'none';
+                }
+            });
+        });
+    });
+
+    // ===== BANNIÈRES CATÉGORIES =====
+    document.querySelectorAll('.category-banner').forEach(banner => {
+        banner.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            document.querySelector(`.category-btn[data-category="${category}"]`).click();
+            window.scrollTo({ top: document.querySelector('.products-grid').offsetTop - 100, behavior: 'smooth' });
+        });
+    });
+
+    // ===== FONCTIONS DIVERSES =====
+    function toggleWishlist(productId) {
+        const index = wishlistItems.indexOf(productId);
+        const button = event.currentTarget;
+        
+        if (index > -1) {
+            wishlistItems.splice(index, 1);
+            button.classList.remove('active');
+            showNotification('Retiré des favoris', 'warning');
+        } else {
+            wishlistItems.push(productId);
+            button.classList.add('active');
+            showNotification('Ajouté aux favoris ❤️');
+        }
+        
+        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+        updateWishlistCounter();
+    }
+
+    function updateWishlistCounter() {
+        const counter = document.getElementById('wishlist-counter');
+        if (counter) {
+            counter.textContent = wishlistItems.length;
+        }
+    }
+
+    // ===== SERVICE WORKER PWA =====
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        });
+    }
+
+    console.log('✅ Panier prêt - Cliquez sur "Ajouter au panier" et sur l\'icône 🛒');
+</script>
+
         // ===== MENU MOBILE =====
         function initMenuMobile() {
             const toggleBtn = document.querySelector('.menu-toggle');
@@ -3127,6 +3264,144 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closePopup();
     }
+});
+</script>
+<script>
+// === FONCTION ADD TO CART CORRIGÉE ===
+function addToCart(productName, oldPrice, promoPrice) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', promoPrice + ' MRU');
+    
+    // Récupérer le panier existant ou en créer un nouveau
+    let cart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+    
+    // Ajouter le produit au panier
+    cart.push({
+        name: productName,
+        price: promoPrice,
+        quantity: 1,
+        addedAt: new Date().toISOString()
+    });
+    
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('anduxara_cart', JSON.stringify(cart));
+    
+    // Afficher une notification
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+    
+    // Mettre à jour le compteur du panier si il existe
+    updateCartCounter();
+}
+
+// === NOTIFICATION ===
+function showNotification(message) {
+    // Créer la notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #25D366;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Supprimer après 3 secondes
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// === COMPTEUR PANIER ===
+function updateCartCounter() {
+    const cart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+    const counter = document.getElementById('cart-counter');
+    
+    if (counter) {
+        counter.textContent = cart.length;
+        counter.style.display = cart.length > 0 ? 'inline' : 'none';
+    }
+}
+
+// === FONCTION POUR LE MODAL ===
+function addToCartFromModal(productName, productPrice) {
+    // Nettoyer le prix (enlever "MRU" et espaces)
+    const cleanPrice = parseInt(productPrice.toString().replace(' MRU', '').replace(/\s/g, ''));
+    
+    // Utiliser la fonction addToCart
+    addToCart(productName, cleanPrice, cleanPrice);
+    
+    // Fermer le modal
+    const modal = document.querySelector('div[style*="position: fixed"]');
+    if (modal) modal.remove();
+}
+
+// === VUE RAPIDE (version simplifiée) ===
+function setupQuickView() {
+    document.querySelectorAll('.quick-view').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productCard = this.closest('.product-card');
+            const productTitle = productCard.querySelector('.product-title').textContent;
+            const productImage = productCard.querySelector('.product-img').src;
+            const productPrice = productCard.querySelector('.promo-price').textContent;
+            const productDescription = productCard.querySelector('.product-description').textContent;
+            
+            showQuickViewModal(productTitle, productImage, productPrice, productDescription);
+        });
+    });
+}
+
+function showQuickViewModal(title, image, price, description) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: white; border-radius: 15px; max-width: 500px; width: 90%; padding: 30px; text-align: center; position: relative;">
+            <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+            <img src="${image}" alt="${title}" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+            <h3 style="color: #2c3e50; margin-bottom: 10px;">${title}</h3>
+            <p style="color: #7f8c8d; margin-bottom: 15px;">${description}</p>
+            <div style="font-size: 1.5em; font-weight: bold; color: #e74c3c; margin-bottom: 20px;">${price}</div>
+            <button onclick="addToCartFromModal('${title.replace(/'/g, "\\'")}', '${price}')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px;">Ajouter au panier</button>
+            <button onclick="this.closest('div').parentElement.remove()" style="background: #95a5a6; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px;">Fermer</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    setupQuickView();
+    updateCartCounter();
+    console.log('✅ Panier et vue rapide initialisés');
 });
 </script>
 </body>
