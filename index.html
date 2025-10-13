@@ -2582,8 +2582,7 @@ function updateConvertedPrices(totalMRU) {
         cfaElement.textContent = totalCFA.toLocaleString() + ' FCFA';
     }
 }
-
-// ===== VOTRE SYSTÈME DE PAIEMENT AMÉLIORÉ =====
+// ===== SYSTÈME DE PAIEMENT COMPLET ET CORRIGÉ =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
@@ -2611,7 +2610,7 @@ function processFloatingCheckout() {
     );
 
     if (paymentChoice === '1') {
-        // WAVE SÉNÉGAL
+        // WAVE SÉNÉGAL - OUVERTURE DIRECTE
         processWavePayment(totalFCFA, totalMRU, message);
     } else if (paymentChoice === '2') {
         // BANKILY MAURITANIE  
@@ -2625,60 +2624,118 @@ function processFloatingCheckout() {
 }
 
 function processWavePayment(totalFCFA, totalMRU, message) {
-    if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Numéro : 76 282 11 33\n\nWave va s'ouvrir avec le transfert pré-rempli.\n\n✅ OK → Payer maintenant avec Wave`)) {
+    // Avertir que Wave va s'ouvrir
+    if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Votre Wave : +221 76 282 11 33\n\n⚠️ L'application Wave va s'ouvrir automatiquement...\n\n✅ OK → Ouvrir Wave maintenant`)) {
         
-        // Ouvrir Wave
-        const ussdCode = `*144*1*1*762821133*${totalFCFA}%23`;
-        window.location.href = `tel:${ussdCode}`;
+        // Ouvrir Wave avec le lien deep link
+        const waveDeepLink = `wave://send?phone=762821133&amount=${totalFCFA}&message=Commande Andu-Xara`;
         
-        // Confirmation
+        // Essayer d'ouvrir l'app Wave
+        window.location.href = waveDeepLink;
+        
+        // Fallback : ouvrir le marché d'apps si Wave n'est pas installé
         setTimeout(() => {
-            if (confirm(`✅ Paiement Wave initié\n\nAvez-vous validé le paiement de ${totalFCFA} FCFA ?\n\n✅ OK → Oui, paiement réussi\n❌ Annuler → Non, problème`)) {
-                showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
-                floatingCart = [];
-                localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-                updateFloatingCart();
-                closeFloatingCart();
+            if (confirm("Wave ne s'est pas ouvert ?\n\nSouhaitez-vous :\n✅ Installer Wave (Play Store)\n❌ Voir les instructions manuelles")) {
+                // Ouvrir Play Store pour installer Wave
+                window.open('https://play.google.com/store/apps/details?id=com.wave.money', '_blank');
             } else {
-                // Retour à WhatsApp en cas de problème
-                window.open(`https://wa.me/221762821133?text=${encodeURIComponent('Problème paiement Wave - ' + message)}`, '_blank');
+                // Montrer les instructions manuelles
+                showManualWaveInstructions(totalFCFA, totalMRU, message);
             }
-        }, 5000);
+        }, 2000);
         
+    } else {
+        showNotification('Ouverture Wave annulée', 'info');
+    }
+}
+
+function showManualWaveInstructions(totalFCFA, totalMRU, message) {
+    const instructions = 
+        `📋 INSTRUCTIONS WAVE MANUELLES :\n\n` +
+        `1. 📱 OUVREZ WAVE sur votre téléphone\n` +
+        `2. 👆 TAPPEZ sur "Envoyer de l'argent"\n` +
+        `3. 🔢 ENTRER le numéro : 762821133\n` +
+        `4. 💰 MONTANT : ${totalFCFA} FCFA\n` +
+        `5. 📝 MESSAGE : "Commande Andu-Xara"\n` +
+        `6. ✅ CONFIRMER le transfert\n\n` +
+        `⚠️ VÉRIFIEZ BIEN :\n` +
+        `• Numéro : 76 282 11 33\n` +
+        `• Montant : ${totalFCFA} FCFA`;
+    
+    if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
+        // Paiement confirmé
+        showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
+        floatingCart = [];
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        updateFloatingCart();
+        closeFloatingCart();
+    } else {
+        // Ouvrir WhatsApp pour assistance
+        const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Wave\n\nMontant : ${totalFCFA} FCFA\n\nDétails de ma commande :\n${message}`;
+        window.open(`https://wa.me/221762821133?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
     }
 }
 
 function processBankilyPayment(totalMRU, message) {
-    if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Numéro : 49 03 76 97\n\n✅ OK → Ouvrir Bankily\n❌ Annuler → WhatsApp`)) {
+    // Essayer d'ouvrir Bankily directement
+    if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Votre Bankily : +222 49 03 76 97\n\n⚠️ L'application Bankily va s'ouvrir...\n\n✅ OK → Ouvrir Bankily maintenant`)) {
         
-        // Instructions Bankily (plus fiable que l'ouverture automatique)
-        const bankilyInstructions = 
-            `🏦 INSTRUCTIONS BANKILY\n\n` +
-            `1. Ouvrez l'application Bankily\n` +
-            `2. Allez dans "Transférer"\n` +
-            `3. Numéro : 49 03 76 97\n` +
-            `4. Montant : ${totalMRU} MRU\n` +
-            `5. Message : "Commande Andu-Xara"\n\n` +
-            `Après paiement, confirmez ici.`;
+        // Essayer d'ouvrir Bankily (si le deep link existe)
+        const bankilyDeepLink = `bankily://transfer?phone=49037697&amount=${totalMRU}`;
+        window.location.href = bankilyDeepLink;
         
-        if (confirm(bankilyInstructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → WhatsApp`)) {
-            showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
-            floatingCart = [];
-            localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-            updateFloatingCart();
-            closeFloatingCart();
-        } else {
-            window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
-        }
+        // Fallback après 2 secondes
+        setTimeout(() => {
+            showManualBankilyInstructions(totalMRU, message);
+        }, 2000);
         
     } else {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        showNotification('Ouverture Bankily annulée', 'info');
+    }
+}
+
+function showManualBankilyInstructions(totalMRU, message) {
+    const instructions = 
+        `📋 INSTRUCTIONS BANKILY MANUELLES :\n\n` +
+        `1. 📱 OUVREZ BANKILY sur votre téléphone\n` +
+        `2. 👆 TAPPEZ sur "Transférer"\n` +
+        `3. 🔢 ENTRER le numéro : 49037697\n` +
+        `4. 💰 MONTANT : ${totalMRU} MRU\n` +
+        `5. 📝 MESSAGE : "Commande Andu-Xara"\n` +
+        `6. ✅ CONFIRMER la transaction\n\n` +
+        `⚠️ VÉRIFIEZ BIEN :\n` +
+        `• Numéro : 49 03 76 97\n` +
+        `• Montant : ${totalMRU} MRU`;
+    
+    if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
+        // Paiement confirmé
+        showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
+        floatingCart = [];
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        updateFloatingCart();
+        closeFloatingCart();
+    } else {
+        // Ouvrir WhatsApp pour assistance
+        const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Bankily\n\nMontant : ${totalMRU} MRU\n\nDétails de ma commande :\n${message}`;
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
     }
 }
 
 function processWhatsAppPayment(message) {
-    if (confirm(`📞 CONTACTER ANDU-XARA\n\n💬 Nous allons ouvrir WhatsApp pour discuter de votre commande.\n\n✅ OK → Ouvrir WhatsApp\n❌ Annuler → Retour`)) {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+    // Avertir que WhatsApp va s'ouvrir
+    if (confirm(`💬 WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour discuter de votre commande...\n\n✅ OK → Ouvrir WhatsApp maintenant`)) {
+        const whatsappMessage = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${message}\n\nPouvez-vous m'aider pour la suite ?`;
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+        
+        // Vider le panier après ouverture
+        setTimeout(() => {
+            floatingCart = [];
+            localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+            updateFloatingCart();
+            showNotification('✅ WhatsApp ouvert ! Commande en cours.', 'success');
+        }, 1000);
+    } else {
+        showNotification('Ouverture WhatsApp annulée', 'info');
     }
 }
 
@@ -2706,7 +2763,7 @@ function showNotification(message, type = 'success') {
         <span>${type === 'error' ? '❌' : '✅'}</span>
         <span>${message}</span>
     `;
-    
+
     document.body.appendChild(notification);
 
     setTimeout(() => {
@@ -2719,28 +2776,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// ===== INITIALISATION =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Panier initialisé');
-    
-    // Charger le panier depuis le localStorage
-    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
-    
-    // Mettre à jour l'affichage
-    updateFloatingCart();
-    
-    // Fermer le panier en cliquant à l'extérieur
-    document.addEventListener('click', function(event) {
-        const cart = document.getElementById('floating-cart');
-        const toggle = document.querySelector('.cart-toggle');
-        
-        if (cart && cart.classList.contains('open') && 
-            !cart.contains(event.target) && 
-            !toggle.contains(event.target)) {
-            closeFloatingCart();
-        }
-    });
-});
 </script>
     // ===== MENU MOBILE =====
     function initMenuMobile() {
