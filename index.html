@@ -1811,7 +1811,41 @@ body.lightbox-open {
     from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
-   
+   /* ===== RECOMMANDATIONS IA ===== */
+.recommendations-section {
+    margin: 50px 0;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px;
+}
+
+.recommendations-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.recommendations-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.recommendation-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 10;
+}
     </style>
 
     <!-- Google Analytics -->
@@ -1975,8 +2009,8 @@ body.lightbox-open {
       <span class="promo-price">349 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt logo arabe', 349)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt logo arabe', 't-shirts', 349)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt logo arabe', 't-shirts', 349)">👁️</button>
     </div>
   </div>
 </div>
@@ -2003,8 +2037,8 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Ensemble capuche style arabe', 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Ensemble capuche style arabe', 'ensembles', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Ensemble capuche style arabe', 'ensembles', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2031,8 +2065,8 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Combinaison T-shirt et Capuche', 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Combinaison T-shirt et Capuche', 'ensembles', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Combinaison T-shirt et Capuche', 'ensembles', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2059,8 +2093,8 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Enfant', 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Enfant', 'enfants', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Enfant', 'enfants', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2088,8 +2122,8 @@ body.lightbox-open {
       <span class="promo-price">559 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Ensemble T-shirt et jogging', 559)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Ensemble T-shirt et jogging', 'ensembles', 559)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Ensemble T-shirt et jogging', 'ensembles', 559)">👁️</button>
     </div>
   </div>
 </div>
@@ -2116,8 +2150,8 @@ body.lightbox-open {
       <span class="promo-price">489 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Pull bleu', 489)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Pull bleu', 't-shirts', 489)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Pull bleu', 't-shirts', 489)">👁️</button>
     </div>
   </div>
 </div>
@@ -2142,8 +2176,8 @@ body.lightbox-open {
       <span class="promo-price">209 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Capuchon blanc', 209)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Capuchon blanc', 'accessoires', 209)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Capuchon blanc', 'accessoires', 209)">👁️</button>
     </div>
   </div>
 </div>
@@ -2170,8 +2204,8 @@ body.lightbox-open {
       <span class="promo-price">629 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt et jogging Complet', 629)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt et jogging Complet', 'ensembles', 629)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt et jogging Complet', 'ensembles', 629)">👁️</button>
     </div>
   </div>
 </div>
@@ -2198,8 +2232,8 @@ body.lightbox-open {
       <span class="promo-price">1049 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Babs Premium', 1049)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Babs Premium', 'ensembles', 1049)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Babs Premium', 'ensembles', 1049)">👁️</button>
     </div>
   </div>
 </div>
@@ -2226,8 +2260,8 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Fille Noir', 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Fille Noir', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Fille Noir', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2254,8 +2288,8 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Fille Blanc', 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Fille Blanc', 't-shirts', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Fille Blanc', 't-shirts', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2282,8 +2316,8 @@ body.lightbox-open {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('Pull Blanc', 419)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Pull Blanc', 'pulls', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Pull Blanc', 'pulls', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2310,8 +2344,8 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Beige', 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Beige', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Beige', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2338,8 +2372,8 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt Blanc', 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Blanc', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Blanc', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2366,13 +2400,21 @@ body.lightbox-open {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="addToCartSimple('T-shirt ADX Noir', 279)">Ajouter au panier</button>
-      <button class="quick-view">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt ADX Noir', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt ADX Noir', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
 
-</div>
+</div> <!-- Fin produits-container -->
+
+<!-- ===== RECOMMANDATIONS IA ===== -->
+<section class="recommendations-section">
+    <h2>🎯 Recommandés spécialement pour vous</h2>
+    <div class="recommendations-container" id="recommendations-container">
+        <!-- Les produits recommandés apparaîtront ici -->
+    </div>
+</section>
             <!-- Filtres -->
             <section id="filtres" style="margin:20px; text-align:center;">
                 <label for="categorie">Catégorie :</label>
@@ -2539,12 +2581,12 @@ body.lightbox-open {
         </div>
     </div>
 <script>
-// ===== VARIABLES GLOBALES =====
+// ===== SYSTÈME DE PANIER CORRIGÉ =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 
-// ===== FONCTION ADD TO CART SIMPLE =====
-function addToCartSimple(productName, price) {
-    console.log('🛒 Ajout au panier simple:', productName, 'Prix:', price + ' MRU');
+// ===== FONCTION PRINCIPALE POUR AJOUTER AU PANIER =====
+function addToCartAndTrack(productName, category, price) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
 
     // Vibration si supporté
     if (navigator.vibrate) navigator.vibrate(50);
@@ -2564,8 +2606,9 @@ function addToCartSimple(productName, price) {
         floatingCart.push({
             name: productName,
             price: price,
-            promoPrice: price, // Pour compatibilité avec votre système
+            promoPrice: price,
             quantity: 1,
+            category: category,
             addedAt: new Date().toISOString()
         });
     }
@@ -2576,8 +2619,8 @@ function addToCartSimple(productName, price) {
     // Afficher une notification
     showNotification('✅ ' + productName + ' ajouté au panier !');
 
-    // Mettre à jour seulement le compteur, sans ouvrir le panier
-    updateFloatingCartCounter();
+    // Mettre à jour l'affichage du panier
+    updateFloatingCart();
 }
 
 // ===== FONCTION POUR METTRE À JOUR SEULEMENT LE COMPTEUR =====
@@ -2600,7 +2643,6 @@ function updateFloatingCart() {
     const badge = document.getElementById('cart-badge-floating');
     const itemsContainer = document.getElementById('cart-items-floating');
     const totalElement = document.getElementById('cart-total-floating');
-    const checkoutSection = document.getElementById('checkout-section');
     
     // Mettre à jour le badge
     if (badge) {
@@ -2615,7 +2657,6 @@ function updateFloatingCart() {
         
         if (floatingCart.length === 0) {
             itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
-            if (checkoutSection) checkoutSection.style.display = 'none';
         } else {
             floatingCart.forEach((item, index) => {
                 const itemPrice = parseFloat(item.price) || 0;
@@ -2636,11 +2677,6 @@ function updateFloatingCart() {
                 itemsContainer.appendChild(itemElement);
                 total += itemPrice * item.quantity;
             });
-            
-            if (checkoutSection) checkoutSection.style.display = 'block';
-            
-            // Mettre à jour les prix convertis
-            updateConvertedPrices(total);
         }
         
         totalElement.textContent = total.toFixed(0) + ' MRU';
@@ -2649,12 +2685,26 @@ function updateFloatingCart() {
 
 // ===== FONCTION RETIRER DU PANIER SANS FERMER =====
 function removeFromFloatingCart(index) {
+    console.log('🗑️ Retrait du produit index:', index);
+    
+    // Sauvegarder l'état d'ouverture
+    const cart = document.getElementById('floating-cart');
+    const wasOpen = cart ? cart.classList.contains('open') : false;
+    
+    // Supprimer l'élément
     floatingCart.splice(index, 1);
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    updateFloatingCart(); // Mettre à jour l'affichage complet
+    
+    // Mettre à jour l'affichage
+    updateFloatingCart();
     showNotification('🗑️ Produit retiré du panier');
-    // ⭐⭐ NE PAS FERMER LE PANIER - IL RESTE OUVERT ⭐⭐
+    
+    // Maintenir le panier ouvert
+    if (wasOpen && cart) {
+        cart.classList.add('open');
+    }
 }
+
 // ===== FONCTIONS D'OUVERTURE/FERMETURE =====
 function openFloatingCart() {
     const cart = document.getElementById('floating-cart');
@@ -2681,84 +2731,6 @@ function toggleFloatingCart() {
     }
 }
 
-// ===== FONCTION UPDATE FLOATING CART COMPLÈTE =====
-function updateFloatingCart() {
-    console.log('🔄 Mise à jour complète du panier flottant...');
-    
-    const badge = document.getElementById('cart-badge-floating');
-    const itemsContainer = document.getElementById('cart-items-floating');
-    const totalElement = document.getElementById('cart-total-floating');
-    
-    // Mettre à jour le badge
-    if (badge) {
-        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
-        badge.textContent = totalItems;
-    }
-    
-    // Mettre à jour les articles
-    if (itemsContainer && totalElement) {
-        itemsContainer.innerHTML = '';
-        let total = 0;
-        
-        if (floatingCart.length === 0) {
-            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
-        } else {
-            floatingCart.forEach((item, index) => {
-                const itemPrice = parseFloat(item.price) || 0;
-                const itemElement = document.createElement('div');
-                itemElement.className = 'cart-item-floating';
-                itemElement.innerHTML = `
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p>Quantité: ${item.quantity}</p>
-                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
-                    </div>
-                    <div class="cart-item-price">
-                        <div style="color: #e60023; font-weight: bold;">
-                            ${(itemPrice * item.quantity).toFixed(0)} MRU
-                        </div>
-                    </div>
-                `;
-                itemsContainer.appendChild(itemElement);
-                total += itemPrice * item.quantity;
-            });
-        }
-        
-        totalElement.textContent = total.toFixed(0) + ' MRU';
-    }
-}
-
-// ===== FONCTION POUR METTRE À JOUR SEULEMENT LE COMPTEUR =====
-function updateFloatingCartCounter() {
-    const badge = document.getElementById('cart-badge-floating');
-    if (badge) {
-        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
-        badge.textContent = totalItems;
-    }
-}
-
-// ===== FONCTION RETIRER DU PANIER SANS FERMER =====
-function removeFromFloatingCart(index) {
-    console.log('🗑️ Retrait du produit index:', index);
-    
-    // Sauvegarder l'état d'ouverture
-    const wasOpen = document.getElementById('floating-cart').classList.contains('open');
-    
-    // Supprimer l'élément
-    floatingCart.splice(index, 1);
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    
-    // Mettre à jour l'affichage
-    updateFloatingCart();
-    showNotification('🗑️ Produit retiré du panier');
-    
-    // ⭐⭐ FORCER LE PANIER À RESTER OUVERT ⭐⭐
-    if (wasOpen) {
-        const cart = document.getElementById('floating-cart');
-        cart.classList.add('open');
-    }
-}
-
 // ===== CONVERSION DES PRIX =====
 function updateConvertedPrices(totalMRU) {
     const tauxMRUtoCFA = 2.5;
@@ -2770,7 +2742,7 @@ function updateConvertedPrices(totalMRU) {
     }
 }
 
-// ===== SYSTÈME DE PAIEMENT COMPLET ET CORRIGÉ =====
+// ===== SYSTÈME DE PAIEMENT =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
@@ -2945,14 +2917,182 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
+// ===== SYSTÈME DE RECOMMANDATIONS IA =====
+class StyleAdvisor {
+    constructor() {
+        this.userBehavior = JSON.parse(localStorage.getItem('anduxara_user_behavior')) || {
+            views: [],
+            cart: [],
+            categories: []
+        };
+    }
+    
+    // Fonction pour tracker la consultation
+    trackProductView(productName, category, price) {
+        console.log('👀 Produit consulté:', productName);
+        
+        this.userBehavior.views.push({
+            productName,
+            category,
+            price,
+            timestamp: Date.now()
+        });
+        
+        // Limiter à 50 consultations maximum
+        if (this.userBehavior.views.length > 50) {
+            this.userBehavior.views = this.userBehavior.views.slice(-50);
+        }
+        
+        this.saveBehavior();
+        this.updateRecommendations();
+    }
+    
+    // Fonction pour tracker l'ajout au panier
+    trackAddToCart(productName, category, price) {
+        console.log('🛒 Ajout au panier:', productName);
+        
+        this.userBehavior.cart.push({
+            productName,
+            category, 
+            price,
+            timestamp: Date.now()
+        });
+        
+        this.saveBehavior();
+        this.updateRecommendations();
+    }
+    
+    // Sauvegarder le comportement
+    saveBehavior() {
+        localStorage.setItem('anduxara_user_behavior', JSON.stringify(this.userBehavior));
+    }
+    
+    // Analyser les préférences
+    analyzePreferences() {
+        const preferences = {
+            favoriteCategories: {},
+            priceRange: { min: Infinity, max: 0 },
+            totalViews: this.userBehavior.views.length
+        };
+        
+        // Analyser les catégories préférées
+        this.userBehavior.views.forEach(view => {
+            preferences.favoriteCategories[view.category] = 
+                (preferences.favoriteCategories[view.category] || 0) + 1;
+            
+            // Analyser la fourchette de prix
+            if (view.price < preferences.priceRange.min) preferences.priceRange.min = view.price;
+            if (view.price > preferences.priceRange.max) preferences.priceRange.max = view.price;
+        });
+        
+        return preferences;
+    }
+    
+    // Générer des recommandations
+    generateRecommendations() {
+        const preferences = this.analyzePreferences();
+        const allProducts = this.getAllProducts();
+        
+        if (preferences.totalViews === 0) {
+            return this.getPopularProducts(allProducts);
+        }
+        
+        // Filtrer par catégories préférées
+        const favoriteCategories = Object.keys(preferences.favoriteCategories)
+            .sort((a, b) => preferences.favoriteCategories[b] - preferences.favoriteCategories[a])
+            .slice(0, 2); // Top 2 catégories
+        
+        let recommendations = allProducts.filter(product => 
+            favoriteCategories.includes(product.category)
+        );
+        
+        // Si pas assez de recommandations, ajouter des produits populaires
+        if (recommendations.length < 4) {
+            recommendations = [...recommendations, ...this.getPopularProducts(allProducts)];
+        }
+        
+        // Mélanger et limiter à 4 produits
+        return this.shuffleArray(recommendations).slice(0, 4);
+    }
+    
+    // Obtenir tous les produits disponibles
+    getAllProducts() {
+        return [
+            { name: 'T-shirt logo arabe', category: 't-shirts', price: 349, image: 'images/t-shirt-logo-arabe.jpeg' },
+            { name: 'Ensemble capuche style arabe', category: 'ensembles', price: 419, image: 'images/ensemble-capuchon-arabe.jpeg' },
+            { name: 'Combinaison T-shirt et Capuche', category: 'ensembles', price: 419, image: 'images/combinaison.jpeg' },
+            { name: 'T-shirt Enfant', category: 'enfants', price: 279, image: 'images/t-shirt-enfant.jpeg' },
+            { name: 'Ensemble T-shirt et jogging', category: 'ensembles', price: 559, image: 'images/t-shirt-et-jogging.jpeg' },
+            { name: 'Pull bleu', category: 't-shirts', price: 489, image: 'images/pull-bleu.jpeg' },
+            { name: 'Capuchon blanc', category: 'accessoires', price: 209, image: 'images/capuchon-blanc.jpeg' },
+            { name: 'Babs Premium', category: 'ensembles', price: 1049, image: 'images/babs.jpeg' },
+            { name: 'T-shirt Fille Noir', category: 't-shirts', price: 279, image: 'images/fillenoir.jpeg' },
+            { name: 'T-shirt Fille Blanc', category: 't-shirts', price: 419, image: 'images/filleblan.jpeg' },
+            { name: 'Pull Blanc', category: 'pulls', price: 419, image: 'images/pull-blanc.jpeg' },
+            { name: 'T-shirt Beige', category: 't-shirts', price: 279, image: 'images/beige-tshirt.jpeg' },
+            { name: 'T-shirt Blanc', category: 't-shirts', price: 279, image: 'images/blanctshirt.jpeg' },
+            { name: 'T-shirt ADX Noir', category: 't-shirts', price: 279, image: 'images/adx-noir.jpeg' }
+        ];
+    }
+    
+    // Produits populaires (fallback)
+    getPopularProducts(products) {
+        return products.filter(p => 
+            ['T-shirt logo arabe', 'Ensemble capuche style arabe', 'Babs Premium', 'T-shirt Fille Noir'].includes(p.name)
+        );
+    }
+    
+    // Mélanger un tableau
+    shuffleArray(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+    
+    // Mettre à jour l'affichage des recommandations
+    updateRecommendations() {
+        const container = document.getElementById('recommendations-container');
+        if (!container) return;
+        
+        const recommendations = this.generateRecommendations();
+        
+        container.innerHTML = recommendations.map(product => `
+            <div class="product-card" data-category="${product.category}">
+                <div class="product-image-container">
+                    <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy">
+                    <div class="recommendation-badge">🌟 Recommandé</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-price">
+                        <span class="promo-price">${product.price} MRU</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCartAndTrack('${product.name}', '${product.category}', ${product.price})">
+                            Ajouter au panier
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+// ===== FONCTION POUR TRACKER LA CONSULTATION =====
+function trackProductView(productName, category, price) {
+    // Tracker pour les recommandations (si le système est initialisé)
+    if (window.styleAdvisor && typeof window.styleAdvisor.trackProductView === 'function') {
+        window.styleAdvisor.trackProductView(productName, category, price);
+    }
+    console.log('📊 Consultation trackée:', productName);
+}
+
 // ===== INITIALISATION =====
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Panier initialisé');
-
+    console.log('🚀 Initialisation du panier et recommandations...');
+    
     // Charger le panier depuis le localStorage
     floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 
-    // Mettre à jour l'affichage
+    // Mettre à jour l'affichage initial du panier
     updateFloatingCart();
 
     // Fermer le panier en cliquant à l'extérieur
@@ -2966,9 +3106,21 @@ document.addEventListener('DOMContentLoaded', function() {
             closeFloatingCart();
         }
     });
+    
+    // Initialiser le système de recommandations
+    window.styleAdvisor = new StyleAdvisor();
+    
+    // Mettre à jour les recommandations après le chargement
+    setTimeout(() => {
+        if (window.styleAdvisor && typeof window.styleAdvisor.updateRecommendations === 'function') {
+            window.styleAdvisor.updateRecommendations();
+            console.log('✅ Système de recommandations IA activé !');
+        }
+    }, 1500);
+    
+    console.log('✅ Panier initialisé avec', floatingCart.length, 'articles');
 });
 </script>
-<script>
 
 // ===== MENU MOBILE =====
 function initMenuMobile() {
