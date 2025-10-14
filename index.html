@@ -1367,14 +1367,13 @@ body.lightbox-open {
         font-size: 0.8rem;
     }
 }
-/* ===== PANIER FLOTTANT AMÉLIORÉ ===== */
+/* ===== PANIER FLOTTANT AVEC BOUTONS FIXES ===== */
 .floating-cart {
     position: fixed;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
     z-index: 1000;
-    max-height: 80vh; /* Limite la hauteur totale */
 }
 
 .cart-toggle {
@@ -1410,38 +1409,35 @@ body.lightbox-open {
     position: absolute;
     top: 100%;
     right: 0;
-    width: 350px; /* Légèrement plus large */
+    width: 350px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     margin-top: 10px;
     display: none;
-    max-height: 70vh; /* Hauteur maximale */
-    overflow: hidden; /* Cache le débordement */
+    max-height: 70vh;
+    overflow: hidden; /* Cache le débordement global */
 }
 
 .floating-cart.open .cart-panel {
-    display: block;
-}
-
-/* Conteneur principal avec défilement interne */
-.cart-panel-content {
     display: flex;
-    flex-direction: column;
-    max-height: 70vh; /* Hauteur maximale */
+    flex-direction: column; /* Organisation verticale */
 }
 
-/* Section des articles avec défilement */
-.cart-items-section {
+/* Conteneur des articles avec défilement */
+.cart-items-container {
     flex: 1;
-    overflow-y: auto; /* Défilement vertical seulement ici */
-    max-height: 400px; /* Hauteur maximale pour les articles */
-    min-height: 100px; /* Hauteur minimale */
+    overflow-y: auto; /* Défilement seulement ici */
+    max-height: calc(70vh - 150px); /* Réserve de l'espace pour les boutons */
     padding: 15px;
 }
 
-.cart-items-container {
-    min-height: 50px;
+/* Section des boutons TOUJOURS visible */
+.cart-summary {
+    padding: 15px;
+    border-top: 2px solid #6a11cb;
+    background: #f8f9fa;
+    flex-shrink: 0; /* Empêche le rétrécissement */
 }
 
 .cart-item-floating {
@@ -1455,7 +1451,7 @@ body.lightbox-open {
 .cart-item-info h4 {
     margin: 0;
     font-size: 0.9rem;
-    max-width: 180px; /* Empêche le texte trop long */
+    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1469,7 +1465,7 @@ body.lightbox-open {
 
 .cart-item-price {
     text-align: right;
-    flex-shrink: 0; /* Empêche le rétrécissement */
+    flex-shrink: 0;
 }
 
 .remove-item {
@@ -1485,16 +1481,6 @@ body.lightbox-open {
 
 .remove-item:hover {
     background: #ff3742;
-}
-
-/* Section checkout TOUJOURS visible */
-.cart-summary {
-    padding: 15px;
-    border-top: 2px solid #6a11cb;
-    background: #f8f9fa;
-    flex-shrink: 0; /* Empêche le rétrécissement */
-    position: sticky;
-    bottom: 0;
 }
 
 .cart-total-floating {
@@ -1544,53 +1530,37 @@ body.lightbox-open {
 }
 
 /* Barre de défilement personnalisée */
-.cart-items-section::-webkit-scrollbar {
+.cart-items-container::-webkit-scrollbar {
     width: 6px;
 }
 
-.cart-items-section::-webkit-scrollbar-track {
+.cart-items-container::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.cart-items-section::-webkit-scrollbar-thumb {
+.cart-items-container::-webkit-scrollbar-thumb {
     background: #6a11cb;
     border-radius: 10px;
 }
 
-.cart-items-section::-webkit-scrollbar-thumb:hover {
+.cart-items-container::-webkit-scrollbar-thumb:hover {
     background: #2575fc;
-}
-
-/* Indicateur quand il y a beaucoup d'articles */
-.cart-has-many-items::after {
-    content: "↓ Défiler pour voir plus d'articles ↓";
-    display: block;
-    text-align: center;
-    color: #6a11cb;
-    font-size: 0.8rem;
-    padding: 10px;
-    background: linear-gradient(transparent, rgba(248, 249, 250, 0.9));
-    position: sticky;
-    bottom: 0;
-    border-top: 1px solid #e2e8f0;
 }
 
 /* Mobile */
 @media (max-width: 768px) {
     .floating-cart {
         right: 10px;
-        max-height: 85vh;
     }
 
     .cart-panel {
         width: 320px;
-        max-height: 75vh;
         right: -50px;
     }
     
-    .cart-items-section {
-        max-height: 350px;
+    .cart-items-container {
+        max-height: calc(75vh - 150px);
     }
     
     .cart-item-info h4 {
@@ -1604,8 +1574,8 @@ body.lightbox-open {
         right: -80px;
     }
     
-    .cart-items-section {
-        max-height: 300px;
+    .cart-items-container {
+        max-height: calc(70vh - 150px);
     }
     
     .cart-item-info h4 {
@@ -2653,20 +2623,19 @@ function updateFloatingCart() {
     }
 }
 
-// ===== FONCTION RETIRER DU PANIER =====
+// ===== FONCTION RETIRER DU PANIER SANS FERMER =====
 function removeFromFloatingCart(index) {
     floatingCart.splice(index, 1);
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart(); // Mettre à jour l'affichage complet
     showNotification('🗑️ Produit retiré du panier');
-    // NE PAS fermer le panier - il reste ouvert
+    // ⭐⭐ NE PAS FERMER LE PANIER - IL RESTE OUVERT ⭐⭐
 }
 // ===== FONCTIONS D'OUVERTURE/FERMETURE =====
 function openFloatingCart() {
     const cart = document.getElementById('floating-cart');
     if (cart) {
         cart.classList.add('open');
-        // Mettre à jour l'affichage complet quand on ouvre
         updateFloatingCart();
     }
 }
@@ -2682,10 +2651,87 @@ function toggleFloatingCart() {
     const cart = document.getElementById('floating-cart');
     if (cart) {
         cart.classList.toggle('open');
-        // Mettre à jour l'affichage complet quand on ouvre/ferme
         if (cart.classList.contains('open')) {
             updateFloatingCart();
         }
+    }
+}
+
+// ===== FONCTION UPDATE FLOATING CART COMPLÈTE =====
+function updateFloatingCart() {
+    console.log('🔄 Mise à jour complète du panier flottant...');
+    
+    const badge = document.getElementById('cart-badge-floating');
+    const itemsContainer = document.getElementById('cart-items-floating');
+    const totalElement = document.getElementById('cart-total-floating');
+    
+    // Mettre à jour le badge
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+    }
+    
+    // Mettre à jour les articles
+    if (itemsContainer && totalElement) {
+        itemsContainer.innerHTML = '';
+        let total = 0;
+        
+        if (floatingCart.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
+        } else {
+            floatingCart.forEach((item, index) => {
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item-floating';
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Quantité: ${item.quantity}</p>
+                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
+                    </div>
+                    <div class="cart-item-price">
+                        <div style="color: #e60023; font-weight: bold;">
+                            ${(itemPrice * item.quantity).toFixed(0)} MRU
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+                total += itemPrice * item.quantity;
+            });
+        }
+        
+        totalElement.textContent = total.toFixed(0) + ' MRU';
+    }
+}
+
+// ===== FONCTION POUR METTRE À JOUR SEULEMENT LE COMPTEUR =====
+function updateFloatingCartCounter() {
+    const badge = document.getElementById('cart-badge-floating');
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+    }
+}
+
+// ===== FONCTION RETIRER DU PANIER SANS FERMER =====
+function removeFromFloatingCart(index) {
+    console.log('🗑️ Retrait du produit index:', index);
+    
+    // Sauvegarder l'état d'ouverture
+    const wasOpen = document.getElementById('floating-cart').classList.contains('open');
+    
+    // Supprimer l'élément
+    floatingCart.splice(index, 1);
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Mettre à jour l'affichage
+    updateFloatingCart();
+    showNotification('🗑️ Produit retiré du panier');
+    
+    // ⭐⭐ FORCER LE PANIER À RESTER OUVERT ⭐⭐
+    if (wasOpen) {
+        const cart = document.getElementById('floating-cart');
+        cart.classList.add('open');
     }
 }
 
@@ -2728,13 +2774,10 @@ function processFloatingCheckout() {
     );
 
     if (paymentChoice === '1') {
-        // WAVE SÉNÉGAL - OUVERTURE DIRECTE
         processWavePayment(totalFCFA, totalMRU, message);
     } else if (paymentChoice === '2') {
-        // BANKILY MAURITANIE  
         processBankilyPayment(totalMRU, message);
     } else if (paymentChoice === '3') {
-        // WHATSAPP
         processWhatsAppPayment(message);
     } else {
         showNotification('Choix annulé', 'warning');
@@ -2742,22 +2785,15 @@ function processFloatingCheckout() {
 }
 
 function processWavePayment(totalFCFA, totalMRU, message) {
-    // Avertir que Wave va s'ouvrir
     if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Votre Wave : +221 76 282 11 33\n\n⚠️ L'application Wave va s'ouvrir automatiquement...\n\n✅ OK → Ouvrir Wave maintenant`)) {
         
-        // Ouvrir Wave avec le lien deep link
         const waveDeepLink = `wave://send?phone=762821133&amount=${totalFCFA}&message=Commande Andu-Xara`;
-        
-        // Essayer d'ouvrir l'app Wave
         window.location.href = waveDeepLink;
         
-        // Fallback : ouvrir le marché d'apps si Wave n'est pas installé
         setTimeout(() => {
             if (confirm("Wave ne s'est pas ouvert ?\n\nSouhaitez-vous :\n✅ Installer Wave (Play Store)\n❌ Voir les instructions manuelles")) {
-                // Ouvrir Play Store pour installer Wave
                 window.open('https://play.google.com/store/apps/details?id=com.wave.money', '_blank');
             } else {
-                // Montrer les instructions manuelles
                 showManualWaveInstructions(totalFCFA, totalMRU, message);
             }
         }, 2000);
@@ -2781,28 +2817,23 @@ function showManualWaveInstructions(totalFCFA, totalMRU, message) {
         `• Montant : ${totalFCFA} FCFA`;
     
     if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
-        // Paiement confirmé
         showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
         floatingCart = [];
         localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
         updateFloatingCart();
         closeFloatingCart();
     } else {
-        // Ouvrir WhatsApp pour assistance
         const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Wave\n\nMontant : ${totalFCFA} FCFA\n\nDétails de ma commande :\n${message}`;
         window.open(`https://wa.me/221762821133?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
     }
 }
 
 function processBankilyPayment(totalMRU, message) {
-    // Essayer d'ouvrir Bankily directement
     if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Votre Bankily : +222 49 03 76 97\n\n⚠️ L'application Bankily va s'ouvrir...\n\n✅ OK → Ouvrir Bankily maintenant`)) {
         
-        // Essayer d'ouvrir Bankily (si le deep link existe)
         const bankilyDeepLink = `bankily://transfer?phone=49037697&amount=${totalMRU}`;
         window.location.href = bankilyDeepLink;
         
-        // Fallback après 2 secondes
         setTimeout(() => {
             showManualBankilyInstructions(totalMRU, message);
         }, 2000);
@@ -2826,26 +2857,22 @@ function showManualBankilyInstructions(totalMRU, message) {
         `• Montant : ${totalMRU} MRU`;
     
     if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
-        // Paiement confirmé
         showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
         floatingCart = [];
         localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
         updateFloatingCart();
         closeFloatingCart();
     } else {
-        // Ouvrir WhatsApp pour assistance
         const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Bankily\n\nMontant : ${totalMRU} MRU\n\nDétails de ma commande :\n${message}`;
         window.open(`https://wa.me/22249037697?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
     }
 }
 
 function processWhatsAppPayment(message) {
-    // Avertir que WhatsApp va s'ouvrir
     if (confirm(`💬 WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour discuter de votre commande...\n\n✅ OK → Ouvrir WhatsApp maintenant`)) {
         const whatsappMessage = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${message}\n\nPouvez-vous m'aider pour la suite ?`;
         window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
         
-        // Vider le panier après ouverture
         setTimeout(() => {
             floatingCart = [];
             localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
@@ -2916,183 +2943,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 </script>
-    // ===== MENU MOBILE =====
-    function initMenuMobile() {
-        const toggleBtn = document.querySelector('.menu-toggle');
-        const menu = document.querySelector('.mobile-menu');
-        const overlay = document.querySelector('.menu-overlay');
+<script>
 
-        if (toggleBtn && menu && overlay) {
-            toggleBtn.addEventListener('click', () => {
-                menu.classList.toggle('active');
-                overlay.classList.toggle('active');
-            });
+// ===== MENU MOBILE =====
+function initMenuMobile() {
+    const toggleBtn = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.mobile-menu');
+    const overlay = document.querySelector('.menu-overlay');
 
-            overlay.addEventListener('click', () => {
-                menu.classList.remove('active');
-                overlay.classList.remove('active');
-            });
-
-            // Fermer le menu au clic sur un lien
-            menu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.remove('active');
-                    overlay.classList.remove('active');
-                });
-            });
-        }
-    }
-
-    // ===== BADGE SONINKÉ =====
-    function initSoninkeBadge() {
-        const messagesLeft = [
-            "Xa kéé biré waaga Soninké !",
-            "Bonne fête de la langue Soninké !",
-            "Profitez de votre journée !"
-        ];
-
-        let indexLeft = 0;
-        const textElLeft = document.getElementById('soninke-text-left');
-
-        if (textElLeft) {
-            setInterval(() => {
-                textElLeft.style.opacity = 0;
-                setTimeout(() => {
-                    indexLeft = (indexLeft + 1) % messagesLeft.length;
-                    textElLeft.textContent = messagesLeft[indexLeft];
-                    textElLeft.style.opacity = 1;
-                }, 500);
-            }, 3000);
-        }
-    }
-
-    // ===== VARIATIONS PRODUITS =====
-    function initVariationButtons() {
-        document.querySelectorAll('.variation-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const parent = this.closest('.variation-selector');
-                parent.querySelectorAll('.variation-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-            });
-        });
-    }
-
-    // ===== RECHERCHE =====
-    document.getElementById('search-input')?.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const products = document.querySelectorAll('.product-card');
-
-        products.forEach(product => {
-            const title = product.querySelector('.product-title').textContent.toLowerCase();
-            const description = product.querySelector('.product-description').textContent.toLowerCase();
-
-            if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        });
+    toggleBtn.addEventListener('click', () => {
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        toggleBtn.setAttribute('aria-expanded', menu.classList.contains('active'));
     });
 
-    // ===== CATÉGORIES =====
-    document.querySelectorAll('.category-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            this.classList.add('active');
-            const category = this.getAttribute('data-category');
-            const products = document.querySelectorAll('.product-card');
-            
-            products.forEach(product => {
-                if (category === 'tous') {
-                    product.style.display = 'block';
-                } else {
-                    const productCategory = product.getAttribute('data-category');
-                    product.style.display = (productCategory === category) ? 'block' : 'none';
-                }
-            });
-        });
+    overlay.addEventListener('click', () => {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
     });
 
-    // ===== BANNIÈRES CATÉGORIES =====
-    document.querySelectorAll('.category-banner').forEach(banner => {
-        banner.addEventListener('click', function() {
-            const category = this.getAttribute('data-category');
-            document.querySelector(`.category-btn[data-category="${category}"]`).click();
-            window.scrollTo({ top: document.querySelector('.products-grid').offsetTop - 100, behavior: 'smooth' });
+    // Fermer le menu au clic sur un lien
+    menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            toggleBtn.setAttribute('aria-expanded', 'false');
         });
     });
+}
 
-    // ===== FONCTIONS DIVERSES =====
-    function toggleWishlist(productId) {
-        const index = wishlistItems.indexOf(productId);
-        const button = event.currentTarget;
-        
-        if (index > -1) {
-            wishlistItems.splice(index, 1);
-            button.classList.remove('active');
-            showNotification('Retiré des favoris', 'warning');
-        } else {
-            wishlistItems.push(productId);
-            button.classList.add('active');
-            showNotification('Ajouté aux favoris ❤️');
-        }
-        
-        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
-        updateWishlistCounter();
-    }
-
-    function updateWishlistCounter() {
-        const counter = document.getElementById('wishlist-counter');
-        if (counter) {
-            counter.textContent = wishlistItems.length;
-        }
-    }
-
-    // ===== SERVICE WORKER PWA =====
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(console.error);
-        });
-    }
-
-    console.log('✅ Panier prêt - Cliquez sur "Ajouter au panier" et sur l\'icône 🛒');
-</script>
-
-        // ===== MENU MOBILE =====
-        function initMenuMobile() {
-            const toggleBtn = document.querySelector('.menu-toggle');
-            const menu = document.querySelector('.mobile-menu');
-            const overlay = document.querySelector('.menu-overlay');
-
-            toggleBtn.addEventListener('click', () => {
-                menu.classList.toggle('active');
-                overlay.classList.toggle('active');
-                toggleBtn.setAttribute('aria-expanded', menu.classList.contains('active'));
-            });
-
-            overlay.addEventListener('click', () => {
-                menu.classList.remove('active');
-                overlay.classList.remove('active');
-                toggleBtn.setAttribute('aria-expanded', 'false');
-            });
-
-            // Fermer le menu au clic sur un lien
-            menu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.remove('active');
-                    overlay.classList.remove('active');
-                    toggleBtn.setAttribute('aria-expanded', 'false');
-                });
-            });
-        }
-
+// ⭐⭐ AJOUTEZ CETTE LIGNE POUR APPELER LA FONCTION ⭐⭐
+initMenuMobile();
         // ===== WISHLIST =====
         function toggleWishlist(productId) {
             const index = wishlistItems.indexOf(productId);
@@ -3139,6 +3022,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     textElLeft.style.opacity = 1;
                 }, 500);
             }, 3000);
+              } 
 
 
         // ===== VARIATIONS PRODUITS =====
