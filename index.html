@@ -868,6 +868,74 @@ body.lightbox-open {
             justify-content: center;
             gap: 10px;
         }
+/* ===== SYSTÈME LIVRAISON ===== */
+.delivery-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 60px 20px;
+    margin: 40px 0;
+}
+
+.delivery-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.delivery-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.location-input {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.location-input input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.location-input button {
+    background: #6a11cb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.delivery-options-list {
+    margin-top: 20px;
+}
+
+.option {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option:hover, .option.selected {
+    border-color: #6a11cb;
+    background: #f0f4ff;
+}
+
+.option .price {
+    color: #25D366;
+    font-weight: bold;
+}
 
         /* ===== BADGE SONINKÉ ===== */
         #soninke-badge-left {
@@ -1604,6 +1672,97 @@ body.lightbox-open {
         padding: 8px;
     }
 }
+/* ===== ASSISTANT SHOPPING IA ===== */
+.shopping-assistant {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.assistant-toggle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-size: 1.5rem;
+}
+
+.assistant-panel {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: none;
+}
+
+.shopping-assistant.open .assistant-panel {
+    display: block;
+}
+
+.assistant-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.assistant-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.assistant-input {
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.assistant-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.assistant-input button {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.message.bot {
+    background: #f0f4ff;
+    text-align: left;
+}
+
+.message.user {
+    background: #e3f2fd;
+    text-align: right;
+}
 /* === NOUVEAU STYLE POUR PRODUITS === */
 .produits-container {
     display: grid;
@@ -1921,6 +2080,23 @@ body.lightbox-open {
             <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
             <button class="buy-btn" onclick="processFloatingCheckout()">Acheter</button>
             <button class="close-cart-btn" onclick="closeFloatingCart()">Fermer</button>
+        </div>
+    </div>
+</div>
+<!-- ===== ASSISTANT SHOPPING IA ===== -->
+<div id="shopping-assistant" class="shopping-assistant">
+    <div class="assistant-toggle" onclick="toggleAssistant()">
+        <span>🤖</span>
+    </div>
+    <div class="assistant-panel">
+        <div class="assistant-header">
+            <h3>Assistant Shopping Andu-Xara</h3>
+            <button class="close-assistant" onclick="toggleAssistant()">×</button>
+        </div>
+        <div class="assistant-messages" id="assistant-messages"></div>
+        <div class="assistant-input">
+            <input type="text" id="assistant-question" placeholder="Ex: Quel t-shirt pour un mariage ?">
+            <button onclick="askAssistant()">Envoyer</button>
         </div>
     </div>
 </div>
@@ -2482,6 +2658,36 @@ body.lightbox-open {
                     </ul>
                 </div>
             </section>
+<!-- ===== SYSTÈME LIVRAISON INTELLIGENT ===== -->
+<section class="delivery-section" id="livraison">
+    <div class="container">
+        <h2>🚚 Livraison Express & Suivi en Temps Réel</h2>
+        <div class="delivery-options">
+            <div class="delivery-card">
+                <h3>📍 Vérifiez la livraison dans votre zone</h3>
+                <div class="location-input">
+                    <input type="text" id="delivery-address" placeholder="Entrez votre quartier/ville">
+                    <button onclick="checkDelivery()">Vérifier</button>
+                </div>
+                <div id="delivery-result"></div>
+            </div>
+            
+            <div class="delivery-card">
+                <h3>⏱️ Options de livraison</h3>
+                <div class="delivery-options-list">
+                    <div class="option" data-type="express">
+                        <span>Express (24h)</span>
+                        <span class="price">Gratuit</span>
+                    </div>
+                    <div class="option" data-type="standard">
+                        <span>Standard (3-5 jours)</span>
+                        <span class="price">Gratuit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
             <!-- Partenaires -->
             <section class="partenaires">
