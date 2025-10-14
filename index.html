@@ -1367,7 +1367,7 @@ body.lightbox-open {
         font-size: 0.8rem;
     }
 }
-/* ===== PANIER FLOTTANT AVEC BOUTONS FIXES ===== */
+/* ===== PANIER FLOTTANT OPTIMISÉ ===== */
 .floating-cart {
     position: fixed;
     top: 50%;
@@ -1403,6 +1403,7 @@ body.lightbox-open {
     font-size: 0.8rem;
     min-width: 20px;
     text-align: center;
+    font-weight: bold;
 }
 
 .cart-panel {
@@ -1415,68 +1416,74 @@ body.lightbox-open {
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     margin-top: 10px;
     display: none;
-    max-height: 70vh;
-    overflow: hidden; /* Cache le débordement global */
+    max-height: 70vh; /* Hauteur maximale */
+    overflow: hidden;
 }
 
 .floating-cart.open .cart-panel {
     display: flex;
-    flex-direction: column; /* Organisation verticale */
+    flex-direction: column;
 }
 
-/* Conteneur des articles avec défilement */
+/* Conteneur des articles avec défilement LIMITÉ */
 .cart-items-container {
     flex: 1;
-    overflow-y: auto; /* Défilement seulement ici */
-    max-height: calc(70vh - 150px); /* Réserve de l'espace pour les boutons */
-    padding: 15px;
+    overflow-y: auto;
+    max-height: calc(70vh - 150px); /* Réserve l'espace pour les boutons */
+    padding: 12px;
 }
 
 /* Section des boutons TOUJOURS visible */
 .cart-summary {
-    padding: 15px;
+    padding: 12px;
     border-top: 2px solid #6a11cb;
     background: #f8f9fa;
     flex-shrink: 0; /* Empêche le rétrécissement */
 }
 
+/* RÉDUCTION DE LA TAILLE DES ÉCRITURES */
 .cart-item-floating {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 8px 0;
     border-bottom: 1px solid #eee;
+    font-size: 0.8rem; /* Taille réduite */
 }
 
 .cart-item-info h4 {
     margin: 0;
-    font-size: 0.9rem;
-    max-width: 180px;
+    font-size: 0.85rem; /* Réduit de 0.9 à 0.85 */
+    max-width: 160px; /* Largeur réduite */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
+    line-height: 1.2;
 }
 
 .cart-item-info p {
-    margin: 5px 0;
-    font-size: 0.8rem;
+    margin: 3px 0;
+    font-size: 0.75rem; /* Réduit */
     color: #666;
+    line-height: 1.2;
 }
 
 .cart-item-price {
     text-align: right;
     flex-shrink: 0;
+    font-size: 0.8rem; /* Réduit */
 }
 
 .remove-item {
     background: #ff4757;
     color: white;
     border: none;
-    border-radius: 5px;
-    padding: 4px 8px;
+    border-radius: 4px;
+    padding: 3px 6px;
     cursor: pointer;
-    font-size: 0.7rem;
-    margin-top: 5px;
+    font-size: 0.65rem; /* Réduit */
+    margin-top: 3px;
 }
 
 .remove-item:hover {
@@ -1485,21 +1492,21 @@ body.lightbox-open {
 
 .cart-total-floating {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.9rem; /* Réduit */
     color: #2c3e50;
 }
 
 .buy-btn, .close-cart-btn {
     width: 100%;
-    padding: 12px;
+    padding: 10px; /* Réduit */
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Réduit */
     transition: all 0.3s ease;
 }
 
@@ -1525,13 +1532,14 @@ body.lightbox-open {
 .empty-cart-floating {
     text-align: center;
     color: #888;
-    padding: 30px 20px;
+    padding: 20px;
     font-style: italic;
+    font-size: 0.9rem;
 }
 
-/* Barre de défilement personnalisée */
+/* Barre de défilement personnalisée plus fine */
 .cart-items-container::-webkit-scrollbar {
-    width: 6px;
+    width: 4px; /* Réduit */
 }
 
 .cart-items-container::-webkit-scrollbar-track {
@@ -1548,7 +1556,7 @@ body.lightbox-open {
     background: #2575fc;
 }
 
-/* Mobile */
+/* Mobile - Ajustements supplémentaires */
 @media (max-width: 768px) {
     .floating-cart {
         right: 10px;
@@ -1560,11 +1568,16 @@ body.lightbox-open {
     }
     
     .cart-items-container {
-        max-height: calc(75vh - 150px);
+        max-height: calc(65vh - 140px);
     }
     
     .cart-item-info h4 {
         max-width: 140px;
+        font-size: 0.8rem;
+    }
+    
+    .cart-item-floating {
+        padding: 6px 0;
     }
 }
 
@@ -1575,12 +1588,21 @@ body.lightbox-open {
     }
     
     .cart-items-container {
-        max-height: calc(70vh - 150px);
+        max-height: calc(60vh - 140px);
+        padding: 8px;
     }
     
     .cart-item-info h4 {
         max-width: 120px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .cart-item-info p {
+        font-size: 0.7rem;
+    }
+    
+    .cart-summary {
+        padding: 8px;
     }
 }
 /* === NOUVEAU STYLE POUR PRODUITS === */
@@ -3259,107 +3281,107 @@ initMenuMobile();
     }, 30000); // Mettre à jour toutes les 30 secondes
 </script>
 <script>
-    // === COMPTE À REBOURS 20 JOURS - VERSION FONCTIONNELLE ===
-    console.log('🎯 Initialisation compte à rebours...');
+// === COMPTE À REBOURS AMÉLIORÉ ===
+console.log('🎯 Initialisation compte à rebours amélioré...');
 
-    // Fonction pour créer une date de fin (maintenant + 20 jours)
-    function createEndDate() {
-        const endDate = new Date();
-        endDate.setDate(endDate.getDate() + 20);
-        endDate.setHours(23, 59, 59, 999); // Fin à 23:59:59
-        return endDate;
-    }
-
-    // Initialiser ou récupérer la date de fin
-    function initializeCountdown() {
-        let endDate;
+function initializeCountdown() {
+    let endDate;
+    const savedDate = localStorage.getItem('promoEndDate');
+    const now = new Date().getTime();
+    
+    // Vérifier si la date sauvegardée est valide et dans le futur
+    if (savedDate) {
+        const savedTime = parseInt(savedDate);
+        endDate = new Date(savedTime);
         
-        // Vérifier si une date existe dans le localStorage
-        const savedDate = localStorage.getItem('promoEndDate');
-        
-        if (savedDate) {
-            endDate = new Date(parseInt(savedDate));
-            console.log('📅 Date existante:', endDate);
-        } else {
-            // Créer une nouvelle date
+        // Si la date est dans le passé, en créer une nouvelle
+        if (endDate.getTime() <= now) {
+            console.log('🔄 Date expirée, création nouvelle date');
             endDate = createEndDate();
             localStorage.setItem('promoEndDate', endDate.getTime());
-            console.log('🆕 Nouvelle date créée:', endDate);
+        } else {
+            console.log('📅 Date valide trouvée:', endDate);
         }
-        
-        return endDate;
+    } else {
+        // Créer une nouvelle date
+        endDate = createEndDate();
+        localStorage.setItem('promoEndDate', endDate.getTime());
+        console.log('🆕 Nouvelle date créée:', endDate);
+    }
+    
+    return endDate;
+}
+
+function createEndDate() {
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 20);
+    endDate.setHours(23, 59, 59, 999);
+    return endDate;
+}
+
+function startCountdown() {
+    const endDate = initializeCountdown();
+    const now = new Date().getTime();
+    const distance = endDate - now;
+    
+    console.log('⏰ Temps restant:', Math.floor(distance / (1000 * 60 * 60 * 24)) + ' jours');
+    
+    if (distance <= 0) {
+        showPromotionEnded();
+        return;
     }
 
-    // Démarrer le compte à rebours
-    function startCountdown() {
-        const endDate = initializeCountdown();
-        const now = new Date().getTime();
-        const distance = endDate - now;
-        
-        console.log('⏰ Temps total:', distance, 'ms');
-        console.log('📆 Date de fin:', endDate);
-        console.log('🕒 Maintenant:', new Date());
+    updateCountdown(endDate);
+}
 
-        // Vérifier si la promotion est déjà terminée
-        if (distance <= 0) {
-            showPromotionEnded();
-            return;
-        }
+function updateCountdown(endDate) {
+    const now = new Date().getTime();
+    const distance = endDate - now;
 
-        // Démarrer la mise à jour
-        updateCountdown(endDate);
+    if (distance <= 0) {
+        showPromotionEnded();
+        return;
     }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     // Mettre à jour l'affichage
-    function updateCountdown(endDate) {
-        const now = new Date().getTime();
-        const distance = endDate - now;
+    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
 
-        if (distance <= 0) {
-            showPromotionEnded();
-            return;
-        }
+    setTimeout(() => updateCountdown(endDate), 1000);
+}
 
-        // Calculer jours, heures, minutes, secondes
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        console.log(`⏳ ${days}j ${hours}h ${minutes}m ${seconds}s`);
-
-        // Mettre à jour l'affichage
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-
-        // Mettre à jour toutes les secondes
-        setTimeout(() => updateCountdown(endDate), 1000);
-    }
-
-    // Afficher "Promotion terminée"
-    function showPromotionEnded() {
-        document.querySelector('.promo-countdown h2').textContent = 'Promotion terminée !';
-        document.querySelector('.promo-countdown').classList.add('ended');
+function showPromotionEnded() {
+    const countdownElement = document.querySelector('.promo-countdown');
+    if (countdownElement) {
+        countdownElement.querySelector('h2').textContent = 'Promotion terminée !';
+        countdownElement.classList.add('ended');
         console.log('🏁 Promotion terminée');
     }
+}
 
-    // FORCER LA RÉINITIALISATION (à utiliser une seule fois)
-    function resetCountdown() {
+// Démarrer le compte à rebours
+if (document.querySelector('.promo-countdown')) {
+    startCountdown();
+}
+
+// === RÉINITIALISATION MANUELLE (pour debug) ===
+function resetCountdownForAll() {
+    if (confirm('Voulez-vous vraiment réinitialiser le compte à rebours ?')) {
         localStorage.removeItem('promoEndDate');
-        console.log('🔄 Compte à rebours réinitialisé');
+        console.log('🔄 Compte à rebours réinitialisé pour tous les appareils');
         location.reload();
     }
+}
 
-    // DÉMARRER - DÉCOMMENTE LA LIGNE CI-DESSOUS POUR RÉINITIALISER
-    // resetCountdown();
-
-    // Démarrer normalement
-    if (document.querySelector('.promo-countdown')) {
-        startCountdown();
-    }
-
+// Pour tester : décommentez la ligne ci-dessous
+// resetCountdownForAll();
 </script>
         <!-- Popup Promotion Élégant -->
         <div id="elegant-popup">
