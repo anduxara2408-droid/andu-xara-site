@@ -868,7 +868,7 @@ body.lightbox-open {
             justify-content: center;
             gap: 10px;
         }
-/* ===== SYSTÈME LIVRAISON ===== */
+/* ===== SYSTÈME LIVRAISON CORRIGÉ ===== */
 .delivery-section {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     padding: 60px 20px;
@@ -898,18 +898,42 @@ body.lightbox-open {
 
 .location-input input {
     flex: 1;
-    padding: 12px;
+    padding: 12px 15px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.location-input input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+    outline: none;
+}
+
+.location-input input::placeholder {
+    color: #a0aec0;
 }
 
 .location-input button {
-    background: #6a11cb;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     color: white;
     border: none;
     padding: 12px 20px;
     border-radius: 8px;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.location-input button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.3);
+}
+
+.location-input button:active {
+    transform: translateY(0);
 }
 
 .delivery-options-list {
@@ -919,22 +943,142 @@ body.lightbox-open {
 .option {
     display: flex;
     justify-content: space-between;
-    padding: 15px;
+    align-items: center;
+    padding: 15px 20px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
     margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: white;
 }
 
-.option:hover, .option.selected {
+.option:hover {
     border-color: #6a11cb;
-    background: #f0f4ff;
+    background: #f8f9ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.1);
+}
+
+.option.selected {
+    border-color: #25D366;
+    background: #f0fff4;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+    transform: translateY(-2px);
 }
 
 .option .price {
     color: #25D366;
     font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Style pour le résultat de la livraison */
+#delivery-result {
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+/* États de chargement */
+.location-input button:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.location-input button:disabled:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .delivery-section {
+        padding: 40px 15px;
+        margin: 30px 0;
+    }
+    
+    .delivery-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .delivery-card {
+        padding: 20px;
+    }
+    
+    .location-input {
+        flex-direction: column;
+    }
+    
+    .location-input button {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .option {
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .delivery-section {
+        padding: 30px 10px;
+    }
+    
+    .delivery-card {
+        padding: 15px;
+    }
+    
+    .option {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .option .price {
+        align-self: flex-end;
+    }
+}
+
+/* Animation pour les résultats */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#delivery-result > div {
+    animation: slideDown 0.3s ease;
+}
+
+/* Badge pour les options sélectionnées */
+.option.selected::before {
+    content: "✓";
+    color: #25D366;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+/* Amélioration visuelle des titres */
+.delivery-card h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.delivery-section h2 {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
         /* ===== BADGE SONINKÉ ===== */
@@ -2658,6 +2802,12 @@ body.lightbox-open {
                     </ul>
                 </div>
             </section>
+<!-- À propos -->
+<section class="about-section" id="apropos">
+</section>
+
+<!-- Partenaires -->
+<section class="partenaires">
 <!-- ===== SYSTÈME LIVRAISON INTELLIGENT ===== -->
 <section class="delivery-section" id="livraison">
     <div class="container">
@@ -3832,6 +3982,7 @@ function addToCart(productName, oldPrice, promoPrice) {
     // Mettre à jour l'affichage du panier
     updateFloatingCart();
 }
+
 // === NOTIFICATION ===
 function showNotification(message) {
     // Créer la notification
@@ -3937,11 +4088,143 @@ function showQuickViewModal(title, image, price, description) {
     });
 }
 
-// Initialiser au chargement
+// ===== SYSTÈME DE LIVRAISON FONCTIONNEL =====
+function checkDelivery() {
+    console.log('📍 Vérification de la livraison...');
+    
+    const addressInput = document.getElementById('delivery-address');
+    const resultDiv = document.getElementById('delivery-result');
+    
+    if (!addressInput) {
+        console.error('❌ Champ delivery-address non trouvé');
+        return;
+    }
+    
+    if (!resultDiv) {
+        console.error('❌ Élément delivery-result non trouvé');
+        return;
+    }
+    
+    const address = addressInput.value.trim();
+    
+    if (!address) {
+        resultDiv.innerHTML = '<p style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px;">⚠️ Veuillez entrer le nom de votre quartier ou ville</p>';
+        return;
+    }
+    
+    // Afficher le chargement
+    resultDiv.innerHTML = '<p style="color: #667eea; padding: 10px; background: #f0f4ff; border-radius: 5px;">🔄 Recherche de votre zone...</p>';
+    
+    // Simuler un délai de vérification
+    setTimeout(() => {
+        const addressLower = address.toLowerCase();
+        
+        // Zones couvertes en Mauritanie
+        const zonesCouvertes = [
+            'nouakchott', 'nouadhibou', 'rosso', 'kaédi', 'kiffa', 'atar', 'zouérat',
+            'tévregh zeina', 'el mina', 'ksar', 'sebkha', 'dar naim', 'toujounine',
+            'arafat', 'ryad', 'tichka', 'légation', 'cité plateaux', 'cocoters',
+            'tevregh', 'mina', 'ksar', 'sebkha'
+        ];
+        
+        let estCouvert = false;
+        let message = '';
+        let delai = '';
+        
+        // Vérifier si la zone est couverte
+        for (const zone of zonesCouvertes) {
+            if (addressLower.includes(zone)) {
+                estCouvert = true;
+                
+                if (addressLower.includes('nouakchott') || 
+                    addressLower.includes('tevregh') || 
+                    addressLower.includes('mina') || 
+                    addressLower.includes('ksar') || 
+                    addressLower.includes('sebkha') ||
+                    addressLower.includes('dar naim') ||
+                    addressLower.includes('toujounine') ||
+                    addressLower.includes('arafat') ||
+                    addressLower.includes('ryad')) {
+                    message = '✅ Livraison EXPRESS disponible !';
+                    delai = '⏱️ Livraison en 24h - GRATUITE';
+                } else {
+                    message = '✅ Livraison STANDARD disponible !';
+                    delai = '⏱️ Livraison en 3-5 jours - GRATUITE';
+                }
+                break;
+            }
+        }
+        
+        if (!estCouvert) {
+            message = '❌ Livraison non disponible dans votre zone';
+            delai = '📞 Contactez-nous au +222 49 03 76 97';
+        }
+        
+        // Afficher le résultat
+        resultDiv.innerHTML = `
+            <div style="padding: 15px; border-radius: 10px; background: ${estCouvert ? '#e8f5e8' : '#ffe8e8'}; border: 2px solid ${estCouvert ? '#25D366' : '#ff4757'};">
+                <h4 style="margin: 0 0 10px 0; color: ${estCouvert ? '#25D366' : '#ff4757'};">${message}</h4>
+                <p style="margin: 0; font-weight: bold;">${delai}</p>
+                ${estCouvert ? `
+                    <div style="margin-top: 15px;">
+                        <p style="margin: 5px 0; font-size: 14px;">📦 Livraison à domicile incluse</p>
+                        <p style="margin: 5px 0; font-size: 14px;">💰 Paiement à la livraison possible</p>
+                    </div>
+                ` : `
+                    <div style="margin-top: 15px;">
+                        <p style="margin: 5px 0; font-size: 14px;">💡 Conseil : Vérifiez l\'orthographe de votre ville</p>
+                        <p style="margin: 5px 0; font-size: 14px;">📞 Appelez-nous pour les commandes spéciales</p>
+                    </div>
+                `}
+            </div>
+        `;
+        
+        console.log('📍 Résultat livraison:', message);
+        
+    }, 1000);
+}
+
+// Fonction pour sélectionner une option de livraison
+function selectDeliveryOption(type) {
+    const options = document.querySelectorAll('.option');
+    
+    options.forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.type === type) {
+            option.classList.add('selected');
+        }
+    });
+    
+    showNotification(`✅ Option ${type === 'express' ? 'Express (24h)' : 'Standard (3-5 jours)'} sélectionnée !`);
+}
+
+// Initialiser les événements au chargement
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation du système de livraison...');
+    
+    // Événement pour la touche Entrée
+    const addressInput = document.getElementById('delivery-address');
+    if (addressInput) {
+        addressInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkDelivery();
+            }
+        });
+    }
+    
+    // Événements pour les options de livraison
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            selectDeliveryOption(this.dataset.type);
+        });
+    });
+    
+    // Initialiser la vue rapide
     setupQuickView();
     updateCartCounter();
-    console.log('✅ Panier et vue rapide initialisés');
+    
+    console.log('✅ Panier, vue rapide et livraison initialisés');
 });
 </script>
 </body>
