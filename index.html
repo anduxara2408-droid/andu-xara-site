@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Catalogue Andu-Xara 2025</title>
     <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens">
     <link rel="icon" href="images/logo.png" type="image/png">
@@ -27,17 +27,6 @@
             overflow-x: hidden;
         }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            min-height: 100%;
-            overflow-x: hidden;
-            -webkit-text-size-adjust: none;
-/* OU supprimez complètement cette ligne */
-        }
-
         .main-container {
             display: flex;
             flex-direction: column;
@@ -49,22 +38,31 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            box-sizing: border-box;
+        .products-grid    box-sizing: border-box;
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
+img, .product-img, .logo-img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    object-fit: cover;
+}
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
+}
+/* ===== TEXTES RESPONSIVES ===== */
+h1, h2, h3, p, span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
+h1 { font-size: clamp(1.4rem, 5vw, 2rem); }
+h2 { font-size: clamp(1.2rem, 4vw, 1.6rem); }
+p { font-size: clamp(0.9rem, 3vw, 1rem); }
         /* ===== ANIMATIONS ===== */
         @keyframes popupAnimation {
             0% { transform: scale(0.5); opacity: 0; }
@@ -375,20 +373,16 @@ h1 {
             opacity: 0.9;
         }
 
-        /* ===== PRODUITS ===== */
 /* ===== GRILLE PRODUITS COMPACTE ===== */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 25px;
     width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 15px;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
-
 .product-card {
     background-color: white;
     border-radius: 12px;
@@ -2478,13 +2472,6 @@ body.lightbox-open {
         margin-bottom: 10px;
     }
 }
-/* ===== CORRECTIONS URGENTES TOUS TÉLÉPHONES ===== */
-/* Empêcher le zoom sur les inputs */
-@media (max-width: 768px) {
-    input, select, textarea {
-        font-size: 16px !important; /* Empêche le zoom sur iOS */
-    }
-}
 
 /* Correction hauteur viewport mobile */
 @media (max-width: 768px) {
@@ -2501,6 +2488,11 @@ body.lightbox-open {
         padding-left: max(15px, env(safe-area-inset-left));
         padding-right: max(15px, env(safe-area-inset-right));
         padding-bottom: max(15px, env(safe-area-inset-bottom));
+    }
+}
+ .container {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
     }
 }
 /* ===== RESPONSIVE MOBILE ===== */
@@ -2550,6 +2542,109 @@ body.lightbox-open {
     h1 { font-size: 24px !important; }
     h2 { font-size: 20px !important; }
     p { font-size: 14px !important; }
+}
+/* ===== CORRECTIONS MOBILE URGENTES ===== */
+@media (max-width: 480px) {
+    /* Reset général */
+    * {
+        max-width: 100% !important;
+    }
+    
+    /* Header mobile */
+    .header-content {
+        flex-direction: column !important;
+        gap: 10px !important;
+        text-align: center !important;
+    }
+    
+    .logo-img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    h1 {
+        font-size: 1.4rem !important;
+        line-height: 1.3 !important;
+    }
+    
+    .subtitle {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Produits en 1 colonne sur très petits écrans */
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        padding: 0 8px !important;
+    }
+    
+    .product-card {
+        margin: 0 auto !important;
+        max-width: 100% !important;
+    }
+    
+    .product-image-container {
+        height: 200px !important;
+    }
+    
+    .product-info {
+        padding: 12px !important;
+    }
+    
+    .product-title {
+        font-size: 1rem !important;
+        height: auto !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-description {
+        font-size: 0.85rem !important;
+        height: auto !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Boutons adaptés aux doigts */
+    .add-to-cart, .quick-view {
+        padding: 14px 16px !important;
+        font-size: 16px !important;
+        min-height: 44px !important;
+    }
+    
+    /* Panier mobile */
+    .floating-cart {
+        right: 10px !important;
+        bottom: 20px !important;
+    }
+    
+    .cart-panel {
+        width: 95vw !important;
+        right: -10px !important;
+        max-height: 70vh !important;
+    }
+    
+    /* Bandeau défilant */
+    .marquee-section {
+        padding: 0 10px !important;
+        font-size: 11px !important;
+    }
+    
+    /* Correction largeurs */
+    .container, section, .promo-countdown, .faq-container, #timeline {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+    }
+}
+
+/* Correction iPhone/Safari */
+@supports (-webkit-touch-callout: none) {
+    .product-image-container {
+        height: 220px !important;
+    }
+    
+    .floating-cart {
+        bottom: 25px !important;
+    }
 }
     </style>
 
