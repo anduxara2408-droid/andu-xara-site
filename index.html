@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Catalogue Andu-Xara 2025</title>
     <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens">
     <link rel="icon" href="images/logo.png" type="image/png">
@@ -27,17 +27,14 @@
             overflow-x: hidden;
         }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            min-height: 100%;
-            overflow-x: hidden;
-            -webkit-text-size-adjust: none;
-/* OU supprimez complètement cette ligne */
-        }
-
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
         .main-container {
             display: flex;
             flex-direction: column;
@@ -2258,6 +2255,557 @@ body.lightbox-open {
     /* Réduire les espacements */
     .container {
         padding: 0 10px !important;
+    }
+}
+/* ===== CORRECTIONS RESPONSIVE URGENTES ===== */
+
+/* Correction viewport pour iOS */
+@viewport {
+    width: device-width;
+    zoom: 1.0;
+    min-zoom: 0.25;
+    max-zoom: 5.0;
+    user-zoom: fixed;
+}
+
+/* Empêcher le zoom sur les champs input en iOS */
+@media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px !important; /* Empêche le zoom automatique iOS */
+        transform: scale(1);
+        max-height: 44px; /* Taille minimale pour le touch */
+    }
+}
+
+/* Correction générale pour mobile landscape */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+    body {
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+    
+    .main-container {
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+    
+    /* Header réduit en paysage */
+    header {
+        padding: 0.5rem 0 !important;
+    }
+    
+    .header-content {
+        gap: 8px !important;
+        padding: 5px 0 !important;
+    }
+    
+    .logo-img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    h1 {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    .subtitle {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+    
+    /* Bandeau défilant réduit */
+    .marquee-container {
+        padding: 8px 0 !important;
+    }
+    
+    .marquee-section {
+        padding: 0 15px !important;
+    }
+    
+    .welcome, .promotion, .original {
+        padding: 4px 12px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Produits en grille adaptative */
+    .produits-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+        gap: 12px !important;
+        padding: 10px !important;
+    }
+    
+    .product-card {
+        padding: 10px !important;
+    }
+    
+    .product-image-container {
+        height: 120px !important;
+    }
+    
+    .product-info {
+        padding: 8px 0 !important;
+    }
+    
+    .product-title {
+        font-size: 0.9rem !important;
+        height: 2.4em !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .product-description {
+        font-size: 0.75rem !important;
+        height: 2.2em !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-price {
+        font-size: 1rem !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .variation-btn {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .add-to-cart, .quick-view {
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    /* Compteur en ligne repositionné */
+    .mini-counter {
+        top: 5px !important;
+        padding: 3px 10px !important;
+        font-size: 10px !important;
+    }
+    
+    .counter-number {
+        font-size: 11px !important;
+    }
+    
+    /* Panier flottant adapté */
+    .floating-cart {
+        right: 10px !important;
+    }
+    
+    .cart-toggle {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .cart-panel {
+        width: 300px !important;
+        right: -40px !important;
+    }
+    
+    /* Assistant IA réduit */
+    #ai-assistant-section {
+        margin: 30px 0 !important;
+        padding: 20px 10px !important;
+    }
+    
+    #ai-assistant-section h2 {
+        font-size: 1.3rem !important;
+    }
+    
+    .messages {
+        max-height: 200px !important;
+        padding: 10px !important;
+    }
+    
+    /* Sections réduites */
+    .delivery-section,
+    #client-dashboard,
+    #virtual-fitting {
+        padding: 30px 15px !important;
+        margin: 20px 0 !important;
+    }
+    
+    .delivery-options,
+    .recommendations-container {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+}
+
+/* Correction spécifique pour très petits écrans paysage */
+@media screen and (max-width: 736px) and (orientation: landscape) {
+    .produits-container {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+    
+    .product-image-container {
+        height: 100px !important;
+    }
+    
+    .product-title {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Cacher certains éléments pour gagner de l'espace */
+    .subtitle,
+    .audio-welcome,
+    .category-banners {
+        display: none !important;
+    }
+    
+    /* Header ultra compact */
+    header {
+        padding: 0.3rem 0 !important;
+    }
+    
+    .logo-img {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    h1 {
+        font-size: 1rem !important;
+    }
+}
+
+/* Correction pour tablettes en paysage */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .produits-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+        gap: 15px !important;
+    }
+    
+    .product-image-container {
+        height: 150px !important;
+    }
+}
+
+/* Empêcher le débordement horizontal */
+@media screen and (max-width: 1024px) {
+    body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+    
+    .main-container {
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+    
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+    }
+    
+    section, .promo-countdown, .faq-container, #timeline {
+        max-width: 100% !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* Correction des images responsives */
+img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* Amélioration de la lisibilité sur mobile */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    h1, h2, h3 {
+        line-height: 1.2;
+    }
+    
+    .product-title, .product-description {
+        line-height: 1.3;
+    }
+}
+
+/* Correction du menu mobile en paysage */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+    .mobile-menu {
+        width: 200px !important;
+    }
+    
+    .mobile-menu a {
+        padding: 12px 15px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Ajustement des boutons pour le touch */
+@media screen and (max-width: 1024px) {
+    button, 
+    .add-to-cart, 
+    .category-btn, 
+    .variation-btn {
+        min-height: 44px !important; /* Taille minimale pour le touch */
+        min-width: 44px !important;
+    }
+    
+    .category-btn {
+        padding: 10px 15px !important;
+    }
+}
+/* ===== CORRECTIONS RESPONSIVE CRITIQUES ===== */
+
+/* Pour les mobiles en paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    .main-container {
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+    
+    .header-content {
+        padding: 5px 0;
+    }
+    
+    .logo-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    h1 {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    .subtitle {
+        font-size: 0.7rem !important;
+    }
+    
+    /* Produits en grille compacte */
+    .produits-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+        gap: 10px !important;
+        padding: 10px 5px !important;
+    }
+    
+    .product-card {
+        padding: 8px !important;
+    }
+    
+    .product-image-container {
+        height: 120px !important;
+    }
+    
+    .product-title {
+        font-size: 0.8rem !important;
+        height: 2.2em !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .product-description {
+        font-size: 0.7rem !important;
+        height: 2.1em !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-price {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .variation-btn {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .add-to-cart, .quick-view {
+        padding: 8px 10px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    /* Panier flottant optimisé */
+    .floating-cart {
+        right: 5px !important;
+    }
+    
+    .cart-panel {
+        width: 280px !important;
+        right: -30px !important;
+        max-height: 60vh !important;
+    }
+    
+    .cart-items-container {
+        max-height: calc(50vh - 120px) !important;
+        padding: 8px !important;
+    }
+    
+    .cart-item-info h4 {
+        max-width: 100px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    /* Assistant IA compact */
+    #ai-assistant-section {
+        margin: 20px 0 !important;
+        padding: 20px 10px !important;
+    }
+    
+    .assistant-container {
+        max-width: 100% !important;
+    }
+    
+    .messages {
+        max-height: 200px !important;
+        padding: 10px !important;
+    }
+    
+    /* Compteur promotion */
+    .promo-countdown {
+        padding: 10px 15px !important;
+        max-width: 350px !important;
+        margin: 10px auto !important;
+    }
+    
+    .promo-countdown h2 {
+        font-size: 1rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    #countdown {
+        font-size: 0.9rem !important;
+    }
+    
+    #countdown span {
+        min-width: 35px !important;
+        padding: 4px 6px !important;
+    }
+}
+
+/* Pour les très petits écrans en paysage */
+@media (max-width: 640px) and (orientation: landscape) {
+    .produits-container {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+        gap: 8px !important;
+    }
+    
+    .product-image-container {
+        height: 100px !important;
+    }
+    
+    .product-info {
+        padding: 5px 0 !important;
+    }
+    
+    .variation-selector {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .variation-selector span {
+        font-size: 0.7rem !important;
+        margin-bottom: 3px !important;
+    }
+    
+    .product-actions {
+        flex-direction: column !important;
+        gap: 5px !important;
+    }
+    
+    /* Header ultra compact */
+    .header-content {
+        gap: 8px !important;
+    }
+    
+    .logo-img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    h1 {
+        font-size: 1rem !important;
+    }
+    
+    .subtitle {
+        font-size: 0.6rem !important;
+    }
+}
+
+/* Correction pour l'essayage virtuel en mobile */
+@media (max-width: 768px) {
+    #virtual-fitting {
+        padding: 30px 10px !important;
+        margin: 40px 0 !important;
+    }
+    
+    #camera-container {
+        height: 200px !important;
+    }
+    
+    #virtual-fitting h2 {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Empêcher le zoom sur les inputs */
+@media (max-width: 896px) {
+    input, select, textarea {
+        font-size: 16px !important; /* Empêche le zoom sur iOS */
+    }
+}
+
+/* Correction de la hauteur pour mobile */
+@media (max-height: 500px) {
+    .main-container {
+        min-height: 100vh;
+    }
+    
+    body {
+        overflow-x: hidden;
+        position: relative;
+    }
+}
+
+/* Amélioration de la scrollbar */
+.cart-items-container::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Correction des marges et paddings */
+@media (max-width: 896px) {
+    .container {
+        width: 100% !important;
+        padding: 0 10px !important;
+    }
+    
+    section, .promo-countdown, .faq-container, #timeline {
+        padding: 0 10px !important;
+    }
+}
+
+/* Optimisation des images */
+@media (max-width: 896px) {
+    .product-img {
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+/* Correction du menu mobile */
+@media (max-width: 896px) {
+    .mobile-menu {
+        width: 200px !important;
+    }
+    
+    .mobile-menu a {
+        padding: 12px 15px !important;
+        font-size: 0.9rem !important;
     }
 }
     </style>
@@ -5812,6 +6360,102 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
+// ===== CORRECTIONS RESPONSIVE JAVASCRIPT =====
+
+// Détection du mode paysage
+function checkOrientation() {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    
+    if (isLandscape && window.innerWidth <= 1024) {
+        document.body.classList.add('landscape-mode');
+        console.log('📱 Mode paysage mobile détecté');
+        
+        // Ajustements spécifiques en paysage
+        adjustForLandscape();
+    } else {
+        document.body.classList.remove('landscape-mode');
+    }
+}
+
+function adjustForLandscape() {
+    // Réduire temporairement certains éléments
+    const header = document.querySelector('header');
+    if (header) {
+        header.style.padding = '0.3rem 0';
+    }
+    
+    // Ajuster la grille des produits
+    const produitsContainer = document.querySelector('.produits-container');
+    if (produitsContainer) {
+        produitsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(140px, 1fr))';
+        produitsContainer.style.gap = '8px';
+    }
+}
+
+// Écouter les changements d'orientation
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+
+// Vérifier au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    checkOrientation();
+    
+    // Correction supplémentaire pour iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.body.classList.add('ios-device');
+        
+        // Correction spécifique iOS
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.25, user-scalable=yes');
+        }
+    }
+});
+
+// Empêcher le zoom sur les inputs (solution alternative)
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            // Forcer un redimensionnement si nécessaire
+            setTimeout(() => {
+                window.scrollTo(0, window.scrollY);
+            }, 100);
+        });
+    });
+});
+</script>
+<script>
+// Détection et correction de l'orientation
+function handleOrientation() {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    const isMobile = window.innerWidth <= 896;
+    
+    if (isMobile && isLandscape) {
+        document.body.classList.add('landscape-mode');
+        console.log('📱 Mode paysage mobile détecté');
+    } else {
+        document.body.classList.remove('landscape-mode');
+    }
+}
+
+// Écouter les changements d'orientation
+window.addEventListener('resize', handleOrientation);
+window.addEventListener('orientationchange', handleOrientation);
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', handleOrientation);
+
+// Correction du viewport pour iOS
+function setViewportScale() {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (window.orientation !== undefined) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+    }
+}
+
+window.addEventListener('orientationchange', setViewportScale);
 </script>
 </body>
 </html>
