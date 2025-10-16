@@ -2183,66 +2183,6 @@ body.lightbox-open {
     width: 100% !important;
     margin-left: 0 !important;
 }
-/* ===== CORRECTION URGENTE ESSAYAGE VIRTUEL MOBILE ===== */
-#virtual-fitting {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 40px 0 !important;
-    padding: 30px 10px !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-}
-
-.fitting-container {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    gap: 20px !important;
-}
-
-.camera-section, .clothing-selection {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.camera-preview {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 250px !important;
-}
-
-.clothing-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
-    gap: 10px !important;
-}
-
-/* Sur très petits écrans */
-@media (max-width: 480px) {
-    #virtual-fitting {
-        padding: 20px 5px !important;
-        margin: 20px 0 !important;
-    }
-    
-    .camera-preview {
-        height: 200px !important;
-    }
-    
-    .clothing-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-    
-    .clothing-item {
-        padding: 10px !important;
-        min-height: 80px !important;
-    }
-    
-    .fitting-header h1 {
-        font-size: 1.5rem !important;
-        line-height: 1.3 !important;
-    }
-}
 /* ===== RESPONSIVE MOBILE ===== */
 @media (max-width: 768px) {
     /* Assistant IA */
@@ -2704,6 +2644,66 @@ body.lightbox-open {
     
     .floating-cart {
         bottom: 25px !important;
+    }
+}
+/* ===== CORRECTION URGENTE ESSAYAGE VIRTUEL MOBILE ===== */
+#virtual-fitting {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 40px 0 !important;
+    padding: 30px 10px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+.fitting-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 20px !important;
+}
+
+.camera-section, .clothing-selection {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.camera-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 250px !important;
+}
+
+.clothing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+    gap: 10px !important;
+}
+
+/* Sur très petits écrans */
+@media (max-width: 480px) {
+    #virtual-fitting {
+        padding: 20px 5px !important;
+        margin: 20px 0 !important;
+    }
+    
+    .camera-preview {
+        height: 200px !important;
+    }
+    
+    .clothing-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .clothing-item {
+        padding: 10px !important;
+        min-height: 80px !important;
+    }
+    
+    .fitting-header h1 {
+        font-size: 1.5rem !important;
+        line-height: 1.3 !important;
     }
 }
     </style>
