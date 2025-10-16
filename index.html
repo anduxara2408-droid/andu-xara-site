@@ -2260,6 +2260,249 @@ body.lightbox-open {
         padding: 0 10px !important;
     }
 }
+/* ===== CORRECTIONS MOBILE URGENTES ===== */
+@media (max-width: 480px) {
+    /* Correction header pour petits écrans */
+    .header-content {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .logo-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    h1 {
+        font-size: 1.3rem !important;
+        text-align: center;
+    }
+    
+    .subtitle {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Correction produits */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        padding: 0 5px !important;
+    }
+    
+    .product-card {
+        margin: 0 !important;
+    }
+    
+    .product-image-container {
+        height: 140px !important;
+    }
+    
+    .product-info {
+        padding: 10px !important;
+    }
+    
+    .product-title {
+        font-size: 0.85rem !important;
+        height: auto !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .product-description {
+        font-size: 0.75rem !important;
+        height: auto !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .add-to-cart, .quick-view {
+        font-size: 0.8rem !important;
+        padding: 8px !important;
+    }
+    
+    /* Correction panier mobile */
+    .floating-cart {
+        right: 10px !important;
+        bottom: 80px !important;
+        top: auto !important;
+        transform: none !important;
+    }
+    
+    .cart-panel {
+        width: 300px !important;
+        right: -120px !important;
+        max-height: 60vh !important;
+    }
+    
+    /* Correction bandeau défilant */
+    .marquee-section {
+        padding: 0 15px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Correction bouton essayage */
+    .virtual-fitting-btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+        margin: 10px auto !important;
+    }
+}
+
+/* Correction pour iPhone spécifiques */
+@supports (-webkit-touch-callout: none) {
+    .product-image-container {
+        height: 150px !important;
+    }
+    
+    .floating-cart {
+        bottom: 90px !important;
+    }
+}
+/* ===== STYLE AMÉLIORÉ ESSAYAGE VIRTUEL ===== */
+.virtual-fitting-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.fitting-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.fitting-header h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.fitting-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.camera-section, .clothing-selection {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.camera-preview {
+    width: 100%;
+    height: 300px;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.clothing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.clothing-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clothing-item:hover, .clothing-item.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* Responsive Essayage */
+@media (max-width: 768px) {
+    .virtual-fitting-page {
+        padding: 15px;
+    }
+    
+    .fitting-header h1 {
+        font-size: 1.7rem;
+    }
+    
+    .camera-preview {
+        height: 250px;
+    }
+    
+    .clothing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .fitting-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .fitting-header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .camera-preview {
+        height: 200px;
+    }
+    
+    .clothing-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .camera-controls {
+        flex-direction: column;
+    }
+    
+    .camera-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+/* ===== CORRECTIONS URGENTES TOUS TÉLÉPHONES ===== */
+/* Empêcher le zoom sur les inputs */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important; /* Empêche le zoom sur iOS */
+    }
+}
+
+/* Correction hauteur viewport mobile */
+@media (max-width: 768px) {
+    html, body {
+        height: 100% !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+    }
+}
+
+/* Safe areas pour iPhone X+ */
+@supports (padding: max(0px)) {
+    .virtual-fitting-page, .catalog-page {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+    }
+}
     </style>
 
     <!-- Google Analytics -->
@@ -3078,6 +3321,16 @@ body.lightbox-open {
         </div>
     </div>
 </section>
+<!-- Bannière d'information - À AJOUTER AVANT la section virtual-fitting-page -->
+<div class="dev-banner" style="background: linear-gradient(135deg, #ffa726, #ff9800); color: white; padding: 15px; border-radius: 10px; margin: 20px auto; max-width: 800px; text-align: center; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); animation: pulse 2s infinite;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <span style="font-size: 1.5rem;">🚧</span>
+        <div>
+            <strong style="display: block; font-size: 1.1rem;">Fonctionnalité en Cours de Développement</strong>
+            <span style="font-size: 0.9rem; opacity: 0.9;">L'Essayage Virtuel IA arrive bientôt ! Version bêta en test.</span>
+        </div>
+    </div>
+</div>
 <!-- ===== ESSAYAGE VIRTUEL PAR IA ===== -->
 <section id="virtual-fitting" style="margin: 80px 0; padding: 60px 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; border-radius: 25px;">
     <div class="container">
