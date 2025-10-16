@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Catalogue Andu-Xara 2025</title>
     <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens">
     <link rel="icon" href="images/logo.png" type="image/png">
@@ -27,14 +27,17 @@
             overflow-x: hidden;
         }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: none;
+/* OU supprimez complètement cette ligne */
+        }
+
         .main-container {
             display: flex;
             flex-direction: column;
@@ -2257,659 +2260,6 @@ body.lightbox-open {
         padding: 0 10px !important;
     }
 }
-/* ===== CORRECTIONS RESPONSIVE URGENTES ===== */
-
-/* Correction viewport pour iOS */
-@viewport {
-    width: device-width;
-    zoom: 1.0;
-    min-zoom: 0.25;
-    max-zoom: 5.0;
-    user-zoom: fixed;
-}
-
-/* Empêcher le zoom sur les champs input en iOS */
-@media screen and (max-width: 768px) {
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    select,
-    textarea {
-        font-size: 16px !important; /* Empêche le zoom automatique iOS */
-        transform: scale(1);
-        max-height: 44px; /* Taille minimale pour le touch */
-    }
-}
-
-/* Correction générale pour mobile landscape */
-@media screen and (max-width: 1024px) and (orientation: landscape) {
-    body {
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-    
-    .main-container {
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-    
-    /* Header réduit en paysage */
-    header {
-        padding: 0.5rem 0 !important;
-    }
-    
-    .header-content {
-        gap: 8px !important;
-        padding: 5px 0 !important;
-    }
-    
-    .logo-img {
-        width: 40px !important;
-        height: 40px !important;
-    }
-    
-    h1 {
-        font-size: 1.2rem !important;
-        margin-bottom: 0.2rem !important;
-    }
-    
-    .subtitle {
-        font-size: 0.7rem !important;
-        margin-bottom: 0.3rem !important;
-    }
-    
-    /* Bandeau défilant réduit */
-    .marquee-container {
-        padding: 8px 0 !important;
-    }
-    
-    .marquee-section {
-        padding: 0 15px !important;
-    }
-    
-    .welcome, .promotion, .original {
-        padding: 4px 12px !important;
-        font-size: 12px !important;
-    }
-    
-    /* Produits en grille adaptative */
-    .produits-container {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
-        gap: 12px !important;
-        padding: 10px !important;
-    }
-    
-    .product-card {
-        padding: 10px !important;
-    }
-    
-    .product-image-container {
-        height: 120px !important;
-    }
-    
-    .product-info {
-        padding: 8px 0 !important;
-    }
-    
-    .product-title {
-        font-size: 0.9rem !important;
-        height: 2.4em !important;
-        margin-bottom: 5px !important;
-    }
-    
-    .product-description {
-        font-size: 0.75rem !important;
-        height: 2.2em !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .product-price {
-        font-size: 1rem !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .variation-btn {
-        padding: 4px 8px !important;
-        font-size: 0.7rem !important;
-    }
-    
-    .add-to-cart, .quick-view {
-        padding: 8px !important;
-        font-size: 0.8rem !important;
-    }
-    
-    /* Compteur en ligne repositionné */
-    .mini-counter {
-        top: 5px !important;
-        padding: 3px 10px !important;
-        font-size: 10px !important;
-    }
-    
-    .counter-number {
-        font-size: 11px !important;
-    }
-    
-    /* Panier flottant adapté */
-    .floating-cart {
-        right: 10px !important;
-    }
-    
-    .cart-toggle {
-        width: 50px !important;
-        height: 50px !important;
-        font-size: 1.2rem !important;
-    }
-    
-    .cart-panel {
-        width: 300px !important;
-        right: -40px !important;
-    }
-    
-    /* Assistant IA réduit */
-    #ai-assistant-section {
-        margin: 30px 0 !important;
-        padding: 20px 10px !important;
-    }
-    
-    #ai-assistant-section h2 {
-        font-size: 1.3rem !important;
-    }
-    
-    .messages {
-        max-height: 200px !important;
-        padding: 10px !important;
-    }
-    
-    /* Sections réduites */
-    .delivery-section,
-    #client-dashboard,
-    #virtual-fitting {
-        padding: 30px 15px !important;
-        margin: 20px 0 !important;
-    }
-    
-    .delivery-options,
-    .recommendations-container {
-        grid-template-columns: 1fr !important;
-        gap: 15px !important;
-    }
-}
-
-/* Correction spécifique pour très petits écrans paysage */
-@media screen and (max-width: 736px) and (orientation: landscape) {
-    .produits-container {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
-        gap: 8px !important;
-        padding: 8px !important;
-    }
-    
-    .product-image-container {
-        height: 100px !important;
-    }
-    
-    .product-title {
-        font-size: 0.8rem !important;
-    }
-    
-    /* Cacher certains éléments pour gagner de l'espace */
-    .subtitle,
-    .audio-welcome,
-    .category-banners {
-        display: none !important;
-    }
-    
-    /* Header ultra compact */
-    header {
-        padding: 0.3rem 0 !important;
-    }
-    
-    .logo-img {
-        width: 35px !important;
-        height: 35px !important;
-    }
-    
-    h1 {
-        font-size: 1rem !important;
-    }
-}
-
-/* Correction pour tablettes en paysage */
-@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    .produits-container {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
-        gap: 15px !important;
-    }
-    
-    .product-image-container {
-        height: 150px !important;
-    }
-}
-
-/* Empêcher le débordement horizontal */
-@media screen and (max-width: 1024px) {
-    body {
-        overflow-x: hidden !important;
-        width: 100% !important;
-        position: relative !important;
-    }
-    
-    .main-container {
-        overflow-x: hidden !important;
-        width: 100% !important;
-    }
-    
-    .container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 10px !important;
-        box-sizing: border-box !important;
-    }
-    
-    section, .promo-countdown, .faq-container, #timeline {
-        max-width: 100% !important;
-        padding: 0 10px !important;
-        box-sizing: border-box !important;
-    }
-}
-
-/* Correction des images responsives */
-img {
-    max-width: 100% !important;
-    height: auto !important;
-    display: block !important;
-}
-
-/* Amélioration de la lisibilité sur mobile */
-@media screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    
-    h1, h2, h3 {
-        line-height: 1.2;
-    }
-    
-    .product-title, .product-description {
-        line-height: 1.3;
-    }
-}
-
-/* Correction du menu mobile en paysage */
-@media screen and (max-width: 1024px) and (orientation: landscape) {
-    .mobile-menu {
-        width: 200px !important;
-    }
-    
-    .mobile-menu a {
-        padding: 12px 15px !important;
-        font-size: 0.9rem !important;
-    }
-}
-
-/* Ajustement des boutons pour le touch */
-@media screen and (max-width: 1024px) {
-    button, 
-    .add-to-cart, 
-    .category-btn, 
-    .variation-btn {
-        min-height: 44px !important; /* Taille minimale pour le touch */
-        min-width: 44px !important;
-    }
-    
-    .category-btn {
-        padding: 10px 15px !important;
-    }
-}
-/* ===== CORRECTIONS RESPONSIVE CRITIQUES ===== */
-
-/* Pour les mobiles en paysage */
-@media (max-width: 896px) and (orientation: landscape) {
-    .main-container {
-        min-height: 100vh;
-        overflow-y: auto;
-    }
-    
-    .header-content {
-        padding: 5px 0;
-    }
-    
-    .logo-img {
-        width: 50px !important;
-        height: 50px !important;
-    }
-    
-    h1 {
-        font-size: 1.2rem !important;
-        margin-bottom: 0.2rem !important;
-    }
-    
-    .subtitle {
-        font-size: 0.7rem !important;
-    }
-    
-    /* Produits en grille compacte */
-    .produits-container {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
-        gap: 10px !important;
-        padding: 10px 5px !important;
-    }
-    
-    .product-card {
-        padding: 8px !important;
-    }
-    
-    .product-image-container {
-        height: 120px !important;
-    }
-    
-    .product-title {
-        font-size: 0.8rem !important;
-        height: 2.2em !important;
-        margin-bottom: 5px !important;
-    }
-    
-    .product-description {
-        font-size: 0.7rem !important;
-        height: 2.1em !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .product-price {
-        font-size: 0.9rem !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .variation-btn {
-        padding: 4px 8px !important;
-        font-size: 0.7rem !important;
-    }
-    
-    .add-to-cart, .quick-view {
-        padding: 8px 10px !important;
-        font-size: 0.8rem !important;
-    }
-    
-    /* Panier flottant optimisé */
-    .floating-cart {
-        right: 5px !important;
-    }
-    
-    .cart-panel {
-        width: 280px !important;
-        right: -30px !important;
-        max-height: 60vh !important;
-    }
-    
-    .cart-items-container {
-        max-height: calc(50vh - 120px) !important;
-        padding: 8px !important;
-    }
-    
-    .cart-item-info h4 {
-        max-width: 100px !important;
-        font-size: 0.7rem !important;
-    }
-    
-    /* Assistant IA compact */
-    #ai-assistant-section {
-        margin: 20px 0 !important;
-        padding: 20px 10px !important;
-    }
-    
-    .assistant-container {
-        max-width: 100% !important;
-    }
-    
-    .messages {
-        max-height: 200px !important;
-        padding: 10px !important;
-    }
-    
-    /* Compteur promotion */
-    .promo-countdown {
-        padding: 10px 15px !important;
-        max-width: 350px !important;
-        margin: 10px auto !important;
-    }
-    
-    .promo-countdown h2 {
-        font-size: 1rem !important;
-        margin-bottom: 8px !important;
-    }
-    
-    #countdown {
-        font-size: 0.9rem !important;
-    }
-    
-    #countdown span {
-        min-width: 35px !important;
-        padding: 4px 6px !important;
-    }
-}
-
-/* Pour les très petits écrans en paysage */
-@media (max-width: 640px) and (orientation: landscape) {
-    .produits-container {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
-        gap: 8px !important;
-    }
-    
-    .product-image-container {
-        height: 100px !important;
-    }
-    
-    .product-info {
-        padding: 5px 0 !important;
-    }
-    
-    .variation-selector {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-    }
-    
-    .variation-selector span {
-        font-size: 0.7rem !important;
-        margin-bottom: 3px !important;
-    }
-    
-    .product-actions {
-        flex-direction: column !important;
-        gap: 5px !important;
-    }
-    
-    /* Header ultra compact */
-    .header-content {
-        gap: 8px !important;
-    }
-    
-    .logo-img {
-        width: 40px !important;
-        height: 40px !important;
-    }
-    
-    h1 {
-        font-size: 1rem !important;
-    }
-    
-    .subtitle {
-        font-size: 0.6rem !important;
-    }
-}
-
-/* Correction pour l'essayage virtuel en mobile */
-@media (max-width: 768px) {
-    #virtual-fitting {
-        padding: 30px 10px !important;
-        margin: 40px 0 !important;
-    }
-    
-    #camera-container {
-        height: 200px !important;
-    }
-    
-    #virtual-fitting h2 {
-        font-size: 1.5rem !important;
-    }
-}
-
-/* Empêcher le zoom sur les inputs */
-@media (max-width: 896px) {
-    input, select, textarea {
-        font-size: 16px !important; /* Empêche le zoom sur iOS */
-    }
-}
-
-/* Correction de la hauteur pour mobile */
-@media (max-height: 500px) {
-    .main-container {
-        min-height: 100vh;
-    }
-    
-    body {
-        overflow-x: hidden;
-        position: relative;
-    }
-}
-
-/* Amélioration de la scrollbar */
-.cart-items-container::-webkit-scrollbar {
-    width: 3px;
-}
-
-/* Correction des marges et paddings */
-@media (max-width: 896px) {
-    .container {
-        width: 100% !important;
-        padding: 0 10px !important;
-    }
-    
-    section, .promo-countdown, .faq-container, #timeline {
-        padding: 0 10px !important;
-    }
-}
-
-/* Optimisation des images */
-@media (max-width: 896px) {
-    .product-img {
-        height: 100% !important;
-        object-fit: cover !important;
-    }
-}
-
-/* Correction du menu mobile */
-@media (max-width: 896px) {
-    .mobile-menu {
-        width: 200px !important;
-    }
-    
-    .mobile-menu a {
-        padding: 12px 15px !important;
-        font-size: 0.9rem !important;
-    }
-}
-/* ===== CORRECTIONS ESSAYAGE VIRTUEL MOBILE ===== */
-.mobile-fitting-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Pour les très petits écrans */
-@media (max-width: 480px) {
-    #virtual-fitting {
-        padding: 20px 10px !important;
-        margin: 30px 0 !important;
-    }
-    
-    #camera-container {
-        height: 200px !important;
-    }
-    
-    #virtual-fitting h2 {
-        font-size: 1.5rem !important;
-    }
-    
-    .clothing-option > div {
-        padding: 10px !important;
-        height: 70px !important;
-    }
-    
-    .clothing-option .icon {
-        font-size: 1.2rem !important;
-    }
-    
-    .clothing-option .label {
-        font-size: 0.65rem !important;
-    }
-}
-
-/* Pour le mode paysage mobile */
-@media (max-width: 896px) and (orientation: landscape) {
-    #virtual-fitting {
-        padding: 15px 10px !important;
-    }
-    
-    .mobile-fitting-container {
-        flex-direction: row;
-        gap: 15px;
-    }
-    
-    .mobile-fitting-container > div {
-        flex: 1;
-    }
-    
-    #camera-container {
-        height: 180px !important;
-    }
-    
-    /* Masquer certaines instructions en paysage */
-    #virtual-fitting .instructions {
-        display: none;
-    }
-}
-
-/* Amélioration de la sélection */
-.clothing-option {
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.clothing-option.selected {
-    border-color: #667eea !important;
-    transform: scale(1.05);
-}
-
-.clothing-option:hover {
-    transform: scale(1.02);
-}
-
-/* Loading animation */
-.loading-dots span {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #667eea;
-    margin: 0 2px;
-    animation: loadingBounce 1.4s infinite ease-in-out;
-}
-
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes loadingBounce {
-    0%, 80%, 100% { 
-        transform: scale(0.8);
-        opacity: 0.5;
-    }
-    40% { 
-        transform: scale(1);
-        opacity: 1;
-    }
-}
     </style>
 
     <!-- Google Analytics -->
@@ -3728,83 +3078,89 @@ img {
         </div>
     </div>
 </section>
-<!-- ===== ESSAYAGE VIRTUEL IA RESPONSIVE ===== -->
-<section id="virtual-fitting" style="margin: 40px 0; padding: 30px 15px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; border-radius: 20px;">
+<!-- ===== ESSAYAGE VIRTUEL PAR IA ===== -->
+<section id="virtual-fitting" style="margin: 80px 0; padding: 60px 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; border-radius: 25px;">
     <div class="container">
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h2 style="font-size: 1.8rem; margin-bottom: 10px; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🪞 Essayage Virtuel IA</h2>
-            <p style="font-size: 1rem; opacity: 0.9;">Essayez nos vêtements en temps réel</p>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <h2 style="font-size: 3rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🪞 Essayage Virtuel IA</h2>
+            <p style="font-size: 1.3rem; opacity: 0.9;">Essayez nos vêtements en temps réel avec l'intelligence artificielle</p>
         </div>
 
-        <!-- Version Mobile - Layout vertical -->
-        <div class="mobile-fitting-container">
-            <!-- Zone Caméra -->
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; backdrop-filter: blur(10px); margin-bottom: 20px;">
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <h3 style="margin-bottom: 10px; color: #667eea; font-size: 1.2rem;">🎥 Votre Apparence</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: center;">
+            
+            <!-- Zone Caméra et Prévisualisation -->
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 10px; color: #667eea;">🎥 Votre Apparence</h3>
+                    <p style="opacity: 0.8;">Activez votre caméra pour commencer</p>
                 </div>
                 
-                <div id="camera-container" style="position: relative; width: 100%; height: 250px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px;">
+                <div id="camera-container" style="position: relative; width: 100%; height: 400px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px;">
                     <video id="camera-feed" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
                     <canvas id="virtual-fitting-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
                     
+                    <!-- Overlay de chargement -->
                     <div id="fitting-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; flex-direction: column;">
-                        <div style="font-size: 1.5rem; margin-bottom: 10px;">🤖</div>
-                        <div style="font-size: 0.9rem;">IA en cours d'analyse...</div>
+                        <div style="font-size: 2rem; margin-bottom: 15px;">🤖</div>
+                        <div style="font-size: 1.1rem;">IA en cours d'analyse...</div>
+                        <div class="loading-dots" style="margin-top: 10px;">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: center;">
                     <button id="start-camera" onclick="startVirtualFitting()" 
-                            style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
-                        🎥 Activer Caméra
+                            style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: transform 0.2s;">
+                        🎥 Activer la Caméra
                     </button>
                     <button id="stop-camera" onclick="stopVirtualFitting()" 
-                            style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: none;">
+                            style="background: #e74c3c; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; display: none;">
                         ⏹️ Arrêter
                     </button>
                 </div>
             </div>
 
-            <!-- Sélection Vêtements - Version Mobile -->
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; backdrop-filter: blur(10px);">
-                <h3 style="margin-bottom: 20px; color: #667eea; text-align: center; font-size: 1.2rem;">👕 Choisissez un Vêtement</h3>
+            <!-- Sélection des Vêtements -->
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
+                <h3 style="margin-bottom: 25px; color: #667eea; text-align: center;">👕 Choisissez un Vêtement</h3>
                 
-                <!-- Grille mobile compacte -->
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
                     <div class="clothing-option" data-product="tshirt-logo-arabe" onclick="selectClothing('tshirt-logo-arabe')">
-                        <div style="background: #667eea; padding: 12px; border-radius: 10px; text-align: center; height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="font-size: 1.5rem;">👕</div>
-                            <div style="font-size: 0.7rem; margin-top: 5px;">T-shirt Logo</div>
+                        <div style="background: #667eea; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 2rem;">👕</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">T-shirt Logo Arabe</div>
                         </div>
                     </div>
                     <div class="clothing-option" data-product="ensemble-capuche" onclick="selectClothing('ensemble-capuche')">
-                        <div style="background: #34495e; padding: 12px; border-radius: 10px; text-align: center; height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="font-size: 1.5rem;">🎽</div>
-                            <div style="font-size: 0.7rem; margin-top: 5px;">Ensemble</div>
+                        <div style="background: #34495e; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 2rem;">🎽</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">Ensemble Capuche</div>
                         </div>
                     </div>
                     <div class="clothing-option" data-product="pull-bleu" onclick="selectClothing('pull-bleu')">
-                        <div style="background: #3498db; padding: 12px; border-radius: 10px; text-align: center; height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="font-size: 1.5rem;">🧥</div>
-                            <div style="font-size: 0.7rem; margin-top: 5px;">Pull Bleu</div>
+                        <div style="background: #3498db; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 2rem;">🧥</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">Pull Bleu</div>
                         </div>
                     </div>
                     <div class="clothing-option" data-product="babs-premium" onclick="selectClothing('babs-premium')">
-                        <div style="background: #9b59b6; padding: 12px; border-radius: 10px; text-align: center; height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="font-size: 1.5rem;">👑</div>
-                            <div style="font-size: 0.7rem; margin-top: 5px;">Babs Premium</div>
+                        <div style="background: #9b59b6; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 2rem;">👑</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">Babs Premium</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Contrôles mobiles -->
-                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                    <h4 style="margin-bottom: 12px; color: #bdc3c7; font-size: 1rem;">🎛️ Ajustements</h4>
-                    <div style="display: grid; gap: 12px;">
+                <!-- Contrôles d'ajustement -->
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #bdc3c7;">🎛️ Ajustements</h4>
+                    <div style="display: grid; gap: 15px;">
                         <div>
-                            <label style="display: block; margin-bottom: 5px; font-size: 0.8rem;">Taille :</label>
-                            <select id="clothing-size" onchange="adjustClothingSize()" style="width: 100%; padding: 8px; border-radius: 8px; background: #2c3e50; color: white; border: 1px solid #34495e; font-size: 0.9rem;">
+                            <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Taille :</label>
+                            <select id="clothing-size" onchange="adjustClothingSize()" style="width: 100%; padding: 10px; border-radius: 8px; background: #2c3e50; color: white; border: 1px solid #34495e;">
                                 <option value="s">S (Small)</option>
                                 <option value="m" selected>M (Medium)</option>
                                 <option value="l">L (Large)</option>
@@ -3812,25 +3168,26 @@ img {
                             </select>
                         </div>
                         <div>
-                            <label style="display: block; margin-bottom: 5px; font-size: 0.8rem;">Couleur :</label>
-                            <select id="clothing-color" onchange="adjustClothingColor()" style="width: 100%; padding: 8px; border-radius: 8px; background: #2c3e50; color: white; border: 1px solid #34495e; font-size: 0.9rem;">
+                            <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Couleur :</label>
+                            <select id="clothing-color" onchange="adjustClothingColor()" style="width: 100%; padding: 10px; border-radius: 8px; background: #2c3e50; color: white; border: 1px solid #34495e;">
                                 <option value="original">Couleur Originale</option>
                                 <option value="black">Noir</option>
                                 <option value="white">Blanc</option>
                                 <option value="blue">Bleu</option>
+                                <option value="red">Rouge</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Actions mobiles -->
-                <div style="display: flex; gap: 8px;">
+                <!-- Actions -->
+                <div style="display: flex; gap: 10px;">
                     <button onclick="captureVirtualFitting()" 
-                            style="flex: 1; background: #27ae60; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem;">
-                        📸 Capturer
+                            style="flex: 1; background: #27ae60; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600;">
+                        📸 Capturer l'Essai
                     </button>
                     <button onclick="shareVirtualFitting()" 
-                            style="flex: 1; background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem;">
+                            style="flex: 1; background: #3498db; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600;">
                         📤 Partager
                     </button>
                 </div>
@@ -3838,45 +3195,44 @@ img {
         </div>
 
         <!-- Résultats de Capture -->
-        <div id="fitting-results" style="display: none; margin-top: 25px; text-align: center;">
-            <h3 style="margin-bottom: 15px; color: #667eea; font-size: 1.3rem;">📸 Votre Essayage Virtuel</h3>
-            <div id="capture-container" style="max-width: 300px; margin: 0 auto;"></div>
-            <div style="margin-top: 15px;">
+        <div id="fitting-results" style="display: none; margin-top: 40px; text-align: center;">
+            <h3 style="margin-bottom: 20px; color: #667eea;">📸 Votre Essayage Virtuel</h3>
+            <div id="capture-container" style="max-width: 400px; margin: 0 auto;"></div>
+            <div style="margin-top: 20px;">
                 <button onclick="addToCartFromFitting()" 
-                        style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; margin: 5px; font-size: 0.8rem;">
+                        style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; margin: 5px;">
                     🛒 Acheter ce Produit
                 </button>
                 <button onclick="resetFitting()" 
-                        style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; margin: 5px; font-size: 0.8rem;">
+                        style="background: #95a5a6; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; margin: 5px;">
                     🔄 Nouvel Essai
                 </button>
             </div>
         </div>
 
-        <!-- Instructions mobiles -->
-        <div style="text-align: center; margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px;">
-            <h4 style="color: #bdc3c7; margin-bottom: 12px; font-size: 1rem;">💡 Comment ça marche ?</h4>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; color: #ecf0f1; font-size: 0.8rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="font-size: 1.2rem;">1️⃣</div>
-                    <div>
-                        <div style="font-weight: 600;">Activez votre caméra</div>
-                        <div style="opacity: 0.8;">Autorisez l'accès à votre caméra</div>
-                    </div>
+        <!-- Instructions -->
+        <div style="text-align: center; margin-top: 40px; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 15px;">
+            <h4 style="color: #bdc3c7; margin-bottom: 15px;">💡 Comment ça marche ?</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; color: #ecf0f1;">
+                <div>
+                    <div style="font-size: 2rem; margin-bottom: 10px;">1️⃣</div>
+                    <div style="font-weight: 600;">Activez votre caméra</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Autorisez l'accès à votre caméra</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="font-size: 1.2rem;">2️⃣</div>
-                    <div>
-                        <div style="font-weight: 600;">Choisissez un vêtement</div>
-                        <div style="opacity: 0.8;">Sélectionnez dans notre collection</div>
-                    </div>
+                <div>
+                    <div style="font-size: 2rem; margin-bottom: 10px;">2️⃣</div>
+                    <div style="font-weight: 600;">Choisissez un vêtement</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Sélectionnez dans notre collection</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="font-size: 1.2rem;">3️⃣</div>
-                    <div>
-                        <div style="font-weight: 600;">Essayez virtuellement</div>
-                        <div style="opacity: 0.8;">L'IA superpose le vêtement</div>
-                    </div>
+                <div>
+                    <div style="font-size: 2rem; margin-bottom: 10px;">3️⃣</div>
+                    <div style="font-weight: 600;">Essayez virtuellement</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">L'IA superpose le vêtement en temps réel</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; margin-bottom: 10px;">4️⃣</div>
+                    <div style="font-weight: 600;">Capturez et partagez</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Sauvegardez votre essayage</div>
                 </div>
             </div>
         </div>
@@ -6248,36 +5604,85 @@ class VirtualFittingAI {
         return { type: 'premium', color, label, size: 1.0 };
     }
 
-    // Capturer l'essayage
-    captureVirtualFitting() {
-        if (!this.selectedClothing) {
-            this.showNotification('❌ Veuillez sélectionner un vêtement d\'abord', 'error');
-            return;
-        }
-
-        // Créer une image de capture
-        const dataURL = this.canvasElement.toDataURL('image/png');
-        
-        // Afficher le résultat
-        const resultsContainer = document.getElementById('fitting-results');
-        const captureContainer = document.getElementById('capture-container');
-        
-        captureContainer.innerHTML = `
-            <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                <img src="${dataURL}" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
-                <div style="text-align: center; color: #2c3e50;">
-                    <h4 style="margin: 10px 0; color: #667eea;">${this.clothingData[this.selectedClothing].name}</h4>
-                    <div style="font-size: 1.2rem; font-weight: bold; color: #e74c3c;">${this.clothingData[this.selectedClothing].price} MRU</div>
-                </div>
-            </div>
-        `;
-        
-        resultsContainer.style.display = 'block';
-        resultsContainer.scrollIntoView({ behavior: 'smooth' });
-        
-        this.showNotification('📸 Capture sauvegardée !');
+// Capturer l'essayage
+captureVirtualFitting() {
+    if (!this.selectedClothing) {
+        this.showNotification('❌ Veuillez sélectionner un vêtement d\'abord', 'error');
+        return;
     }
 
+    // Créer une image de capture
+    const dataURL = this.canvasElement.toDataURL('image/png');
+    const clothing = this.clothingData[this.selectedClothing];
+    
+    // Obtenir l'image réelle du produit
+    const productImage = this.getProductImage(this.selectedClothing);
+
+    // Afficher le résultat avec les DEUX images
+    const resultsContainer = document.getElementById('fitting-results');
+    const captureContainer = document.getElementById('capture-container');
+
+    captureContainer.innerHTML = `
+        <div style="background: white; padding: 15px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 1.1rem;">🎯 Votre Essayage Réussi !</h4>
+                <p style="color: #666; margin: 0; font-size: 0.9rem;">Le vêtement vous va parfaitement !</p>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                <!-- Votre capture avec le vêtement virtuel -->
+                <div style="text-align: center;">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 0.9rem;">Vous avec le vêtement :</div>
+                    <img src="${dataURL}" style="width: 100%; max-width: 200px; border-radius: 10px; border: 3px solid #667eea; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);">
+                </div>
+                
+                <!-- Produit correspondant avec image réelle -->
+                <div style="text-align: center;">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 0.9rem;">Produit sélectionné :</div>
+                    <img src="${productImage}" style="width: 100%; max-width: 150px; border-radius: 10px; border: 2px solid #e2e8f0;">
+                    <div style="margin-top: 10px;">
+                        <div style="font-weight: bold; color: #2c3e50; font-size: 1rem;">${clothing.name}</div>
+                        <div style="font-size: 1.3rem; font-weight: bold; color: #e74c3c; margin: 5px 0;">${clothing.price} MRU</div>
+                        <div style="color: #27ae60; font-size: 0.8rem; font-weight: bold;">✅ Livraison gratuite</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                <div style="color: #666; font-size: 0.7rem;">
+                    Essayage virtuel IA • Andu-Xara 2025
+                </div>
+            </div>
+        </div>
+    `;
+
+    resultsContainer.style.display = 'block';
+    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+
+    this.showNotification('📸 Capture sauvegardée !');
+}
+// Fonction pour obtenir l'image réelle du produit
+getProductImage(productId) {
+    const imageMap = {
+        'tshirt-logo-arabe': 'images/t-shirt-logo-arabe.jpeg',
+        'ensemble-capuche': 'images/ensemble-capuchon-arabe.jpeg', 
+        'pull-bleu': 'images/pull-bleu.jpeg',
+        'babs-premium': 'images/babs.jpeg',
+        'combinaison-tshirt-capuche': 'images/combinaison.jpeg',
+        'tshirt-enfant': 'images/t-shirt-enfant.jpeg',
+        'ensemble-tshirt-jogging': 'images/t-shirt-et-jogging.jpeg',
+        'capuchon-blanc': 'images/capuchon-blanc.jpeg',
+        'tshirt-fille-noir': 'images/fillenoir.jpeg',
+        'tshirt-fille-blanc': 'images/filleblan.jpeg',
+        'pull-blanc': 'images/pull-blanc.jpeg',
+        'tshirt-beige': 'images/beige-tshirt.jpeg',
+        'tshirt-blanc': 'images/blanctshirt.jpeg',
+        'tshirt-adx-noir': 'images/adx-noir.jpeg'
+    };
+    
+    // Retourne l'image ou une image par défaut
+    return imageMap[productId] || 'images/logo.png';
+}
     // Partager l'essayage
     shareVirtualFitting() {
         if (!this.selectedClothing) {
@@ -6368,20 +5773,20 @@ function selectClothing(productId) {
     
     // Mettre à jour la sélection visuelle
     document.querySelectorAll('.clothing-option').forEach(option => {
-        if (option.dataset.product === productId) {
-            option.classList.add('selected');
-            option.style.border = '2px solid #667eea';
-            option.style.transform = 'scale(1.05)';
-        } else {
-            option.classList.remove('selected');
-            option.style.border = '2px solid transparent';
-            option.style.transform = 'scale(1)';
-        }
+        option.style.transform = option.dataset.product === productId ? 'scale(1.05)' : 'scale(1)';
+        option.style.border = option.dataset.product === productId ? '2px solid #667eea' : '2px solid transparent';
     });
     
     virtualFittingAI.selectedClothing = productId;
     virtualFittingAI.showNotification(`👕 ${virtualFittingAI.clothingData[productId].name} sélectionné !`);
 }
+
+function adjustClothingSize() {
+    if (virtualFittingAI) {
+        virtualFittingAI.adjustClothingSize();
+    }
+}
+
 function adjustClothingColor() {
     if (virtualFittingAI) {
         virtualFittingAI.adjustClothingColor();
@@ -6456,102 +5861,6 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
-// ===== CORRECTIONS RESPONSIVE JAVASCRIPT =====
-
-// Détection du mode paysage
-function checkOrientation() {
-    const isLandscape = window.innerWidth > window.innerHeight;
-    
-    if (isLandscape && window.innerWidth <= 1024) {
-        document.body.classList.add('landscape-mode');
-        console.log('📱 Mode paysage mobile détecté');
-        
-        // Ajustements spécifiques en paysage
-        adjustForLandscape();
-    } else {
-        document.body.classList.remove('landscape-mode');
-    }
-}
-
-function adjustForLandscape() {
-    // Réduire temporairement certains éléments
-    const header = document.querySelector('header');
-    if (header) {
-        header.style.padding = '0.3rem 0';
-    }
-    
-    // Ajuster la grille des produits
-    const produitsContainer = document.querySelector('.produits-container');
-    if (produitsContainer) {
-        produitsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(140px, 1fr))';
-        produitsContainer.style.gap = '8px';
-    }
-}
-
-// Écouter les changements d'orientation
-window.addEventListener('resize', checkOrientation);
-window.addEventListener('orientationchange', checkOrientation);
-
-// Vérifier au chargement
-document.addEventListener('DOMContentLoaded', function() {
-    checkOrientation();
-    
-    // Correction supplémentaire pour iOS
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.body.classList.add('ios-device');
-        
-        // Correction spécifique iOS
-        const viewport = document.querySelector('meta[name="viewport"]');
-        if (viewport) {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.25, user-scalable=yes');
-        }
-    }
-});
-
-// Empêcher le zoom sur les inputs (solution alternative)
-document.addEventListener('DOMContentLoaded', function() {
-    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"]');
-    
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            // Forcer un redimensionnement si nécessaire
-            setTimeout(() => {
-                window.scrollTo(0, window.scrollY);
-            }, 100);
-        });
-    });
-});
-</script>
-<script>
-// Détection et correction de l'orientation
-function handleOrientation() {
-    const isLandscape = window.innerWidth > window.innerHeight;
-    const isMobile = window.innerWidth <= 896;
-    
-    if (isMobile && isLandscape) {
-        document.body.classList.add('landscape-mode');
-        console.log('📱 Mode paysage mobile détecté');
-    } else {
-        document.body.classList.remove('landscape-mode');
-    }
-}
-
-// Écouter les changements d'orientation
-window.addEventListener('resize', handleOrientation);
-window.addEventListener('orientationchange', handleOrientation);
-
-// Initialiser au chargement
-document.addEventListener('DOMContentLoaded', handleOrientation);
-
-// Correction du viewport pour iOS
-function setViewportScale() {
-    const viewport = document.querySelector('meta[name="viewport"]');
-    if (window.orientation !== undefined) {
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-    }
-}
-
-window.addEventListener('orientationchange', setViewportScale);
 </script>
 </body>
 </html>
