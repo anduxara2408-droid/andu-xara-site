@@ -2793,7 +2793,7 @@ body.lightbox-open {
         <div class="mini-counter">
             👁️ <span class="counter-number" id="visitorCount">0</span> en ligne
         </div>
-<!-- Panier flottant simple -->
+<!-- ===== PANIER FLOTTANT CORRIGÉ ===== -->
 <div id="floating-cart" class="floating-cart">
     <div class="cart-toggle" onclick="toggleFloatingCart()">
         🛒 <span id="cart-badge-floating">0</span>
@@ -2807,6 +2807,526 @@ body.lightbox-open {
         </div>
     </div>
 </div>
+
+<style>
+/* ===== STYLES DU PANIER CORRIGÉS ===== */
+.floating-cart {
+    position: fixed;
+    bottom: 80px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.cart-toggle {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cart-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: none;
+    max-height: 70vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.floating-cart.open .cart-panel {
+    display: flex;
+}
+
+.cart-items-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(70vh - 150px);
+    padding: 12px;
+}
+
+.cart-summary {
+    padding: 12px;
+    border-top: 2px solid #6a11cb;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.cart-item-floating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+}
+
+.cart-item-info h4 {
+    margin: 0;
+    font-size: 0.85rem;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.cart-item-info p {
+    margin: 3px 0;
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1.2;
+}
+
+.cart-item-price {
+    text-align: right;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+}
+
+.remove-item {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 0.65rem;
+    margin-top: 3px;
+}
+
+.remove-item:hover {
+    background: #ff3742;
+}
+
+.cart-total-floating {
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #2c3e50;
+}
+
+.buy-btn, .close-cart-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.buy-btn {
+    background: #25D366;
+    color: white;
+}
+
+.buy-btn:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+}
+
+.close-cart-btn {
+    background: #6a11cb;
+    color: white;
+}
+
+.close-cart-btn:hover {
+    background: #2575fc;
+}
+
+.empty-cart-floating {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .floating-cart {
+        bottom: 20px !important;
+        right: 15px !important;
+    }
+    
+    .cart-panel {
+        width: 320px !important;
+        right: -50px !important;
+        bottom: 70px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-cart {
+        bottom: 15px !important;
+        right: 10px !important;
+    }
+    
+    .cart-panel {
+        width: 300px !important;
+        right: -80px !important;
+        bottom: 65px !important;
+        max-height: 60vh !important;
+    }
+}
+</style>
+
+<script>
+// ===== SYSTÈME DE PANIER CORRIGÉ =====
+let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+
+// ===== FONCTION PRINCIPALE POUR AJOUTER AU PANIER =====
+function addToCartAndTrack(productName, category, price) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
+
+    // Vibration si supporté
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    // Rechercher si le produit existe déjà
+    const existingItem = floatingCart.find(item => item.name === productName);
+
+    if (existingItem) {
+        // Limite à 20 produits maximum
+        if (existingItem.quantity < 20) {
+            existingItem.quantity += 1;
+        } else {
+            showNotification('❌ Maximum 20 produits par article atteint !', 'error');
+            return;
+        }
+    } else {
+        floatingCart.push({
+            name: productName,
+            price: price,
+            promoPrice: price,
+            quantity: 1,
+            category: category,
+            addedAt: new Date().toISOString()
+        });
+    }
+
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+
+    // Afficher une notification
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+
+    // Mettre à jour l'affichage du panier
+    updateFloatingCart();
+}
+
+// ===== FONCTION UPDATE FLOATING CART COMPLÈTE =====
+function updateFloatingCart() {
+    console.log('🔄 Mise à jour complète du panier flottant...');
+    
+    const badge = document.getElementById('cart-badge-floating');
+    const itemsContainer = document.getElementById('cart-items-floating');
+    const totalElement = document.getElementById('cart-total-floating');
+    
+    // Mettre à jour le badge
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+    }
+    
+    // Mettre à jour les articles
+    if (itemsContainer && totalElement) {
+        itemsContainer.innerHTML = '';
+        let total = 0;
+        
+        if (floatingCart.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
+        } else {
+            floatingCart.forEach((item, index) => {
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item-floating';
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Quantité: ${item.quantity}</p>
+                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
+                    </div>
+                    <div class="cart-item-price">
+                        <div style="color: #e60023; font-weight: bold;">
+                            ${(itemPrice * item.quantity).toFixed(0)} MRU
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+                total += itemPrice * item.quantity;
+            });
+        }
+        
+        totalElement.textContent = total.toFixed(0) + ' MRU';
+    }
+}
+
+// ===== FONCTION RETIRER DU PANIER =====
+function removeFromFloatingCart(index) {
+    console.log('🗑️ Retrait du produit index:', index);
+    
+    // Sauvegarder l'état d'ouverture
+    const cart = document.getElementById('floating-cart');
+    const wasOpen = cart ? cart.classList.contains('open') : false;
+    
+    // Supprimer l'élément
+    floatingCart.splice(index, 1);
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Mettre à jour l'affichage
+    updateFloatingCart();
+    showNotification('🗑️ Produit retiré du panier');
+    
+    // Maintenir le panier ouvert
+    if (wasOpen && cart) {
+        cart.classList.add('open');
+    }
+}
+
+// ===== FONCTIONS D'OUVERTURE/FERMETURE =====
+function openFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.add('open');
+        updateFloatingCart();
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}
+
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        if (cart.classList.contains('open')) {
+            updateFloatingCart();
+        }
+    }
+}
+
+// ===== SYSTÈME DE PAIEMENT =====
+function processFloatingCheckout() {
+    if (floatingCart.length === 0) {
+        showNotification('Panier vide !', 'error');
+        return;
+    }
+    
+    const totalMRU = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
+    const totalFCFA = Math.round(totalMRU * 2.5);
+    
+    const productList = floatingCart.map(item => 
+        `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
+    ).join('\n');
+    
+    const message = `Bonjour ! Je souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU`;
+    
+    // Menu organisé avec 3 options
+    const paymentChoice = prompt(
+        `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n` +
+        `💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n` +
+        `Tapez 1, 2 ou 3 :\n\n` +
+        `1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n` +
+        `2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n` +
+        `3️⃣ → WhatsApp (Discuter)\n\n` +
+        `Votre choix (1/2/3) :`
+    );
+
+    if (paymentChoice === '1') {
+        processWavePayment(totalFCFA, totalMRU, message);
+    } else if (paymentChoice === '2') {
+        processBankilyPayment(totalMRU, message);
+    } else if (paymentChoice === '3') {
+        processWhatsAppPayment(message);
+    } else {
+        showNotification('Choix annulé', 'warning');
+    }
+}
+
+function processWavePayment(totalFCFA, totalMRU, message) {
+    if (confirm(`🌊 WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n📱 Votre Wave : +221 76 282 11 33\n\n⚠️ L'application Wave va s'ouvrir automatiquement...\n\n✅ OK → Ouvrir Wave maintenant`)) {
+        
+        const waveDeepLink = `wave://send?phone=762821133&amount=${totalFCFA}&message=Commande Andu-Xara`;
+        window.location.href = waveDeepLink;
+        
+        setTimeout(() => {
+            if (confirm("Wave ne s'est pas ouvert ?\n\nSouhaitez-vous :\n✅ Installer Wave (Play Store)\n❌ Voir les instructions manuelles")) {
+                window.open('https://play.google.com/store/apps/details?id=com.wave.money', '_blank');
+            } else {
+                showManualWaveInstructions(totalFCFA, totalMRU, message);
+            }
+        }, 2000);
+        
+    } else {
+        showNotification('Ouverture Wave annulée', 'info');
+    }
+}
+
+function showManualWaveInstructions(totalFCFA, totalMRU, message) {
+    const instructions = 
+        `📋 INSTRUCTIONS WAVE MANUELLES :\n\n` +
+        `1. 📱 OUVREZ WAVE sur votre téléphone\n` +
+        `2. 👆 TAPPEZ sur "Envoyer de l'argent"\n` +
+        `3. 🔢 ENTRER le numéro : 762821133\n` +
+        `4. 💰 MONTANT : ${totalFCFA} FCFA\n` +
+        `5. 📝 MESSAGE : "Commande Andu-Xara"\n` +
+        `6. ✅ CONFIRMER le transfert\n\n` +
+        `⚠️ VÉRIFIEZ BIEN :\n` +
+        `• Numéro : 76 282 11 33\n` +
+        `• Montant : ${totalFCFA} FCFA`;
+    
+    if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
+        showNotification('✅ Merci ! Paiement Wave confirmé.', 'success');
+        floatingCart = [];
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        updateFloatingCart();
+        closeFloatingCart();
+    } else {
+        const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Wave\n\nMontant : ${totalFCFA} FCFA\n\nDétails de ma commande :\n${message}`;
+        window.open(`https://wa.me/221762821133?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
+    }
+}
+
+function processBankilyPayment(totalMRU, message) {
+    if (confirm(`🏦 BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Votre Bankily : +222 49 03 76 97\n\n⚠️ L'application Bankily va s'ouvrir...\n\n✅ OK → Ouvrir Bankily maintenant`)) {
+        
+        const bankilyDeepLink = `bankily://transfer?phone=49037697&amount=${totalMRU}`;
+        window.location.href = bankilyDeepLink;
+        
+        setTimeout(() => {
+            showManualBankilyInstructions(totalMRU, message);
+        }, 2000);
+        
+    } else {
+        showNotification('Ouverture Bankily annulée', 'info');
+    }
+}
+
+function showManualBankilyInstructions(totalMRU, message) {
+    const instructions = 
+        `📋 INSTRUCTIONS BANKILY MANUELLES :\n\n` +
+        `1. 📱 OUVREZ BANKILY sur votre téléphone\n` +
+        `2. 👆 TAPPEZ sur "Transférer"\n` +
+        `3. 🔢 ENTRER le numéro : 49037697\n` +
+        `4. 💰 MONTANT : ${totalMRU} MRU\n` +
+        `5. 📝 MESSAGE : "Commande Andu-Xara"\n` +
+        `6. ✅ CONFIRMER la transaction\n\n` +
+        `⚠️ VÉRIFIEZ BIEN :\n` +
+        `• Numéro : 49 03 76 97\n` +
+        `• Montant : ${totalMRU} MRU`;
+    
+    if (confirm(instructions + `\n\n✅ OK → J'ai payé\n❌ Annuler → Support WhatsApp`)) {
+        showNotification('✅ Merci ! Paiement Bankily confirmé.', 'success');
+        floatingCart = [];
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        updateFloatingCart();
+        closeFloatingCart();
+    } else {
+        const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Bankily\n\nMontant : ${totalMRU} MRU\n\nDétails de ma commande :\n${message}`;
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
+    }
+}
+
+function processWhatsAppPayment(message) {
+    if (confirm(`💬 WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour discuter de votre commande...\n\n✅ OK → Ouvrir WhatsApp maintenant`)) {
+        const whatsappMessage = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${message}\n\nPouvez-vous m'aider pour la suite ?`;
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+        
+        setTimeout(() => {
+            floatingCart = [];
+            localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+            updateFloatingCart();
+            showNotification('✅ WhatsApp ouvert ! Commande en cours.', 'success');
+        }, 1000);
+    } else {
+        showNotification('Ouverture WhatsApp annulée', 'info');
+    }
+}
+
+// ===== NOTIFICATION =====
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff4757' : '#25D366'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 350px;
+    `;
+    notification.innerHTML = `
+        <span>${type === 'error' ? '❌' : '✅'}</span>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// ===== INITIALISATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation du panier...');
+    
+    // Charger le panier depuis le localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+
+    // Mettre à jour l'affichage initial du panier
+    updateFloatingCart();
+
+    // Fermer le panier en cliquant à l'extérieur
+    document.addEventListener('click', function(event) {
+        const cart = document.getElementById('floating-cart');
+        const toggle = document.querySelector('.cart-toggle');
+
+        if (cart && cart.classList.contains('open') &&
+            !cart.contains(event.target) &&
+            !toggle.contains(event.target)) {
+            closeFloatingCart();
+        }
+    });
+    
+    console.log('✅ Panier initialisé avec', floatingCart.length, 'articles');
+});
+</script>
 <!-- Main Content -->
 <main class="container">
     <!-- Compteur promotion -->
