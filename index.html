@@ -2227,23 +2227,6 @@ body.lightbox-open {
         </div>
     </div>
 </div>
-<!-- ===== ASSISTANT SHOPPING IA ===== -->
-<div id="shopping-assistant" class="shopping-assistant">
-    <div class="assistant-toggle" onclick="toggleAssistant()">
-        <span>🤖</span>
-    </div>
-    <div class="assistant-panel">
-        <div class="assistant-header">
-            <h3>Assistant Shopping Andu-Xara</h3>
-            <button class="close-assistant" onclick="toggleAssistant()">×</button>
-        </div>
-        <div class="assistant-messages" id="assistant-messages"></div>
-        <div class="assistant-input">
-            <input type="text" id="assistant-question" placeholder="Ex: Quel t-shirt pour un mariage ?">
-            <button onclick="askAssistant()">Envoyer</button>
-        </div>
-    </div>
-</div>
 <!-- Main Content -->
 <main class="container">
     <!-- Compteur promotion -->
@@ -2804,9 +2787,6 @@ body.lightbox-open {
             </section>
 <!-- À propos -->
 <section class="about-section" id="apropos">
-</section>
-
-<!-- Partenaires -->
 <section class="partenaires">
 <!-- ===== SYSTÈME LIVRAISON INTELLIGENT ===== -->
 <section class="delivery-section" id="livraison">
@@ -2838,7 +2818,74 @@ body.lightbox-open {
         </div>
     </div>
 </section>
-
+<!-- ===== ASSISTANT IA INTELLIGENT ANDU-XARA ===== -->
+<section id="ai-assistant-section" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; color: white;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">🤖 Assistant IA Andu-Xara</h2>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Intelligente • Informée • Instantanée</p>
+        </div>
+        
+        <div style="max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden;">
+            <!-- En-tête de l'assistant -->
+            <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 20px; display: flex; align-items: center; gap: 15px;">
+                <div style="width: 50px; height: 50px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    🤖
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: white;">Assistant Andu-Xara Pro</h3>
+                    <p style="margin: 5px 0 0 0; color: #bdc3c7; font-size: 0.9rem;">En ligne • Prêt à vous aider</p>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <div style="background: #27ae60; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">
+                        🟢 En ligne
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zone des messages -->
+            <div id="ai-messages" style="height: 400px; overflow-y: auto; padding: 20px; background: #f8f9fa; display: flex; flex-direction: column; gap: 15px;">
+                <!-- Messages apparaîtront ici -->
+            </div>
+            
+            <!-- Zone de saisie -->
+            <div style="padding: 20px; border-top: 1px solid #e9ecef; background: white;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="ai-input" placeholder="Posez n'importe quelle question sur Andu-Xara..." 
+                           style="flex: 1; padding: 15px 20px; border: 2px solid #e2e8f0; border-radius: 25px; outline: none; font-size: 1rem; transition: border-color 0.3s;">
+                    <button onclick="sendAIMessage()" 
+                            style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: transform 0.2s;">
+                        Envoyer 🚀
+                    </button>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <p style="color: #666; font-size: 0.8rem;">
+                        💡 Exemple : "Quels sont vos nouveaux produits ?", "Comment commander ?", "Livraison à Nouakchott ?"
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistiques -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; text-align: center;">
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+                <div style="font-size: 2rem;">🎯</div>
+                <h3 style="margin: 10px 0;">Précis</h3>
+                <p>Réponses exactes et détaillées</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+                <div style="font-size: 2rem;">⚡</div>
+                <h3 style="margin: 10px 0;">Rapide</h3>
+                <p>Réponses en temps réel</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+                <div style="font-size: 2rem;">📚</div>
+                <h3 style="margin: 10px 0;">Complet</h3>
+                <p>Toutes les infos Andu-Xara</p>
+            </div>
+        </div>
+    </div>
+</section>
             <!-- Partenaires -->
             <section class="partenaires">
                 <h2>Nos Partenaires</h2>
@@ -4123,8 +4170,8 @@ function checkDelivery() {
         const zonesCouvertes = [
             'nouakchott', 'nouadhibou', 'rosso', 'kaédi', 'kiffa', 'atar', 'zouérat',
             'tévregh zeina', 'el mina', 'ksar', 'sebkha', 'dar naim', 'toujounine',
-            'arafat', 'ryad', 'tichka', 'légation', 'cité plateaux', 'cocoters',
-            'tevregh', 'mina', 'ksar', 'sebkha'
+            'arafat', 'ryad', 'socogim bagdad', 'socogim k', 'cité plage', 'socogim k',
+            'tevregh', 'guidimakha', 'ksar', 'sebkha', 'couva', 'cinquiéme'
         ];
         
         let estCouvert = false;
@@ -4226,6 +4273,446 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Panier, vue rapide et livraison initialisés');
 });
+
+// ===== ASSISTANT IA SUPER INTELLIGENT =====
+class IntelligentAssistant {
+    constructor() {
+        this.conversationHistory = [];
+        this.initializeAssistant();
+    }
+
+    initializeAssistant() {
+        // Message de bienvenue après chargement
+        setTimeout(() => {
+            if (document.getElementById('ai-messages') && document.getElementById('ai-messages').children.length === 0) {
+                this.addMessage(
+                    "👋 Bonjour ! Je suis l'Assistant IA Intelligent d'Andu-Xara. 🤖\n\n" +
+                    "Je peux vous aider avec :\n" +
+                    "• 📦 Nos produits et collections\n" +
+                    "• 💰 Prix et promotions\n" +
+                    "• 🚚 Livraison et commandes\n" +
+                    "• 📏 Tailles et conseils style\n" +
+                    "• 📱 Nos réseaux sociaux\n" +
+                    "• 🎯 Et bien plus encore !\n\n" +
+                    "Posez-moi n'importe quelle question ! ✨",
+                    "bot"
+                );
+            }
+        }, 1000);
+    }
+
+    async sendMessage() {
+        const input = document.getElementById('ai-input');
+        const userMessage = input.value.trim();
+
+        if (!userMessage) {
+            this.showNotification('📝 Veuillez écrire votre question', 'info');
+            return;
+        }
+
+        // Ajouter le message utilisateur
+        this.addMessage(userMessage, "user");
+        input.value = '';
+
+        // Afficher l'indicateur de frappe
+        this.showTypingIndicator();
+
+        // Traiter la question
+        setTimeout(() => {
+            this.hideTypingIndicator();
+            const response = this.generateIntelligentResponse(userMessage);
+            this.addMessage(response, "bot");
+        }, 1500);
+    }
+
+    addMessage(text, sender) {
+        const messagesContainer = document.getElementById('ai-messages');
+        const messageDiv = document.createElement('div');
+
+        messageDiv.className = `message ${sender}`;
+        messageDiv.style.cssText = `
+            display: flex;
+            ${sender === 'user' ? 'justify-content: flex-end;' : 'justify-content: flex-start;'}
+            animation: messageSlideIn 0.3s ease;
+        `;
+
+        const messageContent = `
+            <div style="
+                max-width: 70%;
+                padding: 15px 20px;
+                border-radius: 20px;
+                word-wrap: break-word;
+                line-height: 1.5;
+                white-space: pre-line;
+                ${sender === 'user' 
+                    ? 'background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-bottom-right-radius: 5px;' 
+                    : 'background: white; color: #2c3e50; border: 1px solid #e2e8f0; border-bottom-left-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'
+                }
+            ">${text}</div>
+        `;
+
+        messageDiv.innerHTML = messageContent;
+        messagesContainer.appendChild(messageDiv);
+
+        // Scroll vers le bas
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Sauvegarder dans l'historique
+        this.conversationHistory.push({ sender, text, timestamp: new Date() });
+    }
+
+    showTypingIndicator() {
+        const messagesContainer = document.getElementById('ai-messages');
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.style.cssText = `
+            display: flex;
+            justify-content: flex-start;
+            animation: messageSlideIn 0.3s ease;
+        `;
+
+        typingDiv.innerHTML = `
+            <div style="
+                background: white;
+                padding: 15px 20px;
+                border-radius: 20px;
+                border: 1px solid #e2e8f0;
+                border-bottom-left-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            ">
+                <div class="typing-animation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    generateIntelligentResponse(question) {
+        const lowerQuestion = question.toLowerCase();
+        const now = new Date();
+
+        // === BASE DE CONNAISSANCE COMPLÈTE ANDU-XARA ===
+
+        // INFORMATIONS GÉNÉRALES
+        if (this.containsAny(question, ['bonjour', 'salut', 'hello', 'coucou'])) {
+            return `👋 Bonjour ! Ravie de vous rencontrer ! 
+
+Je suis l'Assistant IA Intelligent d'Andu-Xara, votre expert dédié pour tout savoir sur notre marque mauritanienne de vêtements exclusifs.
+
+Comment puis-je vous aider aujourd'hui ? 😊`;
+        }
+
+        // PRODUITS ET COLLECTIONS
+        if (this.containsAny(question, ['produit', 'collection', 'vêtement', 'habit', 'tshirt', 't-shirt', 'ensemble', 'pull', 'capuche'])) {
+            return `🎨 NOTRE COLLECTION 2025 :
+
+👕 T-SHIRTS (279-349 MRU) :
+• T-shirt logo arabe - 349 MRU
+• T-shirt Fille Noir/Blanc - 279 MRU  
+• T-shirt ADX Noir - 279 MRU
+• T-shirt Beige - 279 MRU
+
+🎽 ENSEMBLES (419-1049 MRU) :
+• Ensemble capuche style arabe - 419 MRU
+• Babs Premium (édition limitée) - 1049 MRU
+• Ensemble T-shirt + jogging - 559 MRU
+• Combinaison T-shirt + capuche - 419 MRU
+
+🧥 AUTRES :
+• Pull bleu/blanc - 419-489 MRU
+• Capuchon blanc - 209 MRU
+• T-shirt Enfant - 279 MRU
+
+Quel style vous intéresse ? Je peux vous conseiller !`;
+        }
+
+        // PRIX ET PROMOTIONS
+        if (this.containsAny(question, ['prix', 'combien', 'coûte', 'coût', 'tarif', 'promotion', 'réduction', 'solde', 'offre'])) {
+            return `💰 INFORMATIONS TARIFAIRES :
+
+🎉 PROMOTION EN COURS :
+• 30% DE RÉDUCTION sur tout le catalogue 2025
+• Livraison GRATUITE partout en Mauritanie
+• Offre valable jusqu'au 31 Décembre 2025
+
+💵 FOURCHETTE DE PRIX :
+• Accessoires : à partir de 209 MRU
+• T-shirts : 279-349 MRU
+• Ensembles : 419-1049 MRU  
+• Enfants : 279 MRU
+
+📦 TOUS NOS PRIX INCLUENT :
+• TVA mauritanienne
+• Livraison gratuite
+• Emballage premium
+• Service client 7j/7
+
+Une question sur un produit spécifique ?`;
+        }
+
+        // LIVRAISON ET COMMANDES
+        if (this.containsAny(question, ['livraison', 'livrer', 'délai', 'commander', 'commande', 'acheter', 'paiement'])) {
+            return `🚚 SYSTÈME DE LIVRAISON INTELLIGENT :
+
+📦 LIVRAISON EXPRESS :
+• Nouakchott : 24H - GRATUITE
+• Nouadhibou : 48H - GRATUITE  
+• Autres villes : 3-5 jours - GRATUITE
+
+💳 MODES DE PAIEMENT :
+• Wave Sénégal (FCFA)
+• Bankily Mauritanie (MRU)
+• Paiement à la livraison
+• Virement bancaire
+
+🎯 ZONES COUVERTES :
+Nouakchott, Nouadhibou, Rosso, Kaédi, Kiffa, Atar, Zouérat + toutes les capitales régionales
+
+📞 Pour commander : +222 49 03 76 97 (WhatsApp/Téléphone)`;
+        }
+
+        // RÉSEAUX SOCIAUX
+        if (this.containsAny(question, ['instagram', 'facebook', 'tiktok', 'youtube', 'réseau', 'social', 'reseau', 'follow', 'suivre'])) {
+            return `📱 NOS RÉSEAUX SOCIAUX :
+
+🔗 LIENS DIRECTS :
+• 📷 Instagram : @andu_xara
+• 🎵 TikTok : @andu_xara  
+• 📘 Facebook : Andu-Xara Officiel
+• 📺 YouTube : @andu-xaratv5737
+• 🌐 Site Web : sites.google.com/view/andu-xara-marque-mauritanienne
+
+🎯 CONTENU EXCLUSIF :
+• Nouveautés produits en avant-première
+• Tutoriels style et fashion tips
+• Lives avec notre équipe
+• Concours et cadeaux exclusifs
+• Coulisses de la marque
+
+💌 Restez connecté pour ne rien manquer !`;
+        }
+
+        // CONTACT ET SUPPORT
+        if (this.containsAny(question, ['contact', 'téléphone', 'tel', 'whatsapp', 'email', 'mail', 'adresse', 'support'])) {
+            return `📞 CONTACT ANDU-XARA :
+
+🕒 SERVICE CLIENT 7J/7 :
+• 📱 WhatsApp : +222 49 03 76 97
+• 📞 Téléphone : +222 49 03 76 97
+• 📧 Email : anduxara2408@gmail.com
+• 📍 Adresse : Mauritanie, Nouakchott
+
+🌍 ÉQUIPE INTERNATIONALE :
+• Sénégal : +221 76 282 11 33
+
+📋 HEURES DE DISPONIBILITÉ :
+• Lundi-Dimanche : 8h-22h
+• Réponse sous 15 minutes maximum
+
+N'hésitez pas à nous contacter pour toute question !`;
+        }
+
+        // HISTOIRE ET ÉQUIPE
+        if (this.containsAny(question, ['histoire', 'fondateur', 'équipe', 'team', 'création', 'marque', 'andu-xara'])) {
+            return `📖 NOTRE HISTOIRE :
+
+🎂 Fondation : 18 octobre 2020
+🌟 Mission : Révolutionner la mode mauritanienne
+💡 Vision : Allier tradition et modernité
+
+👥 ÉQUIPE FONDATRICE :
+• Cheikhou Diabira - Président & Fondateur
+• Bocar Ba - Vice-Président & Co-Fondateur
+• Fatimetou Soumaré - Community Manager
+• Halima Sokhona - Trésorière
+• Khadija Diallo - Secrétaire
+• Mouna Diekhete - Production
+• Bonco Sokhona - Production  
+• Botkhol Daffa - Commercial/Vente
+
+🚀 Notre objectif : Devenir la référence mode en Mauritanie et en Afrique de l'Ouest !`;
+        }
+
+        // TAILLES ET CONSEILS
+        if (this.containsAny(question, ['taille', 'size', 'porter', 'conseil', 'style', 'morphologie', 'mesure'])) {
+            return `📏 GUIDE DES TAILLES EXPERT :
+
+📊 TABLEAU DES TAILLES :
+• XS : 34-36 (Très fine)
+• S : 36-38 (Fine)  
+• M : 38-40 (Moyenne)
+• L : 40-42 (Large)
+• XL : 42-44 (Très large)
+
+🎯 CONSEILS STYLE :
+• Pour un look casual : T-shirt logo arabe
+• Pour les occasions : Babs Premium
+• Pour le sport : Ensemble capuche
+• Pour l'hiver : Pull bleu ou blanc
+
+💡 ASTUCE : 
+Prenez vos mesures de poitrine et comparez avec notre guide. Incertain ? Contactez-nous pour un conseil personnalisé !`;
+        }
+
+        // QUESTIONS SPÉCIFIQUES PRODUITS
+        if (this.containsAny(question, ['babs', 'babs premium', 'logo arabe', 'capuche arabe'])) {
+            if (question.includes('babs')) {
+                return `👑 BABS PREMIUM - Notre pièce signature !
+
+🎯 CARACTÉRISTIQUES :
+• Édition limitée 2025
+• Qualité premium exceptionnelle
+• Design exclusif Andu-Xara
+• Tissu haute performance
+
+💰 PRIX : 1049 MRU (au lieu de 1499 MRU)
+
+🌟 POUR QUI ?
+• Les amateurs de mode exigeants
+• Les occasions spéciales
+• Ceux qui veulent se démarquer
+
+📦 LIVRAISON : Offerte
+
+Commandez vite, stocks limités ! 🚀`;
+            }
+        }
+
+        // RÉPONSE INTELLIGENTE PAR DÉFAUT
+        return `🤖 RÉPONSE INTELLIGENTE :
+
+Merci pour votre question ! En analysant votre demande, voici ce que je peux vous dire :
+
+🔍 **Votre question** : "${question}"
+
+📚 **Mon expertise** : Je suis spécialisé dans tout ce qui concerne Andu-Xara :
+
+• 🎯 **Produits** : Notre catalogue complet 2025
+• 💰 **Prix** : Tarifs et promotions en cours  
+• 🚚 **Livraison** : Zones couvertes et délais
+• 📱 **Contact** : Réseaux sociaux et support
+• 📏 **Conseils** : Tailles et style
+
+💡 **Pour une réponse plus précise**, vous pouvez :
+1. Me poser votre question différemment
+2. Consulter nos réseaux sociaux pour les dernières infos
+3. Contacter directement notre équipe au +222 49 03 76 97
+
+Comment puis-je vous aider plus spécifiquement ? 😊`;
+    }
+
+    containsAny(text, keywords) {
+        return keywords.some(keyword => text.toLowerCase().includes(keyword.toLowerCase()));
+    }
+
+    showNotification(message, type = 'info') {
+        // Utiliser la fonction de notification existante ou créer une simple alerte
+        if (typeof showNotification === 'function') {
+            showNotification(message, type);
+        } else {
+            alert(message);
+        }
+    }
+}
+
+// Initialiser l'assistant
+let intelligentAssistant;
+
+// Fonction globale pour envoyer les messages
+function sendAIMessage() {
+    if (!intelligentAssistant) {
+        intelligentAssistant = new IntelligentAssistant();
+    }
+    intelligentAssistant.sendMessage();
+}
+
+// Gestion de la touche Entrée
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('ai-input');
+    if (input) {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendAIMessage();
+            }
+        });
+
+        // Initialiser l'assistant
+        intelligentAssistant = new IntelligentAssistant();
+    }
+});
+
+// Ajouter les animations CSS
+const assistantStyle = document.createElement('style');
+assistantStyle.textContent = `
+    @keyframes messageSlideIn {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px) scale(0.95); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+    }
+    
+    .typing-animation {
+        display: inline-flex;
+        gap: 4px;
+    }
+    
+    .typing-animation span {
+        width: 8px;
+        height: 8px;
+        background: #667eea;
+        border-radius: 50%;
+        animation: typingBounce 1.4s infinite ease-in-out;
+    }
+    
+    .typing-animation span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-animation span:nth-child(2) { animation-delay: -0.16s; }
+    
+    @keyframes typingBounce {
+        0%, 80%, 100% { 
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+        40% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    
+    #ai-messages::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #ai-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    #ai-messages::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 10px;
+    }
+    
+    #ai-messages::-webkit-scrollbar-thumb:hover {
+        background: #5a6fd8;
+    }
+`;
+document.head.appendChild(assistantStyle);
 </script>
 </body>
 </html>
