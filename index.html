@@ -5603,64 +5603,308 @@ class VirtualFittingAI {
     generatePremiumOverlay(color, label) {
         return { type: 'premium', color, label, size: 1.0 };
     }
-
-// Capturer l'essayage
+// Capturer l'essayage - VERSION INTELLIGENTE
 captureVirtualFitting() {
     if (!this.selectedClothing) {
         this.showNotification('❌ Veuillez sélectionner un vêtement d\'abord', 'error');
         return;
     }
 
-    // Créer une image de capture
-    const dataURL = this.canvasElement.toDataURL('image/png');
-    const clothing = this.clothingData[this.selectedClothing];
+    console.log('🤖 Début capture intelligente...');
+
+    // Vérifier que la caméra est active
+    if (!this.isFittingActive) {
+        this.showNotification('❌ Activez la caméra d\'abord', 'error');
+        return;
+    }
+
+    // Créer un canvas haute qualité pour la capture
+    const captureCanvas = document.createElement('canvas');
+    const captureCtx = captureCanvas.getContext('2d');
     
-    // Obtenir l'image réelle du produit
+    // Utiliser les dimensions réelles de la vidéo
+    captureCanvas.width = this.videoElement.videoWidth;
+    captureCanvas.height = this.videoElement.videoHeight;
+    
+    // 1. CAPTURER LA VIDÉO ACTUELLE
+    captureCtx.drawImage(this.videoElement, 0, 0, captureCanvas.width, captureCanvas.height);
+    
+    // 2. APPLIQUER LE VÊTEMENT VIRTUEL SUR LA CAPTURE
+    const clothing = this.clothingData[this.selectedClothing];
+    if (clothing && clothing.overlay) {
+        this.applyClothingToCapture(captureCtx, captureCanvas, clothing.overlay);
+    }
+    
+    // 3. AJOUTER UNE BANDE D'INFORMATION PROFESSIONNELLE
+    this.addInfoOverlay(captureCtx, captureCanvas, clothing);
+    
+    // 4. CONVERTIR EN IMAGE HAUTE QUALITÉ
+    const capturedImageURL = captureCanvas.toDataURL('image/jpeg', 0.95);
+    console.log('✅ Capture HD créée');
+
     const productImage = this.getProductImage(this.selectedClothing);
 
-    // Afficher le résultat avec les DEUX images
+    // 5. AFFICHER LE RÉSULTAT PROFESSIONNEL
+    this.displayCaptureResult(capturedImageURL, clothing, productImage);
+    
+    this.showNotification('📸 Capture parfaite ! Vérifiez votre essayage 👆');
+}
+
+// Appliquer le vêtement sur la capture
+applyClothingToCapture(ctx, canvas, overlayConfig) {
+    const { type, color, label, size } = overlayConfig;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 3;
+    
+    ctx.save();
+    
+    // Style professionnel pour le vêtement virtuel
+    ctx.fillStyle = color + 'AA'; // Transparence ajustée
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 6;
+    ctx.globalAlpha = 0.8;
+    
+    // FORMES INTELLIGENTES adaptées à la capture
+    switch(type) {
+        case 'tshirt':
+            // T-shirt réaliste
+            this.drawRealisticTShirt(ctx, centerX, centerY, size, color);
+            break;
+            
+        case 'hoodie':
+            // Hoodie réaliste
+            this.drawRealisticHoodie(ctx, centerX, centerY, size, color);
+            break;
+            
+        case 'sweater':
+            // Pull réaliste
+            this.drawRealisticSweater(ctx, centerX, centerY, size, color);
+            break;
+            
+        case 'premium':
+            // Vêtement premium
+            this.drawPremiumClothing(ctx, centerX, centerY, size, color);
+            break;
+    }
+    
+    // Label élégant
+    this.drawElegantLabel(ctx, centerX, centerY + 150, label, color);
+    
+    ctx.restore();
+}
+
+// Dessiner un T-shirt réaliste
+drawRealisticTShirt(ctx, x, y, size, color) {
+    // Corps du T-shirt
+    ctx.beginPath();
+    ctx.ellipse(x, y - 60, 100 * size, 130 * size, 0, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Manches réalistes
+    ctx.beginPath();
+    ctx.ellipse(x - 95, y - 30, 35 * size, 55 * size, 0.3, 0, 2 * Math.PI);
+    ctx.ellipse(x + 95, y - 30, 35 * size, 55 * size, -0.3, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Col
+    ctx.beginPath();
+    ctx.arc(x, y - 180 * size, 25 * size, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+}
+
+// Dessiner un hoodie réaliste
+drawRealisticHoodie(ctx, x, y, size, color) {
+    // Capuche
+    ctx.beginPath();
+    ctx.ellipse(x, y - 80, 110 * size, 140 * size, 0, 0.2 * Math.PI, 0.8 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Corps
+    ctx.beginPath();
+    ctx.rect(x - 85 * size, y - 30, 170 * size, 200 * size);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Poche
+    ctx.beginPath();
+    ctx.rect(x - 40 * size, y + 50, 80 * size, 60 * size);
+    ctx.stroke();
+}
+
+// Dessiner un pull réaliste
+drawRealisticSweater(ctx, x, y, size, color) {
+    // Corps arrondi
+    ctx.beginPath();
+    ctx.ellipse(x, y - 40, 120 * size, 150 * size, 0, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Texture tricot (effet visuel)
+    ctx.setLineDash([5, 3]);
+    ctx.lineWidth = 2;
+    for(let i = -80; i <= 80; i += 20) {
+        ctx.beginPath();
+        ctx.ellipse(x + i, y - 40, 115 * size, 145 * size, 0, 0, Math.PI);
+        ctx.stroke();
+    }
+    ctx.setLineDash([]);
+}
+
+// Dessiner vêtement premium
+drawPremiumClothing(ctx, x, y, size, color) {
+    // Forme élégante
+    ctx.beginPath();
+    ctx.ellipse(x, y - 50, 130 * size, 160 * size, 0, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Détails de luxe
+    ctx.fillStyle = '#FFD700'; // Or
+    ctx.font = 'bold 28px Arial';
+    ctx.fillText('✨', x - 15, y - 45);
+    ctx.fillText('⭐', x + 80, y + 30);
+    ctx.fillText('👑', x - 90, y + 30);
+}
+
+// Dessiner label élégant
+drawElegantLabel(ctx, x, y, label, color) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(x - 100, y - 25, 200, 50);
+    
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, y + 5);
+    ctx.textAlign = 'left';
+}
+
+// Ajouter overlay d'information professionnelle
+addInfoOverlay(ctx, canvas, clothing) {
+    const margin = 20;
+    
+    // Bande supérieure
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.9)';
+    ctx.fillRect(0, 0, canvas.width, 80);
+    
+    // Logo et titre
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 24px Arial';
+    ctx.fillText('ANDU-XARA', margin, 35);
+    ctx.font = '18px Arial';
+    ctx.fillText('Essayage Virtuel IA', margin, 60);
+    
+    // Bande inférieure
+    ctx.fillStyle = 'rgba(42, 42, 42, 0.8)';
+    ctx.fillRect(0, canvas.height - 60, canvas.width, 60);
+    
+    // Informations produit
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText(clothing.name, margin, canvas.height - 30);
+    ctx.textAlign = 'right';
+    ctx.fillText(clothing.price + ' MRU', canvas.width - margin, canvas.height - 30);
+    ctx.textAlign = 'left';
+    
+    // Signature
+    ctx.font = '14px Arial';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fillText('andu-xara.com', canvas.width - 150, canvas.height - 10);
+}
+
+// Afficher le résultat de capture
+displayCaptureResult(capturedImageURL, clothing, productImage) {
     const resultsContainer = document.getElementById('fitting-results');
     const captureContainer = document.getElementById('capture-container');
 
     captureContainer.innerHTML = `
-        <div style="background: white; padding: 15px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-            <div style="text-align: center; margin-bottom: 15px;">
-                <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 1.1rem;">🎯 Votre Essayage Réussi !</h4>
-                <p style="color: #666; margin: 0; font-size: 0.9rem;">Le vêtement vous va parfaitement !</p>
+        <div style="background: white; padding: 0; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); overflow: hidden;">
+            
+            <!-- EN-TÊTE PROFESSIONNELLE -->
+            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center;">
+                <h4 style="margin: 0 0 8px 0; font-size: 1.4rem;">🎯 ESSAYAGE VIRTUEL RÉUSSI</h4>
+                <p style="margin: 0; opacity: 0.9; font-size: 1rem;">Votre apparence avec le vêtement superposé</p>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-                <!-- Votre capture avec le vêtement virtuel -->
-                <div style="text-align: center;">
-                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 0.9rem;">Vous avec le vêtement :</div>
-                    <img src="${dataURL}" style="width: 100%; max-width: 200px; border-radius: 10px; border: 3px solid #667eea; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);">
-                </div>
-                
-                <!-- Produit correspondant avec image réelle -->
-                <div style="text-align: center;">
-                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 0.9rem;">Produit sélectionné :</div>
-                    <img src="${productImage}" style="width: 100%; max-width: 150px; border-radius: 10px; border: 2px solid #e2e8f0;">
-                    <div style="margin-top: 10px;">
-                        <div style="font-weight: bold; color: #2c3e50; font-size: 1rem;">${clothing.name}</div>
-                        <div style="font-size: 1.3rem; font-weight: bold; color: #e74c3c; margin: 5px 0;">${clothing.price} MRU</div>
-                        <div style="color: #27ae60; font-size: 0.8rem; font-weight: bold;">✅ Livraison gratuite</div>
+            <!-- CAPTURE PRINCIPALE -->
+            <div style="padding: 25px; text-align: center; background: #f8f9fa;">
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <img src="${capturedImageURL}" 
+                         style="width: 100%; border-radius: 12px; border: 4px solid white; box-shadow: 0 8px 25px rgba(0,0,0,0.15);"
+                         alt="Votre essayage virtuel Andu-Xara">
+                    <div style="margin-top: 15px; color: #666; font-size: 0.9rem;">
+                        <strong>Capture IA haute définition</strong> • Vêtement superposé en temps réel
                     </div>
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-                <div style="color: #666; font-size: 0.7rem;">
-                    Essayage virtuel IA • Andu-Xara 2025
+            <!-- COMPARAISON PRODUIT -->
+            <div style="padding: 25px; background: white;">
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center;">
+                    
+                    <!-- PRODUIT RÉEL -->
+                    <div style="flex: 1; min-width: 250px; text-align: center;">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1rem;">
+                            🛍️ PRODUIT SÉLECTIONNÉ
+                        </div>
+                        <img src="${productImage}" 
+                             style="width: 100%; max-width: 200px; border-radius: 10px; border: 3px solid #f1f3f4;"
+                             alt="${clothing.name}">
+                        <div style="margin-top: 15px;">
+                            <div style="font-weight: bold; color: #2c3e50; font-size: 1.1rem; margin-bottom: 8px;">${clothing.name}</div>
+                            <div style="font-size: 1.6rem; font-weight: bold; color: #e74c3c; margin: 12px 0;">${clothing.price} MRU</div>
+                            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                                <span style="background: #27ae60; color: white; padding: 6px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">
+                                    ✅ Livraison gratuite
+                                </span>
+                                <span style="background: #3498db; color: white; padding: 6px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">
+                                    🚚 24-48h
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ACTIONS -->
+                    <div style="flex: 1; min-width: 200px; text-align: center;">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1rem;">
+                            📋 PROCHAINES ÉTAPES
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button onclick="addToCartFromFitting()" 
+                                    style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; padding: 15px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem;">
+                                🛒 Acheter maintenant
+                            </button>
+                            <button onclick="shareVirtualFitting()" 
+                                    style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                                📤 Partager l'essayage
+                            </button>
+                            <button onclick="resetFitting()" 
+                                    style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                                🔄 Nouvel essai
+                            </button>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
+            
+            <!-- PIED DE PAGE -->
+            <div style="background: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #e9ecef;">
+                <div style="color: #6c757d; font-size: 0.8rem;">
+                    <strong>Andu-Xara 2025</strong> • Essayage Virtuel par Intelligence Artificielle • andu-xara.com
+                </div>
+            </div>
+            
         </div>
     `;
 
     resultsContainer.style.display = 'block';
     resultsContainer.scrollIntoView({ behavior: 'smooth' });
-
-    this.showNotification('📸 Capture sauvegardée !');
 }
+
 // Fonction pour obtenir l'image réelle du produit
 getProductImage(productId) {
     const imageMap = {
@@ -5680,7 +5924,7 @@ getProductImage(productId) {
         'tshirt-adx-noir': 'images/adx-noir.jpeg'
     };
     
-    // Retourne l'image ou une image par défaut
+    // Retourne l'image ou le logo par défaut
     return imageMap[productId] || 'images/logo.png';
 }
     // Partager l'essayage
