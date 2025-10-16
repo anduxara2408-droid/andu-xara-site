@@ -1572,12 +1572,11 @@ body.lightbox-open {
     }
 } /* ✅ ACCOLADE FERMANTE AJOUTÉE */
 
-/* ===== PANIER FLOTTANT OPTIMISÉ ===== */
+/* ===== PANIER FLOTTANT CORRIGÉ POUR MOBILE ===== */
 .floating-cart {
     position: fixed;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+    bottom: 80px; /* Remonté pour être visible */
+    right: 15px;
     z-index: 1000;
 }
 
@@ -1597,23 +1596,9 @@ body.lightbox-open {
     position: relative;
 }
 
-#cart-badge-floating {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4757;
-    color: white;
-    border-radius: 50%;
-    padding: 4px 8px;
-    font-size: 0.8rem;
-    min-width: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
 .cart-panel {
     position: absolute;
-    top: 100%;
+    bottom: 70px; /* S'ouvre vers le haut */
     right: 0;
     width: 350px;
     background: white;
@@ -1621,15 +1606,53 @@ body.lightbox-open {
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     margin-top: 10px;
     display: none;
-    max-height: 70vh; /* Hauteur maximale */
+    max-height: 70vh;
     overflow: hidden;
 }
 
-.floating-cart.open .cart-panel {
-    display: flex;
-    flex-direction: column;
+/* CORRECTION MOBILE URGENTE */
+@media (max-width: 768px) {
+    .floating-cart {
+        bottom: 20px !important; /* Position fixe en bas */
+        right: 15px !important;
+        top: auto !important;
+        transform: none !important;
+    }
+    
+    .cart-panel {
+        width: 320px !important;
+        right: -50px !important;
+        bottom: 70px !important;
+        top: auto !important;
+    }
 }
 
+@media (max-width: 480px) {
+    .floating-cart {
+        bottom: 15px !important;
+        right: 10px !important;
+    }
+    
+    .cart-panel {
+        width: 300px !important;
+        right: -80px !important;
+        bottom: 65px !important;
+        max-height: 60vh !important;
+    }
+    
+    .cart-toggle {
+        width: 55px !important;
+        height: 55px !important;
+        font-size: 1.3rem !important;
+    }
+}
+
+/* Safe area pour iPhone avec encoche */
+@supports (padding: max(0px)) {
+    .floating-cart {
+        bottom: max(15px, env(safe-area-inset-bottom)) !important;
+    }
+}
 /* Conteneur des articles avec défilement LIMITÉ */
 .cart-items-container {
     flex: 1;
@@ -3794,7 +3817,17 @@ body.lightbox-open {
 <script>
 // ===== SYSTÈME DE PANIER CORRIGÉ =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+// ===== TEST PANIER MOBILE =====
+function testMobileCart() {
+    addToCartAndTrack('T-shirt logo arabe', 't-shirts', 349);
+    setTimeout(() => {
+        openFloatingCart();
+        showNotification('🧪 Test panier mobile réussi !');
+    }, 500);
+}
 
+// Appelle cette fonction pour tester
+// testMobileCart(); // Décommente pour tester
 // ===== FONCTION PRINCIPALE POUR AJOUTER AU PANIER =====
 function addToCartAndTrack(productName, category, price) {
     console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
