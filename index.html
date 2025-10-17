@@ -4036,9 +4036,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <button onclick="convertirPointsEnArgent()" style="background: #9b59b6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
         💎 Convertir points
     </button>
-    <button onclick="passerCommandeRecompenses()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
-        📦 Commander
-    </button>
+<button onclick="passerCommandeRecompenses()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+    📦 Commander
+</button>
     <button onclick="afficherHistorique()" style="background: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
         📊 Historique
     </button>
@@ -7154,14 +7154,14 @@ class SystemeRecompenses {
                 const data = JSON.parse(donneesSauvegardees);
                 return {
                     points: data.points || 0,
-                    soldeRecompenses: data.soldeRecompenses || 0, // Argent réel accumulé
+                    soldeRecompenses: data.soldeRecompenses || 0,
                     historique: data.historique || [],
                     parrainages: data.parrainages || 0,
                     parrains: data.parrains || [],
                     monCodeParrain: data.monCodeParrain || this.genererMonCode(),
                     niveau: data.niveau || 'bronze',
                     dateInscription: data.dateInscription || new Date().toISOString(),
-                    commandesRecompenses: data.commandesRecompenses || [] // NOUVEAU : Commandes payées avec récompenses
+                    commandesRecompenses: data.commandesRecompenses || []
                 };
             } catch (e) {
                 console.error('Erreur chargement données:', e);
@@ -7192,7 +7192,6 @@ class SystemeRecompenses {
     sauvegarderDonnees() {
         try {
             localStorage.setItem('anduxara_recompenses', JSON.stringify(this.data));
-            console.log('💾 Données sauvegardées - Points:', this.data.points, 'Solde:', this.data.soldeRecompenses + ' MRU');
         } catch (e) {
             console.error('Erreur sauvegarde:', e);
         }
@@ -7203,7 +7202,6 @@ class SystemeRecompenses {
         console.log('🎫 Système récompenses initialisé');
     }
 
-    // SURVEILLANCE PARRAINAGE
     demarrerSurveillance() {
         setInterval(() => {
             this.verifierNouveauxParrainages();
@@ -7239,10 +7237,9 @@ class SystemeRecompenses {
         }
     }
 
-    // NOUVEAU : Attribution avec conversion en argent réel
     attribuerRecompenseParrainage(nombreParrainages) {
         const pointsGagnes = nombreParrainages * 30;
-        const argentGagne = nombreParrainages * 3; // 30 points = 3 MRU
+        const argentGagne = nombreParrainages * 3;
         
         this.data.points += pointsGagnes;
         this.data.soldeRecompenses += argentGagne;
@@ -7264,7 +7261,6 @@ class SystemeRecompenses {
         this.notifier(`🎉 ${pointsGagnes} points + ${argentGagne} MRU pour ${nombreParrainages} parrainage(s) !`);
     }
 
-    // QUAND ON UTILISE UN CODE PARRAIN (devenir filleul)
     ajouterParrainage(codeParrainDuParrain) {
         if (this.data.parrains.includes(codeParrainDuParrain)) {
             this.notifier('❌ Code déjà utilisé', 'error');
@@ -7277,7 +7273,7 @@ class SystemeRecompenses {
         }
 
         const pointsBonus = 50;
-        const argentBonus = 5; // 50 points = 5 MRU
+        const argentBonus = 5;
 
         this.data.points += pointsBonus;
         this.data.soldeRecompenses += argentBonus;
@@ -7293,7 +7289,6 @@ class SystemeRecompenses {
         });
 
         this.enregistrerParrainagePourParrain(codeParrainDuParrain);
-
         this.calculerNiveau();
         this.sauvegarderDonnees();
         this.mettreAJourAffichage();
@@ -7326,9 +7321,7 @@ class SystemeRecompenses {
         }
     }
 
-    // CONVERSION POINTS → ARGENT RÉEL
     convertirPointsEnArgent(pointsAConvertir) {
-        // Validation
         if (pointsAConvertir > this.data.points) {
             this.notifier(`❌ Points insuffisants. Vous avez ${this.data.points} points.`, 'error');
             return false;
@@ -7344,10 +7337,8 @@ class SystemeRecompenses {
             return false;
         }
 
-        // Calcul conversion (10 points = 1 MRU)
         const montantConverti = pointsAConvertir / 10;
 
-        // Mise à jour
         this.data.points -= pointsAConvertir;
         this.data.soldeRecompenses += montantConverti;
         
@@ -7367,9 +7358,7 @@ class SystemeRecompenses {
         return montantConverti;
     }
 
-    // NOUVEAU : PASSER COMMANDE AVEC RÉCOMPENSES
     passerCommandeAvecRecompenses(montantCommande, description) {
-        // Validation
         if (montantCommande > this.data.soldeRecompenses) {
             this.notifier(`❌ Solde insuffisant. Vous avez ${this.data.soldeRecompenses} MRU.`, 'error');
             return false;
@@ -7380,23 +7369,16 @@ class SystemeRecompenses {
             return false;
         }
 
-        // Générer numéro de commande
         const numeroCommande = 'CMD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
 
-        // Créer la commande
-        const nouvelleCommande = {
+        this.data.soldeRecompenses -= montantCommande;
+        this.data.commandesRecompenses.push({
             numero: numeroCommande,
             montant: montantCommande,
             description: description,
             date: new Date().toISOString(),
-            statut: 'en_attente',
-            type: 'recompenses',
-            suivi: this.genererLienSuivi(numeroCommande)
-        };
-
-        // Débiter le solde
-        this.data.soldeRecompenses -= montantCommande;
-        this.data.commandesRecompenses.push(nouvelleCommande);
+            statut: 'en_attente'
+        });
         
         this.data.historique.push({
             type: 'commande_passee',
@@ -7410,45 +7392,13 @@ class SystemeRecompenses {
         this.sauvegarderDonnees();
         this.mettreAJourAffichage();
 
-        // Notification avec suivi
         this.notifier(`📦 Commande ${numeroCommande} passée ! Montant: ${montantCommande} MRU`);
-        
-        // Afficher détails commande
-        setTimeout(() => {
-            this.afficherDetailsCommande(nouvelleCommande);
-        }, 1000);
-
-        return nouvelleCommande;
+        return numeroCommande;
     }
 
-    genererLienSuivi(numeroCommande) {
-        return `https://andu-xara.com/suivi/${numeroCommande}`;
-    }
-
-    afficherDetailsCommande(commande) {
-        const details = `
-📦 COMMANDE CONFIRMÉE
-
-Numéro: ${commande.numero}
-Montant: ${commande.montant} MRU
-Description: ${commande.description}
-Statut: En traitement
-Date: ${new Date(commande.date).toLocaleDateString()}
-
-🔗 Suivi: ${commande.suivi}
-
-💎 Cette commande a été payée avec vos récompenses fidélité.
-
-Merci pour votre confiance !
-        `;
-        
-        alert(details);
-    }
-
-    // ACHAT NORMAL (gagner des points)
     ajouterPointsAchat(montantAchat, raison) {
         const pointsGagnes = Math.floor(montantAchat / 10);
-        const argentGagne = pointsGagnes / 10; // 10 points = 1 MRU
+        const argentGagne = pointsGagnes / 10;
         
         this.data.points += pointsGagnes;
         this.data.soldeRecompenses += argentGagne;
@@ -7471,7 +7421,6 @@ Merci pour votre confiance !
         return pointsGagnes;
     }
 
-    // AFFICHAGE
     mettreAJourAffichage() {
         const elements = {
             points: document.getElementById('points-fidelite'),
@@ -7479,8 +7428,7 @@ Merci pour votre confiance !
             solde: document.getElementById('solde-recompenses'),
             barre: document.getElementById('barre-progression'),
             parrainages: document.getElementById('parrainages-count'),
-            monCode: document.getElementById('mon-code-parrain'),
-            commandesCount: document.getElementById('commandes-count')
+            monCode: document.getElementById('mon-code-parrain')
         };
 
         if (elements.points) elements.points.textContent = this.data.points;
@@ -7488,7 +7436,6 @@ Merci pour votre confiance !
         if (elements.solde) elements.solde.textContent = this.data.soldeRecompenses.toFixed(2) + ' MRU';
         if (elements.parrainages) elements.parrainages.textContent = this.data.parrainages;
         if (elements.monCode) elements.monCode.textContent = this.data.monCodeParrain;
-        if (elements.commandesCount) elements.commandesCount.textContent = this.data.commandesRecompenses.length;
 
         if (elements.barre) {
             const pourcentage = this.calculerPourcentageProgression();
@@ -7496,7 +7443,6 @@ Merci pour votre confiance !
         }
     }
 
-    // AUTRES MÉTHODES
     calculerNiveau() {
         const points = this.data.points;
         let nouveauNiveau = 'bronze';
@@ -7551,7 +7497,6 @@ Merci pour votre confiance !
             z-index: 10000;
             font-family: Arial, sans-serif;
             max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         `;
         notification.textContent = message;
         document.body.appendChild(notification);
@@ -7590,7 +7535,6 @@ Merci pour votre confiance !
         }
     }
 
-    // NOUVEAU : AFFICHER L'HISTORIQUE
     afficherHistoriqueComplet() {
         let historiqueHTML = `
             <div style="max-height: 400px; overflow-y: auto; padding: 10px;">
@@ -7612,7 +7556,6 @@ Merci pour votre confiance !
         
         historiqueHTML += `</div>`;
         
-        // Afficher dans une popup
         const popup = window.open('', '_blank', 'width=600,height=500');
         popup.document.write(`
             <html>
@@ -7628,10 +7571,337 @@ Merci pour votre confiance !
 }
 
 // =============================================
+// SYSTÈME DE COMMANDES
+// =============================================
+
+class SystemeCommandes {
+    afficherBoutiqueRecompenses() {
+        const systeme = initialiserSystemeRecompenses();
+        const solde = systeme.data.soldeRecompenses;
+        
+        if (solde < 1) {
+            systeme.notifier('❌ Solde insuffisant. Minimum 1 MRU requis.', 'error');
+            return;
+        }
+
+        const produits = this.getProduitsDisponibles();
+        const produitsFiltres = produits.filter(produit => produit.prix <= solde * 1.5);
+
+        let html = `
+            <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h2 style="color: #2c3e50; margin-bottom: 10px;">🛍️ Boutique Récompenses</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Votre solde :</strong> <span style="color: #e74c3c; font-size: 1.2em;">${solde.toFixed(2)} MRU</span>
+                        </div>
+                        <div style="font-size: 0.9em; color: #7f8c8d;">
+                            ${produitsFiltres.length} produit(s) accessible(s)
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        `;
+
+        produitsFiltres.forEach(produit => {
+            const accessible = produit.prix <= solde;
+            const pourcentageSolde = (solde / produit.prix * 100).toFixed(0);
+            
+            html += `
+                <div class="produit-card" style="
+                    border: 2px solid ${accessible ? '#27ae60' : '#e74c3c'}; 
+                    border-radius: 10px; 
+                    padding: 15px; 
+                    text-align: center;
+                    background: white;
+                    opacity: ${accessible ? '1' : '0.7'};
+                    cursor: ${accessible ? 'pointer' : 'not-allowed'};
+                " onclick="${accessible ? `commanderProduit(${produit.id})` : ''}">
+                    
+                    <div style="width: 100px; height: 100px; background: #ecf0f1; border-radius: 8px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2em;">
+                        ${produit.emoji}
+                    </div>
+                    
+                    <h4 style="margin: 10px 0; color: #2c3e50;">${produit.nom}</h4>
+                    <p style="color: #7f8c8d; font-size: 0.9em; margin: 5px 0;">${produit.description}</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #e74c3c; font-size: 1.2em;">${produit.prix} MRU</strong>
+                    </div>
+                    
+                    ${accessible ? 
+                        `<div style="background: #27ae60; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.8em;">
+                            ✅ Éligible
+                        </div>` 
+                        : 
+                        `<div style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.8em;">
+                            ❌ Il vous manque ${(produit.prix - solde).toFixed(2)} MRU
+                        </div>`
+                    }
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+                
+                <div style="text-align: center; padding: 20px; background: #ecf0f1; border-radius: 10px;">
+                    <button onclick="fermerBoutique()" style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        `;
+
+        this.afficherPopupBoutique(html);
+    }
+
+    getProduitsDisponibles() {
+        return [
+            { id: 1, nom: "T-Shirt Basique", description: "T-shirt coton 100%", prix: 25, emoji: "👕" },
+            { id: 2, nom: "Casquette Sport", description: "Casquette ajustable", prix: 15, emoji: "🧢" },
+            { id: 3, nom: "Sac Shopping", description: "Sac réutilisable", prix: 12, emoji: "🛍️" },
+            { id: 4, nom: "Gourde Écologique", description: "Gourde 500ml", prix: 18, emoji: "💧" },
+            { id: 5, nom: "Paire de Chaussettes", description: "Lot de 3 paires", prix: 8, emoji: "🧦" },
+            { id: 6, nom: "Stylo Andu-Xara", description: "Stylo personnalisé", prix: 5, emoji: "✏️" },
+            { id: 7, nom: "Smartphone", description: "Android 128GB", prix: 450, emoji: "📱" },
+            { id: 8, nom: "Casque Audio", description: "Casque sans fil", prix: 85, emoji: "🎧" },
+            { id: 9, nom: "Montre Connectée", description: "Montre fitness", prix: 120, emoji: "⌚" },
+            { id: 10, nom: "Enceinte Bluetooth", description: "Enceinte portable", prix: 65, emoji: "🔊" }
+        ];
+    }
+
+    afficherPopupBoutique(html) {
+        const popup = window.open('', 'BoutiqueAnduXara', 'width=1100,height=700,scrollbars=yes');
+        popup.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Boutique Récompenses - Andu-Xara</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #ecf0f1; }
+                    .produit-card:hover { transform: scale(1.05); transition: transform 0.2s; }
+                </style>
+            </head>
+            <body>
+                ${html}
+                <script>
+                    function commanderProduit(idProduit) {
+                        window.opener.commencerCommande(idProduit);
+                        window.close();
+                    }
+                    function fermerBoutique() { window.close(); }
+                <\/script>
+            </body>
+            </html>
+        `);
+    }
+
+    commencerCommande(idProduit) {
+        const produits = this.getProduitsDisponibles();
+        const produit = produits.find(p => p.id === idProduit);
+        const systeme = initialiserSystemeRecompenses();
+
+        if (!produit || produit.prix > systeme.data.soldeRecompenses) {
+            systeme.notifier('❌ Produit non disponible ou solde insuffisant', 'error');
+            return;
+        }
+
+        this.afficherFormulaireCommande(produit);
+    }
+
+    afficherFormulaireCommande(produit) {
+        const systeme = initialiserSystemeRecompenses();
+        
+        let html = `
+            <div style="max-width: 500px; margin: 0 auto; padding: 30px; background: white; border-radius: 15px;">
+                <h2 style="color: #2c3e50; text-align: center; margin-bottom: 30px;">📦 Finaliser la commande</h2>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 10px 0; color: #2c3e50;">${produit.emoji} ${produit.nom}</h3>
+                    <p style="margin: 0; color: #7f8c8d;">${produit.description}</p>
+                    <div style="margin-top: 10px;">
+                        <strong style="color: #e74c3c; font-size: 1.3em;">${produit.prix} MRU</strong>
+                    </div>
+                </div>
+
+                <form id="formulaire-commande">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Nom complet *</label>
+                        <input type="text" id="nom-client" required style="width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px;">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Téléphone *</label>
+                        <input type="tel" id="telephone-client" required style="width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px;" placeholder="+222 XX XX XX XX">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Quartier/Ville *</label>
+                        <input type="text" id="quartier-client" required style="width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px;" placeholder="Ex: Nouakchott">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Adresse</label>
+                        <textarea id="adresse-client" style="width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px; height: 80px;" placeholder="Rue, bâtiment..."></textarea>
+                    </div>
+
+                    <div style="background: #e8f6f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #27ae60;">📋 Récapitulatif</h4>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Nouveau solde:</span>
+                            <span>${(systeme.data.soldeRecompenses - produit.prix).toFixed(2)} MRU</span>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="finaliserCommande(${produit.id})" style="width: 100%; background: #27ae60; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                        ✅ Confirmer la commande
+                    </button>
+                </form>
+            </div>
+        `;
+
+        this.afficherPopupFormulaire(html);
+    }
+
+    afficherPopupFormulaire(html) {
+        const popup = window.open('', 'FormulaireCommande', 'width=600,height=700');
+        popup.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Formulaire de Commande - Andu-Xara</title>
+            </head>
+            <body style="font-family: Arial, sans-serif; background: #ecf0f1; margin: 0; padding: 20px;">
+                ${html}
+                <script>
+                    function finaliserCommande(idProduit) {
+                        const donnees = {
+                            produitId: idProduit,
+                            nom: document.getElementById('nom-client').value,
+                            telephone: document.getElementById('telephone-client').value,
+                            quartier: document.getElementById('quartier-client').value,
+                            adresse: document.getElementById('adresse-client').value
+                        };
+                        
+                        if (!donnees.nom || !donnees.telephone || !donnees.quartier) {
+                            alert('Veuillez remplir tous les champs obligatoires');
+                            return;
+                        }
+                        
+                        window.opener.traiterCommande(donnees);
+                        window.close();
+                    }
+                <\/script>
+            </body>
+            </html>
+        `);
+    }
+
+    async traiterCommande(donneesClient) {
+        const systeme = initialiserSystemeRecompenses();
+        const produits = this.getProduitsDisponibles();
+        const produit = produits.find(p => p.id === donneesClient.produitId);
+
+        if (!produit || produit.prix > systeme.data.soldeRecompenses) {
+            systeme.notifier('❌ Erreur: Produit non disponible', 'error');
+            return;
+        }
+
+        try {
+            const numeroCommande = 'CMD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+            
+            const commande = {
+                numero: numeroCommande,
+                produit: produit.nom,
+                prix: produit.prix,
+                client: donneesClient,
+                date: new Date().toISOString()
+            };
+
+            // Envoyer notification WhatsApp
+            this.envoyerNotification(commande);
+
+            // Finaliser commande
+            systeme.passerCommandeAvecRecompenses(produit.prix, `${produit.nom} - ${numeroCommande}`);
+            
+            // Afficher confirmation
+            this.afficherConfirmationCommande(commande);
+
+        } catch (error) {
+            systeme.notifier('❌ Erreur lors de la commande', 'error');
+        }
+    }
+
+    envoyerNotification(commande) {
+        const message = `
+🆕 NOUVELLE COMMANDE RÉCOMPENSES
+
+📦 ${commande.numero}
+👤 ${commande.client.nom}
+📞 ${commande.client.telephone}
+📍 ${commande.client.quartier}
+🏠 ${commande.client.adresse}
+💰 ${commande.prix} MRU
+🎁 ${commande.produit}
+📅 ${new Date(commande.date).toLocaleString()}
+
+🔗 https://andu-xara.com/suivi/${commande.numero}
+        `;
+
+        const numeroWhatsApp = "22200000000"; // REMPLACEZ par votre vrai numéro
+        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(message)}`;
+        
+        window.open(urlWhatsApp, '_blank');
+    }
+
+    afficherConfirmationCommande(commande) {
+        const html = `
+            <div style="max-width: 500px; margin: 50px auto; padding: 30px; background: white; border-radius: 15px; text-align: center;">
+                <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+                <h2 style="color: #27ae60; margin-bottom: 20px;">Commande Confirmée !</h2>
+                
+                <div style="text-align: left; background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <p><strong>Numéro:</strong> ${commande.numero}</p>
+                    <p><strong>Produit:</strong> ${commande.produit}</p>
+                    <p><strong>Montant:</strong> ${commande.prix} MRU</p>
+                    <p><strong>Client:</strong> ${commande.client.nom}</p>
+                    <p><strong>Téléphone:</strong> ${commande.client.telephone}</p>
+                </div>
+
+                <div style="background: #e8f6f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #27ae60;">
+                        <strong>📞 Nous vous contacterons sous 24h</strong><br>
+                        au ${commande.client.telephone}
+                    </p>
+                </div>
+
+                <button onclick="window.close()" style="background: #3498db; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer;">
+                    ✅ Fermer
+                </button>
+            </div>
+        `;
+
+        const popup = window.open('', 'ConfirmationCommande', 'width=600,height=600');
+        popup.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head><title>Confirmation</title></head>
+            <body style="font-family: Arial, sans-serif; background: #ecf0f1; margin: 0; padding: 20px;">
+                ${html}
+            </body>
+            </html>
+        `);
+    }
+}
+
+// =============================================
 // FONCTIONS GLOBALES
 // =============================================
 
 window.systemeRecompenses = null;
+window.systemeCommandes = new SystemeCommandes();
 
 function initialiserSystemeRecompenses() {
     if (!window.systemeRecompenses) {
@@ -7640,70 +7910,33 @@ function initialiserSystemeRecompenses() {
     return window.systemeRecompenses;
 }
 
-// DÉCLARATIONS
-window.SystemeRecompenses = SystemeRecompenses;
-window.initialiserSystemeRecompenses = initialiserSystemeRecompenses;
+// FONCTIONS PRINCIPALES
+window.utiliserPointsFidelite = function() {
+    const systeme = initialiserSystemeRecompenses();
+    const pointsDisponibles = systeme.data.points;
+    
+    if (pointsDisponibles < 100) {
+        systeme.notifier(`❌ Minimum 100 points requis. Vous avez ${pointsDisponibles} points.`, 'error');
+        return;
+    }
 
-// CONVERSION POINTS
-window.convertirPointsEnArgent = function() {
-    try {
-        const systeme = initialiserSystemeRecompenses();
-        const pointsDisponibles = systeme.data.points;
-        
-        if (pointsDisponibles < 100) {
-            systeme.notifier(`❌ Minimum 100 points requis. Vous avez ${pointsDisponibles} points.`, 'error');
-            return;
-        }
+    const pointsAConvertir = parseInt(prompt(
+        `💎 CONVERSION POINTS → ARGENT\n\n` +
+        `Vos points : ${pointsDisponibles}\n` +
+        `Taux : 10 points = 1 MRU\n` +
+        `Minimum : 100 points\n\n` +
+        `Combien de points convertir ?\n` +
+        `(Multiple de 10)`
+    ));
 
-        const pointsAConvertir = parseInt(prompt(
-            `💎 CONVERSION POINTS → ARGENT\n\n` +
-            `Vos points : ${pointsDisponibles}\n` +
-            `Votre solde actuel : ${systeme.data.soldeRecompenses.toFixed(2)} MRU\n\n` +
-            `Taux : 10 points = 1 MRU\n` +
-            `Minimum : 100 points\n\n` +
-            `Combien de points convertir ?\n` +
-            `(Multiple de 10)`
-        ));
-
-        if (pointsAConvertir && pointsAConvertir >= 100 && pointsAConvertir % 10 === 0) {
-            systeme.convertirPointsEnArgent(pointsAConvertir);
-        }
-    } catch (error) {
-        console.error('Erreur conversion:', error);
+    if (pointsAConvertir && pointsAConvertir >= 100 && pointsAConvertir % 10 === 0) {
+        systeme.convertirPointsEnArgent(pointsAConvertir);
     }
 }
 
-// PASSER COMMANDE
-window.passerCommandeRecompenses = function() {
-    try {
-        const systeme = initialiserSystemeRecompenses();
-        
-        if (systeme.data.soldeRecompenses < 1) {
-            systeme.notifier('❌ Solde insuffisant pour passer commande', 'error');
-            return;
-        }
-
-        const montant = parseFloat(prompt(
-            `📦 COMMANDE AVEC RÉCOMPENSES\n\n` +
-            `Votre solde : ${systeme.data.soldeRecompenses.toFixed(2)} MRU\n\n` +
-            `Montant de la commande ?\n` +
-            `(Maximum: ${systeme.data.soldeRecompenses.toFixed(2)} MRU)`
-        ));
-
-        if (montant && montant > 0) {
-            const description = prompt('Description de la commande :') || 'Commande récompenses';
-            systeme.passerCommandeAvecRecompenses(montant, description);
-        }
-    } catch (error) {
-        console.error('Erreur commande:', error);
-    }
-}
-
-// FONCTIONS EXISTANTES
-window.utiliserPointsFidelite = window.convertirPointsEnArgent;
 window.genererLienParrainage = function() {
     const systeme = initialiserSystemeRecompenses();
-    const { message, lienParrainage } = systeme.genererLienParrainage();
+    const { message } = systeme.genererLienParrainage();
     
     if (navigator.clipboard) {
         navigator.clipboard.writeText(message).then(() => {
@@ -7725,16 +7958,15 @@ Votre code : ${systeme.data.monCodeParrain}
 • Points : ${systeme.data.points}
 • Argent : ${systeme.data.soldeRecompenses.toFixed(2)} MRU
 • Parrainages : ${systeme.data.parrainages}
-• Commandes : ${systeme.data.commandesRecompenses.length}
 
 💎 CONVERSION :
 • 10 points = 1 MRU
 • Minimum 100 points
 
-📦 UTILISATION :
-• Achetez des produits réels
-• Paiement avec votre solde
-• Suivi de commande inclus
+📦 BOUTIQUE :
+• Produits réels
+• Livraison incluse
+• Paiement avec solde
     `;
     
     alert(details);
@@ -7748,6 +7980,18 @@ window.verifierMesParrainages = function() {
 window.afficherHistorique = function() {
     const systeme = initialiserSystemeRecompenses();
     systeme.afficherHistoriqueComplet();
+}
+
+window.passerCommandeRecompenses = function() {
+    window.systemeCommandes.afficherBoutiqueRecompenses();
+}
+
+window.commencerCommande = function(idProduit) {
+    window.systemeCommandes.commencerCommande(idProduit);
+}
+
+window.traiterCommande = function(donneesClient) {
+    window.systemeCommandes.traiterCommande(donneesClient);
 }
 
 window.verifierParrainage = function() {
@@ -7769,12 +8013,6 @@ window.verifierParrainage = function() {
     }
 }
 
-// SIMULATION ACHAT (pour tests)
-window.simulerAchat = function(montant) {
-    const systeme = initialiserSystemeRecompenses();
-    systeme.ajouterPointsAchat(montant, 'Achat test');
-}
-
 // INITIALISATION
 document.addEventListener('DOMContentLoaded', function() {
     try {
@@ -7786,7 +8024,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-console.log('✅ Système récompenses professionnel prêt');
+console.log('✅ Système complet chargé');
 </script>
 </body>
 </html>
