@@ -1,4 +1,4 @@
-// script.js
+ // script.js
 
 // Gestion du menu mobile
 const menuToggle = document.querySelector('.menu-toggle');
@@ -54,7 +54,7 @@ function toggleWishlist(productName) {
         wishlist.push(productName);
     }
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    updateWishlistCounter();
+updateWishlistCounter();
 }
 updateWishlistCounter();
 
@@ -82,7 +82,7 @@ function subscribeNewsletter() {
 // Codes promo
 const codesPromo = {
     'ADX1': { used: false },
-    'ADX2': { used: false },
+ 'ADX2': { used: false },
     'ADX3': { used: false },
     'ADX4': { used: false }
 };
@@ -92,7 +92,7 @@ if (promoButton) {
     promoButton.addEventListener('click', () => {
         const promoInput = document.getElementById('promoInput');
         const message = document.getElementById('promoMessage');
-        
+
         if (promoInput && message) {
             const code = promoInput.value.toUpperCase();
             if (codesPromo[code] && !codesPromo[code].used) {
@@ -115,7 +115,7 @@ if (searchInput && productsContainer) {
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
         const products = productsContainer.querySelectorAll('.product-card');
-        
+
         products.forEach(p => {
             const titleElement = p.querySelector('.product-title');
             if (titleElement) {
@@ -135,7 +135,7 @@ if (categoryButtons.length > 0 && productsContainer) {
             btn.classList.add('active');
             const cat = btn.dataset.category;
             const products = productsContainer.querySelectorAll('.product-card');
-            
+
             products.forEach(p => {
                 p.style.display = (cat === 'tous' || p.dataset.category === cat) ? 'block' : 'none';
             });
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const essentialElements = {
         'menuToggle': menuToggle,
         'cartCounter': cartCounter,
-        'wishlistCounter': wishlistCounter
+'wishlistCounter': wishlistCounter
     };
     
     for (const [name, element] of Object.entries(essentialElements)) {
