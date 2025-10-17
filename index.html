@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Catalogue Andu-Xara 2025</title>
    <meta name="google-site-verification" content="EN_ATTENTE_DU_CODE">
@@ -10,7 +10,7 @@
     <meta name="description" content="Catalogue Andu-Xara 2025 - Vêtements exclusifs mauritaniens">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="./style-pro.css">
+    <link rel="stylesheet" href="style-min.css">
     <meta name="theme-color" content="#6a11cb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
@@ -3203,6 +3203,7 @@ function processFloatingCheckout() {
     }
     
     const totalMRU = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
+      integrerFideliteAchat(totalMRU);
     const totalFCFA = Math.round(totalMRU * 2.5);
     
     const productList = floatingCart.map(item => 
@@ -3460,7 +3461,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 1 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif" class="product-img" loading="lazy">
+    <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3489,7 +3490,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 2 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
-    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet" class="product-img" loading="lazy">
+    <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3517,7 +3518,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 3 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
-    <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu" class="product-img" loading="lazy">
+    <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3545,7 +3546,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 4 -->
 <div class="product-card" data-category="enfants">
   <div class="product-image-container">
-    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable" class="product-img" loading="lazy">
+    <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3573,7 +3574,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 5 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
-    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging" class="product-img" loading="lazy">
+    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3602,7 +3603,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 6 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable" class="product-img" loading="lazy">
+    <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3630,7 +3631,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 7 -->
 <div class="product-card" data-category="accessoires">
   <div class="product-image-container">
-    <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain" class="product-img" loading="lazy">
+    <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3656,7 +3657,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 8 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
-    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti" class="product-img" loading="lazy">
+    <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3684,7 +3685,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 9 -->
 <div class="product-card" data-category="ensembles">
   <div class="product-image-container">
-    <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3712,7 +3713,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 10 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3740,7 +3741,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 11 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3768,7 +3769,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 12 -->
 <div class="product-card" data-category="pulls">
   <div class="product-image-container">
-    <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3796,7 +3797,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 13 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3824,7 +3825,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 14 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3852,7 +3853,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Produit 15 -->
 <div class="product-card" data-category="t-shirts">
   <div class="product-image-container">
-    <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img" loading="lazy">
+    <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
   </div>
   <div class="product-info">
@@ -3984,6 +3985,112 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         </div>
+    </div>
+</section>
+<!-- ===== PROGRAMME FIDÉLITÉ ANDU-XARA ===== -->
+<section id="programme-fidelite" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-rad>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">🎫 Club Andu-Xara</h2>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Votre programme fidélité exclusif</p>
+        </div>
+
+        <!-- Tableau de bord fidélité -->
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #667eea;" id="points-fidelite">0</div>
+                    <div style="color: #666; font-size: 0.9rem;">Points accumulés</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #27ae60;" id="niveau-fidelite">🌟 Bronze</div>
+                    <div style="color: #666; font-size: 0.9rem;">Votre niveau</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;" id="reduction-fidelite">0 MRU</div>
+                    <div style="color: #666; font-size: 0.9rem;">Réduction disponible</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de progression -->
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span>🌟 Bronze</span>
+                <span>🥈 Argent</span>
+                <span>🥇 Or</span>
+                <span>💎 Diamant</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); height: 10px; border-radius: 5px; overflow: hidden;">
+                <div id="barre-progression" style="background: #27ae60; height: 100%; width: 10%; transition: width 0.5s ease;"></div>
+            </div>
+        </div>
+
+        <!-- AVANTAGES - AJOUTEZ LA SECTION PARRAINAGE ICI -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🛍️</div>
+                <h3 style="margin-bottom: 10px;">10 points = 1 MRU</h3>
+                <p style="opacity: 0.9; font-size: 0.9rem;">Convertissez vos points en réduction immédiate</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">👥</div>
+                <h3 style="margin-bottom: 10px;">Parrainage</h3>
+                <p style="opacity: 0.9; font-size: 0.9rem;">50 points par ami invité</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🎁</div>
+                <h3 style="margin-bottom: 10px;">Avantages exclusifs</h3>
+                <p style="opacity: 0.9; font-size: 0.9rem;">Réductions et cadeaux selon votre niveau</p>
+            </div>
+        </div>
+
+        <!-- ⭐⭐⭐ AJOUTEZ LA SECTION PARRAINAGE COMPLÈTE ICI ⭐⭐⭐ -->
+        <div style="background: rgba(255,255,255,0.15); border-radius: 15px; padding: 25px; margin: 30px 0; border: 2px dashed rgba(255,255,255,0.3);">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">🤝 Programme de Parrainage</h3>
+                <p style="opacity: 0.9;">Gagnez des points en invitant vos amis</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Votre code personnel :</p>
+                <div id="mon-code-parrain" style="font-size: 1.5rem; font-weight: bold; color: #fff; font-family: 'Courier New', monospace; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;"></div>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="genererLienParrainage()" 
+                        style="background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+                    🎁 Parrainer un ami
+                </button>
+                <button onclick="afficherDetailsParrainage()" 
+                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+                    📊 Mes parrainages
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <p style="font-size: 0.8rem; opacity: 0.8;">
+                    💡 <strong>Votre ami</strong> reçoit 50 points + <strong>Vous</strong> recevez 30 points !
+                </p>
+            </div>
+        </div>
+        <!-- ⭐⭐⭐ FIN DE L'AJOUT ⭐⭐⭐ -->
+
+        <!-- Bouton utilisation points -->
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="utiliserPointsFidelite()" style="background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">
+                🎁 Utiliser mes points
+            </button>
+        </div>
+
+        <!-- SUPPRIMEZ CE BOUTON CI-DESSOUS CAR IL EST MAINTENANT DANS LA NOUVELLE SECTION -->
+        <!--
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="genererLienParrainage()" style="background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-s>
+                👥 Parrainer un ami
+            </button>
+        </div>
+        -->
     </div>
 </section>
 <!-- ===== ASSISTANT IA INTELLIGENT ANDU-XARA ===== -->
@@ -6997,5 +7104,453 @@ setTimeout(() => {
 }, 1000);
     </script>
 
+<script>
+// =============================================
+// 🎫 PROGRAMME FIDÉLITÉ ANDU-XARA - CORRIGÉ
+// =============================================
+
+class ProgrammeFidelite {
+    constructor() {
+        this.data = this.chargerDonnees();
+        this.initialiser();
+    }
+
+    chargerDonnees() {
+        const donneesSauvegardees = localStorage.getItem('anduxara_fidelite');
+        if (donneesSauvegardees) {
+            try {
+                return JSON.parse(donneesSauvegardees);
+            } catch (e) {
+                console.error('Erreur chargement données fidélité:', e);
+            }
+        }
+        return {
+            points: 0,
+            historique: [],
+            parrainages: 0,
+            parrains: [],
+            monCodeParrain: this.genererMonCode(),
+            niveau: 'bronze',
+            dateInscription: new Date().toISOString()
+        };
+    }
+
+    genererMonCode() {
+        let codeExistante = localStorage.getItem('mon_code_parrain');
+        if (!codeExistante) {
+            codeExistante = 'ANDU' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            localStorage.setItem('mon_code_parrain', codeExistante);
+        }
+        return codeExistante;
+    }
+
+    sauvegarderDonnees() {
+        try {
+            localStorage.setItem('anduxara_fidelite', JSON.stringify(this.data));
+        } catch (e) {
+            console.error('Erreur sauvegarde données fidélité:', e);
+        }
+    }
+
+    initialiser() {
+        this.mettreAJourAffichage();
+        console.log('🎫 Programme fidélité initialisé - Points:', this.data.points);
+    }
+
+    ajouterPoints(montantAchat, raison) {
+        const pointsGagnes = Math.floor(montantAchat / 10);
+        
+        this.data.points += pointsGagnes;
+        this.data.historique.push({
+            points: pointsGagnes,
+            raison: raison,
+            date: new Date().toISOString(),
+            montantAchat: montantAchat
+        });
+
+        this.calculerNiveau();
+        this.sauvegarderDonnees();
+        this.mettreAJourAffichage();
+
+        this.notifier(`🎉 +${pointsGagnes} points fidélité ! Total: ${this.data.points} points`);
+        return pointsGagnes;
+    }
+
+    ajouterParrainage(codeParrainDuParrain) {
+        if (this.data.parrains.includes(codeParrainDuParrain)) {
+            this.notifier('❌ Code parrain déjà utilisé', 'error');
+            return false;
+        }
+
+        const pointsBonusFilleul = 50;
+        const pointsBonusParrain = 30;
+
+        this.data.points += pointsBonusFilleul;
+        this.data.parrains.push(codeParrainDuParrain);
+        
+        this.data.historique.push({
+            points: pointsBonusFilleul,
+            raison: `Parrainage - 50 points bonus (Parrain: ${codeParrainDuParrain})`,
+            date: new Date().toISOString()
+        });
+
+        this.sauvegarderParrainage(codeParrainDuParrain);
+
+        this.calculerNiveau();
+        this.sauvegarderDonnees();
+        this.mettreAJourAffichage();
+
+        this.notifier(`🎉 +50 points de bienvenue pour parrainage ! Votre parrain ${codeParrainDuParrain} recevra aussi 30 points.`);
+        return true;
+    }
+
+    sauvegarderParrainage(codeParrain) {
+        try {
+            let parrainagesEnAttente = JSON.parse(localStorage.getItem('parrainages_en_attente')) || {};
+            
+            if (!parrainagesEnAttente[codeParrain]) {
+                parrainagesEnAttente[codeParrain] = [];
+            }
+            
+            parrainagesEnAttente[codeParrain].push({
+                filleul: this.data.monCodeParrain,
+                date: new Date().toISOString(),
+                pointsAttribues: false
+            });
+            
+            localStorage.setItem('parrainages_en_attente', JSON.stringify(parrainagesEnAttente));
+        } catch (error) {
+            console.error('Erreur sauvegarde parrainage:', error);
+        }
+    }
+
+    attribuerPointsAuxParrains() {
+        try {
+            const monCode = this.data.monCodeParrain;
+            const parrainagesEnAttente = JSON.parse(localStorage.getItem('parrainages_en_attente')) || {};
+            
+            if (parrainagesEnAttente[monCode]) {
+                let nouveauxPoints = 0;
+                const parrainagesTraites = [];
+                
+                for (const parrainage of parrainagesEnAttente[monCode]) {
+                    if (!parrainage.pointsAttribues) {
+                        nouveauxPoints += 30;
+                        parrainage.pointsAttribues = true;
+                        this.data.parrainages += 1;
+                        
+                        this.data.historique.push({
+                            points: 30,
+                            raison: `Parrainage réussi - Filleul ${parrainage.filleul}`,
+                            date: new Date().toISOString()
+                        });
+                    }
+                    parrainagesTraites.push(parrainage);
+                }
+                
+                if (nouveauxPoints > 0) {
+                    this.data.points += nouveauxPoints;
+                    parrainagesEnAttente[monCode] = parrainagesTraites;
+                    localStorage.setItem('parrainages_en_attente', JSON.stringify(parrainagesEnAttente));
+                    
+                    this.calculerNiveau();
+                    this.sauvegarderDonnees();
+                    this.mettreAJourAffichage();
+                    
+                    this.notifier(`🤝 ${nouveauxPoints} points reçus pour ${this.data.parrainages} parrainage(s) réussis !`);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur attribution points parrains:', error);
+        }
+    }
+
+    calculerNiveau() {
+        const points = this.data.points;
+        let nouveauNiveau = 'bronze';
+
+        if (points >= 3001) nouveauNiveau = 'diamant';
+        else if (points >= 1501) nouveauNiveau = 'or';
+        else if (points >= 501) nouveauNiveau = 'argent';
+
+        if (nouveauNiveau !== this.data.niveau) {
+            this.data.niveau = nouveauNiveau;
+            this.notifier(`🏆 Félicitations ! Vous êtes maintenant ${this.getNomNiveau(nouveauNiveau)} !`);
+        }
+    }
+
+    getNomNiveau(niveau) {
+        const niveaux = {
+            'bronze': '🌟 Bronze',
+            'argent': '🥈 Argent', 
+            'or': '🥇 Or',
+            'diamant': '💎 Diamant'
+        };
+        return niveaux[niveau] || '🌟 Bronze';
+    }
+
+    getReductionDisponible() {
+        return Math.floor(this.data.points / 10);
+    }
+
+    utiliserPoints(pointsAUtiliser) {
+        if (pointsAUtiliser > this.data.points) {
+            this.notifier('❌ Points insuffisants', 'error');
+            return false;
+        }
+
+        if (pointsAUtiliser < 10) {
+            this.notifier('❌ Minimum 10 points requis', 'error');
+            return false;
+        }
+
+        this.data.points -= pointsAUtiliser;
+        const reduction = pointsAUtiliser / 10;
+        
+        this.data.historique.push({
+            points: -pointsAUtiliser,
+            raison: `Échange pour ${reduction} MRU de réduction`,
+            date: new Date().toISOString()
+        });
+
+        this.sauvegarderDonnees();
+        this.mettreAJourAffichage();
+
+        this.notifier(`✅ ${pointsAUtiliser} points échangés pour ${reduction} MRU de réduction !`);
+        return reduction;
+    }
+
+    mettreAJourAffichage() {
+        const elements = {
+            points: document.getElementById('points-fidelite'),
+            niveau: document.getElementById('niveau-fidelite'),
+            reduction: document.getElementById('reduction-fidelite'),
+            barre: document.getElementById('barre-progression'),
+            parrainages: document.getElementById('parrainages-count'),
+            monCode: document.getElementById('mon-code-parrain')
+        };
+
+        if (elements.points) elements.points.textContent = this.data.points;
+        if (elements.niveau) elements.niveau.textContent = this.getNomNiveau(this.data.niveau);
+        if (elements.reduction) elements.reduction.textContent = this.getReductionDisponible() + ' MRU';
+        if (elements.parrainages) elements.parrainages.textContent = this.data.parrainages;
+        if (elements.monCode) elements.monCode.textContent = this.data.monCodeParrain;
+
+        if (elements.barre) {
+            const pourcentage = this.calculerPourcentageProgression();
+            elements.barre.style.width = pourcentage + '%';
+        }
+    }
+
+    calculerPourcentageProgression() {
+        const points = this.data.points;
+        if (points >= 3001) return 100;
+        if (points >= 1501) return 75;
+        if (points >= 501) return 50;
+        return (points / 500) * 25;
+    }
+
+    notifier(message, type = 'success') {
+        if (typeof showNotification === 'function') {
+            showNotification(message, type);
+        } else {
+            console.log(`🔔 ${type.toUpperCase()}: ${message}`);
+            this.creerNotificationSecours(message, type);
+        }
+    }
+
+    creerNotificationSecours(message, type) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'error' ? '#f44336' : '#4CAF50'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 10000;
+            font-family: Arial, sans-serif;
+            max-width: 300px;
+        `;
+        notification.textContent = message.replace(/[🎉🏆✅❌🎁👋🎫🔔]/g, '');
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 3000);
+    }
+
+    genererLienParrainage() {
+        const monCode = this.data.monCodeParrain;
+        const lienParrainage = `${window.location.origin}${window.location.pathname}?parrain=${monCode}`;
+        
+        const message = `👋 Rejoins le Club Andu-Xara !
+
+💎 Utilise mon code: ${monCode}
+🔗 Ou clique: ${lienParrainage}
+
+🎁 AVANTAGES PARRAINAGE :
+• Toi : 50 points de bienvenue offerts
+• Moi : 30 points de récompense
+
+🛍️ Cumule tes points pour des réductions !`;
+
+        return { message, lienParrainage, monCode };
+    }
+}
+
+// =============================================
+// FONCTIONS GLOBALES - CORRIGÉES
+// =============================================
+
+// Initialiser l'instance globale
+window.programmeFidelite = null;
+
+// FONCTION MANQUANTE - AJOUTÉE ICI
+function initialiserProgrammeFidelite() {
+    if (!window.programmeFidelite) {
+        window.programmeFidelite = new ProgrammeFidelite();
+    }
+    return window.programmeFidelite;
+}
+
+window.utiliserPointsFidelite = function() {
+    try {
+        const programme = initialiserProgrammeFidelite();
+        const pointsDisponibles = programme.data.points;
+        
+        if (pointsDisponibles < 10) {
+            programme.notifier('❌ Minimum 10 points requis pour une réduction', 'error');
+            return;
+        }
+
+        const pointsAUtiliser = parseInt(prompt(
+            `🎁 ÉCHANGE DE POINTS FIDÉLITÉ\n\n` +
+            `Points disponibles: ${pointsDisponibles}\n` +
+            `10 points = 1 MRU de réduction\n\n` +
+            `Combien de points souhaitez-vous utiliser ?\n` +
+            `(Minimum: 10 points)`
+        ));
+
+        if (pointsAUtiliser && pointsAUtiliser >= 10) {
+            programme.utiliserPoints(pointsAUtiliser);
+        }
+    } catch (error) {
+        console.error('Erreur utilisation points fidélité:', error);
+        alert('Erreur lors de l\'utilisation des points fidélité');
+    }
+}
+
+window.integrerFideliteAchat = function(montantTotal) {
+    try {
+        const programme = initialiserProgrammeFidelite();
+        const pointsGagnes = programme.ajouterPoints(montantTotal, 'Achat effectué');
+        console.log(`🎫 Points fidélité ajoutés: ${pointsGagnes} pour achat de ${montantTotal} MRU`);
+    } catch (error) {
+        console.error('Erreur intégration fidélité achat:', error);
+    }
+}
+
+window.genererLienParrainage = function() {
+    try {
+        const programme = initialiserProgrammeFidelite();
+        const { message, lienParrainage } = programme.genererLienParrainage();
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Rejoins Andu-Xara - Parrainage',
+                text: message,
+                url: lienParrainage
+            }).then(() => {
+                programme.notifier('🤝 Parrainage partagé avec succès !');
+            });
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(message).then(() => {
+                programme.notifier('📋 Lien de parrainage copié ! Collez-le à vos amis.');
+            });
+        } else {
+            programme.notifier('📋 ' + message);
+        }
+    } catch (error) {
+        console.error('Erreur génération lien parrainage:', error);
+    }
+}
+
+window.afficherDetailsParrainage = function() {
+    try {
+        const programme = initialiserProgrammeFidelite();
+        const details = `
+🎯 SYSTÈME DE PARRAINAGE
+
+Votre code personnel: ${programme.data.monCodeParrain}
+
+🤝 COMMENT ÇA MARCHE :
+1. Partagez votre code avec des amis
+2. Vos amis reçoivent 50 points de bienvenue
+3. Vous recevez 30 points par ami parrainé
+
+📊 VOS STATS :
+• Parrainages réussis: ${programme.data.parrainages}
+• Points reçus: ${programme.data.parrainages * 30}
+• Code personnel: ${programme.data.monCodeParrain}
+
+🎁 AVANTAGES :
+• Filleul: 50 points offerts
+• Parrain: 30 points par filleul
+        `;
+        
+        alert(details);
+    } catch (error) {
+        console.error('Erreur affichage détails parrainage:', error);
+        alert('Erreur lors de l\'affichage des détails');
+    }
+}
+
+window.verifierParrainage = function() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const codeParrain = urlParams.get('parrain');
+        
+        if (codeParrain && !localStorage.getItem('parrainage_utilise')) {
+            const programme = initialiserProgrammeFidelite();
+            
+            if (codeParrain === programme.data.monCodeParrain) {
+                programme.notifier('❌ Vous ne pouvez pas utiliser votre propre code de parrainage', 'error');
+                return;
+            }
+            
+            const succes = programme.ajouterParrainage(codeParrain);
+            if (succes) {
+                localStorage.setItem('parrainage_utilise', 'true');
+                const urlSansParams = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, urlSansParams);
+            }
+        }
+        
+        const programme = initialiserProgrammeFidelite();
+        programme.attribuerPointsAuxParrains();
+        
+    } catch (error) {
+        console.error('Erreur vérification parrainage:', error);
+    }
+}
+
+// Initialisation automatique
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        initialiserProgrammeFidelite();
+        window.verifierParrainage();
+        console.log('🎫 Programme fidélité chargé avec succès');
+    } catch (error) {
+        console.error('Erreur initialisation fidélité:', error);
+    }
+});
+
+console.log('✅ Système de parrainage complet chargé');
+</script>
 </body>
 </html>
+
