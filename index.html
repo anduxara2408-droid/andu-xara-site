@@ -3995,24 +3995,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <p style="font-size: 1.2rem; opacity: 0.9;">Votre programme fidélité exclusif</p>
         </div>
 
-        <!-- Tableau de bord fidélité -->
-        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
-                <div>
-                    <div style="font-size: 2rem; font-weight: bold; color: #667eea;" id="points-fidelite">0</div>
-                    <div style="color: #666; font-size: 0.9rem;">Points accumulés</div>
-                </div>
-                <div>
-                    <div style="font-size: 2rem; font-weight: bold; color: #27ae60;" id="niveau-fidelite">🌟 Bronze</div>
-                    <div style="color: #666; font-size: 0.9rem;">Votre niveau</div>
-                </div>
-                <div>
-                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;" id="reduction-fidelite">0 MRU</div>
-                    <div style="color: #666; font-size: 0.9rem;">Réduction disponible</div>
-                </div>
-            </div>
-        </div>
-
+       
+ 
         <!-- Barre de progression -->
         <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 30px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
@@ -4025,6 +4009,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div id="barre-progression" style="background: #27ae60; height: 100%; width: 10%; transition: width 0.5s ease;"></div>
             </div>
         </div>
+<!-- ⭐⭐⭐ NOUVEAU TABLEAU DE BORD - COPIER ICI ⭐⭐⭐ -->
+<div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+        <div>
+            <div style="font-size: 2rem; font-weight: bold; color: #667eea;" id="points-fidelite">0</div>
+            <div style="color: #666; font-size: 0.9rem;">Points</div>
+        </div>
+        <div>
+            <div style="font-size: 2rem; font-weight: bold; color: #27ae60;" id="niveau-fidelite">🌟 Bronze</div>
+            <div style="color: #666; font-size: 0.9rem;">Niveau</div>
+        </div>
+        <div>
+            <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;" id="solde-recompenses">0 MRU</div>
+            <div style="color: #666; font-size: 0.9rem;">Solde Récompenses</div>
+        </div>
+        <div>
+            <div style="font-size: 2rem; font-weight: bold; color: #9b59b6;" id="parrainages-count">0</div>
+            <div style="color: #666; font-size: 0.9rem;">Parrainages</div>
+        </div>
+    </div>
+</div>
+
+<!-- ⭐⭐⭐ NOUVEAUX BOUTONS - COPIER APRÈS LA BARRE DE PROGRESSION ⭐⭐⭐ -->
+<div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
+    <button onclick="convertirPointsEnArgent()" style="background: #9b59b6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+        💎 Convertir points
+    </button>
+    <button onclick="passerCommandeRecompenses()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+        📦 Commander
+    </button>
+    <button onclick="afficherHistorique()" style="background: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+        📊 Historique
+    </button>
+</div>
 
         <!-- AVANTAGES - AJOUTEZ LA SECTION PARRAINAGE ICI -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
@@ -7119,10 +7137,10 @@ setTimeout(() => {
   </script>
 <script>
 // =============================================
-// 🎫 SYSTÈME FIDÉLITÉ PROFESSIONNEL COMPLET
+// 🎫 SYSTÈME COMPLET RÉCOMPENSES + COMMANDES
 // =============================================
 
-class ProgrammeFidelite {
+class SystemeRecompenses {
     constructor() {
         this.data = this.chargerDonnees();
         this.initialiser();
@@ -7130,34 +7148,35 @@ class ProgrammeFidelite {
     }
 
     chargerDonnees() {
-        const donneesSauvegardees = localStorage.getItem('anduxara_fidelite');
+        const donneesSauvegardees = localStorage.getItem('anduxara_recompenses');
         if (donneesSauvegardees) {
             try {
                 const data = JSON.parse(donneesSauvegardees);
-                // S'assurer que toutes les propriétés existent
                 return {
                     points: data.points || 0,
+                    soldeRecompenses: data.soldeRecompenses || 0, // Argent réel accumulé
                     historique: data.historique || [],
                     parrainages: data.parrainages || 0,
                     parrains: data.parrains || [],
                     monCodeParrain: data.monCodeParrain || this.genererMonCode(),
                     niveau: data.niveau || 'bronze',
                     dateInscription: data.dateInscription || new Date().toISOString(),
-                    reductionCumulee: data.reductionCumulee || 0 // NOUVEAU : Réduction cumulée
+                    commandesRecompenses: data.commandesRecompenses || [] // NOUVEAU : Commandes payées avec récompenses
                 };
             } catch (e) {
-                console.error('Erreur chargement données fidélité:', e);
+                console.error('Erreur chargement données:', e);
             }
         }
         return {
             points: 0,
+            soldeRecompenses: 0,
             historique: [],
             parrainages: 0,
             parrains: [],
             monCodeParrain: this.genererMonCode(),
             niveau: 'bronze',
             dateInscription: new Date().toISOString(),
-            reductionCumulee: 0
+            commandesRecompenses: []
         };
     }
 
@@ -7172,26 +7191,25 @@ class ProgrammeFidelite {
 
     sauvegarderDonnees() {
         try {
-            localStorage.setItem('anduxara_fidelite', JSON.stringify(this.data));
-            console.log('💾 Données sauvegardées - Points:', this.data.points);
+            localStorage.setItem('anduxara_recompenses', JSON.stringify(this.data));
+            console.log('💾 Données sauvegardées - Points:', this.data.points, 'Solde:', this.data.soldeRecompenses + ' MRU');
         } catch (e) {
-            console.error('Erreur sauvegarde données fidélité:', e);
+            console.error('Erreur sauvegarde:', e);
         }
     }
 
     initialiser() {
         this.mettreAJourAffichage();
-        console.log('🎫 Programme fidélité initialisé - Points:', this.data.points, 'Parrainages:', this.data.parrainages);
+        console.log('🎫 Système récompenses initialisé');
     }
 
-    // SURVEILLANCE AUTOMATIQUE
+    // SURVEILLANCE PARRAINAGE
     demarrerSurveillance() {
         setInterval(() => {
             this.verifierNouveauxParrainages();
         }, 3000);
     }
 
-    // VÉRIFICATION ROBUSTE DES PARRAINAGES
     verifierNouveauxParrainages() {
         try {
             const tousParrainages = JSON.parse(localStorage.getItem('tous_les_parrainages')) || [];
@@ -7201,78 +7219,55 @@ class ProgrammeFidelite {
             let parrainagesTraites = [];
 
             for (const parrainage of tousParrainages) {
-                // Vérification robuste : je suis le parrain ET points pas encore donnés
                 if (parrainage.codeParrain === monCode && 
                     parrainage.pointsDonnesAuParrain === false &&
-                    parrainage.codeFilleul !== monCode) { // Anti-auto-parrainage
+                    parrainage.codeFilleul !== monCode) {
                     
                     nouveauxParrainages++;
                     parrainage.pointsDonnesAuParrain = true;
                     parrainage.dateAttribution = new Date().toISOString();
-                    
-                    console.log(`🎯 PARRAINAGE DÉTECTÉ : ${parrainage.codeFilleul} → ${monCode}`);
                 }
                 parrainagesTraites.push(parrainage);
             }
 
             if (nouveauxParrainages > 0) {
-                this.attribuerPointsParrainage(nouveauxParrainages);
+                this.attribuerRecompenseParrainage(nouveauxParrainages);
                 localStorage.setItem('tous_les_parrainages', JSON.stringify(parrainagesTraites));
-                return true;
             }
         } catch (error) {
             console.error('Erreur vérification parrainages:', error);
         }
-        return false;
     }
 
-    // ATTRIBUTION DES POINTS PARRAINAGE
-    attribuerPointsParrainage(nombreParrainages) {
+    // NOUVEAU : Attribution avec conversion en argent réel
+    attribuerRecompenseParrainage(nombreParrainages) {
         const pointsGagnes = nombreParrainages * 30;
+        const argentGagne = nombreParrainages * 3; // 30 points = 3 MRU
         
         this.data.points += pointsGagnes;
+        this.data.soldeRecompenses += argentGagne;
         this.data.parrainages += nombreParrainages;
         
         this.data.historique.push({
+            type: 'parrainage_reussi',
             points: pointsGagnes,
-            raison: `Parrainage - ${nombreParrainages} filleul(s)`,
+            montant: argentGagne,
+            raison: `Parrainage ${nombreParrainages} filleul(s)`,
             date: new Date().toISOString(),
-            type: 'parrainage'
+            statut: 'credite'
         });
 
         this.calculerNiveau();
         this.sauvegarderDonnees();
         this.mettreAJourAffichage();
         
-        this.notifier(`🎉 ${pointsGagnes} points reçus pour ${nombreParrainages} parrainage(s) !`);
+        this.notifier(`🎉 ${pointsGagnes} points + ${argentGagne} MRU pour ${nombreParrainages} parrainage(s) !`);
     }
 
-    // AJOUT DE POINTS (achats, parrainage filleul)
-    ajouterPoints(montantAchat, raison) {
-        const pointsGagnes = Math.floor(montantAchat / 10);
-        
-        this.data.points += pointsGagnes;
-        this.data.historique.push({
-            points: pointsGagnes,
-            raison: raison,
-            date: new Date().toISOString(),
-            montantAchat: montantAchat,
-            type: 'gain'
-        });
-
-        this.calculerNiveau();
-        this.sauvegarderDonnees();
-        this.mettreAJourAffichage();
-
-        this.notifier(`🎉 +${pointsGagnes} points ! Total: ${this.data.points} points`);
-        return pointsGagnes;
-    }
-
-    // PARRAINAGE (quand on utilise un code)
+    // QUAND ON UTILISE UN CODE PARRAIN (devenir filleul)
     ajouterParrainage(codeParrainDuParrain) {
-        // Vérifications
         if (this.data.parrains.includes(codeParrainDuParrain)) {
-            this.notifier('❌ Code parrain déjà utilisé', 'error');
+            this.notifier('❌ Code déjà utilisé', 'error');
             return false;
         }
 
@@ -7281,36 +7276,36 @@ class ProgrammeFidelite {
             return false;
         }
 
-        const pointsBonusFilleul = 50;
+        const pointsBonus = 50;
+        const argentBonus = 5; // 50 points = 5 MRU
 
-        // Ajouter points au filleul
-        this.data.points += pointsBonusFilleul;
+        this.data.points += pointsBonus;
+        this.data.soldeRecompenses += argentBonus;
         this.data.parrains.push(codeParrainDuParrain);
         
         this.data.historique.push({
-            points: pointsBonusFilleul,
-            raison: `Parrainage - Bienvenue (Parrain: ${codeParrainDuParrain})`,
+            type: 'parrainage_bienvenue',
+            points: pointsBonus,
+            montant: argentBonus,
+            raison: `Bienvenue (Parrain: ${codeParrainDuParrain})`,
             date: new Date().toISOString(),
-            type: 'parrainage_filleul'
+            statut: 'credite'
         });
 
-        // Enregistrer pour le parrain
         this.enregistrerParrainagePourParrain(codeParrainDuParrain);
 
         this.calculerNiveau();
         this.sauvegarderDonnees();
         this.mettreAJourAffichage();
 
-        this.notifier(`🎉 Bienvenue ! +50 points de parrainage !`);
+        this.notifier(`🎉 Bienvenue ! +50 points + 5 MRU !`);
         return true;
     }
 
-    // ENREGISTREMENT POUR LE PARRAIN
     enregistrerParrainagePourParrain(codeParrain) {
         try {
             let tousParrainages = JSON.parse(localStorage.getItem('tous_les_parrainages')) || [];
             
-            // Vérifier si pas déjà enregistré
             const existeDeja = tousParrainages.some(p => 
                 p.codeParrain === codeParrain && p.codeFilleul === this.data.monCodeParrain
             );
@@ -7320,84 +7315,199 @@ class ProgrammeFidelite {
                     codeParrain: codeParrain,
                     codeFilleul: this.data.monCodeParrain,
                     date: new Date().toISOString(),
-                    pointsDonnesAuParrain: false,
-                    statut: 'en_attente'
+                    pointsDonnesAuParrain: false
                 };
                 
                 tousParrainages.push(nouveauParrainage);
                 localStorage.setItem('tous_les_parrainages', JSON.stringify(tousParrainages));
-                
-                console.log(`📝 PARRAINAGE ENREGISTRÉ : ${codeParrain} ← ${this.data.monCodeParrain}`);
             }
         } catch (error) {
-            console.error('Erreur enregistrement parrainage:', error);
+            console.error('Erreur enregistrement:', error);
         }
     }
 
-    // UTILISATION DES POINTS - VERSION PROFESSIONNELLE
-    utiliserPoints(pointsAUtiliser) {
-        // Validations
-        if (pointsAUtiliser > this.data.points) {
+    // CONVERSION POINTS → ARGENT RÉEL
+    convertirPointsEnArgent(pointsAConvertir) {
+        // Validation
+        if (pointsAConvertir > this.data.points) {
             this.notifier(`❌ Points insuffisants. Vous avez ${this.data.points} points.`, 'error');
             return false;
         }
 
-        if (pointsAUtiliser < 10) {
-            this.notifier('❌ Minimum 10 points requis', 'error');
+        if (pointsAConvertir < 100) {
+            this.notifier('❌ Minimum 100 points requis pour conversion', 'error');
             return false;
         }
 
-        if (pointsAUtiliser % 10 !== 0) {
-            this.notifier('❌ Le nombre de points doit être un multiple de 10', 'error');
+        if (pointsAConvertir % 10 !== 0) {
+            this.notifier('❌ Le nombre doit être un multiple de 10', 'error');
             return false;
         }
 
-        // Calcul de la réduction
-        const reduction = pointsAUtiliser / 10;
+        // Calcul conversion (10 points = 1 MRU)
+        const montantConverti = pointsAConvertir / 10;
 
-        // Mettre à jour les données
-        this.data.points -= pointsAUtiliser;
-        this.data.reductionCumulee += reduction; // NOUVEAU : Cumul des réductions
+        // Mise à jour
+        this.data.points -= pointsAConvertir;
+        this.data.soldeRecompenses += montantConverti;
         
         this.data.historique.push({
-            points: -pointsAUtiliser,
-            raison: `Échange - ${reduction} MRU de réduction`,
+            type: 'conversion_points',
+            points: -pointsAConvertir,
+            montant: montantConverti,
+            raison: `Conversion points → argent`,
             date: new Date().toISOString(),
-            reductionObtenue: reduction,
-            type: 'utilisation'
+            statut: 'converti'
         });
 
         this.sauvegarderDonnees();
         this.mettreAJourAffichage();
 
-        this.notifier(`✅ ${pointsAUtiliser} points échangés → ${reduction} MRU de réduction !`);
-        
-        return reduction;
+        this.notifier(`💎 ${pointsAConvertir} points convertis → ${montantConverti} MRU !`);
+        return montantConverti;
     }
 
-    // RÉINITIALISER (pour tests)
-    reinitialiser() {
-        if (confirm('Êtes-vous sûr de vouloir réinitialiser tous vos points et historique ?')) {
-            localStorage.removeItem('anduxara_fidelite');
-            localStorage.removeItem('mon_code_parrain');
-            this.data = this.chargerDonnees();
-            this.mettreAJourAffichage();
-            this.notifier('🔄 Compte fidélité réinitialisé');
+    // NOUVEAU : PASSER COMMANDE AVEC RÉCOMPENSES
+    passerCommandeAvecRecompenses(montantCommande, description) {
+        // Validation
+        if (montantCommande > this.data.soldeRecompenses) {
+            this.notifier(`❌ Solde insuffisant. Vous avez ${this.data.soldeRecompenses} MRU.`, 'error');
+            return false;
+        }
+
+        if (montantCommande < 1) {
+            this.notifier('❌ Montant minimum : 1 MRU', 'error');
+            return false;
+        }
+
+        // Générer numéro de commande
+        const numeroCommande = 'CMD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+        // Créer la commande
+        const nouvelleCommande = {
+            numero: numeroCommande,
+            montant: montantCommande,
+            description: description,
+            date: new Date().toISOString(),
+            statut: 'en_attente',
+            type: 'recompenses',
+            suivi: this.genererLienSuivi(numeroCommande)
+        };
+
+        // Débiter le solde
+        this.data.soldeRecompenses -= montantCommande;
+        this.data.commandesRecompenses.push(nouvelleCommande);
+        
+        this.data.historique.push({
+            type: 'commande_passee',
+            montant: -montantCommande,
+            raison: `Commande ${numeroCommande} - ${description}`,
+            date: new Date().toISOString(),
+            statut: 'debite',
+            numeroCommande: numeroCommande
+        });
+
+        this.sauvegarderDonnees();
+        this.mettreAJourAffichage();
+
+        // Notification avec suivi
+        this.notifier(`📦 Commande ${numeroCommande} passée ! Montant: ${montantCommande} MRU`);
+        
+        // Afficher détails commande
+        setTimeout(() => {
+            this.afficherDetailsCommande(nouvelleCommande);
+        }, 1000);
+
+        return nouvelleCommande;
+    }
+
+    genererLienSuivi(numeroCommande) {
+        return `https://andu-xara.com/suivi/${numeroCommande}`;
+    }
+
+    afficherDetailsCommande(commande) {
+        const details = `
+📦 COMMANDE CONFIRMÉE
+
+Numéro: ${commande.numero}
+Montant: ${commande.montant} MRU
+Description: ${commande.description}
+Statut: En traitement
+Date: ${new Date(commande.date).toLocaleDateString()}
+
+🔗 Suivi: ${commande.suivi}
+
+💎 Cette commande a été payée avec vos récompenses fidélité.
+
+Merci pour votre confiance !
+        `;
+        
+        alert(details);
+    }
+
+    // ACHAT NORMAL (gagner des points)
+    ajouterPointsAchat(montantAchat, raison) {
+        const pointsGagnes = Math.floor(montantAchat / 10);
+        const argentGagne = pointsGagnes / 10; // 10 points = 1 MRU
+        
+        this.data.points += pointsGagnes;
+        this.data.soldeRecompenses += argentGagne;
+        
+        this.data.historique.push({
+            type: 'achat',
+            points: pointsGagnes,
+            montant: argentGagne,
+            raison: raison,
+            date: new Date().toISOString(),
+            montantAchat: montantAchat,
+            statut: 'credite'
+        });
+
+        this.calculerNiveau();
+        this.sauvegarderDonnees();
+        this.mettreAJourAffichage();
+
+        this.notifier(`🛍️ Achat : +${pointsGagnes} points + ${argentGagne.toFixed(1)} MRU !`);
+        return pointsGagnes;
+    }
+
+    // AFFICHAGE
+    mettreAJourAffichage() {
+        const elements = {
+            points: document.getElementById('points-fidelite'),
+            niveau: document.getElementById('niveau-fidelite'),
+            solde: document.getElementById('solde-recompenses'),
+            barre: document.getElementById('barre-progression'),
+            parrainages: document.getElementById('parrainages-count'),
+            monCode: document.getElementById('mon-code-parrain'),
+            commandesCount: document.getElementById('commandes-count')
+        };
+
+        if (elements.points) elements.points.textContent = this.data.points;
+        if (elements.niveau) elements.niveau.textContent = this.getNomNiveau(this.data.niveau);
+        if (elements.solde) elements.solde.textContent = this.data.soldeRecompenses.toFixed(2) + ' MRU';
+        if (elements.parrainages) elements.parrainages.textContent = this.data.parrainages;
+        if (elements.monCode) elements.monCode.textContent = this.data.monCodeParrain;
+        if (elements.commandesCount) elements.commandesCount.textContent = this.data.commandesRecompenses.length;
+
+        if (elements.barre) {
+            const pourcentage = this.calculerPourcentageProgression();
+            elements.barre.style.width = pourcentage + '%';
         }
     }
 
+    // AUTRES MÉTHODES
     calculerNiveau() {
         const points = this.data.points;
-        let ancienNiveau = this.data.niveau;
         let nouveauNiveau = 'bronze';
 
         if (points >= 3001) nouveauNiveau = 'diamant';
         else if (points >= 1501) nouveauNiveau = 'or';
         else if (points >= 501) nouveauNiveau = 'argent';
 
-        if (nouveauNiveau !== ancienNiveau) {
+        if (nouveauNiveau !== this.data.niveau) {
             this.data.niveau = nouveauNiveau;
-            this.notifier(`🏆 Félicitations ! Vous êtes maintenant ${this.getNomNiveau(nouveauNiveau)} !`);
+            this.notifier(`🏆 Nouveau niveau : ${this.getNomNiveau(nouveauNiveau)} !`);
         }
     }
 
@@ -7409,36 +7519,6 @@ class ProgrammeFidelite {
             'diamant': '💎 Diamant'
         };
         return niveaux[niveau] || '🌟 Bronze';
-    }
-
-    getReductionDisponible() {
-        return Math.floor(this.data.points / 10);
-    }
-
-    mettreAJourAffichage() {
-        const elements = {
-            points: document.getElementById('points-fidelite'),
-            niveau: document.getElementById('niveau-fidelite'),
-            reduction: document.getElementById('reduction-fidelite'),
-            barre: document.getElementById('barre-progression'),
-            parrainages: document.getElementById('parrainages-count'),
-            monCode: document.getElementById('mon-code-parrain'),
-            reductionCumulee: document.getElementById('reduction-cumulee') // Nouvel élément
-        };
-
-        if (elements.points) elements.points.textContent = this.data.points;
-        if (elements.niveau) elements.niveau.textContent = this.getNomNiveau(this.data.niveau);
-        if (elements.reduction) elements.reduction.textContent = this.getReductionDisponible() + ' MRU';
-        if (elements.parrainages) elements.parrainages.textContent = this.data.parrainages;
-        if (elements.monCode) elements.monCode.textContent = this.data.monCodeParrain;
-        if (elements.reductionCumulee) elements.reductionCumulee.textContent = this.data.reductionCumulee + ' MRU';
-
-        if (elements.barre) {
-            const pourcentage = this.calculerPourcentageProgression();
-            elements.barre.style.width = pourcentage + '%';
-        }
-
-        console.log('📊 Affichage mis à jour - Points:', this.data.points, 'Parrainages:', this.data.parrainages);
     }
 
     calculerPourcentageProgression() {
@@ -7493,30 +7573,57 @@ class ProgrammeFidelite {
 🔗 Lien : ${lienParrainage}
 
 🎁 AVANTAGES :
-• Toi : 50 points de bienvenue
-• Moi : 30 points de récompense
+• Toi : 50 points + 5 MRU offerts
+• Moi : 30 points + 3 MRU de récompense
 
-🛍️ Cumule tes points pour des réductions !`;
+🛍️ Cumule et achète des produits réels !`;
 
         return { message, lienParrainage, monCode };
     }
 
-    // FORCER LA VÉRIFICATION
     forcerVerificationParrainage() {
         const resultat = this.verifierNouveauxParrainages();
         if (resultat) {
-            this.notifier('✅ Nouveaux parrainages détectés et points attribués !');
+            this.notifier('✅ Nouveaux parrainages traités !');
         } else {
-            this.notifier('🔍 Aucun nouveau parrainage en attente');
+            this.notifier('🔍 Aucun nouveau parrainage');
         }
-        return resultat;
     }
 
-    // DEBUG : Afficher tous les parrainages
-    debugParrainages() {
-        const tousParrainages = JSON.parse(localStorage.getItem('tous_les_parrainages')) || [];
-        console.log('🐛 DEBUG Parrainages:', tousParrainages);
-        alert(`Parrainages enregistrés: ${JSON.stringify(tousParrainages, null, 2)}`);
+    // NOUVEAU : AFFICHER L'HISTORIQUE
+    afficherHistoriqueComplet() {
+        let historiqueHTML = `
+            <div style="max-height: 400px; overflow-y: auto; padding: 10px;">
+                <h3>📊 Historique Complet</h3>
+        `;
+        
+        this.data.historique.slice().reverse().forEach(operation => {
+            const date = new Date(operation.date).toLocaleString();
+            const montant = operation.montant ? ` | ${operation.montant} MRU` : '';
+            const points = operation.points ? ` | ${operation.points > 0 ? '+' : ''}${operation.points} pts` : '';
+            
+            historiqueHTML += `
+                <div style="border-bottom: 1px solid #eee; padding: 8px 0;">
+                    <strong>${operation.raison}</strong><br>
+                    <small style="color: #666;">${date} ${points} ${montant}</small>
+                </div>
+            `;
+        });
+        
+        historiqueHTML += `</div>`;
+        
+        // Afficher dans une popup
+        const popup = window.open('', '_blank', 'width=600,height=500');
+        popup.document.write(`
+            <html>
+                <head><title>Historique Andu-Xara</title></head>
+                <body style="font-family: Arial, sans-serif; padding: 20px;">
+                    ${historiqueHTML}
+                    <br>
+                    <button onclick="window.close()" style="padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px;">Fermer</button>
+                </body>
+            </html>
+        `);
     }
 }
 
@@ -7524,117 +7631,123 @@ class ProgrammeFidelite {
 // FONCTIONS GLOBALES
 // =============================================
 
-window.programmeFidelite = null;
+window.systemeRecompenses = null;
 
-function initialiserProgrammeFidelite() {
-    if (!window.programmeFidelite) {
-        window.programmeFidelite = new ProgrammeFidelite();
+function initialiserSystemeRecompenses() {
+    if (!window.systemeRecompenses) {
+        window.systemeRecompenses = new SystemeRecompenses();
     }
-    return window.programmeFidelite;
+    return window.systemeRecompenses;
 }
 
-// DÉCLARATIONS GLOBALES
-window.ProgrammeFidelite = ProgrammeFidelite;
-window.initialiserProgrammeFidelite = initialiserProgrammeFidelite;
+// DÉCLARATIONS
+window.SystemeRecompenses = SystemeRecompenses;
+window.initialiserSystemeRecompenses = initialiserSystemeRecompenses;
 
-window.utiliserPointsFidelite = function() {
+// CONVERSION POINTS
+window.convertirPointsEnArgent = function() {
     try {
-        const programme = initialiserProgrammeFidelite();
-        const pointsDisponibles = programme.data.points;
+        const systeme = initialiserSystemeRecompenses();
+        const pointsDisponibles = systeme.data.points;
         
-        if (pointsDisponibles < 10) {
-            programme.notifier(`❌ Minimum 10 points requis. Vous avez ${pointsDisponibles} points.`, 'error');
+        if (pointsDisponibles < 100) {
+            systeme.notifier(`❌ Minimum 100 points requis. Vous avez ${pointsDisponibles} points.`, 'error');
             return;
         }
 
-        const pointsAUtiliser = parseInt(prompt(
-            `💎 ÉCHANGE POINTS FIDÉLITÉ\n\n` +
+        const pointsAConvertir = parseInt(prompt(
+            `💎 CONVERSION POINTS → ARGENT\n\n` +
             `Vos points : ${pointsDisponibles}\n` +
-            `Votre réduction disponible : ${programme.getReductionDisponible()} MRU\n\n` +
-            `10 points = 1 MRU de réduction\n\n` +
-            `Combien de points utiliser ?\n` +
-            `(Multiple de 10, min: 10)`
+            `Votre solde actuel : ${systeme.data.soldeRecompenses.toFixed(2)} MRU\n\n` +
+            `Taux : 10 points = 1 MRU\n` +
+            `Minimum : 100 points\n\n` +
+            `Combien de points convertir ?\n` +
+            `(Multiple de 10)`
         ));
 
-        if (pointsAUtiliser && pointsAUtiliser >= 10 && pointsAUtiliser % 10 === 0) {
-            programme.utiliserPoints(pointsAUtiliser);
-        } else if (pointsAUtiliser) {
-            programme.notifier('❌ Le nombre de points doit être un multiple de 10', 'error');
+        if (pointsAConvertir && pointsAConvertir >= 100 && pointsAConvertir % 10 === 0) {
+            systeme.convertirPointsEnArgent(pointsAConvertir);
         }
     } catch (error) {
-        console.error('Erreur utilisation points:', error);
-        alert('Erreur lors de l\'utilisation des points');
+        console.error('Erreur conversion:', error);
     }
 }
 
-window.genererLienParrainage = function() {
+// PASSER COMMANDE
+window.passerCommandeRecompenses = function() {
     try {
-        const programme = initialiserProgrammeFidelite();
-        const { message, lienParrainage } = programme.genererLienParrainage();
+        const systeme = initialiserSystemeRecompenses();
         
-        if (navigator.share) {
-            navigator.share({
-                title: 'Rejoins Andu-Xara - Parrainage',
-                text: message,
-                url: lienParrainage
-            }).then(() => {
-                programme.notifier('🤝 Lien partagé avec succès !');
-            });
-        } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(message).then(() => {
-                programme.notifier('📋 Lien copié ! Collez-le à vos amis.');
-            });
-        } else {
-            programme.notifier('📋 ' + message);
+        if (systeme.data.soldeRecompenses < 1) {
+            systeme.notifier('❌ Solde insuffisant pour passer commande', 'error');
+            return;
+        }
+
+        const montant = parseFloat(prompt(
+            `📦 COMMANDE AVEC RÉCOMPENSES\n\n` +
+            `Votre solde : ${systeme.data.soldeRecompenses.toFixed(2)} MRU\n\n` +
+            `Montant de la commande ?\n` +
+            `(Maximum: ${systeme.data.soldeRecompenses.toFixed(2)} MRU)`
+        ));
+
+        if (montant && montant > 0) {
+            const description = prompt('Description de la commande :') || 'Commande récompenses';
+            systeme.passerCommandeAvecRecompenses(montant, description);
         }
     } catch (error) {
-        console.error('Erreur génération lien:', error);
+        console.error('Erreur commande:', error);
+    }
+}
+
+// FONCTIONS EXISTANTES
+window.utiliserPointsFidelite = window.convertirPointsEnArgent;
+window.genererLienParrainage = function() {
+    const systeme = initialiserSystemeRecompenses();
+    const { message, lienParrainage } = systeme.genererLienParrainage();
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(message).then(() => {
+            systeme.notifier('📋 Lien copié !');
+        });
+    } else {
+        systeme.notifier('📋 ' + message);
     }
 }
 
 window.afficherDetailsParrainage = function() {
-    try {
-        const programme = initialiserProgrammeFidelite();
-        const details = `
-🎯 SYSTÈME DE PARRAINAGE
+    const systeme = initialiserSystemeRecompenses();
+    const details = `
+🎯 SYSTÈME RÉCOMPENSES
 
-Votre code : ${programme.data.monCodeParrain}
+Votre code : ${systeme.data.monCodeParrain}
 
-📊 VOS STATS :
-• Points actuels : ${programme.data.points}
-• Parrainages réussis : ${programme.data.parrainages}
-• Points reçus par parrainage : ${programme.data.parrainages * 30}
-• Réduction disponible : ${programme.getReductionDisponible()} MRU
-• Réduction cumulée : ${programme.data.reductionCumulee} MRU
+💰 SOLDE :
+• Points : ${systeme.data.points}
+• Argent : ${systeme.data.soldeRecompenses.toFixed(2)} MRU
+• Parrainages : ${systeme.data.parrainages}
+• Commandes : ${systeme.data.commandesRecompenses.length}
 
-🤝 FONCTIONNEMENT :
-1. Partagez votre code
-2. Votre ami reçoit 50 points
-3. Vous recevez 30 points automatiquement
-4. Utilisez vos points pour des réductions
+💎 CONVERSION :
+• 10 points = 1 MRU
+• Minimum 100 points
 
-🔄 Le système vérifie automatiquement !
-        `;
-        
-        alert(details);
-    } catch (error) {
-        console.error('Erreur affichage détails:', error);
-    }
+📦 UTILISATION :
+• Achetez des produits réels
+• Paiement avec votre solde
+• Suivi de commande inclus
+    `;
+    
+    alert(details);
 }
 
 window.verifierMesParrainages = function() {
-    const programme = initialiserProgrammeFidelite();
-    programme.forcerVerificationParrainage();
+    const systeme = initialiserSystemeRecompenses();
+    systeme.forcerVerificationParrainage();
 }
 
-window.debugParrainages = function() {
-    const programme = initialiserProgrammeFidelite();
-    programme.debugParrainages();
-}
-
-window.reinitialiserFidelite = function() {
-    const programme = initialiserProgrammeFidelite();
-    programme.reinitialiser();
+window.afficherHistorique = function() {
+    const systeme = initialiserSystemeRecompenses();
+    systeme.afficherHistoriqueComplet();
 }
 
 window.verifierParrainage = function() {
@@ -7643,12 +7756,10 @@ window.verifierParrainage = function() {
         const codeParrain = urlParams.get('parrain');
         
         if (codeParrain && !localStorage.getItem('parrainage_utilise_' + codeParrain)) {
-            const programme = initialiserProgrammeFidelite();
-            
-            const succes = programme.ajouterParrainage(codeParrain);
+            const systeme = initialiserSystemeRecompenses();
+            const succes = systeme.ajouterParrainage(codeParrain);
             if (succes) {
                 localStorage.setItem('parrainage_utilise_' + codeParrain, 'true');
-                // Nettoyer l'URL
                 const urlSansParams = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, urlSansParams);
             }
@@ -7658,18 +7769,24 @@ window.verifierParrainage = function() {
     }
 }
 
+// SIMULATION ACHAT (pour tests)
+window.simulerAchat = function(montant) {
+    const systeme = initialiserSystemeRecompenses();
+    systeme.ajouterPointsAchat(montant, 'Achat test');
+}
+
 // INITIALISATION
 document.addEventListener('DOMContentLoaded', function() {
     try {
-        initialiserProgrammeFidelite();
+        initialiserSystemeRecompenses();
         window.verifierParrainage();
-        console.log('🚀 Système fidélité professionnel chargé');
+        console.log('🚀 Système récompenses chargé');
     } catch (error) {
         console.error('Erreur initialisation:', error);
     }
 });
 
-console.log('✅ Système fidélité professionnel prêt');
+console.log('✅ Système récompenses professionnel prêt');
 </script>
 </body>
 </html>
