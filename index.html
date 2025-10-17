@@ -7102,12 +7102,15 @@ setTimeout(() => {
     document.getElementById('cookie-banner').style.display = 'block';
     console.log('✅ Bannière affichée manuellement');
 }, 1000);
-    </script>
+  
+  </script>
+ <script>
+// =============================================
+// 🎫 PROGRAMME FIDÉLITÉ ANDU-XARA - ULTRA ROBUSTE
+// =============================================
 
-<script>
-// =============================================
-// 🎫 PROGRAMME FIDÉLITÉ ANDU-XARA - CORRIGÉ
-// =============================================
+// Vérifier si le script est déjà chargé
+if (typeof window.ProgrammeFidelite === 'undefined') {
 
 class ProgrammeFidelite {
     constructor() {
@@ -7194,7 +7197,7 @@ class ProgrammeFidelite {
             date: new Date().toISOString()
         });
 
-        this.sauvegarderParrainage(codeParrainDuParrain);
+        this.sauvegarderParrainagePourParrain(codeParrainDuParrain);
 
         this.calculerNiveau();
         this.sauvegarderDonnees();
@@ -7204,21 +7207,21 @@ class ProgrammeFidelite {
         return true;
     }
 
-    sauvegarderParrainage(codeParrain) {
+    sauvegarderParrainagePourParrain(codeParrain) {
         try {
-            let parrainagesEnAttente = JSON.parse(localStorage.getItem('parrainages_en_attente')) || {};
+            let tousParrainages = JSON.parse(localStorage.getItem('tous_les_parrainages')) || [];
             
-            if (!parrainagesEnAttente[codeParrain]) {
-                parrainagesEnAttente[codeParrain] = [];
-            }
-            
-            parrainagesEnAttente[codeParrain].push({
-                filleul: this.data.monCodeParrain,
+            const nouveauParrainage = {
+                codeParrain: codeParrain,
+                codeFilleul: this.data.monCodeParrain,
                 date: new Date().toISOString(),
-                pointsAttribues: false
-            });
+                pointsDonnesAuParrain: false
+            };
             
-            localStorage.setItem('parrainages_en_attente', JSON.stringify(parrainagesEnAttente));
+            tousParrainages.push(nouveauParrainage);
+            localStorage.setItem('tous_les_parrainages', JSON.stringify(tousParrainages));
+            
+            console.log(`📝 Parrainage enregistré pour ${codeParrain} - Filleul: ${this.data.monCodeParrain}`);
         } catch (error) {
             console.error('Erreur sauvegarde parrainage:', error);
         }
@@ -7227,42 +7230,48 @@ class ProgrammeFidelite {
     attribuerPointsAuxParrains() {
         try {
             const monCode = this.data.monCodeParrain;
-            const parrainagesEnAttente = JSON.parse(localStorage.getItem('parrainages_en_attente')) || {};
+            const tousParrainages = JSON.parse(localStorage.getItem('tous_les_parrainages')) || [];
             
-            if (parrainagesEnAttente[monCode]) {
-                let nouveauxPoints = 0;
-                const parrainagesTraites = [];
-                
-                for (const parrainage of parrainagesEnAttente[monCode]) {
-                    if (!parrainage.pointsAttribues) {
-                        nouveauxPoints += 30;
-                        parrainage.pointsAttribues = true;
-                        this.data.parrainages += 1;
-                        
-                        this.data.historique.push({
-                            points: 30,
-                            raison: `Parrainage réussi - Filleul ${parrainage.filleul}`,
-                            date: new Date().toISOString()
-                        });
-                    }
-                    parrainagesTraites.push(parrainage);
-                }
-                
-                if (nouveauxPoints > 0) {
-                    this.data.points += nouveauxPoints;
-                    parrainagesEnAttente[monCode] = parrainagesTraites;
-                    localStorage.setItem('parrainages_en_attente', JSON.stringify(parrainagesEnAttente));
+            let parrainagesTraites = [];
+            let nouveauxPoints = 0;
+            let nouveauxParrainages = 0;
+
+            for (const parrainage of tousParrainages) {
+                if (parrainage.codeParrain === monCode && !parrainage.pointsDonnesAuParrain) {
+                    nouveauxPoints += 30;
+                    nouveauxParrainages += 1;
                     
-                    this.calculerNiveau();
-                    this.sauvegarderDonnees();
-                    this.mettreAJourAffichage();
+                    parrainage.pointsDonnesAuParrain = true;
+                    parrainage.dateAttribution = new Date().toISOString();
                     
-                    this.notifier(`🤝 ${nouveauxPoints} points reçus pour ${this.data.parrainages} parrainage(s) réussis !`);
+                    console.log(`🎯 Points attribués à ${monCode} pour filleul ${parrainage.codeFilleul}`);
                 }
+                parrainagesTraites.push(parrainage);
+            }
+
+            if (nouveauxPoints > 0) {
+                this.data.points += nouveauxPoints;
+                this.data.parrainages += nouveauxParrainages;
+                
+                this.data.historique.push({
+                    points: nouveauxPoints,
+                    raison: `Parrainage - ${nouveauxParrainages} filleul(s)`,
+                    date: new Date().toISOString()
+                });
+
+                localStorage.setItem('tous_les_parrainages', JSON.stringify(parrainagesTraites));
+                
+                this.calculerNiveau();
+                this.sauvegarderDonnees();
+                this.mettreAJourAffichage();
+                
+                this.notifier(`🤝 +${nouveauxPoints} points pour ${nouveauxParrainages} parrainage(s) réussi(s) !`);
+                return true;
             }
         } catch (error) {
             console.error('Erreur attribution points parrains:', error);
         }
+        return false;
     }
 
     calculerNiveau() {
@@ -7403,19 +7412,22 @@ class ProgrammeFidelite {
 }
 
 // =============================================
-// FONCTIONS GLOBALES - CORRIGÉES
+// FONCTIONS GLOBALES - DÉCLARÉES SUR WINDOW
 // =============================================
 
 // Initialiser l'instance globale
 window.programmeFidelite = null;
 
-// FONCTION MANQUANTE - AJOUTÉE ICI
 function initialiserProgrammeFidelite() {
     if (!window.programmeFidelite) {
         window.programmeFidelite = new ProgrammeFidelite();
     }
     return window.programmeFidelite;
 }
+
+// DÉCLARATION EXPLICITE SUR WINDOW
+window.ProgrammeFidelite = ProgrammeFidelite;
+window.initialiserProgrammeFidelite = initialiserProgrammeFidelite;
 
 window.utiliserPointsFidelite = function() {
     try {
@@ -7514,7 +7526,7 @@ window.verifierParrainage = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const codeParrain = urlParams.get('parrain');
         
-        if (codeParrain && !localStorage.getItem('parrainage_utilise')) {
+        if (codeParrain && !localStorage.getItem('parrainage_utilise_' + codeParrain)) {
             const programme = initialiserProgrammeFidelite();
             
             if (codeParrain === programme.data.monCodeParrain) {
@@ -7524,17 +7536,29 @@ window.verifierParrainage = function() {
             
             const succes = programme.ajouterParrainage(codeParrain);
             if (succes) {
-                localStorage.setItem('parrainage_utilise', 'true');
+                localStorage.setItem('parrainage_utilise_' + codeParrain, 'true');
                 const urlSansParams = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, urlSansParams);
+                
+                console.log(`✅ Parrainage réussi pour ${codeParrain}`);
             }
         }
         
-        const programme = initialiserProgrammeFidelite();
-        programme.attribuerPointsAuxParrains();
-        
     } catch (error) {
         console.error('Erreur vérification parrainage:', error);
+    }
+}
+
+window.verifierPointsParrainage = function() {
+    try {
+        const programme = initialiserProgrammeFidelite();
+        const pointsRecus = programme.attribuerPointsAuxParrains();
+        
+        if (pointsRecus) {
+            console.log('✅ Points de parrainage attribués avec succès');
+        }
+    } catch (error) {
+        console.error('Erreur vérification points parrainage:', error);
     }
 }
 
@@ -7543,6 +7567,18 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         initialiserProgrammeFidelite();
         window.verifierParrainage();
+        
+        setTimeout(() => {
+            window.verifierPointsParrainage();
+        }, 1000);
+        
+        let verifications = 0;
+        const interval = setInterval(() => {
+            window.verifierPointsParrainage();
+            verifications++;
+            if (verifications >= 6) clearInterval(interval);
+        }, 5000);
+        
         console.log('🎫 Programme fidélité chargé avec succès');
     } catch (error) {
         console.error('Erreur initialisation fidélité:', error);
@@ -7550,6 +7586,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('✅ Système de parrainage complet chargé');
+
+} // Fin de la protection anti-doublon
 </script>
 </body>
 </html>
