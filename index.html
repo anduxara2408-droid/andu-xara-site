@@ -2491,6 +2491,75 @@ body.lightbox-open {
     }
 }
 
+/* ===== CORRECTION ESSAYAGE VIRTUEL MOBILE ===== */
+@media (max-width: 768px) {
+    #virtual-fitting {
+        padding: 30px 10px !important;
+        margin: 40px 0 !important;
+    }
+    
+    .fitting-container {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .camera-section, .clothing-selection {
+        padding: 15px !important;
+    }
+    
+    .camera-preview {
+        height: 250px !important;
+    }
+    
+    .clothing-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    
+    .clothing-item {
+        padding: 12px !important;
+        min-height: 80px !important;
+    }
+    
+    .fitting-header h1 {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #virtual-fitting {
+        padding: 20px 8px !important;
+        margin: 30px 0 !important;
+    }
+    
+    .camera-preview {
+        height: 200px !important;
+    }
+    
+    .clothing-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .clothing-item {
+        padding: 10px !important;
+        min-height: 70px !important;
+    }
+    
+    .fitting-header h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    .camera-controls {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .camera-controls button {
+        width: 100% !important;
+        margin: 5px 0 !important;
+    }
+}
 /* Correction hauteur viewport mobile */
 @media (max-width: 768px) {
     html, body {
@@ -4120,7 +4189,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <p style="font-size: 1.3rem; opacity: 0.9;">Essayez nos vêtements en temps réel avec l'intelligence artificielle</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: center;">
+     <div class="fitting-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; align-items: center;">
             
             <!-- Zone Caméra et Prévisualisation -->
             <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
@@ -4244,33 +4313,32 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
 
-        <!-- Instructions -->
-        <div style="text-align: center; margin-top: 40px; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 15px;">
-            <h4 style="color: #bdc3c7; margin-bottom: 15px;">💡 Comment ça marche ?</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; color: #ecf0f1;">
-                <div>
-                    <div style="font-size: 2rem; margin-bottom: 10px;">1️⃣</div>
-                    <div style="font-weight: 600;">Activez votre caméra</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">Autorisez l'accès à votre caméra</div>
-                </div>
-                <div>
-                    <div style="font-size: 2rem; margin-bottom: 10px;">2️⃣</div>
-                    <div style="font-weight: 600;">Choisissez un vêtement</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">Sélectionnez dans notre collection</div>
-                </div>
-                <div>
-                    <div style="font-size: 2rem; margin-bottom: 10px;">3️⃣</div>
-                    <div style="font-weight: 600;">Essayez virtuellement</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">L'IA superpose le vêtement en temps réel</div>
-                </div>
-                <div>
-                    <div style="font-size: 2rem; margin-bottom: 10px;">4️⃣</div>
-                    <div style="font-weight: 600;">Capturez et partagez</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8;">Sauvegardez votre essayage</div>
-                </div>
-            </div>
+<!-- Instructions -->
+<div style="text-align: center; margin-top: 40px; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 15px;">
+    <h4 style="color: #bdc3c7; margin-bottom: 15px;">💡 Comment ça marche ?</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; color: #ecf0f1;">
+        <div>
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">1️⃣</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Activez caméra</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">Autorisez l'accès</div>
+        </div>
+        <div>
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">2️⃣</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Choisissez</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">Sélectionnez un vêtement</div>
+        </div>
+        <div>
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">3️⃣</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Essayez</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">IA superpose en temps réel</div>
+        </div>
+        <div>
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">4️⃣</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Capturez</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">Sauvegardez et partagez</div>
         </div>
     </div>
+</div>
 </section>
             <!-- Partenaires -->
             <section class="partenaires">
@@ -6463,6 +6531,62 @@ function addFavoriteButtonsToProducts() {
         card.querySelector('.product-image-container').appendChild(favoriteBtn);
     });
 }
+// ===== REDIMENSIONNEMENT AUTOMATIQUE POUR MOBILE =====
+function initMobileFitting() {
+    const cameraContainer = document.getElementById('camera-container');
+    const virtualFittingSection = document.getElementById('virtual-fitting');
+    
+    if (!cameraContainer || !virtualFittingSection) return;
+    
+    function adjustFittingLayout() {
+        const isMobile = window.innerWidth <= 768;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        
+        if (isMobile) {
+            // Mode mobile
+            virtualFittingSection.style.padding = "20px 10px";
+            
+            if (isPortrait) {
+                // Mode portrait - layout vertical
+                const fittingContainer = document.querySelector('.fitting-container');
+                if (fittingContainer) {
+                    fittingContainer.style.gridTemplateColumns = "1fr";
+                }
+                cameraContainer.style.height = "200px";
+            } else {
+                // Mode paysage - layout horizontal
+                const fittingContainer = document.querySelector('.fitting-container');
+                if (fittingContainer) {
+                    fittingContainer.style.gridTemplateColumns = "1fr 1fr";
+                }
+                cameraContainer.style.height = "250px";
+            }
+        } else {
+            // Mode desktop
+            const fittingContainer = document.querySelector('.fitting-container');
+            if (fittingContainer) {
+                fittingContainer.style.gridTemplateColumns = "1fr 1fr";
+            }
+            cameraContainer.style.height = "400px";
+        }
+    }
+    
+    // Écouter les changements d'orientation et de taille
+    window.addEventListener('resize', adjustFittingLayout);
+    window.addEventListener('orientationchange', adjustFittingLayout);
+    
+    // Appliquer au chargement
+    adjustFittingLayout();
+}
+
+// Ajoutez cet appel dans DOMContentLoaded existant
+// Cherchez cette section :
+document.addEventListener('DOMContentLoaded', function() {
+    // ... code existant ...
+    
+    // AJOUTEZ CETTE LIGNE à la fin du DOMContentLoaded existant :
+    initMobileFitting();
+});
 // ===== SYSTÈME D'ESSAYAGE VIRTUEL PAR IA =====
 class VirtualFittingAI {
     constructor() {
