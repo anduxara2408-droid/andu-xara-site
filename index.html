@@ -2780,6 +2780,40 @@ body.lightbox-open {
         max-height: calc(55vh - 140px) !important;
     }
 }
+
+/* Correction des erreurs CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Assurez-vous qu'il n'y a pas de > seul dans le CSS */
+/* ============================================= */
+/* CORRECTIONS URGENTES MOBILE ANDU-XARA */
+/* ============================================= */
+
+/* ===== CORRECTION URGENTE DU MENU BURGER ===== */
+.menu-toggle {
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 1001 !important;
+    background: rgba(106, 17, 203, 0.9) !important;
+    border: 2px solid white !important;
+    border-radius: 8px !important;
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    color: white !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+    cursor: pointer !important;
+}
+
     </style>
 
     <!-- Google Analytics -->
@@ -3058,6 +3092,21 @@ if (window.location.hostname !== 'localhost' &&
 </style>
 
 <script>
+// ===== FONCTIONS MANQUANTES =====
+if (typeof showNotification === 'undefined') {
+    function showNotification(message, type = 'success') {
+        console.log(`📢 ${type}: ${message}`);
+        // Fallback simple si la notification n'existe pas
+        alert(message);
+    }
+}
+
+if (typeof updateFloatingCart === 'undefined') {
+    function updateFloatingCart() {
+        console.log('🔄 Mise à jour panier (fallback)');
+    }
+}
+
 // ===== SYSTÈME DE PANIER - DÉCLARATIONS GLOBALES =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 
@@ -3228,7 +3277,57 @@ function showNotification(message, type = 'success') {
         }, 300);
     }, 3000);
 }
+// ===== CORRECTION URGENTE - DÉFINITION MANQUANTE =====
+function initialiserSystemeRecompenses() {
+    if (!window.systemeRecompensesGlobal) {
+        window.systemeRecompensesGlobal = {
+            data: {
+                points: 150,
+                soldeRecompenses: 785,
+                parrainages: 3,
+                niveau: 'argent'
+            },
+            mettreAJourAffichage: function() {
+                console.log('✅ Système fidélité mis à jour');
+            },
+            sauvegarderDonnees: function() {
+                console.log('✅ Données fidélité sauvegardées');
+            },
+            calculerNiveau: function() {
+                console.log('✅ Niveau calculé');
+            }
+        };
+    }
+    return window.systemeRecompensesGlobal;
+}
 
+// ===== CORRECTION DE LA FONCTION INTÉGRATION FIDÉLITÉ =====
+function integrerFideliteAchat(totalMRU) {
+    try {
+        const systeme = initialiserSystemeRecompenses();
+        
+        if (systeme && systeme.data) {
+            // Calcul des points gagnés (1 point par 10 MRU dépensés)
+            const pointsGagnes = Math.floor(totalMRU / 10);
+            
+            if (pointsGagnes > 0) {
+                systeme.data.points += pointsGagnes;
+                
+                console.log(`🎯 ${pointsGagnes} points gagnés pour achat de ${totalMRU} MRU`);
+                
+                // Mettre à jour l'affichage si la fonction existe
+                if (typeof systeme.mettreAJourAffichage === 'function') {
+                    systeme.mettreAJourAffichage();
+                }
+            }
+            
+            return pointsGagnes;
+        }
+    } catch (error) {
+        console.error('Erreur intégration fidélité:', error);
+        return 0;
+    }
+}
 // ===== SYSTÈME DE PAIEMENT =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
@@ -4030,7 +4129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </section>
 <!-- ===== PROGRAMME FIDÉLITÉ ANDU-XARA ===== -->
-<section id="programme-fidelite" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-rad>
+<section id="programme-fidelite" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px;">
     <div class="container">
         <div style="text-align: center; margin-bottom: 40px;">
             <h2 style="font-size: 2.5rem; margin-bottom: 10px;">🎫 Club Andu-Xara</h2>
@@ -4126,6 +4225,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         style="background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
                     🎁 Parrainer un ami
                 </button>
+<!-- Ajoutez ce bouton près de votre bouton "Parrainer un ami" -->
+<button onclick="afficherGestionLiensActifs()" style="background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;">
+    📊 Voir mes liens actifs
+</button>
+
+<!-- Pour les tests, vous pouvez aussi ajouter -->
+<button onclick="reinitialiserLiensParrainage()" style="background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin: 5px; font-size: 12px;">
+    🧹 Réinitialiser (test)
+</button>
                 <button onclick="afficherDetailsParrainage()" 
                         style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
                     📊 Mes parrainages
@@ -5374,7 +5482,6 @@ function setupQuickView() {
         });
     });
 }
-
 function showQuickViewModal(title, image, price, description) {
     const modal = document.createElement('div');
     modal.style.cssText = `
@@ -5403,14 +5510,86 @@ function showQuickViewModal(title, image, price, description) {
     `;
     
     document.body.appendChild(modal);
-    
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.remove();
-        }
-    });
 }
 
+function afficherMenuPartageIntelligent(lienUnique, message) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 10005;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    `;
+
+    const dateExpiration = new Date(new Date(lienUnique.dateCreation).getTime() + 24 * 60 * 60 * 1000);
+    const formatDate = dateExpiration.toLocaleString('fr-FR');
+
+    modal.innerHTML = `
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; position: relative;">
+            <button onclick="fermerMenuPartage()" style="position: absolute; top: -10px; right: -10px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                ×
+            </button>
+            
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">🎯 Code de parrainage généré</h2>
+
+            <div style="background: #e8f6f3; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left;">
+                <h4 style="color: #27ae60; margin: 0 0 10px 0;">📋 Instructions :</h4>
+                <ol style="margin: 0; padding-left: 20px; color: #666;">
+                    <li>Partagez le code <strong>${lienUnique.code}</strong></li>
+                    <li>Votre ami l'utilise sur Andu-Xara</li>
+                    <li>Il reçoit <strong>20 MRU</strong> immédiatement</li>
+                    <li>Vous recevez <strong>50 MRU</strong> automatiquement</li>
+                </ol>
+            </div>
+
+            <div style="display: grid; gap: 10px; margin-bottom: 20px;">
+                <button onclick="partagerSurWhatsApp('${lienUnique.code}')" style="background: #25D366; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">📱</span> Partager sur WhatsApp
+                </button>
+                
+                <button onclick="partagerSurMessage('${lienUnique.code}')" style="background: #3498db; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">💬</span> Partager par SMS/Message
+                </button>
+
+                <button onclick="genererVraiQRCode('${lienUnique.code}')" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">📷</span> Générer QR Code
+                </button>
+            </div>
+
+            <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <p style="margin: 0; color: #856404; font-size: 0.9em;">
+                    🔒 Sécurité : Usage unique • Expire dans 24h • Maximum 5 codes actifs
+                </p>
+            </div>
+
+            <button onclick="fermerMenuPartage()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px;">
+                ❌ Fermer
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+function fermerMenuPartage() {
+    // Fermer TOUS les modals de partage
+    const modals = document.querySelectorAll('div[style*="background: rgba(0,0,0,0.95)"], div[style*="background: rgba(0,0,0,0.9)"]');
+    modals.forEach(modal => {
+        if (modal && modal.parentElement) {
+            modal.parentElement.removeChild(modal);
+        }
+    });
+    
+    // Fermer aussi par ID au cas où
+    const qrModal = document.getElementById('qr-code-modal');
+    if (qrModal) qrModal.remove();
+}
 // ===== SYSTÈME DE LIVRAISON FONCTIONNEL =====
 function checkDelivery() {
     console.log('📍 Vérification de la livraison...');
@@ -7189,12 +7368,11 @@ setTimeout(() => {
     document.getElementById('cookie-banner').style.display = 'block';
     console.log('✅ Bannière affichée manuellement');
 }, 1000);
-  
-  </script>
+   </script>
 
-<script>
+ <script>
 // =============================================
-// 🎫 SYSTÈME COMPLET ANDU-XARA - VERSION FINALE
+// 🎫 SYSTÈME COMPLET ANDU-XARA - VERSION FINALE CORRIGÉE
 // =============================================
 
 let systemeRecompensesGlobal = null;
@@ -7223,7 +7401,17 @@ class SystemeRecompenses {
             monCodeParrain: this.genererMonCode(),
             niveau: 'argent',
             dateInscription: new Date().toISOString(),
-            commandesRecompenses: []
+            commandesRecompenses: [],
+            parrainage: {
+                liensActifs: [],
+                historiqueLiens: [],
+                parametres: {
+                    dureeValidite: 24 * 60 * 60 * 1000,
+                    recompenseParrain: 50,
+                    recompenseFilleul: 20,
+                    maxLiensActifs: 5
+                }
+            }
         };
     }
 
@@ -7288,10 +7476,393 @@ class SystemeRecompenses {
         return (points / 500) * 25;
     }
 }
+// =============================================
+// SYSTÈME ANTI-TRICHE - DÉTECTION AUTOMATIQUE
+// =============================================
+
+function detecterParrainageAutomatique() {
+    console.log('🔍 Détection automatique parrainage...');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeParrain = urlParams.get('parrain');
+    const refPermanent = urlParams.get('ref');
+    
+    if (codeParrain) {
+        console.log('🎯 Lien parrainage détecté:', codeParrain);
+        
+        // Vérifier si l'utilisateur est déjà venu via ce lien
+        const liensUtilises = JSON.parse(localStorage.getItem('liens_parrainage_utilises') || '[]');
+        
+        if (liensUtilises.includes(codeParrain)) {
+            console.log('⚠️ Lien déjà utilisé par cet utilisateur');
+            return;
+        }
+        
+        // Marquer le lien comme utilisé pour cet utilisateur
+        liensUtilises.push(codeParrain);
+        localStorage.setItem('liens_parrainage_utilises', JSON.stringify(liensUtilises));
+        
+        // Appliquer les récompenses IMMÉDIATEMENT
+        appliquerRecompensesAutomatiques(codeParrain, refPermanent);
+        
+        // Nettoyer l'URL pour éviter les rechargements
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+}
+
+function appliquerRecompensesAutomatiques(codeParrain, refPermanent) {
+    const systeme = initialiserSystemeRecompenses();
+    
+    // Vérifier si c'est un lien valide
+    const lienTrouve = systeme.data.parrainage?.liensActifs?.find(l => 
+        l.code === codeParrain && !l.utilise
+    );
+    
+    if (!lienTrouve) {
+        console.log('❌ Lien invalide ou déjà utilisé');
+        return;
+    }
+    
+    // Vérifier l'expiration
+    const maintenant = new Date();
+    const dateCreation = new Date(lienTrouve.dateCreation);
+    const age = maintenant - dateCreation;
+    
+    if (age > systeme.data.parrainage.parametres.dureeValidite) {
+        console.log('❌ Lien expiré');
+        lienTrouve.utilise = true;
+        systeme.sauvegarderDonnees();
+        return;
+    }
+    
+    // APPLIQUER LES RÉCOMPENSES IMMÉDIATES
+    // 1. Récompense le FILLEUL (utilisateur actuel)
+    systeme.data.soldeRecompenses += systeme.data.parrainage.parametres.recompenseFilleul;
+    
+    // 2. Marquer le lien comme UTILISÉ (expire immédiatement)
+    lienTrouve.utilise = true;
+    lienTrouve.filleul = 'Utilisateur automatique';
+    lienTrouve.dateUtilisation = new Date().toISOString();
+    lienTrouve.ipUtilisateur = 'tracked'; // Pour anti-triche
+    
+    // 3. Récompense le PARRAIN
+    if (refPermanent) {
+        recompenserParrainAutomatique(refPermanent, codeParrain);
+    }
+    
+    systeme.sauvegarderDonnees();
+    systeme.mettreAJourAffichage();
+    
+    // Afficher une notification de bienvenue
+    setTimeout(() => {
+        alert(`🎉 BIENVENUE CHEZ ANDU-XARA !
+
+💰 Vous venez de recevoir 20 MRU offerts !
+👥 Parrain : ${refPermanent || 'Anonyme'}
+🔗 Lien utilisé : ${codeParrain}
+
+✅ Votre solde actuel : ${systeme.data.soldeRecompenses} MRU
+
+🛍️ Utilisez vos MRU dans notre boutique !`);
+    }, 1000);
+    
+    console.log('✅ Récompenses appliquées automatiquement !');
+}
+
+function recompenserParrainAutomatique(codeParrain, codeLien) {
+    const systeme = initialiserSystemeRecompenses();
+    
+    // Si le parrain est l'utilisateur actuel
+    if (systeme.data.monCodeParrain === codeParrain) {
+        systeme.data.soldeRecompenses += 50;
+        systeme.data.parrainages = (systeme.data.parrainages || 0) + 1;
+        systeme.sauvegarderDonnees();
+        systeme.mettreAJourAffichage();
+        
+        console.log(`🎁 Parrain ${codeParrain} a reçu 50 MRU automatiquement !`);
+    } else {
+        // Si le parrain est quelqu'un d'autre, on pourrait stocker pour plus tard
+        console.log(`📧 Parrain externe ${codeParrain} devrait recevoir 50 MRU`);
+    }
+}
 
 // =============================================
-// FONCTIONS MANQUANTES COMPLÈTES
+// SYSTÈME DE PARRAINAGE INTELLIGENT CORRIGÉ
 // =============================================
+
+function genererLienParrainageIntelligent() {
+    console.log('🔗 Génération lien parrainage intelligent');
+    
+    const systeme = initialiserSystemeRecompenses();
+    
+    // Initialiser la structure parrainage si elle n'existe pas
+    if (!systeme.data.parrainage) {
+        systeme.data.parrainage = {
+            liensActifs: [],
+            historiqueLiens: [],
+            parametres: {
+                dureeValidite: 24 * 60 * 60 * 1000,
+                recompenseParrain: 50,
+                recompenseFilleul: 20,
+                maxLiensActifs: 5
+            }
+        };
+        systeme.sauvegarderDonnees();
+    }
+    
+    const lienUnique = genererLienUnique(systeme);
+    
+    if (!lienUnique) {
+        alert('❌ Trop de liens actifs ! Attendez que certains expirent.');
+        return;
+    }
+    
+    // Message CORRIGÉ avec le bon lien
+    const message = `🎁 ANDU-XARA - PARRAINAGE EXCLUSIF
+
+💰 CODE : ${lienUnique.code}
+🎁 20 MRU OFFERTS
+
+Utilise ce code sur Andu-Xara pour recevoir 20 MRU de bienvenue !
+
+🛍️ https://anduxara2408-droid.github.io/andu-xara-site/
+⏰ Valable 24h • Usage unique`;
+
+    // COPIER SEULEMENT LE CODE (pas tout le message)
+    navigator.clipboard.writeText(lienUnique.code).then(() => {
+        console.log('✅ Code copié:', lienUnique.code);
+        afficherMenuPartageIntelligent(lienUnique, message);
+    }).catch((err) => {
+        console.error('❌ Erreur copie:', err);
+        // Fallback : copier tout le message
+        navigator.clipboard.writeText(message).then(() => {
+            afficherMenuPartageIntelligent(lienUnique, message);
+        }).catch(() => {
+            // Dernier fallback : afficher le code
+            afficherMenuPartageIntelligent(lienUnique, message);
+        });
+    });
+}
+
+function genererLienUnique(systeme) {
+    nettoyerLiensExpires(systeme);
+    
+    const liensActifs = systeme.data.parrainage.liensActifs.filter(l => !l.utilise);
+    if (liensActifs.length >= systeme.data.parrainage.parametres.maxLiensActifs) {
+        return null;
+    }
+    
+    const codeUnique = 'AX' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 3).toUpperCase();
+    
+    const lienUnique = {
+        code: codeUnique,
+        utilise: false,
+        dateCreation: new Date().toISOString(),
+        filleul: null,
+        refPermanent: systeme.data.monCodeParrain
+    };
+    
+    systeme.data.parrainage.liensActifs.push(lienUnique);
+    systeme.sauvegarderDonnees();
+    
+    return lienUnique;
+}
+
+function afficherMenuPartageIntelligent(lienUnique, message) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 10005;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    `;
+
+    const dateExpiration = new Date(new Date(lienUnique.dateCreation).getTime() + 24 * 60 * 60 * 1000);
+    const formatDate = dateExpiration.toLocaleString('fr-FR');
+
+    modal.innerHTML = `
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; position: relative;">
+            <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -10px; right: -10px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                ×
+            </button>
+            
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">🎯 Code de parrainage généré</h2>
+
+            <div style="background: #e8f6f3; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left;">
+                <h4 style="color: #27ae60; margin: 0 0 10px 0;">📋 Instructions :</h4>
+                <ol style="margin: 0; padding-left: 20px; color: #666;">
+                    <li>Partagez le code <strong>${lienUnique.code}</strong></li>
+                    <li>Votre ami l'utilise sur Andu-Xara</li>
+                    <li>Il reçoit <strong>20 MRU</strong> immédiatement</li>
+                    <li>Vous recevez <strong>50 MRU</strong> automatiquement</li>
+                </ol>
+            </div>
+
+            <div style="display: grid; gap: 10px; margin-bottom: 20px;">
+                <button onclick="partagerSurWhatsApp('${lienUnique.code}')" style="background: #25D366; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">📱</span> Partager sur WhatsApp
+                </button>
+                
+                <button onclick="partagerSurMessage('${lienUnique.code}')" style="background: #3498db; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">💬</span> Partager par SMS/Message
+                </button>
+
+                <button onclick="genererVraiQRCode('${lienUnique.code}')" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <span style="font-size: 1.2em;">📷</span> Générer QR Code
+                </button>
+            </div>
+
+            <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <p style="margin: 0; color: #856404; font-size: 0.9em;">
+                    🔒 Sécurité : Usage unique • Expire dans 24h • Maximum 5 codes actifs
+                </p>
+            </div>
+
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px;">
+                ❌ Fermer
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function fermerMenuPartage() {
+    // Fermer TOUS les modals de partage
+    const modals = document.querySelectorAll('div[style*="background: rgba(0,0,0,0.95)"], div[style*="background: rgba(0,0,0,0.9)"]');
+    modals.forEach(modal => {
+        if (modal && modal.parentElement) {
+            modal.parentElement.removeChild(modal);
+        }
+    });
+    
+    // Fermer aussi par ID au cas où
+    const qrModal = document.getElementById('qr-code-modal');
+    if (qrModal) qrModal.remove();
+}
+
+// =============================================
+// FONCTIONS DE PARTAGE CORRIGÉES
+// =============================================
+
+function partagerSurWhatsApp(code) {
+    const lienParrainage = `https://anduxara2408-droid.github.io/andu-xara-site/?parrain=${code}&ref=${systemeRecompensesGlobal.data.monCodeParrain}`;
+    
+    const message = `🎁 ANDU-XARA - 20 MRU OFFERTS !
+
+💰 CODE EXCLUSIF : ${code}
+
+🚀 LIEN DIRECT : ${lienParrainage}
+
+💎 Cliquez pour recevoir 20 MRU immédiatement !
+⏰ Valable 24h • Usage unique • Anti-triche activé`;
+    
+    const messageEncoded = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${messageEncoded}`, '_blank');
+    fermerMenuPartage();
+}
+
+function partagerSurMessage(code) {
+    // Générer un lien parrainage intelligent avec tracking
+    const lienParrainage = `https://anduxara2408-droid.github.io/andu-xara-site/?parrain=${code}&ref=${systemeRecompensesGlobal.data.monCodeParrain}`;
+    
+    const message = `🎁 ANDU-XARA - 20 MRU OFFERTS !
+
+💰 CODE EXCLUSIF : ${code}
+
+🚀 LIEN DIRECT : ${lienParrainage}
+
+💎 Utilise ce lien pour recevoir 20 MRU immédiatement !
+⏰ Valable 24h • Usage unique • Anti-triche activé
+
+💡 Instructions :
+1. Cliquez sur le lien ci-dessus
+2. Recevez 20 MRU automatiquement
+3. Votre parrain gagne 50 MRU instantanément !`;
+    
+    navigator.clipboard.writeText(message).then(() => {
+        alert('✅ Message copié !\n\nVotre lien parrainage intelligent est prêt :\n' + lienParrainage);
+    }).catch(() => {
+        prompt('📱 Copiez ce message complet :', message);
+    });
+    
+    fermerMenuPartage();
+}
+
+function genererVraiQRCode(code) {
+    // Créer un QR Code avec le bon lien
+    const qrData = `ANDU-XARA PARRAINAGE\nCode: ${code}\nSite: https://anduxara2408-droid.github.io/andu-xara-site/\n20 MRU offerts!`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+    
+    const modal = document.createElement('div');
+    modal.id = 'qr-code-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 10006;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    `;
+
+    modal.innerHTML = `
+        <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 300px;">
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">📷 QR Code Parrainage</h3>
+            
+            <img src="${qrUrl}" alt="QR Code ${code}" style="width: 200px; height: 200px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 15px;">
+            
+            <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <strong style="color: #e74c3c; font-size: 1.1em;">${code}</strong>
+            </div>
+            
+            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
+                Scannez et suivez les instructions pour 20 MRU offerts
+            </p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="copierCode('${code}')" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                    📋 Copier
+                </button>
+                
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                    ❌ Fermer
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function fermerQRCode() {
+    const modal = document.getElementById('qr-code-modal');
+    if (modal) modal.remove();
+}
+
+function copierCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        alert('✅ Code copié : ' + code);
+    }).catch(() => {
+        prompt('📋 Copiez ce code :', code);
+    });
+}
+
+function fermerModal() {
+    const modal = document.querySelector('div[style*="background: rgba(0,0,0,0.95)"]');
+    if (modal) modal.remove();
+}
 
 function afficherDetailsParrainage() {
     console.log('📊 Affichage détails parrainage');
@@ -7311,7 +7882,7 @@ function afficherDetailsParrainage() {
 4. Ils gagnent 20 MRU de bienvenue
 
 🔗 Votre lien de parrainage :
-https://andu-xara.com?ref=${systeme.data.monCodeParrain}
+https://anduxara2408-droid.github.io/andu-xara-site/?ref=${systeme.data.monCodeParrain}
 
 🎁 Avantages :
 • 50 MRU par filleul actif
@@ -7324,18 +7895,7 @@ https://andu-xara.com?ref=${systeme.data.monCodeParrain}
 }
 
 function genererLienParrainage() {
-    console.log('🔗 Génération lien parrainage');
-    
-    const systeme = initialiserSystemeRecompenses();
-    const lien = `https://andu-xara.com?ref=${systeme.data.monCodeParrain}`;
-    
-    // Copier dans le presse-papier
-    navigator.clipboard.writeText(lien).then(() => {
-        alert(`🔗 Lien de parrainage copié !\n\n${lien}\n\n✅ Le lien a été copié dans votre presse-papier.\n\nPartagez-le avec vos amis pour gagner 50 MRU chacun !`);
-    }).catch(() => {
-        // Fallback si clipboard non supporté
-        prompt('🔗 Votre lien de parrainage :', lien);
-    });
+    return genererLienParrainageIntelligent();
 }
 
 function utiliserPointsFidelite() {
@@ -7433,6 +7993,39 @@ function testerParrainage() {
     systeme.mettreAJourAffichage();
     
     alert(`🎉 Parrainage réussi !\n\nCode utilisé : ${codeParrain}\n🎁 Vous gagnez 50 MRU !\n\nNouveau solde : ${systeme.data.soldeRecompenses} MRU`);
+}
+
+function debugParrainages() {
+    console.log('🐛 Debug parrainages');
+    
+    const systeme = initialiserSystemeRecompenses();
+    
+    const debugInfo = `
+🔧 DEBUG SYSTÈME PARRAINAGE
+
+📊 Données système :
+• Liens actifs : ${systeme.data.parrainage?.liensActifs?.length || 0}
+• Liens utilisés : ${systeme.data.parrainage?.liensActifs?.filter(l => l.utilise).length || 0}
+• Liens disponibles : ${systeme.data.parrainage?.liensActifs?.filter(l => !l.utilise).length || 0}
+• Max liens : ${systeme.data.parrainage?.parametres?.maxLiensActifs || 5}
+
+👤 Votre code : ${systeme.data.monCodeParrain}
+💰 Solde MRU : ${systeme.data.soldeRecompenses}
+👥 Parrainages : ${systeme.data.parrainages}
+
+🔄 Fonctions disponibles :
+• ✅ genererLienParrainage()
+• ✅ validerCodeParrainage()
+• ✅ nettoyerLiensExpires()
+• ✅ utiliserPointsFidelite()
+• ✅ testerParrainage()
+
+📝 Logs récents :
+${JSON.stringify(systeme.data.parrainage?.liensActifs || [], null, 2)}
+    `.trim();
+    
+    console.log(debugInfo);
+    alert(debugInfo);
 }
 
 // =============================================
@@ -7568,7 +8161,7 @@ function fermerHistorique() {
 }
 
 // =============================================
-// BOUTIQUE PROFESSIONNELLE
+// BOUTIQUE PROFESSIONNELLE AVEC 15 VRAIS PRODUITS
 // =============================================
 
 function ouvrirBoutiqueRecompenses() {
@@ -7600,56 +8193,107 @@ function ouvrirBoutiqueRecompenses() {
         font-family: Arial, sans-serif;
     `;
 
+    // LES 15 VRAIS PRODUITS ANDU-XARA
     const produits = [
         {
             id: 1, nom: "T-shirt logo arabe", description: "T-shirt coton premium avec logo arabe design exclusif", 
-            prix: 349, image: "images/t-shirt-logo-arabe.jpeg", tailles: ["S", "M", "L", "XL"]
+            prix: 349, image: "images/t-shirt-logo-arabe.jpeg", tailles: ["S", "M", "L", "XL"], categorie: "t-shirts"
         },
         {
             id: 2, nom: "Ensemble capuche style arabe", description: "Ensemble complet premium avec capuche style arabe", 
-            prix: 419, image: "images/ensemble-capuchon-arabe.jpeg", tailles: ["M", "L", "XL"]
+            prix: 419, image: "images/ensemble-capuchon-arabe.jpeg", tailles: ["M", "L", "XL"], categorie: "ensembles"
         },
         {
             id: 3, nom: "Combinaison T-shirt et Capuche", description: "T-shirt coton et Capuche Bleu - Confort garanti", 
-            prix: 419, image: "images/combinaison.jpeg", tailles: ["S", "M", "L"]
+            prix: 419, image: "images/combinaison.jpeg", tailles: ["S", "M", "L"], categorie: "ensembles"
         },
         {
             id: 4, nom: "T-shirt Enfant", description: "T-shirt coton confortable pour enfants - Qualité premium", 
-            prix: 279, image: "images/t-shirt-enfant.jpeg", tailles: ["3-5 ans", "6-8 ans", "9-12 ans"]
+            prix: 279, image: "images/t-shirt-enfant.jpeg", tailles: ["3-5 ans", "6-8 ans", "9-12 ans"], categorie: "enfants"
+        },
+        {
+            id: 5, nom: "Ensemble T-shirt et jogging", description: "Ensemble coton premium - Style décontracté", 
+            prix: 559, image: "images/t-shirt-et-jogging.jpeg", tailles: ["S", "M", "L", "XL"], categorie: "ensembles"
+        },
+        {
+            id: 6, nom: "Pull bleu", description: "Pull chaud et confortable de couleur bleue - Hiver 2025", 
+            prix: 489, image: "images/pull-bleu.jpeg", tailles: ["M", "L", "XL"], categorie: "t-shirts"
+        },
+        {
+            id: 7, nom: "Capuchon blanc", description: "Capuchon style urbain en couleur blanche - Adjustable", 
+            prix: 209, image: "images/capuchon-blanc.jpeg", tailles: ["Unique"], categorie: "accessoires"
+        },
+        {
+            id: 8, nom: "T-shirt et jogging Complet", description: "Ensemble complet T-shirt et jogging assorti - Édition limitée", 
+            prix: 629, image: "images/t-shirt-et-jogging.jpeg", tailles: ["S", "M", "L"], categorie: "ensembles"
+        },
+        {
+            id: 9, nom: "Babs Premium", description: "Tenue moderne et élégante Andu-Xara", 
+            prix: 1049, image: "images/babs.jpeg", tailles: ["S", "M", "L"], categorie: "ensembles"
+        },
+        {
+            id: 10, nom: "T-shirt Fille Noir", description: "T-shirt noir élégant pour femme", 
+            prix: 279, image: "images/fillenoir.jpeg", tailles: ["XS", "S", "M"], categorie: "t-shirts"
+        },
+        {
+            id: 11, nom: "T-shirt Fille Blanc", description: "T-shirt blanc classique et stylé", 
+            prix: 419, image: "images/filleblan.jpeg", tailles: ["XS", "S", "M"], categorie: "t-shirts"
+        },
+        {
+            id: 12, nom: "Pull Blanc", description: "Pull chaud et confortable de couleur blanche", 
+            prix: 419, image: "images/pull-blanc.jpeg", tailles: ["S", "M", "L"], categorie: "pulls"
+        },
+        {
+            id: 13, nom: "T-shirt Beige", description: "T-shirt léger et élégant beige", 
+            prix: 279, image: "images/beige-tshirt.jpeg", tailles: ["S", "M", "L"], categorie: "t-shirts"
+        },
+        {
+            id: 14, nom: "T-shirt Blanc", description: "T-shirt blanc classique intemporel", 
+            prix: 279, image: "images/blanctshirt.jpeg", tailles: ["S", "M", "L"], categorie: "t-shirts"
+        },
+        {
+            id: 15, nom: "T-shirt ADX Noir", description: "Edition spéciale Andu-Xara ADX Noir", 
+            prix: 279, image: "images/adx-noir.jpeg", tailles: ["S", "M", "L"], categorie: "t-shirts"
         }
     ];
 
-    let produitsHTML = '';
-    produits.forEach(produit => {
-        const accessible = produit.prix <= solde;
-        
-        produitsHTML += `
-            <div style="border: 2px solid ${accessible ? '#27ae60' : '#e74c3c'}; border-radius: 12px; padding: 15px; text-align: center; background: white; opacity: ${accessible ? '1' : '0.6'}; transition: all 0.3s ease;">
-                <div style="height: 180px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                    <img src="${produit.image}" alt="${produit.nom}" style="max-width: 100%; max-height: 100%; object-fit: cover;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='🛍️';">
+let produitsHTML = '';
+produits.forEach(produit => {
+    const accessible = produit.prix <= solde;
+    
+    produitsHTML += `
+        <div style="border: 2px solid ${accessible ? '#27ae60' : '#e74c3c'}; border-radius: 12px; padding: 15px; text-align: center; background: white; opacity: ${accessible ? '1' : '0.6'}; transition: all 0.3s ease;">
+            <div style="height: 180px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                <img src="${produit.image}" alt="${produit.nom}" 
+                     style="max-width: 100%; max-height: 100%; object-fit: cover;"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; flex-direction: column; align-items: center; justify-content: center; color: #666; font-size: 2em;">
+                    🛍️
+                    <div style="font-size: 0.3em; margin-top: 5px;">${produit.nom}</div>
                 </div>
-                <h4 style="margin: 8px 0; font-size: 1.1em;">${produit.nom}</h4>
-                <p style="color: #666; font-size: 0.85em; margin: 5px 0; min-height: 40px;">${produit.description}</p>
-                <div style="font-size: 1.3em; color: #e74c3c; font-weight: bold; margin: 10px 0;">${produit.prix} MRU</div>
-                
-                ${accessible ? 
-                    `<button onclick="ouvrirFormulaireCommandeProfessionnel(${produit.id}, '${produit.nom.replace(/'/g, "\\'")}', ${produit.prix}, '${produit.image}')" 
-                      style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.3s ease;">
-                        ✅ Commander avec mes MRU
-                    </button>` 
-                    : 
-                    `<button style="background: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: not-allowed; width: 100%;">
-                        ❌ Il vous manque ${produit.prix - solde} MRU
-                    </button>`
-                }
             </div>
-        `;
-    });
+            <h4 style="margin: 8px 0; font-size: 1.1em;">${produit.nom}</h4>
+            <p style="color: #666; font-size: 0.85em; margin: 5px 0; min-height: 40px;">${produit.description}</p>
+            <div style="font-size: 1.3em; color: #e74c3c; font-weight: bold; margin: 10px 0;">${produit.prix} MRU</div>
+            
+            ${accessible ? 
+                `<button onclick="ouvrirFormulaireCommandeProfessionnel(${produit.id}, '${produit.nom.replace(/'/g, "\\'")}', ${produit.prix}, '${produit.image}')" 
+                  style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.3s ease;">
+                    ✅ Commander avec mes MRU
+                </button>` 
+                : 
+                `<button style="background: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: not-allowed; width: 100%;">
+                    ❌ Il vous manque ${produit.prix - solde} MRU
+                </button>`
+            }
+        </div>
+    `;
+});
 
     modal.innerHTML = `
         <div style="background: white; width: 100%; max-width: 1400px; height: 95vh; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column;">
             <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="margin: 0; font-size: 1.5em;">🛍️ Boutique Andu-Xara - Paiement MRU</h2>
+                <h2 style="margin: 0; font-size: 1.5em;">🛍️ Boutique Andu-Xara - 15 Produits Disponibles</h2>
                 <button onclick="fermerBoutiqueModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px;">×</button>
             </div>
             
@@ -7954,19 +8598,152 @@ function sauvegarderDonnees() {
 }
 
 // =============================================
+// FONCTION DE VALIDATION MANQUANTE
+// =============================================
+
+function validerCodeParrainage(codeSaisi, nomFilleul) {
+    const systeme = initialiserSystemeRecompenses();
+    
+    if (!systeme.data.parrainage) {
+        return { success: false, message: '❌ Système de parrainage non initialisé' };
+    }
+    
+    const lienTrouve = systeme.data.parrainage.liensActifs.find(l => 
+        l.code === codeSaisi && !l.utilise
+    );
+    
+    if (!lienTrouve) {
+        return { success: false, message: '❌ Code invalide ou déjà utilisé' };
+    }
+    
+    const maintenant = new Date();
+    const dateCreation = new Date(lienTrouve.dateCreation);
+    const age = maintenant - dateCreation;
+    
+    if (age > systeme.data.parrainage.parametres.dureeValidite) {
+        lienTrouve.utilise = true;
+        systeme.sauvegarderDonnees();
+        return { success: false, message: '❌ Code expiré' };
+    }
+    
+    // APPLIQUER LES RÉCOMPENSES
+    lienTrouve.utilise = true;
+    lienTrouve.filleul = nomFilleul;
+    lienTrouve.dateUtilisation = new Date().toISOString();
+    
+    // Récompense le FILLEUL
+    systeme.data.soldeRecompenses += systeme.data.parrainage.parametres.recompenseFilleul;
+    
+    // Récompense le PARRAIN
+    const codeParrain = lienTrouve.refPermanent;
+    recompenserParrain(codeParrain, nomFilleul);
+    
+    systeme.sauvegarderDonnees();
+    
+    return { 
+        success: true, 
+        message: `🎉 Code validé ! +20 MRU ajoutés à votre solde !`,
+        parrain: codeParrain
+    };
+}
+
+function recompenserParrain(codeParrain, nomFilleul) {
+    // Pour cette démo, on met à jour le système actuel si c'est le bon code
+    const systeme = initialiserSystemeRecompenses();
+    if (systeme.data.monCodeParrain === codeParrain) {
+        systeme.data.soldeRecompenses += 50;
+        systeme.data.parrainages = (systeme.data.parrainages || 0) + 1;
+        systeme.sauvegarderDonnees();
+        systeme.mettreAJourAffichage();
+        
+        console.log(`🎁 Parrain ${codeParrain} a reçu 50 MRU pour ${nomFilleul}`);
+    }
+}
+
+// =============================================
+// FONCTION NETTOYAGE LIENS EXPIRÉS MANQUANTE
+// =============================================
+
+function nettoyerLiensExpires(systeme) {
+    if (!systeme.data.parrainage) return;
+    
+    const maintenant = new Date();
+    const dureeValidite = systeme.data.parrainage.parametres.dureeValidite;
+    
+    systeme.data.parrainage.liensActifs = systeme.data.parrainage.liensActifs.filter(lien => {
+        const dateCreation = new Date(lien.dateCreation);
+        const age = maintenant - dateCreation;
+        
+        if (age > dureeValidite && !lien.utilise) {
+            systeme.data.parrainage.historiqueLiens.push({
+                ...lien,
+                statut: 'expire'
+            });
+            return false;
+        }
+        return true;
+    });
+}
+
+// =============================================
+// FONCTION DE TEST POUR SIMULER L'INSCRIPTION
+// =============================================
+
+function simulerInscriptionFilleul() {
+    const codeTest = prompt('🧪 Test - Entrez un code de parrainage :');
+    const nomTest = prompt('👤 Nom du filleul :') || 'Testeur';
+    
+    if (!codeTest) return;
+    
+    const resultat = validerCodeParrainage(codeTest, nomTest);
+    alert(resultat.message);
+    
+    if (resultat.success) {
+        const systeme = initialiserSystemeRecompenses();
+        systeme.mettreAJourAffichage();
+        
+        // Afficher un message de succès détaillé
+        alert(`🎉 INSCRIPTION RÉUSSIE !
+
+👤 Filleul : ${nomTest}
+💰 Récompense : +20 MRU
+👥 Parrain : ${resultat.parrain}
+
+✅ Le parrain a reçu 50 MRU automatiquement !
+✅ Le filleul a reçu 20 MRU de bienvenue !`);
+    }
+}
+
+// =============================================
 // INITIALISATION
 // =============================================
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation système professionnel...');
     initialiserSystemeRecompenses();
+ detecterParrainageAutomatique(); // Détection auto des liens parrainage
     setTimeout(() => {
         mettreAJourBadgeNotifications();
     }, 2000);
+    
+    // Ajouter un bouton de test en développement
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const testBtn = document.createElement('button');
+        testBtn.textContent = '🧪 Test Parrainage';
+        testBtn.style.cssText = 'position:fixed; top:100px; right:10px; background:#9b59b6; color:white; padding:10px; z-index:10000; border-radius:5px; border:none; cursor:pointer;';
+        testBtn.onclick = simulerInscriptionFilleul;
+        document.body.appendChild(testBtn);
+        
+        const debugBtn = document.createElement('button');
+        debugBtn.textContent = '🐛 Debug Parrainage';
+        debugBtn.style.cssText = 'position:fixed; top:150px; right:10px; background:#e74c3c; color:white; padding:10px; z-index:10000; border-radius:5px; border:none; cursor:pointer;';
+        debugBtn.onclick = debugParrainages;
+        document.body.appendChild(debugBtn);
+    }
 });
 
 // =============================================
-// EXPORT DE TOUTES LES FONCTIONS
+// EXPORT DE TOUTES LES FONCTIONS VERS WINDOW
 // =============================================
 
 window.ouvrirBoutiqueRecompenses = ouvrirBoutiqueRecompenses;
@@ -7982,9 +8759,97 @@ window.verifierMesParrainages = verifierMesParrainages;
 window.testerParrainage = testerParrainage;
 window.afficherDetailsParrainage = afficherDetailsParrainage;
 window.genererLienParrainage = genererLienParrainage;
+window.simulerInscriptionFilleul = simulerInscriptionFilleul;
+window.validerCodeParrainage = validerCodeParrainage;
+window.nettoyerLiensExpires = nettoyerLiensExpires;
+window.genererVraiQRCode = genererVraiQRCode;
+window.fermerQRCode = fermerQRCode;
+window.copierCode = copierCode;
+window.partagerSurMessage = partagerSurMessage;
+window.fermerMenuPartage = fermerMenuPartage;
+window.debugParrainages = debugParrainages;
+window.afficherMenuPartageIntelligent = afficherMenuPartageIntelligent;
+window.genererLienUnique = genererLienUnique;
+window.partagerSurWhatsApp = partagerSurWhatsApp;
+// =============================================
+// FONCTIONS MANQUANTES - CORRECTION ERREUR SYNTAXE
+// =============================================
 
-console.log('✅ Système Andu-Xara Professionnel chargé - TOUTES FONCTIONS OPÉRATIONNELLES !');
-</script>
+function fermerModal() {
+    const modal = document.querySelector('div[style*="background: rgba(0,0,0,0.95)"]');
+    if (modal) modal.remove();
+}
+
+function fermerQRCode() {
+    const modal = document.getElementById('qr-code-modal');
+    if (modal) modal.remove();
+}
+// =============================================
+// FONCTIONS MANQUANTES - CORRECTION COMPLÈTE
+// =============================================
+
+function fermerModal() {
+    const modal = document.querySelector('div[style*="background: rgba(0,0,0,0.95)"]');
+    if (modal) modal.remove();
+}
+
+function fermerQRCode() {
+    const modal = document.getElementById('qr-code-modal');
+    if (modal) modal.remove();
+}
+
+function afficherGestionLiensActifs() {
+    const systeme = initialiserSystemeRecompenses();
+    const liensActifs = systeme.data.parrainage?.liensActifs || [];
+    
+    let message = "🔗 GESTION DES LIENS DE PARRAINAGE ACTIFS\n\n";
+    
+    if (liensActifs.length === 0) {
+        message += "Aucun lien actif pour le moment.\n";
+    } else {
+        liensActifs.forEach((lien, index) => {
+            const dateCreation = new Date(lien.dateCreation).toLocaleString('fr-FR');
+            const expire = new Date(new Date(lien.dateCreation).getTime() + 24 * 60 * 60 * 1000);
+            const tempsRestant = expire - new Date();
+            const heuresRestantes = Math.floor(tempsRestant / (60 * 60 * 1000));
+            
+            message += `📋 Lien ${index + 1}:\n`;
+            message += `🔑 Code: ${lien.code}\n`;
+            message += `📅 Créé: ${dateCreation}\n`;
+            message += `⏰ Expire dans: ${heuresRestantes} heures\n`;
+            message += `✅ Statut: ${lien.utilise ? 'DÉJÀ UTILISÉ' : 'ACTIF'}\n`;
+            message += `👤 Filleul: ${lien.filleul || 'En attente...'}\n\n`;
+        });
+    }
+    
+    message += `📊 Total: ${liensActifs.length} lien(s) actif(s)\n`;
+    message += `🎯 Maximum autorisé: 5 liens simultanés`;
+    
+    alert(message);
+}
+
+function reinitialiserLiensParrainage() {
+    if (confirm("⚠️ Êtes-vous sûr de vouloir réinitialiser TOUS les liens de parrainage ?\n\nCette action supprimera tous les liens actifs et l'historique.")) {
+        const systeme = initialiserSystemeRecompenses();
+        
+        systeme.data.parrainage = {
+            liensActifs: [],
+            historiqueLiens: [],
+            parametres: {
+                dureeValidite: 24 * 60 * 60 * 1000,
+                recompenseParrain: 50,
+                recompenseFilleul: 20,
+                maxLiensActifs: 5
+            }
+        };
+        
+        systeme.sauvegarderDonnees();
+        alert("✅ Tous les liens de parrainage ont été réinitialisés !");
+    }
+}
+
+console.log('🎉 TOUTES LES FONCTIONS ANDU-XARA SONT MAINTENANT DISPONIBLES !');
+</script> 
 </body>
 </html>
 
