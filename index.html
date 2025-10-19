@@ -14,6 +14,7 @@
     <meta name="theme-color" content="#6a11cb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
+ 
     <style>
         /* ===== RESET ET STYLES GLOBAUX ===== */
         * {
@@ -2780,6 +2781,80 @@ body.lightbox-open {
         max-height: calc(55vh - 140px) !important;
     }
 }
+/* ===== SECTION RÉDUCTION SIMPLE ET JOLIE ===== */
+.reduction-section {
+    text-align: center;
+    margin: 25px auto;
+    padding: 25px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid rgba(106, 17, 203, 0.1);
+}
+
+.reduction-section input {
+    padding: 14px 20px;
+    width: 200px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: center;
+    margin-right: 10px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.reduction-section input:focus {
+    outline: none;
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+    transform: translateY(-1px);
+}
+
+.reduction-section button {
+    padding: 14px 25px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.reduction-section button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.3);
+}
+
+#promoMessage {
+    font-weight: 600;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reduction-section {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+    
+    .reduction-section input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 12px;
+    }
+    
+    .reduction-section button {
+        width: 100%;
+    }
+}
     </style>
 
     <!-- Google Analytics -->
@@ -2797,6 +2872,42 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 }
 </script>
 </head>
+<script>
+// ===== CORRECTION AFFICHAGE EN TEMPS RÉEL =====
+function updateRewardsDisplay() {
+    if (!window.userManager) return;
+    
+    const stats = window.userManager.getUserStats();
+    const display = document.getElementById('rewards-display');
+    const amount = document.getElementById('rewards-amount');
+    const code = document.getElementById('user-code');
+    
+    if (display && amount && code) {
+        amount.textContent = stats.rewards + ' MRU';
+        code.textContent = 'Code: ' + stats.userCode;
+        display.style.display = 'block';
+        
+        // Afficher un message de bienvenue si c'est un nouveau parrainage
+        if (stats.hasUsedParrainage && stats.rewards > 0) {
+            setTimeout(() => {
+                alert(`🎉 BIENVENUE ! Vous avez reçu ${stats.rewards} MRU grâce au parrainage !\nCode parrain: ${stats.parrainCode}`);
+            }, 1000);
+        }
+    }
+}
+
+// Surcharger la fonction existante
+if (window.userManager) {
+    const originalInit = window.userManager.init;
+    window.userManager.init = function() {
+        originalInit.call(this);
+        setTimeout(updateRewardsDisplay, 500);
+    };
+}
+
+// Mettre à jour toutes les 2 secondes
+setInterval(updateRewardsDisplay, 2000);
+</script>
 <body>
 </head>
 <body>
@@ -2837,7 +2948,7 @@ if (window.location.hostname !== 'localhost' &&
                     <li><a href="blog.html">Blog / Podcast</a></li>
                     <li><a href="acheter.html">Acheter & Offrir</a></li>
                     <li><a href="histoire.html">Notre Histoire</a></li>
-                    <li><a href="reductions.html">Réductions & Cadeaux</a></li>
+                    <li><a href="reductions.html">Réductions & Cadeaux 🎁</a></li>
                     <li><a href="faq.html">FAQ</a></li>
                 </ul>
             </nav>
@@ -3060,6 +3171,7 @@ if (window.location.hostname !== 'localhost' &&
 <script>
 // ===== SYSTÈME DE PANIER - DÉCLARATIONS GLOBALES =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+
 
 // ===== FONCTIONS DU PANIER - DÉFINIES EN PREMIER =====
 function updateFloatingCart() {
@@ -3459,12 +3571,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 </audio>
             </div>
 
-            <!-- Code promo -->
-            <div class="reduction-section">
-                <input type="text" id="promoInput" placeholder="Entrez votre code">
-                <button id="promoButton">Obtenir une réduction</button>
-                <p id="promoMessage" style="color: green; margin-top: 10px;"></p>
-            </div>
+<!-- Code promo amélioré -->
+<div class="reduction-section">
+    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Code Promo</h3>
+    <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+        <input type="text" id="promoInput" placeholder="Ex: BIENVENUE15" 
+               style="flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
+        <button id="promoButton" 
+                style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            Appliquer ✅
+        </button>
+    </div>
+    <p id="promoMessage" style="margin-top: 10px; text-align: center; font-weight: 500;"></p>
+    
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="reductions.html" style="color: #667eea; text-decoration: none; font-size: 0.9rem;">
+            📋 Voir tous les codes promo disponibles
+        </a>
+    </div>
+</div>            
 
             <!-- Recherche -->
             <div class="search-bar">
@@ -4029,147 +4154,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </section>
-<!-- ===== PROGRAMME FIDÉLITÉ ANDU-XARA ===== -->
-<section id="programme-fidelite" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-rad>
-    <div class="container">
-        <div style="text-align: center; margin-bottom: 40px;">
-            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">🎫 Club Andu-Xara</h2>
-            <p style="font-size: 1.2rem; opacity: 0.9;">Votre programme fidélité exclusif</p>
-        </div>
-
-       
- 
-        <!-- Barre de progression -->
-        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 30px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span>🌟 Bronze</span>
-                <span>🥈 Argent</span>
-                <span>🥇 Or</span>
-                <span>💎 Diamant</span>
-            </div>
-            <div style="background: rgba(255,255,255,0.2); height: 10px; border-radius: 5px; overflow: hidden;">
-                <div id="barre-progression" style="background: #27ae60; height: 100%; width: 10%; transition: width 0.5s ease;"></div>
-            </div>
-        </div>
-<!-- ⭐⭐⭐ NOUVEAU TABLEAU DE BORD - COPIER ICI ⭐⭐⭐ -->
-<div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
-        <div>
-            <div style="font-size: 2rem; font-weight: bold; color: #667eea;" id="points-fidelite">0</div>
-            <div style="color: #666; font-size: 0.9rem;">Points</div>
-        </div>
-        <div>
-            <div style="font-size: 2rem; font-weight: bold; color: #27ae60;" id="niveau-fidelite">🌟 Bronze</div>
-            <div style="color: #666; font-size: 0.9rem;">Niveau</div>
-        </div>
-        <div>
-            <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;" id="solde-recompenses">0 MRU</div>
-            <div style="color: #666; font-size: 0.9rem;">Solde Récompenses</div>
-        </div>
-        <div>
-            <div style="font-size: 2rem; font-weight: bold; color: #9b59b6;" id="parrainages-count">0</div>
-            <div style="color: #666; font-size: 0.9rem;">Parrainages</div>
-        </div>
-    </div>
-</div>
-<!-- ===== BOUTON COMMANDER AVEC RÉCOMPENSES ===== -->
-<div style="text-align: center; margin: 25px 0;">
-    <button onclick="ouvrirBoutiqueRecompenses()" 
-            style="background: linear-gradient(135deg, #FF6B6B, #FF8E53); 
-                   color: white; 
-                   border: none; 
-                   padding: 15px 30px; 
-                   border-radius: 50px; 
-                   cursor: pointer; 
-                   font-size: 1.1rem; 
-                   font-weight: bold;
-                   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);">
-        🛍️ Commander avec mes Récompenses
-    </button>
-    <p style="color: #666; margin-top: 10px; font-size: 0.9rem;">
-        Utilisez vos points pour acheter des produits Andu-Xara
-    </p>
-</div>
-        <!-- AVANTAGES - AJOUTEZ LA SECTION PARRAINAGE ICI -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🛍️</div>
-                <h3 style="margin-bottom: 10px;">10 points = 1 MRU</h3>
-                <p style="opacity: 0.9; font-size: 0.9rem;">Convertissez vos points en réduction immédiate</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">👥</div>
-                <h3 style="margin-bottom: 10px;">Parrainage</h3>
-                <p style="opacity: 0.9; font-size: 0.9rem;">50 points par ami invité</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🎁</div>
-                <h3 style="margin-bottom: 10px;">Avantages exclusifs</h3>
-                <p style="opacity: 0.9; font-size: 0.9rem;">Réductions et cadeaux selon votre niveau</p>
-            </div>
-        </div>
-
-        <!-- ⭐⭐⭐ AJOUTEZ LA SECTION PARRAINAGE COMPLÈTE ICI ⭐⭐⭐ -->
-        <div style="background: rgba(255,255,255,0.15); border-radius: 15px; padding: 25px; margin: 30px 0; border: 2px dashed rgba(255,255,255,0.3);">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">🤝 Programme de Parrainage</h3>
-                <p style="opacity: 0.9;">Gagnez des points en invitant vos amis</p>
-            </div>
-            
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
-                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Votre code personnel :</p>
-                <div id="mon-code-parrain" style="font-size: 1.5rem; font-weight: bold; color: #fff; font-family: 'Courier New', monospace; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;"></div>
-            </div>
-
-            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <button onclick="genererLienParrainage()" 
-                        style="background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
-                    🎁 Parrainer un ami
-                </button>
-                <button onclick="afficherDetailsParrainage()" 
-                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
-                    📊 Mes parrainages
-                </button>
-            </div>
-           <button onclick="verifierMesParrainages()" style="background: #FF9800; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin-left: 10px;">
-    🔄 Vérifier maintenant
-</button>
-<!-- Dans votre section parrainage, ajoutez ces boutons -->
-<div style="text-align: center; margin-top: 10px;">
-    <button onclick="debugParrainages()" style="background: #95a5a6; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; margin: 2px;">
-        🐛 Debug Parrainages
-    </button>
-    <button onclick="testerParrainage()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; margin: 2px;">
-        🧪 Test Parrainage
-    </button>
-</div>
-
-            <div style="text-align: center; margin-top: 15px;">
-                <p style="font-size: 0.8rem; opacity: 0.8;">
-                    💡 <strong>Votre ami</strong> reçoit 50 points + <strong>Vous</strong> recevez 30 points !
-                </p>
-            </div>
-        </div>
-        <!-- ⭐⭐⭐ FIN DE L'AJOUT ⭐⭐⭐ -->
-
-        <!-- Bouton utilisation points -->
-        <div style="text-align: center; margin-top: 30px;">
-            <button onclick="utiliserPointsFidelite()" style="background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">
-                🎁 Utiliser mes points
-            </button>
-        </div>
-
-        <!-- SUPPRIMEZ CE BOUTON CI-DESSOUS CAR IL EST MAINTENANT DANS LA NOUVELLE SECTION -->
-        <!--
-        <div style="text-align: center; margin-top: 15px;">
-            <button onclick="genererLienParrainage()" style="background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-s>
-                👥 Parrainer un ami
-            </button>
-        </div>
-        -->
-    </div>
-</section>
-
 <!-- ===== ASSISTANT IA INTELLIGENT ANDU-XARA ===== -->
 <section id="ai-assistant-section" style="margin: 60px 0; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; color: white;">
     <div class="container">
@@ -4596,6 +4580,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 <script>
+
 // ===== SYSTÈME DE RECOMMANDATIONS IA =====
 class StyleAdvisor {
     constructor() {
@@ -5872,17 +5857,17 @@ Commandez vite, stocks limités ! 🚀`;
 
 Merci pour votre question ! En analysant votre demande, voici ce que je peux vous dire :
 
-🔍 **Votre question** : "${question}"
+🔍 Votre question : "${question}"
 
-📚 **Mon expertise** : Je suis spécialisé dans tout ce qui concerne Andu-Xara :
+📚 Mon expertise : Je suis spécialisé dans tout ce qui concerne Andu-Xara :
 
-• 🎯 **Produits** : Notre catalogue complet 2025
-• 💰 **Prix** : Tarifs et promotions en cours  
-• 🚚 **Livraison** : Zones couvertes et délais
-• 📱 **Contact** : Réseaux sociaux et support
-• 📏 **Conseils** : Tailles et style
+• 🎯 Produits : Notre catalogue complet 2025
+• 💰 Prix : Tarifs et promotions en cours  
+• 🚚 Livraison : Zones couvertes et délais
+• 📱 Contact : Réseaux sociaux et support
+• 📏 Conseils : Tailles et style
 
-💡 **Pour une réponse plus précise**, vous pouvez :
+💡 Pour une réponse plus précise, vous pouvez :
 1. Me poser votre question différemment
 2. Consulter nos réseaux sociaux pour les dernières infos
 3. Contacter directement notre équipe au +222 49 03 76 97
@@ -7189,802 +7174,9 @@ setTimeout(() => {
     document.getElementById('cookie-banner').style.display = 'block';
     console.log('✅ Bannière affichée manuellement');
 }, 1000);
-  
+
   </script>
 
-<script>
-// =============================================
-// 🎫 SYSTÈME COMPLET ANDU-XARA - VERSION FINALE
-// =============================================
-
-let systemeRecompensesGlobal = null;
-
-class SystemeRecompenses {
-    constructor() {
-        this.data = this.chargerDonnees();
-        this.initialiser();
-    }
-
-    chargerDonnees() {
-        const donneesSauvegardees = localStorage.getItem('anduxara_recompenses');
-        if (donneesSauvegardees) {
-            try {
-                return JSON.parse(donneesSauvegardees);
-            } catch (e) {
-                console.error('Erreur chargement données:', e);
-            }
-        }
-        return {
-            points: 150,
-            soldeRecompenses: 785,
-            historique: [],
-            parrainages: 3,
-            parrains: ['ANDU123', 'ANDU456'],
-            monCodeParrain: this.genererMonCode(),
-            niveau: 'argent',
-            dateInscription: new Date().toISOString(),
-            commandesRecompenses: []
-        };
-    }
-
-    genererMonCode() {
-        let codeExistante = localStorage.getItem('mon_code_parrain');
-        if (!codeExistante) {
-            codeExistante = 'ANDU' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            localStorage.setItem('mon_code_parrain', codeExistante);
-        }
-        return codeExistante;
-    }
-
-    sauvegarderDonnees() {
-        localStorage.setItem('anduxara_recompenses', JSON.stringify(this.data));
-    }
-
-    initialiser() {
-        this.mettreAJourAffichage();
-    }
-
-    mettreAJourAffichage() {
-        try {
-            const elements = {
-                points: document.querySelector('.points-fidelite, [id*="points"], [class*="points"]'),
-                niveau: document.querySelector('.niveau-fidelite, [id*="niveau"], [class*="niveau"]'),
-                solde: document.querySelector('.solde-recompenses, [id*="solde"], [class*="solde"]'),
-                barre: document.querySelector('.barre-progression, [id*="barre"], [class*="barre"]'),
-                parrainages: document.querySelector('.parrainages-count, [id*="parrainage"], [class*="parrainage"]'),
-                monCode: document.querySelector('.mon-code-parrain, [id*="code"], [class*="code"]')
-            };
-
-            if (elements.points) elements.points.textContent = this.data.points;
-            if (elements.niveau) elements.niveau.textContent = this.getNomNiveau(this.data.niveau);
-            if (elements.solde) elements.solde.textContent = this.data.soldeRecompenses + ' MRU';
-            if (elements.parrainages) elements.parrainages.textContent = this.data.parrainages;
-            if (elements.monCode) elements.monCode.textContent = this.data.monCodeParrain;
-
-            if (elements.barre) {
-                const pourcentage = this.calculerPourcentageProgression();
-                elements.barre.style.width = pourcentage + '%';
-            }
-        } catch (error) {
-            console.error('Erreur mise à jour affichage:', error);
-        }
-    }
-
-    getNomNiveau(niveau) {
-        const niveaux = {
-            'bronze': '🌟 Bronze',
-            'argent': '🥈 Argent', 
-            'or': '🥇 Or',
-            'diamant': '💎 Diamant'
-        };
-        return niveaux[niveau] || '🌟 Bronze';
-    }
-
-    calculerPourcentageProgression() {
-        const points = this.data.points;
-        if (points >= 3001) return 100;
-        if (points >= 1501) return 75;
-        if (points >= 501) return 50;
-        return (points / 500) * 25;
-    }
-}
-
-// =============================================
-// FONCTIONS MANQUANTES COMPLÈTES
-// =============================================
-
-function afficherDetailsParrainage() {
-    console.log('📊 Affichage détails parrainage');
-    
-    const systeme = initialiserSystemeRecompenses();
-    const message = `
-🎯 SYSTÈME DE PARRAINAGE ANDU-XARA
-
-💎 Votre code unique : ${systeme.data.monCodeParrain}
-👥 Filleuls actifs : ${systeme.data.parrainages}
-💰 Gains totaux : ${systeme.data.parrainages * 50} MRU
-
-📈 Comment ça marche :
-1. Partagez votre code avec vos amis
-2. Ils l'utilisent lors de leur inscription
-3. Vous gagnez 50 MRU par filleul
-4. Ils gagnent 20 MRU de bienvenue
-
-🔗 Votre lien de parrainage :
-https://andu-xara.com?ref=${systeme.data.monCodeParrain}
-
-🎁 Avantages :
-• 50 MRU par filleul actif
-• Pas de limite de parrainage
-• Paiements instantanés
-• Suivi en temps réel
-    `.trim();
-    
-    alert(message);
-}
-
-function genererLienParrainage() {
-    console.log('🔗 Génération lien parrainage');
-    
-    const systeme = initialiserSystemeRecompenses();
-    const lien = `https://andu-xara.com?ref=${systeme.data.monCodeParrain}`;
-    
-    // Copier dans le presse-papier
-    navigator.clipboard.writeText(lien).then(() => {
-        alert(`🔗 Lien de parrainage copié !\n\n${lien}\n\n✅ Le lien a été copié dans votre presse-papier.\n\nPartagez-le avec vos amis pour gagner 50 MRU chacun !`);
-    }).catch(() => {
-        // Fallback si clipboard non supporté
-        prompt('🔗 Votre lien de parrainage :', lien);
-    });
-}
-
-function utiliserPointsFidelite() {
-    console.log('💰 Utilisation des points de fidélité');
-    
-    const systeme = initialiserSystemeRecompenses();
-    const points = systeme.data.points;
-    
-    if (points < 100) {
-        alert(`❌ Points insuffisants !\n\nVous avez : ${points} points\nMinimum requis : 100 points\n\nGagnez plus de points en :\n• Achetant des produits\n• Parrainant des amis\n• Participant aux promotions`);
-        return;
-    }
-    
-    const pointsAUtiliser = parseInt(prompt(`🔄 Conversion Points → MRU\n\nVos points : ${points}\nTaux : 10 points = 1 MRU\n\nCombien de points souhaitez-vous convertir ?\n(Multiple de 10, minimum 100)`));
-    
-    if (!pointsAUtiliser || pointsAUtiliser < 100 || pointsAUtiliser % 10 !== 0) {
-        alert('❌ Montant invalide !\nLe montant doit être un multiple de 10 (minimum 100)');
-        return;
-    }
-    
-    if (pointsAUtiliser > points) {
-        alert(`❌ Points insuffisants !\nVous avez ${points} points, vous en demandez ${pointsAUtiliser}`);
-        return;
-    }
-    
-    const mruGagnes = pointsAUtiliser / 10;
-    
-    if (confirm(`✅ Confirmer la conversion ?\n\n${pointsAUtiliser} points → ${mruGagnes} MRU\n\nNouveau solde :\n• Points : ${points - pointsAUtiliser}\n• MRU : ${systeme.data.soldeRecompenses + mruGagnes}`)) {
-        systeme.data.points -= pointsAUtiliser;
-        systeme.data.soldeRecompenses += mruGagnes;
-        systeme.sauvegarderDonnees();
-        systeme.mettreAJourAffichage();
-        
-        alert(`🎉 Conversion réussie !\n\n${pointsAUtiliser} points → ${mruGagnes} MRU\n\nVotre nouveau solde :\n📊 Points : ${systeme.data.points}\n💰 MRU : ${systeme.data.soldeRecompenses}`);
-    }
-}
-
-function verifierMesParrainages() {
-    console.log('👥 Vérification des parrainages');
-    const systeme = initialiserSystemeRecompenses();
-    
-    const message = `
-📊 TABLEAU DE BORD PARRAINAGE
-
-👤 Votre code : ${systeme.data.monCodeParrain}
-👥 Filleuls actifs : ${systeme.data.parrainages}
-🎁 Récompenses gagnées : ${systeme.data.parrainages * 50} MRU
-
-📈 Votre réseau :
-${systeme.data.parrains.map(parrain => `• ${parrain}`).join('\n') || '• Aucun parrain pour le moment'}
-
-💡 Comment gagner plus :
-• Partagez votre code : ${systeme.data.monCodeParrain}
-• Chaque filleul = 50 MRU
-• Pas de limite de parrainage !
-    `.trim();
-    
-    alert(message);
-}
-
-function testerParrainage() {
-    console.log('🧪 Test de parrainage');
-    
-    const codeParrain = prompt('👥 Test de parrainage\n\nEntrez un code de parrainage :');
-    
-    if (!codeParrain) {
-        alert('❌ Code vide !');
-        return;
-    }
-    
-    if (codeParrain.length < 6) {
-        alert('❌ Code invalide ! Le code doit faire au moins 6 caractères.');
-        return;
-    }
-    
-    const systeme = initialiserSystemeRecompenses();
-    
-    // Vérifier si c'est son propre code
-    if (codeParrain === systeme.data.monCodeParrain) {
-        alert('❌ Impossible de vous parrainer vous-même !');
-        return;
-    }
-    
-    // Vérifier si déjà parrainé
-    if (systeme.data.parrains.includes(codeParrain)) {
-        alert('❌ Vous êtes déjà parrainé par cette personne !');
-        return;
-    }
-    
-    // Simuler le parrainage
-    systeme.data.parrains.push(codeParrain);
-    systeme.data.parrainages += 1;
-    systeme.data.soldeRecompenses += 50;
-    systeme.sauvegarderDonnees();
-    systeme.mettreAJourAffichage();
-    
-    alert(`🎉 Parrainage réussi !\n\nCode utilisé : ${codeParrain}\n🎁 Vous gagnez 50 MRU !\n\nNouveau solde : ${systeme.data.soldeRecompenses} MRU`);
-}
-
-// =============================================
-// SYSTÈME DE NOTIFICATION CORRIGÉ
-// =============================================
-
-let notificationModalGlobal = null;
-
-function mettreAJourBadgeNotifications() {
-    const notifications = JSON.parse(localStorage.getItem('anduxara_notifications') || '[]');
-    const nonLues = notifications.filter(notif => !notif.lu).length;
-    
-    let badge = document.getElementById('badge-notifications');
-    if (!badge) {
-        badge = document.createElement('div');
-        badge.id = 'badge-notifications';
-        badge.style.cssText = `
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background: #e74c3c;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            z-index: 10003;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        `;
-        badge.onclick = afficherHistoriqueNotifications;
-        document.body.appendChild(badge);
-    }
-    
-    if (nonLues > 0) {
-        badge.innerHTML = `🔔 ${nonLues} nouvelle(s) commande(s)`;
-        badge.style.display = 'block';
-    } else {
-        badge.style.display = 'none';
-    }
-}
-
-function afficherHistoriqueNotifications() {
-    // Fermer l'ancien modal s'il existe
-    if (notificationModalGlobal) {
-        document.body.removeChild(notificationModalGlobal);
-        notificationModalGlobal = null;
-    }
-    
-    const notifications = JSON.parse(localStorage.getItem('anduxara_notifications') || '[]');
-    
-    let html = `
-        <div style="padding: 20px; background: white; border-radius: 10px; max-width: 500px; margin: 20px auto; font-family: Arial, sans-serif;">
-            <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0;">📋 Historique des Commandes MRU</h3>
-    `;
-    
-    if (notifications.length === 0) {
-        html += `<p style="text-align: center; color: #666;">Aucune commande pour le moment</p>`;
-    } else {
-        notifications.forEach((notif, index) => {
-            const date = new Date(notif.timestamp).toLocaleString('fr-FR');
-            html += `
-                <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 10px 0; background: ${notif.lu ? '#f8f9fa' : '#e8f4fd'};">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div style="flex: 1;">
-                            <strong style="display: block; margin-bottom: 5px;">${notif.commande.produit}</strong>
-                            <div style="color: #e74c3c; font-weight: bold; margin-bottom: 5px;">${notif.commande.prix} MRU</div>
-                            <div style="font-size: 0.9em; color: #666;">${notif.commande.client.nom} - ${date}</div>
-                        </div>
-                        ${!notif.lu ? '<span style="background: #27ae60; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; white-space: nowrap; margin-left: 10px;">NOUVEAU</span>' : ''}
-                    </div>
-                    <button onclick="marquerCommeLue(${index})" style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 5px; margin-top: 8px; cursor: pointer; font-size: 0.8em;">
-                        Marquer comme lu
-                    </button>
-                </div>
-            `;
-        });
-    }
-    
-    html += `
-            <button onclick="fermerHistorique()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin-top: 15px; cursor: pointer; width: 100%; font-size: 14px;">
-                Fermer
-            </button>
-        </div>
-    `;
-    
-    notificationModalGlobal = document.createElement('div');
-    notificationModalGlobal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.8);
-        z-index: 10004;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 50px 20px;
-        overflow-y: auto;
-        font-family: Arial, sans-serif;
-    `;
-    notificationModalGlobal.innerHTML = html;
-    notificationModalGlobal.onclick = function(e) {
-        if (e.target === notificationModalGlobal) {
-            fermerHistorique();
-        }
-    };
-    
-    document.body.appendChild(notificationModalGlobal);
-}
-
-function marquerCommeLue(index) {
-    const notifications = JSON.parse(localStorage.getItem('anduxara_notifications') || '[]');
-    if (notifications[index]) {
-        notifications[index].lu = true;
-        localStorage.setItem('anduxara_notifications', JSON.stringify(notifications));
-        
-        // Fermer et rouvrir pour mettre à jour
-        fermerHistorique();
-        setTimeout(afficherHistoriqueNotifications, 100);
-        
-        mettreAJourBadgeNotifications();
-    }
-}
-
-function fermerHistorique() {
-    if (notificationModalGlobal) {
-        document.body.removeChild(notificationModalGlobal);
-        notificationModalGlobal = null;
-    }
-}
-
-// =============================================
-// BOUTIQUE PROFESSIONNELLE
-// =============================================
-
-function ouvrirBoutiqueRecompenses() {
-    console.log('🎯 Ouverture boutique professionnelle...');
-    
-    const systeme = initialiserSystemeRecompenses();
-    const solde = systeme.data.soldeRecompenses;
-    
-    if (solde < 1) {
-        alert('❌ Solde insuffisant. Minimum 1 MRU requis.');
-        return;
-    }
-
-    const modal = document.createElement('div');
-    modal.id = 'boutique-modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.95);
-        z-index: 10000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    `;
-
-    const produits = [
-        {
-            id: 1, nom: "T-shirt logo arabe", description: "T-shirt coton premium avec logo arabe design exclusif", 
-            prix: 349, image: "images/t-shirt-logo-arabe.jpeg", tailles: ["S", "M", "L", "XL"]
-        },
-        {
-            id: 2, nom: "Ensemble capuche style arabe", description: "Ensemble complet premium avec capuche style arabe", 
-            prix: 419, image: "images/ensemble-capuchon-arabe.jpeg", tailles: ["M", "L", "XL"]
-        },
-        {
-            id: 3, nom: "Combinaison T-shirt et Capuche", description: "T-shirt coton et Capuche Bleu - Confort garanti", 
-            prix: 419, image: "images/combinaison.jpeg", tailles: ["S", "M", "L"]
-        },
-        {
-            id: 4, nom: "T-shirt Enfant", description: "T-shirt coton confortable pour enfants - Qualité premium", 
-            prix: 279, image: "images/t-shirt-enfant.jpeg", tailles: ["3-5 ans", "6-8 ans", "9-12 ans"]
-        }
-    ];
-
-    let produitsHTML = '';
-    produits.forEach(produit => {
-        const accessible = produit.prix <= solde;
-        
-        produitsHTML += `
-            <div style="border: 2px solid ${accessible ? '#27ae60' : '#e74c3c'}; border-radius: 12px; padding: 15px; text-align: center; background: white; opacity: ${accessible ? '1' : '0.6'}; transition: all 0.3s ease;">
-                <div style="height: 180px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                    <img src="${produit.image}" alt="${produit.nom}" style="max-width: 100%; max-height: 100%; object-fit: cover;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='🛍️';">
-                </div>
-                <h4 style="margin: 8px 0; font-size: 1.1em;">${produit.nom}</h4>
-                <p style="color: #666; font-size: 0.85em; margin: 5px 0; min-height: 40px;">${produit.description}</p>
-                <div style="font-size: 1.3em; color: #e74c3c; font-weight: bold; margin: 10px 0;">${produit.prix} MRU</div>
-                
-                ${accessible ? 
-                    `<button onclick="ouvrirFormulaireCommandeProfessionnel(${produit.id}, '${produit.nom.replace(/'/g, "\\'")}', ${produit.prix}, '${produit.image}')" 
-                      style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.3s ease;">
-                        ✅ Commander avec mes MRU
-                    </button>` 
-                    : 
-                    `<button style="background: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: not-allowed; width: 100%;">
-                        ❌ Il vous manque ${produit.prix - solde} MRU
-                    </button>`
-                }
-            </div>
-        `;
-    });
-
-    modal.innerHTML = `
-        <div style="background: white; width: 100%; max-width: 1400px; height: 95vh; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="margin: 0; font-size: 1.5em;">🛍️ Boutique Andu-Xara - Paiement MRU</h2>
-                <button onclick="fermerBoutiqueModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px;">×</button>
-            </div>
-            
-            <div style="padding: 15px; text-align: center; background: #e8f6f3; border-bottom: 1px solid #ddd;">
-                <h3 style="margin: 0; color: #2c3e50;">Solde disponible : <strong style="color: #e74c3c; font-size: 1.2em;">${solde} MRU</strong></h3>
-                <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">Commandez sans payer - Utilisez vos récompenses MRU</p>
-            </div>
-            
-            <div style="flex: 1; padding: 20px; overflow-y: auto;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-                    ${produitsHTML}
-                </div>
-            </div>
-            
-            <div style="padding: 15px; text-align: center; border-top: 1px solid #eee; background: #f8f9fa;">
-                <button onclick="fermerBoutiqueModal()" style="background: #e74c3c; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: bold;">
-                    ❌ Fermer la boutique
-                </button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-}
-
-function fermerBoutiqueModal() {
-    const modal = document.getElementById('boutique-modal');
-    if (modal) modal.remove();
-}
-
-// =============================================
-// FORMULAIRE PROFESSIONNEL
-// =============================================
-
-function ouvrirFormulaireCommandeProfessionnel(idProduit, nomProduit, prixProduit, imageProduit) {
-    console.log('📦 Ouverture formulaire professionnel pour:', nomProduit);
-    
-    fermerBoutiqueModal();
-    
-    const modal = document.createElement('div');
-    modal.id = 'formulaire-commande-modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.95);
-        z-index: 10001;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    `;
-
-    const paysIndicatifs = [
-        { code: 'MR', nom: 'Mauritanie 🇲🇷', indicatif: '+222' },
-        { code: 'SN', nom: 'Sénégal 🇸🇳', indicatif: '+221' },
-        { code: 'ML', nom: 'Mali 🇲🇱', indicatif: '+223' },
-        { code: 'NE', nom: 'Niger 🇳🇪', indicatif: '+227' },
-        { code: 'FR', nom: 'France 🇫🇷', indicatif: '+33' }
-    ];
-
-    let optionsPays = '';
-    paysIndicatifs.forEach(pays => {
-        const selected = pays.code === 'MR' ? 'selected' : '';
-        optionsPays += `<option value="${pays.indicatif}" ${selected}>${pays.nom} (${pays.indicatif})</option>`;
-    });
-
-    modal.innerHTML = `
-        <div style="background: white; width: 100%; max-width: 600px; max-height: 90vh; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="margin: 0; font-size: 1.4em;">📦 Commande Andu-Xara</h2>
-                <button onclick="fermerFormulaireCommande()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px;">×</button>
-            </div>
-            
-            <div style="flex: 1; padding: 25px; overflow-y: auto;">
-                <!-- Produit sélectionné -->
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px; display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        <img src="${imageProduit}" alt="${nomProduit}" style="max-width: 100%; max-height: 100%; object-fit: cover;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='🛍️';">
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0 0 5px 0;">${nomProduit}</h4>
-                        <p style="color: #666; margin: 0 0 8px 0; font-size: 0.9em;">🔄 Paiement avec récompenses MRU</p>
-                        <div style="font-size: 1.3em; color: #e74c3c; font-weight: bold;">${prixProduit} MRU</div>
-                    </div>
-                </div>
-
-                <h3 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">📝 Informations de livraison</h3>
-                
-                <div style="display: grid; gap: 15px;">
-                    <!-- Nom complet -->
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">Nom complet *</label>
-                        <input type="text" id="nom-client" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box;" placeholder="Votre nom complet" required>
-                    </div>
-
-                    <!-- Téléphone avec indicatif -->
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">Téléphone WhatsApp *</label>
-                        <div style="display: flex; gap: 10px;">
-                            <select id="indicatif-pays" style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; width: 150px;">
-                                ${optionsPays}
-                            </select>
-                            <input type="tel" id="telephone-client" style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box;" placeholder="Numéro de téléphone" required>
-                        </div>
-                        <small style="color: #666; display: block; margin-top: 5px;">📞 Nous vous contacterons sur WhatsApp</small>
-                    </div>
-
-                    <!-- Adresse -->
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">Adresse de livraison *</label>
-                        <textarea id="adresse-client" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; min-height: 80px; resize: vertical;" placeholder="Votre adresse complète de livraison" required></textarea>
-                    </div>
-
-                    <!-- Ville -->
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">Ville *</label>
-                        <input type="text" id="ville-client" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box;" placeholder="Votre ville" required>
-                    </div>
-
-                    <!-- Notes -->
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">Notes de livraison</label>
-                        <textarea id="notes-livraison" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; min-height: 60px; resize: vertical;" placeholder="Instructions spéciales pour la livraison"></textarea>
-                    </div>
-                </div>
-
-                <!-- Bouton de confirmation -->
-                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
-                    <button onclick="confirmerCommandeProfessionnelle(${idProduit}, '${nomProduit.replace(/'/g, "\\'")}', ${prixProduit})" 
-                            style="background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; transition: all 0.3s ease;">
-                        🔐 Confirmer la commande sécurisée
-                    </button>
-                    <p style="text-align: center; color: #666; font-size: 0.9em; margin-top: 10px;">
-                        ✅ Commande 100% gratuite avec vos MRU • 📞 Contact WhatsApp garanti
-                    </p>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-}
-
-function fermerFormulaireCommande() {
-    const modal = document.getElementById('formulaire-commande-modal');
-    if (modal) modal.remove();
-}
-
-// =============================================
-// NOTIFICATION WHATSAPP AVEC TON NUMÉRO
-// =============================================
-
-function envoyerNotificationAnduXara(commande) {
-    // TON NUMÉRO WHATSAPP CONFIGURÉ
-    const tonNumeroWhatsApp = '+22249037697';
-    
-    const messageAnduXara = `
-🛍️ *NOUVELLE COMMANDE ANDU-XARA - RÉCOMPENSES MRU* 🛍️
-
-📦 *PRODUIT:* ${commande.produit}
-💰 *PRIX:* ${commande.prix} MRU
-👤 *CLIENT:* ${commande.client.nom}
-📞 *WHATSAPP:* https://wa.me/${commande.client.telephone.replace('+', '')}
-🏠 *ADRESSE:* ${commande.client.adresse}, ${commande.client.ville}
-
-📋 *RÉFÉRENCE:* ${commande.id}
-🕐 *DATE:* ${new Date().toLocaleString('fr-FR')}
-🔐 *TYPE:* Paiement Récompenses MRU
-
-📝 *NOTES:* ${commande.client.notes || 'Aucune note'}
-
-⚡ *ACTION REQUISE:* Contacter le client sur WhatsApp
-    `.trim();
-
-    const messageEncoded = encodeURIComponent(messageAnduXara);
-    const urlWhatsApp = `https://wa.me/${tonNumeroWhatsApp.replace('+', '')}?text=${messageEncoded}`;
-    
-    window.open(urlWhatsApp, '_blank', 'width=600,height=700');
-    sauvegarderNotification(commande, messageAnduXara);
-}
-
-function sauvegarderNotification(commande, message) {
-    const notifications = JSON.parse(localStorage.getItem('anduxara_notifications') || '[]');
-    notifications.unshift({
-        type: 'nouvelle_commande_mru',
-        commande: commande,
-        timestamp: new Date().toISOString(),
-        message: message,
-        lu: false
-    });
-    
-    const notificationsTriees = notifications.slice(0, 50);
-    localStorage.setItem('anduxara_notifications', JSON.stringify(notificationsTriees));
-    mettreAJourBadgeNotifications();
-}
-
-// =============================================
-// CONFIRMATION DE COMMANDE
-// =============================================
-
-function confirmerCommandeProfessionnelle(idProduit, nomProduit, prixProduit) {
-    const nom = document.getElementById('nom-client').value.trim();
-    const indicatif = document.getElementById('indicatif-pays').value;
-    const telephone = document.getElementById('telephone-client').value.trim();
-    const adresse = document.getElementById('adresse-client').value.trim();
-    const ville = document.getElementById('ville-client').value.trim();
-    const notes = document.getElementById('notes-livraison').value.trim();
-
-    if (!nom || !telephone || !adresse || !ville) {
-        alert('❌ Veuillez remplir tous les champs obligatoires (*)');
-        return;
-    }
-
-    const telephoneComplet = `${indicatif}${telephone.replace(/\D/g, '')}`;
-    
-    const systeme = initialiserSystemeRecompenses();
-    const solde = systeme.data.soldeRecompenses;
-
-    if (solde >= prixProduit) {
-        const messageConfirmation = `
-CONFIRMATION DE COMMANDE ANDU-XARA
-
-📦 Produit: ${nomProduit}
-💰 Prix: ${prixProduit} MRU (Récompenses)
-👤 Client: ${nom}
-📞 WhatsApp: ${telephoneComplet}
-🏠 Adresse: ${adresse}, ${ville}
-${notes ? `📝 Notes: ${notes}` : ''}
-
-Voulez-vous finaliser cette commande ?
-        `.trim();
-
-        if (confirm(messageConfirmation)) {
-            systeme.data.soldeRecompenses -= prixProduit;
-            
-            const commande = {
-                id: 'CMD-' + Date.now(),
-                produit: nomProduit,
-                prix: prixProduit,
-                date: new Date().toISOString(),
-                statut: 'confirmée',
-                type: 'recompenses_mru',
-                client: {
-                    nom: nom,
-                    telephone: telephoneComplet,
-                    adresse: adresse,
-                    ville: ville,
-                    notes: notes
-                }
-            };
-            
-            systeme.data.commandesRecompenses.push(commande);
-            systeme.sauvegarderDonnees();
-            envoyerNotificationAnduXara(commande);
-            fermerFormulaireCommande();
-            
-            alert(`🎉 COMMANDE ANDU-XARA CONFIRMÉE !
-
-✅ Votre commande a été traitée avec succès
-📦 Produit: ${nomProduit}
-💰 Prix: ${prixProduit} MRU (Payé avec vos récompenses)
-👤 Client: ${nom}
-📞 Contact: ${telephoneComplet}
-🏠 Livraison: ${adresse}, ${ville}
-
-🔄 Statut: En préparation
-📋 Référence: ${commande.id}
-
-💎 Nouveau solde: ${systeme.data.soldeRecompenses} MRU
-
-📱 Nous vous contacterons sur WhatsApp pour confirmer la livraison.
-
-Merci pour votre confiance ! 🛍️`);
-            
-            systeme.mettreAJourAffichage();
-        }
-    } else {
-        alert(`❌ Erreur de solde ! Il vous manque ${prixProduit - solde} MRU`);
-    }
-}
-
-// =============================================
-// FONCTIONS PRINCIPALES
-// =============================================
-
-function initialiserSystemeRecompenses() {
-    if (!systemeRecompensesGlobal) {
-        systemeRecompensesGlobal = new SystemeRecompenses();
-    }
-    return systemeRecompensesGlobal;
-}
-
-function sauvegarderDonnees() {
-    if (systemeRecompensesGlobal) {
-        systemeRecompensesGlobal.sauvegarderDonnees();
-    }
-}
-
-// =============================================
-// INITIALISATION
-// =============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initialisation système professionnel...');
-    initialiserSystemeRecompenses();
-    setTimeout(() => {
-        mettreAJourBadgeNotifications();
-    }, 2000);
-});
-
-// =============================================
-// EXPORT DE TOUTES LES FONCTIONS
-// =============================================
-
-window.ouvrirBoutiqueRecompenses = ouvrirBoutiqueRecompenses;
-window.fermerBoutiqueModal = fermerBoutiqueModal;
-window.ouvrirFormulaireCommandeProfessionnel = ouvrirFormulaireCommandeProfessionnel;
-window.fermerFormulaireCommande = fermerFormulaireCommande;
-window.confirmerCommandeProfessionnelle = confirmerCommandeProfessionnelle;
-window.initialiserSystemeRecompenses = initialiserSystemeRecompenses;
-window.marquerCommeLue = marquerCommeLue;
-window.fermerHistorique = fermerHistorique;
-window.utiliserPointsFidelite = utiliserPointsFidelite;
-window.verifierMesParrainages = verifierMesParrainages;
-window.testerParrainage = testerParrainage;
-window.afficherDetailsParrainage = afficherDetailsParrainage;
-window.genererLienParrainage = genererLienParrainage;
-
-console.log('✅ Système Andu-Xara Professionnel chargé - TOUTES FONCTIONS OPÉRATIONNELLES !');
-</script>
 </body>
 </html>
 
