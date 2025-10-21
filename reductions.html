@@ -3,2062 +3,1862 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes Promo & Réductions - Andu-Xara</title>
-<style>
-    /* STYLES EXISTANTS - CONSERVÉS */
-    body { 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-        margin: 0; 
-        padding: 0;
-        color: #333;
-    }
+    <title>Codes Promo - Andu Xara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+    <!-- Firebase SDK Compatibility -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="panier-shared.js"></script>
     
-    .header {
-        text-align: center;
-        padding: 40px 20px;
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: white;
-        border-radius: 0 0 20px 20px;
-        margin-bottom: 40px;
-    }
-    
-    .header h1 {
-        margin: 0;
-        font-size: 2.5rem;
-    }
-    
-    .header p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        margin-top: 10px;
-    }
-    
-    .promo-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
-        margin-bottom: 40px;
-    }
-    
-    .promo-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        text-align: center;
-        transition: transform 0.3s ease;
-        border: 2px solid transparent;
-        position: relative;
-    }
-    
-    .promo-card:hover {
-        transform: translateY(-5px);
-        border-color: #6a11cb;
-    }
-    
-    .promo-badge {
-        position: absolute;
-        top: -10px;
-        right: 20px;
-        background: #e74c3c;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-    
-    .promo-code {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #6a11cb;
-        margin: 15px 0;
-        font-family: 'Courier New', monospace;
-    }
-    
-    .promo-description {
-        color: #666;
-        margin-bottom: 20px;
-        line-height: 1.5;
-    }
-    
-    .promo-details {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        text-align: left;
-    }
-    
-    .promo-details span {
-        display: block;
-        margin: 5px 0;
-        font-size: 0.9rem;
-    }
-    
-    .copy-btn {
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-    
-    .copy-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
-    }
-    
-    .copy-btn.copied {
-        background: #27ae60;
-    }
-    
-    .copy-btn:disabled {
-        background: #95a5a6;
-        cursor: not-allowed;
-        transform: none;
-    }
-    
-    .activation-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        margin-bottom: 40px;
-    }
-    
-    .activation-input {
-        display: flex;
-        gap: 15px;
-        margin-top: 20px;
-    }
-    
-    .activation-input input {
-        flex: 1;
-        padding: 15px 20px;
-        border: 2px solid #e2e8f0;
-        border-radius: 10px;
-        font-size: 1rem;
-        outline: none;
-        transition: border-color 0.3s ease;
-    }
-    
-    .activation-input input:focus {
-        border-color: #6a11cb;
-    }
-    
-    .activation-input button {
-        background: #27ae60;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .activation-input button:hover {
-        background: #219653;
-        transform: translateY(-2px);
-    }
-    
-    .history-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-    
-    .history-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .history-item:last-child {
-        border-bottom: none;
-    }
-    
-    .back-btn {
-        display: inline-block;
-        margin-top: 30px;
-        padding: 12px 25px;
-        background: #6a11cb;
-        color: white;
-        text-decoration: none;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .back-btn:hover {
-        background: #2575fc;
-        transform: translateY(-2px);
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* BOUTON PRINCIPAL POUR OUVRIR LA MODALE */
-    .promo-modal-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: linear-gradient(135deg, #e74c3c, #e67e22);
-        color: white;
-        border: none;
-        padding: 20px 25px;
-        border-radius: 50px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1.1rem;
-        box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-        z-index: 1000;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .promo-modal-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 12px 30px rgba(231, 76, 60, 0.6);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
 
-    /* MODALE PRODUITS AVEC RÉDUCTIONS */
-    .promo-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.8);
-        z-index: 2000;
-        overflow-y: auto;
-    }
-    
-    .modal-content {
-        background: white;
-        margin: 2% auto;
-        width: 95%;
-        max-width: 1400px;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        animation: modalSlideIn 0.4s ease;
-    }
-    
-    @keyframes modalSlideIn {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-    
-    .modal-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: white;
-        padding: 25px 30px;
-        border-radius: 20px 20px 0 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .modal-header h2 {
-        margin: 0;
-        flex: 1;
-    }
-    
-    .close-modal {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 2rem;
-        cursor: pointer;
-        padding: 0;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .modal-body {
-        padding: 30px;
-        display: grid;
-        grid-template-columns: 1fr 400px;
-        gap: 30px;
-        min-height: 600px;
-    }
-    
-    /* SECTION PRODUITS DANS LA MODALE */
-    .modal-products {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-        max-height: 700px;
-        overflow-y: auto;
-        padding-right: 15px;
-    }
-    
-    .modal-product-card {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-    }
-    
-    .modal-product-card:hover {
-        transform: translateY(-5px);
-        border-color: #6a11cb;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    
-    /* STYLE POUR LES IMAGES RÉELLES DES PRODUITS */
-    .product-image-modal {
-        width: 100%;
-        height: 200px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
-    }
-    
-    .product-image-modal img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-    
-    .modal-product-card:hover .product-image-modal img {
-        transform: scale(1.05);
-    }
-    
-    .product-title-modal {
-        font-weight: bold;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-        line-height: 1.3;
-    }
-    
-    .product-description-modal {
-        color: #666;
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-        line-height: 1.4;
-    }
-    
-    .price-section-modal {
-        margin: 15px 0;
-    }
-    
-    .original-price-modal {
-        text-decoration: line-through;
-        color: #999;
-        font-size: 0.9rem;
-    }
-    
-    .promo-price-modal {
-        color: #e74c3c;
-        font-weight: bold;
-        font-size: 1.3rem;
-        margin: 5px 0;
-    }
-    
-    .savings-modal {
-        color: #27ae60;
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
-    
-    .add-to-cart-modal {
-        background: #6a11cb;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        width: 100%;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-        font-size: 0.9rem;
-    }
-    
-    .add-to-cart-modal:hover {
-        background: #2575fc;
-        transform: translateY(-2px);
-    }
-    
-    /* PANIER DANS LA MODALE */
-    .modal-cart {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 25px;
-        height: fit-content;
-        position: sticky;
-        top: 20px;
-    }
-    
-    .cart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #e2e8f0;
-    }
-    
-    .cart-items {
-        max-height: 300px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-    }
-    
-    .cart-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .cart-item:last-child {
-        border-bottom: none;
-    }
-    
-    .item-details {
-        flex: 1;
-    }
-    
-    .item-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 0.9rem;
-        line-height: 1.3;
-    }
-    
-    .item-price {
-        color: #6a11cb;
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
-    
-    .item-quantity {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .quantity-btn {
-        background: #e2e8f0;
-        border: none;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-    }
-    
-    .remove-item {
-        background: none;
-        border: none;
-        color: #e74c3c;
-        cursor: pointer;
-        margin-left: 10px;
-        font-size: 0.9rem;
-    }
-    
-    .cart-total {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-        border: 2px solid #e2e8f0;
-    }
-    
-    .total-line {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        font-size: 0.9rem;
-    }
-    
-    .discount-badge {
-        background: #27ae60;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-    
-    .order-btn-modal {
-        background: linear-gradient(135deg, #27ae60, #2ecc71);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1rem;
-        width: 100%;
-        margin-top: 15px;
-        transition: all 0.3s ease;
-    }
-    
-    .order-btn-modal:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
-    }
-    
-    /* FORMULAIRE DE COMMANDE */
-    .order-form {
-        display: none;
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        margin-top: 20px;
-        border: 2px solid #e2e8f0;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-        font-size: 0.9rem;
-    }
-    
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-    }
-    
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        border-color: #6a11cb;
-        outline: none;
-    }
-    
-    .phone-input {
-        display: flex;
-        gap: 10px;
-    }
-    
-    .country-code {
-        width: 120px;
-    }
-    
-    .phone-number {
-        flex: 1;
-    }
-    
-    .countries-note {
-        font-size: 0.8rem;
-        color: #666;
-        margin-top: 5px;
-        font-style: italic;
-    }
-    
-    .form-buttons {
-        display: flex;
-        gap: 15px;
-        margin-top: 25px;
-    }
-    
-    .submit-btn {
-        background: linear-gradient(135deg, #27ae60, #2ecc71);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-        flex: 1;
-        font-size: 1rem;
-    }
-    
-    .cancel-btn {
-        background: #95a5a6;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1rem;
-    }
-
-    /* ===== CORRECTIONS MOBILE PORTRAIT ===== */
-    @media (max-width: 768px) and (orientation: portrait) {
         .container {
-            padding: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
+
         .header {
-            padding: 25px 15px;
-            margin-bottom: 25px;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
         }
-        
+
         .header h1 {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        
+
         .header p {
-            font-size: 1rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-        
-        .activation-section {
-            padding: 20px;
-            margin-bottom: 25px;
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
-        
-        .activation-input {
-            flex-direction: column;
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        .promo-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+
+        .promo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        
-        .promo-card {
-            padding: 20px;
+
+        .promo-section h2 {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .promo-code {
-            font-size: 1.5rem;
+
+        .promo-section h2 i {
+            color: #667eea;
         }
-        
-        .modal-content {
-            margin: 1% auto;
-            width: 98%;
-            border-radius: 15px;
+
+        .promo-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
         }
-        
-        .modal-header {
-            padding: 15px 20px;
+
+        .promo-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
         }
-        
-        .modal-header h2 {
+
+        .promo-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .promo-btn {
+            padding: 14px 28px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .promo-btn:hover:not(:disabled) {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .promo-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .promo-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .promo-loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #667eea;
+        }
+
+        .promo-loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .promo-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .promo-success {
+            background: #f0fff4;
+            color: #2d7d32;
+            border: 1px solid #9ae6b4;
+        }
+
+        .promo-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+
+        .discount-display {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            display: none;
+            animation: slideIn 0.5s;
+            text-align: center;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .discount-display h3 {
+            margin-bottom: 0.5rem;
             font-size: 1.3rem;
         }
-        
-        .modal-body {
-            grid-template-columns: 1fr;
-            gap: 20px;
-            padding: 15px;
-            min-height: auto;
+
+        .discount-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
         }
-        
-        .modal-products {
-            max-height: 50vh;
-            padding-right: 0;
-            grid-template-columns: 1fr;
-            gap: 15px;
+
+        .info-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        
-        .modal-cart {
-            position: relative;
+
+        .info-section h2 {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-section h2 i {
+            color: #667eea;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-card p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+        }
+
+        .admin-section h2 {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-section h2 i {
+            color: #e53e3e;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            padding: 12px 24px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .admin-btn.secondary {
+            background: #4a5568;
+        }
+
+        .admin-btn.secondary:hover {
+            background: #2d3748;
+        }
+
+        .test-codes {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .test-codes h3 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .code-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .test-code {
+            background: #f7fafc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px dashed #cbd5e0;
+            font-family: monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .test-code:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Styles pour l'authentification */
+        .auth-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .auth-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .auth-btn.outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .auth-btn.outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .user-profile {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            display: block;
+            color: #2d3748;
+        }
+
+        .user-email {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .profile-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .profile-btn:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
             top: 0;
-            max-height: 40vh;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .modal-product-card {
-            padding: 15px;
-        }
-        
-        .product-image-modal {
-            height: 150px;
-        }
-        
-        .product-title-modal {
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-        
-        .product-description-modal {
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
-        
-        .promo-price-modal {
-            font-size: 1.1rem;
-        }
-        
-        .cart-header h3 {
-            font-size: 1.1rem;
-        }
-        
-        .cart-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 10px 0;
-        }
-        
-        .item-quantity {
-            align-self: flex-end;
-        }
-        
-        .order-form {
-            padding: 20px;
-            margin-top: 15px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 10px 12px;
-            font-size: 0.9rem;
-        }
-        
-        .phone-input {
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .country-code {
+            left: 0;
             width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
-        
-        .form-buttons {
-            flex-direction: column;
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .form-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .form-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .verification-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .warning-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: 10px;
         }
-        
-        .promo-modal-btn {
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            font-size: 0.9rem;
-            z-index: 1001;
-        }
-        
-        /* AJOUT: Optimisation images mobile */
-        .product-image-modal img {
-            loading: lazy;
-            aspect-ratio: 1/1;
-        }
-        
-        .modal-content {
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-        
-        /* Prévenir le zoom sur les inputs iOS */
-        input, select, textarea {
-            font-size: 16px !important;
-        }
-    }
 
-    /* ===== CORRECTIONS POUR TRÈS PETITS ÉCRANS ===== */
-    @media (max-width: 480px) and (orientation: portrait) {
-        .modal-products {
-            max-height: 45vh;
-        }
-        
-        .product-image-modal {
-            height: 120px;
-        }
-        
-        .cart-total {
-            padding: 15px;
-        }
-        
-        .total-line {
-            font-size: 0.8rem;
-        }
-        
-        .order-btn-modal {
-            padding: 12px;
+        .warning-content button {
+            background: #856404;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 0.9rem;
         }
-    }
 
-    /* ===== CORRECTIONS HAUTEUR MINIMALE ===== */
-    @media (max-height: 700px) and (orientation: portrait) {
-        .modal-body {
-            min-height: 400px;
-        }
-        
-        .modal-products {
-            max-height: 40vh;
-        }
-        
-        .modal-cart {
-            max-height: 35vh;
-        }
-    }
-    
-    /* AJOUT: Correction hauteur pour très petits écrans */
-    @media (max-height: 600px) {
-        .modal-body {
-            grid-template-columns: 1fr;
-            max-height: 80vh;
-        }
-        
-        .modal-products {
-            max-height: 40vh;
-        }
-        
-        .modal-cart {
-            max-height: 35vh;
-        }
-    }
+/* Styles pour le panier unifié */
+.panier-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #48bb78;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+}
 
-    /* ===== CORRECTIONS POUR PAYSAGE ===== */
-    @media (max-width: 768px) and (orientation: landscape) {
-        .modal-body {
-            grid-template-columns: 1fr 350px;
-        }
-        
-        .modal-products {
-            max-height: 65vh;
-        }
-        
-        .modal-cart {
-            max-height: 65vh;
-        }
-    }
-</style>
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.notification-content button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.panier-compteur {
+    background: #e53e3e;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+    </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎁 Codes Promo Exclusifs</h1>
-        <p>Profitez de réductions exceptionnelles sur la collection Andu-Xara 2025</p>
-    </div>
-
     <div class="container">
-        <!-- ACTIVATION MANUELLE -->
-        <section class="activation-section">
-            <h2>💎 Activez votre code promo</h2>
-            <p>Entrez votre code ci-dessous pour débloquer les réductions spéciales</p>
-            
-            <div class="activation-input">
-                <input type="text" id="manual-promo-input" placeholder="Exemple: BIENVENUE15">
-                <button onclick="validateAndApplyPromo()">Activer le Code ✅</button>
-            </div>
-            
-            <div id="activation-result" style="margin-top: 15px;"></div>
-        </section>
-
-        <!-- CODES PROMO DISPONIBLES -->
-        <section class="promo-grid" id="promo-cards-container">
-            <!-- Les cartes de codes promo seront générées ici par JavaScript -->
-        </section>
-
-        <!-- HISTORIQUE DES CODES UTILISÉS -->
-        <section class="history-section">
-            <h2>📋 Historique de vos codes</h2>
-            <div id="promo-history-container">
-                <!-- L'historique sera généré ici -->
-            </div>
-        </section>
-
-        <!-- BOUTON RETOUR -->
-        <div style="text-align: center;">
-            <button onclick="window.location.href='index.html'" class="back-btn">⬅️ Retour à l'accueil</button>
+        <!-- En-tête -->
+        <div class="header">
+            <h1><i class="fas fa-tag"></i> Codes Promo Exclusifs</h1>
+            <p>Profitez de réductions exceptionnelles sur nos produits</p>
         </div>
-    </div>
 
-    <!-- BOUTON POUR OUVRIR LA MODALE -->
-    <button class="promo-modal-btn" onclick="openPromoModal()">
-        🎁 Voir les réductions
-    </button>
-
-    <!-- MODALE PRODUITS AVEC RÉDUCTIONS -->
-    <div class="promo-modal" id="promoModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>🛍️ Produits avec votre réduction</h2>
-                <button class="close-modal" onclick="closePromoModal()">×</button>
+        <!-- Section Authentification -->
+        <div class="auth-section">
+            <div id="authButtons" class="auth-buttons">
+                <button class="auth-btn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+                <button class="auth-btn outline" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Créer un compte
+                </button>
             </div>
-            
-            <div class="modal-body">
-                <!-- SECTION PRODUITS -->
-                <div class="modal-products" id="modalProducts">
-                    <!-- Les produits avec réductions apparaîtront ici -->
+
+            <div id="userProfile" class="user-profile">
+                <div class="profile-header">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userDisplayName">Utilisateur</span>
+                        <span class="user-email" id="userEmail">email@example.com</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="profile-btn" onclick="showUserHistory()">
+                        <i class="fas fa-history"></i> Mon historique
+                    </button>
+                    <button class="profile-btn" onclick="authManager.signOut()">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </div>
+
+            <div id="verificationWarning" class="verification-warning">
+                <div class="warning-content">
+                    <div>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez vérifier votre adresse email pour accéder à toutes les fonctionnalités
+                    </div>
+                    <button onclick="authManager.sendEmailVerification()">Renvoyer l'email</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="main-content">
+            <!-- Section Application Code Promo -->
+            <div class="promo-section">
+                <h2><i class="fas fa-gift"></i> Appliquer un code promo</h2>
+                
+                <div class="promo-input-group">
+                    <input type="text" 
+                           class="promo-input" 
+                           placeholder="Saisissez votre code promo..."
+                           maxlength="20"
+                           id="promoInput">
+                    <button class="promo-btn" onclick="applyPromoCode()">
+                        <i class="fas fa-check-circle"></i> Appliquer
+                    </button>
                 </div>
                 
-                <!-- SECTION PANIER ET COMMANDE -->
-                <div class="modal-cart">
-                    <div class="cart-header">
-                        <h3>🛒 Votre panier promo</h3>
-                        <span class="discount-badge" id="activePromoBadge" style="display: none;">-0%</span>
+                <div class="promo-loading" id="loading">
+                    <i class="fas fa-spinner"></i> Validation en cours...
+                </div>
+                
+                <div class="promo-message" id="message"></div>
+                
+                <div class="discount-display" id="discountDisplay">
+                    <h3>Félicitations !</h3>
+                    <div class="discount-value" id="discountValue"></div>
+                    <p>Votre réduction a été appliquée avec succès</p>
+                </div>
+
+                <div class="test-codes">
                     </div>
-                    
-                    <div class="cart-items" id="modalCartItems">
-                        <!-- Les articles du panier apparaîtront ici -->
-                        <div style="text-align: center; color: #666; padding: 40px 20px;">
-                            Votre panier est vide<br>
-                            <small>Ajoutez des produits pour voir votre commande</small>
-                        </div>
+                </div>
+            </div>
+
+
+            <!-- Section Informations -->
+            <div class="info-section">
+                <h2><i class="fas fa-info-circle"></i> Comment ça marche</h2>
+                <p>Entrez votre code promo dans le champ ci-contre et cliquez sur "Appliquer" pour bénéficier de votre réduction.</p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-shield-alt"></i> Sécurisé</h3>
+                        <p>Validation en temps réel avec protection anti-fraude</p>
                     </div>
-                    
-                    <div class="cart-total">
-                        <div class="total-line">
-                            <span>Sous-total:</span>
-                            <span id="cartSubtotal">0 MRU</span>
-                        </div>
-                        <div class="total-line">
-                            <span>Réduction:</span>
-                            <span style="color: #27ae60;" id="cartDiscount">-0 MRU</span>
-                        </div>
-                        <div class="total-line" style="font-weight: bold; font-size: 1.2rem; border-top: 1px solid #eee; padding-top: 10px;">
-                            <span>Total:</span>
-                            <span id="cartTotal">0 MRU</span>
-                        </div>
-                        
-                        <button class="order-btn-modal" onclick="showOrderForm()">
-                            📋 Passer la commande
-                        </button>
+                    <div class="info-card">
+                        <h3><i class="fas fa-bolt"></i> Instantané</h3>
+                        <p>Application immédiate de la réduction</p>
                     </div>
-                    
-<!-- FORMULAIRE DE COMMANDE -->
-<div class="order-form" id="orderForm">
-    <h4 style="margin-bottom: 20px;">📝 Informations de commande</h4>
-    
-    <div class="form-group">
-        <label>Nom et Prénom *</label>
-        <input type="text" id="customerName" placeholder="Votre nom complet" required>
-    </div>
-    
-    <div class="form-group">
-        <label>Taille *</label>
-        <select id="productSize" required>
-            <option value="">Choisissez votre taille</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-            <option value="3-5ans">3-5 ans</option>
-            <option value="6-8ans">6-8 ans</option>
-            <option value="9-12ans">9-12 ans</option>
-            <option value="Unique">Unique</option>
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label>Couleur préférée</label>
-        <input type="text" id="productColor" placeholder="Ex: Noir, Blanc, Bleu, Beige...">
-    </div>
-    
-    <div class="form-group">
-        <label>Numéro de téléphone *</label>
-        <div class="phone-input">
-            <select class="country-code" id="countryCode" required style="width: 140px;">
-                <option value="+222">🇲🇷 +222 Mauritanie</option>
-                <option value="+221">🇸🇳 +221 Sénégal</option>
-                <option value="+223">🇲🇱 +223 Mali</option>
-                <option value="+220">🇬🇲 +220 Gambie</option>
-                <option value="+33">🇫🇷 +33 France</option>
-            </select>
-            <input type="tel" class="phone-number" id="phoneNumber" placeholder="Votre numéro" required style="flex: 1;">
+                    <div class="info-card">
+                        <h3><i class="fas fa-history"></i> Historique</h3>
+                        <p>Suivi complet de l'utilisation des codes</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-user-lock"></i> Admin</h3>
+                        <p>Tableau de bord en temps réel pour gestion</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="countries-note">
-            📍 Seuls ces pays sont éligibles pour cette offre
+
+<div class="reduction-section">
+    <input type="text" id="promoInput" placeholder="Votre code promo">
+    <button onclick="validateAndApplyPromo()">Appliquer</button>
+    <p id="promoMessage"></p>
+
+<!-- Ajoutez ceci près de votre champ code promo -->
+<div id="currentPromoDisplay" style="display: none; margin: 10px 0; padding: 10px; background: #e8f5e8; border-radius: 5px;">
+    <strong>Code appliqué: <span id="appliedCode"></span></strong>
+    <br>
+    <span id="appliedDiscount"></span>
+    <button onclick="resetPromo()" style="margin-left: 10px; padding: 2px 8px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer;">
+        Retirer
+    </button>
+</div>
+    
+    <!-- 🎯 AJOUTE CE CODE ICI -->
+<div class="promo-instructions" style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-top: 25px; border-left: 4px solid #6a11cb;">
+    <h4 style="color: #6a11cb; margin-bottom: 15px; text-align: center;">🎁 Comment obtenir un code promo ?</h4>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        
+        <!-- Instagram -->
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">📷</div>
+            <div style="font-weight: bold; color: #2c3e50;">Instagram</div>
+            <a href="https://www.instagram.com/andu_xara" target="_blank" 
+               style="font-size: 0.9rem; color: #6a11cb; text-decoration: none; font-weight: 500;">
+                @andu_xara
+            </a>
         </div>
+        
+        <!-- TikTok -->
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">🎵</div>
+            <div style="font-weight: bold; color: #2c3e50;">TikTok</div>
+            <a href="https://www.tiktok.com/@andu_xara" target="_blank" 
+               style="font-size: 0.9rem; color: #6a11cb; text-decoration: none; font-weight: 500;">
+                @andu_xara
+            </a>
+        </div>
+        
+        <!-- Facebook -->
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">📘</div>
+            <div style="font-weight: bold; color: #2c3e50;">Facebook</div>
+            <a href="https://www.facebook.com/share/1HxCMHr3bE/" target="_blank" 
+               style="font-size: 0.9rem; color: #6a11cb; text-decoration: none; font-weight: 500;">
+                Andu-Xara
+            </a>
+        </div>
+        
+        <!-- WhatsApp -->
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">💬</div>
+            <div style="font-weight: bold; color: #2c3e50;">Contact</div>
+            <a href="https://wa.me/22249037697" target="_blank" 
+               style="font-size: 0.9rem; color: #6a11cb; text-decoration: none; font-weight: 500;">
+                WhatsApp
+            </a>
+        </div>
+        
     </div>
     
-    <div class="form-group">
-        <label>Recommandations ou conseils</label>
-        <textarea id="customerNotes" rows="3" placeholder="Avez-vous des demandes particulières ?"></textarea>
-    </div>
-    
-    <div class="form-buttons">
-        <button type="button" class="submit-btn" onclick="submitOrder()">
-            ✅ Envoyer la commande
-        </button>
-        <button type="button" class="cancel-btn" onclick="hideOrderForm()">
-            Annuler
-        </button>
+    <!-- Ligne supplémentaire simple -->
+    <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 5px;">📧 Newsletter Exclusive</div>
+        <div style="font-size: 0.9rem; color: #666;">
+            Inscrivez-vous sur notre site
+        </div>
     </div>
 </div>
-    <script>
-        // ===== SYSTÈME PROFESSIONNEL CODES PROMO =====
-        class PromoCodeManager {
-            constructor() {
-                this.promoCodes = this.loadPromoCodes();
-                this.usedCodes = JSON.parse(localStorage.getItem('anduxara_used_promos')) || [];
-                this.activePromo = this.validateStoredPromo();
-                
-                this.initializeGlobalStats();
-                this.initializeAdminSystem();
-            }
+        <!-- Section Administration -->
+        <div class="admin-section admin-element" style="display: none;">
+            <h2><i class="fas fa-cogs"></i> Administration</h2>
+            <p>Accédez au tableau de bord pour gérer les codes promo et surveiller les utilisations.</p>
             
-            // NOUVELLE MÉTHODE : Initialiser le système admin
-            initializeAdminSystem() {
-                if (!localStorage.getItem('anduxara_admin_initialized')) {
-                    localStorage.setItem('anduxara_admin_initialized', 'true');
-                }
-            }
-            
-            // MÉTHODE ADMIN CORRIGÉE : Plus simple et fiable
-            isAdmin() {
-                // Vérifier le mot de passe admin dans localStorage
-                if (localStorage.getItem('anduxara_admin') === 'true') {
-                    return true;
-                }
-                
-                // Vérifier par paramètre URL (pour activer facilement)
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('admin') === 'true') {
-                    localStorage.setItem('anduxara_admin', 'true');
-                    return true;
-                }
-                
-                // Vérifier par domaine (optionnel)
-                if (window.location.hostname.includes('andu-xara') || 
-                    window.location.hostname.includes('github.io') ||
-                    window.location.hostname === 'localhost') {
-                    return true;
-                }
-                
-                return false;
-            }
-            
-            // MÉTHODE : Activer le mode admin
-            enableAdminMode() {
-                const password = prompt('🔐 Entrez le mot de passe administrateur:');
-                if (password === 'anduxara2408') {
-                    localStorage.setItem('anduxara_admin', 'true');
-                    showNotification('✅ Mode admin activé !', 'success');
-                    addAdminResetButton(); // Re-créer le bouton
-                    return true;
-                } else {
-                    showNotification('❌ Mot de passe incorrect', 'error');
-                    return false;
-                }
-            }
-            
-            validateStoredPromo() {
-                const storedPromo = JSON.parse(localStorage.getItem('active_promo_session'));
-                if (!storedPromo) return null;
-                
-                const validation = this.validatePromoCode(storedPromo.code);
-                if (validation.valid) {
-                    return storedPromo;
-                } else {
-                    localStorage.removeItem('active_promo_session');
-                    return null;
-                }
-            }
-            
-            initializeGlobalStats() {
-                if (!localStorage.getItem('anduxara_global_promo_stats')) {
-                    const initialStats = {};
-                    Object.keys(this.promoCodes).forEach(code => {
-                        initialStats[code] = {
-                            totalUses: this.promoCodes[code].usedCount,
-                            totalRevenue: 0,
-                            lastUsed: null
-                        };
-                    });
-                    localStorage.setItem('anduxara_global_promo_stats', JSON.stringify(initialStats));
-                }
-            }
-            
-            loadPromoCodes() {
-                return {
-                    "BIENVENUE15": {
-                        type: "percentage",
-                        value: 15,
-                        minPurchase: 0,
-                        validUntil: "2025-12-31",
-                        usageLimit: 1000,
-                        usedCount: 243,
-                        isActive: true,
-                        description: "15% de réduction sur votre première commande",
-                        badge: "Nouveau"
-                    },
-                    "ETE2025": {
-                        type: "percentage", 
-                        value: 20,
-                        minPurchase: 100,
-                        validUntil: "2025-08-31",
-                        usageLimit: 500,
-                        usedCount: 127,
-                        isActive: true,
-                        categories: ["t-shirts", "ensembles"],
-                        description: "20% de réduction sur la collection été",
-                        badge: "Populaire"
-                    },
-                    "FIDELITE10": {
-                        type: "percentage",
-                        value: 10,
-                        minPurchase: 50,
-                        validUntil: "2025-12-31", 
-                        usageLimit: 2000,
-                        usedCount: 892,
-                        isActive: true,
-                        description: "10% de réduction fidélité pour nos clients réguliers",
-                        badge: "Fidélité"
-                    },
-                    "SOLDE25": {
-                        type: "percentage",
-                        value: 25,
-                        minPurchase: 200,
-                        validUntil: "2025-06-30",
-                        usageLimit: 300,
-                        usedCount: 89,
-                        isActive: true,
-                        description: "25% de réduction exceptionnelle - Soldes été 2025",
-                        badge: "Flash"
-                    }
-                };
-            }
-            
-            validatePromoCode(code) {
-                if (!code || code.length < 4 || code.length > 20) {
-                    return { valid: false, message: "❌ Format de code invalide" };
-                }
-                
-                if (!/^[A-Z0-9]+$/.test(code.toUpperCase())) {
-                    return { valid: false, message: "❌ Code contient des caractères invalides" };
-                }
-                
-                const promoCode = this.promoCodes[code.toUpperCase()];
-                
-                if (!promoCode) {
-                    return { valid: false, message: "❌ Code promo invalide" };
-                }
-                
-                if (!promoCode.isActive) {
-                    return { valid: false, message: "❌ Code promo désactivé" };
-                }
-                
-                const today = new Date();
-                const validUntil = new Date(promoCode.validUntil);
-                if (today > validUntil) {
-                    return { valid: false, message: "❌ Code promo expiré" };
-                }
-                
-                const globalStats = JSON.parse(localStorage.getItem('anduxara_global_promo_stats')) || {};
-                const currentGlobalUses = globalStats[code.toUpperCase()]?.totalUses || promoCode.usedCount;
-                
-                if (currentGlobalUses >= promoCode.usageLimit) {
-                    return { valid: false, message: "❌ Code promo épuisé" };
-                }
-                
-                if (this.usedCodes.includes(code.toUpperCase())) {
-                    return { valid: false, message: "❌ Code déjà utilisé" };
-                }
-                
-                return { 
-                    valid: true, 
-                    message: "✅ Code promo valide !", 
-                    data: promoCode 
-                };
-            }
-            
-            activatePromoCode(code) {
-                const validation = this.validatePromoCode(code);
-                
-                if (!validation.valid) {
-                    return validation;
-                }
-                
-                this.activePromo = {
-                    code: code.toUpperCase(),
-                    data: validation.data,
-                    activatedAt: new Date().toISOString()
-                };
-                
-                localStorage.setItem('active_promo_session', JSON.stringify(this.activePromo));
-                
-                return {
-                    valid: true,
-                    message: `✅ ${validation.data.description} activé !`,
-                    code: code.toUpperCase(),
-                    data: validation.data
-                };
-            }
-            
-            checkCartEligibility(cartTotal) {
-                if (!this.activePromo) return { eligible: false, reason: "Aucun code activé" };
-                
-                const promo = this.activePromo.data;
-                
-                if (cartTotal < promo.minPurchase) {
-                    return { 
-                        eligible: false, 
-                        reason: `Minimum d'achat de ${promo.minPurchase} MRU requis`,
-                        required: promo.minPurchase,
-                        current: cartTotal
-                    };
-                }
-                
-                return { eligible: true };
-            }
-            
-            applyDiscount(originalPrice) {
-                if (!this.activePromo) return originalPrice;
-                
-                const promo = this.activePromo.data;
-                let discountedPrice = originalPrice;
-                
-                if (promo.type === "percentage") {
-                    discountedPrice = originalPrice * (1 - promo.value / 100);
-                }
-                
-                return Math.max(0, Math.round(discountedPrice));
-            }
-            
-            getDiscountAmount(originalPrice) {
-                if (!this.activePromo) return 0;
-                return originalPrice - this.applyDiscount(originalPrice);
-            }
-            
-            // NOUVELLE MÉTHODE : Réinitialisation complète après commande
-            resetAfterOrder() {
-                // Supprimer le code actif
-                this.activePromo = null;
-                localStorage.removeItem('active_promo_session');
-                
-                // Mettre à jour l'affichage
-                this.updateAllDisplays();
-            }
-            
-            // NOUVELLE MÉTHODE : Mettre à jour tous les affichages
-            updateAllDisplays() {
-                renderPromoCards();
-                renderPromoHistory();
-                cartManager.updateCartDisplay();
-                
-                // Forcer la fermeture de la modale si ouverte
-                closePromoModal();
-            }
-            
-            markCodeAsUsed(code, orderTotal) {
-                // Marquer pour cet utilisateur
-                if (!this.usedCodes.includes(code.toUpperCase())) {
-                    this.usedCodes.push(code.toUpperCase());
-                    localStorage.setItem('anduxara_used_promos', JSON.stringify(this.usedCodes));
-                }
-                
-                // Mettre à jour les statistiques GLOBALES
-                const globalStats = JSON.parse(localStorage.getItem('anduxara_global_promo_stats')) || {};
-                if (!globalStats[code.toUpperCase()]) {
-                    globalStats[code.toUpperCase()] = {
-                        totalUses: 0,
-                        totalRevenue: 0,
-                        lastUsed: null
-                    };
-                }
-                
-                globalStats[code.toUpperCase()].totalUses++;
-                globalStats[code.toUpperCase()].totalRevenue += orderTotal;
-                globalStats[code.toUpperCase()].lastUsed = new Date().toISOString();
-                
-                localStorage.setItem('anduxara_global_promo_stats', JSON.stringify(globalStats));
-                
-                if (this.promoCodes[code.toUpperCase()]) {
-                    this.promoCodes[code.toUpperCase()].usedCount = globalStats[code.toUpperCase()].totalUses;
-                }
-            }
-            
-            getActivePromo() {
-                return this.activePromo;
-            }
-            
-            getGlobalStats() {
-                return JSON.parse(localStorage.getItem('anduxara_global_promo_stats')) || {};
-            }
-        }
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="showAdminDashboard()">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </button>
+                <button class="admin-btn secondary" onclick="showAnalytics()">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+                <button class="admin-btn secondary" onclick="showCodeManager()">
+                    <i class="fas fa-key"></i> Gérer les codes
+                </button>
+            </div>
+        </div>
 
-        // ===== GESTIONNAIRE DE PRODUITS =====
-        class ProductManager {
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 Andu Xara - Système de codes promo professionnel</p>
+        </div>
+    </div>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('loginModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+            
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="#" onclick="showResetPassword()" style="color: #667eea; text-decoration: none;">
+                    Mot de passe oublié ?
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'inscription -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Créer un compte</h2>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="signupName">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('signupModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal réinitialisation mot de passe -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resetPasswordModal')">&times;</span>
+            <h2><i class="fas fa-key"></i> Réinitialisation</h2>
+            
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="resetEmail" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-paper-plane"></i> Envoyer le lien
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('resetPasswordModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// Fermer les modals en cliquant à l'extérieur
+window.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+    }
+});
+
+        // Références Firebase (déjà initialisées dans firebase-config.js)
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const functions = firebase.functions();
+
+        // Gestionnaire d'authentification
+        class AuthManager {
             constructor() {
-                this.products = this.loadRealProducts();
+                this.user = null;
+                this.init();
             }
-            
-            loadRealProducts() {
-                return [
-                    {
-                        id: 1,
-                        name: "T-shirt logo arabe",
-                        originalPrice: 499,
-                        category: "t-shirts",
-                        image: "images/t-shirt-logo-arabe.jpeg",
-                        description: "T-shirt coton premium avec logo arabe design exclusif"
-                    },
-                    {
-                        id: 2,
-                        name: "Ensemble capuche style arabe",
-                        originalPrice: 599,
-                        category: "ensembles",
-                        image: "images/ensemble-capuchon-arabe.jpeg",
-                        description: "Ensemble complet premium avec capuche style arabe"
-                    },
-                    {
-                        id: 3,
-                        name: "Combinaison T-shirt et Capuche",
-                        originalPrice: 599,
-                        category: "ensembles",
-                        image: "images/combinaison.jpeg",
-                        description: "T-shirt coton et Capuche Bleu - Confort garanti"
-                    },
-                    {
-                        id: 4,
-                        name: "T-shirt Enfant",
-                        originalPrice: 399,
-                        category: "enfants",
-                        image: "images/t-shirt-enfant.jpeg",
-                        description: "T-shirt coton confortable pour enfants - Qualité premium"
-                    },
-                    {
-                        id: 5,
-                        name: "Ensemble T-shirt et jogging",
-                        originalPrice: 799,
-                        category: "ensembles",
-                        image: "images/t-shirt-et-jogging.jpeg",
-                        description: "Ensemble coton premium - Style décontracté"
-                    },
-                    {
-                        id: 6,
-                        name: "Pull bleu",
-                        originalPrice: 699,
-                        category: "t-shirts",
-                        image: "images/pull-bleu.jpeg",
-                        description: "Pull chaud et confortable de couleur bleue - Hiver 2025"
-                    },
-                    {
-                        id: 7,
-                        name: "Capuchon blanc",
-                        originalPrice: 299,
-                        category: "accessoires",
-                        image: "images/capuchon-blanc.jpeg",
-                        description: "Capuchon style urbain en couleur blanche - Adjustable"
-                    },
-                    {
-                        id: 8,
-                        name: "T-shirt et jogging Complet",
-                        originalPrice: 899,
-                        category: "ensembles",
-                        image: "images/t-shirt-et-jogging.jpeg",
-                        description: "Ensemble complet T-shirt et jogging assorti - Édition limitée"
-                    },
-                    {
-                        id: 9,
-                        name: "Babs Premium",
-                        originalPrice: 1499,
-                        category: "ensembles",
-                        image: "images/babs.jpeg",
-                        description: "Tenue moderne et élégante Andu-Xara"
-                    },
-                    {
-                        id: 10,
-                        name: "T-shirt Fille Noir",
-                        originalPrice: 399,
-                        category: "t-shirts",
-                        image: "images/fillenoir.jpeg",
-                        description: "T-shirt noir élégant pour femme"
-                    },
-                    {
-                        id: 11,
-                        name: "T-shirt Fille Blanc",
-                        originalPrice: 599,
-                        category: "t-shirts",
-                        image: "images/filleblan.jpeg",
-                        description: "T-shirt blanc classique et stylé"
-                    },
-                    {
-                        id: 12,
-                        name: "Pull Blanc",
-                        originalPrice: 599,
-                        category: "pulls",
-                        image: "images/pull-blanc.jpeg",
-                        description: "Pull chaud et confortable de couleur blanche"
-                    },
-                    {
-                        id: 13,
-                        name: "T-shirt Beige",
-                        originalPrice: 399,
-                        category: "t-shirts",
-                        image: "images/beige-tshirt.jpeg",
-                        description: "T-shirt léger et élégant beige"
-                    },
-                    {
-                        id: 14,
-                        name: "T-shirt Blanc",
-                        originalPrice: 399,
-                        category: "t-shirts",
-                        image: "images/blanctshirt.jpeg",
-                        description: "T-shirt blanc classique intemporel"
-                    },
-                    {
-                        id: 15,
-                        name: "T-shirt ADX Noir",
-                        originalPrice: 399,
-                        category: "t-shirts",
-                        image: "images/adx-noir.jpeg",
-                        description: "Edition spéciale Andu-Xara ADX Noir"
-                    }
-                ];
-            }
-            
-            getProductsWithDiscount(promoManager) {
-                return this.products.map(product => {
-                    const discountedPrice = promoManager.applyDiscount(product.originalPrice);
-                    const savings = promoManager.getDiscountAmount(product.originalPrice);
-                    
-                    return {
-                        ...product,
-                        discountedPrice: discountedPrice,
-                        savings: savings,
-                        hasDiscount: savings > 0
-                    };
+
+            init() {
+                firebase.auth().onAuthStateChanged((user) => {
+                    this.user = user;
+                    this.onAuthStateChanged(user);
                 });
             }
-        }
 
-        // ===== GESTIONNAIRE DE PANIER =====
-        class CartManager {
-            constructor() {
-                this.cart = JSON.parse(localStorage.getItem('promo_cart')) || [];
+            async signUp(email, password, displayName = '') {
+                try {
+                    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                    
+                    if (displayName) {
+                        await userCredential.user.updateProfile({
+                            displayName: displayName
+                        });
+                    }
+
+                    await userCredential.user.sendEmailVerification();
+                    await this.createUserDocument(userCredential.user, displayName);
+                    
+                    this.showVerificationInstructions();
+                    closeModal('signupModal');
+
+                    return { success: true, user: userCredential.user };
+                } catch (error) {
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
             }
-            
-            addToCart(product, quantity = 1) {
-                const existingItem = this.cart.find(item => item.id === product.id);
-                if (existingItem && existingItem.quantity >= 10) {
+
+            async signIn(email, password) {
+                try {
+                    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                    await this.updateLastLogin(userCredential.user.uid);
+                    closeModal('loginModal');
+                    
+                    return { success: true, user: userCredential.user };
+                } catch (error) {
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
+            }
+
+            async signOut() {
+                try {
+                    await firebase.auth().signOut();
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
+            }
+
+            async resetPassword(email) {
+                try {
+                    await firebase.auth().sendPasswordResetEmail(email);
+                    closeModal('resetPasswordModal');
+                    showMessage('Email de réinitialisation envoyé !', 'success');
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
+            }
+
+            async createUserDocument(user, displayName = '') {
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: displayName || user.displayName || '',
+                    role: 'user',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    isActive: true,
+                    preferences: {
+                        newsletter: true,
+                        promotions: true
+                    }
+                };
+
+                await db.collection('users').doc(user.uid).set(userData);
+            }
+
+            async updateLastLogin(uid) {
+                await db.collection('users').doc(uid).update({
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+
+            async isAdmin() {
+                if (!this.user) return false;
+                
+                try {
+                    const userDoc = await db.collection('users').doc(this.user.uid).get();
+                    return userDoc.exists && userDoc.data().role === 'admin';
+                } catch (error) {
+                    console.error('Erreur vérification admin:', error);
                     return false;
                 }
+            }
+
+            async checkEmailVerification() {
+                if (!this.user) return false;
+                await this.user.reload();
+                return this.user.emailVerified;
+            }
+
+            async sendEmailVerification() {
+                if (!this.user) return { success: false, error: 'Utilisateur non connecté' };
                 
-                if (existingItem) {
-                    existingItem.quantity += quantity;
+                try {
+                    await this.user.sendEmailVerification();
+                    showMessage('Email de vérification envoyé !', 'success');
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
+            }
+
+            onAuthStateChanged(user) {
+                this.updateUI();
+                
+                if (user) {
+                    console.log('Utilisateur connecté:', user.email, 'Vérifié:', user.emailVerified);
+                    
+                    if (!user.emailVerified) {
+                        this.showVerificationWarning();
+                    }
                 } else {
-                    this.cart.push({
-                        ...product,
-                        quantity: quantity,
-                        addedAt: new Date().toISOString()
+                    console.log('Utilisateur déconnecté');
+                }
+            }
+
+            updateUI() {
+                const authButtons = document.getElementById('authButtons');
+                const userProfile = document.getElementById('userProfile');
+                const verificationWarning = document.getElementById('verificationWarning');
+
+                if (this.user) {
+                    authButtons.style.display = 'none';
+                    userProfile.style.display = 'block';
+                    
+                    document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+                    document.getElementById('userEmail').textContent = this.user.email;
+                    document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+
+                    if (!this.user.emailVerified) {
+                        verificationWarning.style.display = 'block';
+                    } else {
+                        verificationWarning.style.display = 'none';
+                    }
+
+                    this.isAdmin().then(isAdmin => {
+                        document.querySelectorAll('.admin-element').forEach(element => {
+                            element.style.display = isAdmin ? 'block' : 'none';
+                        });
+                    });
+
+                } else {
+                    authButtons.style.display = 'flex';
+                    userProfile.style.display = 'none';
+                    verificationWarning.style.display = 'none';
+                    document.querySelectorAll('.admin-element').forEach(element => {
+                        element.style.display = 'none';
                     });
                 }
-                
-                this.saveCart();
-                this.updateCartDisplay();
-                return true;
             }
-            
-            removeFromCart(productId) {
-                this.cart = this.cart.filter(item => item.id !== productId);
-                this.saveCart();
-                this.updateCartDisplay();
-            }
-            
-            updateQuantity(productId, newQuantity) {
-                const item = this.cart.find(item => item.id === productId);
-                if (item) {
-                    if (newQuantity <= 0) {
-                        this.removeFromCart(productId);
-                    } else {
-                        item.quantity = newQuantity;
-                        this.saveCart();
-                        this.updateCartDisplay();
-                    }
-                }
-            }
-            
-            getCartTotal() {
-                return this.cart.reduce((total, item) => {
-                    return total + (item.discountedPrice * item.quantity);
-                }, 0);
-            }
-            
-            getOriginalTotal() {
-                return this.cart.reduce((total, item) => {
-                    return total + (item.originalPrice * item.quantity);
-                }, 0);
-            }
-            
-            getTotalDiscount() {
-                return this.getOriginalTotal() - this.getCartTotal();
-            }
-            
-            saveCart() {
-                localStorage.setItem('promo_cart', JSON.stringify(this.cart));
-            }
-            
-            // NOUVELLE MÉTHODE : Réinitialiser complètement le panier
-            resetCart() {
-                this.cart = [];
-                this.saveCart();
-                this.updateCartDisplay();
-            }
-            
-            updateCartDisplay() {
-                const cartItems = document.getElementById('modalCartItems');
-                const cartSubtotal = document.getElementById('cartSubtotal');
-                const cartDiscount = document.getElementById('cartDiscount');
-                const cartTotal = document.getElementById('cartTotal');
-                const orderBtn = document.querySelector('.order-btn-modal');
-                const discountBadge = document.getElementById('activePromoBadge');
-                
-                if (this.cart.length === 0) {
-                    cartItems.innerHTML = `
-                        <div style="text-align: center; color: #666; padding: 40px 20px;">
-                            Votre panier est vide<br>
-                            <small>Ajoutez des produits pour voir votre commande</small>
-                        </div>
-                    `;
-                    if (orderBtn) {
-                        orderBtn.textContent = '📋 Passer la commande';
-                        orderBtn.style.background = '';
-                        orderBtn.onclick = showOrderForm;
-                    }
-                    if (discountBadge) discountBadge.style.display = 'none';
-                } else {
-                    cartItems.innerHTML = this.cart.map(item => `
-                        <div class="cart-item">
-                            <div class="item-details">
-                                <div class="item-name">${item.name}</div>
-                                <div class="item-price">${item.discountedPrice} MRU × ${item.quantity}</div>
-                            </div>
-                            <div class="item-quantity">
-                                <button class="quantity-btn" onclick="cartManager.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
-                                <span>${item.quantity}</span>
-                                <button class="quantity-btn" onclick="cartManager.updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
-                                <button class="remove-item" onclick="cartManager.removeFromCart(${item.id})">🗑️</button>
-                            </div>
-                        </div>
-                    `).join('');
-                    
-                    const activePromo = promoManager.getActivePromo();
-                    if (activePromo) {
-                        const eligibility = promoManager.checkCartEligibility(this.getOriginalTotal());
-                        if (!eligibility.eligible) {
-                            orderBtn.textContent = `❌ ${eligibility.reason}`;
-                            orderBtn.style.background = '#e74c3c';
-                            orderBtn.onclick = () => showNotification(eligibility.reason, 'error');
-                        } else {
-                            orderBtn.textContent = '📋 Passer la commande';
-                            orderBtn.style.background = '';
-                            orderBtn.onclick = showOrderForm;
-                        }
-                        
-                        if (discountBadge) {
-                            discountBadge.textContent = `-${activePromo.data.value}%`;
-                            discountBadge.style.display = 'block';
-                        }
-                    } else {
-                        if (discountBadge) {
-                            discountBadge.textContent = '-0%';
-                            discountBadge.style.display = 'none';
-                        }
-                        orderBtn.textContent = '📋 Passer la commande';
-                        orderBtn.style.background = '';
-                        orderBtn.onclick = showOrderForm;
-                    }
-                }
-                
-                const subtotal = this.getOriginalTotal();
-                const discount = this.getTotalDiscount();
-                const total = this.getCartTotal();
-                
-                cartSubtotal.textContent = `${subtotal} MRU`;
-                cartDiscount.textContent = `-${discount} MRU`;
-                cartTotal.textContent = `${total} MRU`;
+
+showVerificationInstructions() {
+    showMessage(
+        'Un email de vérification a été envoyé. Vérifiez votre boîte de réception (et les spams).', 
+        'success'
+    );
+}
+
+// AJOUTEZ CETTE MÉTHODE MANQUANTE :
+showVerificationWarning() {
+    document.getElementById('verificationWarning').style.display = 'block';
+}
+
+            getErrorMessage(error) {
+                const errorMessages = {
+                    'auth/invalid-email': 'Adresse email invalide',
+                    'auth/user-disabled': 'Ce compte a été désactivé',
+                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
+                    'auth/wrong-password': 'Mot de passe incorrect',
+                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
+                    'auth/weak-password': 'Le mot de passe est trop faible',
+                    'auth/network-request-failed': 'Erreur réseau. Veuillez réessayer.',
+                    'auth/too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.'
+                };
+
+                return errorMessages[error.code] || error.message;
             }
         }
 
-        // ===== INITIALISATION DES MANAGERS =====
-        const promoManager = new PromoCodeManager();
-        const productManager = new ProductManager();
-        const cartManager = new CartManager();
+        // Initialisation
+        const authManager = new AuthManager();
 
-        // ===== FONCTIONS D'AFFICHAGE =====
-        function renderPromoCards() {
-            const container = document.getElementById('promo-cards-container');
-            const promoCodes = promoManager.promoCodes;
-            const globalStats = promoManager.getGlobalStats();
-            const userUsedCodes = promoManager.usedCodes;
+        // Fonctions pour appliquer les codes promo
+        async function applyPromoCode() {
+            const input = document.getElementById('promoInput');
+            const button = document.querySelector('.promo-btn');
+            const loading = document.getElementById('loading');
+            const message = document.getElementById('message');
+            const discountDisplay = document.getElementById('discountDisplay');
             
-            container.innerHTML = Object.keys(promoCodes).map(code => {
-                const promo = promoCodes[code];
-                const stats = globalStats[code] || { totalUses: promo.usedCount, totalRevenue: 0 };
-                const isUsedByUser = userUsedCodes.includes(code);
-                const isGloballyAvailable = stats.totalUses < promo.usageLimit;
-                
-                return `
-                    <div class="promo-card ${isUsedByUser ? 'used' : ''}">
-                        ${promo.badge ? `<div class="promo-badge">${promo.badge}</div>` : ''}
-                        <h3>${promo.description}</h3>
-                        <div class="promo-code">${code}</div>
-                        <div class="promo-details">
-                            <span>🎯 Réduction: ${promo.value}%</span>
-                            <span>💰 Min. achat: ${promo.minPurchase} MRU</span>
-                            <span>📅 Valide jusqu'au: ${new Date(promo.validUntil).toLocaleDateString()}</span>
-                            <span>👥 Utilisations: ${stats.totalUses}/${promo.usageLimit}</span>
-                            ${promo.minPurchase > 0 ? `<span>⚠️ Panier minimum requis</span>` : ''}
-                        </div>
-                        <button class="copy-btn ${isUsedByUser ? 'copied' : ''}" 
-                                onclick="copyPromoCode('${code}')" 
-                                ${isUsedByUser || !isGloballyAvailable ? 'disabled' : ''}>
-                            ${isUsedByUser ? '✅ Déjà utilisé' : !isGloballyAvailable ? '❌ Épuisé' : '📋 Copier le code'}
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderProductsInModal() {
-            const container = document.getElementById('modalProducts');
-            const activePromo = promoManager.getActivePromo();
-            
-            if (!activePromo) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666;">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">🎁</div>
-                        <h3>Activez d'abord un code promo</h3>
-                        <p>Entrez un code valide pour voir les produits avec réductions</p>
-                        <button onclick="closePromoModal()" style="background: #6a11cb; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 15px;">
-                            Activer un code
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            
-            const products = productManager.getProductsWithDiscount(promoManager);
-            
-            container.innerHTML = products.map(product => {
-                return `
-                    <div class="modal-product-card">
-                        <div class="product-image-modal">
-                            <img src="${product.image}" 
-                                 alt="${product.name}"
-                                 onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f8f9fa;border-radius:10px;\\'><span style=\\'font-size:3rem;\\'>🛒</span></div>';"
-                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
-                        </div>
-                        <div class="product-title-modal">${product.name}</div>
-                        <div class="product-description-modal">${product.description}</div>
-                        <div class="price-section-modal">
-                            <div class="original-price-modal">~~${product.originalPrice} MRU~~</div>
-                            <div class="promo-price-modal">${product.discountedPrice} MRU</div>
-                            ${product.savings > 0 ? 
-                                `<div class="savings-modal">Économie: ${product.savings} MRU</div>` : 
-                                ''
-                            }
-                        </div>
-                        <button class="add-to-cart-modal" onclick="addToCart(${product.id})">
-                            🛒 Ajouter au panier
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderPromoHistory() {
-            const container = document.getElementById('promo-history-container');
-            const usedCodes = promoManager.usedCodes;
-            
-            if (usedCodes.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Aucun code utilisé pour le moment</p>';
-                return;
-            }
-            
-            container.innerHTML = usedCodes.map(code => {
-                const promo = promoManager.promoCodes[code];
-                return `
-                    <div class="history-item">
-                        <div>
-                            <strong>${code}</strong>
-                            <div style="color: #666; font-size: 0.9rem;">${promo ? promo.description : 'Code spécial'}</div>
-                        </div>
-                        <div style="color: #27ae60; font-weight: bold;">
-                            ✅ Utilisé
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ===== FONCTIONS PRINCIPALES =====
-        function validateAndApplyPromo() {
-            const codeInput = document.getElementById('manual-promo-input');
-            const resultDiv = document.getElementById('activation-result');
-            const code = codeInput.value.trim();
+            const code = input.value.trim().toUpperCase();
             
             if (!code) {
-                resultDiv.innerHTML = '<p style="color: red;">❌ Veuillez entrer un code promo</p>';
+                showMessage('Veuillez saisir un code promo', 'error');
+                input.focus();
                 return;
             }
             
-            const result = promoManager.activatePromoCode(code);
+            button.disabled = true;
+            loading.style.display = 'block';
+            message.style.display = 'none';
+            discountDisplay.style.display = 'none';
             
-            if (result.valid) {
-                resultDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">${result.message}</p>`;
-                codeInput.value = '';
+            try {
+                const userIP = await getUserIP();
+                const user = firebase.auth().currentUser;
                 
-                renderPromoCards();
-                renderPromoHistory();
+                const data = {
+                    promoCode: code,
+                    userEmail: user ? user.email : null,
+                    userIP: userIP,
+                    userAgent: navigator.userAgent
+                };
+
+                // Simulation en attendant les Cloud Functions
+                const result = await simulateValidation(code);
                 
-                showNotification('🎉 Code activé ! Ouvrez la fenêtre des réductions pour voir les produits', 'success');
+                showMessage(result.message, result.success ? 'success' : 'error');
                 
-            } else {
-                resultDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                if (result.success) {
+                    showDiscount(result.discount);
+                    input.value = '';
+                }
+                
+            } catch (error) {
+                showMessage('Erreur: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                loading.style.display = 'none';
             }
         }
 
-        function addToCart(productId) {
-            const products = productManager.getProductsWithDiscount(promoManager);
-            const product = products.find(p => p.id === productId);
-            
-            if (product) {
-                const success = cartManager.addToCart(product);
-                if (success) {
-                    showNotification(`✅ ${product.name} ajouté au panier !`, 'success');
-                    
-                    const activePromo = promoManager.getActivePromo();
-                    if (activePromo) {
-                        const eligibility = promoManager.checkCartEligibility(cartManager.getOriginalTotal());
-                        if (!eligibility.eligible) {
-                            showNotification(`ℹ️ ${eligibility.reason}`, 'info');
-                        }
+        // Simulation de validation (à remplacer par Cloud Functions)
+        async function simulateValidation(code) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    switch(code) {
+                        case 'WELCOME10':
+                            resolve({
+                                success: true,
+                                discount: '10% de réduction',
+                                message: 'Code WELCOME10 appliqué avec succès !'
+                            });
+                            break;
+                        case 'SUMMER25':
+                            resolve({
+                                success: true,
+                                discount: '25% de réduction',
+                                message: 'Code SUMMER25 appliqué avec succès !'
+                            });
+                            break;
+                        case 'EXPIRED99':
+                            resolve({
+                                success: false,
+                                message: 'Ce code a expiré'
+                            });
+                            break;
+                        default:
+                            resolve({
+                                success: false,
+                                message: 'Code non valide'
+                            });
                     }
-                } else {
-                    showNotification('❌ Quantité maximum atteinte pour ce produit (10 max)', 'error');
-                }
-            }
-        }
-
-        function openPromoModal() {
-            const modal = document.getElementById('promoModal');
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            
-            const activePromo = promoManager.getActivePromo();
-            
-            if (activePromo) {
-                renderProductsInModal();
-            } else {
-                const container = document.getElementById('modalProducts');
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666;">
-                        <div style="font-size: 4rem; margin-bottom: 20px;">🎁</div>
-                        <h3>Activez d'abord un code promo</h3>
-                        <p>Entrez un code valide pour voir les produits avec réductions</p>
-                        <button onclick="closePromoModal()" style="background: #6a11cb; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 15px;">
-                            Activer un code
-                        </button>
-                    </div>
-                `;
-            }
-            
-            cartManager.updateCartDisplay();
-        }
-
-        function closePromoModal() {
-            const modal = document.getElementById('promoModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            hideOrderForm();
-        }
-
-        function showOrderForm() {
-            const cart = cartManager.cart;
-            if (cart.length === 0) {
-                showNotification('❌ Votre panier est vide', 'error');
-                return;
-            }
-            
-            const activePromo = promoManager.getActivePromo();
-            if (activePromo) {
-                const eligibility = promoManager.checkCartEligibility(cartManager.getOriginalTotal());
-                if (!eligibility.eligible) {
-                    showNotification(`❌ ${eligibility.reason}`, 'error');
-                    return;
-                }
-            }
-            
-            document.getElementById('orderForm').style.display = 'block';
-        }
-
-        function hideOrderForm() {
-            document.getElementById('orderForm').style.display = 'none';
-        }
-
-        function submitOrder() {
-            const name = document.getElementById('customerName').value.trim();
-            const size = document.getElementById('productSize').value;
-            const color = document.getElementById('productColor').value.trim();
-            const countryCode = document.getElementById('countryCode').value;
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            const notes = document.getElementById('customerNotes').value.trim();
-            
-            if (!name || name.length < 2) {
-                showNotification('❌ Le nom doit contenir au moins 2 caractères', 'error');
-                return;
-            }
-            
-            if (!size) {
-                showNotification('❌ Veuillez sélectionner une taille', 'error');
-                return;
-            }
-            
-            const cleanPhone = phoneNumber.replace(/\s/g, '');
-            if (!cleanPhone || !/^[0-9]{8,15}$/.test(cleanPhone)) {
-                showNotification('❌ Numéro de téléphone invalide (8-15 chiffres)', 'error');
-                return;
-            }
-            
-            const activePromo = promoManager.getActivePromo();
-            const cart = cartManager.cart;
-            const orderTotal = cartManager.getCartTotal();
-            const originalTotal = cartManager.getOriginalTotal();
-            
-            if (activePromo) {
-                const eligibility = promoManager.checkCartEligibility(originalTotal);
-                if (!eligibility.eligible) {
-                    showNotification(`❌ Commande refusée: ${eligibility.reason}`, 'error');
-                    return;
-                }
-            }
-            
-            let message = `🎁 NOUVELLE COMMANDE ANDU-XARA 🎁%0A%0A`;
-            message += `👤 *Client:* ${name}%0A`;
-            message += `📞 *Téléphone:* ${countryCode}${phoneNumber}%0A`;
-            message += `📏 *Taille:* ${size}%0A`;
-            message += `🎨 *Couleur:* ${color || 'Non spécifié'}%0A`;
-            
-            if (activePromo) {
-                message += `🎫 *Code promo:* ${activePromo.code}%0A`;
-                promoManager.markCodeAsUsed(activePromo.code, orderTotal);
-            }
-            
-            message += `%0A🛒 *PRODUITS COMMANDÉS:*%0A`;
-            
-            cart.forEach((item, index) => {
-                message += `${index + 1}. ${item.name}%0A`;
-                message += `   💰 Prix: ${item.discountedPrice} MRU (au lieu de ${item.originalPrice} MRU)%0A`;
-                message += `   📦 Quantité: ${item.quantity}%0A`;
-                message += `   💵 Total: ${item.discountedPrice * item.quantity} MRU%0A%0A`;
-            });
-            
-            message += `💰 *SOUS-TOTAL:* ${originalTotal} MRU%0A`;
-            message += `🎫 *RÉDUCTION:* -${cartManager.getTotalDiscount()} MRU%0A`;
-            message += `💵 *TOTAL FINAL:* ${orderTotal} MRU%0A%0A`;
-            
-            if (notes) {
-                message += `💡 *RECOMMANDATIONS:*%0A${notes}%0A%0A`;
-            }
-            
-            message += `🕒 *Date:* ${new Date().toLocaleString('fr-FR')}%0A`;
-            message += `🌍 *Source:* Page Codes Promo`;
-            
-            // ENVOI WHATSAPP
-            const whatsappUrl = `https://wa.me/22249037697?text=${message}`;
-            if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                window.location.href = whatsappUrl;
-            } else {
-                window.open(whatsappUrl, '_blank');
-            }
-            
-            // ENVOI EMAIL
-            const emailSubject = `🎁 Nouvelle Commande Andu-Xara - ${name}`;
-            const emailBody = message.replace(/%0A/g, '\n').replace(/\*/g, '');
-            const mailtoLink = `mailto:anduxara2408@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            
-            setTimeout(() => {
-                window.location.href = mailtoLink;
-            }, 1000);
-            
-            // RÉINITIALISATION COMPLÈTE APRÈS COMMANDE
-            promoManager.resetAfterOrder();
-            cartManager.resetCart();
-            
-            setTimeout(() => {
-                closePromoModal();
-                showNotification('✅ Commande envoyée ! Tout a été réinitialisé automatiquement.', 'success');
-            }, 3000);
-        }
-
-        function copyPromoCode(code) {
-            navigator.clipboard.writeText(code).then(() => {
-                showNotification(`📋 Code "${code}" copié ! Collez-le dans le champ d'activation.`, 'success');
+                }, 1500);
             });
         }
 
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                z-index: 10000;
-                animation: slideInRight 0.3s ease;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 4000);
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return 'unknown';
+            }
         }
 
-        // ===== INITIALISATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            renderPromoCards();
-            renderPromoHistory();
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `promo-message promo-${type}`;
+            message.style.display = 'block';
             
-            const urlParams = new URLSearchParams(window.location.search);
-            const autoCode = urlParams.get('code');
-            if (autoCode) {
-                document.getElementById('manual-promo-input').value = autoCode;
-                validateAndApplyPromo();
+            if (type === 'success') {
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
             }
+        }
+
+        function showDiscount(discount) {
+            const discountDisplay = document.getElementById('discountDisplay');
+            const discountValue = document.getElementById('discountValue');
             
-            document.getElementById('promoModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closePromoModal();
-                }
-            });
+            discountValue.textContent = discount;
+            discountDisplay.style.display = 'block';
+        }
+
+        function fillCode(code) {
+            document.getElementById('promoInput').value = code;
+            document.getElementById('promoInput').focus();
+        }
+
+        // Gestion des modals
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+
+        function showResetPassword() {
+            closeModal('loginModal');
+            document.getElementById('resetPasswordModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Événements des formulaires
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = await authManager.signIn(email, password);
+            if (!result.success) {
+                showMessage('Erreur: ' + result.error, 'error');
+            }
         });
 
-        // ===== FONCTIONS ADMIN =====
-        function showPromoStats() {
-            const stats = promoManager.getGlobalStats();
-            console.log('📊 STATISTIQUES GLOBALES CODES PROMO ANDU-XARA');
-            console.log('=============================================');
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const name = document.getElementById('signupName').value;
             
-            Object.keys(stats).forEach(code => {
-                const stat = stats[code];
-                const promo = promoManager.promoCodes[code];
-                console.log(`\n${code}:`);
-                console.log(`  Utilisations: ${stat.totalUses}/${promo.usageLimit}`);
-                console.log(`  Chiffre d'affaires: ${stat.totalRevenue} MRU`);
-                console.log(`  Dernière utilisation: ${stat.lastUsed ? new Date(stat.lastUsed).toLocaleString('fr-FR') : 'Jamais'}`);
-            });
+            const result = await authManager.signUp(email, password, name);
+            if (!result.success) {
+                showMessage('Erreur: ' + result.error, 'error');
+            }
+        });
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            
+            const result = await authManager.resetPassword(email);
+            if (!result.success) {
+                showMessage('Erreur: ' + result.error, 'error');
+            }
+        });
+
+        // Fonctions admin
+        function showAdminDashboard() {
+            window.open('admin-dashboard.html', '_blank');
         }
 
-        // RÉINITIALISATION COMPLÈTE (UNIQUEMENT POUR ADMIN)
-        function resetAllPromoCodes() {
-            // Vérifier si l'utilisateur est admin
-            if (!promoManager.isAdmin()) {
-                // Si pas admin, proposer d'activer le mode admin
-                if (confirm('🔐 Mode admin requis\n\nVoulez-vous activer le mode administrateur ?')) {
-                    promoManager.enableAdminMode();
-                }
-                return;
-            }
-            
-            if (confirm('⚠️ ACTION ADMINISTRATEUR ⚠️\nVoulez-vous vraiment réinitialiser TOUS les codes promo ?\n\nCette action effacera l\'historique de TOUS les utilisateurs.')) {
-                localStorage.removeItem('anduxara_used_promos');
-                localStorage.removeItem('anduxara_global_promo_stats');
-                localStorage.removeItem('active_promo_session');
-                localStorage.removeItem('promo_cart');
-                
-                showNotification('✅ Système entièrement réinitialisé !', 'success');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
+function showAnalytics() {
+    // Ouvrir le dashboard sur la section analytics
+    if (window.adminWindow && !window.adminWindow.closed) {
+        window.adminWindow.showSection('analytics');
+    } else {
+        window.open('admin-dashboard.html#analytics', '_blank');
+    }
+}
+
+function showCodeManager() {
+    // Ouvrir le dashboard sur la section codes
+    if (window.adminWindow && !window.adminWindow.closed) {
+        window.adminWindow.showSection('codes');
+        window.adminWindow.showCreateCodeModal();
+    } else {
+        window.open('admin-dashboard.html#codes', '_blank');
+    }
+}
+
+
+        function showUserHistory() {
+            alert('Historique utilisateur - À implémenter');
         }
 
-        // BOUTON ADMIN AMÉLIORÉ
-        function addAdminResetButton() {
-            // Supprimer d'abord l'ancien bouton s'il existe
-            const oldBtn = document.querySelector('.admin-reset-btn');
-            if (oldBtn) oldBtn.remove();
-            
-            const oldBadge = document.querySelector('.admin-badge');
-            if (oldBadge) oldBadge.remove();
-            
-            // Créer le nouveau bouton
-            const adminBtn = document.createElement('button');
-            adminBtn.className = 'admin-reset-btn';
-            adminBtn.innerHTML = '🔄 Admin';
-            adminBtn.style.cssText = `
-                position: fixed;
-                bottom: 30px;
-                left: 30px;
-                background: ${promoManager.isAdmin() ? '#e74c3c' : '#95a5a6'};
-                color: white;
-                border: none;
-                padding: 10px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 0.8rem;
-                z-index: 1000;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            `;
-            adminBtn.title = promoManager.isAdmin() ? 'Mode Admin Activé' : 'Cliquez pour activer le mode admin';
-            adminBtn.onclick = resetAllPromoCodes;
-            document.body.appendChild(adminBtn);
-            
-            // Ajouter un indicateur visuel pour l'admin
-            if (promoManager.isAdmin()) {
-                const adminBadge = document.createElement('div');
-                adminBadge.textContent = '👑 ADMIN';
-                adminBadge.style.cssText = `
-                    position: fixed;
-                    top: 10px;
-                    left: 10px;
-                    background: #f39c12;
-                    color: white;
-                    padding: 5px 10px;
-                    border-radius: 3px;
-                    font-size: 0.7rem;
-                    font-weight: bold;
-                    z-index: 1001;
-                `;
-                adminBadge.className = 'admin-badge';
-                document.body.appendChild(adminBadge);
+        // Permettre la validation avec Entrée
+        document.getElementById('promoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyPromoCode();
             }
-        }
+        });
 
-        // Initialiser le bouton admin
-        addAdminResetButton();
-        
-        // Afficher un message si admin
-        if (promoManager.isAdmin()) {
-            console.log('🔧 Mode administrateur activé');
-        }
+        // Focus automatique
+        window.addEventListener('load', function() {
+            document.getElementById('promoInput').focus();
+        });
+
+        // Fermer les modals en cliquant à l'extérieur
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
     </script>
+<!-- ===== PANIER FLOTTANT UNIFIÉ ===== -->
+<div id="floating-cart" class="floating-cart">
+    <div class="cart-toggle" onclick="toggleFloatingCart()">
+        🛒 <span id="cart-badge-floating">0</span>
+    </div>
+    <div class="cart-panel">
+        <div class="cart-items-container" id="cart-items-floating"></div>
+        <div class="cart-summary">
+            <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
+            <button class="buy-btn" onclick="processFloatingCheckout()">Acheter</button>
+            <button class="close-cart-btn" onclick="closeFloatingCart()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== STYLES DU PANIER CORRIGÉS ===== */
+.floating-cart {
+    position: fixed;
+    bottom: 80px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.cart-toggle {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cart-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: none;
+    max-height: 70vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.floating-cart.open .cart-panel {
+    display: flex;
+}
+
+.cart-items-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(70vh - 150px);
+    padding: 12px;
+}
+
+.cart-summary {
+    padding: 12px;
+    border-top: 2px solid #6a11cb;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.cart-item-floating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+}
+
+.empty-cart-floating {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.remove-item {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 0.65rem;
+    margin-top: 3px;
+}
+</style>
+<script>
+// ===== FONCTIONS PANIER MANQUANTES =====
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        if (cart.classList.contains('open')) {
+            if (typeof updateFloatingCart === 'function') {
+                updateFloatingCart();
+            }
+        }
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}
+
+function processFloatingCheckout() {
+    if (typeof floatingCart === 'undefined' || floatingCart.length === 0) {
+        showNotification('Panier vide !', 'error');
+        return;
+    }
+    
+    showNotification('🛒 Redirection vers la page de commande...');
+    window.location.href = 'index.html';
+}
+
+// Fermer le panier en cliquant à l'extérieur
+document.addEventListener('click', function(event) {
+    const cart = document.getElementById('floating-cart');
+    const toggle = document.querySelector('.cart-toggle');
+
+    if (cart && cart.classList.contains('open') &&
+        !cart.contains(event.target) &&
+        !toggle.contains(event.target)) {
+        closeFloatingCart();
+    }
+});
+</script>
+<script>
+// ===== FONCTIONS MANQUANTES FINALES =====
+
+// 1. Fonction notification
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff4757' : '#25D366'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 350px;
+    `;
+    notification.innerHTML = `
+        <span>${type === 'error' ? '❌' : '✅'}</span>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// 2. Fonction validation code promo
+async function validateAndApplyPromo() {
+    const promoInput = document.getElementById('promoInput');
+    const promoMessage = document.getElementById('promoMessage');
+    const promoButton = document.getElementById('promoButton');
+    
+    if (!promoInput || !promoMessage) return;
+    
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        promoMessage.textContent = '❌ Veuillez entrer un code promo';
+        promoMessage.style.color = '#e74c3c';
+        return;
+    }
+    
+    if (promoButton) {
+        promoButton.disabled = true;
+        promoButton.textContent = 'Validation...';
+    }
+    
+    try {
+        const validationResult = await simulatePromoValidation(code);
+        
+        if (validationResult.valid) {
+            // Appliquer la réduction
+            if (typeof applyPromoToCart === 'function') {
+                applyPromoToCart(code, validationResult.discount);
+                promoMessage.textContent = `✅ Code "${code}" appliqué : ${validationResult.discount}% de réduction !`;
+                promoMessage.style.color = '#27ae60';
+                promoInput.value = '';
+            } else {
+                promoMessage.textContent = '❌ Erreur: système panier non chargé';
+                promoMessage.style.color = '#e74c3c';
+            }
+        } else {
+            promoMessage.textContent = `❌ Code "${code}" invalide`;
+            promoMessage.style.color = '#e74c3c';
+        }
+    } catch (error) {
+        promoMessage.textContent = '❌ Erreur de validation';
+        promoMessage.style.color = '#e74c3c';
+    } finally {
+        if (promoButton) {
+            promoButton.disabled = false;
+            promoButton.textContent = 'Appliquer ✅';
+        }
+    }
+}
+
+// 3. Simulation validation
+async function simulatePromoValidation(code) {
+    const validCodes = {
+        'TEST10': 10,
+        'BIENVENUE15': 15,
+        'ANDU2025': 20,
+        'SOLDE30': 30
+    };
+    
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (validCodes[code]) {
+        return { valid: true, discount: validCodes[code] };
+    } else {
+        return { valid: false };
+    }
+}
+
+// 4. Forcer la mise à jour du panier au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    // Synchronisation automatique du panier
+    window.addEventListener("storage", function(e) {
+        if (e.key === "anduxara_cart") {
+            console.log("🔄 Mise à jour panier depuis autre page");
+            floatingCart = JSON.parse(e.newValue) || [];
+            if (typeof updateFloatingCart === "function") {
+                updateFloatingCart();
+            }
+        }
+    });
+    
+    // Forcer la mise à jour initiale
+    setTimeout(() => {
+        if (typeof updateFloatingCart === "function") {
+            updateFloatingCart();
+        }
+    }, 1000);
+    console.log('🔄 Chargement reductions.html - Mise à jour panier...');
+    
+    // Mettre à jour le panier après un court délai
+    setTimeout(() => {
+        if (typeof updateFloatingCart === 'function') {
+            updateFloatingCart();
+        }
+    }, 500);
+});
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedPromo(); // Charger les réductions sauvegardées
+    // ... le reste de votre code existant
+});
+
+// === SYSTÈME DE RÉDUCTIONS CORRIGÉ ===
+// === SYSTÈME DE RÉDUCTIONS COMPLET ===
+let currentDiscount = null;
+let appliedPromoCode = null;
+
+// Fonction pour appliquer la réduction au panier
+async function applyPromoToCart(discount, promoCode) {
+    console.log("Application de la réduction:", discount, "Code:", promoCode);
+    
+    // Sauvegarder la réduction actuelle
+    currentDiscount = discount;
+    appliedPromoCode = promoCode;
+    
+    // Mettre à jour l'interface
+    showDiscount(discount);
+    updatePromoDisplay();
+    
+    // Mettre à jour le panier flottant
+    if (typeof updateFloatingCart === "function") {
+        updateFloatingCart();
+    }
+    
+    // Mettre à jour le panier principal si disponible
+    if (typeof updateCartDisplay === "function") {
+        updateCartDisplay();
+    }
+    
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('currentPromo', JSON.stringify({
+        code: promoCode,
+        discount: discount,
+        timestamp: Date.now()
+    }));
+    
+    showNotification(`🎉 Code promo "${promoCode}" appliqué ! Réduction de ${discount.value}${discount.type === 'percentage' ? '%' : '€'}`, 'success');
+}
+
+// Mettre à jour l'affichage de la promo active
+function updatePromoDisplay() {
+    const promoDisplay = document.getElementById('currentPromoDisplay');
+    const appliedCodeSpan = document.getElementById('appliedCode');
+    const appliedDiscountSpan = document.getElementById('appliedDiscount');
+    
+    if (currentDiscount && appliedPromoCode) {
+        promoDisplay.style.display = 'block';
+        appliedCodeSpan.textContent = appliedPromoCode;
+        appliedDiscountSpan.textContent = `Réduction: ${currentDiscount.value}${currentDiscount.type === 'percentage' ? '%' : '€'}`;
+    } else {
+        promoDisplay.style.display = 'none';
+    }
+}
+
+// Fonction pour calculer le prix après réduction
+function calculateDiscountedPrice(originalPrice, discount) {
+    if (!discount) return originalPrice;
+    
+    if (discount.type === 'percentage') {
+        return originalPrice * (1 - discount.value / 100);
+    } else if (discount.type === 'fixed') {
+        return Math.max(0, originalPrice - discount.value);
+    }
+    
+    return originalPrice;
+}
+
+// Fonction pour obtenir la réduction actuelle
+function getCurrentDiscount() {
+    return currentDiscount;
+}
+
+// Fonction pour réinitialiser la réduction
+function resetPromo() {
+    currentDiscount = null;
+    appliedPromoCode = null;
+    localStorage.removeItem('currentPromo');
+    
+    updatePromoDisplay();
+    
+    if (typeof updateFloatingCart === "function") {
+        updateFloatingCart();
+    }
+    
+    showNotification('Réduction retirée', 'info');
+}
+
+// Charger la réduction au démarrage
+function loadSavedPromo() {
+    const savedPromo = localStorage.getItem('currentPromo');
+    if (savedPromo) {
+        try {
+            const promo = JSON.parse(savedPromo);
+            // Vérifier si la promo n'est pas trop ancienne (24h)
+            if (Date.now() - promo.timestamp < 24 * 60 * 60 * 1000) {
+                currentDiscount = promo.discount;
+                appliedPromoCode = promo.code;
+                updatePromoDisplay();
+                console.log('Promo chargée:', promo);
+            } else {
+                localStorage.removeItem('currentPromo');
+            }
+        } catch (e) {
+            console.error('Erreur chargement promo:', e);
+        }
+    }
+}
+
+// Fonction principale de validation des codes promo
+async function validateAndApplyPromo() {
+    const promoInput = document.getElementById('promoInput');
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        showNotification('Veuillez entrer un code promo', 'error');
+        return;
+    }
+    
+    try {
+        showMessage('Validation en cours...', 'info');
+        
+        // Simuler la validation
+        const discount = await simulatePromoValidation(code);
+        
+        if (discount && discount.valid) {
+            await applyPromoToCart(discount, code);
+            promoInput.value = ''; // Vider le champ
+        } else {
+            showNotification('❌ Code promo invalide ou expiré', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Erreur validation promo:', error);
+        showNotification('Erreur lors de la validation du code', 'error');
+    }
+}
+
+// Base de données des codes promo
+async function simulatePromoValidation(code) {
+    const promoDatabase = {
+        'ANDU10': { valid: true, type: 'percentage', value: 10, message: 'Réduction de 10% sur Andu' },
+        'ANDU20': { valid: true, type: 'percentage', value: 20, message: 'Réduction de 20% sur Andu' },
+        'ANDU15': { valid: true, type: 'percentage', value: 15, message: 'Réduction de 15% sur Andu' },
+        'ANDU5': { valid: true, type: 'fixed', value: 5, message: '5€ de réduction sur Andu' },
+        'XARA10': { valid: true, type: 'percentage', value: 10, message: 'Réduction spéciale Xara 10%' },
+        'XARA15': { valid: true, type: 'percentage', value: 15, message: 'Réduction spéciale Xara 15%' },
+        'ANDUXARA': { valid: true, type: 'percentage', value: 25, message: 'Réduction combinée Andu & Xara 25%' }
+    };
+    
+    // Simuler un délai réseau
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const promo = promoDatabase[code];
+    
+    if (promo) {
+        return {
+            valid: true,
+            type: promo.type,
+            value: promo.value,
+            message: promo.message
+        };
+    }
+    
+    return { valid: false };
+}
+
+// Mettre à jour le panier flottant pour afficher la réduction
+function updateFloatingCart() {
+    const cart = JSON.parse(localStorage.getItem('panier')) || [];
+    const cartItemsElement = document.getElementById('cartItems');
+    const cartTotalElement = document.getElementById('cartTotal');
+    const cartCountElement = document.getElementById('cartCount');
+    
+    if (!cartItemsElement || !cartTotalElement) return;
+    
+    // Calculer le total original
+    let total = cart.reduce((sum, item) => sum + (item.prix * item.quantite), 0);
+    let discountAmount = 0;
+    
+    // Appliquer la réduction si elle existe
+    if (currentDiscount) {
+        if (currentDiscount.type === 'percentage') {
+            discountAmount = total * (currentDiscount.value / 100);
+        } else {
+            discountAmount = currentDiscount.value;
+        }
+    }
+    
+    const finalTotal = Math.max(0, total - discountAmount);
+    
+    // Mettre à jour l'affichage
+    cartItemsElement.innerHTML = '';
+    cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+            <span>${item.nom} x${item.quantite}</span>
+            <span>${(item.prix * item.quantite).toFixed(2)}€</span>
+        `;
+        cartItemsElement.appendChild(itemElement);
+    });
+    
+    // Afficher le total avec réduction
+    if (currentDiscount) {
+        cartTotalElement.innerHTML = `
+            <div style="text-decoration: line-through; color: #999; font-size: 14px;">${total.toFixed(2)}€</div>
+            <div style="color: #e74c3c; font-weight: bold; font-size: 18px;">${finalTotal.toFixed(2)}€</div>
+            <div style="font-size: 12px; color: #27ae60;">Économie: ${discountAmount.toFixed(2)}€</div>
+        `;
+    } else {
+        cartTotalElement.textContent = `${total.toFixed(2)}€`;
+    }
+    
+    // Mettre à jour le compteur
+    if (cartCountElement) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantite, 0);
+        cartCountElement.textContent = totalItems;
+    }
+}
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedPromo();
+    updatePromoDisplay();
+});
+</script>
 </body>
 </html>
