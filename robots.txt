@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://anduxara2408-droid.github.io/andu-xara-site/sitemap.xml
