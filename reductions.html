@@ -1054,7 +1054,7 @@ async function copierLienParrainage() {
         if (userDoc.exists) {
             const userData = userDoc.data();
             const referralCode = userData.referralCode;
-            const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
+            const lienParrainage = window.location.origin + '/andu-xara-site/index.html?ref=' + referralCode;
             
             await navigator.clipboard.writeText(lienParrainage);
             alert('✅ Lien de parrainage copié !\n\nPartagez ce lien avec vos amis :\n' + lienParrainage);
