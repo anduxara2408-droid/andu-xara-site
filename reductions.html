@@ -809,140 +809,22 @@ class AuthManager {
         this.init();
     }
 
-init() {
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            this.user = user;
-            await this.checkAdminStatus();
-            this.updateUI();
-            await this.loadParrainageStats();
-            
-            // Gérer les paramètres de parrainage après connexion
-            this.handleReferralParams();
-            
-            console.log('✅ Utilisateur Firebase connecté:', user.email);
-        } else {
-            this.user = null;
-            this.isAdmin = false;
-            this.updateUI();
-            
-            // Vérifier les paramètres même si non connecté
-            this.handleReferralParams();
-            
-            console.log('🚪 Utilisateur déconnecté');
-        }
-    });
-}
-
-// AJOUTER CETTE MÉTHODE APRÈS init()
-handleReferralParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const refCode = urlParams.get('ref');
-    
-    if (refCode && !this.user) {
-        localStorage.setItem('pending_referral', refCode);
-        console.log('🔗 Code parrainage détecté:', refCode);
-        this.showReferralNotification(refCode);
-    } else if (refCode && this.user && !this.isAdmin) {
-        this.applyReferralCode(refCode);
-    }
-}
-
-// AJOUTER CETTE MÉTHODE
-async applyReferralCode(referralCode) {
-    try {
-        console.log('🎯 Application code parrainage:', referralCode);
-        
-        const userDoc = await db.collection('users').doc(this.user.uid).get();
-        const userData = userDoc.data();
-        
-        if (userData.referralCode === referralCode) {
-            alert('❌ Vous ne pouvez pas utiliser votre propre code de parrainage');
-            return;
-        }
-
-        const referralQuery = await db.collection('users')
-            .where('referralCode', '==', referralCode)
-            .get();
-
-        if (referralQuery.empty) {
-            alert('❌ Code de parrainage invalide');
-            return;
-        }
-
-        const referrerDoc = referralQuery.docs[0];
-        const referrerData = referrerDoc.data();
-
-        await db.collection('referrals').add({
-            referrerId: referrerDoc.id,
-            referrerEmail: referrerData.email,
-            referredId: this.user.uid,
-            referredEmail: this.user.email,
-            referralCode: referralCode,
-            status: 'active',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            rewards: {
-                referrerBonus: 15,
-                referredBonus: 10
+    init() {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                this.user = user;
+                await this.checkAdminStatus();
+                this.updateUI();
+                await this.loadParrainageStats();
+                console.log('✅ Utilisateur Firebase connecté:', user.email);
+            } else {
+                this.user = null;
+                this.isAdmin = false;
+                this.updateUI();
+                console.log('🚪 Utilisateur déconnecté');
             }
         });
-
-        await db.collection('users').doc(referrerDoc.id).update({
-            'parrainage.referredCount': firebase.firestore.FieldValue.increment(1),
-            'parrainage.availableEarnings': firebase.firestore.FieldValue.increment(15)
-        });
-
-        await db.collection('users').doc(this.user.uid).update({
-            referredBy: referrerDoc.id,
-            referralApplied: true
-        });
-
-        window.history.replaceState({}, document.title, window.location.pathname);
-        
-        alert('🎉 Parrainage appliqué ! Vous bénéficiez de 10% de réduction sur votre première commande.');
-
-    } catch (error) {
-        console.error('Erreur application parrainage:', error);
-        alert('❌ Erreur lors de l\'application du parrainage');
     }
-}
-
-// AJOUTER CETTE MÉTHODE
-showReferralNotification(refCode) {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #667eea;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10000;
-        max-width: 400px;
-    `;
-    notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="font-size: 24px;">🎁</div>
-            <div>
-                <strong>Code parrainage détecté !</strong>
-                <div style="font-size: 14px; opacity: 0.9;">Connectez-vous pour bénéficier de 10% de réduction</div>
-                <div style="font-size: 12px; margin-top: 5px; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; display: inline-block;">
-                    Code: ${refCode}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    }, 10000);
-}
 
     async signIn(email, password) {
         try {
@@ -1162,8 +1044,11 @@ async function sendEmailVerification() {
 
 // ===== FONCTIONS PARRAINAGE =====
 async function copierLienParrainage() {
-    ouvrirInterfaceParrainage();
-}
+    if (!auth.currentUser) {
+        alert('Veuillez vous connecter pour utiliser le parrainage');
+        return;
+    }
+
     try {
         const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
         if (userDoc.exists) {
@@ -1171,93 +1056,12 @@ async function copierLienParrainage() {
             const referralCode = userData.referralCode;
             const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
             
-            showReferralInterface(userData, lienParrainage);
+            await navigator.clipboard.writeText(lienParrainage);
+            alert('✅ Lien de parrainage copié !\n\nPartagez ce lien avec vos amis :\n' + lienParrainage);
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);
         alert('❌ Erreur lors de la copie du lien');
-    }
-}
-
-// AJOUTER CES FONCTIONS APRÈS copierLienParrainage()
-function showReferralInterface(userData, lienParrainage) {
-    const modalHTML = `
-        <div class="modal" style="display: flex;">
-            <div class="modal-content" style="max-width: 500px;">
-                <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                <h2><i class="fas fa-users"></i> Programme de Parrainage</h2>
-                
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
-                        <div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${userData.parrainage?.referredCount || 0}</div>
-                            <div style="font-size: 14px; color: #666;">Personnes parrainées</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 24px; font-weight: bold; color: #28a745;">${userData.parrainage?.availableEarnings || 0} MRU</div>
-                            <div style="font-size: 14px; color: #666;">Gains disponibles</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin: 20px 0;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Votre lien de parrainage :</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="referralLinkInput" readonly 
-                               value="${lienParrainage}" 
-                               style="flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; background: #f7fafc;">
-                        <button onclick="copyReferralLink()" 
-                                style="background: #667eea; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
-                            📋
-                        </button>
-                    </div>
-                </div>
-
-                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                    <h4 style="margin: 0 0 10px 0; color: #0056b3;">🎯 Comment ça marche ?</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #333;">
-                        <li><strong>Parrain</strong> : 15% de crédit sur chaque commande de votre filleul</li>
-                        <li><strong>Filleul</strong> : 10% de réduction sur la première commande</li>
-                        <li>🔄 Le lien est personnel et unique</li>
-                        <li>💰 Gains crédités automatiquement</li>
-                    </ul>
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button onclick="shareReferralLink('${lienParrainage}')" 
-                            style="flex: 1; background: #25D366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer;">
-                        📱 Partager
-                    </button>
-                    <button onclick="this.parentElement.parentElement.parentElement.remove()" 
-                            style="background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer;">
-                        Fermer
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-function copyReferralLink() {
-    const input = document.getElementById('referralLinkInput');
-    if (input) {
-        input.select();
-        document.execCommand('copy');
-        alert('✅ Lien copié dans le presse-papier !');
-    }
-}
-
-function shareReferralLink(link) {
-    if (navigator.share) {
-        navigator.share({
-            title: 'Rejoins Andu Xara avec mon code parrainage !',
-            text: 'Bénéficie de 10% de réduction sur ta première commande 🎁',
-            url: link
-        });
-    } else {
-        copyReferralLink();
     }
 }
 
@@ -1345,205 +1149,6 @@ function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
 }
 
-// Fermer les modals en cliquant dehors
-window.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-    }
-});
-
-// ===== SYSTÈME DE PARRAINAGE COMPLET =====
-
-// Fonction principale de parrainage
-async function copierLienParrainage() {
-    ouvrirInterfaceParrainage();
-}
-
-// Interface de parrainage
-function ouvrirInterfaceParrainage() {
-    if (!auth.currentUser) {
-        showLoginModal();
-        return;
-    }
-    
-    // Vérifier si l'interface existe déjà
-    if (document.getElementById('interfaceParrainage')) {
-        return;
-    }
-    
-    const interfaceHTML = `
-        <div id="interfaceParrainage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-            <div style="background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 style="margin: 0; color: #333;">🎁 Programme de Parrainage</h2>
-                    <span onclick="fermerInterfaceParrainage()" style="font-size: 24px; cursor: pointer; color: #666;">&times;</span>
-                </div>
-                
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
-                        <div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="statsParrains">0</div>
-                            <div style="font-size: 14px; color: #666;">Personnes parrainées</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 24px; font-weight: bold; color: #28a745;" id="statsGains">0 MRU</div>
-                            <div style="font-size: 14px; color: #666;">Gains disponibles</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Votre lien de parrainage :</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="lienParrainageInput" readonly 
-                               style="flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; background: #f7fafc; font-family: monospace;">
-                        <button onclick="copierLienParrainageFinal()" 
-                                style="background: #667eea; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                            📋
-                        </button>
-                    </div>
-                </div>
-
-                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                    <h4 style="margin: 0 0 10px 0; color: #0056b3;">🎯 Comment ça marche ?</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #333;">
-                        <li><strong>Parrain</strong> : 15% de crédit sur chaque commande</li>
-                        <li><strong>Filleul</strong> : 10% de réduction immédiate</li>
-                        <li>🔄 Lien personnel et unique</li>
-                        <li>💰 Gains automatiques</li>
-                    </ul>
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="partagerLienParrainage()" 
-                            style="flex: 1; background: #25D366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-                        📱 Partager
-                    </button>
-                    <button onclick="fermerInterfaceParrainage()" 
-                            style="background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer;">
-                        Fermer
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', interfaceHTML);
-    chargerDonneesParrainage();
-}
-
-// Charger les données
-async function chargerDonneesParrainage() {
-    try {
-        const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-        const userData = userDoc.data();
-        
-        // Mettre à jour les statistiques
-        if (document.getElementById('statsParrains')) {
-            document.getElementById('statsParrains').textContent = userData.parrainage?.referredCount || 0;
-        }
-        if (document.getElementById('statsGains')) {
-            document.getElementById('statsGains').textContent = (userData.parrainage?.availableEarnings || 0) + ' MRU';
-        }
-        
-        // Générer le lien
-        if (document.getElementById('lienParrainageInput')) {
-            const lien = window.location.origin + window.location.pathname + '?ref=' + userData.referralCode;
-            document.getElementById('lienParrainageInput').value = lien;
-        }
-        
-    } catch (error) {
-        console.error("Erreur chargement:", error);
-    }
-}
-
-// Copier le lien
-function copierLienParrainageFinal() {
-    const input = document.getElementById('lienParrainageInput');
-    if (!input || !input.value) return;
-    
-    // Méthode moderne
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(input.value)
-            .then(() => {
-                afficherMessage('✅ Lien copié !');
-            })
-            .catch(() => {
-                copierAvecFallback(input);
-            });
-    } else {
-        copierAvecFallback(input);
-    }
-}
-
-// Fallback pour la copie
-function copierAvecFallback(input) {
-    input.select();
-    input.setSelectionRange(0, 99999);
-    
-    try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-            afficherMessage('✅ Lien copié !');
-        } else {
-            afficherMessage('📋 Sélectionnez et copiez manuellement');
-        }
-    } catch (err) {
-        afficherMessage('📋 Sélectionnez et copiez manuellement');
-    }
-}
-
-// Partager le lien
-function partagerLienParrainage() {
-    const input = document.getElementById('lienParrainageInput');
-    if (!input || !input.value) return;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Rejoins Andu Xara !',
-            text: 'Bénéficie de 10% de réduction avec mon code parrainage 🎁',
-            url: input.value
-        }).catch(() => {
-            copierLienParrainageFinal();
-        });
-    } else {
-        copierLienParrainageFinal();
-    }
-}
-
-// Afficher un message
-function afficherMessage(message) {
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #28a745;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10001;
-        font-weight: bold;
-    `;
-    
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        if (toast.parentNode) {
-            toast.parentNode.removeChild(toast);
-        }
-    }, 3000);
-}
-
-// Fermer l'interface
-function fermerInterfaceParrainage() {
-    const interfaceEl = document.getElementById('interfaceParrainage');
-    if (interfaceEl) {
-        interfaceEl.remove();
-    }
-}
-
 // ===== INITIALISATION =====
 const authManager = new AuthManager();
 
@@ -1592,73 +1197,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('👤 Client: créez un nouveau compte pour tester');
 });
 
-
-// ===== FONCTIONS MANQUANTES =====
-function showLoginModal() {
-    console.log("🔓 Ouverture modal connexion");
-    const modal = document.getElementById('loginModal');
-    if (modal) modal.style.display = 'flex';
-}
-
-function showSignupModal() {
-    console.log("📝 Ouverture modal inscription"); 
-    const modal = document.getElementById('signupModal');
-    if (modal) modal.style.display = 'flex';
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) modal.style.display = 'none';
-}
-
-async function copierLienParrainage() {
-    console.log("🎁 Début copierLienParrainage");
-    
-    if (!firebase.auth().currentUser) {
-        showLoginModal();
-        return;
-    }
-    
-    try {
-        const user = firebase.auth().currentUser;
-        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-        
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const lien = window.location.origin + window.location.pathname + '?ref=' + userData.referralCode;
-            
-            // Interface simple
-            const html = `
-                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;">
-                    <div style="background:white;padding:20px;border-radius:10px;max-width:400px;width:90%;">
-                        <h3>🎁 Votre Lien de Parrainage</h3>
-                        <input type="text" id="lienTemp" value="${lien}" readonly style="width:100%;padding:8px;margin:10px 0;border:1px solid #ddd;">
-                        <div style="display:flex;gap:10px;">
-                            <button onclick="copierLienTemp()" style="flex:1;background:#667eea;color:white;border:none;padding:8px;border-radius:5px;cursor:pointer;">📋 Copier</button>
-                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#666;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', html);
-        }
-    } catch (error) {
-        console.error("❌ Erreur:", error);
-        alert("Erreur: " + error.message);
-    }
-}
-
-function copierLienTemp() {
-    const input = document.getElementById('lienTemp');
-    if (input) {
-        input.select();
-        document.execCommand('copy');
-        alert('✅ Lien copié !');
-    }
-}
-
-console.log("✅ Fonctions manquantes ajoutées avec succès");
 // Instructions
 setTimeout(() => {
     console.log('\n🎯 SOURCES DE CODES PROMO:');
