@@ -1,0 +1,72 @@
+<!-- COLLER CE CODE DANS REDUCTIONS.HTML -->
+
+<section class="promo-section">
+    <h1>🎫 Codes Promo Andu Xara</h1>
+    
+    <!-- Section connexion -->
+    <div class="auth-required">
+        <h3>🔐 Connexion Active</h3>
+        <p>Vous êtes connecté en tant que: <strong id="user-email">cheikhdiabira2408@gmail.com</strong></p>
+    </div>
+
+    <!-- Formulaire code promo -->
+    <div class="promo-card">
+        <h3>Appliquer un code promo</h3>
+        <div class="promo-form">
+            <input type="text" id="code-promo-input" class="promo-input" 
+                   placeholder="Entrez votre code promo (ex: TEST2025)" maxlength="20">
+            <button id="appliquer-promo-btn" class="promo-btn" onclick="validateAndApplyPromo()">
+                Appliquer
+            </button>
+        </div>
+        <div class="usage-info">
+            <p>📌 Un code ne peut être utilisé qu'une seule fois par compte</p>
+            <p>⏰ Chaque code a une date de validité</p>
+            <p>💳 Certains codes nécessitent un montant minimum</p>
+        </div>
+    </div>
+
+    <!-- Code actuellement appliqué -->
+    <div class="promo-card current-promo">
+        <h3>Code promo actif</h3>
+        <p>Code appliqué: <span id="code-actif">Aucun</span></p>
+        <p>Réduction: <span id="montant-reduction">0 FCFA</span></p>
+    </div>
+
+    <!-- Instructions de test -->
+    <div class="promo-card">
+        <h3>💡 Test du système</h3>
+        <p>Code de test disponible: <strong>TEST2025</strong></p>
+        <p>Réduction: <strong>1500 FCFA</strong> (montant minimum: 5000 FCFA)</p>
+        <button onclick="testManuel()" style="background: #2196F3; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+            Tester automatiquement
+        </button>
+    </div>
+</section>
+
+<style>
+.promo-section { max-width: 800px; margin: 0 auto; padding: 20px; }
+.promo-card { background: white; border-radius: 10px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 4px solid #4CAF50; }
+.promo-form { display: flex; gap: 10px; margin: 20px 0; }
+.promo-input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; }
+.promo-btn { background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+.auth-required { background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0; }
+.usage-info { font-size: 14px; color: #666; margin-top: 10px; }
+.current-promo { background: #f0f8f0; }
+</style>
+
+<script>
+// Fonction de test manuel
+function testManuel() {
+    document.getElementById('code-promo-input').value = 'TEST2025';
+    validateAndApplyPromo();
+}
+
+// Mettre à jour l'email utilisateur
+document.addEventListener('DOMContentLoaded', function() {
+    const emailEl = document.getElementById('user-email');
+    if (emailEl && typeof userManager !== 'undefined') {
+        emailEl.textContent = userManager.userEmail;
+    }
+});
+</script>

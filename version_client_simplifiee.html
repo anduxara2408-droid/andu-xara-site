@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codes Promo - Andu Xara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .auth-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .auth-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .auth-btn.outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .auth-btn.outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .user-profile {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            display: block;
+            color: #2d3748;
+        }
+
+        .user-email {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .promo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .promo-section h2 {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .promo-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .promo-btn {
+            padding: 14px 28px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .info-message {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .admin-btn {
+            padding: 15px 25px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .form-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .form-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1><i class="fas fa-tag"></i> Codes Promo Andu Xara</h1>
+            <p>Accédez à vos réductions exclusives</p>
+        </div>
+
+        <!-- Section Authentification -->
+        <div class="auth-section">
+            <div id="authButtons" class="auth-buttons">
+                <button class="auth-btn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+                <button class="auth-btn outline" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Créer un compte
+                </button>
+            </div>
+
+            <div id="userProfile" class="user-profile">
+                <div class="profile-header">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userDisplayName">Utilisateur</span>
+                        <span class="user-email" id="userEmail">email@example.com</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="auth-btn" style="background: #718096;" onclick="authManager.signOut()">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Code Promo (visible seulement pour les clients connectés) -->
+        <div id="promoSection" class="promo-section">
+            <h2><i class="fas fa-ticket-alt"></i> Utiliser un code promo</h2>
+            <div class="promo-input-group">
+                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: BIENVENUE15">
+                <button class="promo-btn" onclick="appliquerCodePromo()">
+                    <i class="fas fa-check"></i> Appliquer
+                </button>
+            </div>
+            <div id="promoMessage" style="margin-top: 1rem; font-weight: 500;"></div>
+        </div>
+
+        <!-- Message d'information pour les non-connectés -->
+        <div id="infoMessage" class="info-message">
+            <i class="fas fa-info-circle"></i>
+            Pour bénéficier des codes promo, connectez-vous ou créez un compte gratuitement
+        </div>
+
+        <!-- SECTION ADMIN (visible seulement pour l'admin) -->
+        <div id="adminSection" class="admin-section">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
+                <i class="fas fa-cogs"></i> Administration
+            </h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #718096;">
+                Gestion des comptes clients et analyse des performances
+            </p>
+            
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="showAdminDashboard()">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </button>
+                <button class="admin-btn" onclick="showAnalytics()">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+                <button class="admin-btn" onclick="showClientManager()">
+                    <i class="fas fa-users"></i> Gérer les clients
+                </button>
+            </div>
+
+            <!-- Statistiques admin -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 10px;">
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Aperçu des performances</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #667eea;">👥</div>
+                        <div style="font-weight: bold;">Clients actifs</div>
+                        <div id="clientCount" style="font-size: 1.5rem; font-weight: bold;">0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #48bb78;">💰</div>
+                        <div style="font-weight: bold;">Codes utilisés</div>
+                        <div id="codesUsed" style="font-size: 1.5rem; font-weight: bold;">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('loginModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal d'inscription -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Créer un compte</h2>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('signupModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// ===== GESTIONNAIRE D'AUTHENTIFICATION =====
+class AuthManager {
+    constructor() {
+        this.user = null;
+        this.isAdmin = false;
+        this.init();
+    }
+
+    init() {
+        // Vérifier si un utilisateur est déjà connecté
+        const savedUser = localStorage.getItem('anduxara_user');
+        if (savedUser) {
+            this.user = JSON.parse(savedUser);
+            this.updateUI();
+        }
+    }
+
+    async signIn(email, password) {
+        // Simulation de connexion
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Vérifier si c'est l'admin
+        if (email === 'cheikhdiabira2408@gmail.com') {
+            this.user = {
+                email: email,
+                displayName: 'Cheikhou Admin',
+                role: 'admin',
+                isAdmin: true
+            };
+            this.isAdmin = true;
+        } else {
+            this.user = {
+                email: email,
+                displayName: email.split('@')[0],
+                role: 'client',
+                isAdmin: false
+            };
+            this.isAdmin = false;
+        }
+        
+        // Sauvegarder en localStorage
+        localStorage.setItem('anduxara_user', JSON.stringify(this.user));
+        this.updateUI();
+        
+        return { success: true, user: this.user };
+    }
+
+    async signUp(email, password, displayName) {
+        // Simulation d'inscription
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        this.user = {
+            email: email,
+            displayName: displayName,
+            role: 'client',
+            isAdmin: false
+        };
+        
+        localStorage.setItem('anduxara_user', JSON.stringify(this.user));
+        this.updateUI();
+        
+        return { success: true, user: this.user };
+    }
+
+    signOut() {
+        this.user = null;
+        this.isAdmin = false;
+        localStorage.removeItem('anduxara_user');
+        this.updateUI();
+        return { success: true };
+    }
+
+    updateUI() {
+        const authButtons = document.getElementById('authButtons');
+        const userProfile = document.getElementById('userProfile');
+        const promoSection = document.getElementById('promoSection');
+        const infoMessage = document.getElementById('infoMessage');
+        const adminSection = document.getElementById('adminSection');
+
+        if (this.user) {
+            // Utilisateur connecté
+            authButtons.style.display = 'none';
+            userProfile.style.display = 'block';
+            infoMessage.style.display = 'none';
+            
+            document.getElementById('userDisplayName').textContent = this.user.displayName;
+            document.getElementById('userEmail').textContent = this.user.email;
+            document.getElementById('userAvatar').textContent = this.user.displayName.charAt(0).toUpperCase();
+
+            if (this.user.isAdmin) {
+                // ADMIN - voir seulement l'administration
+                promoSection.style.display = 'none';
+                adminSection.style.display = 'block';
+                this.loadAdminStats();
+                console.log('🔑 Admin connecté - Interface admin activée');
+            } else {
+                // CLIENT - voir seulement les codes promo
+                promoSection.style.display = 'block';
+                adminSection.style.display = 'none';
+                console.log('👤 Client connecté - Interface codes promo activée');
+            }
+        } else {
+            // Non connecté
+            authButtons.style.display = 'flex';
+            userProfile.style.display = 'none';
+            promoSection.style.display = 'none';
+            adminSection.style.display = 'none';
+            infoMessage.style.display = 'block';
+        }
+    }
+
+    loadAdminStats() {
+        // Simulation de statistiques admin
+        document.getElementById('clientCount').textContent = '24';
+        document.getElementById('codesUsed').textContent = '156';
+    }
+}
+
+// ===== FONCTIONS CODES PROMO =====
+function appliquerCodePromo() {
+    const codeInput = document.getElementById('promoCodeInput');
+    const messageDiv = document.getElementById('promoMessage');
+    const code = codeInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
+        return;
+    }
+    
+    // Codes de test
+    const codesValides = {
+        'BIENVENUE10': '10% de réduction',
+        'ANDU15': '15% de réduction',
+        'XARA20': '20% de réduction',
+        'ETE2024': '25% de réduction'
+    };
+    
+    if (codesValides[code]) {
+        messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
+        codeInput.value = '';
+    } else {
+        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
+    }
+}
+
+// ===== FONCTIONS ADMIN =====
+function showAdminDashboard() {
+    alert('🎯 Tableau de bord admin\n\n• 24 clients actifs\n• 156 codes utilisés\n• 2,450 MRU de réductions\n• Performance: Excellente');
+}
+
+function showAnalytics() {
+    alert('📊 Analytics détaillés\n\n📈 Graphiques des utilisations\n👥 Répartition clients\n💰 Revenus générés\n🕒 Heures de pointe');
+}
+
+function showClientManager() {
+    alert('👥 Gestion des clients\n\n• Voir tous les clients\n• Historique des commandes\n• Codes promo utilisés\n• Statistiques individuelles');
+}
+
+// ===== FONCTIONS MODALS =====
+function showLoginModal() {
+    document.getElementById('loginModal').style.display = 'flex';
+}
+
+function showSignupModal() {
+    document.getElementById('signupModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// ===== INITIALISATION =====
+const authManager = new AuthManager();
+
+// Gestion des formulaires
+document.addEventListener('DOMContentLoaded', function() {
+    // Formulaire connexion
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const result = await authManager.signIn(email, password);
+        if (result.success) {
+            closeModal('loginModal');
+            alert('✅ Connexion réussie!');
+        } else {
+            alert('❌ Erreur de connexion');
+        }
+    });
+
+    // Formulaire inscription
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        
+        const result = await authManager.signUp(email, password, name);
+        if (result.success) {
+            closeModal('signupModal');
+            alert('✅ Compte créé avec succès!');
+        } else {
+            alert('❌ Erreur d\'inscription');
+        }
+    });
+
+    // Fermer modals en cliquant dehors
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    console.log('🚀 Interface client/admin initialisée');
+    console.log('🔑 Admin: cheikhdiabira2408@gmail.com');
+    console.log('👤 Client: n\'importe quel autre email');
+});
+
+// Instructions
+setTimeout(() => {
+    console.log('\n🎯 MODES D\'UTILISATION:');
+    console.log('1. NON CONNECTÉ: Voir "Se connecter/Créer compte" + message info');
+    console.log('2. CLIENT: Voir section codes promo pour utiliser les réductions');
+    console.log('3. ADMIN: Voir section admin avec stats et gestion clients');
+}, 1000);
+    </script>
+</body>
+</html>

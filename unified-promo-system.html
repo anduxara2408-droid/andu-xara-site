@@ -1,0 +1,167 @@
+<!-- ===== SYSTÈME CODES PROMO UNIFIÉ (DEPUIS INDEX.HTML) ===== -->
+<div class="promo-unified-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px; border: 2px solid rgba(106, 17, 203, 0.1);">
+    <h2 style="color: #2c3e50; margin-bottom: 25px; font-size: 2rem;">🎁 Codes Promo Exclusifs</h2>
+    
+    <!-- Affichage code actif -->
+    <div id="active-promo-display" style="display: none; background: #e8f5e8; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #25D366;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="color: #25D366;">✅ Code actif :</strong>
+                <span id="active-promo-code" style="font-weight: bold; margin-left: 10px;"></span>
+                <span id="active-promo-discount" style="color: #e74c3c; margin-left: 10px;"></span>
+            </div>
+            <button onclick="unifiedRemovePromo()" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;">
+                Retirer
+            </button>
+        </div>
+    </div>
+    
+    <!-- Formulaire -->
+    <div style="display: flex; gap: 15px; justify-content: center; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+        <input type="text" 
+               id="unified-promo-input" 
+               placeholder="Ex: BIENVENUE15"
+               style="padding: 15px 20px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1.1rem; width: 250px; text-align: center;">
+        <button onclick="unifiedApplyPromo()" 
+                id="unified-promo-btn"
+                style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">
+            Appliquer ✅
+        </button>
+    </div>
+    
+    <!-- Message -->
+    <div id="unified-promo-message" style="font-weight: 500; min-height: 24px; font-size: 1.1rem;"></div>
+
+    <!-- Instructions -->
+    <div style="margin-top: 30px; padding: 25px; background: white; border-radius: 15px;">
+        <h4 style="color: #6a11cb; margin-bottom: 20px; text-align: center;">💡 Comment obtenir un code promo ?</h4>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+            <div>
+                <div style="font-size: 2rem; margin-bottom: 10px;">📷</div>
+                <div style="font-weight: bold; color: #2c3e50;">Instagram</div>
+                <a href="https://www.instagram.com/andu_xara" target="_blank" style="color: #6a11cb;">@andu_xara</a>
+            </div>
+            <div>
+                <div style="font-size: 2rem; margin-bottom: 10px;">🎵</div>
+                <div style="font-weight: bold; color: #2c3e50;">TikTok</div>
+                <a href="https://www.tiktok.com/@andu_xara" target="_blank" style="color: #6a11cb;">@andu_xara</a>
+            </div>
+            <div>
+                <div style="font-size: 2rem; margin-bottom: 10px;">📘</div>
+                <div style="font-weight: bold; color: #2c3e50;">Facebook</div>
+                <a href="https://www.facebook.com/share/1HxCMHr3bE/" target="_blank" style="color: #6a11cb;">Andu-Xara</a>
+            </div>
+            <div>
+                <div style="font-size: 2rem; margin-bottom: 10px;">💬</div>
+                <div style="font-weight: bold; color: #2c3e50;">Contact</div>
+                <a href="https://wa.me/22249037697" target="_blank" style="color: #6a11cb;">WhatsApp</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== SYSTÈME UNIFIÉ CODES PROMO =====
+// Ces fonctions utilisent le système d'index.html
+
+async function unifiedApplyPromo() {
+    const input = document.getElementById('unified-promo-input');
+    const button = document.getElementById('unified-promo-btn');
+    const message = document.getElementById('unified-promo-message');
+    
+    if (!input || !button) {
+        console.error('❌ Éléments manquants');
+        return;
+    }
+    
+    const code = input.value.trim().toUpperCase();
+    
+    if (!code) {
+        message.textContent = '❌ Veuillez entrer un code promo';
+        message.style.color = '#e74c3c';
+        return;
+    }
+    
+    button.disabled = true;
+    button.textContent = 'Validation...';
+    message.textContent = '🔄 Validation en cours...';
+    message.style.color = '#667eea';
+    
+    try {
+        // Utiliser la fonction de validation d'index.html
+        const validationResult = await simulatePromoValidation(code);
+        
+        if (validationResult.valid) {
+            // Utiliser la fonction d'application au panier d'index.html
+            applyPromoToCart(code, validationResult.discount);
+            
+            // Sauvegarder pour la persistance
+            localStorage.setItem('anduxara_active_promo', JSON.stringify({
+                code: code,
+                discount: validationResult.discount,
+                appliedAt: new Date().toISOString()
+            }));
+            
+            message.textContent = `✅ Code "${code}" appliqué : ${validationResult.discount}% de réduction !`;
+            message.style.color = '#27ae60';
+            input.value = '';
+            
+            // Mettre à jour l'affichage
+            unifiedUpdatePromoDisplay(code, validationResult.discount);
+            
+        } else {
+            message.textContent = `❌ ${validationResult.message || 'Code invalide'}`;
+            message.style.color = '#e74c3c';
+        }
+        
+    } catch (error) {
+        console.error('Erreur:', error);
+        message.textContent = '❌ Erreur de validation';
+        message.style.color = '#e74c3c';
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Appliquer ✅';
+    }
+}
+
+function unifiedRemovePromo() {
+    // Utiliser la fonction de suppression d'index.html
+    if (typeof removePromoFromCart === 'function') {
+        removePromoFromCart();
+    }
+    
+    localStorage.removeItem('anduxara_active_promo');
+    unifiedUpdatePromoDisplay(null, 0);
+    
+    const message = document.getElementById('unified-promo-message');
+    if (message) {
+        message.textContent = '🗑️ Code promo retiré';
+        message.style.color = '#95a5a6';
+    }
+}
+
+function unifiedUpdatePromoDisplay(code, discount) {
+    const display = document.getElementById('active-promo-display');
+    const codeElement = document.getElementById('active-promo-code');
+    const discountElement = document.getElementById('active-promo-discount');
+    
+    if (code && discount > 0) {
+        display.style.display = 'block';
+        codeElement.textContent = code;
+        discountElement.textContent = `(-${discount}%)`;
+    } else {
+        display.style.display = 'none';
+    }
+}
+
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    // Charger le code promo actif s'il existe
+    const savedPromo = localStorage.getItem('anduxara_active_promo');
+    if (savedPromo) {
+        const promoData = JSON.parse(savedPromo);
+        unifiedUpdatePromoDisplay(promoData.code, promoData.discount);
+    }
+});
+</script>

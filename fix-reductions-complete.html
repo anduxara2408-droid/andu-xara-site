@@ -1,0 +1,81 @@
+<!-- CORRECTIF COMPLET POUR REDUCTIONS.HTML -->
+<!-- AJOUTER CE CODE DANS LE BODY DE REDUCTIONS.HTML -->
+
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h1>🎫 Codes Promo Andu Xara</h1>
+    
+    <!-- Statut connexion -->
+    <div style="background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <h3>🔐 Connexion Active</h3>
+        <p>Connecté en tant que: <strong id="user-email">cheikhdiabira2408@gmail.com</strong></p>
+    </div>
+
+    <!-- Formulaire code promo -->
+    <div style="background: white; border-radius: 10px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 4px solid #4CAF50;">
+        <h3>Appliquer un code promo</h3>
+        <div style="display: flex; gap: 10px; margin: 20px 0;">
+            <input type="text" id="code-promo-input" style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px;" 
+                   placeholder="Entrez votre code promo (ex: TEST2025)" maxlength="20">
+            <button id="appliquer-promo-btn" style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;" onclick="validateAndApplyPromo()">
+                Appliquer
+            </button>
+        </div>
+        <div style="font-size: 14px; color: #666; margin-top: 10px;">
+            <p>📌 Un code ne peut être utilisé qu'une seule fois par compte</p>
+            <p>⏰ Chaque code a une date de validité</p>
+            <p>💳 Certains codes nécessitent un montant minimum</p>
+        </div>
+    </div>
+
+    <!-- Code actif -->
+    <div style="background: #f0f8f0; border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #4CAF50;">
+        <h3>Code promo actif</h3>
+        <p>Code appliqué: <span id="code-actif">Aucun</span></p>
+        <p>Réduction: <span id="montant-reduction">0 FCFA</span></p>
+    </div>
+
+    <!-- Test automatique -->
+    <div style="background: white; border-radius: 10px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h3>💡 Test du système</h3>
+        <p>Code de test: <strong>TEST2025</strong> (réduction: 1500 FCFA, minimum: 5000 FCFA)</p>
+        <button onclick="testAutomatique()" style="background: #2196F3; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+            Tester automatiquement
+        </button>
+    </div>
+</div>
+
+<script>
+// Fonction de test automatique
+function testAutomatique() {
+    const codeInput = document.getElementById('code-promo-input');
+    const applyButton = document.getElementById('appliquer-promo-btn');
+    
+    if (codeInput && applyButton) {
+        codeInput.value = 'TEST2025';
+        validateAndApplyPromo();
+    } else {
+        alert('❌ Éléments manquants. Le correctif HTML doit être ajouté.');
+    }
+}
+
+// Mettre à jour l'interface utilisateur
+function updateUserInterface() {
+    const emailEl = document.getElementById('user-email');
+    if (emailEl && typeof userManager !== 'undefined') {
+        emailEl.textContent = userManager.userEmail;
+    }
+}
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Interface codes promo initialisée');
+    updateUserInterface();
+    
+    // Vérifier que validateAndApplyPromo existe
+    if (typeof validateAndApplyPromo === 'function') {
+        console.log('✅ validateAndApplyPromo disponible');
+    } else {
+        console.log('❌ validateAndApplyPromo manquant');
+    }
+});
+</script>

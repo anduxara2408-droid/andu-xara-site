@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
  
-<script src="panier-unified.js"></script>
+
 <style>
 /* ===== RESET ET STYLES GLOBAUX ===== */
 * {
@@ -25,35 +25,6 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
-// Fonction pour retirer le code promo du panier
-function removePromoFromCart() {
-    console.log('🗑️ Retrait du code promo');
-    
-    activePromoCode = null;
-    promoDiscount = 0;
-    
-    // Rétablir les prix originaux
-    floatingCart.forEach(item => {
-        item.promoPrice = item.price;
-    });
-    
-    // Sauvegarder le panier
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    
-    // Mettre à jour l'affichage
-    updateFloatingCart();
-    
-    // Supprimer le code actif du localStorage
-    localStorage.removeItem('anduxara_active_promo');
-    
-    // Mettre à jour l'affichage dans reductions.html si ouvert
-    if (typeof unifiedUpdatePromoDisplay === 'function') {
-        unifiedUpdatePromoDisplay(null, 0);
-    }
-    
-    showNotification('🗑️ Code promo retiré');
-}
 body {
     background-color: #f5f7fa;
     color: #333;
@@ -1944,9 +1915,133 @@ if (window.location.hostname !== 'localhost' &&
 </style>
 
 <script>
+// ===== SYSTÈME DE PANIER - DÉCLARATIONS GLOBALES =====
+let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+
+// ===== SYSTÈME CODES PROMO - DÉCLARATIONS GLOBALES EXPLICITES =====
+window.activePromoCode = null;
+window.promoDiscount = 0;
+
+// ===== FONCTIONS DU PANIER - DÉFINIES EN PREMIER =====
 // ===== NOUVELLE VERSION AVEC CODES PROMO =====
+function updateFloatingCart() {
+    console.log('🔄 Mise à jour complète du panier flottant avec codes promo...');
+    
+    const badge = document.getElementById('cart-badge-floating');
+    const itemsContainer = document.getElementById('cart-items-floating');
+    const totalElement = document.getElementById('cart-total-floating');
+    
+    // Mettre à jour le badge
+    if (badge) {
+        const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+    }
+    
+    // Mettre à jour les articles
+    if (itemsContainer && totalElement) {
+        itemsContainer.innerHTML = '';
+        const totals = calculateCartTotal();
+        
+        if (floatingCart.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-cart-floating">Panier vide</div>';
+            
+            // Réinitialiser le code promo si panier vide
+            if (activePromoCode) {
+                removePromoFromCart();
+            }
+        } else {
+            floatingCart.forEach((item, index) => {
+                const itemPrice = item.promoPrice || item.price;
+                const originalTotal = item.price * item.quantity;
+                const discountedTotal = itemPrice * item.quantity;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item-floating';
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Quantité: ${item.quantity}</p>
+                        ${promoDiscount > 0 ? `<p style="color: #27ae60; font-size: 0.7rem;">🎯 Promo: -${promoDiscount}%</p>` : ''}
+                        <button class="remove-item" onclick="removeFromFloatingCart(${index})">Retirer</button>
+                    </div>
+                    <div class="cart-item-price">
+                        ${promoDiscount > 0 ? `
+                            <div style="text-decoration: line-through; color: #888; font-size: 0.7rem;">
+                                ${originalTotal.toFixed(0)} MRU
+                            </div>
+                        ` : ''}
+                        <div style="color: #e60023; font-weight: bold;">
+                            ${discountedTotal.toFixed(0)} MRU
+                        </div>
+                        ${promoDiscount > 0 ? `
+                            <div style="color: #27ae60; font-size: 0.7rem; font-weight: bold;">
+                                Économie: ${(originalTotal - discountedTotal).toFixed(0)} MRU
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+            });
+        }
+        
+        // Afficher le total avec la réduction
+        let totalHTML = '';
+        if (promoDiscount > 0 && floatingCart.length > 0) {
+            totalHTML = `
+                <div style="background: #e8f5e8; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="font-size: 0.8rem; color: #27ae60; font-weight: bold; margin-bottom: 5px;">
+                        🎉 Code "${activePromoCode}" actif (-${promoDiscount}%)
+                    </div>
+                    <div style="font-size: 0.8rem; color: #666; margin-bottom: 3px;">
+                        Sous-total: ${totals.subtotal.toFixed(0)} MRU
+                    </div>
+                    <div style="font-size: 0.8rem; color: #27ae60; margin-bottom: 3px;">
+                        Réduction: -${totals.discount.toFixed(0)} MRU
+                    </div>
+                </div>
+                <div class="cart-total-floating" style="font-size: 1.1rem; color: #2c3e50;">
+                    Total: ${totals.total.toFixed(0)} MRU
+                </div>
+            `;
+        } else {
+            totalHTML = `
+                <div class="cart-total-floating" style="font-size: 1.1rem; color: #2c3e50;">
+                    Total: ${totals.total.toFixed(0)} MRU
+                </div>
+                ${floatingCart.length > 0 ? `
+                    <div style="font-size: 0.8rem; color: #666; text-align: center; margin-top: 5px;">
+                        💡 Ajoutez un code promo pour économiser !
+                    </div>
+                ` : ''}
+            `;
+        }
+        
+        totalElement.innerHTML = totalHTML;
+        
+        // Mettre à jour l'affichage du code promo actif dans la section promo
+        updateActivePromoDisplay();
+    }
+}
 
 // ===== FONCTION POUR METTRE À JOUR L'AFFICHAGE DU CODE ACTIF =====
+function updateActivePromoDisplay() {
+    const activePromoDisplay = document.getElementById('active-promo-display');
+    const activePromoCodeElement = document.getElementById('active-promo-code');
+    const promoInput = document.getElementById('promoInput');
+    const promoMessage = document.getElementById('promoMessage');
+    
+    if (activePromoDisplay && activePromoCodeElement) {
+        if (activePromoCode && promoDiscount > 0) {
+            activePromoDisplay.style.display = 'block';
+            activePromoCodeElement.textContent = `${activePromoCode} (-${promoDiscount}%)`;
+            promoInput.value = '';
+            promoMessage.textContent = `✅ Code "${activePromoCode}" actif : ${promoDiscount}% de réduction`;
+            promoMessage.style.color = '#27ae60';
+        } else {
+            activePromoDisplay.style.display = 'none';
+        }
+    }
+}
 function removeFromFloatingCart(index) {
     console.log('🗑️ Retrait du produit index:', index);
     
@@ -1955,9 +2050,11 @@ function removeFromFloatingCart(index) {
     const wasOpen = cart ? cart.classList.contains('open') : false;
     
     // Supprimer l'élément
+    floatingCart.splice(index, 1);
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     
     // Mettre à jour l'affichage
+    updateFloatingCart();
     showNotification('🗑️ Produit retiré du panier');
     
     // Maintenir le panier ouvert
@@ -1966,8 +2063,30 @@ function removeFromFloatingCart(index) {
     }
 }
 
+function openFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.add('open');
+        updateFloatingCart();
+    }
+}
 
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}
 
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        if (cart.classList.contains('open')) {
+            updateFloatingCart();
+        }
+    }
+}
 
 
 function applyPromoToCart(promoCode, discountPercentage) {
@@ -1975,22 +2094,85 @@ function applyPromoToCart(promoCode, discountPercentage) {
     promoDiscount = discountPercentage;
     
     // Recalculer tous les prix avec la réduction
+    floatingCart.forEach(item => {
         item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
     });
     
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    updateFloatingCart();
     showNotification(`✅ Code promo appliqué : ${discountPercentage}% de réduction !`);
 }
+
+function removePromoFromCart() {
+    activePromoCode = null;
+    promoDiscount = 0;
+    
+    // Rétablir les prix originaux
+    floatingCart.forEach(item => {
+        item.promoPrice = item.price;
+    });
     
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
-    showNotification('✅ Code promo appliqué : ' + discountPercentage + '% de réduction !');
+    showNotification('🗑️ Code promo retiré');
 }
 
-
 // Mettre à jour la fonction de calcul du total
+function calculateCartTotal() {
+    let subtotal = floatingCart.reduce((sum, item) => {
+        return sum + (item.promoPrice * item.quantity);
+    }, 0);
+    
+    let discount = 0;
+    if (promoDiscount > 0) {
+        discount = subtotal * (promoDiscount / 100);
+    }
+    
+    return {
+        subtotal: subtotal,
+        discount: discount,
+        total: subtotal - discount
+    };
+}
 
 // ===== FONCTION PRINCIPALE POUR AJOUTER AU PANIER =====
+function addToCartAndTrack(productName, category, price) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
+
+    // Vibration si supporté
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    // Rechercher si le produit existe déjà
+    const existingItem = floatingCart.find(item => item.name === productName);
+
+    if (existingItem) {
+        // Limite à 20 produits maximum
+        if (existingItem.quantity < 20) {
+            existingItem.quantity += 1;
+        } else {
+            showNotification('❌ Maximum 20 produits par article atteint !', 'error');
+            return;
+        }
+    } else {
+        floatingCart.push({
+            name: productName,
+            price: price,
+            promoPrice: price,
+            quantity: 1,
+            category: category,
+            addedAt: new Date().toISOString()
+        });
+    }
+
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+
+    // Afficher une notification
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+
+    // Mettre à jour l'affichage du panier
+    updateFloatingCart();
+}
 
 // ===== NOTIFICATION =====
 function showNotification(message, type = 'success') {
@@ -2030,15 +2212,18 @@ function showNotification(message, type = 'success') {
 
 // ===== SYSTÈME DE PAIEMENT =====
 function processFloatingCheckout() {
+    if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
         return;
     }
     
+    const totalMRU = floatingCart.reduce((sum, item) => sum + (item.promoPrice * item.quantity), 0);
     const totalFCFA = Math.round(totalMRU * 2.5);
     
     // INTÉGRATION AVEC LE SYSTÈME DE FIDÉLITÉ
     integrerFideliteAchat(totalMRU);
     
+    const productList = floatingCart.map(item => 
         `${item.name} (x${item.quantity}) - ${item.promoPrice * item.quantity} MRU`
     ).join('\n');
     
@@ -2234,6 +2419,56 @@ function initialiserSystemeFideliteSimplifie(totalMRU) {
 }
 
 // ===== VALIDATION DES CODES PROMO =====
+async function validateAndApplyPromo() {
+    const promoInput = document.getElementById('promoInput');
+    const promoMessage = document.getElementById('promoMessage');
+    const promoButton = document.getElementById('promoButton');
+    
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        promoMessage.textContent = '❌ Veuillez entrer un code promo';
+        promoMessage.style.color = '#e74c3c';
+        return;
+    }
+    
+    // Désactiver le bouton pendant la validation
+    promoButton.disabled = true;
+    promoButton.textContent = 'Validation...';
+    
+    try {
+        // Simulation de validation - À REMPLACER par ton système Firebase
+        const validationResult = await simulatePromoValidation(code);
+        
+        if (validationResult.valid) {
+            applyPromoToCart(code, validationResult.discount);
+            
+            // Sauvegarder pour les autres pages
+            localStorage.setItem('anduxara_active_promo', JSON.stringify({
+                code: code,
+                discount: validationResult.discount,
+                appliedAt: new Date().toISOString()
+            }));
+            
+            promoMessage.textContent = `✅ Code "${code}" appliqué : ${validationResult.discount}% de réduction !`;
+            promoMessage.style.color = '#27ae60';
+            promoInput.value = '';
+            
+        } else {
+            promoMessage.textContent = `❌ Code "${code}" invalide ou expiré`;
+            promoMessage.style.color = '#e74c3c';
+        }
+        
+    } catch (error) {
+        console.error('Erreur validation promo:', error);
+        promoMessage.textContent = '❌ Erreur de validation';
+        promoMessage.style.color = '#e74c3c';
+    } finally {
+        // Réactiver le bouton
+        promoButton.disabled = false;
+        promoButton.textContent = 'Appliquer ✅';
+    }
+}
 
 // Simulation de validation - À ADAPTER avec ton système Firebase
 async function simulatePromoValidation(code) {
@@ -2267,6 +2502,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du panier et fidélité...');
     
     // Mettre à jour l'affichage initial du panier
+    updateFloatingCart();
 
     // Fermer le panier en cliquant à l'extérieur
     document.addEventListener('click', function(event) {
@@ -2280,6 +2516,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    console.log('✅ Panier initialisé avec', floatingCart.length, 'articles');
 });
 </script>
 
@@ -2390,8 +2627,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">349 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt logo arabe', 't-shirts', 349)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt logo arabe')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt logo arabe', 't-shirts', 349)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt logo arabe', 't-shirts', 349)">👁️</button>
     </div>
   </div>
 </div>
@@ -2418,8 +2655,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Ensemble capuche style arabe', 'ensembles', 419)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Ensemble capuche style arabe')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Ensemble capuche style arabe', 'ensembles', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Ensemble capuche style arabe', 'ensembles', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2446,8 +2683,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Combinaison T-shirt et Capuche', 'ensembles', 419)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Combinaison T-shirt et Capuche')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Combinaison T-shirt et Capuche', 'ensembles', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Combinaison T-shirt et Capuche', 'ensembles', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2474,8 +2711,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt Enfant', 'enfants', 279)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt Enfant')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Enfant', 'enfants', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Enfant', 'enfants', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2503,8 +2740,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">559 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Ensemble T-shirt et jogging', 'ensembles', 559)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Ensemble T-shirt et jogging')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Ensemble T-shirt et jogging', 'ensembles', 559)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Ensemble T-shirt et jogging', 'ensembles', 559)">👁️</button>
     </div>
   </div>
 </div>
@@ -2531,8 +2768,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">489 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Pull bleu', 't-shirts', 489)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Pull bleu')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Pull bleu', 't-shirts', 489)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Pull bleu', 't-shirts', 489)">👁️</button>
     </div>
   </div>
 </div>
@@ -2557,8 +2794,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">209 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Capuchon blanc', 'accessoires', 209)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Capuchon blanc')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Capuchon blanc', 'accessoires', 209)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Capuchon blanc', 'accessoires', 209)">👁️</button>
     </div>
   </div>
 </div>
@@ -2585,8 +2822,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">629 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt et jogging Complet', 'ensembles', 629)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt et jogging Complet')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt et jogging Complet', 'ensembles', 629)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt et jogging Complet', 'ensembles', 629)">👁️</button>
     </div>
   </div>
 </div>
@@ -2613,8 +2850,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">1049 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Babs Premium', 'ensembles', 1049)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Babs Premium')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Babs Premium', 'ensembles', 1049)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Babs Premium', 'ensembles', 1049)">👁️</button>
     </div>
   </div>
 </div>
@@ -2641,8 +2878,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt Fille Noir', 't-shirts', 279)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt Fille Noir')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Fille Noir', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Fille Noir', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2669,8 +2906,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt Fille Blanc', 't-shirts', 419)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt Fille Blanc')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Fille Blanc', 't-shirts', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Fille Blanc', 't-shirts', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2697,8 +2934,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">419 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('Pull Blanc', 'pulls', 419)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: Pull Blanc')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('Pull Blanc', 'pulls', 419)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('Pull Blanc', 'pulls', 419)">👁️</button>
     </div>
   </div>
 </div>
@@ -2725,8 +2962,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt Beige', 't-shirts', 279)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt Beige')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Beige', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Beige', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2753,8 +2990,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt Blanc', 't-shirts', 279)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt Blanc')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt Blanc', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt Blanc', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -2781,8 +3018,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="promo-price">279 MRU</span>
     </div>
     <div class="product-actions">
-      <button class="add-to-cart" onclick="ajouterAuPanier('T-shirt ADX Noir', 't-shirts', 279)">Ajouter au panier</button>
-      <button class="quick-view" onclick="console.log('Vue produit: T-shirt ADX Noir')">👁️</button>
+      <button class="add-to-cart" onclick="addToCartAndTrack('T-shirt ADX Noir', 't-shirts', 279)">Ajouter au panier</button>
+      <button class="quick-view" onclick="trackProductView('T-shirt ADX Noir', 't-shirts', 279)">👁️</button>
     </div>
   </div>
 </div>
@@ -3472,7 +3709,7 @@ class StyleAdvisor {
                         <span class="promo-price">${product.price} MRU</span>
                     </div>
                     <div class="product-actions">
-                        <button class="add-to-cart" onclick="ajouterAuPanier('${product.name}', '${product.category}', ${product.price})">
+                        <button class="add-to-cart" onclick="addToCartAndTrack('${product.name}', '${product.category}', ${product.price})">
                             Ajouter au panier
                         </button>
                     </div>
@@ -3483,14 +3720,23 @@ class StyleAdvisor {
 }
 
 // ===== FONCTION POUR TRACKER LA CONSULTATION =====
+function trackProductView(productName, category, price) {
+    // Tracker pour les recommandations (si le système est initialisé)
+    if (window.styleAdvisor && typeof window.styleAdvisor.trackProductView === 'function') {
+        window.styleAdvisor.trackProductView(productName, category, price);
+    }
+    console.log('📊 Consultation trackée:', productName);
+}
 
 // ===== INITIALISATION =====
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du panier et recommandations...');
     
     // Charger le panier depuis le localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 
     // Mettre à jour l'affichage initial du panier
+    updateFloatingCart();
 
     // Fermer le panier en cliquant à l'extérieur
     document.addEventListener('click', function(event) {
@@ -3515,6 +3761,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1500);
     
+    console.log('✅ Panier initialisé avec', floatingCart.length, 'articles');
 });
 </script>
 <script>
@@ -3997,12 +4244,15 @@ function addToCart(productName, oldPrice, promoPrice) {
     if (navigator.vibrate) navigator.vibrate(50);
 
     // Synchroniser floatingCart avec localStorage
+    floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
     
     // Rechercher si le produit existe déjà
+    const existingItem = floatingCart.find(item => item.name === productName);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
+        floatingCart.push({
             name: productName,
             price: promoPrice,
             quantity: 1,
@@ -4017,6 +4267,7 @@ function addToCart(productName, oldPrice, promoPrice) {
     showNotification('✅ ' + productName + ' ajouté au panier !');
     
     // Mettre à jour l'affichage du panier
+    updateFloatingCart();
 }
 
 // === NOTIFICATION ===
@@ -4918,7 +5169,7 @@ container.innerHTML = favorites.map(product => `
             <div style="padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
                 <div style="font-weight: 500; font-size: 0.9rem;">${product.name}</div>
                 <div style="font-size: 0.8rem; color: #27ae60; font-weight: bold;">${product.price} MRU</div>
-                <button onclick="ajouterAuPanier('${product.name}', '${product.category}', ${product.price})" 
+                <button onclick="addToCartAndTrack('${product.name}', '${product.category}', ${product.price})" 
                         style="background: #27ae60; color: white; border: none; padding: 4px 8px; border-radius: 12px; cursor: pointer; font-size: 0.7rem; margin-top: 4px;">
                     🛒 Ajouter
                 </button>
@@ -5746,7 +5997,7 @@ function shareVirtualFitting() {
 function addToCartFromFitting() {
     if (virtualFittingAI && virtualFittingAI.selectedClothing) {
         const clothing = virtualFittingAI.clothingData[virtualFittingAI.selectedClothing];
-        ajouterAuPanier(clothing.name, clothing.category, clothing.price);
+        addToCartAndTrack(clothing.name, clothing.category, clothing.price);
     }
 }
 
@@ -5904,141 +6155,26 @@ setTimeout(() => {
 }, 1000);
 
 // ===== INTÉGRATION AVEC LE SYSTÈME CODES PROMO =====
-
-// ===== FONCTIONS MANQUANTES POUR LE SYSTÈME CODES PROMO =====
-
-// Fonction pour appliquer un code promo au panier
-function applyPromoToCart(promoCode, discountPercentage) {
-    console.log('🎯 Application code promo:', promoCode, discountPercentage + '%');
-    
-    // Variables globales (doivent exister)
-    if (typeof activePromoCode === 'undefined') window.activePromoCode = null;
-    if (typeof promoDiscount === 'undefined') window.promoDiscount = 0;
-    if (typeof floatingCart === 'undefined') window.floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
-    
-    activePromoCode = promoCode;
-    promoDiscount = discountPercentage;
-    
-    // Recalculer tous les prix avec la réduction
-    floatingCart.forEach(item => {
-        item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
-    });
-    
-    // Sauvegarder le panier
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    
-    // Mettre à jour l'affichage
-    if (typeof updateFloatingCart === 'function') {
-        updateFloatingCart();
-    }
-    
-    // Sauvegarder le code actif
-    localStorage.setItem('anduxara_active_promo', JSON.stringify({
-        code: promoCode,
-        discount: discountPercentage,
-        appliedAt: new Date().toISOString()
-    }));
-    
-    // Mettre à jour l'affichage du code actif
-    updateActivePromoDisplay();
-    
-    showNotification('✅ Code ' + promoCode + ' appliqué : ' + discountPercentage + '% de réduction !');
-}
-
-// Fonction pour retirer le code promo
-function removePromoFromCart() {
-    console.log('🗑️ Retrait du code promo');
-    
-    if (typeof activePromoCode === 'undefined') window.activePromoCode = null;
-    if (typeof promoDiscount === 'undefined') window.promoDiscount = 0;
-    if (typeof floatingCart === 'undefined') window.floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
-    
-    activePromoCode = null;
-    promoDiscount = 0;
-    
-    // Rétablir les prix originaux
-    floatingCart.forEach(item => {
-        item.promoPrice = item.price;
-    });
-    
-    // Sauvegarder le panier
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    
-    // Mettre à jour l'affichage
-    if (typeof updateFloatingCart === 'function') {
-        updateFloatingCart();
-    }
-    
-    // Supprimer le code actif
-    localStorage.removeItem('anduxara_active_promo');
-    
-    // Mettre à jour l'affichage
-    updateActivePromoDisplay();
-    
-    showNotification('🗑️ Code promo retiré');
-}
-
-// Fonction pour mettre à jour l'affichage du code actif
-function updateActivePromoDisplay() {
-    const display = document.getElementById('active-promo-display');
-    const codeElement = document.getElementById('active-promo-code');
-    const discountElement = document.getElementById('active-promo-discount');
-    
-    if (display && codeElement && discountElement) {
-        if (activePromoCode && promoDiscount > 0) {
-            display.style.display = 'block';
-            codeElement.textContent = activePromoCode;
-            discountElement.textContent = `(-${promoDiscount}%)`;
-        } else {
-            display.style.display = 'none';
-        }
-    }
-}
-
-// Fonction toggleFloatingCart manquante
-function toggleFloatingCart() {
-    console.log('🛒 toggleFloatingCart appelé');
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.toggle('open');
-        console.log("Panier état:", cart.classList.contains('open') ? "ouvert" : "fermé");
-        if (cart.classList.contains('open') && typeof updateFloatingCart === 'function') {
-            updateFloatingCart();
-        }
-    }
-}
-
-function closeFloatingCart() {
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.remove('open');
-    }
-}
-
-// Initialisation des variables globales
-if (typeof activePromoCode === 'undefined') window.activePromoCode = null;
-if (typeof promoDiscount === 'undefined') window.promoDiscount = 0;
-if (typeof floatingCart === 'undefined') window.floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 function initPromoIntegration() {
     // Vérifier si un code promo est déjà actif
-    // DÉSACTIVÉ: const savedPromo = localStorage.getItem('anduxara_active_promo');
-    // DÉSACTIVÉ: if (savedPromo) {
+    const savedPromo = localStorage.getItem('anduxara_active_promo');
+    if (savedPromo) {
         const promoData = JSON.parse(savedPromo);
-        // DÉSACTIVÉ: applyPromoToCart(promoData.code, promoData.discount);
-    // DÉSACTIVÉ: }
+        applyPromoToCart(promoData.code, promoData.discount);
+    }
     
     // Écouter les messages entre pages (pour reductions.html)
     window.addEventListener('storage', function(e) {
         if (e.key === 'anduxara_active_promo') {
             if (e.newValue) {
                 const promoData = JSON.parse(e.newValue);
-                // DÉSACTIVÉ: applyPromoToCart(promoData.code, promoData.discount);
-            // DÉSACTIVÉ: } else {
+                applyPromoToCart(promoData.code, promoData.discount);
+            } else {
                 removePromoFromCart();
-            // DÉSACTIVÉ: }
-        // DÉSACTIVÉ: }
-    // DÉSACTIVÉ: });
-// DÉSACTIVÉ: }
+            }
+        }
+    });
+}
 
 // Appeler cette fonction au chargement
 document.addEventListener('DOMContentLoaded', function() {
