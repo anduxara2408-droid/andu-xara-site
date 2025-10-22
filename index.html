@@ -1,3 +1,4 @@
+<script>document.addEventListener("DOMContentLoaded",function(){const e=new URLSearchParams(window.location.search).get("ref");e&&(localStorage.setItem("referralCodePending",e),console.log("🎯 Parrainage détecté:",e),function(e){const t=document.createElement("div");t.style.cssText="position:fixed;top:20px;right:20px;background:linear-gradient(135deg, #667eea, #764ba2);color:white;padding:15px;border-radius:10px;z-index:10000;max-width:300px;",t.innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><span>🎁</span><div><strong>Parrainage Actif</strong><div style="font-size:14px">${e}</div></div><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:white;margin-left:auto">×</button></div>`,document.body.appendChild(t),setTimeout(()=>{t.parentElement&&t.remove()},8e3)}("🎁 Code parrainage détecté ! Créez un compte pour 500 MRU"))});</script>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
