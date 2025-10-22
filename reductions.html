@@ -1592,6 +1592,73 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('👤 Client: créez un nouveau compte pour tester');
 });
 
+
+// ===== FONCTIONS MANQUANTES =====
+function showLoginModal() {
+    console.log("🔓 Ouverture modal connexion");
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function showSignupModal() {
+    console.log("📝 Ouverture modal inscription"); 
+    const modal = document.getElementById('signupModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = 'none';
+}
+
+async function copierLienParrainage() {
+    console.log("🎁 Début copierLienParrainage");
+    
+    if (!firebase.auth().currentUser) {
+        showLoginModal();
+        return;
+    }
+    
+    try {
+        const user = firebase.auth().currentUser;
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const lien = window.location.origin + window.location.pathname + '?ref=' + userData.referralCode;
+            
+            // Interface simple
+            const html = `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;">
+                    <div style="background:white;padding:20px;border-radius:10px;max-width:400px;width:90%;">
+                        <h3>🎁 Votre Lien de Parrainage</h3>
+                        <input type="text" id="lienTemp" value="${lien}" readonly style="width:100%;padding:8px;margin:10px 0;border:1px solid #ddd;">
+                        <div style="display:flex;gap:10px;">
+                            <button onclick="copierLienTemp()" style="flex:1;background:#667eea;color:white;border:none;padding:8px;border-radius:5px;cursor:pointer;">📋 Copier</button>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#666;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+    } catch (error) {
+        console.error("❌ Erreur:", error);
+        alert("Erreur: " + error.message);
+    }
+}
+
+function copierLienTemp() {
+    const input = document.getElementById('lienTemp');
+    if (input) {
+        input.select();
+        document.execCommand('copy');
+        alert('✅ Lien copié !');
+    }
+}
+
+console.log("✅ Fonctions manquantes ajoutées avec succès");
 // Instructions
 setTimeout(() => {
     console.log('\n🎯 SOURCES DE CODES PROMO:');
