@@ -230,203 +230,219 @@
     </script>
 
     <script>
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+<!-- GARDEZ TOUT LE CSS ET HTML EXISTANT -->
+<!-- MODIFIEZ SEULEMENT LA PARTIE JavaScript -->
 
-        class InscriptionParrainage {
-            constructor() {
-                this.parrainCode = null;
-                this.init();
-            }
+<script>
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-            init() {
-                console.log('🔄 Initialisation inscription parrainage...');
-                this.detecterParrain();
-                this.setupForm();
-            }
+    class InscriptionParrainage {
+        constructor() {
+            this.parrainCode = null;
+            this.init();
+        }
 
-            detecterParrain() {
-                // Détecter le code parrain depuis l'URL
-                const urlParams = new URLSearchParams(window.location.search);
-                this.parrainCode = urlParams.get('parrain');
+        init() {
+            console.log('🔄 Initialisation inscription parrainage...');
+            this.detecterParrain();
+            this.setupForm();
+        }
 
-                if (this.parrainCode) {
-                    console.log('✅ Parrain détecté:', this.parrainCode);
-                    localStorage.setItem('referralCode', this.parrainCode);
-                    
-                    // Mettre à jour l'interface
-                    const badge = document.getElementById('parrainBadge');
-                    badge.innerHTML = `<i class="fas fa-crown"></i> Parrainé par ${this.parrainCode} - 10% de réduction`;
-                } else {
-                    console.log('ℹ️ Aucun parrain détecté');
-                }
-            }
+        detecterParrain() {
+            const urlParams = new URLSearchParams(window.location.search);
+            this.parrainCode = urlParams.get('parrain');
 
-            setupForm() {
-                const form = document.getElementById('inscriptionForm');
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.creerCompte();
-                });
-            }
-
-            async creerCompte() {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const submitBtn = document.getElementById('submitBtn');
-
-                // Désactiver le bouton
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
-
-                try {
-                    // Créer l'utilisateur Firebase Auth
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    const user = userCredential.user;
-
-                    console.log('✅ Compte créé:', user.email);
-
-                    // Préparer les données utilisateur
-                    const userData = {
-                        email: user.email,
-                        createdAt: new Date(),
-                        hasUsedWelcomeCode: false,
-                        referralCodeUsed: this.parrainCode || null,
-                        referredBy: await this.trouverParrainUid(this.parrainCode)
-                    };
-
-                    // Sauvegarder dans Firestore
-                    await db.collection('users').doc(user.uid).set(userData);
-                    console.log('✅ Données utilisateur sauvegardées');
-
-                    // Traiter le parrainage si applicable
-                    if (this.parrainCode && userData.referredBy) {
-                        await this.traiterParrainage(userData.referredBy, user.email, user.uid);
-                    }
-
-                    // Afficher le succès
-                    this.afficherSucces('🎉 Compte créé avec succès ! Redirection...');
-
-                    // Rediriger vers reductions.html après 2 secondes
-                    setTimeout(() => {
-                        window.location.href = 'reductions.html';
-                    }, 2000);
-
-                } catch (error) {
-                    console.error('❌ Erreur création compte:', error);
-                    this.afficherErreur(this.getErrorMessage(error));
-                    
-                    // Réactiver le bouton
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Créer mon compte avec 10% de réduction';
-                }
-            }
-
-            async trouverParrainUid(codeParrain) {
-                if (!codeParrain) return null;
-
-                try {
-                    // Trouver l'UID du parrain via son code
-                    const parrainQuery = await db.collection('userReferrals')
-                        .where('code', '==', codeParrain)
-                        .limit(1)
-                        .get();
-
-                    if (!parrainQuery.empty) {
-                        const parrainDoc = parrainQuery.docs[0];
-                        console.log('✅ Parrain trouvé:', parrainDoc.id);
-                        return parrainDoc.id;
-                    }
-                    
-                    console.log('❌ Parrain non trouvé avec le code:', codeParrain);
-                    return null;
-                } catch (error) {
-                    console.error('❌ Erreur recherche parrain:', error);
-                    return null;
-                }
-            }
-
-            async traiterParrainage(parrainUid, filleulEmail, filleulUid) {
-                try {
-                    console.log('🎁 Traitement parrainage pour:', filleulEmail);
-
-                    // Mettre à jour userReferrals du parrain
-                    const parrainRef = db.collection('userReferrals').doc(parrainUid);
-                    
-                    await db.runTransaction(async (transaction) => {
-                        const parrainDoc = await transaction.get(parrainRef);
-                        
-                        if (parrainDoc.exists) {
-                            const data = parrainDoc.data();
-                            const newCount = (data.referredCount || 0) + 1;
-                            const newEarnings = (data.totalEarnings || 0) + 5;
-                            const newAvailable = (data.availableEarnings || 0) + 5;
-
-                            transaction.update(parrainRef, {
-                                referredCount: newCount,
-                                totalEarnings: newEarnings,
-                                availableEarnings: newAvailable,
-                                lastReferralAt: new Date()
-                            });
-
-                            console.log('✅ Parrain mis à jour:', { newCount, newEarnings });
-                        }
-                    });
-
-                    // Créer l'entrée dans referralHistory
-                    await db.collection('referralHistory').add({
-                        referrerId: parrainUid,
-                        referredEmail: filleulEmail,
-                        referredUid: filleulUid,
-                        type: 'inscription',
-                        amount: 5,
-                        timestamp: new Date(),
-                        description: 'Bonus inscription filleul'
-                    });
-
-                    console.log('✅ Historique parrainage créé');
-
-                } catch (error) {
-                    console.error('❌ Erreur traitement parrainage:', error);
-                }
-            }
-
-            getErrorMessage(error) {
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        return 'Cette adresse email est déjà utilisée.';
-                    case 'auth/invalid-email':
-                        return 'Adresse email invalide.';
-                    case 'auth/weak-password':
-                        return 'Le mot de passe doit contenir au moins 6 caractères.';
-                    default:
-                        return 'Erreur lors de la création du compte. Veuillez réessayer.';
-                }
-            }
-
-            afficherErreur(message) {
-                const errorDiv = document.getElementById('errorMessage');
-                errorDiv.textContent = message;
-                errorDiv.style.display = 'block';
+            if (this.parrainCode) {
+                console.log('✅ Parrain détecté:', this.parrainCode);
+                localStorage.setItem('referralCode', this.parrainCode);
                 
-                const successDiv = document.getElementById('successMessage');
-                successDiv.style.display = 'none';
-            }
-
-            afficherSucces(message) {
-                const successDiv = document.getElementById('successMessage');
-                successDiv.textContent = message;
-                successDiv.style.display = 'block';
-                
-                const errorDiv = document.getElementById('errorMessage');
-                errorDiv.style.display = 'none';
+                const badge = document.getElementById('parrainBadge');
+                badge.innerHTML = `<i class="fas fa-crown"></i> Parrainé par ${this.parrainCode} - 10% de réduction`;
             }
         }
 
-        // Initialiser l'application
-        document.addEventListener('DOMContentLoaded', () => {
-            new InscriptionParrainage();
-        });
-    </script>
+        setupForm() {
+            const form = document.getElementById('inscriptionForm');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.creerCompte();
+            });
+        }
+
+        // 🆕 FONCTION POUR CRÉER LE CODE PARRAIN PERSONNEL
+        async creerCodeParrainPersonnel(userUid, userEmail) {
+            try {
+                const codeParrain = 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                
+                const referralData = {
+                    code: codeParrain,
+                    email: userEmail,
+                    joinedAt: new Date(),
+                    referredCount: 0,
+                    totalEarnings: 0,
+                    availableEarnings: 0,
+                    canEarnCommissions: true,
+                    hasUsedWelcomeCode: false
+                };
+                
+                await db.collection('userReferrals').doc(userUid).set(referralData);
+                console.log('✅ Code parrain personnel créé:', codeParrain);
+                
+                return codeParrain;
+            } catch (error) {
+                console.error('❌ Erreur création code parrain:', error);
+                return null;
+            }
+        }
+
+        async creerCompte() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                console.log('✅ Compte créé:', user.email);
+
+                // 🆕 CRÉATION DU CODE PARRAIN PERSONNEL
+                await this.creerCodeParrainPersonnel(user.uid, user.email);
+
+                const userData = {
+                    email: user.email,
+                    createdAt: new Date(),
+                    hasUsedWelcomeCode: false,
+                    referralCodeUsed: this.parrainCode || null,
+                    referredBy: await this.trouverParrainUid(this.parrainCode)
+                };
+
+                await db.collection('users').doc(user.uid).set(userData);
+                console.log('✅ Données utilisateur sauvegardées');
+
+                if (this.parrainCode && userData.referredBy) {
+                    await this.traiterParrainage(userData.referredBy, user.email, user.uid);
+                }
+
+                this.afficherSucces('🎉 Compte créé avec succès ! Redirection...');
+
+                setTimeout(() => {
+                    window.location.href = 'reductions.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('❌ Erreur création compte:', error);
+                this.afficherErreur(this.getErrorMessage(error));
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Créer mon compte avec 10% de réduction';
+            }
+        }
+
+        async trouverParrainUid(codeParrain) {
+            if (!codeParrain) return null;
+
+            try {
+                const parrainQuery = await db.collection('userReferrals')
+                    .where('code', '==', codeParrain)
+                    .limit(1)
+                    .get();
+
+                if (!parrainQuery.empty) {
+                    const parrainDoc = parrainQuery.docs[0];
+                    console.log('✅ Parrain trouvé:', parrainDoc.id);
+                    return parrainDoc.id;
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('❌ Erreur recherche parrain:', error);
+                return null;
+            }
+        }
+
+        async traiterParrainage(parrainUid, filleulEmail, filleulUid) {
+            try {
+                console.log('🎁 Traitement parrainage pour:', filleulEmail);
+
+                const parrainRef = db.collection('userReferrals').doc(parrainUid);
+                
+                await db.runTransaction(async (transaction) => {
+                    const parrainDoc = await transaction.get(parrainRef);
+                    
+                    if (parrainDoc.exists) {
+                        const data = parrainDoc.data();
+                        const newCount = (data.referredCount || 0) + 1;
+                        const newEarnings = (data.totalEarnings || 0) + 5;
+                        const newAvailable = (data.availableEarnings || 0) + 5;
+
+                        transaction.update(parrainRef, {
+                            referredCount: newCount,
+                            totalEarnings: newEarnings,
+                            availableEarnings: newAvailable,
+                            lastReferralAt: new Date()
+                        });
+
+                        console.log('✅ Parrain mis à jour:', { newCount, newEarnings });
+                    }
+                });
+
+                await db.collection('referralHistory').add({
+                    referrerId: parrainUid,
+                    referredEmail: filleulEmail,
+                    referredUid: filleulUid,
+                    type: 'inscription',
+                    amount: 5,
+                    timestamp: new Date(),
+                    description: 'Bonus inscription filleul'
+                });
+
+                console.log('✅ Historique parrainage créé');
+
+            } catch (error) {
+                console.error('❌ Erreur traitement parrainage:', error);
+            }
+        }
+
+        getErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    return 'Cette adresse email est déjà utilisée.';
+                case 'auth/invalid-email':
+                    return 'Adresse email invalide.';
+                case 'auth/weak-password':
+                    return 'Le mot de passe doit contenir au moins 6 caractères.';
+                default:
+                    return 'Erreur lors de la création du compte. Veuillez réessayer.';
+            }
+        }
+
+        afficherErreur(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            const successDiv = document.getElementById('successMessage');
+            successDiv.style.display = 'none';
+        }
+
+        afficherSucces(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new InscriptionParrainage();
+    });
+</script>
 </body>
 </html>
