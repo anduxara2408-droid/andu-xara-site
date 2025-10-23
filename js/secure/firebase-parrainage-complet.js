@@ -9,7 +9,7 @@ class FirebaseParrainageSystem {
     }
 
     async init() {
-        console.log('🔄 Initialisation système parrainage');
+        console.log('🔄 Initialisation système parrainage - Version 5 MRU + 10% commissions');
 
         // Écouter les changements d'authentification
         this.auth.onAuthStateChanged(async (user) => {
@@ -76,7 +76,7 @@ class FirebaseParrainageSystem {
                 referralCode: referralCode,
                 referredEmail: user.email,
                 status: 'completed',
-                referrerReward: 5, // ⭐ CORRIGÉ : 5 MRU pour le parrain (était 15)
+                referrerReward: 5, // ⭐ CORRIGÉ : 5 MRU pour le parrain
                 referredReward: 10, // 10% pour le filleul
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 completedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -90,7 +90,7 @@ class FirebaseParrainageSystem {
                 lastReferralAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // ⭐ AJOUT : Synchroniser avec la collection users pour l'affichage
+            // ⭐ CORRECTION : Synchroniser avec la collection users pour l'affichage
             await this.db.collection('users').doc(referrerUid).update({
                 'parrainage.referredCount': firebase.firestore.FieldValue.increment(1),
                 'parrainage.totalEarnings': firebase.firestore.FieldValue.increment(5), // ⭐ 5 MRU
@@ -101,6 +101,13 @@ class FirebaseParrainageSystem {
             // Créer le code promo de bienvenue pour le filleul
             await this.creerCodeBienvenueFilleul(user.uid);
 
+            // ⭐ AJOUT : ENREGISTRER POUR COMMISSIONS FUTURES 10%
+            await this.db.collection('userReferrals').doc(user.uid).set({
+                referrerUid: referrerUid, // Référence vers le parrain
+                canEarnCommissions: true,
+                joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+
             // Créer ou mettre à jour le document de parrainage de l'utilisateur
             await this.db.collection('userReferrals').doc(user.uid).set({
                 referredBy: referrerUid,
@@ -109,7 +116,7 @@ class FirebaseParrainageSystem {
                 hasUsedWelcomeCode: false
             }, { merge: true });
 
-            console.log('✅ Parrainage traité avec succès - 5 MRU attribués');
+            console.log('✅ Parrainage traité avec succès - 5 MRU attribués + 10% commissions futures');
             this.afficherNotificationParrainage();
 
             // Nettoyer le parrainage en attente
@@ -155,6 +162,50 @@ class FirebaseParrainageSystem {
 
         console.log('🎁 Code bienvenue créé:', code);
         return code;
+    }
+
+    // ⭐ NOUVEAU : Commission 10% sur achats filleuls
+    async calculerCommissionAchat(parrainId, filleulId, montantAchat, produit) {
+        try {
+            console.log('💰 Calcul commission 10%...');
+            
+            const POURCENTAGE_COMMISSION = 10; // 10% du montant d'achat
+            const commission = Math.round(montantAchat * (POURCENTAGE_COMMISSION / 100));
+            
+            console.log(`📊 Commission: ${commission} MRU (${POURCENTAGE_COMMISSION}% de ${montantAchat} MRU)`);
+
+const transaction = {
+    type: 'commission_pourcentage',
+    filleulId: filleulId,
+    montantAchat: montantAchat,
+    produit: produit,
+    pourcentage: POURCENTAGE_COMMISSION,
+    commission: commission,
+    date: new Date(), // ⭐ CORRIGÉ : Utiliser new Date() au lieu de serverTimestamp()
+    message: `${POURCENTAGE_COMMISSION}% de commission sur achat ${produit}`
+};
+
+            // Mettre à jour dans userReferrals
+            await this.db.collection('userReferrals').doc(parrainId).update({
+                totalEarnings: firebase.firestore.FieldValue.increment(commission),
+                availableEarnings: firebase.firestore.FieldValue.increment(commission),
+                transactions: firebase.firestore.FieldValue.arrayUnion(transaction)
+            });
+
+            // Mettre à jour dans users (pour l'affichage)
+            await this.db.collection('users').doc(parrainId).update({
+                'parrainage.totalEarnings': firebase.firestore.FieldValue.increment(commission),
+                'parrainage.availableEarnings': firebase.firestore.FieldValue.increment(commission),
+                transactions: firebase.firestore.FieldValue.arrayUnion(transaction)
+            });
+
+            console.log('✅ Commission 10% appliquée:', commission, 'MRU');
+            return commission;
+            
+        } catch (error) {
+            console.error('❌ Erreur calcul commission:', error);
+            return 0;
+        }
     }
 
     // Générer un code de parrainage pour l'utilisateur
@@ -252,7 +303,7 @@ class FirebaseParrainageSystem {
     // Afficher notification de succès
     afficherNotificationParrainage() {
         this.afficherNotification(
-            '🎉 Parrainage réussi ! Vous avez gagné 10% de réduction et votre parrain 5 MRU !', 
+            '🎉 Parrainage réussi ! Vous avez gagné 10% de réduction et votre parrain 5 MRU + 10% sur vos achats !', 
             'success'
         );
     }
@@ -289,7 +340,7 @@ class FirebaseParrainageSystem {
 
 // Initialisation globale
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initialisation système parrainage - Version 5 MRU');
+    console.log('🚀 Initialisation système parrainage - Version 5 MRU + 10% commissions');
     window.parrainageSystem = new FirebaseParrainageSystem();
 });
 
@@ -322,5 +373,25 @@ async function copierLienParrainage() {
         });
     } else {
         alert('Lien de parrainage non disponible');
+    }
+}
+
+// ⭐ NOUVEAU : Fonction pour simuler un achat (TEST)
+async function simulerAchatFilleul(produit, prix) {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert('Connectez-vous d\'abord');
+        return;
+    }
+
+    // Trouver le parrain du user connecté
+    const userRefDoc = await firebase.firestore().collection('userReferrals').doc(user.uid).get();
+    if (userRefDoc.exists && userRefDoc.data().referrerUid) {
+        const parrainId = userRefDoc.data().referrerUid;
+        const commission = await window.parrainageSystem.calculerCommissionAchat(parrainId, user.uid, prix, produit);
+        
+        alert(`🎉 Achat simulé : ${produit} - ${prix} MRU\n💎 Commission parrain : ${commission} MRU`);
+    } else {
+        alert('❌ Aucun parrain trouvé pour cet utilisateur');
     }
 }
