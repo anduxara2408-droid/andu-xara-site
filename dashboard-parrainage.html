@@ -486,9 +486,10 @@ async afficherLienParrainage(uid) {
         if (userRefDoc.exists) {
             const data = userRefDoc.data();
             const code = data.code;
-            // NOUVEAU LIEN vers la page d'inscription dédiée
+            // ⚠️ MODIFIEZ CETTE LIGNE ⚠️
             const baseUrl = 'https://anduxara2408-droid.github.io/andu-xara-site';
             const lien = `${baseUrl}/inscription-parrainage.html?parrain=${code}`;
+            // ⚠️ MODIFIEZ CETTE LIGNE ⚠️
             
             document.getElementById('lienParrainageText').textContent = lien;
         }
