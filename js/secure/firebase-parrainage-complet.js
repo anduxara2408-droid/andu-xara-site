@@ -85,6 +85,15 @@ class FirebaseParrainageSystem {
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 completedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
+// ⭐⭐ CORRECTION BUG - ENREGISTRER LE FILLEUL POUR COMMISSIONS 10% ⭐⭐
+            await this.db.collection('userReferrals').doc(user.uid).set({
+                referrerUid: referrerUid,
+                canEarnCommissions: true,
+                joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                referredBy: referrerUid
+            }, { merge: true });
+            
+            console.log("✅ userReferrals créé pour filleul:", user.uid, "avec parrain:", referrerUid);
 
             // Mettre à jour les stats du parrain dans userReferrals
             await this.db.collection('userReferrals').doc(referrerUid).update({

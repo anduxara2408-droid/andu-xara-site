@@ -271,30 +271,31 @@
         }
 
         // 🆕 FONCTION POUR CRÉER LE CODE PARRAIN PERSONNEL
-        async creerCodeParrainPersonnel(userUid, userEmail) {
-            try {
-                const codeParrain = 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                
-                const referralData = {
-                    code: codeParrain,
-                    email: userEmail,
-                    joinedAt: new Date(),
-                    referredCount: 0,
-                    totalEarnings: 0,
-                    availableEarnings: 0,
-                    canEarnCommissions: true,
-                    hasUsedWelcomeCode: false
-                };
-                
-                await db.collection('userReferrals').doc(userUid).set(referralData);
-                console.log('✅ Code parrain personnel créé:', codeParrain);
-                
-                return codeParrain;
-            } catch (error) {
-                console.error('❌ Erreur création code parrain:', error);
-                return null;
-            }
-        }
+// 🛠️ CORRECTION : Ajouter l'email dans userReferrals
+async creerCodeParrainPersonnel(userUid, userEmail) {
+    try {
+        const codeParrain = 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        
+        const referralData = {
+            code: codeParrain,
+            email: userEmail, // ⚠️ AJOUT IMPORTANT !
+            joinedAt: new Date(),
+            referredCount: 0,
+            totalEarnings: 0,
+            availableEarnings: 0,
+            canEarnCommissions: true,
+            hasUsedWelcomeCode: false
+        };
+        
+        await db.collection('userReferrals').doc(userUid).set(referralData);
+        console.log('✅ Code parrain personnel créé:', codeParrain, 'pour:', userEmail);
+        
+        return codeParrain;
+    } catch (error) {
+        console.error('❌ Erreur création code parrain:', error);
+        return null;
+    }
+}
 
         async creerCompte() {
             const email = document.getElementById('email').value;
