@@ -596,6 +596,94 @@
                 </div>
             </div>
         </div>
+<!-- 🎯 SECTION PARRAINAGE - À AJOUTER -->
+<section id="parrainageSection" class="hidden max-w-4xl mx-auto my-12">
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white shadow-2xl">
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            
+            <!-- Colonne gauche: Statistiques et lien -->
+            <div>
+                <h2 class="text-3xl font-bold mb-2">🎯 Programme de Parrainage</h2>
+                <p class="text-purple-100 mb-6">Parrainez vos amis et gagnez ensemble !</p>
+                
+                <!-- Statistiques -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center border border-white/30">
+                        <div class="text-2xl font-bold" id="parrainsCount">0</div>
+                        <div class="text-sm opacity-90 mt-1">Filleuls actifs</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center border border-white/30">
+                        <div class="text-2xl font-bold" id="gainsTotal">0 MRU</div>
+                        <div class="text-sm opacity-90 mt-1">Gains totaux</div>
+                    </div>
+                </div>
+
+                <!-- Lien de parrainage -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-3">Votre lien de parrainage :</label>
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="lienParrainage" 
+                            readonly 
+                            class="flex-1 px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+                            placeholder="Chargement du lien..."
+                        >
+                        <button 
+                            onclick="copierLienParrainage()"
+                            class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
+                        >
+                            📋 Copier
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bouton régénérer -->
+                <button 
+                    onclick="regenererMonCode()"
+                    class="text-white/80 hover:text-white text-sm underline transition-colors duration-200"
+                >
+                    🔄 Générer un nouveau code
+                </button>
+            </div>
+
+            <!-- Colonne droite: Avantages et filleuls -->
+            <div>
+                <h3 class="text-xl font-bold mb-4">✨ Vos Avantages</h3>
+                
+                <!-- Liste des avantages -->
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center bg-white/10 rounded-lg p-3">
+                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 text-white text-sm">✓</span>
+                        <span><strong class="text-white">150 MRU</strong> <span class="text-purple-100">par filleul</span></span>
+                    </li>
+                    <li class="flex items-center bg-white/10 rounded-lg p-3">
+                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 text-white text-sm">✓</span>
+                        <span><strong class="text-white">100 MRU</strong> <span class="text-purple-100">pour votre filleul</span></span>
+                    </li>
+                    <li class="flex items-center bg-white/10 rounded-lg p-3">
+                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 text-white text-sm">✓</span>
+                        <span>Jusqu'à <strong class="text-white">5 filleuls</strong> <span class="text-purple-100">par code</span></span>
+                    </li>
+                    <li class="flex items-center bg-white/10 rounded-lg p-3">
+                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 text-white text-sm">✓</span>
+                        <span>Code <strong class="text-white">auto-regénéré</strong></span>
+                    </li>
+                </ul>
+
+                <!-- Liste des filleuls -->
+                <div class="bg-white/10 rounded-xl p-4 border border-white/20">
+                    <h4 class="font-semibold mb-3 flex items-center gap-2">
+                        👥 Vos Filleuls
+                    </h4>
+                    <div id="filleulsList" class="space-y-2 max-h-32 overflow-y-auto">
+                        <p class="text-white/70 text-sm text-center py-4">Aucun filleul pour le moment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- Section Parrainage (visible pour les clients connectés) -->
         <div id="parrainageSection" class="parrainage-section">
@@ -615,7 +703,7 @@
                         </div>
                     </div>
                     
-                    <button class="btn-parrain" onclick="copierLienParrainageSecours()">
+                    <button class="btn-parrain" onclick="copierLienParrainage()">
                         <i class="fas fa-copy"></i> Copier mon lien de parrainage
                     </button>
                 </div>
@@ -682,46 +770,236 @@
             Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
         </div>
 
-        <!-- SECTION ADMIN (visible seulement pour l'admin) -->
-        <div id="adminSection" class="admin-section">
-            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
-                <i class="fas fa-cogs"></i> Administration
-            </h2>
-            <p style="text-align: center; margin-bottom: 2rem; color: #718096;">
-                Gestion des comptes clients et analyse des performances
-            </p>
+        </div>
+    </div>
+
+    <!-- Grille des fonctionnalités -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+        
+        <!-- Carte Tableau de bord -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center text-xl">
+                    🎯
+                </div>
+                <h3 class="text-xl font-bold text-white">Tableau de bord</h3>
+            </div>
             
-            <div class="admin-actions">
-                <button class="admin-btn" onclick="showAdminDashboard()">
-                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
-                </button>
-                <button class="admin-btn" onclick="showAnalytics()">
-                    <i class="fas fa-chart-bar"></i> Analytics
-                </button>
-                <button class="admin-btn" onclick="showClientManager()">
-                    <i class="fas fa-users"></i> Gérer les clients
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <span class="text-purple-100">Clients actifs</span>
+                    <span class="font-bold text-lg text-white" id="adminActiveClients">0</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <span class="text-purple-100">Codes utilisés</span>
+                    <span class="font-bold text-lg text-green-300" id="adminCodesUsed">0</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <span class="text-purple-100">Performance</span>
+                    <span class="font-bold text-lg text-yellow-300">⭐ Excellente</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte Analytics -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-xl">
+                    📈
+                </div>
+                <h3 class="text-xl font-bold text-white">Analytics détaillés</h3>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span class="text-purple-100">Graphiques des utilisations</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                    <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span class="text-purple-100">Répartition clients</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span class="text-purple-100">Revenus générés</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte Gestion clients -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/30 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-xl">
+                    👥
+                </div>
+                <h3 class="text-xl font-bold text-white">Gestion clients</h3>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                    <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    <span class="text-purple-100 text-sm">Voir Firestore pour la liste complète</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                    <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    <span class="text-purple-100 text-sm">Chaque compte apparaît automatiquement</span>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-white/10">
+                <button onclick="showUserHistory()" 
+                        class="w-full bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-colors text-sm font-semibold">
+                    📋 Voir historique complet
                 </button>
             </div>
+        </div>
+    </div>
 
-            <!-- Statistiques admin -->
-            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 10px;">
-                <h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Aperçu des performances</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; color: #667eea;">👥</div>
-                        <div style="font-weight: bold;">Clients actifs</div>
-                        <div id="clientCount" style="font-size: 1.5rem; font-weight: bold;">0</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; color: #48bb78;">💰</div>
-                        <div style="font-weight: bold;">Codes utilisés</div>
-                        <div id="codesUsed" style="font-size: 1.5rem; font-weight: bold;">0</div>
-                    </div>
+    <!-- Aperçu performances -->
+    <div class="bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl p-6 border border-white/10 backdrop-blur-lg">
+        <h3 class="text-xl font-bold text-center mb-6 text-white">
+            📊 Aperçu des performances
+        </h3>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <!-- Carte Clients -->
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                <div class="text-3xl font-bold mb-2 text-white group-hover:scale-110 transition-transform" id="performanceClients">0</div>
+                <div class="text-xs text-purple-200 font-semibold flex items-center justify-center gap-1">
+                    <span>👥</span> Clients actifs
+                </div>
+            </div>
+            
+            <!-- Carte Codes -->
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                <div class="text-3xl font-bold mb-2 text-green-300 group-hover:scale-110 transition-transform" id="performanceCodes">0</div>
+                <div class="text-xs text-purple-200 font-semibold flex items-center justify-center gap-1">
+                    <span>💰</span> Codes utilisés
+                </div>
+            </div>
+            
+            <!-- Carte Performance -->
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                <div class="text-3xl font-bold mb-2 text-yellow-300 group-hover:scale-110 transition-transform">⭐</div>
+                <div class="text-xs text-purple-200 font-semibold flex items-center justify-center gap-1">
+                    <span>📈</span> Performance
+                </div>
+            </div>
+            
+            <!-- Carte Statut -->
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                <div class="text-3xl font-bold mb-2 text-cyan-300 group-hover:scale-110 transition-transform">🟢</div>
+                <div class="text-xs text-purple-200 font-semibold flex items-center justify-center gap-1">
+                    <span>⚡</span> Système actif
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Indicateur de chargement -->
+</div>
+        <div class="text-right">
+            <div class="text-sm text-purple-200 mb-2">Dashboard Admin</div>
+            <div class="flex gap-2 flex-wrap">
+                <button onclick="ouvrirDashboardAdmin()" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm">
+                    📊 Tableau de bord
+                </button>
+                <button onclick="showAnalytics()" class="bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition-colors text-sm border border-white/30">
+                    📈 Analytics
+                </button>
+                <button onclick="showCodeManager()" class="bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition-colors text-sm border border-white/30">
+                    🏷️ Gérer les codes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cartes de statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Carte Tableau de bord -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+            <h3 class="font-semibold mb-3 flex items-center gap-2">
+                🎯 Tableau de bord admin
+            </h3>
+            <ul class="space-y-2 text-sm">
+                <li class="flex justify-between">
+                    <span class="text-purple-100">Clients actifs:</span>
+                    <span class="font-semibold" id="adminActiveClients">0</span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="text-purple-100">Codes utilisés:</span>
+                    <span class="font-semibold" id="adminCodesUsed">0</span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="text-purple-100">Performance:</span>
+                    <span class="font-semibold text-green-300" id="adminPerformance">Excellente</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Carte Analytics -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+            <h3 class="font-semibold mb-3 flex items-center gap-2">
+                📈 Analytics détaillés
+            </h3>
+            <ul class="space-y-2 text-sm text-purple-100">
+                <li class="flex items-center gap-2">
+                    <span>•</span>
+                    <span>Graphiques des utilisations</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span>•</span>
+                    <span>Répartition clients</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span>•</span>
+                    <span>Revenus générés</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Carte Gestion clients -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+            <h3 class="font-semibold mb-3 flex items-center gap-2">
+                👥 Gestion des clients
+            </h3>
+            <ul class="space-y-2 text-sm text-purple-100">
+                <li class="flex items-center gap-2">
+                    <span>•</span>
+                    <span>Voir Firestore pour la liste complète</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span>•</span>
+                    <span>Chaque compte créé apparaît automatiquement</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Aperçu performances -->
+    <div class="bg-black/20 rounded-xl p-4 border border-white/20">
+        <h3 class="font-semibold mb-4 text-center">📊 Aperçu des performances</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+            <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold mb-1" id="performanceClients">0</div>
+                <div class="text-xs text-purple-200">👥 Clients actifs</div>
+            </div>
+            <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold mb-1" id="performanceCodes">0</div>
+                <div class="text-xs text-purple-200">💰 Codes utilisés</div>
+            </div>
+            <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold mb-1" id="performanceRating">⭐</div>
+                <div class="text-xs text-purple-200">📈 Performance</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dans la section admin - REMPLACEZ le bouton existant par : -->
+<button onclick="ouvrirDashboardAdmin()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
+    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
+</button>
     <!-- Modal de connexion -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
@@ -923,8 +1201,8 @@ class AuthManager {
                 const userData = userDoc.data();
                 const parrainage = userData.parrainage || {};
                 
-                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                if(document.getElementById('parrainsCount')) document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+                if(document.getElementById('gainsTotal')) document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
             }
         } catch (error) {
             console.error('Erreur chargement parrainage:', error);
@@ -955,9 +1233,9 @@ class AuthManager {
             userProfile.style.display = 'block';
             infoMessage.style.display = 'none';
             
-            document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
-            document.getElementById('userEmail').textContent = this.user.email;
-            document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+            if(document.getElementById('userDisplayName')) document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+            if(document.getElementById('userEmail')) document.getElementById('userEmail').textContent = this.user.email;
+            if(document.getElementById('userAvatar')) document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
             
             // Statut de vérification email
             const statusElement = document.getElementById('userStatus');
@@ -1003,8 +1281,8 @@ class AuthManager {
                 .where('role', '==', 'client')
                 .get();
             
-            document.getElementById('clientCount').textContent = clientsSnapshot.size;
-            document.getElementById('codesUsed').textContent = '156'; // Temporaire
+            if(document.getElementById('clientCount')) document.getElementById('clientCount').textContent = clientsSnapshot.size;
+            if(document.getElementById('codesUsed')) document.getElementById('codesUsed').textContent = '156'; // Temporaire
         } catch (error) {
             console.error('Erreur chargement stats:', error);
         }
@@ -1043,7 +1321,7 @@ async function sendEmailVerification() {
 }
 
 // ===== FONCTIONS PARRAINAGE =====
-async function copierLienParrainageSecours() {
+async function copierLienParrainage() {
     if (!auth.currentUser) {
         alert('Veuillez vous connecter pour utiliser le parrainage');
         return;
@@ -1057,31 +1335,7 @@ async function copierLienParrainageSecours() {
             const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
             
             await navigator.clipboard.writeText(lienParrainage);
-            
-            // Message de succès amélioré
-            const message = document.createElement('div');
-            message.textContent = '✅ Lien copié dans le presse-papier !';
-            message.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #28a745;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 5px;
-                z-index: 10000;
-                font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            `;
-            document.body.appendChild(message);
-            
-            // Suppression automatique après 3 secondes
-            setTimeout(() => {
-                if (message.parentNode) {
-                    message.parentNode.removeChild(message);
-                }
-            }, 3000);
-            
+            alert('✅ Lien de parrainage copié !\n\nPartagez ce lien avec vos amis :\n' + lienParrainage);
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);
@@ -1231,5 +1485,8 @@ setTimeout(() => {
     console.log('• Parrainage: Programme fidélité → Codes de récompense');
 }, 1000);
     </script>
+    <script src="safe_functions.js"></script>
+    <script src="fix_missing_functions.js"></script>
+    <script src="ultimate_fix.js"></script>
 </body>
 </html>

@@ -615,7 +615,7 @@
                         </div>
                     </div>
                     
-                    <button class="btn-parrain" onclick="copierLienParrainageSecours()">
+                    <button class="btn-parrain" onclick="copierLienParrainage()">
                         <i class="fas fa-copy"></i> Copier mon lien de parrainage
                     </button>
                 </div>
@@ -1043,7 +1043,7 @@ async function sendEmailVerification() {
 }
 
 // ===== FONCTIONS PARRAINAGE =====
-async function copierLienParrainageSecours() {
+async function copierLienParrainage() {
     if (!auth.currentUser) {
         alert('Veuillez vous connecter pour utiliser le parrainage');
         return;
@@ -1057,31 +1057,7 @@ async function copierLienParrainageSecours() {
             const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
             
             await navigator.clipboard.writeText(lienParrainage);
-            
-            // Message de succès amélioré
-            const message = document.createElement('div');
-            message.textContent = '✅ Lien copié dans le presse-papier !';
-            message.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #28a745;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 5px;
-                z-index: 10000;
-                font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            `;
-            document.body.appendChild(message);
-            
-            // Suppression automatique après 3 secondes
-            setTimeout(() => {
-                if (message.parentNode) {
-                    message.parentNode.removeChild(message);
-                }
-            }, 3000);
-            
+            alert('✅ Lien de parrainage copié !\n\nPartagez ce lien avec vos amis :\n' + lienParrainage);
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);

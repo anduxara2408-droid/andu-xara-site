@@ -1,3 +1,8 @@
+#!/bin/bash
+
+echo "🔨 Création d'un auth.js correct..."
+
+cat > auth.js << 'EOF'
 // auth.js - Gestionnaire d'authentification
 class AuthManager {
     constructor() {
@@ -18,6 +23,42 @@ class AuthManager {
             await this.updateLastLogin(userCredential.user.uid);
             return { success: true, user: userCredential.user };
         } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    async signUp(email, password, name) {
+        try {
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            console.log("✅ Compte Firebase créé:", user.uid);
+
+            // Envoi de l'email de vérification
+            await user.sendEmailVerification();
+
+            // Sauvegarde des infos utilisateur dans Firestore
+            await db.collection("users").doc(user.uid).set({
+                email: email,
+                name: name,
+                createdAt: new Date(),
+                lastLogin: new Date(),
+                isAdmin: false
+            });
+
+            // 🎯 GÉNÉRATION AUTOMATIQUE DU LIEN DE PARRAINAGE
+            await this.genererLienParrainage(user.uid, email);
+            
+            // 🎯 DÉTECTION DE PARRAINAGE SI CODE PRÉSENT DANS L'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const codeParrain = urlParams.get("ref");
+            if (codeParrain) {
+                console.log("🎯 Code parrainage détecté:", codeParrain);
+                await this.detecterParrainage(email, codeParrain);
+            }
+
+            return { success: true, user: user };
+        } catch (error) {
+            console.error("❌ Erreur lors de l'inscription:", error);
             return { success: false, error: this.getErrorMessage(error) };
         }
     }
@@ -43,7 +84,7 @@ class AuthManager {
 
     async isAdmin() {
         if (!this.user) return false;
-
+        
         try {
             const userDoc = await db.collection('users').doc(this.user.uid).get();
             return userDoc.exists && userDoc.data().role === 'admin';
@@ -56,6 +97,7 @@ class AuthManager {
     onAuthStateChanged(user) {
         if (user) {
             console.log('Utilisateur connecté:', user.email);
+            this.mettreAJourInterfaceParrainage(user.uid);
         } else {
             console.log('Utilisateur déconnecté');
         }
@@ -76,155 +118,192 @@ class AuthManager {
         return errorMessages[error.code] || error.message;
     }
 
-    async signUp(email, password, firstName, lastName) {
+    // 🎯 FONCTIONS DE PARRAINAGE
+
+    async genererLienParrainage(userId, email) {
         try {
-            console.log("🚀 Début de l'inscription:", email);
-
-            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            console.log("✅ Utilisateur Auth créé:", user.uid);
-
-            // Sauvegarder le profil utilisateur dans Firestore
-            await db.collection('users').doc(user.uid).set({
+            const codeParrainage = "ANDU-" + Math.random().toString(36).substr(2, 8).toUpperCase();
+            
+            await db.collection("parrainage").doc(userId).set({
+                code: codeParrainage,
+                userId: userId,
                 email: email,
-                firstName: firstName,
-                lastName: lastName,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                isAdmin: false,
-                emailVerified: false
+                dateCreation: new Date(),
+                utilisations: 0,
+                maxUtilisations: 5,
+                actif: true,
+                filleuls: [],
+                recompensesTotal: 0
             });
-
-            console.log("✅ Profil utilisateur sauvegardé");
-
-            // GÉNÉRER LE LIEN DE PARRAINAGE
-            console.log("✅ Lien de parrainage généré");
-
-            // DÉTECTER LE PARRAINAGE (si code présent dans l'URL)
-
-            // Envoyer l'email de vérification
-            await user.sendEmailVerification();
-            console.log("✅ Email de vérification envoyé");
-
-            return { success: true, user: user };
-
+            
+            console.log("✅ Code parrainage généré:", codeParrainage);
+            return codeParrainage;
         } catch (error) {
-            console.error("❌ Erreur inscription:", error);
-            return { 
-                success: false, 
-                error: error.message 
-            };
+            console.error("❌ Erreur génération code parrainage:", error);
+            return null;
         }
     }
 
-    // AJOUT : Méthode resetPassword manquante
+    async detecterParrainage(email, codeParrainage) {
+        try {
+            console.log("🔍 Recherche parrain avec code:", codeParrainage);
+            
+            const parrainQuery = await db.collection("parrainage")
+                .where("code", "==", codeParrainage)
+                .where("actif", "==", true)
+                .get();
+
+            if (!parrainQuery.empty) {
+                const parrainDoc = parrainQuery.docs[0];
+                const parrainData = parrainDoc.data();
+                const parrainId = parrainDoc.id;
+                
+                console.log("✅ Parrain trouvé:", parrainData.email);
+                
+                if (parrainData.utilisations < parrainData.maxUtilisations) {
+                    console.log("🎯 Attribution du parrainage...");
+                    
+                    await db.collection("parrainage").doc(parrainId).update({
+                        utilisations: firebase.firestore.FieldValue.increment(1),
+                        filleuls: firebase.firestore.FieldValue.arrayUnion(email)
+                    });
+                    
+                    await this.attribuerRecompenses(parrainId, email);
+                    await this.regenererCode(parrainId);
+                    
+                    return true;
+                }
+            }
+            return false;
+        } catch (error) {
+            console.error("❌ Erreur détection parrainage:", error);
+            return false;
+        }
+    }
+
+    async attribuerRecompenses(parrainId, emailFilleul) {
+        try {
+            const montantParrain = 1000;
+            const montantFilleul = 500;
+            
+            // RÉCOMPENSE POUR LE PARRAIN
+            await db.collection("recompenses").add({
+                userId: parrainId,
+                type: "parrainage_reussi",
+                montant: montantParrain,
+                description: "Parrainage réussi - " + emailFilleul,
+                dateAttribution: new Date(),
+                statut: "actif",
+                dateExpiration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+            
+            await db.collection("parrainage").doc(parrainId).update({
+                recompensesTotal: firebase.firestore.FieldValue.increment(montantParrain)
+            });
+            
+            // RÉCOMPENSE POUR LE FILLEUL
+            const filleulQuery = await db.collection("users")
+                .where("email", "==", emailFilleul)
+                .get();
+                
+            if (!filleulQuery.empty) {
+                const filleulId = filleulQuery.docs[0].id;
+                
+                await db.collection("recompenses").add({
+                    userId: filleulId,
+                    type: "bienvenue_parrainage",
+                    montant: montantFilleul,
+                    description: "Réduction bienvenue par parrainage",
+                    dateAttribution: new Date(),
+                    statut: "actif",
+                    dateExpiration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                });
+            }
+            
+            console.log("🎁 Récompenses attribuées avec succès");
+            return true;
+        } catch (error) {
+            console.error("❌ Erreur attribution récompenses:", error);
+            return false;
+        }
+    }
+
+    async regenererCode(userId) {
+        try {
+            const nouveauCode = "ANDU-" + Math.random().toString(36).substr(2, 8).toUpperCase();
+            
+            await db.collection("parrainage").doc(userId).update({
+                code: nouveauCode,
+                dateDerniereRegeneration: new Date()
+            });
+            
+            console.log("🔄 Code régénéré:", nouveauCode);
+            return nouveauCode;
+        } catch (error) {
+            console.error("❌ Erreur régénération code:", error);
+            return null;
+        }
+    }
+
+    mettreAJourInterfaceParrainage(userId) {
+        if (!userId) return;
+        
+        console.log("🔄 Mise à jour interface parrainage pour:", userId);
+        
+        db.collection("parrainage").doc(userId).onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                
+                // Mettre à jour l'interface
+                if (document.getElementById("parrainsCount")) {
+                    document.getElementById("parrainsCount").textContent = data.utilisations || 0;
+                }
+                if (document.getElementById("gainsTotal")) {
+                    document.getElementById("gainsTotal").textContent = (data.recompensesTotal || 0) + " MRU";
+                }
+                if (document.getElementById("lienParrainage")) {
+                    const lienParrainage = window.location.origin + "/index.html?ref=" + data.code;
+                    document.getElementById("lienParrainage").value = lienParrainage;
+                }
+                if (document.getElementById("limiteParrainage")) {
+                    document.getElementById("limiteParrainage").textContent = 
+                        `${data.utilisations || 0}/${data.maxUtilisations || 5} utilisations`;
+                }
+                
+                const sectionParrainage = document.getElementById("parrainageSection");
+                if (sectionParrainage) {
+                    sectionParrainage.style.display = "block";
+                }
+            }
+        });
+    }
+
     async resetPassword(email) {
         try {
             await firebase.auth().sendPasswordResetEmail(email);
-            showMessage('✅ Email de réinitialisation envoyé !', 'success');
-            closeModal('resetPasswordModal');
             return { success: true };
         } catch (error) {
             return { success: false, error: this.getErrorMessage(error) };
         }
     }
-
-    // Méthode pour copier le lien de parrainage
-    copierLienParrainage() {
-        console.log("📋 Début de la copie du lien");
-        const input = document.getElementById('lienParrainage');
-        if (!input) {
-            console.error("❌ Input lienParrainage non trouvé");
-            this.afficherMessage("Erreur: Lien non disponible", "error");
-            return;
-        }
-
-        // Sélectionner le texte
-        input.select();
-        input.setSelectionRange(0, 99999);
-
-        // Copier
-        try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(input.value)
-                    .then(() => {
-                        this.afficherMessage("✅ Lien copié dans le presse-papier !", "success");
-                        console.log("✅ Lien copié avec succès");
-                    })
-                    .catch(err => {
-                        console.error("❌ Erreur clipboard:", err);
-                        this.fallbackCopy(input);
-                    });
-            } else {
-                this.fallbackCopy(input);
-            }
-        } catch (error) {
-            console.error("❌ Erreur générale copie:", error);
-            this.fallbackCopy(input);
-        }
-    }
-
-    fallbackCopy(input) {
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                this.afficherMessage("✅ Lien copié dans le presse-papier !", "success");
-            } else {
-                this.afficherMessage("❌ Impossible de copier le lien", "error");
-            }
-        } catch (err) {
-            console.error("❌ Erreur fallback:", err);
-            this.afficherMessage("❌ Erreur lors de la copie", "error");
-        }
-    }
-
-    afficherMessage(text, type = 'success') {
-        // Créer un élément de message temporaire
-        const messageDiv = document.createElement('div');
-        messageDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            z-index: 10000;
-            animation: slideInRight 0.3s ease;
-            max-width: 400px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        `;
-        
-        if (type === 'success') {
-            messageDiv.style.background = '#48bb78';
-        } else if (type === 'error') {
-            messageDiv.style.background = '#e53e3e';
-        } else if (type === 'warning') {
-            messageDiv.style.background = '#ed8936';
-        }
-        
-        messageDiv.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-exclamation-triangle'}"></i>
-                <span>${text}</span>
-            </div>
-        `;
-        
-        document.body.appendChild(messageDiv);
-        
-        // Supprimer après 5 secondes
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.parentNode.removeChild(messageDiv);
-                    }
-                }, 300);
-            }
-        }, 5000);
-    }
 }
+
+// Initialisation globale
+let authManager;
+
+// Attendre que Firebase soit chargé
+if (typeof firebase !== 'undefined') {
+    authManager = new AuthManager();
+} else {
+    document.addEventListener('DOMContentLoaded', () => {
+        authManager = new AuthManager();
+    });
+}
+
+
+// 📁 auth.js - FONCTIONS MANQUANTES POUR reductions.html
+
+// ===== FONCTIONS POUR LES MODALS =====
 
 function showLoginModal() {
     const modal = document.getElementById('loginModal');
@@ -280,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
+            
             const result = await authManager.signIn(email, password);
             if (!result.success) {
                 showMessage('Erreur: ' + result.error, 'error');
@@ -296,8 +375,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
             const name = document.getElementById('signupName').value;
-
-            const result = await authManager.signUp(email, password, name, "");
+            
+            const result = await authManager.signUp(email, password, name);
             if (!result.success) {
                 showMessage('Erreur: ' + result.error, 'error');
             }
@@ -310,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
         resetForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('resetEmail').value;
-
+            
             const result = await authManager.resetPassword(email);
             if (!result.success) {
                 showMessage('Erreur: ' + result.error, 'error');
@@ -435,7 +514,7 @@ if (!document.querySelector('#auth-animations')) {
                 opacity: 1;
             }
         }
-
+        
         @keyframes fadeOut {
             from {
                 opacity: 1;
@@ -444,11 +523,11 @@ if (!document.querySelector('#auth-animations')) {
                 opacity: 0;
             }
         }
-
+        
         .modal {
             animation: fadeIn 0.3s ease;
         }
-
+        
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -462,19 +541,3 @@ if (!document.querySelector('#auth-animations')) {
 }
 
 console.log('✅ auth.js - Fonctions modals chargées avec succès');
-
-// Fonction signUp globale
-async function signUp(email, password, name) {
-    if (!authManager) {
-        return { success: false, error: "Système non disponible" };
-    }
-    
-    const nameParts = name.split(' ');
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
-    
-    return await authManager.signUp(email, password, firstName, lastName);
-}
-
-// Initialisation globale d'AuthManager
-window.authManager = new AuthManager();
