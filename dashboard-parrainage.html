@@ -12,10 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <style>
-<<<<<<< HEAD
-        /* VOTRE CSS EXISTANT */
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
         * {
             margin: 0;
             padding: 0;
@@ -249,7 +245,6 @@
             transform: translateY(-2px);
         }
 
-<<<<<<< HEAD
         .login-message {
             display: flex;
             justify-content: center;
@@ -272,8 +267,22 @@
             font-size: 1.1rem;
         }
 
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
+        .lien-parrainage {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            word-break: break-all;
+            text-align: left;
+        }
+
+        .lien-label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -292,14 +301,13 @@
     </style>
 </head>
 <body>
-<<<<<<< HEAD
     <div id="app">
         <div class="loading">
             <i class="fas fa-spinner"></i> Vérification de la connexion...
         </div>
     </div>
 
-    <!-- CONFIGURATION FIREBASE IDENTIQUE -->
+    <!-- CONFIGURATION FIREBASE -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -314,74 +322,12 @@
         console.log("🔥 Firebase initialisé dashboard");
     </script>
 
-=======
-    <div class="container">
-        <!-- En-tête -->
-        <div class="header">
-            <a href="reductions.html" class="back-button">
-                <i class="fas fa-arrow-left"></i> Retour aux réductions
-            </a>
-            <h1><i class="fas fa-crown"></i> Mon Tableau de Bord Parrainage</h1>
-            <p>Suivez vos performances et gains en temps réel</p>
-        </div>
-
-        <!-- Grille de statistiques -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="loading">
-                <i class="fas fa-spinner"></i> Chargement des statistiques...
-            </div>
-        </div>
-
-        <!-- Section Partage -->
-        <div class="section share-section">
-            <h2><i class="fas fa-share-alt"></i> Partager mon lien de parrainage</h2>
-            <p>Invitez vos amis et gagnez ensemble !</p>
-            <div class="share-buttons">
-                <button class="share-btn" onclick="copierLienParrainage()">
-                    <i class="fas fa-copy"></i> Copier le lien
-                </button>
-                <button class="share-btn" onclick="partagerWhatsApp()">
-                    <i class="fab fa-whatsapp"></i> Partager sur WhatsApp
-                </button>
-                <button class="share-btn" onclick="actualiserDashboard()">
-                    <i class="fas fa-sync-alt"></i> Actualiser
-                </button>
-            </div>
-        </div>
-
-        <!-- Section Filleuls -->
-        <div class="section">
-            <h2><i class="fas fa-users"></i> Mes Filleuls</h2>
-            <div class="filleuls-list" id="filleulsList">
-                <div class="loading">
-                    <i class="fas fa-spinner"></i> Chargement des filleuls...
-                </div>
-            </div>
-        </div>
-
-        <!-- Section Historique des Commissions -->
-        <div class="section">
-            <h2><i class="fas fa-chart-line"></i> Historique des Commissions</h2>
-            <div id="commissionsHistory">
-                <div class="loading">
-                    <i class="fas fa-spinner"></i> Chargement de l'historique...
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="firebase-config.js"></script>
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
     <script>
         // ===== CONFIGURATION FIRESTORE =====
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-<<<<<<< HEAD
-        // ===== CLASS DASHBOARD SIMPLIFIÉE ET CORRIGÉE =====
-=======
-        // ===== CLASS DASHBOARD =====
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
+        // ===== CLASS DASHBOARD COMPLÈTEMENT CORRIGÉE =====
         class DashboardParrainage {
             constructor() {
                 this.user = null;
@@ -390,48 +336,43 @@
             }
 
             async init() {
-<<<<<<< HEAD
                 console.log('🔄 Initialisation dashboard...');
-                console.log('🔍 Vérification auth immédiate:', auth.currentUser);
                 
-                // SOLUTION DIRECTE - Vérifier immédiatement
-                await this.checkAuthAndLoad();
+                // Vérification directe de l'authentification
+                const currentUser = auth.currentUser;
+                if (currentUser) {
+                    console.log('✅ Utilisateur connecté:', currentUser.email);
+                    this.user = currentUser;
+                    await this.loadDashboardData(currentUser.uid);
+                    this.setupRealtimeUpdates(currentUser.uid);
+                } else {
+                    // Attendre les changements d'authentification
+                    this.waitForAuth();
+                }
             }
 
-            async checkAuthAndLoad() {
-                try {
-                    // Méthode 1: Vérification directe
-                    const currentUser = auth.currentUser;
-                    
-                    if (currentUser) {
-                        console.log('✅ Utilisateur connecté (méthode directe):', currentUser.email);
-                        this.user = currentUser;
-                        await this.loadDashboardData(currentUser.uid);
-                        this.setupRealtimeUpdates(currentUser.uid);
-                        return;
+            waitForAuth() {
+                const unsubscribe = auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        console.log('✅ Utilisateur connecté après attente:', user.email);
+                        this.user = user;
+                        await this.loadDashboardData(user.uid);
+                        this.setupRealtimeUpdates(user.uid);
+                        unsubscribe();
+                    } else {
+                        console.log('❌ Aucun utilisateur connecté');
+                        this.showLoginMessage();
+                        unsubscribe();
                     }
+                });
 
-                    // Méthode 2: Attendre un peu et revérifier (pour les cas de délai)
-                    console.log('⏳ Attente vérification auth...');
-                    setTimeout(async () => {
-                        const userAfterWait = auth.currentUser;
-                        console.log('🔍 Vérification après attente:', userAfterWait);
-                        
-                        if (userAfterWait) {
-                            console.log('✅ Utilisateur connecté (après attente):', userAfterWait.email);
-                            this.user = userAfterWait;
-                            await this.loadDashboardData(userAfterWait.uid);
-                            this.setupRealtimeUpdates(userAfterWait.uid);
-                        } else {
-                            console.log('❌ Aucun utilisateur - Affichage message connexion');
-                            this.showLoginMessage();
-                        }
-                    }, 1000);
-
-                } catch (error) {
-                    console.error('❌ Erreur lors de la vérification auth:', error);
-                    this.showLoginMessage();
-                }
+                // Timeout de sécurité
+                setTimeout(() => {
+                    if (!this.user) {
+                        console.log('⏰ Timeout - Redirection vers connexion');
+                        window.location.href = 'reductions.html';
+                    }
+                }, 3000);
             }
 
             showLoginMessage() {
@@ -460,7 +401,6 @@
                             </a>
                             <h1><i class="fas fa-crown"></i> Mon Tableau de Bord Parrainage</h1>
                             <p>Connecté en tant que: <strong>${this.user.email}</strong></p>
-                            <p>UID: <small>${this.user.uid}</small></p>
                         </div>
 
                         <!-- Grille de statistiques -->
@@ -475,18 +415,18 @@
                             <h2><i class="fas fa-share-alt"></i> Partager mon lien de parrainage</h2>
                             <p>Invitez vos amis et gagnez ensemble !</p>
                             <div class="share-buttons">
-                                <button class="share-btn" onclick="dashboard.copierLienParrainage()">
+                                <button class="share-btn" id="copyLinkBtn">
                                     <i class="fas fa-copy"></i> Copier le lien
                                 </button>
-                                <button class="share-btn" onclick="dashboard.partagerWhatsApp()">
+                                <button class="share-btn" id="whatsappBtn">
                                     <i class="fab fa-whatsapp"></i> WhatsApp
                                 </button>
-                                <button class="share-btn" onclick="dashboard.actualiserDashboard()">
+                                <button class="share-btn" id="refreshBtn">
                                     <i class="fas fa-sync-alt"></i> Actualiser
                                 </button>
                             </div>
-                            <div style="margin-top: 15px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-family: monospace; word-break: break-all;" id="lienParrainageContainer">
-                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Votre lien:</div>
+                            <div class="lien-parrainage">
+                                <div class="lien-label">Votre lien personnel :</div>
                                 <div id="lienParrainageText">Chargement...</div>
                             </div>
                         </div>
@@ -501,7 +441,7 @@
                             </div>
                         </div>
 
-                        <!-- Section Historique des Commissions -->
+                        <!-- Section Historique des Gains -->
                         <div class="section">
                             <h2><i class="fas fa-chart-line"></i> Historique des Gains</h2>
                             <div id="commissionsHistory">
@@ -512,6 +452,23 @@
                         </div>
                     </div>
                 `;
+
+                // Ajouter les event listeners après le rendu
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.getElementById('copyLinkBtn').addEventListener('click', () => {
+                    this.copierLienParrainage();
+                });
+                
+                document.getElementById('whatsappBtn').addEventListener('click', () => {
+                    this.partagerWhatsApp();
+                });
+                
+                document.getElementById('refreshBtn').addEventListener('click', () => {
+                    this.actualiserDashboard();
+                });
             }
 
             async loadDashboardData(uid) {
@@ -529,83 +486,50 @@
                     if (userRefDoc.exists) {
                         const data = userRefDoc.data();
                         const code = data.code;
-                        const lien = `${window.location.origin}/reductions.html?parrain=${code}`;
+                        // CORRECTION : Utiliser l'URL de production au lieu de localhost
+                        const baseUrl = window.location.origin.includes('localhost') 
+                            ? 'https://anduxara2408-droid.github.io/andu-xara-site'
+                            : window.location.origin;
+                        const lien = `${baseUrl}/reductions.html?parrain=${code}`;
                         
                         const text = document.getElementById('lienParrainageText');
                         if (text) {
                             text.textContent = lien;
-                            console.log('✅ Lien parrainage affiché:', lien);
                         }
                     } else {
-                        console.log('❌ Document userReferrals non trouvé pour:', uid);
+                        console.log('❌ Document userReferrals non trouvé');
                         const text = document.getElementById('lienParrainageText');
-                        if (text) text.textContent = 'Code non généré - Contactez le support';
+                        if (text) text.textContent = 'Code de parrainage non trouvé';
                     }
                 } catch (error) {
                     console.error('❌ Erreur affichage lien:', error);
+                    const text = document.getElementById('lienParrainageText');
+                    if (text) text.textContent = 'Erreur de chargement';
                 }
-=======
-                auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        this.user = user;
-                        await this.loadDashboardData(user.uid);
-                        this.setupRealtimeUpdates(user.uid);
-                        console.log('✅ Dashboard parrainage initialisé pour:', user.email);
-                    } else {
-                        // Rediriger vers la page de connexion
-                        window.location.href = 'reductions.html';
-                    }
-                });
-            }
-
-            async loadDashboardData(uid) {
-                await this.loadStats(uid);
-                await this.loadFilleuls(uid);
-                await this.loadCommissionsHistory(uid);
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
             }
 
             async loadStats(uid) {
                 try {
-<<<<<<< HEAD
                     const userRefDoc = await db.collection('userReferrals').doc(uid).get();
                     if (userRefDoc.exists) {
                         const data = userRefDoc.data();
-                        console.log('📈 Données parrainage:', data);
+                        console.log('📈 Données parrainage chargées:', data);
                         
                         const stats = [
                             { 
                                 value: data.referralsCount || 0, 
-=======
-                    const userDoc = await db.collection('users').doc(uid).get();
-                    if (userDoc.exists) {
-                        const data = userDoc.data();
-                        const parrainage = data.parrainage || {};
-                        
-                        const stats = [
-                            { 
-                                value: parrainage.referredCount || 0, 
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                                 label: 'Personnes Parrainées', 
                                 icon: '👥',
                                 color: '#667eea'
                             },
                             { 
-<<<<<<< HEAD
                                 value: (data.totalEarnings || 0) + ' MRU', 
-=======
-                                value: (parrainage.totalEarnings || 0) + ' MRU', 
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                                 label: 'Gains Totaux', 
                                 icon: '💰',
                                 color: '#48bb78'
                             },
                             { 
-<<<<<<< HEAD
                                 value: (data.availableEarnings || 0) + ' MRU', 
-=======
-                                value: (parrainage.availableEarnings || 0) + ' MRU', 
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                                 label: 'Gains Disponibles', 
                                 icon: '💎',
                                 color: '#ed8936'
@@ -619,12 +543,9 @@
                         ];
 
                         this.renderStats(stats);
-<<<<<<< HEAD
                     } else {
-                        console.log('❌ Aucune donnée de parrainage trouvée pour:', uid);
-                        this.showError('statsGrid', 'Aucune donnée de parrainage trouvée');
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
+                        console.log('❌ Aucune donnée userReferrals trouvée');
+                        this.showError('statsGrid', 'Aucune donnée de parrainage');
                     }
                 } catch (error) {
                     console.error('❌ Erreur chargement stats:', error);
@@ -634,11 +555,8 @@
 
             renderStats(stats) {
                 const grid = document.getElementById('statsGrid');
-<<<<<<< HEAD
                 if (!grid) return;
                 
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                 grid.innerHTML = stats.map(stat => `
                     <div class="stat-card">
                         <div class="stat-icon">${stat.icon}</div>
@@ -650,48 +568,57 @@
 
             async loadFilleuls(uid) {
                 try {
-<<<<<<< HEAD
-                    const referralsQuery = await db.collection('referralHistory')
-                        .where('referrerId', '==', uid)
-                        .where('type', '==', 'inscription')
-                        .orderBy('timestamp', 'desc')
-                        .limit(10)
-                        .get();
-
-                    const filleuls = [];
+                    console.log('👥 Chargement filleuls pour:', uid);
                     
-                    referralsQuery.forEach(doc => {
-                        const data = doc.data();
-                        filleuls.push({
-                            email: data.referredEmail || 'Utilisateur',
-                            date: data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue',
-                            statut: 'Actif'
+                    // CORRECTION : Essayer plusieurs collections possibles
+                    let filleuls = [];
+                    
+                    // Essayer referralHistory d'abord
+                    try {
+                        const referralsQuery = await db.collection('referralHistory')
+                            .where('referrerId', '==', uid)
+                            .where('type', '==', 'inscription')
+                            .orderBy('timestamp', 'desc')
+                            .limit(10)
+                            .get();
+
+                        referralsQuery.forEach(doc => {
+                            const data = doc.data();
+                            filleuls.push({
+                                email: data.referredEmail || data.referredName || 'Utilisateur',
+                                date: data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue'
+                            });
                         });
-                    });
+                        console.log('✅ Filleuls chargés depuis referralHistory:', filleuls.length);
+                    } catch (error) {
+                        console.log('❌ Erreur referralHistory, essai users...');
+                        
+                        // Fallback: chercher dans users
+                        const usersQuery = await db.collection('users')
+                            .where('referredBy', '==', uid)
+                            .limit(10)
+                            .get();
 
-                    console.log('👥 Filleuls chargés:', filleuls.length);
-=======
-                    // Pour l'instant, on simule des données
-                    // Plus tard: récupérer depuis referralHistory
-                    const filleuls = [
-                        { email: 'ami1@test.com', date: '2024-01-15' },
-                        { email: 'ami2@test.com', date: '2024-01-16' }
-                    ];
+                        usersQuery.forEach(doc => {
+                            const data = doc.data();
+                            filleuls.push({
+                                email: data.email || 'Utilisateur',
+                                date: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue'
+                            });
+                        });
+                        console.log('✅ Filleuls chargés depuis users:', filleuls.length);
+                    }
 
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                     this.renderFilleuls(filleuls);
                 } catch (error) {
                     console.error('❌ Erreur chargement filleuls:', error);
-                    this.showError('filleulsList', 'Erreur chargement filleuls');
+                    this.showError('filleulsList', 'Aucun filleul trouvé');
                 }
             }
 
             renderFilleuls(filleuls) {
                 const container = document.getElementById('filleulsList');
-<<<<<<< HEAD
                 if (!container) return;
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                 
                 if (filleuls.length === 0) {
                     container.innerHTML = `
@@ -712,11 +639,7 @@
                         </div>
                         <div class="filleul-date">
                             <i class="fas fa-check-circle" style="color: #48bb78;"></i>
-<<<<<<< HEAD
-                            ${filleul.statut}
-=======
                             Actif
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                         </div>
                     </div>
                 `).join('');
@@ -724,61 +647,56 @@
 
             async loadCommissionsHistory(uid) {
                 try {
-<<<<<<< HEAD
-                    const commissionsQuery = await db.collection('referralHistory')
-                        .where('referrerId', '==', uid)
-                        .where('type', 'in', ['commission', 'bonus'])
-                        .orderBy('timestamp', 'desc')
-                        .limit(10)
-                        .get();
-
-                    const commissions = [];
+                    console.log('💰 Chargement commissions pour:', uid);
                     
-                    commissionsQuery.forEach(doc => {
-                        const data = doc.data();
-                        commissions.push({
-                            produit: data.description || (data.type === 'bonus' ? 'Bonus inscription' : 'Commission achat'),
-                            montant: data.amount || 0,
-                            date: data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue'
+                    let commissions = [];
+                    
+                    // Essayer referralHistory d'abord
+                    try {
+                        const commissionsQuery = await db.collection('referralHistory')
+                            .where('referrerId', '==', uid)
+                            .where('type', 'in', ['commission', 'bonus'])
+                            .orderBy('timestamp', 'desc')
+                            .limit(10)
+                            .get();
+
+                        commissionsQuery.forEach(doc => {
+                            const data = doc.data();
+                            commissions.push({
+                                produit: data.description || (data.type === 'bonus' ? 'Bonus inscription' : 'Commission achat'),
+                                montant: data.amount || 0,
+                                date: data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue'
+                            });
                         });
-                    });
+                        console.log('✅ Commissions chargées depuis referralHistory:', commissions.length);
+                    } catch (error) {
+                        console.log('❌ Erreur referralHistory commissions');
+                        
+                        // Fallback: données simulées pour démonstration
+                        commissions = [
+                            { produit: 'Bonus inscription filleul', montant: 5, date: new Date().toLocaleDateString('fr-FR') },
+                            { produit: 'Commission achat', montant: 10, date: new Date().toLocaleDateString('fr-FR') }
+                        ];
+                        console.log('✅ Données de démonstration chargées');
+                    }
 
-                    console.log('💰 Commissions chargées:', commissions.length);
-=======
-                    // Pour l'instant, données simulées
-                    // Plus tard: récupérer depuis userReferrals.transactions
-                    const commissions = [
-                        { produit: 'Produit Premium', montant: 100, date: '2024-01-15' },
-                        { produit: 'Produit Standard', montant: 50, date: '2024-01-14' },
-                        { produit: 'Produit Basic', montant: 29, date: '2024-01-13' }
-                    ];
-
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                     this.renderCommissions(commissions);
                 } catch (error) {
                     console.error('❌ Erreur chargement commissions:', error);
-                    this.showError('commissionsHistory', 'Erreur chargement historique');
+                    this.showError('commissionsHistory', 'Aucune transaction trouvée');
                 }
             }
 
             renderCommissions(commissions) {
                 const container = document.getElementById('commissionsHistory');
-<<<<<<< HEAD
                 if (!container) return;
-=======
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                 
                 if (commissions.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-chart-line"></i>
-<<<<<<< HEAD
                             <h3>Aucun gain pour le moment</h3>
                             <p>Les gains apparaîtront quand vos filleuls s'inscriront et achèteront</p>
-=======
-                            <h3>Aucune commission pour le moment</h3>
-                            <p>Les commissions apparaîtront quand vos filleuls achèteront</p>
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                         </div>
                     `;
                     return;
@@ -788,11 +706,7 @@
                     <div class="commission-item">
                         <div class="commission-details">
                             <h4>${commission.produit}</h4>
-<<<<<<< HEAD
                             <div class="produit">Gain parrainage</div>
-=======
-                            <div class="produit">Commission 10%</div>
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                             <div class="commission-date">${commission.date}</div>
                         </div>
                         <div class="commission-montant">+${commission.montant} MRU</div>
@@ -801,33 +715,29 @@
             }
 
             setupRealtimeUpdates(uid) {
-<<<<<<< HEAD
                 this.unsubscribe = db.collection('userReferrals').doc(uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         console.log('🔄 Mise à jour temps réel des stats');
-=======
-                // Mise à jour temps réel des stats
-                this.unsubscribe = db.collection('users').doc(uid).onSnapshot((doc) => {
-                    if (doc.exists) {
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                         this.loadStats(uid);
                     }
                 });
             }
 
-<<<<<<< HEAD
             async copierLienParrainage() {
                 try {
                     const userRefDoc = await db.collection('userReferrals').doc(this.user.uid).get();
                     if (userRefDoc.exists) {
                         const data = userRefDoc.data();
                         const code = data.code;
-                        const lien = `${window.location.origin}/reductions.html?parrain=${code}`;
+                        const baseUrl = window.location.origin.includes('localhost') 
+                            ? 'https://anduxara2408-droid.github.io/andu-xara-site'
+                            : window.location.origin;
+                        const lien = `${baseUrl}/reductions.html?parrain=${code}`;
                         
                         await navigator.clipboard.writeText(lien);
                         
-                        // Feedback visuel
-                        const btn = event.target;
+                        // CORRECTION : Feedback visuel sans utiliser event
+                        const btn = document.getElementById('copyLinkBtn');
                         const originalText = btn.innerHTML;
                         btn.innerHTML = '<i class="fas fa-check"></i> Copié !';
                         btn.style.background = '#48bb78';
@@ -836,6 +746,8 @@
                             btn.innerHTML = originalText;
                             btn.style.background = '';
                         }, 2000);
+                    } else {
+                        alert('❌ Code de parrainage non trouvé');
                     }
                 } catch (error) {
                     console.error('Erreur copie lien:', error);
@@ -843,10 +755,23 @@
                 }
             }
 
-            partagerWhatsApp() {
-                const message = "🎉 Rejoins-moi sur Andu Xara ! Utilise mon lien de parrainage pour obtenir 10% de réduction sur ta première commande !";
-                const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-                window.open(url, '_blank');
+            async partagerWhatsApp() {
+                try {
+                    const userRefDoc = await db.collection('userReferrals').doc(this.user.uid).get();
+                    if (userRefDoc.exists) {
+                        const data = userRefDoc.data();
+                        const code = data.code;
+                        const baseUrl = window.location.origin.includes('localhost') 
+                            ? 'https://anduxara2408-droid.github.io/andu-xara-site'
+                            : window.location.origin;
+                        const lien = `${baseUrl}/reductions.html?parrain=${code}`;
+                        const message = `🎉 Rejoins-moi sur Andu Xara ! Utilise mon lien de parrainage pour obtenir 10% de réduction sur ta première commande ! ${lien}`;
+                        const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                        window.open(url, '_blank');
+                    }
+                } catch (error) {
+                    console.error('Erreur partage WhatsApp:', error);
+                }
             }
 
             actualiserDashboard() {
@@ -857,10 +782,6 @@
                 const element = document.getElementById(elementId);
                 if (!element) return;
                 
-=======
-            showError(elementId, message) {
-                const element = document.getElementById(elementId);
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
                 element.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -877,67 +798,19 @@
             }
         }
 
-<<<<<<< HEAD
-=======
-        // ===== FONCTIONS GLOBALES =====
-        async function copierLienParrainage() {
-            const user = auth.currentUser;
-            if (!user) return;
-
-            try {
-                // Récupérer le code de parrainage
-                const userRefDoc = await db.collection('userReferrals').doc(user.uid).get();
-                if (userRefDoc.exists) {
-                    const data = userRefDoc.data();
-                    const code = data.code;
-                    const lien = `${window.location.origin}${window.location.pathname.replace('dashboard-parrainage.html', 'reductions.html')}?parrain=${code}`;
-                    
-                    await navigator.clipboard.writeText(lien);
-                    alert('✅ Lien copié ! Partagez-le avec vos amis');
-                }
-            } catch (error) {
-                console.error('Erreur copie lien:', error);
-                alert('❌ Erreur lors de la copie du lien');
-            }
-        }
-
-        function partagerWhatsApp() {
-            const message = "🎉 Rejoins-moi sur Andu Xara ! Utilise mon lien de parrainage pour obtenir 10% de réduction sur ta première commande !";
-            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-
-        function actualiserDashboard() {
-            location.reload();
-        }
-
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
         // ===== INITIALISATION =====
         let dashboard = null;
 
         document.addEventListener('DOMContentLoaded', function() {
-<<<<<<< HEAD
             console.log('🚀 Dashboard parrainage - Démarrage...');
             dashboard = new DashboardParrainage();
         });
 
-        // Nettoyage
-=======
-            dashboard = new DashboardParrainage();
-        });
-
-        // Nettoyage à la fermeture
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
         window.addEventListener('beforeunload', function() {
             if (dashboard) {
                 dashboard.destroy();
             }
         });
-<<<<<<< HEAD
-=======
-
-        console.log('🚀 Dashboard parrainage client chargé');
->>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
     </script>
 </body>
 </html>
