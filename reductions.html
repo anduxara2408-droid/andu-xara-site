@@ -523,14 +523,14 @@
                             <i class="fas fa-exclamation-triangle"></i>
                             Vérifiez votre email pour activer votre compte
                         </div>
-                        <button onclick="sendEmailVerification()" style="background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                        <button onclick="renvoyerEmailVerification()" style="background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
                             Renvoyer
                         </button>
                     </div>
                 </div>
                 
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button class="auth-btn" style="background: #718096;" onclick="authManager.signOut()">
+                    <button class="auth-btn" style="background: #718096;" onclick="deconnecterUtilisateur()">
                         <i class="fas fa-sign-out-alt"></i> Déconnexion
                     </button>
                 </div>
@@ -618,6 +618,10 @@
                     <button class="btn-parrain" onclick="copierLienParrainageSecours()">
                         <i class="fas fa-copy"></i> Copier mon lien de parrainage
                     </button>
+                    <button class="btn-parrain" onclick="actualiserStatsParrainage()" 
+                            style="background: #718096; margin-left: 10px;">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                    </button>
                 </div>
                 
                 <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; backdrop-filter: blur(10px);">
@@ -643,11 +647,6 @@
                 </div>
             </div>
         </div>
-<!-- Dans la section parrainage, après le bouton copier -->
-<button class="btn-parrain" onclick="authManager.refreshParrainageStats()" 
-        style="background: #718096; margin-left: 10px;">
-    <i class="fas fa-sync-alt"></i> Actualiser
-</button>
 
         <!-- Section Code Promo (visible seulement pour les clients connectés) -->
         <div id="promoSection" class="promo-section">
@@ -811,51 +810,55 @@ class AuthManager {
     constructor() {
         this.user = null;
         this.isAdmin = false;
+        this.unsubscribeStats = null;
         this.init();
     }
 
-init() {
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            this.user = user;
-            await this.checkAdminStatus();
-            this.updateUI();
-            await this.loadParrainageStats();
-            
-            // ✅ DÉMARRER L'ÉCOUTEUR TEMPS RÉEL
-            this.setupRealtimeStats();
-            
-            console.log('✅ Utilisateur Firebase connecté:', user.email);
-        } else {
-            this.user = null;
-            this.isAdmin = false;
-            
-            // ✅ ARRÊTER L'ÉCOUTEUR TEMPS RÉEL
-            if (this.unsubscribeStats) {
-                this.unsubscribeStats();
+    init() {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                this.user = user;
+                await this.checkAdminStatus();
+                this.updateUI();
+                await this.loadParrainageStats();
+                this.setupRealtimeStats();
+                console.log('✅ Utilisateur Firebase connecté:', user.email);
+            } else {
+                this.user = null;
+                this.isAdmin = false;
+                if (this.unsubscribeStats) {
+                    this.unsubscribeStats();
+                }
+                this.updateUI();
+                console.log('🚪 Utilisateur déconnecté');
             }
-            
-            this.updateUI();
-            console.log('🚪 Utilisateur déconnecté');
+        });
+    }
+
+    async signIn(email, password) {
+        try {
+            showLoading(true);
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            await this.updateUserDocument(userCredential.user.uid, {
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showLoading(false);
+            return { success: true, user: userCredential.user };
+        } catch (error) {
+            showLoading(false);
+            return { success: false, error: this.getErrorMessage(error) };
         }
-    });
-}
+    }
+
     async signUp(email, password, displayName) {
         try {
             showLoading(true);
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            
-            // Mettre à jour le profil
             await userCredential.user.updateProfile({
                 displayName: displayName
             });
-            
-            // Envoyer l'email de vérification
             await userCredential.user.sendEmailVerification();
-            
-            // Créer le document utilisateur dans Firestore
             await this.createUserDocument(userCredential.user, displayName);
-            
             showLoading(false);
             return { success: true, user: userCredential.user };
         } catch (error) {
@@ -884,7 +887,6 @@ init() {
                 promotions: true
             }
         };
-
         await db.collection('users').doc(user.uid).set(userData);
         console.log('📝 Document utilisateur créé dans Firestore:', user.email);
     }
@@ -899,7 +901,6 @@ init() {
 
     async checkAdminStatus() {
         if (!this.user) return false;
-        
         try {
             const userDoc = await db.collection('users').doc(this.user.uid).get();
             this.isAdmin = userDoc.exists && userDoc.data().role === 'admin';
@@ -912,13 +913,11 @@ init() {
 
     async loadParrainageStats() {
         if (!this.user || this.isAdmin) return;
-        
         try {
             const userDoc = await db.collection('users').doc(this.user.uid).get();
             if (userDoc.exists) {
                 const userData = userDoc.data();
                 const parrainage = userData.parrainage || {};
-                
                 document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                 document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
             }
@@ -926,55 +925,45 @@ init() {
             console.error('Erreur chargement parrainage:', error);
         }
     }
-// ✅ AJOUTEZ CETTE MÉTHODE APRÈS loadParrainageStats()
-async refreshParrainageStats() {
-    if (!this.user || this.isAdmin) return;
-    
-    try {
-        console.log('🔄 Rafraîchissement des stats parrainage...');
-        const userDoc = await db.collection('users').doc(this.user.uid).get();
-        
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const parrainage = userData.parrainage || {};
-            
-            // Mettre à jour l'interface
-            document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-            document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-            
-            console.log('✅ Stats mises à jour:', {
-                referredCount: parrainage.referredCount,
-                totalEarnings: parrainage.totalEarnings
-            });
-        }
-    } catch (error) {
-        console.error('❌ Erreur rafraîchissement stats:', error);
-    }
-}
 
-// ✅ AJOUTEZ CETTE MÉTHODE APRÈS refreshParrainageStats()
-setupRealtimeStats() {
-    if (!this.user || this.isAdmin) return;
-    
-    // Écouter les changements en temps réel sur le document utilisateur
-    this.unsubscribeStats = db.collection('users').doc(this.user.uid)
-        .onSnapshot((doc) => {
-            if (doc.exists) {
-                const userData = doc.data();
+    async refreshParrainageStats() {
+        if (!this.user || this.isAdmin) return;
+        try {
+            console.log('🔄 Rafraîchissement des stats parrainage...');
+            const userDoc = await db.collection('users').doc(this.user.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
                 const parrainage = userData.parrainage || {};
-                
                 document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                 document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                
-                console.log('🔄 Mise à jour temps réel des stats:', {
+                console.log('✅ Stats mises à jour:', {
                     referredCount: parrainage.referredCount,
                     totalEarnings: parrainage.totalEarnings
                 });
             }
-        }, (error) => {
-            console.error('❌ Erreur écouteur temps réel:', error);
-        });
-}
+        } catch (error) {
+            console.error('❌ Erreur rafraîchissement stats:', error);
+        }
+    }
+
+    setupRealtimeStats() {
+        if (!this.user || this.isAdmin) return;
+        this.unsubscribeStats = db.collection('users').doc(this.user.uid)
+            .onSnapshot((doc) => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    const parrainage = userData.parrainage || {};
+                    document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+                    document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                    console.log('🔄 Mise à jour temps réel des stats:', {
+                        referredCount: parrainage.referredCount,
+                        totalEarnings: parrainage.totalEarnings
+                    });
+                }
+            }, (error) => {
+                console.error('❌ Erreur écouteur temps réel:', error);
+            });
+    }
 
     async signOut() {
         try {
@@ -985,74 +974,64 @@ setupRealtimeStats() {
         }
     }
 
-updateUI() {
-    const authButtons = document.getElementById('authButtons');
-    const userProfile = document.getElementById('userProfile');
-    const promoSection = document.getElementById('promoSection');
-    const parrainageSection = document.getElementById('parrainageSection');
-    const infoMessage = document.getElementById('infoMessage');
-    const adminSection = document.getElementById('adminSection');
-    const verificationWarning = document.getElementById('verificationWarning');
+    updateUI() {
+        const authButtons = document.getElementById('authButtons');
+        const userProfile = document.getElementById('userProfile');
+        const promoSection = document.getElementById('promoSection');
+        const parrainageSection = document.getElementById('parrainageSection');
+        const infoMessage = document.getElementById('infoMessage');
+        const adminSection = document.getElementById('adminSection');
+        const verificationWarning = document.getElementById('verificationWarning');
 
-    if (this.user) {
-        // Utilisateur connecté
-        authButtons.style.display = 'none';
-        userProfile.style.display = 'block';
-        infoMessage.style.display = 'none';
-        
-        document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
-        document.getElementById('userEmail').textContent = this.user.email;
-        document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
-        
-        // Statut de vérification email
-        const statusElement = document.getElementById('userStatus');
-        if (this.user.emailVerified) {
-            statusElement.textContent = '✓ Email vérifié';
-            statusElement.style.color = '#38a169';
-            verificationWarning.style.display = 'none';
+        if (this.user) {
+            authButtons.style.display = 'none';
+            userProfile.style.display = 'block';
+            infoMessage.style.display = 'none';
+            document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+            document.getElementById('userEmail').textContent = this.user.email;
+            document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+            
+            const statusElement = document.getElementById('userStatus');
+            if (this.user.emailVerified) {
+                statusElement.textContent = '✓ Email vérifié';
+                statusElement.style.color = '#38a169';
+                verificationWarning.style.display = 'none';
+            } else {
+                statusElement.textContent = '✗ Email non vérifié';
+                statusElement.style.color = '#e53e3e';
+                verificationWarning.style.display = 'block';
+            }
+
+            if (this.isAdmin) {
+                promoSection.style.display = 'none';
+                parrainageSection.style.display = 'none';
+                adminSection.style.display = 'block';
+                this.loadAdminStats();
+                console.log('🔑 Admin connecté - Interface admin activée');
+            } else {
+                promoSection.style.display = 'block';
+                parrainageSection.style.display = 'block';
+                adminSection.style.display = 'none';
+                this.refreshParrainageStats();
+                console.log('👤 Client connecté - Interface complète activée');
+            }
         } else {
-            statusElement.textContent = '✗ Email non vérifié';
-            statusElement.style.color = '#e53e3e';
-            verificationWarning.style.display = 'block';
-        }
-
-        if (this.isAdmin) {
-            // ADMIN - voir seulement l'administration
+            authButtons.style.display = 'flex';
+            userProfile.style.display = 'none';
             promoSection.style.display = 'none';
             parrainageSection.style.display = 'none';
-            adminSection.style.display = 'block';
-            this.loadAdminStats();
-            console.log('🔑 Admin connecté - Interface admin activée');
-        } else {
-            // CLIENT - voir codes promo ET parrainage
-            promoSection.style.display = 'block';
-            parrainageSection.style.display = 'block';
             adminSection.style.display = 'none';
-            
-            // ✅ AJOUT IMPORTANT : Rafraîchir les stats à chaque connexion
-            this.refreshParrainageStats();
-            console.log('👤 Client connecté - Interface complète activée');
+            infoMessage.style.display = 'block';
         }
-    } else {
-        // Non connecté
-        authButtons.style.display = 'flex';
-        userProfile.style.display = 'none';
-        promoSection.style.display = 'none';
-        parrainageSection.style.display = 'none';
-        adminSection.style.display = 'none';
-        infoMessage.style.display = 'block';
     }
-}
 
     async loadAdminStats() {
         try {
-            // Compter les clients
             const clientsSnapshot = await db.collection('users')
                 .where('role', '==', 'client')
                 .get();
-            
             document.getElementById('clientCount').textContent = clientsSnapshot.size;
-            document.getElementById('codesUsed').textContent = '156'; // Temporaire
+            document.getElementById('codesUsed').textContent = '156';
         } catch (error) {
             console.error('Erreur chargement stats:', error);
         }
@@ -1069,25 +1048,52 @@ updateUI() {
             'auth/network-request-failed': 'Erreur réseau. Veuillez réessayer.',
             'auth/too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.'
         };
-
         return errorMessages[error.code] || error.message;
     }
+}
+
+// ===== GESTIONNAIRE GLOBAL AUTH MANAGER =====
+let authManager = null;
+
+function getAuthManager() {
+    if (!authManager) {
+        authManager = new AuthManager();
+    }
+    return authManager;
+}
+
+// ===== FONCTIONS GLOBALES POUR LES BOUTONS =====
+async function deconnecterUtilisateur() {
+    try {
+        const authManager = getAuthManager();
+        const result = await authManager.signOut();
+        if (result.success) {
+            alert('✅ Déconnexion réussie!');
+        } else {
+            alert('❌ Erreur: ' + result.error);
+        }
+    } catch (error) {
+        alert('❌ Erreur lors de la déconnexion: ' + error.message);
+    }
+}
+
+function renvoyerEmailVerification() {
+    const authManager = getAuthManager();
+    if (authManager.user) {
+        authManager.user.sendEmailVerification()
+            .then(() => alert('📧 Email de vérification envoyé !'))
+            .catch(error => alert('❌ Erreur: ' + error.message));
+    }
+}
+
+function actualiserStatsParrainage() {
+    const authManager = getAuthManager();
+    authManager.refreshParrainageStats();
 }
 
 // ===== FONCTIONS UTILITAIRES =====
 function showLoading(show) {
     document.getElementById('authLoading').style.display = show ? 'block' : 'none';
-}
-
-async function sendEmailVerification() {
-    if (auth.currentUser) {
-        try {
-            await auth.currentUser.sendEmailVerification();
-            alert('📧 Email de vérification envoyé ! Vérifiez votre boîte de réception.');
-        } catch (error) {
-            alert('❌ Erreur: ' + error.message);
-        }
-    }
 }
 
 // ===== FONCTIONS PARRAINAGE =====
@@ -1096,19 +1102,14 @@ async function copierLienParrainageSecours() {
         alert('Veuillez vous connecter pour utiliser le parrainage');
         return;
     }
-
     try {
         const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
         if (userDoc.exists) {
             const userData = userDoc.data();
             const referralCode = userData.referralCode;
-
-            // ✅ LIEN FIXE POUR LA PRODUCTION - VOTRE SITE EN LIGNE
             const lienParrainage = 'https://anduxara2408-droid.github.io/andu-xara-site/inscription.html?parrain=' + referralCode;
-
             await navigator.clipboard.writeText(lienParrainage);
             
-            // Message de succès
             const message = document.createElement('div');
             message.innerHTML = '✅ Lien de parrainage copié !<br><small>Partagez ce lien avec vos amis</small>';
             message.style.cssText = `
@@ -1126,22 +1127,19 @@ async function copierLienParrainageSecours() {
                 text-align: center;
             `;
             document.body.appendChild(message);
-
-            // Suppression automatique après 5 secondes
             setTimeout(() => {
                 if (message.parentNode) {
                     message.parentNode.removeChild(message);
                 }
             }, 5000);
-
             console.log('📋 Lien de parrainage copié:', lienParrainage);
-
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);
         alert('❌ Erreur lors de la copie du lien');
     }
 }
+
 // ===== FONCTIONS CODES PROMO =====
 function appliquerCodePromo() {
     const codeInput = document.getElementById('promoCodeInput');
@@ -1154,7 +1152,6 @@ function appliquerCodePromo() {
         return;
     }
     
-    // Codes de test (simuler ceux des réseaux sociaux)
     const codesValides = {
         'BIENVENUE10': '10% de réduction',
         'ANDU15': '15% de réduction', 
@@ -1170,16 +1167,12 @@ function appliquerCodePromo() {
         messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
         successSection.style.display = 'block';
         codeInput.value = '';
-        
-        // Sauvegarder le code utilisé dans localStorage pour index.html
         localStorage.setItem('anduxara_active_promo', JSON.stringify({
             code: code,
             discount: getDiscountFromCode(code),
             appliedAt: new Date().toISOString()
         }));
-        
         console.log('🎉 Code promo sauvegardé pour index.html');
-        
     } else {
         messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
         successSection.style.display = 'none';
@@ -1227,16 +1220,16 @@ function closeModal(modalId) {
 }
 
 // ===== INITIALISATION =====
-const authManager = new AuthManager();
-
-// Gestion des formulaires
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser authManager
+    const authManager = getAuthManager();
+
     // Formulaire connexion
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        
+        const authManager = getAuthManager();
         const result = await authManager.signIn(email, password);
         if (result.success) {
             closeModal('loginModal');
@@ -1252,7 +1245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = document.getElementById('signupName').value;
         const email = document.getElementById('signupEmail').value;
         const password = document.getElementById('signupPassword').value;
-        
+        const authManager = getAuthManager();
         const result = await authManager.signUp(email, password, name);
         if (result.success) {
             closeModal('signupModal');
