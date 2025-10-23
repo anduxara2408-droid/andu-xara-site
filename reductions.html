@@ -643,6 +643,11 @@
                 </div>
             </div>
         </div>
+<!-- Dans la section parrainage, après le bouton copier -->
+<button class="btn-parrain" onclick="authManager.refreshParrainageStats()" 
+        style="background: #718096; margin-left: 10px;">
+    <i class="fas fa-sync-alt"></i> Actualiser
+</button>
 
         <!-- Section Code Promo (visible seulement pour les clients connectés) -->
         <div id="promoSection" class="promo-section">
@@ -809,41 +814,32 @@ class AuthManager {
         this.init();
     }
 
-    init() {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                this.user = user;
-                await this.checkAdminStatus();
-                this.updateUI();
-                await this.loadParrainageStats();
-                console.log('✅ Utilisateur Firebase connecté:', user.email);
-            } else {
-                this.user = null;
-                this.isAdmin = false;
-                this.updateUI();
-                console.log('🚪 Utilisateur déconnecté');
+init() {
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            this.user = user;
+            await this.checkAdminStatus();
+            this.updateUI();
+            await this.loadParrainageStats();
+            
+            // ✅ DÉMARRER L'ÉCOUTEUR TEMPS RÉEL
+            this.setupRealtimeStats();
+            
+            console.log('✅ Utilisateur Firebase connecté:', user.email);
+        } else {
+            this.user = null;
+            this.isAdmin = false;
+            
+            // ✅ ARRÊTER L'ÉCOUTEUR TEMPS RÉEL
+            if (this.unsubscribeStats) {
+                this.unsubscribeStats();
             }
-        });
-    }
-
-    async signIn(email, password) {
-        try {
-            showLoading(true);
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
             
-            // Mettre à jour lastLogin
-            await this.updateUserDocument(userCredential.user.uid, {
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            showLoading(false);
-            return { success: true, user: userCredential.user };
-        } catch (error) {
-            showLoading(false);
-            return { success: false, error: this.getErrorMessage(error) };
+            this.updateUI();
+            console.log('🚪 Utilisateur déconnecté');
         }
-    }
-
+    });
+}
     async signUp(email, password, displayName) {
         try {
             showLoading(true);
@@ -930,6 +926,55 @@ class AuthManager {
             console.error('Erreur chargement parrainage:', error);
         }
     }
+// ✅ AJOUTEZ CETTE MÉTHODE APRÈS loadParrainageStats()
+async refreshParrainageStats() {
+    if (!this.user || this.isAdmin) return;
+    
+    try {
+        console.log('🔄 Rafraîchissement des stats parrainage...');
+        const userDoc = await db.collection('users').doc(this.user.uid).get();
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const parrainage = userData.parrainage || {};
+            
+            // Mettre à jour l'interface
+            document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+            document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+            
+            console.log('✅ Stats mises à jour:', {
+                referredCount: parrainage.referredCount,
+                totalEarnings: parrainage.totalEarnings
+            });
+        }
+    } catch (error) {
+        console.error('❌ Erreur rafraîchissement stats:', error);
+    }
+}
+
+// ✅ AJOUTEZ CETTE MÉTHODE APRÈS refreshParrainageStats()
+setupRealtimeStats() {
+    if (!this.user || this.isAdmin) return;
+    
+    // Écouter les changements en temps réel sur le document utilisateur
+    this.unsubscribeStats = db.collection('users').doc(this.user.uid)
+        .onSnapshot((doc) => {
+            if (doc.exists) {
+                const userData = doc.data();
+                const parrainage = userData.parrainage || {};
+                
+                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                
+                console.log('🔄 Mise à jour temps réel des stats:', {
+                    referredCount: parrainage.referredCount,
+                    totalEarnings: parrainage.totalEarnings
+                });
+            }
+        }, (error) => {
+            console.error('❌ Erreur écouteur temps réel:', error);
+        });
+}
 
     async signOut() {
         try {
@@ -940,61 +985,64 @@ class AuthManager {
         }
     }
 
-    updateUI() {
-        const authButtons = document.getElementById('authButtons');
-        const userProfile = document.getElementById('userProfile');
-        const promoSection = document.getElementById('promoSection');
-        const parrainageSection = document.getElementById('parrainageSection');
-        const infoMessage = document.getElementById('infoMessage');
-        const adminSection = document.getElementById('adminSection');
-        const verificationWarning = document.getElementById('verificationWarning');
+updateUI() {
+    const authButtons = document.getElementById('authButtons');
+    const userProfile = document.getElementById('userProfile');
+    const promoSection = document.getElementById('promoSection');
+    const parrainageSection = document.getElementById('parrainageSection');
+    const infoMessage = document.getElementById('infoMessage');
+    const adminSection = document.getElementById('adminSection');
+    const verificationWarning = document.getElementById('verificationWarning');
 
-        if (this.user) {
-            // Utilisateur connecté
-            authButtons.style.display = 'none';
-            userProfile.style.display = 'block';
-            infoMessage.style.display = 'none';
-            
-            document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
-            document.getElementById('userEmail').textContent = this.user.email;
-            document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
-            
-            // Statut de vérification email
-            const statusElement = document.getElementById('userStatus');
-            if (this.user.emailVerified) {
-                statusElement.textContent = '✓ Email vérifié';
-                statusElement.style.color = '#38a169';
-                verificationWarning.style.display = 'none';
-            } else {
-                statusElement.textContent = '✗ Email non vérifié';
-                statusElement.style.color = '#e53e3e';
-                verificationWarning.style.display = 'block';
-            }
-
-            if (this.isAdmin) {
-                // ADMIN - voir seulement l'administration
-                promoSection.style.display = 'none';
-                parrainageSection.style.display = 'none';
-                adminSection.style.display = 'block';
-                this.loadAdminStats();
-                console.log('🔑 Admin connecté - Interface admin activée');
-            } else {
-                // CLIENT - voir codes promo ET parrainage
-                promoSection.style.display = 'block';
-                parrainageSection.style.display = 'block';
-                adminSection.style.display = 'none';
-                console.log('👤 Client connecté - Interface complète activée');
-            }
+    if (this.user) {
+        // Utilisateur connecté
+        authButtons.style.display = 'none';
+        userProfile.style.display = 'block';
+        infoMessage.style.display = 'none';
+        
+        document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+        document.getElementById('userEmail').textContent = this.user.email;
+        document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+        
+        // Statut de vérification email
+        const statusElement = document.getElementById('userStatus');
+        if (this.user.emailVerified) {
+            statusElement.textContent = '✓ Email vérifié';
+            statusElement.style.color = '#38a169';
+            verificationWarning.style.display = 'none';
         } else {
-            // Non connecté
-            authButtons.style.display = 'flex';
-            userProfile.style.display = 'none';
+            statusElement.textContent = '✗ Email non vérifié';
+            statusElement.style.color = '#e53e3e';
+            verificationWarning.style.display = 'block';
+        }
+
+        if (this.isAdmin) {
+            // ADMIN - voir seulement l'administration
             promoSection.style.display = 'none';
             parrainageSection.style.display = 'none';
+            adminSection.style.display = 'block';
+            this.loadAdminStats();
+            console.log('🔑 Admin connecté - Interface admin activée');
+        } else {
+            // CLIENT - voir codes promo ET parrainage
+            promoSection.style.display = 'block';
+            parrainageSection.style.display = 'block';
             adminSection.style.display = 'none';
-            infoMessage.style.display = 'block';
+            
+            // ✅ AJOUT IMPORTANT : Rafraîchir les stats à chaque connexion
+            this.refreshParrainageStats();
+            console.log('👤 Client connecté - Interface complète activée');
         }
+    } else {
+        // Non connecté
+        authButtons.style.display = 'flex';
+        userProfile.style.display = 'none';
+        promoSection.style.display = 'none';
+        parrainageSection.style.display = 'none';
+        adminSection.style.display = 'none';
+        infoMessage.style.display = 'block';
     }
+}
 
     async loadAdminStats() {
         try {
@@ -1054,7 +1102,20 @@ async function copierLienParrainageSecours() {
         if (userDoc.exists) {
             const userData = userDoc.data();
             const referralCode = userData.referralCode;
-            const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
+            
+            // ✅ DÉTECTION AUTOMATIQUE ENVIRONNEMENT
+            const isLocalhost = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1';
+            
+            let lienParrainage;
+            
+            if (isLocalhost) {
+                // 🔧 MODE DÉVELOPPEMENT
+                lienParrainage = window.location.origin + '/inscription.html?parrain=' + referralCode;
+            } else {
+                // 🌐 MODE PRODUCTION  
+                lienParrainage = 'https://anduxara.com/inscription.html?parrain=' + referralCode;
+            }
             
             await navigator.clipboard.writeText(lienParrainage);
             
