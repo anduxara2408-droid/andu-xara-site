@@ -9,7 +9,7 @@ class FirebaseParrainageSystem {
     }
 
     async init() {
-        console.log('🔄 Initialisation système parrainage');
+        console.log('🔄 Initialisation système parrainage - Version 5 MRU');
 
         // Écouter les changements d'authentification
         this.auth.onAuthStateChanged(async (user) => {
@@ -76,7 +76,7 @@ class FirebaseParrainageSystem {
                 referralCode: referralCode,
                 referredEmail: user.email,
                 status: 'completed',
-                referrerReward: 5, // ⭐ CORRIGÉ : 5 MRU pour le parrain (était 15)
+                referrerReward: 5, // ⭐ CORRIGÉ : 5 MRU pour le parrain
                 referredReward: 10, // 10% pour le filleul
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 completedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -90,7 +90,7 @@ class FirebaseParrainageSystem {
                 lastReferralAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // ⭐ AJOUT : Synchroniser avec la collection users pour l'affichage
+            // ⭐ CORRECTION : Synchroniser avec la collection users pour l'affichage
             await this.db.collection('users').doc(referrerUid).update({
                 'parrainage.referredCount': firebase.firestore.FieldValue.increment(1),
                 'parrainage.totalEarnings': firebase.firestore.FieldValue.increment(5), // ⭐ 5 MRU
