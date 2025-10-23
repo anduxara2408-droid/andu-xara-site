@@ -258,69 +258,192 @@
         }
 
         .parrainage-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
             border-radius: 16px;
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin: 2rem 0;
             display: none;
+            border: 3px solid #667eea;
+        }
+
+        .parrainage-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .parrainage-header h2 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .parrainage-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            align-items: center;
-        }
-
-        .parrainage-info h3 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            align-items: start;
         }
 
         .parrainage-stats {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .parrainage-stats h3 {
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin: 1.5rem 0;
         }
 
         .stat-item {
             text-align: center;
-            background: rgba(255,255,255,0.1);
             padding: 1rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
         }
 
         .stat-value {
             font-size: 1.5rem;
             font-weight: bold;
+            color: #667eea;
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
             font-size: 0.9rem;
-            opacity: 0.9;
+            color: #718096;
+        }
+
+        .parrainage-actions {
+            background: #f0fff4;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #9ae6b4;
+        }
+
+        .parrainage-actions h3 {
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .code-display {
+            background: #2d3748;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .code-display:hover {
+            background: #4a5568;
+            transform: scale(1.02);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .btn-parrain {
-            background: #25D366;
+            flex: 1;
+            padding: 12px 16px;
+            background: #667eea;
             color: white;
-            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            margin-top: 1rem;
+            transition: all 0.3s;
         }
 
         .btn-parrain:hover {
-            background: #1da851;
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-parrain.success {
+            background: #48bb78;
+        }
+
+        .btn-parrain.success:hover {
+            background: #38a169;
+        }
+
+        .parrainage-how {
+            grid-column: 1 / -1;
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .parrainage-how h3 {
+            margin-bottom: 1rem;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: #718096;
         }
 
         .admin-section {
@@ -477,6 +600,22 @@
             background: #38a169;
         }
 
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-width: 300px;
+            text-align: center;
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .parrainage-content {
                 grid-template-columns: 1fr;
@@ -484,6 +623,14 @@
             
             .sources-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -597,14 +744,18 @@
             </div>
         </div>
 
-        <!-- Section Parrainage (visible pour les clients connectés) -->
+        <!-- SECTION PARRAINAGE COMPLÈTE -->
         <div id="parrainageSection" class="parrainage-section">
+            <div class="parrainage-header">
+                <h2><i class="fas fa-crown"></i> Programme de Parrainage</h2>
+                <p style="color: #718096;">Parrainez vos amis et gagnez ensemble des récompenses !</p>
+            </div>
+
             <div class="parrainage-content">
-                <div class="parrainage-info">
-                    <h3>👑 Programme de Parrainage</h3>
-                    <p>Parrainez vos amis et gagnez ensemble des récompenses !</p>
-                    
-                    <div class="parrainage-stats">
+                <!-- Statistiques -->
+                <div class="parrainage-stats">
+                    <h3><i class="fas fa-chart-bar"></i> Vos Statistiques</h3>
+                    <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-value" id="parrainsCount">0</div>
                             <div class="stat-label">Personnes parrainées</div>
@@ -613,35 +764,70 @@
                             <div class="stat-value" id="gainsTotal">0 MRU</div>
                             <div class="stat-label">Gains totaux</div>
                         </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="gainsDisponibles">0 MRU</div>
+                            <div class="stat-label">Gains disponibles</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="codeParrain">-</div>
+                            <div class="stat-label">Votre code</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="parrainage-actions">
+                    <h3><i class="fas fa-rocket"></i> Actions Rapides</h3>
+                    
+                    <div class="code-display" id="codeParrainDisplay" onclick="copierCodeParrain()">
+                        <i class="fas fa-copy"></i> 
+                        <span id="parrainCodeText">Chargement...</span>
                     </div>
                     
-                    <button class="btn-parrain" onclick="copierLienParrainageSecours()">
-                        <i class="fas fa-copy"></i> Copier mon lien de parrainage
-                    </button>
-                    <button class="btn-parrain" onclick="actualiserStatsParrainage()" 
-                            style="background: #718096; margin-left: 10px;">
-                        <i class="fas fa-sync-alt"></i> Actualiser
-                    </button>
+                    <div class="action-buttons">
+                        <button class="btn-parrain" onclick="copierLienParrainage()">
+                            <i class="fas fa-link"></i> Copier le lien
+                        </button>
+                        <button class="btn-parrain success" onclick="partagerParrainage()">
+                            <i class="fas fa-share-alt"></i> Partager
+                        </button>
+                        <button class="btn-parrain" onclick="actualiserStatsParrainage()">
+                            <i class="fas fa-sync-alt"></i> Actualiser
+                        </button>
+                    </div>
                 </div>
-                
-                <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; backdrop-filter: blur(10px);">
-                    <h4 style="margin-bottom: 1rem;">🎯 Comment ça marche ?</h4>
-                    <div style="space-y-2">
-                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                            <span>1️⃣</span>
-                            <span>Partagez votre lien de parrainage</span>
+
+                <!-- Comment ça marche -->
+                <div class="parrainage-how">
+                    <h3><i class="fas fa-info-circle"></i> Comment ça marche ?</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Partagez votre lien</div>
+                                <div class="step-desc">Copiez et partagez votre lien unique avec vos amis</div>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                            <span>2️⃣</span>
-                            <span>Votre ami s'inscrit avec votre lien</span>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Votre ami s'inscrit</div>
+                                <div class="step-desc">Il utilise votre lien pour créer son compte</div>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                            <span>3️⃣</span>
-                            <span>Vous gagnez <strong>15%</strong> de ses achats</span>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Récompenses automatiques</div>
+                                <div class="step-desc">Vous gagnez 15% de ses achats, lui gagne 10%</div>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 10px;">
-                            <span>4️⃣</span>
-                            <span>Votre ami gagne <strong>10%</strong> de réduction</span>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Gains disponibles</div>
+                                <div class="step-desc">Utilisez vos gains pour vos propres achats</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -726,6 +912,9 @@
         </div>
     </div>
 
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
     <!-- Modal de connexion -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
@@ -788,6 +977,9 @@
             </form>
         </div>
     </div>
+
+    <!-- SCRIPT DU SYSTÈME DE PARRAINAGE COMPLET -->
+    <script src="js/secure/firebase-parrainage-complet.js"></script>
 
     <script>
 // ===== CONFIGURATION FIREBASE =====
@@ -920,6 +1112,9 @@ class AuthManager {
                 const parrainage = userData.parrainage || {};
                 document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                 document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
+                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
+                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
             }
         } catch (error) {
             console.error('Erreur chargement parrainage:', error);
@@ -936,9 +1131,13 @@ class AuthManager {
                 const parrainage = userData.parrainage || {};
                 document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                 document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
+                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
+                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
                 console.log('✅ Stats mises à jour:', {
                     referredCount: parrainage.referredCount,
-                    totalEarnings: parrainage.totalEarnings
+                    totalEarnings: parrainage.totalEarnings,
+                    availableEarnings: parrainage.availableEarnings
                 });
             }
         } catch (error) {
@@ -955,9 +1154,13 @@ class AuthManager {
                     const parrainage = userData.parrainage || {};
                     document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                     document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                    document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
+                    document.getElementById('codeParrain').textContent = userData.referralCode || '-';
+                    document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
                     console.log('🔄 Mise à jour temps réel des stats:', {
                         referredCount: parrainage.referredCount,
-                        totalEarnings: parrainage.totalEarnings
+                        totalEarnings: parrainage.totalEarnings,
+                        availableEarnings: parrainage.availableEarnings
                     });
                 }
             }, (error) => {
@@ -1068,12 +1271,12 @@ async function deconnecterUtilisateur() {
         const authManager = getAuthManager();
         const result = await authManager.signOut();
         if (result.success) {
-            alert('✅ Déconnexion réussie!');
+            showNotification('✅ Déconnexion réussie!', 'success');
         } else {
-            alert('❌ Erreur: ' + result.error);
+            showNotification('❌ Erreur: ' + result.error, 'error');
         }
     } catch (error) {
-        alert('❌ Erreur lors de la déconnexion: ' + error.message);
+        showNotification('❌ Erreur lors de la déconnexion: ' + error.message, 'error');
     }
 }
 
@@ -1081,25 +1284,37 @@ function renvoyerEmailVerification() {
     const authManager = getAuthManager();
     if (authManager.user) {
         authManager.user.sendEmailVerification()
-            .then(() => alert('📧 Email de vérification envoyé !'))
-            .catch(error => alert('❌ Erreur: ' + error.message));
+            .then(() => showNotification('📧 Email de vérification envoyé !', 'success'))
+            .catch(error => showNotification('❌ Erreur: ' + error.message, 'error'));
     }
 }
 
 function actualiserStatsParrainage() {
     const authManager = getAuthManager();
     authManager.refreshParrainageStats();
+    showNotification('🔄 Statistiques actualisées!', 'success');
 }
 
-// ===== FONCTIONS UTILITAIRES =====
-function showLoading(show) {
-    document.getElementById('authLoading').style.display = show ? 'block' : 'none';
+// ===== FONCTIONS PARRAINAGE AMÉLIORÉES =====
+async function copierCodeParrain() {
+    const codeText = document.getElementById('parrainCodeText').textContent;
+    if (codeText === 'Chargement...' || codeText === 'Code non disponible') {
+        showNotification('❌ Code de parrainage non disponible', 'error');
+        return;
+    }
+    
+    try {
+        await navigator.clipboard.writeText(codeText);
+        showNotification('✅ Code de parrainage copié !', 'success');
+    } catch (error) {
+        console.error('Erreur copie code:', error);
+        showNotification('❌ Erreur lors de la copie du code', 'error');
+    }
 }
 
-// ===== FONCTIONS PARRAINAGE =====
-async function copierLienParrainageSecours() {
+async function copierLienParrainage() {
     if (!auth.currentUser) {
-        alert('Veuillez vous connecter pour utiliser le parrainage');
+        showNotification('Veuillez vous connecter pour utiliser le parrainage', 'error');
         return;
     }
     try {
@@ -1109,35 +1324,40 @@ async function copierLienParrainageSecours() {
             const referralCode = userData.referralCode;
             const lienParrainage = 'https://anduxara2408-droid.github.io/andu-xara-site/inscription.html?parrain=' + referralCode;
             await navigator.clipboard.writeText(lienParrainage);
-            
-            const message = document.createElement('div');
-            message.innerHTML = '✅ Lien de parrainage copié !<br><small>Partagez ce lien avec vos amis</small>';
-            message.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #28a745;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 5px;
-                z-index: 10000;
-                font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                max-width: 300px;
-                text-align: center;
-            `;
-            document.body.appendChild(message);
-            setTimeout(() => {
-                if (message.parentNode) {
-                    message.parentNode.removeChild(message);
-                }
-            }, 5000);
+            showNotification('✅ Lien de parrainage copié !<br><small>Partagez ce lien avec vos amis</small>', 'success');
             console.log('📋 Lien de parrainage copié:', lienParrainage);
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);
-        alert('❌ Erreur lors de la copie du lien');
+        showNotification('❌ Erreur lors de la copie du lien', 'error');
     }
+}
+
+function partagerParrainage() {
+    if (!auth.currentUser) {
+        showNotification('Veuillez vous connecter pour partager', 'error');
+        return;
+    }
+    
+    // Simuler le partage (pourrait être étendu avec Web Share API)
+    copierLienParrainage();
+    showNotification('🎯 Lien prêt à partager !<br><small>Collez-le sur vos réseaux</small>', 'success');
+}
+
+// ===== FONCTIONS UTILITAIRES =====
+function showLoading(show) {
+    document.getElementById('authLoading').style.display = show ? 'block' : 'none';
+}
+
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.innerHTML = message;
+    notification.style.background = type === 'success' ? '#28a745' : '#e53e3e';
+    notification.style.display = 'block';
+    
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 5000);
 }
 
 // ===== FONCTIONS CODES PROMO =====
@@ -1233,9 +1453,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await authManager.signIn(email, password);
         if (result.success) {
             closeModal('loginModal');
-            alert('✅ Connexion réussie!');
+            showNotification('✅ Connexion réussie!', 'success');
         } else {
-            alert('❌ Erreur: ' + result.error);
+            showNotification('❌ Erreur: ' + result.error, 'error');
         }
     });
 
@@ -1249,9 +1469,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await authManager.signUp(email, password, name);
         if (result.success) {
             closeModal('signupModal');
-            alert('✅ Compte créé avec succès! Un email de vérification a été envoyé.');
+            showNotification('✅ Compte créé avec succès! Un email de vérification a été envoyé.', 'success');
         } else {
-            alert('❌ Erreur: ' + result.error);
+            showNotification('❌ Erreur: ' + result.error, 'error');
         }
     });
 
@@ -1262,7 +1482,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    console.log('🚀 Système complet avec Facebook et Parrainage initialisé');
+    console.log('🚀 Système complet avec Parrainage intégré initialisé');
     console.log('🔑 Admin: cheikhdiabira2408@gmail.com');
     console.log('👤 Client: créez un nouveau compte pour tester');
 });
@@ -1279,3 +1499,4 @@ setTimeout(() => {
     </script>
 </body>
 </html>
+
