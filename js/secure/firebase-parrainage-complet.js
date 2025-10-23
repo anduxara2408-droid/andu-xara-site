@@ -9,7 +9,11 @@ class FirebaseParrainageSystem {
     }
 
     async init() {
+<<<<<<< HEAD
         console.log('🔄 Initialisation système parrainage - Version 5 MRU + 10% commissions');
+=======
+        console.log('🔄 Initialisation système parrainage - Version 5 MRU');
+>>>>>>> 466f81bc673016a41e4398a1ffbf94e65c6ad89e
 
         // Écouter les changements d'authentification
         this.auth.onAuthStateChanged(async (user) => {
