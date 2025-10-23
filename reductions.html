@@ -1102,26 +1102,15 @@ async function copierLienParrainageSecours() {
         if (userDoc.exists) {
             const userData = userDoc.data();
             const referralCode = userData.referralCode;
-            
-            // ✅ DÉTECTION AUTOMATIQUE ENVIRONNEMENT
-            const isLocalhost = window.location.hostname === 'localhost' || 
-                               window.location.hostname === '127.0.0.1';
-            
-            let lienParrainage;
-            
-            if (isLocalhost) {
-                // 🔧 MODE DÉVELOPPEMENT
-                lienParrainage = window.location.origin + '/inscription.html?parrain=' + referralCode;
-            } else {
-                // 🌐 MODE PRODUCTION  
-                lienParrainage = 'https://anduxara.com/inscription.html?parrain=' + referralCode;
-            }
-            
+
+            // ✅ LIEN FIXE POUR LA PRODUCTION - VOTRE SITE EN LIGNE
+            const lienParrainage = 'https://anduxara2408-droid.github.io/andu-xara-site/inscription.html?parrain=' + referralCode;
+
             await navigator.clipboard.writeText(lienParrainage);
             
-            // Message de succès amélioré
+            // Message de succès
             const message = document.createElement('div');
-            message.textContent = '✅ Lien copié dans le presse-papier !';
+            message.innerHTML = '✅ Lien de parrainage copié !<br><small>Partagez ce lien avec vos amis</small>';
             message.style.cssText = `
                 position: fixed;
                 top: 20px;
@@ -1133,23 +1122,26 @@ async function copierLienParrainageSecours() {
                 z-index: 10000;
                 font-weight: bold;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                max-width: 300px;
+                text-align: center;
             `;
             document.body.appendChild(message);
-            
-            // Suppression automatique après 3 secondes
+
+            // Suppression automatique après 5 secondes
             setTimeout(() => {
                 if (message.parentNode) {
                     message.parentNode.removeChild(message);
                 }
-            }, 3000);
-            
+            }, 5000);
+
+            console.log('📋 Lien de parrainage copié:', lienParrainage);
+
         }
     } catch (error) {
         console.error('Erreur copie lien:', error);
         alert('❌ Erreur lors de la copie du lien');
     }
 }
-
 // ===== FONCTIONS CODES PROMO =====
 function appliquerCodePromo() {
     const codeInput = document.getElementById('promoCodeInput');
