@@ -1,4 +1,4 @@
-// firebase-parrainage-complet.js - Système de parrainage complet
+// firebase-parrainage-complet.js - Système de parrainage complet CORRIGÉ
 console.log('🤝 Chargement système parrainage Firebase');
 
 class FirebaseParrainageSystem {
@@ -10,7 +10,7 @@ class FirebaseParrainageSystem {
 
     async init() {
         console.log('🔄 Initialisation système parrainage');
-        
+
         // Écouter les changements d'authentification
         this.auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -24,11 +24,11 @@ class FirebaseParrainageSystem {
     async verifierEtTraiterParrainage() {
         const urlParams = new URLSearchParams(window.location.search);
         const referralCode = urlParams.get('ref');
-        
+
         if (referralCode) {
             console.log('🎯 Code parrainage détecté:', referralCode);
             await this.traiterParrainage(referralCode);
-            
+
             // Nettoyer l'URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -76,18 +76,26 @@ class FirebaseParrainageSystem {
                 referralCode: referralCode,
                 referredEmail: user.email,
                 status: 'completed',
-                referrerReward: 15, // 15% pour le parrain
+                referrerReward: 5, // ⭐ CORRIGÉ : 5 MRU pour le parrain (était 15)
                 referredReward: 10, // 10% pour le filleul
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 completedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // Mettre à jour les stats du parrain
+            // Mettre à jour les stats du parrain dans userReferrals
             await this.db.collection('userReferrals').doc(referrerUid).update({
                 referredCount: firebase.firestore.FieldValue.increment(1),
-                totalEarnings: firebase.firestore.FieldValue.increment(15),
-                availableEarnings: firebase.firestore.FieldValue.increment(15),
+                totalEarnings: firebase.firestore.FieldValue.increment(5), // ⭐ CORRIGÉ : 5 MRU
+                availableEarnings: firebase.firestore.FieldValue.increment(5), // ⭐ CORRIGÉ : 5 MRU
                 lastReferralAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // ⭐ AJOUT : Synchroniser avec la collection users pour l'affichage
+            await this.db.collection('users').doc(referrerUid).update({
+                'parrainage.referredCount': firebase.firestore.FieldValue.increment(1),
+                'parrainage.totalEarnings': firebase.firestore.FieldValue.increment(5), // ⭐ 5 MRU
+                'parrainage.availableEarnings': firebase.firestore.FieldValue.increment(5), // ⭐ 5 MRU
+                'parrainage.lastReferralAt': firebase.firestore.FieldValue.serverTimestamp()
             });
 
             // Créer le code promo de bienvenue pour le filleul
@@ -101,12 +109,12 @@ class FirebaseParrainageSystem {
                 hasUsedWelcomeCode: false
             }, { merge: true });
 
-            console.log('✅ Parrainage traité avec succès');
+            console.log('✅ Parrainage traité avec succès - 5 MRU attribués');
             this.afficherNotificationParrainage();
-            
+
             // Nettoyer le parrainage en attente
             localStorage.removeItem('pending_referral');
-            
+
             return true;
 
         } catch (error) {
@@ -121,7 +129,7 @@ class FirebaseParrainageSystem {
         const referralHistory = await this.db.collection('referralHistory')
             .where('referredUid', '==', userUid)
             .get();
-        
+
         return !referralHistory.empty;
     }
 
@@ -129,7 +137,7 @@ class FirebaseParrainageSystem {
     async creerCodeBienvenueFilleul(userUid) {
         const user = this.auth.currentUser;
         const code = 'BIENVENUE' + Math.random().toString(36).substr(2, 4).toUpperCase();
-        
+
         await this.db.collection('promocodes').add({
             code: code,
             type: 'percentage',
@@ -153,7 +161,7 @@ class FirebaseParrainageSystem {
     async genererCodeParrainage(uid) {
         try {
             const code = 'ANDU' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            
+
             await this.db.collection('userReferrals').doc(uid).set({
                 code: code,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -162,10 +170,10 @@ class FirebaseParrainageSystem {
                 availableEarnings: 0,
                 isActive: true
             }, { merge: true });
-            
+
             console.log('🎫 Code parrainage généré:', code);
             return code;
-            
+
         } catch (error) {
             console.error('❌ Erreur génération code parrainage:', error);
             throw error;
@@ -175,28 +183,35 @@ class FirebaseParrainageSystem {
     // Mettre à jour l'affichage du parrainage
     async mettreAJourAffichageParrainage(uid) {
         try {
-            const userRefDoc = await this.db.collection('userReferrals').doc(uid).get();
-            
-            if (userRefDoc.exists) {
-                const data = userRefDoc.data();
-                
-                // Afficher le code de parrainage
+            // ⭐ CORRIGÉ : Utiliser la collection 'users' pour l'affichage
+            const userDoc = await this.db.collection('users').doc(uid).get();
+
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                const parrainage = data.parrainage || {};
+
+                // Afficher le code de parrainage (récupérer de userReferrals)
+                const userRefDoc = await this.db.collection('userReferrals').doc(uid).get();
+                const referralData = userRefDoc.exists ? userRefDoc.data() : {};
+
                 const codeElement = document.getElementById('userReferralCode');
-                if (codeElement && data.code) {
-                    codeElement.textContent = data.code;
+                if (codeElement && referralData.code) {
+                    codeElement.textContent = referralData.code;
                 }
-                
-                // Afficher les statistiques
-                this.afficherStatistiquesParrainage(data);
-                
+
+                // Afficher les statistiques depuis 'users'
+                this.afficherStatistiquesParrainage(parrainage);
+
                 // Générer le lien de parrainage
-                this.genererLienParrainage(data.code);
+                if (referralData.code) {
+                    this.genererLienParrainage(referralData.code);
+                }
             } else {
                 // Générer un code si l'utilisateur n'en a pas
                 const newCode = await this.genererCodeParrainage(uid);
                 this.mettreAJourAffichageParrainage(uid); // Rappeler pour afficher
             }
-            
+
         } catch (error) {
             console.error('❌ Erreur mise à jour affichage parrainage:', error);
         }
@@ -226,10 +241,10 @@ class FirebaseParrainageSystem {
     // Générer le lien de parrainage
     genererLienParrainage(code) {
         const link = `${window.location.origin}${window.location.pathname}?ref=${code}`;
-        
+
         // Stocker le lien pour la fonction de copie
         window.referralLink = link;
-        
+
         console.log('🔗 Lien parrainage généré:', link);
         return link;
     }
@@ -237,7 +252,7 @@ class FirebaseParrainageSystem {
     // Afficher notification de succès
     afficherNotificationParrainage() {
         this.afficherNotification(
-            '🎉 Parrainage réussi ! Vous avez gagné 10% de réduction et votre parrain 15% !', 
+            '🎉 Parrainage réussi ! Vous avez gagné 10% de réduction et votre parrain 5 MRU !', 
             'success'
         );
     }
@@ -255,11 +270,14 @@ class FirebaseParrainageSystem {
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: ${type === 'error' ? '#ff4757' : '#25D366'};
+                background: ${type === 'success' ? '#28a745' : '#e53e3e'};
                 color: white;
                 padding: 15px 20px;
                 border-radius: 10px;
                 z-index: 10000;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                max-width: 300px;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -271,7 +289,7 @@ class FirebaseParrainageSystem {
 
 // Initialisation globale
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initialisation système parrainage');
+    console.log('🚀 Initialisation système parrainage - Version 5 MRU');
     window.parrainageSystem = new FirebaseParrainageSystem();
 });
 
@@ -297,7 +315,7 @@ async function copierLienParrainage() {
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            
+
             if (window.parrainageSystem) {
                 window.parrainageSystem.afficherNotification('✅ Lien copié !', 'success');
             }
