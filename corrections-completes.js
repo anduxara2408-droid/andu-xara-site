@@ -117,6 +117,92 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
+// ===== SYSTÈME DE CODES PROMO =====
+function validateAndApplyPromo() {
+    const input = document.getElementById('promoInput');
+    const message = document.getElementById('promoMessage');
+    
+    if (!input || !message) {
+        showNotification('❌ Système promo non disponible', 'error');
+        return;
+    }
+    
+    const code = input.value.trim().toUpperCase();
+    
+    if (!code) {
+        message.innerHTML = '<span style="color: red;">❌ Veuillez entrer un code</span>';
+        return;
+    }
+    
+    const validCodes = {
+        'BIENVENUE15': 15,
+        'ANDU2025': 20,
+        'SOLDE30': 30,
+        'PREMIUM25': 25
+    };
+    
+    if (validCodes[code]) {
+        const discount = validCodes[code];
+        applyPromoToCart(code, discount);
+        message.innerHTML = '<span style="color: green;">✅ Code ' + code + ' appliqué : ' + discount + '% de réduction !</span>';
+        input.value = '';
+    } else {
+        message.innerHTML = '<span style="color: red;">❌ Code invalide ou expiré</span>';
+    }
+}
+
+function applyPromoToCart(promoCode, discountPercentage) {
+    activePromoCode = promoCode;
+    promoDiscount = discountPercentage;
+    
+    floatingCart.forEach(item => {
+        item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
+    });
+    
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    localStorage.setItem('anduxara_active_promo', JSON.stringify({
+        code: promoCode,
+        discount: discountPercentage,
+        appliedAt: new Date().toISOString()
+    }));
+    
+    updateFloatingCart();
+    updateActivePromoDisplay();
+    
+    showNotification('✅ Code ' + promoCode + ' appliqué : ' + discountPercentage + '% de réduction !');
+}
+
+function removePromoFromCart() {
+    activePromoCode = null;
+    promoDiscount = 0;
+    
+    floatingCart.forEach(item => {
+        item.promoPrice = item.price;
+    });
+    
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    localStorage.removeItem('anduxara_active_promo');
+    
+    updateFloatingCart();
+    updateActivePromoDisplay();
+    
+    showNotification('🗑️ Code promo retiré');
+}
+
+function updateActivePromoDisplay() {
+    const display = document.getElementById('active-promo-display');
+    const codeElement = document.getElementById('active-promo-code');
+    
+    if (display && codeElement) {
+        if (activePromoCode && promoDiscount > 0) {
+            display.style.display = 'block';
+            codeElement.textContent = activePromoCode + ' (-' + promoDiscount + '%)';
+        } else {
+            display.style.display = 'none';
+        }
+    }
+}
+
 // ===== SYSTÈME DE COMMANDE AMÉLIORÉ =====
 function processFloatingCheckout() {
     if (floatingCart.length === 0) {
@@ -148,14 +234,17 @@ function processFloatingCheckout() {
     );
 
     if (paymentChoice === '1') {
+        // Wave Sénégal
         const waveMessage = 'Bonjour ! Je souhaite payer ma commande Andu-Xara par Wave.\n\n' + message;
         window.open('https://wa.me/221762821133?text=' + encodeURIComponent(waveMessage), '_blank');
         showNotification('🌊 Wave Sénégal sélectionné');
     } else if (paymentChoice === '2') {
+        // Bankily Mauritanie
         const bankilyMessage = 'Bonjour ! Je souhaite payer ma commande Andu-Xara par Bankily.\n\n' + message;
         window.open('https://wa.me/22249037697?text=' + encodeURIComponent(bankilyMessage), '_blank');
         showNotification('🏦 Bankily Mauritanie sélectionné');
     } else if (paymentChoice === '3') {
+        // WhatsApp direct
         window.open('https://wa.me/22249037697?text=' + encodeURIComponent(message), '_blank');
         showNotification('📱 WhatsApp ouvert !');
     } else {
@@ -164,68 +253,6 @@ function processFloatingCheckout() {
 }
 
 // ===== SYSTÈME DE LIVRAISON =====
-function checkDelivery() {
-    showNotification('🚚 Vérification de la livraison...', 'info');
-}
-
-function selectDeliveryOption(type) {
-    showNotification('✅ Option ' + type + ' sélectionnée !');
-}
-
-// ===== ASSISTANT IA =====
-function sendAIMessage() {
-    showNotification('🤖 Assistant IA en développement...', 'info');
-}
-
-// ===== FONCTIONS DE DÉBUG =====
-function debugParrainages() {
-    showNotification('🔍 Debug dans la console');
-}
-
-function resetDashboard() {
-    showNotification('✅ Tableau de bord réinitialisé !');
-}
-
-// ===== ESSAYAGE VIRTUEL =====
-function startVirtualFitting() {
-    showNotification('🪞 Essayage virtuel en développement...', 'info');
-}
-
-function selectClothing(productId) {
-    showNotification('👕 Sélection: ' + productId, 'info');
-}
-
-function captureVirtualFitting() {
-    showNotification('📸 Capture en développement...', 'info');
-}
-
-function shareVirtualFitting() {
-    showNotification('📤 Partage en développement...', 'info');
-}
-
-// ===== INITIALISATION =====
-function initAllSystems() {
-    console.log('🚀 Initialisation des systèmes...');
-    
-    const savedCart = localStorage.getItem('anduxara_cart');
-    if (savedCart) {
-        floatingCart = JSON.parse(savedCart);
-    }
-    
-    updateFloatingCart();
-    
-    console.log('✅ Systèmes initialisés !');
-}
-
-// ===== DÉMARRAGE AUTOMATIQUE =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 DOM chargé, initialisation...');
-    setTimeout(initAllSystems, 1000);
-});
-
-console.log('🔧 Corrections chargées !');
-
-// ===== SYSTÈME DE LIVRAISON COMPLET =====
 function checkDelivery() {
     const addressInput = document.getElementById('delivery-address');
     const resultDiv = document.getElementById('delivery-result');
@@ -246,21 +273,18 @@ function checkDelivery() {
     
     setTimeout(() => {
         const addressLower = address.toLowerCase();
-        const zonesCouvertes = ['nouakchott', 'nouadhibou', 'rosso', 'kaédi', 'kiffa', 'atar', 'zouérat', 'tevregh', 'mina', 'ksar', 'sebkha', 'dar naim', 'toujounine', 'arafat', 'ryad'];
+        const zonesCouvertes = ['nouakchott', 'nouadhibou', 'rosso', 'kaédi', 'kiffa', 'atar', 'zouérat', 'tevregh', 'mina', 'ksar', 'sebkha'];
         
         let estCouvert = false;
         let message = '';
-        let delai = '';
         
         for (const zone of zonesCouvertes) {
             if (addressLower.includes(zone)) {
                 estCouvert = true;
-                if (addressLower.includes('nouakchott') || addressLower.includes('tevregh') || addressLower.includes('mina') || addressLower.includes('ksar') || addressLower.includes('sebkha')) {
+                if (addressLower.includes('nouakchott') || addressLower.includes('tevregh') || addressLower.includes('mina')) {
                     message = '✅ Livraison EXPRESS disponible !';
-                    delai = '⏱️ Livraison en 24h - GRATUITE';
                 } else {
                     message = '✅ Livraison STANDARD disponible !';
-                    delai = '⏱️ Livraison en 3-5 jours - GRATUITE';
                 }
                 break;
             }
@@ -268,37 +292,27 @@ function checkDelivery() {
         
         if (!estCouvert) {
             message = '❌ Livraison non disponible dans votre zone';
-            delai = '📞 Contactez-nous au +222 49 03 76 97';
         }
         
-        resultDiv.innerHTML = '<div style="padding: 15px; border-radius: 10px; background: ' + (estCouvert ? '#e8f5e8' : '#ffe8e8') + '; border: 2px solid ' + (estCouvert ? '#25D366' : '#ff4757') + ';"><h4 style="margin: 0 0 10px 0; color: ' + (estCouvert ? '#25D366' : '#ff4757') + ';">' + message + '</h4><p style="margin: 0; font-weight: bold;">' + delai + '</p></div>';
+        resultDiv.innerHTML = '<div style="padding: 15px; border-radius: 10px; background: ' + (estCouvert ? '#e8f5e8' : '#ffe8e8') + '; border: 2px solid ' + (estCouvert ? '#25D366' : '#ff4757') + ';"><h4 style="margin: 0 0 10px 0; color: ' + (estCouvert ? '#25D366' : '#ff4757') + ';">' + message + '</h4><p style="margin: 0; font-weight: bold;">' + (estCouvert ? '⏱️ Livraison 24h-48h - GRATUITE' : '📞 Contactez-nous au +222 49 03 76 97') + '</p></div>';
         
     }, 1000);
 }
 
 function selectDeliveryOption(type) {
     const options = document.querySelectorAll('.option');
-    
     options.forEach(option => {
         option.classList.remove('selected');
         if (option.dataset.type === type) {
             option.classList.add('selected');
         }
     });
-    
     showNotification('✅ Option ' + (type === 'express' ? 'Express (24h)' : 'Standard (3-5 jours)') + ' sélectionnée !');
 }
 
-// ===== ASSISTANT IA INTELLIGENT =====
+// ===== ASSISTANT IA =====
 function sendAIMessage() {
     const input = document.getElementById('ai-input');
-    const messagesContainer = document.getElementById('ai-messages');
-    
-    if (!input || !messagesContainer) {
-        showNotification('❌ Assistant IA non disponible', 'error');
-        return;
-    }
-    
     const message = input.value.trim();
     
     if (!message) {
@@ -306,89 +320,42 @@ function sendAIMessage() {
         return;
     }
     
-    // Ajouter le message utilisateur
-    const userMessageDiv = document.createElement('div');
-    userMessageDiv.style.cssText = 'display: flex; justify-content: flex-end; margin-bottom: 15px;';
-    userMessageDiv.innerHTML = '<div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 20px; border-radius: 20px; border-bottom-right-radius: 5px; max-width: 70%;">' + message + '</div>';
-    messagesContainer.appendChild(userMessageDiv);
-    
+    showNotification('🤖 Assistant IA en développement...', 'info');
     input.value = '';
-    
-    // Réponse automatique basée sur le contenu
-    setTimeout(() => {
-        const botMessageDiv = document.createElement('div');
-        botMessageDiv.style.cssText = 'display: flex; justify-content: flex-start; margin-bottom: 15px;';
-        
-        let response = '';
-        const lowerMessage = message.toLowerCase();
-        
-        if (lowerMessage.includes('bonjour') || lowerMessage.includes('salut') || lowerMessage.includes('hello')) {
-            response = '👋 Bonjour ! Je suis l\\'Assistant IA Andu-Xara. Je peux vous aider avec nos produits, prix, livraison, et plus encore !';
-        } else if (lowerMessage.includes('produit') || lowerMessage.includes('vêtement') || lowerMessage.includes('tshirt') || lowerMessage.includes('ensemble')) {
-            response = '🎨 Nous avons une large gamme de produits : T-shirts (279-349 MRU), Ensembles (419-1049 MRU), Accessoires. Quel style vous intéresse ?';
-        } else if (lowerMessage.includes('prix') || lowerMessage.includes('combien') || lowerMessage.includes('coût')) {
-            response = '💰 Nos prix vont de 209 MRU (accessoires) à 1049 MRU (ensembles premium). Promotion en cours : 30% de réduction sur tout le catalogue !';
-        } else if (lowerMessage.includes('livraison') || lowerMessage.includes('livrer') || lowerMessage.includes('délai')) {
-            response = '🚚 Livraison GRATUITE partout en Mauritanie ! Nouakchott : 24h, Autres villes : 3-5 jours. Vérifiez votre zone dans notre section livraison.';
-        } else if (lowerMessage.includes('contact') || lowerMessage.includes('téléphone') || lowerMessage.includes('whatsapp')) {
-            response = '📞 Contactez-nous : WhatsApp +222 49 03 76 97, Email: anduxara2408@gmail.com. Service client 7j/7 !';
-        } else if (lowerMessage.includes('code promo') || lowerMessage.includes('réduction') || lowerMessage.includes('promo')) {
-            response = '🎁 Codes promo disponibles : BIENVENUE15 (-15%), ANDU2025 (-20%), SOLDE30 (-30%). Utilisez-les dans la section codes promo !';
-        } else {
-            response = '🤖 Je suis l\\'Assistant IA Andu-Xara. Je peux vous aider avec :\\n• 📦 Nos produits et collections\\n• 💰 Prix et promotions\\n• 🚚 Livraison et commandes\\n• 📱 Contacts et support\\n\\nPosez-moi votre question !';
-        }
-        
-        botMessageDiv.innerHTML = '<div style="background: white; color: #2c3e50; padding: 15px 20px; border-radius: 20px; border-bottom-left-radius: 5px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 70%; white-space: pre-line;">' + response + '</div>';
-        messagesContainer.appendChild(botMessageDiv);
-        
-        // Scroll vers le bas
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
-    }, 1000);
 }
 
-// ===== FONCTIONS DE DÉBUG COMPLÈTES =====
+// ===== FONCTIONS DE DÉBUG =====
 function debugParrainages() {
-    console.log('🔍 DEBUG PARRAINAGES:', {
-        panier: floatingCart,
-        codePromoActif: activePromoCode,
-        reduction: promoDiscount + '%',
-        localStorage: {
-            panier: localStorage.getItem('anduxara_cart'),
-            promo: localStorage.getItem('anduxara_active_promo'),
-            userData: localStorage.getItem('anduxara_user_dashboard')
-        }
+    console.log('🔍 Debug parrainages:', {
+        floatingCart: floatingCart,
+        activePromoCode: activePromoCode,
+        promoDiscount: promoDiscount
     });
-    
-    // Afficher un rapport détaillé
-    const debugInfo = `
-🔍 RAPPORT DE DÉBUG :
-
-🛒 PANIER: ${floatingCart.length} article(s)
-💰 TOTAL: ${floatingCart.reduce((sum, item) => sum + ((item.promoPrice || item.price) * item.quantity), 0)} MRU
-🎁 CODE PROMO: ${activePromoCode || 'Aucun'} ${promoDiscount ? '(' + promoDiscount + '%)' : ''}
-
-📦 ARTICLES:
-${floatingCart.map(item => `• ${item.name} (x${item.quantity}) - ${(item.promoPrice || item.price) * item.quantity} MRU`).join('\\n')}
-
-✅ Données complètes dans la console (F12)
-    `;
-    
-    alert(debugInfo);
-    showNotification('🔍 Rapport de debug affiché !');
+    showNotification('🔍 Données de debug dans la console');
 }
 
 function resetDashboard() {
-    if (confirm('ÊTES-VOUS SÛR DE VOULOIR RÉINITIALISER VOTRE TABLEAU DE BORD ?\\n\\nCette action supprimera :\\n• Votre historique de consultation\\n• Vos produits favoris\\n• Vos statistiques personnelles\\n\\nCette action est irréversible.')) {
+    if (confirm('Êtes-vous sûr de vouloir réinitialiser votre tableau de bord ?')) {
         localStorage.removeItem('anduxara_user_dashboard');
-        localStorage.removeItem('anduxara_user_behavior');
-        showNotification('✅ Tableau de bord réinitialisé avec succès !');
-        
-        // Recharger la page pour voir les changements
-        setTimeout(() => {
-            location.reload();
-        }, 2000);
+        showNotification('✅ Tableau de bord réinitialisé !');
     }
+}
+
+// ===== ESSAYAGE VIRTUEL =====
+function startVirtualFitting() {
+    showNotification('🪞 Essayage virtuel en développement...', 'info');
+}
+
+function selectClothing(productId) {
+    showNotification('👕 Sélection: ' + productId, 'info');
+}
+
+function captureVirtualFitting() {
+    showNotification('📸 Capture en développement...', 'info');
+}
+
+function shareVirtualFitting() {
+    showNotification('📤 Partage en développement...', 'info');
 }
 
 // ===== INITIALISATION DES ÉVÉNEMENTS =====
@@ -430,11 +397,9 @@ function initEventListeners() {
             }
         });
     }
-    
-    console.log('✅ Événements initialisés');
 }
 
-// Mettre à jour l'initialisation
+// ===== INITIALISATION =====
 function initAllSystems() {
     console.log('🚀 Initialisation des systèmes...');
     
@@ -464,3 +429,18 @@ function initAllSystems() {
     
     console.log('✅ Systèmes initialisés !');
 }
+
+// ===== DÉMARRAGE AUTOMATIQUE =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM chargé, initialisation...');
+    setTimeout(initAllSystems, 1000);
+});
+
+// ===== STYLES DYNAMIQUES =====
+const dynamicStyles = '@keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } } @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } } .notification-custom { animation: slideInRight 0.3s ease; }';
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = dynamicStyles;
+document.head.appendChild(styleSheet);
+
+console.log('🔧 Corrections complètes chargées !');

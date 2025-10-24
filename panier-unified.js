@@ -1,0 +1,1 @@
+// Fichier panier unified - Placeholder
