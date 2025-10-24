@@ -6020,15 +6020,13 @@ if (typeof activePromoCode === 'undefined') window.activePromoCode = null;
 if (typeof promoDiscount === 'undefined') window.promoDiscount = 0;
 if (typeof floatingCart === 'undefined') window.floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 function initPromoIntegration() {
+    window.addEventListener('storage', function(e) {
     // Vérifier si un code promo est déjà actif
     // DÉSACTIVÉ: const savedPromo = localStorage.getItem('anduxara_active_promo');
     // DÉSACTIVÉ: if (savedPromo) {
-        const promoData = JSON.parse(window.savedPromo);
+        // DÉSACTIVÉ: const promoData = JSON.parse(window.savedPromo);
         // DÉSACTIVÉ: applyPromoToCart(promoData.code, promoData.discount);
     // DÉSACTIVÉ: }
-    
-    // Écouter les messages entre pages (pour reductions.html)
-    window.addEventListener('storage', function(e) {
         if (e.key === 'anduxara_active_promo') {
             if (e.newValue) {
                 const promoData = JSON.parse(e.newValue);
