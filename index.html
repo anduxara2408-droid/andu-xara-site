@@ -6032,13 +6032,13 @@ function initPromoIntegration() {
         if (e.key === 'anduxara_active_promo') {
             if (e.newValue) {
                 const promoData = JSON.parse(e.newValue);
-                // DÉSACTIVÉ: applyPromoToCart(promoData.code, promoData.discount);
-            // DÉSACTIVÉ: } else {
+                applyPromoToCart(promoData.code, promoData.discount);
+            } else {
                 removePromoFromCart();
-            // DÉSACTIVÉ: }
-        // DÉSACTIVÉ: }
-    // DÉSACTIVÉ: });
-// DÉSACTIVÉ: }
+            }
+        }
+    });
+}
 
 // Appeler cette fonction au chargement
 document.addEventListener('DOMContentLoaded', function() {
