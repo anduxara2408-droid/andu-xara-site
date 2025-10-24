@@ -265,7 +265,7 @@ function checkDelivery() {
     const address = addressInput.value.trim();
     
     if (!address || address.length < 5) {
-        resultDiv.innerHTML = '<p style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px;">❌ L'adresse doit contenir au moins 5 caractères</p>';
+        resultDiv.innerHTML = \"<p style=\"color: red; padding: 10px; background: #ffe8e8; border-radius: 5px;\">❌ L'adresse doit contenir au moins 5 caractères</p>\";
         return;
     }
     

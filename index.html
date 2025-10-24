@@ -6023,7 +6023,7 @@ function initPromoIntegration() {
     // Vérifier si un code promo est déjà actif
     // DÉSACTIVÉ: const savedPromo = localStorage.getItem('anduxara_active_promo');
     // DÉSACTIVÉ: if (savedPromo) {
-        const promoData = JSON.parse(savedPromo);
+        const promoData = JSON.parse(window.savedPromo);
         // DÉSACTIVÉ: applyPromoToCart(promoData.code, promoData.discount);
     // DÉSACTIVÉ: }
     
