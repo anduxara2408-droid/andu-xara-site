@@ -1692,6 +1692,72 @@ footer {
 #ai-messages::-webkit-scrollbar-thumb:hover {
     background: #5a6fd8;
 }
+/* ===== ANIMATIONS VUE RAPIDE ===== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes scaleIn {
+    from { 
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===== STYLES VUE RAPIDE ===== */
+.quick-view-modal {
+    backdrop-filter: blur(5px);
+}
+
+.quick-view-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.quick-view-modal::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.quick-view-modal::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.quick-view-modal::-webkit-scrollbar-thumb:hover {
+    background: #5a6fd8;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+    .quick-view-modal > div > div {
+        grid-template-columns: 1fr !important;
+        max-height: 95vh !important;
+    }
+    
+    .quick-view-modal > div > div > div:first-child {
+        border-radius: 20px 20px 0 0 !important;
+        padding: 20px !important;
+    }
+    
+    .quick-view-modal > div > div > div:last-child {
+        border-radius: 0 0 20px 20px !important;
+        padding: 20px !important;
+    }
+    
+    .quick-view-modal h2 {
+        font-size: 1.4rem !important;
+    }
+}
 
 </style>
     <!-- Google Analytics -->
@@ -3636,60 +3702,6 @@ function addToCartFromModal(productName, productPrice) {
     // Fermer le modal
     const modal = document.querySelector('div[style*="position: fixed"]');
     if (modal) modal.remove();
-}
-
-// === VUE RAPIDE (version simplifiée) ===
-function setupQuickView() {
-    document.querySelectorAll('.quick-view').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const productCard = this.closest('.product-card');
-            const productTitle = productCard.querySelector('.product-title').textContent;
-            const productImage = productCard.querySelector('.product-img').src;
-            const productPrice = productCard.querySelector('.promo-price').textContent;
-            const productDescription = productCard.querySelector('.product-description').textContent;
-            
-            showQuickViewModal(productTitle, productImage, productPrice, productDescription);
-        });
-    });
-}
-
-function showQuickViewModal(title, image, price, description) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.8);
-        z-index: 10000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `;
-    
-    modal.innerHTML = `
-        <div style="background: white; border-radius: 15px; max-width: 500px; width: 90%; padding: 30px; text-align: center; position: relative;">
-            <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
-            <img src="${image}" alt="${title}" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
-            <h3 style="color: #2c3e50; margin-bottom: 10px;">${title}</h3>
-            <p style="color: #7f8c8d; margin-bottom: 15px;">${description}</p>
-            <div style="font-size: 1.5em; font-weight: bold; color: #e74c3c; margin-bottom: 20px;">${price}</div>
-            <button onclick="addToCartFromModal('${title.replace(/'/g, "\\'")}', '${price}')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px;">Ajouter au panier</button>
-            <button onclick="this.closest('div').parentElement.remove()" style="background: #95a5a6; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px;">Fermer</button>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.remove();
-        }
-    });
 }
 
 
@@ -6590,6 +6602,218 @@ function resetFitting() {
     }
 }
 
+// ===== SYSTÈME DE VUE RAPIDE (QUICK VIEW) =====
+function setupQuickView() {
+    console.log('👁️ Initialisation de la vue rapide...');
+    
+    document.querySelectorAll('.quick-view').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productCard = this.closest('.product-card');
+            if (!productCard) return;
+            
+            const productTitle = productCard.querySelector('.product-title')?.textContent || 'Produit';
+            const productImage = productCard.querySelector('.product-img')?.src || 'images/logo.png';
+            const productPrice = productCard.querySelector('.promo-price')?.textContent || '0 MRU';
+            const productDescription = productCard.querySelector('.product-description')?.textContent || 'Description non disponible';
+            const productCategory = productCard.getAttribute('data-category') || 'general';
+            
+            showQuickViewModal(productTitle, productImage, productPrice, productDescription, productCategory);
+        });
+    });
+    
+    console.log('✅ Vue rapide initialisée sur', document.querySelectorAll('.quick-view').length, 'boutons');
+}
+
+function showQuickViewModal(title, image, price, description, category) {
+    console.log('👁️ Ouverture vue rapide:', title);
+    
+    // Fermer toute modale existante
+    const existingModal = document.querySelector('.quick-view-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    const modal = document.createElement('div');
+    modal.className = 'quick-view-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: white; border-radius: 20px; max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; position: relative; animation: scaleIn 0.3s ease;">
+            <button onclick="closeQuickView()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;">&times;</button>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 500px;">
+                <!-- Colonne Image -->
+                <div style="background: #f8f9fa; display: flex; align-items: center; justify-content: center; padding: 40px; border-radius: 20px 0 0 20px;">
+                    <img src="${image}" alt="${title}" 
+                         style="max-width: 100%; max-height: 400px; object-fit: contain; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);"
+                         onerror="this.src='images/logo.png'">
+                </div>
+                
+                <!-- Colonne Informations -->
+                <div style="padding: 40px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">${category}</span>
+                            <span style="background: #27ae60; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">🔥 Promo</span>
+                        </div>
+                        
+                        <h2 style="color: #2c3e50; margin-bottom: 15px; font-size: 1.8rem; line-height: 1.3;">${title}</h2>
+                        
+                        <p style="color: #7f8c8d; margin-bottom: 25px; line-height: 1.6; font-size: 1.1rem;">${description}</p>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;">${price}</div>
+                            <div style="text-decoration: line-through; color: #888; font-size: 1.2rem;">${getOriginalPrice(price)} MRU</div>
+                        </div>
+                        
+                        <!-- Options de taille -->
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #2c3e50; margin-bottom: 10px; font-size: 1.1rem;">📏 Tailles disponibles :</h4>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                ${generateSizeOptions(category)}
+                            </div>
+                        </div>
+                        
+                        <!-- Caractéristiques -->
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #2c3e50; margin-bottom: 10px; font-size: 1.1rem;">✨ Caractéristiques :</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>✅</span>
+                                    <span>100% Coton</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>✅</span>
+                                    <span>Livraison gratuite</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>✅</span>
+                                    <span>Qualité premium</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>✅</span>
+                                    <span>Retour sous 7 jours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 15px;">
+                        <button onclick="addToCartFromQuickView('${title.replace(/'/g, "\\'")}', '${category}', ${extractPrice(price)})" 
+                                style="flex: 2; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 18px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s;">
+                            🛒 Ajouter au panier
+                        </button>
+                        <button onclick="closeQuickView()" 
+                                style="flex: 1; background: #95a5a6; color: white; border: none; padding: 18px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s;">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Fermer en cliquant en dehors
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeQuickView();
+        }
+    });
+    
+    // Fermer avec la touche Échap
+    const closeOnEscape = function(e) {
+        if (e.key === 'Escape') {
+            closeQuickView();
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    
+    // Track la vue du produit
+    trackProductView(title, category, extractPrice(price));
+}
+
+function closeQuickView() {
+    const modal = document.querySelector('.quick-view-modal');
+    if (modal) {
+        modal.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+function addToCartFromQuickView(productName, category, price) {
+    ajouterAuPanier(productName, category, price);
+    closeQuickView();
+}
+
+// Fonctions utilitaires pour la vue rapide
+function getOriginalPrice(promoPrice) {
+    // Simuler un prix original basé sur le prix promo
+    const price = extractPrice(promoPrice);
+    return Math.round(price * 1.3); // +30% pour le prix original
+}
+
+function extractPrice(priceText) {
+    // Extraire le nombre du texte de prix
+    const match = priceText.toString().match(/(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+}
+
+function generateSizeOptions(category) {
+    const sizes = {
+        't-shirts': ['XS', 'S', 'M', 'L', 'XL'],
+        'ensembles': ['S', 'M', 'L', 'XL'],
+        'enfants': ['3-5 ans', '6-8 ans', '9-12 ans'],
+        'accessoires': ['Unique'],
+        'pulls': ['S', 'M', 'L', 'XL']
+    };
+    
+    const availableSizes = sizes[category] || ['S', 'M', 'L'];
+    
+    return availableSizes.map(size => `
+        <button style="padding: 10px 15px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 500;"
+                onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='#f8f9ff'"
+                onmouseout="this.style.borderColor='#e2e8f0'; this.style.backgroundColor='white'"
+                onclick="selectSize(this)">
+            ${size}
+        </button>
+    `).join('');
+}
+
+function selectSize(button) {
+    // Retirer la sélection précédente
+    button.parentElement.querySelectorAll('button').forEach(btn => {
+        btn.style.borderColor = '#e2e8f0';
+        btn.style.backgroundColor = 'white';
+        btn.style.color = '#333';
+    });
+    
+    // Sélectionner la nouvelle taille
+    button.style.borderColor = '#667eea';
+    button.style.backgroundColor = '#667eea';
+    button.style.color = 'white';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du panier et fidélité...');
     
@@ -6619,6 +6843,11 @@ document.addEventListener('DOMContentLoaded', function() {
             closeFloatingCart();
         }
     });
+    
+    // ===== INITIALISATION VUE RAPIDE =====
+    console.log('👁️ Initialisation de la vue rapide...');
+    setupQuickView();
+    console.log('✅ Vue rapide initialisée');
     
     // ===== INITIALISATION ESSAYAGE VIRTUEL =====
     console.log('🪞 Initialisation de l\'essayage virtuel IA...');
