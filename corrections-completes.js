@@ -313,17 +313,64 @@ function selectDeliveryOption(type) {
 // ===== ASSISTANT IA =====
 function sendAIMessage() {
     const input = document.getElementById('ai-input');
-    const message = input.value.trim();
+    const message = input ? input.value.trim() : prompt('🤖 Posez votre question sur nos produits Andu-Xara:');
     
     if (!message) {
-        showNotification('📝 Veuillez écrire votre question', 'info');
+        showNotification('❌ Veuillez écrire votre question', 'warning');
         return;
     }
     
-    showNotification('🤖 Assistant IA en développement...', 'info');
-    input.value = '';
+    showNotification('✅ Question envoyée à notre assistant IA !');
+    
+    // Simulation de réponses IA intelligentes
+    setTimeout(() => {
+        const lowerMessage = message.toLowerCase();
+        let response = '';
+        
+        if (lowerMessage.includes('prix') || lowerMessage.includes('coût') || lowerMessage.includes('combien')) {
+            response = '💰 Nos prix varient de 500 à 2500 MRU. T-shirts: 500-800 MRU, Ensembles: 1500-2500 MRU. Qualité premium garantie !';
+        } else if (lowerMessage.includes('livraison') || lowerMessage.includes('délai')) {
+            response = '🚚 Livraison express 24h en ville, 72h partout en Mauritanie. Gratuite dès 5000 MRU d\'achat !';
+        } else if (lowerMessage.includes('taille') || lowerMessage.includes('size')) {
+            response = '📏 Tailles S-XXL disponibles. Conseil: Prenez votre taille habituelle, nos vêtements sont true-to-size !';
+        } else if (lowerMessage.includes('coton') || lowerMessage.includes('matière')) {
+            response = '👕 100% coton égyptien premium. Respirant, durable et confortable même sous notre climat !';
+        } else if (lowerMessage.includes('retour') || lowerMessage.includes('échange')) {
+            response = '🔄 Retours gratuits sous 15 jours. Échanges de taille sans frais !';
+        } else if (lowerMessage.includes('promo') || lowerMessage.includes('code')) {
+            response = '🎁 Code WELCOME10 pour 10% de réduction sur votre première commande !';
+        } else if (lowerMessage.includes('andu-xara') || lowerMessage.includes('marque')) {
+            response = '🌟 Andu-Xara: Style mauritanien moderne. Qualité exceptionnelle, designs exclusifs !';
+        } else if (lowerMessage.includes('commande') || lowerMessage.includes('acheter')) {
+            response = '🛒 Ajoutez les articles au panier, puis cliquez sur le panier pour finaliser votre commande !';
+        } else if (lowerMessage.includes('contact') || lowerMessage.includes('whatsapp')) {
+            response = '📞 Contact: +222 36 00 00 00 (WhatsApp). Service client 7j/7 de 8h à 22h !';
+        } else {
+            response = '🤖 Merci pour votre intérêt pour Andu-Xara ! Pour une réponse personnalisée, contactez notre service client.';
+        }
+        
+        showNotification('🤖 IA: ' + response);
+        
+        // Ajouter à l'historique du chat si l'élément existe
+        const chatBox = document.getElementById('ai-chat');
+        if (chatBox) {
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-message user';
+            userMsg.textContent = message;
+            chatBox.appendChild(userMsg);
+            
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'ai-message bot';
+            aiMsg.textContent = response;
+            chatBox.appendChild(aiMsg);
+            
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+    }, 1500);
+    
+    if (input) input.value = '';
 }
-
 // ===== FONCTIONS DE DÉBUG =====
 function debugParrainages() {
     console.log('🔍 Debug parrainages:', {
