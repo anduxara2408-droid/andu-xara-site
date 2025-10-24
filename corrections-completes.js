@@ -408,7 +408,7 @@ function initAllSystems() {
         floatingCart = JSON.parse(savedCart);
     }
     
-    const savedPromo = localStorage.getItem('anduxara_active_promo');
+    window.savedPromo = localStorage.getItem('anduxara_active_promo');
     if (savedPromo) {
         try {
             const promoData = JSON.parse(savedPromo);
@@ -452,4 +452,15 @@ function toggleFloatingCart() {
         cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
     }
     console.log('🛒 Panier flottant togglé');
+}
+
+// ===== FONCTION AJOUTER AU PANIER =====
+function updateCartCounter() {
+    const counter = document.getElementById('cart-counter');
+    if (counter) {
+        const totalItems = window.floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+        counter.textContent = totalItems;
+        counter.style.display = totalItems > 0 ? 'flex' : 'none';
+    }
+    console.log('🛒 Compteur panier mis à jour:', totalItems, 'articles');
 }
