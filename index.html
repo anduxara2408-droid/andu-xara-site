@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Catalogue Andu-Xara 2025</title>
    <meta name="google-site-verification" content="EN_ATTENTE_DU_CODE">
@@ -16,6 +16,16 @@
     <meta name="format-detection" content="telephone=no">
  
 <style>
+:root {
+    --vh: 1vh;
+}
+
+/* Utiliser la hauteur viewport calculée */
+html, body {
+    height: 100%;
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
 /* ===== RESET ET STYLES GLOBAUX ===== */
 * {
     margin: 0;
@@ -311,6 +321,102 @@ h1 {
 
 .menu-overlay.active {
     display: block;
+}
+
+/* ===== CORRECTIONS SPÉCIFIQUES BOUTON ASSISTANT IA ===== */
+@media (max-width: 768px) and (orientation: portrait) {
+    /* Conteneur principal de l'input IA */
+    #ai-input-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+    
+    /* Groupe input + bouton */
+    #ai-input-group {
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    /* Input IA */
+    #ai-input {
+        flex: 1 !important;
+        padding: 15px 20px !important;
+        font-size: 1rem !important;
+        border-radius: 25px !important;
+        border: 2px solid #e2e8f0 !important;
+        min-height: 50px !important;
+        width: 100% !important;
+    }
+    
+    /* Bouton Envoyer IA */
+    #ai-send-button {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        border: none !important;
+        padding: 15px 25px !important;
+        border-radius: 25px !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        min-width: 120px !important;
+        min-height: 50px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        white-space: nowrap !important;
+    }
+    
+    #ai-send-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+    }
+}
+
+/* ===== CORRECTIONS TRÈS PETITS ÉCRANS ===== */
+@media (max-width: 480px) and (orientation: portrait) {
+    #ai-input-group {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    #ai-input {
+        width: 100% !important;
+        padding: 16px 20px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    #ai-send-button {
+        width: 100% !important;
+        padding: 16px 20px !important;
+        font-size: 1.1rem !important;
+        min-width: auto !important;
+    }
+}
+
+/* ===== FORÇAGE D'AFFICHAGE ===== */
+#ai-send-button {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* ===== CORRECTION PAYSAGE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    #ai-input-group {
+        flex-direction: row !important;
+    }
+    
+    #ai-send-button {
+        min-width: 100px !important;
+    }
 }
 
 /* ===== RECHERCHE ET CATÉGORIES ===== */
@@ -1603,6 +1709,179 @@ footer {
     }
 }
 
+/* ===== CORRECTIONS BOUTONS MOBILE PORTRAIT ===== */
+@media (max-width: 768px) and (orientation: portrait) {
+    /* Bouton Vérifier livraison */
+    .location-input {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .location-input button {
+        min-width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 10px;
+        order: 2; /* Met le bouton après l'input */
+    }
+    
+    .location-input input {
+        order: 1;
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+    }
+    
+    /* Options de livraison */
+    .delivery-options-list {
+        margin-top: 15px;
+    }
+    
+    .option {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        padding: 15px;
+    }
+    
+    .option span:first-child {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .option .price {
+        font-size: 1.1rem;
+    }
+    
+    /* Bouton Envoyer Assistant IA */
+    #ai-input {
+        padding: 15px 20px;
+        font-size: 1rem;
+        border-radius: 25px;
+    }
+    
+    #ai-input + button {
+        padding: 15px 25px;
+        font-size: 1rem;
+        border-radius: 25px;
+        min-width: 120px;
+    }
+    
+    /* Conteneur input assistant IA */
+    #ai-input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    #ai-input-container > div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+/* ===== CORRECTIONS SPÉCIFIQUES TRÈS PETITS ÉCRANS PORTRAIT ===== */
+@media (max-width: 480px) and (orientation: portrait) {
+    /* Livraison - carte complète */
+    .delivery-card {
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .delivery-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    /* Bouton vérifier livraison */
+    .location-input button {
+        padding: 16px;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+    
+    /* Options livraison */
+    .option {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    
+    /* Assistant IA */
+    #ai-assistant-section {
+        padding: 15px 8px;
+    }
+    
+    #ai-messages {
+        height: 250px;
+        padding: 12px;
+    }
+    
+    #ai-input {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+    }
+    
+    #ai-input + button {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        min-width: 100px;
+    }
+}
+
+/* ===== CORRECTIONS PAYSAGE POUR LES BOUTONS ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* En paysage, on remet en ligne */
+    .location-input {
+        flex-direction: row;
+    }
+    
+    .location-input button {
+        min-width: 120px;
+        order: 0;
+    }
+    
+    .location-input input {
+        order: 0;
+    }
+    
+    #ai-input-container > div {
+        flex-direction: row;
+    }
+}
+
+/* ===== FORCER L'AFFICHAGE DES BOUTONS ===== */
+.location-input button,
+#ai-input + button,
+.option {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* ===== CORRECTIONS DE VISIBILITÉ ===== */
+@media (max-width: 768px) {
+    /* S'assurer que tous les boutons sont visibles */
+    button:not(.menu-toggle):not(.cart-toggle) {
+        min-height: 44px;
+        min-width: 44px;
+        font-size: 1rem !important;
+        z-index: 10;
+        position: relative;
+    }
+    
+    /* Empêcher le masquage des boutons */
+    .location-input,
+    .delivery-options-list,
+    #ai-input-container {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+}
+
 /* ===== BADGES RECOMMANDATIONS ===== */
 .recommendation-badge {
     position: absolute;
@@ -1756,6 +2035,490 @@ footer {
     
     .quick-view-modal h2 {
         font-size: 1.4rem !important;
+    }
+}
+/* ===== CORRECTIONS MOBILE AVANCÉES ===== */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Empêcher le débordement horizontal */
+.container, section, .products-grid, .header-content, .category-banners {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Safe area pour iPhone avec encoche */
+@supports (padding: max(0px)) {
+    .container, header, footer {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+    }
+    
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* ===== CORRECTIONS SPÉCIFIQUES MOBILE ===== */
+@media (max-width: 768px) {
+    /* Header mobile compact */
+    .header-content {
+        padding: 5px 0;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .logo-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    h1 {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.2rem;
+    }
+    
+    .subtitle {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.3rem;
+    }
+    
+    /* Menu mobile amélioré */
+    .menu-toggle {
+        top: 10px;
+        left: 10px;
+        width: 35px;
+        height: 35px;
+    }
+    
+    .mobile-menu {
+        width: 100vw;
+        left: -100vw;
+        padding-top: 60px;
+    }
+    
+    .mobile-menu.active {
+        left: 0;
+    }
+    
+    /* Produits - grille optimisée */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+        padding: 0 8px;
+        margin-top: 15px;
+    }
+    
+    .product-card {
+        margin: 0;
+        border-radius: 10px;
+    }
+    
+    .product-image-container {
+        height: 140px !important;
+    }
+    
+    .product-info {
+        padding: 10px;
+    }
+    
+    .product-title {
+        font-size: 0.8rem !important;
+        height: 2.2em;
+        margin-bottom: 5px;
+    }
+    
+    .product-description {
+        font-size: 0.7rem !important;
+        height: 2.4em;
+        margin-bottom: 8px;
+    }
+    
+    .product-price {
+        margin-bottom: 8px;
+    }
+    
+    .promo-price {
+        font-size: 0.9rem !important;
+    }
+    
+    .old-price {
+        font-size: 0.7rem !important;
+    }
+    
+    .variation-selector {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    
+    .variation-btn {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .add-to-cart, .quick-view {
+        padding: 8px;
+        font-size: 0.75rem;
+        border-radius: 6px;
+    }
+    
+    /* Bannières catégories */
+    .category-banner {
+        height: 100px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .banner-content h2 {
+        font-size: 1.1rem !important;
+    }
+    
+    .banner-content p {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Compteur promotion */
+    .promo-countdown {
+        padding: 12px 20px;
+        margin: 15px auto;
+        border-radius: 25px;
+        max-width: 350px;
+    }
+    
+    .promo-countdown h2 {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px;
+    }
+    
+    #countdown {
+        font-size: 0.9rem;
+    }
+    
+    #countdown span {
+        padding: 4px 8px;
+        min-width: 35px;
+        font-size: 0.8rem;
+    }
+    
+    /* Section réduction */
+    .reduction-section {
+        padding: 20px 15px;
+        margin: 20px auto;
+        max-width: 350px;
+    }
+    
+    .reduction-section input {
+        width: 150px;
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    .reduction-section button {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    /* Barre de recherche */
+    .search-bar {
+        margin: 15px 0;
+    }
+    
+    .search-bar input {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+        border-radius: 20px;
+    }
+    
+    /* Catégories */
+    .categories {
+        gap: 6px;
+        margin: 15px 0;
+    }
+    
+    .category-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 15px;
+    }
+    
+    /* Assistant IA mobile */
+    #ai-assistant-section {
+        margin: 40px 0;
+        padding: 20px 10px;
+        border-radius: 15px;
+    }
+    
+    #ai-messages {
+        height: 300px;
+        padding: 15px;
+    }
+    
+    /* Tableau de bord mobile */
+    #client-dashboard {
+        margin: 40px 0;
+        padding: 20px 10px;
+    }
+    
+    /* Essayage virtuel mobile */
+    #virtual-fitting {
+        margin: 40px 0;
+        padding: 30px 10px;
+        border-radius: 15px;
+    }
+    
+    .fitting-container {
+        grid-template-columns: 1fr !important;
+        gap: 20px;
+    }
+    
+    #camera-container {
+        height: 250px !important;
+    }
+    
+    /* Footer mobile */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .social-links {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Panier flottant mobile */
+    .floating-cart {
+        bottom: 20px !important;
+        right: 15px !important;
+    }
+    
+    .cart-panel {
+        width: 320px !important;
+        right: -80px !important;
+        bottom: 70px !important;
+        max-height: 60vh !important;
+    }
+    
+    .cart-toggle {
+        width: 55px;
+        height: 55px;
+        font-size: 1.2rem;
+    }
+    
+    /* Badge Soninké mobile */
+    #soninke-badge-left {
+        bottom: 20px;
+        left: 10px;
+        padding: 10px 15px;
+        font-size: 0.8rem;
+        max-width: 160px;
+    }
+    
+    /* Compteur visiteurs mobile */
+    .mini-counter {
+        top: 10px;
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+    
+    .counter-number {
+        font-size: 11px;
+    }
+}
+
+/* ===== CORRECTIONS TRÈS PETITS ÉCRANS ===== */
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+        padding: 0 5px;
+    }
+    
+    .product-image-container {
+        height: 160px !important;
+    }
+    
+    .header-content {
+        gap: 5px;
+    }
+    
+    .logo-img {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    h1 {
+        font-size: 1.1rem !important;
+    }
+    
+    .subtitle {
+        font-size: 0.65rem !important;
+    }
+    
+    /* Bannière défilante mobile */
+    .marquee-container {
+        padding: 8px 0;
+    }
+    
+    .marquee-section {
+        padding: 0 15px;
+    }
+    
+    .welcome, .promotion, .original {
+        padding: 4px 12px;
+        font-size: 0.7rem;
+        border-radius: 12px;
+    }
+    
+    /* Sections de contenu */
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+    
+    section {
+        padding: 20px 10px;
+    }
+    
+    /* Cartes de livraison */
+    .delivery-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .delivery-card {
+        padding: 20px;
+    }
+    
+    /* Options de livraison */
+    .option {
+        padding: 12px 15px;
+    }
+}
+
+/* ===== CORRECTIONS ORIENTATION PAYSAGE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    
+    .product-image-container {
+        height: 120px !important;
+    }
+    
+    .mobile-menu {
+        padding-top: 50px;
+    }
+    
+    .mobile-menu a {
+        padding: 10px 15px;
+    }
+    
+    #ai-messages {
+        height: 200px;
+    }
+    
+    #camera-container {
+        height: 200px !important;
+    }
+}
+
+/* ===== CORRECTIONS TOUCH SCREEN ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Améliorer les cibles tactiles */
+    .category-btn, .variation-btn, .add-to-cart, .quick-view {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .menu-toggle {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .cart-toggle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    /* Désactiver les hover sur mobile */
+    .category-btn:hover, .variation-btn:hover, .product-card:hover {
+        transform: none;
+    }
+    
+    /* Améliorer le scroll */
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ===== EMPÊCHER LE ZOOM SUR CHAMPS INPUT ===== */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important; /* Empêche le zoom sur iOS */
+    }
+}
+
+/* ===== CORRECTIONS SPÉCIFIQUES iOS ===== */
+@supports (-webkit-touch-callout: none) {
+    .product-image-container {
+        height: 180px;
+    }
+    
+    .floating-cart {
+        bottom: 25px;
+    }
+    
+    /* Correction hauteur safe area iOS */
+    .container {
+        padding-left: max(15px, constant(safe-area-inset-left));
+        padding-right: max(15px, constant(safe-area-inset-right));
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+    }
+}
+
+/* ===== CORRECTIONS SPÉCIFIQUES ANDROID ===== */
+@supports (not (-webkit-touch-callout: none)) {
+    .product-image-container {
+        height: 160px;
+    }
+}
+
+/* ===== GESTION DU DÉFILEMENT HORIZONTAL ===== */
+* {
+    box-sizing: border-box;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+table {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    display: block;
+}
+
+/* ===== ANIMATIONS MOBILE OPTIMISÉES ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
@@ -3719,6 +4482,244 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+// ===== CORRECTION DYNAMIQUE BOUTONS MOBILE =====
+function fixMobileButtons() {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile && isPortrait) {
+        console.log('📱 Mode portrait mobile détecté - Correction des boutons...');
+        
+        // Correction livraison
+        fixDeliverySection();
+        
+        // Correction assistant IA
+        fixAIAssistant();
+        
+        // Correction options livraison
+        fixDeliveryOptions();
+    }
+}
+
+function fixDeliverySection() {
+    const locationInput = document.querySelector('.location-input');
+    const deliveryButton = document.querySelector('.location-input button');
+    const deliveryInput = document.getElementById('delivery-address');
+    
+    if (locationInput && deliveryButton && deliveryInput) {
+        // Forcer l'affichage
+        locationInput.style.display = 'flex';
+        locationInput.style.flexDirection = 'column';
+        locationInput.style.gap = '12px';
+        
+        deliveryButton.style.display = 'block';
+        deliveryButton.style.width = '100%';
+        deliveryButton.style.opacity = '1';
+        deliveryButton.style.visibility = 'visible';
+        deliveryButton.style.order = '2';
+        
+        deliveryInput.style.order = '1';
+        deliveryInput.style.width = '100%';
+        
+        console.log('✅ Bouton livraison corrigé');
+    }
+}
+
+function fixAIAssistant() {
+    const aiInput = document.getElementById('ai-input');
+    let aiButton = document.querySelector('#ai-send-button') || 
+                   document.querySelector('#ai-input + button') ||
+                   document.querySelector('button[onclick*="sendAIMessage"]');
+    
+    console.log('🔍 Recherche bouton IA:', {
+        input: !!aiInput,
+        button: !!aiButton,
+        buttonText: aiButton?.textContent
+    });
+    
+    if (aiInput && aiButton) {
+        // Donner un ID spécifique au bouton
+        if (!aiButton.id) {
+            aiButton.id = 'ai-send-button';
+        }
+        
+        // Créer le conteneur principal si nécessaire
+        let aiContainer = document.getElementById('ai-input-container');
+        if (!aiContainer) {
+            aiContainer = document.createElement('div');
+            aiContainer.id = 'ai-input-container';
+            aiContainer.style.display = 'flex';
+            aiContainer.style.flexDirection = 'column';
+            aiContainer.style.gap = '12px';
+            aiContainer.style.width = '100%';
+            
+            // Insérer le conteneur
+            aiInput.parentNode.insertBefore(aiContainer, aiInput);
+        }
+        
+        // Créer le groupe input + bouton
+        let aiGroup = document.getElementById('ai-input-group');
+        if (!aiGroup) {
+            aiGroup = document.createElement('div');
+            aiGroup.id = 'ai-input-group';
+            aiGroup.style.display = 'flex';
+            aiGroup.style.gap = '10px';
+            aiGroup.style.alignItems = 'center';
+            aiGroup.style.width = '100%';
+            
+            // Ajouter au conteneur
+            aiContainer.appendChild(aiGroup);
+        }
+        
+        // Réorganiser les éléments dans le groupe
+        if (!aiGroup.contains(aiInput)) {
+            aiGroup.appendChild(aiInput);
+        }
+        if (!aiGroup.contains(aiButton)) {
+            aiGroup.appendChild(aiButton);
+        }
+        
+        // Styles forcés pour le bouton
+        aiButton.style.display = 'flex';
+        aiButton.style.alignItems = 'center';
+        aiButton.style.justifyContent = 'center';
+        aiButton.style.padding = '15px 25px';
+        aiButton.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+        aiButton.style.color = 'white';
+        aiButton.style.border = 'none';
+        aiButton.style.borderRadius = '25px';
+        aiButton.style.cursor = 'pointer';
+        aiButton.style.fontWeight = '600';
+        aiButton.style.fontSize = '1rem';
+        aiButton.style.minWidth = '120px';
+        aiButton.style.minHeight = '50px';
+        aiButton.style.opacity = '1';
+        aiButton.style.visibility = 'visible';
+        aiButton.style.whiteSpace = 'nowrap';
+        aiButton.style.flexShrink = '0';
+        
+        // Styles pour l'input
+        aiInput.style.flex = '1';
+        aiInput.style.minHeight = '50px';
+        aiInput.style.padding = '15px 20px';
+        aiInput.style.fontSize = '1rem';
+        aiInput.style.borderRadius = '25px';
+        aiInput.style.border = '2px solid #e2e8f0';
+        
+        console.log('✅ Bouton IA corrigé avec succès');
+        
+    } else if (aiInput && !aiButton) {
+        // Créer le bouton s'il n'existe pas
+        console.log('⚠️ Bouton IA non trouvé, création...');
+        createAISendButton();
+    } else {
+        console.log('❌ Éléments IA non trouvés');
+    }
+}
+
+function createAISendButton() {
+    const aiInput = document.getElementById('ai-input');
+    if (!aiInput) return;
+    
+    // Créer le bouton
+    const aiButton = document.createElement('button');
+    aiButton.id = 'ai-send-button';
+    aiButton.innerHTML = 'Envoyer 🚀';
+    aiButton.onclick = sendAIMessage;
+    
+    // Styles du bouton
+    aiButton.style.cssText = `
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        min-width: 120px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        visibility: visible;
+        white-space: nowrap;
+        flex-shrink: 0;
+    `;
+    
+    // Créer la structure
+    const aiContainer = document.createElement('div');
+    aiContainer.id = 'ai-input-container';
+    aiContainer.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    `;
+    
+    const aiGroup = document.createElement('div');
+    aiGroup.id = 'ai-input-group';
+    aiGroup.style.cssText = `
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+    `;
+    
+    // Réorganiser
+    aiInput.parentNode.insertBefore(aiContainer, aiInput);
+    aiGroup.appendChild(aiInput);
+    aiGroup.appendChild(aiButton);
+    aiContainer.appendChild(aiGroup);
+    
+    console.log('✅ Bouton IA créé avec succès');
+}
+
+function fixDeliveryOptions() {
+    const options = document.querySelectorAll('.option');
+    
+    options.forEach(option => {
+        option.style.display = 'flex';
+        option.style.flexDirection = 'column';
+        option.style.alignItems = 'center';
+        option.style.textAlign = 'center';
+        option.style.gap = '8px';
+        option.style.opacity = '1';
+        option.style.visibility = 'visible';
+    });
+    
+    console.log(`✅ ${options.length} options livraison corrigées`);
+}
+
+// Surveiller les changements d'orientation et de taille
+function initMobileButtonObserver() {
+    // Corriger au chargement
+    setTimeout(fixMobileButtons, 100);
+    
+    // Corriger lors du redimensionnement
+    window.addEventListener('resize', fixMobileButtons);
+    
+    // Corriger lors du changement d'orientation
+    window.addEventListener('orientationchange', function() {
+        setTimeout(fixMobileButtons, 300);
+    });
+    
+    // Observer les mutations du DOM au cas où des éléments seraient ajoutés dynamiquement
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                setTimeout(fixMobileButtons, 100);
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du panier et fidélité...');
     
@@ -3733,7 +4734,11 @@ document.addEventListener('DOMContentLoaded', function() {
         promoDiscount = promoData.discount;
         updateActivePromoDisplay();
     }
-    
+
+// ===== CORRECTION BOUTONS MOBILE =====
+    console.log('📱 Initialisation correcteur boutons mobile...');
+    initMobileButtonObserver();
+    console.log('✅ Correcteur boutons mobile activé');    
     // Mettre à jour l'affichage initial du panier
     updateFloatingCart();
 
@@ -6929,5 +7934,99 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
 <!-- Corrections permanentes -->
     <script src="corrections-essentielles.js"></script>
+<script>
+// ===== DÉTECTION ET OPTIMISATION MOBILE =====
+function optimizeForMobile() {
+    console.log('📱 Optimisation mobile en cours...');
+    
+    // Détection du dispositif
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+        console.log('📱 Appareil mobile détecté');
+        
+        if (isIOS) {
+            document.body.classList.add('ios-device');
+            console.log('🍎 Appareil iOS');
+        }
+        
+        if (isAndroid) {
+            document.body.classList.add('android-device');
+            console.log('🤖 Appareil Android');
+        }
+        
+        // Optimisations spécifiques mobile
+        optimizeTouchInteractions();
+        preventHorizontalScroll();
+        optimizeImagesForMobile();
+    }
+}
+
+function optimizeTouchInteractions() {
+    // Améliorer les interactions tactiles
+    const touchElements = document.querySelectorAll('button, a, .product-card, .category-btn');
+    touchElements.forEach(element => {
+        element.style.cursor = 'pointer';
+    });
+}
+
+function preventHorizontalScroll() {
+    // Empêcher le défilement horizontal
+    window.addEventListener('scroll', function() {
+        if (window.scrollX !== 0) {
+            window.scrollTo(0, window.scrollY);
+        }
+    });
+    
+    // Empêcher le zoom sur le document
+    document.addEventListener('touchmove', function(e) {
+        if (e.scale !== 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
+
+function optimizeImagesForMobile() {
+    // Chargement optimisé des images pour mobile
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.getAttribute('data-src');
+                img.removeAttribute('data-src');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+}
+
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    optimizeForMobile();
+    
+    // Re-optimiser lors du redimensionnement
+    window.addEventListener('resize', optimizeForMobile);
+    window.addEventListener('orientationchange', function() {
+        setTimeout(optimizeForMobile, 100);
+    });
+});
+
+// ===== CORRECTION HAUTEUR VIEWPORT MOBILE =====
+function setViewportHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Initialiser et mettre à jour la hauteur viewport
+setViewportHeight();
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+</script>
 </body>
 </html>
