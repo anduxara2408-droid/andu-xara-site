@@ -1824,58 +1824,115 @@ footer {
 }
 
 </style>
-    <!-- Google Analytics -->
+
+<!-- Google Analytics GA4 - Version corrigée -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EDG8XJ65NN"></script>
 <script>
-// Version sécurisée pour localhost et production
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    // Mode développement - désactiver Analytics
-    console.log('🔧 Mode développement - Analytics désactivé');
-} else {
-    // Mode production - charger Analytics normalement
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR';
-    document.head.appendChild(script);
-}
-</script>
-</head>
-<script>
-// ===== CORRECTION AFFICHAGE EN TEMPS RÉEL =====
-function updateRewardsDisplay() {
-    if (!window.userManager) return;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
     
-    const stats = window.userManager.getUserStats();
-    const display = document.getElementById('rewards-display');
-    const amount = document.getElementById('rewards-amount');
-    const code = document.getElementById('user-code');
-    
-    if (display && amount && code) {
-        amount.textContent = stats.rewards + ' MRU';
-        code.textContent = 'Code: ' + stats.userCode;
-        display.style.display = 'block';
-        
-        // Afficher un message de bienvenue si c'est un nouveau parrainage
-        if (stats.hasUsedParrainage && stats.rewards > 0) {
-            setTimeout(() => {
-                alert(`🎉 BIENVENUE ! Vous avez reçu ${stats.rewards} MRU grâce au parrainage !\nCode parrain: ${stats.parrainCode}`);
-            }, 1000);
+    // Mode développement
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log('🔧 Mode développement - Analytics désactivé');
+        // Simulation de gtag pour éviter les erreurs
+        window.gtag = function() {
+            console.log('🔧 Analytics simulé:', arguments);
+        };
+    } else {
+        // Mode production
+        gtag('js', new Date());
+        gtag('config', 'G-EDG8XJ65NN', {
+            debug_mode: true,
+            page_title: document.title,
+            page_location: window.location.href
+        });
+    }
+
+    // ===== FONCTIONS DE TRACKING ANALYTICS =====
+    function trackGAEvent(eventName, parameters) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, parameters);
         }
     }
-}
 
-// Surcharger la fonction existante
-if (window.userManager) {
-    const originalInit = window.userManager.init;
-    window.userManager.init = function() {
-        originalInit.call(this);
-        setTimeout(updateRewardsDisplay, 500);
-    };
-}
+    function trackPageView(pageTitle, pageLocation) {
+        if (typeof gtag === 'function') {
+            gtag('event', 'page_view', {
+                page_title: pageTitle,
+                page_location: pageLocation,
+                page_path: window.location.pathname
+            });
+        }
+    }
 
-// Mettre à jour toutes les 2 secondes
-setInterval(updateRewardsDisplay, 2000);
+    function trackAddToCart(productName, category, price) {
+        trackGAEvent('add_to_cart', {
+            'currency': 'MRU',
+            'value': price,
+            'items': [{
+                'item_name': productName,
+                'item_category': category,
+                'price': price,
+                'quantity': 1
+            }]
+        });
+    }
+
+    function trackProductView(productName, category, price) {
+        trackGAEvent('view_item', {
+            'currency': 'MRU',
+            'value': price,
+            'items': [{
+                'item_name': productName,
+                'item_category': category,
+                'price': price
+            }]
+        });
+    }
+
+    function trackPurchase(totalAmount, products) {
+        trackGAEvent('purchase', {
+            'currency': 'MRU',
+            'value': totalAmount,
+            'items': products
+        });
+    }
+
+    // ===== CORRECTION AFFICHAGE EN TEMPS RÉEL =====
+    function updateRewardsDisplay() {
+        if (!window.userManager) return;
+        
+        const stats = window.userManager.getUserStats();
+        const display = document.getElementById('rewards-display');
+        const amount = document.getElementById('rewards-amount');
+        const code = document.getElementById('user-code');
+        
+        if (display && amount && code) {
+            amount.textContent = stats.rewards + ' MRU';
+            code.textContent = 'Code: ' + stats.userCode;
+            display.style.display = 'block';
+            
+            // Afficher un message de bienvenue si c'est un nouveau parrainage
+            if (stats.hasUsedParrainage && stats.rewards > 0) {
+                setTimeout(() => {
+                    alert(`🎉 BIENVENUE ! Vous avez reçu ${stats.rewards} MRU grâce au parrainage !\nCode parrain: ${stats.parrainCode}`);
+                }, 1000);
+            }
+        }
+    }
+
+    // Surcharger la fonction existante
+    if (window.userManager) {
+        const originalInit = window.userManager.init;
+        window.userManager.init = function() {
+            originalInit.call(this);
+            setTimeout(updateRewardsDisplay, 500);
+        };
+    }
+
+    // Mettre à jour toutes les 2 secondes
+    setInterval(updateRewardsDisplay, 2000);
 </script>
-<body>
 </head>
 <body>
 <script>
@@ -1885,55 +1942,50 @@ if (window.location.hostname !== 'localhost' &&
     window.location.protocol === 'http:') {
     window.location.href = 'https://' + window.location.host + window.location.pathname + window.location.search;
 }
+
 </script>
-    <!-- Votre contenu existant continue ici -->
+    <!-- Bandeau défilant -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <div class="marquee-section welcome">
+                🌟 BIENVENUE CHEZ ANDU-XARA - VOTRE CATALOGUE DE MODE EXCLUSIVE 2025 🌟
+            </div>
+            <div class="marquee-section promotion">
+                🎉 OFFRE SPÉCIALE : À l'occasion de la journée internationale de la langue Soninké le 25 septembre décrétée par l'UNESCO, bénéficiez de remises exceptionnelles !
+            </div>
+            <div class="marquee-section original">
+                🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟
+            </div>
+        </div>
+    </div>
+
+    <!-- Header principal -->
     <header>
-        <!-- ... votre header ... -->
-    </header>
-        <!-- Bandeau défilant -->
-        <div class="marquee-container">
-            <div class="marquee-content">
-                <div class="marquee-section welcome">
-                    🌟 BIENVENUE CHEZ ANDU-XARA - VOTRE CATALOGUE DE MODE EXCLUSIVE 2025 🌟
+        <button class="menu-toggle" aria-label="Menu principal">☰</button>
+        <div class="menu-overlay"></div>
+        <nav class="mobile-menu" aria-label="Menu mobile">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="blog.html">Blog / Podcast</a></li>
+                <li><a href="acheter.html">Acheter & Offrir</a></li>
+                <li><a href="histoire.html">Notre Histoire</a></li>
+                <li><a href="reductions.html">Réductions & Cadeaux 🎁</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo Andu-Xara - Marque mauritanienne de vêtements exclusifs" class="logo-img" loading="lazy">
                 </div>
-                <div class="marquee-section promotion">
-                    🎉 OFFRE SPÉCIALE : À l'occasion de la journée internationale de la langue Soninké le 25 septembre décrétée par l'UNESCO, bénéficiez de remises exceptionnelles !
-                </div>
-                <div class="marquee-section original">
-                    🌟 PROMOTION EXCEPTIONNELLE : 30% DE RÉDUCTION SUR TOUT LE CATALOGUE - OFFRE VALABLE JUSQU'AU 31 DÉCEMBRE 2025 🌟
+                <div class="header-text">
+                    <h1>Catalogue Andu-Xara 2025</h1>
+                    <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
                 </div>
             </div>
         </div>
-
-        <!-- Header -->
-        <header>
-            <button class="menu-toggle" aria-label="Menu principal">☰</button>
-            <div class="menu-overlay"></div>
-            <nav class="mobile-menu" aria-label="Menu mobile">
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="blog.html">Blog / Podcast</a></li>
-                    <li><a href="acheter.html">Acheter & Offrir</a></li>
-                    <li><a href="histoire.html">Notre Histoire</a></li>
-                    <li><a href="reductions.html">Réductions & Cadeaux 🎁</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                </ul>
-            </nav>
-            
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <img src="images/logo.png" alt="Logo Andu-Xara - Marque mauritanienne de vêtements exclusifs" class="logo-img" loading="lazy">
-                    </div>
-                    <div class="header-text">
-                        <h1>Catalogue Andu-Xara 2025</h1>
-                        <p class="subtitle">Découvrez nos vêtements exclusifs pour l'année 2025</p>
-                    </div>
-                </div>
-            </div>
-
-
-        </header>
+    </header>
 
         <!-- Compteur visiteurs réel -->
         <div class="mini-counter">
