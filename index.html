@@ -1579,7 +1579,109 @@ footer {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* ===== CORRECTION URGENTE MENU VISIBLE ===== */
+.mobile-menu {
+    transform: translateX(0) !important;
+    left: 0 !important;
+    position: relative !important;
+    background: transparent !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 20px 0 !important;
+    box-shadow: none !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 
+.menu-toggle {
+    display: none !important;
+}
+
+.menu-overlay {
+    display: none !important;
+}
+
+/* Navigation desktop */
+@media (min-width: 768px) {
+    .mobile-menu {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 40px !important;
+        background: rgba(0,0,0,0.9) !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        margin: 10px auto !important;
+        max-width: 90% !important;
+    }
+    
+    .mobile-menu ul {
+        display: flex !important;
+        gap: 30px !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .mobile-menu li {
+        margin: 0 !important;
+        border: none !important;
+    }
+    
+    .mobile-menu a {
+        color: white !important;
+        text-decoration: none !important;
+        font-weight: 500 !important;
+        padding: 8px 16px !important;
+        border-radius: 5px !important;
+        transition: background 0.3s !important;
+        display: block !important;
+    }
+    
+    .mobile-menu a:hover {
+        background: rgba(255,255,255,0.2) !important;
+    }
+}
+
+/* Navigation mobile */
+@media (max-width: 767px) {
+    .mobile-menu {
+        display: block !important;
+        text-align: center !important;
+        background: #f8f9fa !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        margin: 10px !important;
+    }
+    
+    .mobile-menu ul {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .mobile-menu li {
+        margin: 0 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+    
+    .mobile-menu li:last-child {
+        border-bottom: none !important;
+    }
+    
+    .mobile-menu a {
+        display: block !important;
+        padding: 12px !important;
+        color: #333 !important;
+        text-decoration: none !important;
+        font-weight: 500 !important;
+    }
+    
+    .mobile-menu a:hover {
+        background: #667eea !important;
+        color: white !important;
+    }
+}
 /* Safe area pour iPhone avec encoche */
 @supports (padding: max(0px)) {
     .floating-cart {
@@ -1822,7 +1924,6 @@ footer {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
-
 </style>
 
 <!-- Google Analytics GA4 - Version corrigée -->
@@ -1985,6 +2086,35 @@ if (window.location.hostname !== 'localhost' &&
             </div>
         </div>
     </header>
+<!-- ===== NAVIGATION PRINCIPALE FIXE ===== -->
+<nav id="main-navigation" style="position: sticky; top: 0; background: #000; padding: 15px 0; text-align: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <div style="display: inline-flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">🏠 Accueil</a>
+        <a href="blog.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">📝 Blog</a>
+        <a href="acheter.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">🛒 Boutique</a>
+        <a href="histoire.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">📖 Notre Histoire</a>
+        <a href="reductions.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">🎁 Promotions</a>
+        <a href="faq.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">❓ FAQ</a>
+        <a href="contact.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">📞 Contact</a>
+    </div>
+</nav>
+
+<style>
+    #main-navigation a:hover {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        #main-navigation div {
+            gap: 15px;
+        }
+        #main-navigation a {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+    }
+</style>
 
         <!-- Compteur visiteurs réel -->
         <div class="mini-counter">
