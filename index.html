@@ -2061,19 +2061,7 @@ if (window.location.hostname !== 'localhost' &&
 
     <!-- Header principal -->
     <header>
-        <button class="menu-toggle" aria-label="Menu principal">☰</button>
-        <div class="menu-overlay"></div>
-        <nav class="mobile-menu" aria-label="Menu mobile">
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="blog.html">Blog / Podcast</a></li>
-                <li><a href="acheter.html">Acheter & Offrir</a></li>
-                <li><a href="histoire.html">Notre Histoire</a></li>
-                <li><a href="reductions.html">Réductions & Cadeaux 🎁</a></li>
-                <li><a href="faq.html">FAQ</a></li>
-            </ul>
-        </nav>
-
+                
         <div class="container">
             <div class="header-content">
                 <div class="logo">
@@ -2098,7 +2086,6 @@ if (window.location.hostname !== 'localhost' &&
         <a href="contact.html" style="color: white; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">📞 Contact</a>
     </div>
 </nav>
-
 <style>
     #main-navigation a:hover {
         background: rgba(255,255,255,0.2);
@@ -2114,6 +2101,41 @@ if (window.location.hostname !== 'localhost' &&
             font-size: 14px;
         }
     }
+/* ===== STYLES MENU FIXE AMÉLIORÉ ===== */
+#main-navigation {
+    position: sticky;
+    top: 0;
+    background: #000;
+    padding: 15px 0;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#main-navigation a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+#main-navigation a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #main-navigation div {
+        gap: 15px;
+    }
+    #main-navigation a {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
 </style>
 
         <!-- Compteur visiteurs réel -->
