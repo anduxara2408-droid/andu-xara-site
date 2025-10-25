@@ -3475,9 +3475,10 @@ function initMenuMobile() {
         });
     });
 }
-
-// ⭐⭐ AJOUTEZ CETTE LIGNE POUR APPELER LA FONCTION ⭐⭐
-initMenuMobile();
+// ✅ APPEL SÉCURISÉ - Menu mobile seulement si éléments existent
+document.addEventListener('DOMContentLoaded', function() {
+    initMenuMobile();
+});
         // ===== WISHLIST =====
         function toggleWishlist(productId) {
             const index = wishlistItems.indexOf(productId);
