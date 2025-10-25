@@ -1960,30 +1960,42 @@ footer {
     }
 }
 </style>
-
-<!-- Google Analytics GA4 - Version corrigée -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HMHF43YF7N"></script>
+<!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
+    // ===== ANALYTICS SÉCURISÉ =====
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
     
-    // Mode développement
+    // Fonction gtag sécurisée
+    window.gtag = function() {
+        if (window.dataLayer) {
+            window.dataLayer.push(arguments);
+        }
+        console.log('🔧 Analytics:', arguments);
+    };
+
+    // Mode développement - Toujours actif mais sécurisé
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        console.log('🔧 Mode développement - Analytics désactivé');
-        // Simulation de gtag pour éviter les erreurs
-        window.gtag = function() {
-            console.log('🔧 Analytics simulé:', arguments);
+        console.log('🔧 Mode développement - Analytics en mode simulation');
+    } else {
+        // Mode production - Chargement conditionnel
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-HMHF43YF7N';
+        script.onerror = function() {
+            console.log('❌ Google Analytics non chargé - ID potentiellement invalide');
         };
-} else {
-    // Mode production
-    gtag('js', new Date());
-    gtag('config', 'G-HMHF43YF7N', {
-        debug_mode: true,
-        page_title: document.title,
-        page_location: window.location.href
-    });
-}
-    // ===== FONCTIONS DE TRACKING ANALYTICS =====
+        document.head.appendChild(script);
+        
+        // Configuration de base
+        gtag('js', new Date());
+        gtag('config', 'G-HMHF43YF7N', {
+            debug_mode: false,
+            page_title: document.title,
+            page_location: window.location.href
+        });
+    }
+
+    // ===== FONCTIONS DE TRACKING ANALYTICS SÉCURISÉES =====
     function trackGAEvent(eventName, parameters) {
         if (typeof gtag === 'function') {
             gtag('event', eventName, parameters);
@@ -2036,17 +2048,17 @@ footer {
     // ===== CORRECTION AFFICHAGE EN TEMPS RÉEL =====
     function updateRewardsDisplay() {
         if (!window.userManager) return;
-        
+
         const stats = window.userManager.getUserStats();
         const display = document.getElementById('rewards-display');
         const amount = document.getElementById('rewards-amount');
         const code = document.getElementById('user-code');
-        
+
         if (display && amount && code) {
             amount.textContent = stats.rewards + ' MRU';
             code.textContent = 'Code: ' + stats.userCode;
             display.style.display = 'block';
-            
+
             // Afficher un message de bienvenue si c'est un nouveau parrainage
             if (stats.hasUsedParrainage && stats.rewards > 0) {
                 setTimeout(() => {
@@ -3448,37 +3460,43 @@ if (window.location.hostname !== 'localhost' &&
     </div>
 
 <script>
-// ===== MENU MOBILE =====
+// ===== MENU MOBILE CORRIGÉ =====
 function initMenuMobile() {
     const toggleBtn = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-menu');
     const overlay = document.querySelector('.menu-overlay');
 
-    toggleBtn.addEventListener('click', () => {
-        menu.classList.toggle('active');
-        overlay.classList.toggle('active');
-        toggleBtn.setAttribute('aria-expanded', menu.classList.contains('active'));
-    });
+    // ✅ CORRECTION : Vérifier si les éléments existent AVANT d'ajouter les events
+    if (toggleBtn && menu && overlay) {
+        toggleBtn.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            toggleBtn.setAttribute('aria-expanded', menu.classList.contains('active'));
+        });
 
-    overlay.addEventListener('click', () => {
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-    });
-
-    // Fermer le menu au clic sur un lien
-    menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+        overlay.addEventListener('click', () => {
             menu.classList.remove('active');
             overlay.classList.remove('active');
             toggleBtn.setAttribute('aria-expanded', 'false');
         });
-    });
+
+        // Fermer le menu au clic sur un lien
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+    // ✅ Si les éléments n'existent pas, pas d'erreur - silence is golden
 }
+
 // ✅ APPEL SÉCURISÉ - Menu mobile seulement si éléments existent
 document.addEventListener('DOMContentLoaded', function() {
     initMenuMobile();
 });
+
         // ===== WISHLIST =====
         function toggleWishlist(productId) {
             const index = wishlistItems.indexOf(productId);
@@ -7466,8 +7484,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
   </script>
-<!-- Corrections permanentes -->
-    <script src="corrections-essentielles.js"></script>
+<!-- Corrections permanentes - TEMPORAIREMENT DÉSACTIVÉ -->
+<!-- <script src="corrections-essentielles.js"></script> -->
+<script>
+// 🔧 TEMPORAIRE : Fichier corrections-essentielles.js désactivé
+console.log('✅ Fichier corrections-essentielles.js temporairement désactivé');
+</script>
 <script>
 // ===== DÉTECTION ET OPTIMISATION MOBILE =====
 function optimizeForMobile() {
