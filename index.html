@@ -3764,11 +3764,14 @@ if ('serviceWorker' in navigator) {
     <!-- Intégration panier STABLE -->
     <script src="js/secure/panier-integration-stable.js"></script>
     
+<!-- Script Firebase corrigé -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
     import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-    // Configuration Firebase - utilise ton projet andu-xara-online-counter
+    console.log('🚀 Initialisation du vrai compteur Firebase...');
+
+    // Configuration Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyBjzBW5ADllWk2292Xv1C3mlm4X08XyknM",
         authDomain: "andu-xara-online-counter.firebaseapp.com",
@@ -3783,9 +3786,6 @@ if ('serviceWorker' in navigator) {
     // Initialiser Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
- <!-- Correctif Compteur Utilisateurs -->
-    <script src="js/secure/user-counter-fix.js"></script>
-    console.log('🚀 Initialisation du vrai compteur Firebase...');
 
     // Créer un ID unique pour cet utilisateur
     const userId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -3793,7 +3793,10 @@ if ('serviceWorker' in navigator) {
 
     // Fonction pour mettre à jour l'affichage
     function updateCounterDisplay(count) {
-        document.getElementById('visitorCount').textContent = count;
+        const counterElement = document.getElementById('visitorCount');
+        if (counterElement) {
+            counterElement.textContent = count;
+        }
         console.log('👥 Vrais utilisateurs en ligne:', count);
     }
 
@@ -3846,9 +3849,7 @@ if ('serviceWorker' in navigator) {
         }
     }
 
-    // Maintenir la connexion active AVEC GESTION D'ERREURS
-    setInterval(() => {
-        try {
+    // Maintenir la connexion active
     setInterval(() => {
         try {
             set(userRef, {
@@ -3861,7 +3862,6 @@ if ('serviceWorker' in navigator) {
             console.warn("⚠️ Erreur mise à jour connexion:", error);
         }
     }, 30000);
-
 </script>
 <script>
 // === COMPTE À REBOURS AMÉLIORÉ ===
