@@ -1,0 +1,12 @@
+{
+  "parrainId": "17apXmjUgNahSdAShQHD78Fld8u2",
+  "parrainCode": "PARRAIN001",
+  "parrainName": "cheikhou",
+  "parrainEmail": "cheikhdiabira2408@gmail.com",
+  "filleulId": "filleul_test_001",
+  "filleulEmail": "filleul@example.com",
+  "statut": "actif",
+  "createdAt": "2025-01-23T10:00:00Z",
+  "recompense": 50,
+  "type": "parrainage_admin"
+}

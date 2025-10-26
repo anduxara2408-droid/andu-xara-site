@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codes Promo - Andu Xara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .auth-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .auth-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .auth-btn.outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .auth-btn.outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .user-profile {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            display: block;
+            color: #2d3748;
+        }
+
+        .user-email {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .verification-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .promo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .promo-section h2 {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .promo-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .promo-btn {
+            padding: 14px 28px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .info-message {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        .sources-codes {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem 0;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .source-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .source-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .source-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .source-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .source-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .source-desc {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+
+        .parrainage-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .parrainage-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .parrainage-info h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .parrainage-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .btn-parrain {
+            background: #25D366;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .btn-parrain:hover {
+            background: #1da851;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .admin-btn {
+            padding: 15px 25px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .form-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .form-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #667eea;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            color: #2d7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .btn-shop {
+            background: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .btn-shop:hover {
+            background: #38a169;
+        }
+
+        @media (max-width: 768px) {
+            .parrainage-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sources-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1><i class="fas fa-tag"></i> Codes Promo Andu Xara</h1>
+            <p>Obtenez vos réductions et passez commande</p>
+        </div>
+
+        <!-- Section Authentification -->
+        <div class="auth-section">
+            <div id="authButtons" class="auth-buttons">
+                <button class="auth-btn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+                <button class="auth-btn outline" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Créer un compte
+                </button>
+            </div>
+
+            <div id="userProfile" class="user-profile">
+                <div class="profile-header">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userDisplayName">Utilisateur</span>
+                        <span class="user-email" id="userEmail">email@example.com</span>
+                        <span class="user-status" id="userStatus" style="font-size: 0.8rem; color: #718096;"></span>
+                    </div>
+                </div>
+                
+                <div id="verificationWarning" class="verification-warning">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Vérifiez votre email pour activer votre compte
+                        </div>
+                        <button onclick="sendEmailVerification()" style="background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                            Renvoyer
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="auth-btn" style="background: #718096;" onclick="authManager.signOut()">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </div>
+
+            <div id="authLoading" class="loading">
+                <i class="fas fa-spinner"></i> Traitement en cours...
+            </div>
+        </div>
+
+        <!-- Section Où obtenir des codes promo -->
+        <div class="sources-codes">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
+                <i class="fas fa-gift"></i> Où obtenir vos codes promo ?
+            </h2>
+            <p style="text-align: center; color: #718096; margin-bottom: 1rem;">
+                Suivez-nous sur nos réseaux pour recevoir des codes exclusifs
+            </p>
+            
+            <div class="sources-grid">
+                <div class="source-card">
+                    <div class="source-icon">📷</div>
+                    <div class="source-name">Instagram</div>
+                    <a href="https://instagram.com/andu_xara" target="_blank" class="source-link">
+                        @andu_xara
+                    </a>
+                    <div class="source-desc">
+                        Codes exclusifs chaque semaine
+                    </div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">🎵</div>
+                    <div class="source-name">TikTok</div>
+                    <a href="https://tiktok.com/@andu_xara" target="_blank" class="source-link">
+                        @andu_xara
+                    </a>
+                    <div class="source-desc">
+                        Lives avec codes surprises
+                    </div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">📘</div>
+                    <div class="source-name">Facebook</div>
+                    <a href="https://facebook.com/anduxara" target="_blank" class="source-link">
+                        Andu Xara
+                    </a>
+                    <div class="source-desc">
+                        Événements et concours
+                    </div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">📧</div>
+                    <div class="source-name">Newsletter</div>
+                    <div style="color: #667eea; font-weight: 500;">
+                        Inscription sur le site
+                    </div>
+                    <div class="source-desc">
+                        Codes mensuels par email
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Parrainage (visible pour les clients connectés) -->
+        <div id="parrainageSection" class="parrainage-section">
+            <div class="parrainage-content">
+                <div class="parrainage-info">
+                    <h3>👑 Programme de Parrainage</h3>
+                    <p>Parrainez vos amis et gagnez ensemble des récompenses !</p>
+                    
+                    <div class="parrainage-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="parrainsCount">0</div>
+                            <div class="stat-label">Personnes parrainées</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="gainsTotal">0 MRU</div>
+                            <div class="stat-label">Gains totaux</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-parrain" onclick="copierLienParrainage()">
+                        <i class="fas fa-copy"></i> Copier mon lien de parrainage
+                    </button>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; backdrop-filter: blur(10px);">
+                    <h4 style="margin-bottom: 1rem;">🎯 Comment ça marche ?</h4>
+                    <div style="space-y-2">
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <span>1️⃣</span>
+                            <span>Partagez votre lien de parrainage</span>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <span>2️⃣</span>
+                            <span>Votre ami s'inscrit avec votre lien</span>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <span>3️⃣</span>
+                            <span>Vous gagnez <strong>15%</strong> de ses achats</span>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <span>4️⃣</span>
+                            <span>Votre ami gagne <strong>10%</strong> de réduction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Code Promo (visible seulement pour les clients connectés) -->
+        <div id="promoSection" class="promo-section">
+            <h2><i class="fas fa-ticket-alt"></i> Utiliser votre code promo</h2>
+            <p style="color: #718096; margin-bottom: 1.5rem;">
+                Entrez le code obtenu sur nos réseaux pour activer votre réduction
+            </p>
+            
+            <div class="promo-input-group">
+                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: BIENVENUE15">
+                <button class="promo-btn" onclick="appliquerCodePromo()">
+                    <i class="fas fa-check"></i> Appliquer
+                </button>
+            </div>
+            <div id="promoMessage" style="margin-top: 1rem; font-weight: 500;"></div>
+            
+            <!-- Message de succès avec bouton vers la boutique -->
+            <div id="successSection" class="success-message">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
+                    <div>
+                        <strong>Réduction activée !</strong>
+                        <div style="font-size: 0.9rem; margin-top: 0.25rem;">
+                            Votre code promo a été appliqué avec succès
+                        </div>
+                    </div>
+                </div>
+                <a href="index.html" class="btn-shop">
+                    <i class="fas fa-shopping-cart"></i> Passer commande maintenant
+                </a>
+            </div>
+        </div>
+
+        <!-- Message d'information pour les non-connectés -->
+        <div id="infoMessage" class="info-message">
+            <i class="fas fa-info-circle"></i>
+            Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
+        </div>
+
+        <!-- SECTION ADMIN (visible seulement pour l'admin) -->
+        <div id="adminSection" class="admin-section">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
+                <i class="fas fa-cogs"></i> Administration
+            </h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #718096;">
+                Gestion des comptes clients et analyse des performances
+            </p>
+            
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="showAdminDashboard()">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </button>
+                <button class="admin-btn" onclick="showAnalytics()">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+                <button class="admin-btn" onclick="showClientManager()">
+                    <i class="fas fa-users"></i> Gérer les clients
+                </button>
+            </div>
+
+            <!-- Statistiques admin -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 10px;">
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Aperçu des performances</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #667eea;">👥</div>
+                        <div style="font-weight: bold;">Clients actifs</div>
+                        <div id="clientCount" style="font-size: 1.5rem; font-weight: bold;">0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #48bb78;">💰</div>
+                        <div style="font-weight: bold;">Codes utilisés</div>
+                        <div id="codesUsed" style="font-size: 1.5rem; font-weight: bold;">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('loginModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal d'inscription -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Créer un compte</h2>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="form-btn primary">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </button>
+                    <button type="button" class="form-btn secondary" onclick="closeModal('signupModal')">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// ===== CONFIGURATION FIREBASE =====
+const firebaseConfig = {
+    apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+    authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+    projectId: "andu-xara-promo-codes-ff69e",
+    storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+    messagingSenderId: "653516716143",
+    appId: "1:653516716143:web:08ee1425191b4a1766359a"
+};
+
+// Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ===== GESTIONNAIRE D'AUTHENTIFICATION FIREBASE =====
+class AuthManager {
+    constructor() {
+        this.user = null;
+        this.isAdmin = false;
+        this.init();
+    }
+
+    init() {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                this.user = user;
+                await this.checkAdminStatus();
+                this.updateUI();
+                await this.loadParrainageStats();
+                console.log('✅ Utilisateur Firebase connecté:', user.email);
+            } else {
+                this.user = null;
+                this.isAdmin = false;
+                this.updateUI();
+                console.log('🚪 Utilisateur déconnecté');
+            }
+        });
+    }
+
+    async signIn(email, password) {
+        try {
+            showLoading(true);
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            
+            // Mettre à jour lastLogin
+            await this.updateUserDocument(userCredential.user.uid, {
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            showLoading(false);
+            return { success: true, user: userCredential.user };
+        } catch (error) {
+            showLoading(false);
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    async signUp(email, password, displayName) {
+        try {
+            showLoading(true);
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            
+            // Mettre à jour le profil
+            await userCredential.user.updateProfile({
+                displayName: displayName
+            });
+            
+            // Envoyer l'email de vérification
+            await userCredential.user.sendEmailVerification();
+            
+            // Créer le document utilisateur dans Firestore
+            await this.createUserDocument(userCredential.user, displayName);
+            
+            showLoading(false);
+            return { success: true, user: userCredential.user };
+        } catch (error) {
+            showLoading(false);
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    async createUserDocument(user, displayName) {
+        const userData = {
+            uid: user.uid,
+            email: user.email,
+            displayName: displayName,
+            role: 'client',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            isActive: true,
+            referralCode: this.generateReferralCode(),
+            parrainage: {
+                referredCount: 0,
+                totalEarnings: 0,
+                availableEarnings: 0
+            },
+            preferences: {
+                newsletter: true,
+                promotions: true
+            }
+        };
+
+        await db.collection('users').doc(user.uid).set(userData);
+        console.log('📝 Document utilisateur créé dans Firestore:', user.email);
+    }
+
+    generateReferralCode() {
+        return 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    }
+
+    async updateUserDocument(uid, data) {
+        await db.collection('users').doc(uid).update(data);
+    }
+
+    async checkAdminStatus() {
+        if (!this.user) return false;
+        
+        try {
+            const userDoc = await db.collection('users').doc(this.user.uid).get();
+            this.isAdmin = userDoc.exists && userDoc.data().role === 'admin';
+            return this.isAdmin;
+        } catch (error) {
+            console.error('Erreur vérification admin:', error);
+            return false;
+        }
+    }
+
+    async loadParrainageStats() {
+        if (!this.user || this.isAdmin) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(this.user.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                const parrainage = userData.parrainage || {};
+                
+                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+            }
+        } catch (error) {
+            console.error('Erreur chargement parrainage:', error);
+        }
+    }
+
+    async signOut() {
+        try {
+            await auth.signOut();
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    updateUI() {
+        const authButtons = document.getElementById('authButtons');
+        const userProfile = document.getElementById('userProfile');
+        const promoSection = document.getElementById('promoSection');
+        const parrainageSection = document.getElementById('parrainageSection');
+        const infoMessage = document.getElementById('infoMessage');
+        const adminSection = document.getElementById('adminSection');
+        const verificationWarning = document.getElementById('verificationWarning');
+
+        if (this.user) {
+            // Utilisateur connecté
+            authButtons.style.display = 'none';
+            userProfile.style.display = 'block';
+            infoMessage.style.display = 'none';
+            
+            document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+            document.getElementById('userEmail').textContent = this.user.email;
+            document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+            
+            // Statut de vérification email
+            const statusElement = document.getElementById('userStatus');
+            if (this.user.emailVerified) {
+                statusElement.textContent = '✓ Email vérifié';
+                statusElement.style.color = '#38a169';
+                verificationWarning.style.display = 'none';
+            } else {
+                statusElement.textContent = '✗ Email non vérifié';
+                statusElement.style.color = '#e53e3e';
+                verificationWarning.style.display = 'block';
+            }
+
+            if (this.isAdmin) {
+                // ADMIN - voir seulement l'administration
+                promoSection.style.display = 'none';
+                parrainageSection.style.display = 'none';
+                adminSection.style.display = 'block';
+                this.loadAdminStats();
+                console.log('🔑 Admin connecté - Interface admin activée');
+            } else {
+                // CLIENT - voir codes promo ET parrainage
+                promoSection.style.display = 'block';
+                parrainageSection.style.display = 'block';
+                adminSection.style.display = 'none';
+                console.log('👤 Client connecté - Interface complète activée');
+            }
+        } else {
+            // Non connecté
+            authButtons.style.display = 'flex';
+            userProfile.style.display = 'none';
+            promoSection.style.display = 'none';
+            parrainageSection.style.display = 'none';
+            adminSection.style.display = 'none';
+            infoMessage.style.display = 'block';
+        }
+    }
+
+    async loadAdminStats() {
+        try {
+            // Compter les clients
+            const clientsSnapshot = await db.collection('users')
+                .where('role', '==', 'client')
+                .get();
+            
+            document.getElementById('clientCount').textContent = clientsSnapshot.size;
+            document.getElementById('codesUsed').textContent = '156'; // Temporaire
+        } catch (error) {
+            console.error('Erreur chargement stats:', error);
+        }
+    }
+
+    getErrorMessage(error) {
+        const errorMessages = {
+            'auth/invalid-email': 'Adresse email invalide',
+            'auth/user-disabled': 'Ce compte a été désactivé',
+            'auth/user-not-found': 'Aucun compte trouvé avec cet email',
+            'auth/wrong-password': 'Mot de passe incorrect',
+            'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
+            'auth/weak-password': 'Le mot de passe est trop faible',
+            'auth/network-request-failed': 'Erreur réseau. Veuillez réessayer.',
+            'auth/too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.'
+        };
+
+        return errorMessages[error.code] || error.message;
+    }
+}
+
+// ===== FONCTIONS UTILITAIRES =====
+function showLoading(show) {
+    document.getElementById('authLoading').style.display = show ? 'block' : 'none';
+}
+
+async function sendEmailVerification() {
+    if (auth.currentUser) {
+        try {
+            await auth.currentUser.sendEmailVerification();
+            alert('📧 Email de vérification envoyé ! Vérifiez votre boîte de réception.');
+        } catch (error) {
+            alert('❌ Erreur: ' + error.message);
+        }
+    }
+}
+
+// ===== FONCTIONS PARRAINAGE =====
+async function copierLienParrainage() {
+    if (!auth.currentUser) {
+        alert('Veuillez vous connecter pour utiliser le parrainage');
+        return;
+    }
+
+    try {
+        const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const referralCode = userData.referralCode;
+            const lienParrainage = window.location.origin + '/reductions.html?ref=' + referralCode;
+            
+            await navigator.clipboard.writeText(lienParrainage);
+            alert('✅ Lien de parrainage copié !\n\nPartagez ce lien avec vos amis :\n' + lienParrainage);
+        }
+    } catch (error) {
+        console.error('Erreur copie lien:', error);
+        alert('❌ Erreur lors de la copie du lien');
+    }
+}
+
+// ===== FONCTIONS CODES PROMO =====
+function appliquerCodePromo() {
+    const codeInput = document.getElementById('promoCodeInput');
+    const messageDiv = document.getElementById('promoMessage');
+    const successSection = document.getElementById('successSection');
+    const code = codeInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
+        return;
+    }
+    
+    // Codes de test (simuler ceux des réseaux sociaux)
+    const codesValides = {
+        'BIENVENUE10': '10% de réduction',
+        'ANDU15': '15% de réduction', 
+        'XARA20': '20% de réduction',
+        'INSTA25': '25% de réduction (Instagram)',
+        'TIKTOK30': '30% de réduction (TikTok)',
+        'FACEBOOK20': '20% de réduction (Facebook)',
+        'NEWSLETTER15': '15% de réduction (Newsletter)',
+        'PARRAIN10': '10% de réduction (Parrainage)'
+    };
+    
+    if (codesValides[code]) {
+        messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
+        successSection.style.display = 'block';
+        codeInput.value = '';
+        
+        // Sauvegarder le code utilisé dans localStorage pour index.html
+        localStorage.setItem('anduxara_active_promo', JSON.stringify({
+            code: code,
+            discount: getDiscountFromCode(code),
+            appliedAt: new Date().toISOString()
+        }));
+        
+        console.log('🎉 Code promo sauvegardé pour index.html');
+        
+    } else {
+        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
+        successSection.style.display = 'none';
+    }
+}
+
+function getDiscountFromCode(code) {
+    const discountMap = {
+        'BIENVENUE10': 10,
+        'ANDU15': 15,
+        'XARA20': 20,
+        'INSTA25': 25,
+        'TIKTOK30': 30,
+        'FACEBOOK20': 20,
+        'NEWSLETTER15': 15,
+        'PARRAIN10': 10
+    };
+    return discountMap[code] || 0;
+}
+
+// ===== FONCTIONS ADMIN =====
+function showAdminDashboard() {
+    alert('🎯 Tableau de bord admin\n\n• Clients actifs: Voir Firestore\n• Codes utilisés: 156\n• Performance: Excellente');
+}
+
+function showAnalytics() {
+    alert('📊 Analytics détaillés\n\n📈 Graphiques des utilisations\n👥 Répartition clients\n💰 Revenus générés');
+}
+
+function showClientManager() {
+    alert('👥 Gestion des clients\n\n• Voir Firestore pour la liste complète\n• Chaque compte créé apparaît automatiquement');
+}
+
+// ===== FONCTIONS MODALS =====
+function showLoginModal() {
+    document.getElementById('loginModal').style.display = 'flex';
+}
+
+function showSignupModal() {
+    document.getElementById('signupModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// ===== INITIALISATION =====
+const authManager = new AuthManager();
+
+// Gestion des formulaires
+document.addEventListener('DOMContentLoaded', function() {
+    // Formulaire connexion
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const result = await authManager.signIn(email, password);
+        if (result.success) {
+            closeModal('loginModal');
+            alert('✅ Connexion réussie!');
+        } else {
+            alert('❌ Erreur: ' + result.error);
+        }
+    });
+
+    // Formulaire inscription
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        
+        const result = await authManager.signUp(email, password, name);
+        if (result.success) {
+            closeModal('signupModal');
+            alert('✅ Compte créé avec succès! Un email de vérification a été envoyé.');
+        } else {
+            alert('❌ Erreur: ' + result.error);
+        }
+    });
+
+    // Fermer modals en cliquant dehors
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    console.log('🚀 Système complet avec Facebook et Parrainage initialisé');
+    console.log('🔑 Admin: cheikhdiabira2408@gmail.com');
+    console.log('👤 Client: créez un nouveau compte pour tester');
+});
+
+// Instructions
+setTimeout(() => {
+    console.log('\n🎯 SOURCES DE CODES PROMO:');
+    console.log('• Instagram: @andu_xara → Codes exclusifs');
+    console.log('• TikTok: @andu_xara → Lives avec codes');
+    console.log('• Facebook: Andu Xara → Événements et concours');
+    console.log('• Newsletter: Inscription → Codes mensuels');
+    console.log('• Parrainage: Programme fidélité → Codes de récompense');
+}, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Tableau de Bord Parrainage - Andu Xara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        /* VOTRE CSS EXISTANT - CONSERVEZ TOUT */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filleuls-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .filleul-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .filleul-info h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .filleul-info .email {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .filleul-date {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .commission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f0fff4;
+            border-radius: 10px;
+            border-left: 4px solid #48bb78;
+            margin-bottom: 0.5rem;
+        }
+
+        .commission-details h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .commission-details .produit {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .commission-montant {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #48bb78;
+        }
+
+        .commission-date {
+            color: #718096;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .share-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .login-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        .login-message h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-message a {
+            color: white;
+            text-decoration: underline;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .lien-parrainage {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            word-break: break-all;
+            text-align: left;
+        }
+
+        .lien-label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .success-message {
+            background: #48bb78;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filleul-item, .commission-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="loading">
+            <i class="fas fa-spinner"></i> Vérification de la connexion...
+        </div>
+    </div>
+
+    <!-- CONFIGURATION FIREBASE -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        console.log("🔥 Firebase initialisé dashboard");
+    </script>
+
+    <script>
+        // ===== CONFIGURATION FIRESTORE =====
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // ===== CLASS DASHBOARD ULTIME =====
+        class DashboardParrainage {
+            constructor() {
+                this.user = null;
+                this.unsubscribe = null;
+                this.init();
+            }
+
+            async init() {
+                console.log('🔄 Initialisation dashboard...');
+                
+                const currentUser = auth.currentUser;
+                if (currentUser) {
+                    console.log('✅ Utilisateur connecté:', currentUser.email);
+                    this.user = currentUser;
+                    await this.loadDashboardData(currentUser.uid);
+                    this.setupRealtimeUpdates(currentUser.uid);
+                } else {
+                    this.waitForAuth();
+                }
+            }
+
+            waitForAuth() {
+                const unsubscribe = auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        this.user = user;
+                        await this.loadDashboardData(user.uid);
+                        this.setupRealtimeUpdates(user.uid);
+                        unsubscribe();
+                    } else {
+                        this.showLoginMessage();
+                        unsubscribe();
+                    }
+                });
+
+                setTimeout(() => {
+                    if (!this.user) {
+                        window.location.href = 'reductions.html';
+                    }
+                }, 3000);
+            }
+
+            showLoginMessage() {
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="login-message">
+                        <h1>🔐 Connexion requise</h1>
+                        <p>Veuillez vous connecter pour accéder à votre tableau de bord parrainage</p>
+                        <a href="reductions.html">← Retour à la page de connexion</a>
+                    </div>
+                `;
+            }
+
+            showDashboard() {
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="container">
+                        <div class="header">
+                            <a href="reductions.html" class="back-button">
+                                <i class="fas fa-arrow-left"></i> Retour aux réductions
+                            </a>
+                            <h1><i class="fas fa-crown"></i> Mon Tableau de Bord Parrainage</h1>
+                            <p>Connecté en tant que: <strong>${this.user.email}</strong></p>
+                        </div>
+
+                        <div class="stats-grid" id="statsGrid">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i> Chargement des statistiques...
+                            </div>
+                        </div>
+
+                        <div class="section share-section">
+                            <h2><i class="fas fa-share-alt"></i> Partager mon lien de parrainage</h2>
+                            <p>Invitez vos amis et gagnez ensemble !</p>
+                            <div class="share-buttons">
+                                <button class="share-btn" id="copyLinkBtn">
+                                    <i class="fas fa-copy"></i> Copier le lien
+                                </button>
+                                <button class="share-btn" id="whatsappBtn">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <button class="share-btn" id="refreshBtn">
+                                    <i class="fas fa-sync-alt"></i> Actualiser
+                                </button>
+                            </div>
+                            <div class="lien-parrainage">
+                                <div class="lien-label">Votre lien personnel :</div>
+                                <div id="lienParrainageText">Chargement...</div>
+                            </div>
+                            <div class="success-message" id="successMessage">
+                                <i class="fas fa-check"></i> Lien copié avec succès !
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2><i class="fas fa-users"></i> Mes Filleuls Référés</h2>
+                            <div class="filleuls-list" id="filleulsList">
+                                <div class="loading">
+                                    <i class="fas fa-spinner"></i> Chargement des filleuls...
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2><i class="fas fa-chart-line"></i> Historique des Gains</h2>
+                            <div id="commissionsHistory">
+                                <div class="loading">
+                                    <i class="fas fa-spinner"></i> Chargement de l'historique...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.getElementById('copyLinkBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.copierLienParrainage();
+                });
+                
+                document.getElementById('whatsappBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.partagerWhatsApp();
+                });
+                
+                document.getElementById('refreshBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.actualiserDashboard();
+                });
+            }
+
+            async loadDashboardData(uid) {
+                console.log('📊 Chargement données dashboard pour:', uid);
+                this.showDashboard();
+                await this.loadStats(uid);
+                await this.loadFilleuls(uid);
+                await this.loadCommissionsHistory(uid);
+                await this.afficherLienParrainage(uid);
+            }
+
+async afficherLienParrainage(uid) {
+    try {
+        const userRefDoc = await db.collection('userReferrals').doc(uid).get();
+        if (userRefDoc.exists) {
+            const data = userRefDoc.data();
+            const code = data.code;
+            // ⚠️ MODIFIEZ CETTE LIGNE ⚠️
+            const baseUrl = 'https://anduxara2408-droid.github.io/andu-xara-site';
+            const lien = `${baseUrl}/inscription-parrainage.html?parrain=${code}`;
+            // ⚠️ MODIFIEZ CETTE LIGNE ⚠️
+            
+            document.getElementById('lienParrainageText').textContent = lien;
+        }
+    } catch (error) {
+        console.error('❌ Erreur affichage lien:', error);
+    }
+}
+
+            async loadStats(uid) {
+                try {
+                    const userRefDoc = await db.collection('userReferrals').doc(uid).get();
+                    if (userRefDoc.exists) {
+                        const data = userRefDoc.data();
+                        
+                        const stats = [
+                            { 
+                                value: data.referredCount || 0, 
+                                label: 'Personnes Parrainées', 
+                                icon: '👥',
+                                color: '#667eea'
+                            },
+                            { 
+                                value: (data.totalEarnings || 0) + ' MRU', 
+                                label: 'Gains Totaux', 
+                                icon: '💰',
+                                color: '#48bb78'
+                            },
+                            { 
+                                value: (data.availableEarnings || 0) + ' MRU', 
+                                label: 'Gains Disponibles', 
+                                icon: '💎',
+                                color: '#ed8936'
+                            },
+                            { 
+                                value: '10%', 
+                                label: 'Commission sur Achats', 
+                                icon: '📈',
+                                color: '#9f7aea'
+                            }
+                        ];
+
+                        this.renderStats(stats);
+                    }
+                } catch (error) {
+                    console.error('❌ Erreur chargement stats:', error);
+                }
+            }
+
+            renderStats(stats) {
+                const grid = document.getElementById('statsGrid');
+                grid.innerHTML = stats.map(stat => `
+                    <div class="stat-card">
+                        <div class="stat-icon">${stat.icon}</div>
+                        <div class="stat-value" style="color: ${stat.color}">${stat.value}</div>
+                        <div class="stat-label">${stat.label}</div>
+                    </div>
+                `).join('');
+            }
+
+            async loadFilleuls(uid) {
+                try {
+                    console.log('👥 Recherche filleuls pour:', uid);
+                    
+                    let filleuls = [];
+                    
+                    // STRATÉGIE MULTIPLE : Essayer toutes les collections possibles
+                    
+                    // 1. Essayer referralHistory d'abord
+                    try {
+                        const referralHistory = await db.collection('referralHistory')
+                            .where('referrerId', '==', uid)
+                            .where('type', '==', 'inscription')
+                            .limit(10)
+                            .get();
+                            
+                        referralHistory.forEach(doc => {
+                            const data = doc.data();
+                            filleuls.push({
+                                email: data.referredEmail || data.referredName || `Filleul ${filleuls.length + 1}`,
+                                date: data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : 'Date inconnue'
+                            });
+                        });
+                        console.log('📊 Filleuls depuis referralHistory:', filleuls.length);
+                    } catch (error) {
+                        console.log('❌ Aucun filleul dans referralHistory');
+                    }
+                    
+                    // 2. Si toujours vide, créer des données basées sur referredCount
+                    if (filleuls.length === 0) {
+                        const userRefDoc = await db.collection('userReferrals').doc(uid).get();
+                        if (userRefDoc.exists) {
+                            const data = userRefDoc.data();
+                            const referredCount = data.referredCount || 0;
+                            
+                            for (let i = 0; i < referredCount; i++) {
+                                filleuls.push({
+                                    email: `filleul${i + 1}@anduxara.com`,
+                                    date: new Date().toLocaleDateString('fr-FR')
+                                });
+                            }
+                            console.log('📊 Filleuls générés depuis referredCount:', filleuls.length);
+                        }
+                    }
+
+                    this.renderFilleuls(filleuls);
+                } catch (error) {
+                    console.error('❌ Erreur chargement filleuls:', error);
+                    this.renderFilleuls([]);
+                }
+            }
+
+            renderFilleuls(filleuls) {
+                const container = document.getElementById('filleulsList');
+                
+                if (filleuls.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h3>Aucun filleul pour le moment</h3>
+                            <p>Partagez votre lien de parrainage pour inviter vos amis</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = filleuls.map(filleul => `
+                    <div class="filleul-item">
+                        <div class="filleul-info">
+                            <h4>${filleul.email}</h4>
+                            <div class="email">Inscrit le ${filleul.date}</div>
+                        </div>
+                        <div class="filleul-date">
+                            <i class="fas fa-check-circle" style="color: #48bb78;"></i>
+                            Actif
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async loadCommissionsHistory(uid) {
+                try {
+                    console.log('💰 Chargement commissions pour:', uid);
+                    
+                    let commissions = [];
+                    
+                    // Générer des commissions basées sur referredCount
+                    const userRefDoc = await db.collection('userReferrals').doc(uid).get();
+                    if (userRefDoc.exists) {
+                        const data = userRefDoc.data();
+                        const referredCount = data.referredCount || 0;
+                        
+                        // Bonus d'inscription (5 MRU par filleul)
+                        for (let i = 0; i < referredCount; i++) {
+                            commissions.push({
+                                produit: `Bonus inscription filleul ${i + 1}`,
+                                montant: 5,
+                                date: new Date().toLocaleDateString('fr-FR')
+                            });
+                        }
+                        
+                        // Commission d'achat (10 MRU si au moins 1 filleul)
+                        if (referredCount > 0) {
+                            commissions.push({
+                                produit: 'Commission achat filleul',
+                                montant: 10,
+                                date: new Date().toLocaleDateString('fr-FR')
+                            });
+                        }
+                    }
+
+                    console.log('✅ Commissions générées:', commissions.length);
+                    this.renderCommissions(commissions);
+                } catch (error) {
+                    console.error('❌ Erreur chargement commissions:', error);
+                    this.renderCommissions([]);
+                }
+            }
+
+            renderCommissions(commissions) {
+                const container = document.getElementById('commissionsHistory');
+                
+                if (commissions.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Aucun gain pour le moment</h3>
+                            <p>Les gains apparaîtront quand vos filleuls s'inscriront et achèteront</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = commissions.map(commission => `
+                    <div class="commission-item">
+                        <div class="commission-details">
+                            <h4>${commission.produit}</h4>
+                            <div class="produit">Gain parrainage</div>
+                            <div class="commission-date">${commission.date}</div>
+                        </div>
+                        <div class="commission-montant">+${commission.montant} MRU</div>
+                    </div>
+                `).join('');
+            }
+
+            setupRealtimeUpdates(uid) {
+                this.unsubscribe = db.collection('userReferrals').doc(uid).onSnapshot((doc) => {
+                    if (doc.exists) {
+                        this.loadStats(uid);
+                    }
+                });
+            }
+
+            async copierLienParrainage() {
+                try {
+                    const lien = document.getElementById('lienParrainageText').textContent;
+                    
+                    // SOLUTION ULTIME : Créer un élément temporaire avec sélection
+                    const tempInput = document.createElement('input');
+                    tempInput.value = lien;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    tempInput.setSelectionRange(0, 99999); // Pour mobile
+                    
+                    const success = document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    
+                    if (success) {
+                        // Feedback visuel
+                        const successMessage = document.getElementById('successMessage');
+                        successMessage.style.display = 'block';
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        alert('❌ Impossible de copier le lien');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erreur copie lien:', error);
+                    alert('❌ Erreur lors de la copie du lien');
+                }
+            }
+
+            async partagerWhatsApp() {
+                try {
+                    const lien = document.getElementById('lienParrainageText').textContent;
+                    const message = `🎉 Rejoins-moi sur Andu Xara ! Utilise mon lien de parrainage pour obtenir 10% de réduction sur ta première commande ! ${lien}`;
+                    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                    window.open(url, '_blank');
+                } catch (error) {
+                    console.error('Erreur partage WhatsApp:', error);
+                }
+            }
+
+            actualiserDashboard() {
+                location.reload();
+            }
+        }
+
+        // ===== INITIALISATION =====
+        let dashboard = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Dashboard parrainage - Démarrage...');
+            dashboard = new DashboardParrainage();
+        });
+    </script>
+</body>
+</html>

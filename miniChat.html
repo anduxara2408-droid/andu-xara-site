@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Andu-Xara</title>
+    <style>
+        /* Coin flottant */
+        #miniMessage {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2000;
+            transition: transform 0.2s;
+        }
+        #miniMessage:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Fenêtre de chat */
+        #miniChatWindow {
+            position: fixed;
+            bottom: 20px;
+            right: 70px;
+            width: 320px;
+            max-height: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            z-index: 2001;
+        }
+
+        #miniChatHeader {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        #miniChatMessages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+
+        .miniMessage.user {
+            background: #667eea;
+            color: white;
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 12px;
+            text-align: right;
+        }
+
+        .miniMessage.bot {
+            background: #e2e8f0;
+            color: #1f2937;
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        #miniChatInputArea {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        #miniChatInput {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            border-radius: 0;
+        }
+
+        #miniChatSend {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        #miniChatSend:hover {
+            background: #556cd6;
+        }
+    </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S9CBS21SVR');
+</script>
+
+</head>
+<body>
+
+<!-- Coin flottant -->
+<div id="miniMessage" title="Chat avec Andu-Xara">💬</div>
+
+<!-- Fenêtre de chat -->
+<div id="miniChatWindow">
+  <div id="miniChatHeader">💬 Chat avec Andu-Xara</div>
+  <div id="miniChatMessages"></div>
+  <div id="miniChatInputArea">
+    <input type="text" id="miniChatInput" placeholder="Écris ton message...">
+    <button id="miniChatSend">Envoyer</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const miniMessage = document.getElementById("miniMessage");
+    const chatWindow = document.getElementById("miniChatWindow");
+    const chatInput = document.getElementById("miniChatInput");
+    const chatSend = document.getElementById("miniChatSend");
+    const chatMessages = document.getElementById("miniChatMessages");
+
+    const replies = {
+        "bonjour": "Bonjour 👋 ! Je suis votre assistant Andu-Xara. Comment puis-je vous aider ?",
+        "salut": "Salut ! Je suis là pour répondre à vos questions sur nos produits.",
+        "t-shirt": "Nos T-shirts sont en coton premium, disponibles en S, M, L, XL.",
+        "ensemble": "Nos ensembles sont élégants et confortables, disponibles en plusieurs tailles.",
+        "prix": "Nos prix : T-shirts dès 499 Mru, Ensembles dès 599 Mru, Enfants dès 399 Mru.",
+        "livraison": "Nous livrons partout en Mauritanie et en Afrique. Délais : Nouakchott 24-48h, autres villes 3-5 jours.",
+        "paiement": "Paiement via Bankily, Masrvi, Wave, Orange Money et virements bancaires.",
+        "promo": "Promotion : 30% de réduction sur tout le catalogue jusqu'au 31 Décembre 2025 !",
+        "taille": "Tailles disponibles : S, M, L, XL. Besoin d'aide pour choisir ?",
+        "couleur": "Couleurs disponibles : Noir, Blanc, Bleu, Rouge, Vert, Jaune, Orange.",
+        "retour": "Les retours sont possibles sous 7 jours après réception, si le produit est intact.",
+        "contact": "Contact : +222 49 03 76 97 ou anduxara2408@gmail.com"
+    };
+
+    miniMessage.addEventListener("click", () => {
+        chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
+        chatWindow.style.flexDirection = "column";
+    });
+
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "miniMessage " + sender;
+        msgDiv.innerHTML = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+        const text = chatInput.value.trim().toLowerCase();
+        if (!text) return;
+        addMessage(text, "user");
+        chatInput.value = "";
+
+        let reply = "🤖 Désolé, je n'ai pas compris.";
+        for (const key in replies) {
+            if (text.includes(key)) {
+                reply = replies[key];
+                break;
+            }
+        }
+        addMessage(reply, "bot");
+    }
+
+    chatSend.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keypress", e => { if(e.key==="Enter") sendMessage(); });
+});
+</script>
+
+</body>
+</html>

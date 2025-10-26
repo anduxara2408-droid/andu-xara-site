@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vérificateur d'ordre du code</title>
+</head>
+<body>
+    <h1>Vérification de l'ordre du code Andu-Xara</h1>
+    <div id="resultat"></div>
+
+    <script>
+        console.log('🔍 Début de la vérification...');
+        
+        // Liste des éléments à vérifier dans l'ordre
+        const elementsAttendus = [
+            'Variables globales (floatingCart, activePromoCode, promoDiscount)',
+            'Fonction ajouterAuPanier',
+            'Fonction updateFloatingCart', 
+            'Fonction removeFromFloatingCart',
+            'Fonction toggleFloatingCart',
+            'Fonction closeFloatingCart',
+            'Fonction validateAndApplyPromo',
+            'Fonction applyPromoToCart',
+            'Fonction removePromoFromCart',
+            'Fonction updateActivePromoDisplay',
+            'Fonction processFloatingCheckout',
+            'Fonction processWavePayment',
+            'Fonction processBankilyPayment',
+            'Fonction processWhatsAppPayment',
+            'Fonction finaliserCommande',
+            'Fonction integrerFideliteAchat',
+            'DOMContentLoaded'
+        ];
+
+        let resultatHTML = '<h2>Résultat de la vérification :</h2><ul>';
+        let tousCorrects = true;
+
+        // Vérifier les variables globales
+        if (typeof floatingCart !== 'undefined' && 
+            typeof activePromoCode !== 'undefined' && 
+            typeof promoDiscount !== 'undefined') {
+            resultatHTML += '<li style="color: green;">✅ Variables globales définies</li>';
+        } else {
+            resultatHTML += '<li style="color: red;">❌ Variables globales MANQUANTES</li>';
+            tousCorrects = false;
+        }
+
+        // Vérifier les fonctions une par une
+        const fonctions = [
+            'ajouterAuPanier', 'updateFloatingCart', 'removeFromFloatingCart',
+            'toggleFloatingCart', 'closeFloatingCart', 'validateAndApplyPromo',
+            'applyPromoToCart', 'removePromoFromCart', 'updateActivePromoDisplay',
+            'processFloatingCheckout', 'processWavePayment', 'processBankilyPayment',
+            'processWhatsAppPayment', 'finaliserCommande', 'integrerFideliteAchat'
+        ];
+
+        fonctions.forEach(fonction => {
+            if (typeof window[fonction] === 'function') {
+                resultatHTML += `<li style="color: green;">✅ ${fonction} définie</li>`;
+            } else {
+                resultatHTML += `<li style="color: red;">❌ ${fonction} MANQUANTE</li>`;
+                tousCorrects = false;
+            }
+        });
+
+        // Vérifier DOMContentLoaded
+        resultatHTML += '<li style="color: orange;">⚠️ DOMContentLoaded (à vérifier manuellement)</li>';
+
+        resultatHTML += '</ul>';
+
+        if (tousCorrects) {
+            resultatHTML += '<h2 style="color: green;">🎉 TOUT EST EN ORDRE !</h2>';
+        } else {
+            resultatHTML += '<h2 style="color: red;">⚠️ PROBLEMES DETECTES - VOIR CI-DESSUS</h2>';
+        }
+
+        document.getElementById('resultat').innerHTML = resultatHTML;
+        console.log('✅ Vérification terminée');
+    </script>
+</body>
+</html>

@@ -1,5 +1,32 @@
-# Fichiers de sauvegarde et cache
-index-backup*
-*~
+# Fichiers de backup
+*.backup*
+*.backup.*
+*backup_*
+*avant_*
+*before_*
+
+# Fichiers de correction temporaires
+*.sh
+*.md
+*_fix*
+*_patch*
+*_test*
+*_final*
+*_complete*
+*_duplicated*
+*_error*
+*_null*
+
+# Fichiers de debug
+*_debug*
+*_temp*
+*_old*
+*_new*
+
+# Fichiers système
 .DS_Store
-main
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
