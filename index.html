@@ -1802,14 +1802,23 @@ footer {
 }
 /* ===== CORRECTIONS MOBILE PORTRAIT ===== */
 @media (max-width: 768px) and (orientation: portrait) {
-    /* Assistant IA */
+    /* Assistant IA - Correction bouton */
     #ai-input-group {
         flex-direction: column !important;
+        gap: 12px !important;
     }
     
     #ai-send-button {
         width: 100% !important;
+        min-width: auto !important; /* ← CORRECTION IMPORTANTE */
         margin-top: 10px;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    #ai-input {
+        width: 100% !important;
     }
     
     /* Essayage Virtuel */
@@ -1848,6 +1857,23 @@ footer {
 @media (max-width: 480px) {
     #ai-input {
         font-size: 16px !important; /* Empêche le zoom sur iOS */
+        width: 100% !important;
+    }
+    
+    #ai-send-button {
+        min-width: 80px !important;
+        padding: 12px 15px !important;
+        font-size: 14px !important;
+        width: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    #ai-input-group {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        align-items: center !important;
+        width: 100% !important;
     }
     
     .location-input input {
@@ -1855,15 +1881,6 @@ footer {
     }
 }
 
-/* Safe areas pour iPhone avec encoche */
-@supports (padding: max(0px)) {
-    #ai-input-container,
-    #camera-controls-container,
-    .location-input {
-        padding-left: max(15px, env(safe-area-inset-left));
-        padding-right: max(15px, env(safe-area-inset-right));
-    }
-}
 /* ===== CORRECTION EN-TÊTE MOBILE ===== */
 @media (max-width: 768px) {
     header {
@@ -2527,12 +2544,13 @@ if (window.location.hostname !== 'localhost' &&
     }
     
     .cart-panel {
-        width: 320px !important;
-        right: -50px !important;
+        width: 95vw !important; /* ← CORRECTION */
+        right: 10px !important; /* ← CORRECTION */
         bottom: 70px !important;
+        left: auto !important;
+        transform: none !important;
     }
 }
-
 @media (max-width: 480px) {
     .floating-cart {
         bottom: 15px !important;
@@ -2540,15 +2558,15 @@ if (window.location.hostname !== 'localhost' &&
     }
     
     .cart-panel {
-        width: 300px !important;
-        right: -80px !important;
+        width: 92vw !important;
+        right: 4vw !important;
         bottom: 65px !important;
         max-height: 60vh !important;
+        left: auto !important;
     }
 }
-</style>
 
-<script>
+</style>
 
 </script>
 
