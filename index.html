@@ -125,7 +125,118 @@
     <meta name="theme-color" content="#6a11cb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
- 
+
+
+<style>
+/* ===== DESIGN SYSTEM AMÉLIORÉ ===== */
+:root {
+  /* Variables CSS améliorées */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --primary-purple: #667eea;
+  --white: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #666;
+  --font-primary: 'Montserrat', sans-serif;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-xl: 1rem;
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --transition-normal: 0.3s ease;
+}
+
+/* ===== ANIMATIONS AVANCÉES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 2s infinite;
+}
+
+.hover-lift {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ===== RESPONSIVE AMÉLIORÉ ===== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Touch improvements pour mobile */
+@media (max-width: 768px) {
+  .btn, .category-btn, .back-button {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Safe area pour iPhone */
+  .safe-area-padding {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Typographie mobile optimisée */
+  .article-card h2 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+  
+  .article-card p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  .hero-banner {
+    height: 250px;
+  }
+  
+  .banner-text h1 {
+    font-size: 1.5rem;
+  }
+}
+</style> 
 <style>
 /* ===== RESET ET STYLES GLOBAUX ===== */
 * {
@@ -2573,7 +2684,7 @@ if (window.location.hostname !== 'localhost' &&
 <!-- Main Content -->
 <main class="container">
     <!-- Compteur promotion -->
-    <section class="promo-countdown">
+    <section class="promo-countdown animate-fade-in-up">
         <h2>Promotion spéciale se termine bientôt !</h2>
         <div id="countdown">
             <span id="days">00</span>j
@@ -2592,7 +2703,7 @@ if (window.location.hostname !== 'localhost' &&
             </div>
 
 <!-- Code promo amélioré avec intégration panier -->
-<div class="reduction-section">
+<div class="reduction-section animate-fade-in-up">
     <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Code Promo</h3>
     
     <!-- Affichage du code actif -->
@@ -2655,7 +2766,7 @@ if (window.location.hostname !== 'localhost' &&
 <div class="produits-container">
 
 <!-- Produit 1 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/t-shirt-logo-arabe.jpeg" alt="T-shirt Andu-Xara avec logo arabe design exclusif" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2684,7 +2795,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 2 -->
-<div class="product-card" data-category="ensembles">
+<div class="product-card hover-lift" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/ensemble-capuchon-arabe.jpeg" alt="Ensemble Andu-Xara capuche style arabe complet" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2712,7 +2823,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 3 -->
-<div class="product-card" data-category="ensembles">
+<div class="product-card hover-lift" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/combinaison.jpeg" alt="Combinaison Andu-Xara T-shirt et Capuche Bleu" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2740,7 +2851,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 4 -->
-<div class="product-card" data-category="enfants">
+<div class="product-card hover-lift" data-category="enfants">
   <div class="product-image-container">
     <img src="images/t-shirt-enfant.jpeg" alt="T-shirt enfant Andu-Xara coton confortable" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2768,7 +2879,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 5 -->
-<div class="product-card" data-category="ensembles">
+<div class="product-card hover-lift" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble Andu-Xara T-shirt et jogging" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2797,7 +2908,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 6 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/pull-bleu.jpeg" alt="Pull Andu-Xara bleu chaud et confortable" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2825,7 +2936,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 7 -->
-<div class="product-card" data-category="accessoires">
+<div class="product-card hover-lift" data-category="accessoires">
   <div class="product-image-container">
     <img src="images/capuchon-blanc.jpeg" alt="Capuchon Andu-Xara blanc style urbain" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2851,7 +2962,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 8 -->
-<div class="product-card" data-category="ensembles">
+<div class="product-card hover-lift" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/t-shirt-et-jogging.jpeg" alt="Ensemble complet Andu-Xara T-shirt et jogging assorti" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2879,7 +2990,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 9 -->
-<div class="product-card" data-category="ensembles">
+<div class="product-card hover-lift" data-category="ensembles">
   <div class="product-image-container">
     <img src="images/babs.jpeg" alt="Babs - Tenue premium Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2907,7 +3018,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 10 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/fillenoir.jpeg" alt="T-shirt Fille Noir Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2935,7 +3046,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 11 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/filleblan.jpeg" alt="T-shirt Fille Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2963,7 +3074,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 12 -->
-<div class="product-card" data-category="pulls">
+<div class="product-card hover-lift" data-category="pulls">
   <div class="product-image-container">
     <img src="images/pull-blanc.jpeg" alt="Pull Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -2991,7 +3102,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 13 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/beige-tshirt.jpeg" alt="T-shirt Beige Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -3019,7 +3130,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 14 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/blanctshirt.jpeg" alt="T-shirt Blanc Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -3047,7 +3158,7 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <!-- Produit 15 -->
-<div class="product-card" data-category="t-shirts">
+<div class="product-card hover-lift" data-category="t-shirts">
   <div class="product-image-container">
     <img src="images/adx-noir.jpeg" alt="T-shirt ADX Noir Andu-Xara" class="product-img" width="400" height="400" loading="lazy">
     <button class="wishlist-btn">❤️</button>
@@ -5016,7 +5127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 <!-- Nouveau Popup Newsletter Firebase -->
-<div id="firebase-newsletter-popup" class="firebase-newsletter-popup">
+<div id="firebase-newsletter-popup" class="firebase-newsletter-popup animate-fade-in-up">
     <div class="newsletter-popup-content">
         <button class="newsletter-close-btn" onclick="closeFirebaseNewsletter()">×</button>
         
@@ -5652,7 +5763,7 @@ class StyleAdvisor {
         console.log('🎯 Génération de', recommendations.length, 'recommandations');
         
         container.innerHTML = recommendations.map(product => `
-            <div class="product-card" data-category="${product.category}">
+            <div class="product-card hover-lift" data-category="${product.category}">
                 <div class="product-image-container">
                     <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy" 
                          onerror="this.src='images/logo.png'; this.alt='Image non disponible'">
