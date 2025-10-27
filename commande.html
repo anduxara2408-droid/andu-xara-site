@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande - Andu Xara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .commande-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .commande-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .commande-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+            border: 3px solid white;
+        }
+
+        .step.active .step-number {
+            background: #667eea;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #48bb78;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .panier-items {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .panier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .panier-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .panier-item.quantite-zero {
+            opacity: 0.6;
+            background: #f8f9fa;
+        }
+
+        .panier-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            background: #f8f9fa;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .item-description {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .item-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .item-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+        }
+
+        .quantity-btn:disabled {
+            background: #f7fafc;
+            color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            padding: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: #2d3748;
+            min-width: 90px;
+            text-align: right;
+            font-size: 1.1rem;
+        }
+
+        .quantite-zero-text {
+            color: #e53e3e;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .reductions-section {
+            background: #f0fff4;
+            border: 2px solid #9ae6b4;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .reduction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #c6f6d5;
+        }
+
+        .reduction-item:last-child {
+            border-bottom: none;
+        }
+
+        .reduction-label {
+            flex: 1;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .reduction-value {
+            font-weight: bold;
+            color: #48bb78;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .resume-commande {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .resume-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .resume-line.total {
+            border-bottom: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .btn-commander {
+            width: 100%;
+            padding: 16px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-commander:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-commander:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-width: 300px;
+            text-align: center;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .success-section {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #48bb78;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .cart-summary {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .info-contact {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .info-contact h4 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== SYSTÈME DE LOCALISATION GPS AMÉLIORÉ ===== */
+        .localisation-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .gps-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .gps-map {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #cbd5e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .gps-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .gps-btn {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .gps-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .gps-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .gps-btn.secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .gps-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .location-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .location-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .location-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            display: none;
+        }
+
+        .location-result.error {
+            background: #fed7d7;
+            border-color: #feb2b2;
+        }
+
+        .delivery-options {
+            margin-top: 1rem;
+        }
+
+        .delivery-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .delivery-option:hover {
+            border-color: #667eea;
+        }
+
+        .delivery-option.selected {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .delivery-price {
+            font-weight: bold;
+            color: #48bb78;
+            font-size: 1.1rem;
+        }
+
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        /* ===== CONFIRMATION DE COMMANDE ===== */
+        .confirmation-details {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .confirmation-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .confirmation-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .order-number {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .action-btn.success {
+            background: #48bb78;
+            color: white;
+        }
+
+        /* NOUVEAUX STYLES POUR LES IMAGES PLUS GRANDES */
+        .product-image-large {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .commande-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .commande-steps::before {
+                display: none;
+            }
+            
+            .panier-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .item-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .item-total {
+                text-align: left;
+            }
+            
+            .item-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .gps-container {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1><i class="fas fa-shopping-bag"></i> Finaliser votre commande</h1>
+            <p>Andu Xara - Votre boutique de mode préférée</p>
+        </div>
+
+        <!-- Section Commande -->
+        <div class="commande-section">
+            <!-- Étapes de commande -->
+            <div class="commande-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Panier</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Livraison</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Paiement</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+
+            <!-- Panier -->
+            <div class="panier-items">
+                <div class="panier-header">
+                    <h3 style="color: #2d3748;">
+                        <i class="fas fa-shopping-cart"></i> Votre panier Andu-Xara
+                    </h3>
+                    <div class="cart-summary" id="cartSummary">
+                        <!-- Résumé du panier -->
+                    </div>
+                </div>
+                <div id="panierContent">
+                    <!-- Les articles du panier seront injectés ici -->
+                </div>
+
+                <!-- Information contact pour grandes quantités -->
+                <div class="info-contact">
+                    <h4><i class="fas fa-info-circle"></i> Commande en grande quantité ?</h4>
+                    <p style="color: #856404; margin-bottom: 0.5rem;">
+                        Pour commander plus de 100 articles du même produit, contactez-nous directement :
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:contact@andu-xara.store" class="contact-link">
+                            <i class="fas fa-envelope"></i> contact@andu-xara.store
+                        </a>
+                        <a href="https://wa.me/22249037697" target="_blank" class="contact-link">
+                            <i class="fab fa-whatsapp"></i> +222 49 03 76 97
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Réductions appliquées -->
+            <div class="reductions-section">
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">
+                    <i class="fas fa-tag"></i> Réductions appliquées
+                </h3>
+                <div id="reductionsContent">
+                    <!-- Les réductions seront injectées ici -->
+                </div>
+            </div>
+
+            <!-- ===== SYSTÈME DE LOCALISATION GPS AMÉLIORÉ ===== -->
+            <div class="localisation-section">
+                <h3 style="margin-bottom: 1.5rem; color: #2d3748;">
+                    <i class="fas fa-map-marker-alt"></i> Localisation et Livraison
+                </h3>
+                
+                <div class="gps-container">
+                    <div class="gps-map" id="gpsMap">
+                        <div class="map-overlay">
+                            <i class="fas fa-map" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                            <p style="color: #718096; text-align: center;">Votre position apparaîtra ici<br><small>Cliquez sur "Utiliser ma position GPS"</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="gps-controls">
+                        <button class="gps-btn" onclick="getUserLocation()" id="gpsButton">
+                            <i class="fas fa-crosshairs"></i> Utiliser ma position GPS
+                        </button>
+                        
+                        <div style="text-align: center; color: #718096; font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Nous calculons les frais de livraison selon votre position
+                        </div>
+                        
+                        <div class="location-input-group">
+                            <input type="text" class="location-input" id="manualLocation" 
+                                   placeholder="Ou entrez votre adresse manuellement...">
+                            <button class="gps-btn secondary" onclick="validateManualLocation()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        
+                        <button class="gps-btn secondary" onclick="showDeliveryZones()">
+                            <i class="fas fa-info-circle"></i> Voir les zones de livraison
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="location-result" id="locationResult">
+                    <!-- Résultat de la localisation -->
+                </div>
+                
+                <div class="delivery-options" id="deliveryOptions" style="display: none;">
+                    <h4 style="margin-bottom: 1rem; color: #2d3748;">Options de livraison :</h4>
+                    <div class="delivery-option" data-price="50" onclick="selectDeliveryOption(this, 50)">
+                        <div>
+                            <strong>Livraison Standard</strong>
+                            <div class="delivery-info">
+                                <i class="fas fa-truck"></i>
+                                <span>3-5 jours ouvrables</span>
+                            </div>
+                        </div>
+                        <div class="delivery-price">50 MRU</div>
+                    </div>
+                    <div class="delivery-option" data-price="100" onclick="selectDeliveryOption(this, 100)">
+                        <div>
+                            <strong>Livraison Express</strong>
+                            <div class="delivery-info">
+                                <i class="fas fa-bolt"></i>
+                                <span>24-48 heures</span>
+                            </div>
+                        </div>
+                        <div class="delivery-price">100 MRU</div>
+                    </div>
+                    <div class="delivery-option" data-price="0" onclick="selectDeliveryOption(this, 0)">
+                        <div>
+                            <strong>Retrait en boutique</strong>
+                            <div class="delivery-info">
+                                <i class="fas fa-store"></i>
+                                <span>Nouakchott - Gratuit</span>
+                            </div>
+                        </div>
+                        <div class="delivery-price">Gratuit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire de livraison -->
+            <div class="form-section">
+                <h3 style="margin-bottom: 1.5rem; color: #2d3748;">
+                    <i class="fas fa-user"></i> Informations personnelles
+                </h3>
+                
+                <form id="commandeForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prénom *</label>
+                            <input type="text" id="prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nom *</label>
+                            <input type="text" id="nom" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Téléphone *</label>
+                        <input type="tel" id="telephone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Adresse complète *</label>
+                        <input type="text" id="adresse" required placeholder="Rue, quartier, ville...">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ville *</label>
+                            <input type="text" id="ville" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Code postal</label>
+                            <input type="text" id="codePostal">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes (optionnel)</label>
+                        <textarea id="notes" rows="3" placeholder="Instructions spéciales, préférences de livraison..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Résumé de commande -->
+            <div class="resume-commande">
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">
+                    <i class="fas fa-receipt"></i> Résumé de la commande
+                </h3>
+                
+                <div class="resume-line">
+                    <span>Sous-total:</span>
+                    <span id="sousTotal">0 MRU</span>
+                </div>
+                <div class="resume-line">
+                    <span>Livraison:</span>
+                    <span id="fraisLivraison">0 MRU</span>
+                </div>
+                <div class="resume-line">
+                    <span>Réduction code promo:</span>
+                    <span id="reductionPromo">0 MRU</span>
+                </div>
+                <div class="resume-line">
+                    <span>Crédits parrainage:</span>
+                    <span id="reductionParrainage">0 MRU</span>
+                </div>
+                <div class="resume-line total">
+                    <span>Total:</span>
+                    <span id="totalFinal">0 MRU</span>
+                </div>
+
+                <button class="btn-commander" id="btnFinaliserCommande">
+                    <i class="fas fa-lock"></i> Finaliser la commande
+                </button>
+            </div>
+
+            <!-- Section succès -->
+            <div id="successSection" class="success-section">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 style="color: #48bb78; margin-bottom: 1rem;">Commande confirmée !</h2>
+                
+                <div class="order-number" id="orderNumber">
+                    <!-- Numéro de commande -->
+                </div>
+                
+                <p style="color: #718096; margin-bottom: 2rem;">
+                    Votre commande a été enregistrée avec succès. Vous allez être redirigé vers votre espace de suivi.
+                </p>
+
+                <div class="confirmation-details">
+                    <h4 style="margin-bottom: 1rem; color: #2d3748;">Récapitulatif de votre commande :</h4>
+                    <div class="confirmation-item">
+                        <span>Numéro de commande :</span>
+                        <strong id="confirmationOrderNumber"></strong>
+                    </div>
+                    <div class="confirmation-item">
+                        <span>Date :</span>
+                        <strong id="confirmationDate"></strong>
+                    </div>
+                    <div class="confirmation-item">
+                        <span>Total :</span>
+                        <strong id="confirmationTotal"></strong>
+                    </div>
+                    <div class="confirmation-item">
+                        <span>Mode de livraison :</span>
+                        <strong id="confirmationDelivery"></strong>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn success" onclick="redirectToTracking()">
+                        <i class="fas fa-shipping-fast"></i> Suivre ma commande
+                    </button>
+                    <a href="index.html" class="action-btn primary">
+                        <i class="fas fa-home"></i> Retour à la boutique
+                    </a>
+                    <button class="action-btn secondary" onclick="printConfirmation()">
+                        <i class="fas fa-print"></i> Imprimer la confirmation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loadingSection" class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Traitement de votre commande...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ===== LES 15 PRODUITS ANDU-XARA AVEC VRAIES IMAGES =====
+        const PRODUITS_ANDU_XARA = [
+            {
+                id: 1,
+                nom: "T-shirt logo arabe",
+                categorie: "t-shirts",
+                prix: 349,
+                quantite: 1,
+                image: "images/t-shirt-logo-arabe.jpeg",
+                description: "T-shirt coton premium avec logo arabe design exclusif",
+                tailles: ["S", "M", "L", "XL"]
+            },
+            {
+                id: 2,
+                nom: "Ensemble capuche style arabe",
+                categorie: "ensembles",
+                prix: 419,
+                quantite: 1,
+                image: "images/ensemble-capuchon-arabe.jpeg",
+                description: "Ensemble complet premium avec capuche style arabe",
+                tailles: ["M", "L", "XL"]
+            },
+            {
+                id: 3,
+                nom: "Combinaison T-shirt et Capuche",
+                categorie: "ensembles",
+                prix: 419,
+                quantite: 0,
+                image: "images/combinaison.jpeg",
+                description: "T-shirt coton et Capuche Bleu - Confort garanti",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 4,
+                nom: "T-shirt Enfant",
+                categorie: "enfants",
+                prix: 279,
+                quantite: 0,
+                image: "images/t-shirt-enfant.jpeg",
+                description: "T-shirt coton confortable pour enfants - Qualité premium",
+                tailles: ["3-5 ans", "6-8 ans", "9-12 ans"]
+            },
+            {
+                id: 5,
+                nom: "Ensemble T-shirt et jogging",
+                categorie: "ensembles",
+                prix: 559,
+                quantite: 0,
+                image: "images/t-shirt-et-jogging.jpeg",
+                description: "Ensemble coton premium - Style décontracté",
+                tailles: ["S", "M", "L", "XL"]
+            },
+            {
+                id: 6,
+                nom: "Pull bleu",
+                categorie: "pulls",
+                prix: 489,
+                quantite: 0,
+                image: "images/pull-bleu.jpeg",
+                description: "Pull chaud et confortable de couleur bleue - Hiver 2025",
+                tailles: ["M", "L", "XL"]
+            },
+            {
+                id: 7,
+                nom: "Capuchon blanc",
+                categorie: "accessoires",
+                prix: 209,
+                quantite: 0,
+                image: "images/capuchon-blanc.jpeg",
+                description: "Capuchon style urbain en couleur blanche - Adjustable",
+                tailles: ["Unique"]
+            },
+            {
+                id: 8,
+                nom: "T-shirt et jogging Complet",
+                categorie: "ensembles",
+                prix: 629,
+                quantite: 0,
+                image: "images/t-shirt-et-jogging-2.jpeg",
+                description: "Ensemble complet T-shirt et jogging assorti - Édition limitée",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 9,
+                nom: "Babs Premium",
+                categorie: "ensembles",
+                prix: 1049,
+                quantite: 0,
+                image: "images/babs.jpeg",
+                description: "Tenue moderne et élégante Andu-Xara",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 10,
+                nom: "T-shirt Fille Noir",
+                categorie: "t-shirts",
+                prix: 279,
+                quantite: 0,
+                image: "images/fillenoir.jpeg",
+                description: "T-shirt noir élégant pour femme",
+                tailles: ["XS", "S", "M"]
+            },
+            {
+                id: 11,
+                nom: "T-shirt Fille Blanc",
+                categorie: "t-shirts",
+                prix: 419,
+                quantite: 0,
+                image: "images/filleblan.jpeg",
+                description: "T-shirt blanc classique et stylé",
+                tailles: ["XS", "S", "M"]
+            },
+            {
+                id: 12,
+                nom: "Pull Blanc",
+                categorie: "pulls",
+                prix: 419,
+                quantite: 0,
+                image: "images/pull-blanc.jpeg",
+                description: "Pull chaud et confortable de couleur blanche",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 13,
+                nom: "T-shirt Beige",
+                categorie: "t-shirts",
+                prix: 279,
+                quantite: 0,
+                image: "images/beige-tshirt.jpeg",
+                description: "T-shirt léger et élégant beige",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 14,
+                nom: "T-shirt Blanc",
+                categorie: "t-shirts",
+                prix: 279,
+                quantite: 0,
+                image: "images/blanctshirt.jpeg",
+                description: "T-shirt blanc classique intemporel",
+                tailles: ["S", "M", "L"]
+            },
+            {
+                id: 15,
+                nom: "T-shirt ADX Noir",
+                categorie: "t-shirts",
+                prix: 279,
+                quantite: 0,
+                image: "images/adx-noir.jpeg",
+                description: "Edition spéciale Andu-Xara ADX Noir",
+                tailles: ["S", "M", "L"]
+            }
+        ];
+
+        // ===== GESTION DU PANIER CORRIGÉE =====
+        class PanierManager {
+            constructor() {
+                this.panier = this.chargerPanier();
+                this.reductions = this.chargerReductions();
+                this.fraisLivraison = 0;
+                this.localisationValidee = false;
+                this.modeLivraison = '';
+            }
+
+            chargerPanier() {
+                try {
+                    const panierSauvegarde = localStorage.getItem('anduxara_cart');
+                    if (panierSauvegarde) {
+                        const panier = JSON.parse(panierSauvegarde);
+                        // VALIDATION RENFORCÉE - CORRECTION DES NaN ET UNDEFINED
+                        if (panier && Array.isArray(panier)) {
+                            return panier.map(item => ({
+                                id: item.id || 0,
+                                nom: item.nom || 'Produit inconnu',
+                                categorie: item.categorie || 'non-catégorisé',
+                                prix: Number(item.prix) || 0,
+                                quantite: Number(item.quantite) || 0,
+                                image: item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0Y4RjlGQSIvPgo8cGF0aCBkPSJNNDAgMzJDMzIuMjY4IDMyIDI2IDM4LjI2OCAyNiA0NkMyNiA1My43MzIgMzIuMjY4IDYwIDQwIDYwQzQ3LjczMiA2MCA1NCA1My43MzIgNTQgNDZDNTQgMzguMjY4IDQ3LjczMiAzMiA0MCAzMloiIGZpbGw9IiM2NjdFRUEiLz4KPHBhdGggZD0iTTQ4IDI4QzQ4IDMyLjQxODMgNDQuNDE4MyAzNiA0MCAzNkMzNS41ODE3IDM2IDMyIDMyLjQxODMgMzIgMjhDMzIgMjMuNTgxNyAzNS41ODE3IDIwIDQwIDIwQzQ0LjQxODMgMjAgNDggMjMuNTgxNyA0OCAyOFoiIGZpbGw9IiM2NjdFRUEiLz4KPC9zdmc+',
+                                description: item.description || 'Description non disponible',
+                                tailles: item.tailles || ['Unique']
+                            }));
+                        }
+                    }
+                } catch (e) {
+                    console.log('Erreur chargement panier, utilisation par défaut');
+                }
+
+                // Si pas de panier sauvegardé ou erreur, utiliser les produits par défaut
+                return JSON.parse(JSON.stringify(PRODUITS_ANDU_XARA));
+            }
+
+            chargerReductions() {
+                const reductions = {
+                    codePromo: null,
+                    creditsParrainage: 0
+                };
+
+                try {
+                    const promoData = localStorage.getItem('anduxara_active_promo');
+                    if (promoData) {
+                        const promo = JSON.parse(promoData);
+                        // VALIDATION DES DONNÉES PROMO
+                        if (promo && promo.code && promo.discount) {
+                            reductions.codePromo = {
+                                code: promo.code,
+                                discount: Number(promo.discount) || 0,
+                                type: promo.type || 'percentage',
+                                appliedAt: promo.appliedAt || new Date().toISOString()
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.log('Aucun code promo actif ou données invalides');
+                }
+
+                try {
+                    const credits = localStorage.getItem('anduxara_referral_credits');
+                    if (credits) {
+                        reductions.creditsParrainage = Math.max(0, Number(credits)) || 0;
+                    }
+                } catch (e) {
+                    console.log('Aucun crédit parrainage');
+                }
+
+                return reductions;
+            }
+
+            calculerSousTotal() {
+                return this.panier.reduce((total, item) => {
+                    const quantite = Number(item.quantite) || 0;
+                    const prix = Number(item.prix) || 0;
+                    if (quantite > 0) {
+                        return total + (prix * quantite);
+                    }
+                    return total;
+                }, 0);
+            }
+
+            calculerReductionPromo(sousTotal) {
+                if (!this.reductions.codePromo) return 0;
+                
+                const discount = Number(this.reductions.codePromo.discount) || 0;
+                return (sousTotal * discount) / 100;
+            }
+
+            setFraisLivraison(frais, mode = '') {
+                this.fraisLivraison = Number(frais) || 0;
+                this.modeLivraison = mode;
+                this.mettreAJourAffichage();
+            }
+
+            calculerTotal() {
+                const sousTotal = this.calculerSousTotal();
+                const fraisLivraison = this.fraisLivraison;
+                const reductionPromo = this.calculerReductionPromo(sousTotal);
+                const reductionParrainage = Math.min(this.reductions.creditsParrainage, sousTotal);
+
+                const total = sousTotal + fraisLivraison - reductionPromo - reductionParrainage;
+                
+                return {
+                    sousTotal,
+                    fraisLivraison,
+                    reductionPromo,
+                    reductionParrainage,
+                    total: Math.max(0, total)
+                };
+            }
+
+            afficherPanier() {
+                const container = document.getElementById('panierContent');
+                const summary = document.getElementById('cartSummary');
+                
+                const produitsAvecQuantite = this.panier.filter(item => (Number(item.quantite) || 0) > 0);
+                const totalArticles = produitsAvecQuantite.reduce((total, item) => total + (Number(item.quantite) || 0), 0);
+
+                if (produitsAvecQuantite.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h3>Votre panier est vide</h3>
+                            <p>Ajoutez des produits depuis la boutique en réglant la quantité (0 à 100)</p>
+                            <a href="index.html" class="action-btn primary" style="margin-top: 1rem;">
+                                <i class="fas fa-store"></i> Voir la boutique
+                            </a>
+                        </div>
+                    `;
+                    summary.textContent = '0 article';
+                    return;
+                }
+
+                summary.textContent = `${totalArticles} article${totalArticles > 1 ? 's' : ''}`;
+
+                container.innerHTML = '';
+                this.panier.forEach(item => {
+                    const quantite = Number(item.quantite) || 0;
+                    const prix = Number(item.prix) || 0;
+                    const quantiteZero = quantite === 0;
+                    const itemHTML = `
+                        <div class="panier-item ${quantiteZero ? 'quantite-zero' : ''}">
+                            <div class="item-image">
+                                <img src="${item.image}" alt="${item.nom}" 
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0Y4RjlGQSIvPgo8cGF0aCBkPSJNNDAgMzJDMzIuMjY4IDMyIDI2IDM4LjI2OCAyNiA0NkMyNiA1My43MzIgMzIuMjY4IDYwIDQwIDYwQzQ3LjczMiA2MCA1NCA1My43MzIgNTQgNDZDNTQgMzguMjY4IDQ3LjczMiAzMiA0MCAzMloiIGZpbGw9IiM2NjdFRUEiLz4KPHBhdGggZD0iTTQ4IDI4QzQ4IDMyLjQxODMgNDQuNDE4MyAzNiA0MCAzNkMzNS41ODE3IDM2IDMyIDMyLjQxODMgMzIgMjhDMzIgMjMuNTgxNyAzNS41ODE3IDIwIDQwIDIwQzQ0LjQxODMgMjAgNDggMjMuNTgxNyA0OCAyOFoiIGZpbGw9IiM2NjdFRUEiLz4KPC9zdmc+';">
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${item.nom}</div>
+                                <div class="item-description">${item.description}</div>
+                                <div class="item-meta">
+                                    <span class="item-category">${item.categorie}</span>
+                                    <span class="item-price">${prix} MRU</span>
+                                    ${quantiteZero ? '<span class="quantite-zero-text">(Quantité: 0 - Non commandé)</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="item-controls">
+                                <div class="item-quantity">
+                                    <button class="quantity-btn" onclick="panierManager.changerQuantite(${item.id}, -1)" 
+                                            ${quantite === 0 ? 'disabled' : ''}>-</button>
+                                    <input type="number" class="quantity-input" value="${quantite}" min="0" max="100"
+                                           onchange="panierManager.mettreAJourQuantite(${item.id}, this.value)"
+                                           placeholder="0">
+                                    <button class="quantity-btn" onclick="panierManager.changerQuantite(${item.id}, 1)"
+                                            ${quantite === 100 ? 'disabled' : ''}>+</button>
+                                </div>
+                                <div class="item-total">
+                                    ${quantite > 0 ? (prix * quantite) + ' MRU' : '0 MRU'}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHTML;
+                });
+            }
+
+            afficherReductions() {
+                const container = document.getElementById('reductionsContent');
+                const reductions = this.reductions;
+                let html = '';
+
+                if (reductions.codePromo) {
+                    html += `
+                        <div class="reduction-item">
+                            <div class="reduction-label">
+                                <i class="fas fa-ticket-alt"></i> Code promo: ${reductions.codePromo.code}
+                            </div>
+                            <div class="reduction-value">-${reductions.codePromo.discount}%</div>
+                        </div>
+                    `;
+                }
+
+                if (reductions.creditsParrainage > 0) {
+                    html += `
+                        <div class="reduction-item">
+                            <div class="reduction-label">
+                                <i class="fas fa-crown"></i> Crédits parrainage
+                            </div>
+                            <div class="reduction-value">-${reductions.creditsParrainage} MRU</div>
+                        </div>
+                    `;
+                }
+
+                if (!html) {
+                    html = '<p style="color: #718096; text-align: center; padding: 1rem;">Aucune réduction appliquée</p>';
+                }
+
+                container.innerHTML = html;
+            }
+
+            mettreAJourAffichage() {
+                this.afficherPanier();
+                this.afficherReductions();
+                
+                const totals = this.calculerTotal();
+                
+                document.getElementById('sousTotal').textContent = totals.sousTotal + ' MRU';
+                document.getElementById('fraisLivraison').textContent = totals.fraisLivraison + ' MRU';
+                document.getElementById('reductionPromo').textContent = '-' + totals.reductionPromo + ' MRU';
+                document.getElementById('reductionParrainage').textContent = '-' + totals.reductionParrainage + ' MRU';
+                document.getElementById('totalFinal').textContent = totals.total + ' MRU';
+
+                // Activer/désactiver le bouton de commande
+                const btnCommander = document.getElementById('btnFinaliserCommande');
+                const produitsCommandes = this.getProduitsCommandes();
+                
+                if (produitsCommandes.length === 0 || !this.localisationValidee) {
+                    btnCommander.disabled = true;
+                    btnCommander.style.background = '#a0aec0';
+                } else {
+                    btnCommander.disabled = false;
+                    btnCommander.style.background = '#48bb78';
+                }
+            }
+
+            changerQuantite(itemId, delta) {
+                const item = this.panier.find(i => i.id === itemId);
+                if (item) {
+                    const quantiteActuelle = Number(item.quantite) || 0;
+                    const nouvelleQuantite = quantiteActuelle + delta;
+                    if (nouvelleQuantite >= 0 && nouvelleQuantite <= 100) {
+                        item.quantite = nouvelleQuantite;
+                        this.sauvegarderPanier();
+                        this.mettreAJourAffichage();
+                        
+                        if (nouvelleQuantite >= 50) {
+                            showNotification(`⚠️ Quantité élevée (${nouvelleQuantite}). Pour +100 articles, contactez-nous.`, 'warning');
+                        }
+                    }
+                }
+            }
+
+            mettreAJourQuantite(itemId, nouvelleQuantite) {
+                const quantite = parseInt(nouvelleQuantite);
+                if (!isNaN(quantite)) {
+                    const item = this.panier.find(i => i.id === itemId);
+                    if (item) {
+                        if (quantite >= 0 && quantite <= 100) {
+                            item.quantite = quantite;
+                            this.sauvegarderPanier();
+                            this.mettreAJourAffichage();
+                            
+                            if (quantite >= 50) {
+                                showNotification(`⚠️ Quantité élevée (${quantite}). Pour +100 articles, contactez-nous.`, 'warning');
+                            }
+                        } else if (quantite > 100) {
+                            showNotification('❌ Maximum 100 articles par produit. Contactez-nous pour plus.', 'error');
+                            item.quantite = 100;
+                            this.sauvegarderPanier();
+                            this.mettreAJourAffichage();
+                        }
+                    }
+                }
+            }
+
+            sauvegarderPanier() {
+                localStorage.setItem('anduxara_cart', JSON.stringify(this.panier));
+            }
+
+            validerLocalisation() {
+                this.localisationValidee = true;
+                this.mettreAJourAffichage();
+                showNotification('✅ Localisation validée ! Vous pouvez finaliser votre commande.', 'success');
+            }
+
+            getProduitsCommandes() {
+                return this.panier.filter(item => (Number(item.quantite) || 0) > 0);
+            }
+
+            sauvegarderCommande(commandeData) {
+                // Sauvegarder la commande dans le localStorage
+                const commandes = JSON.parse(localStorage.getItem('anduxara_commandes')) || [];
+                commandes.push(commandeData);
+                localStorage.setItem('anduxara_commandes', JSON.stringify(commandes));
+                
+                // Sauvegarder la dernière commande pour affichage
+                localStorage.setItem('anduxara_derniere_commande', JSON.stringify(commandeData));
+                
+                // Sauvegarder les données pour le suivi
+                this.sauvegarderPourSuivi(commandeData);
+                
+                return commandeData.numeroCommande;
+            }
+
+            sauvegarderPourSuivi(commandeData) {
+                // Préparer les données pour la page de suivi
+                const suiviData = {
+                    ...commandeData,
+                    statut: 'confirmée',
+                    dateConfirmation: new Date().toISOString(),
+                    etapes: [
+                        { etape: 'confirmée', date: new Date().toISOString(), termine: true },
+                        { etape: 'preparation', date: null, termine: false },
+                        { etape: 'expediee', date: null, termine: false },
+                        { etape: 'livree', date: null, termine: false }
+                    ]
+                };
+                
+                localStorage.setItem('anduxara_suivi_commande', JSON.stringify(suiviData));
+            }
+        }
+
+        // ===== SYSTÈME DE LOCALISATION GPS AMÉLIORÉ =====
+        class LocalisationManager {
+            constructor() {
+                this.currentLocation = null;
+                this.deliveryPrice = 0;
+            }
+
+            getUserLocation() {
+                if (!navigator.geolocation) {
+                    showNotification('❌ La géolocalisation n\'est pas supportée par votre navigateur', 'error');
+                    return;
+                }
+
+                const gpsButton = document.getElementById('gpsButton');
+                gpsButton.disabled = true;
+                gpsButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Localisation en cours...';
+
+                showNotification('📍 Recherche de votre position...', 'info');
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        this.currentLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        this.calculateDeliveryPrice();
+                        this.showLocationOnMap();
+                        panierManager.validerLocalisation();
+                        
+                        gpsButton.disabled = false;
+                        gpsButton.innerHTML = '<i class="fas fa-check-circle"></i> Position trouvée !';
+                    },
+                    (error) => {
+                        let message = '❌ Impossible d\'obtenir votre position';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                message = '❌ Permission de localisation refusée. Utilisez la saisie manuelle.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                message = '❌ Position indisponible. Vérifiez votre connexion.';
+                                break;
+                            case error.TIMEOUT:
+                                message = '❌ Délai de localisation dépassé. Réessayez.';
+                                break;
+                        }
+                        showNotification(message, 'error');
+                        
+                        gpsButton.disabled = false;
+                        gpsButton.innerHTML = '<i class="fas fa-crosshairs"></i> Utiliser ma position GPS';
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 60000
+                    }
+                );
+            }
+
+            calculateDeliveryPrice() {
+                // Simulation de calcul de prix basé sur la localisation
+                const basePrice = 50;
+                const randomMultiplier = 0.8 + (Math.random() * 0.4); // Variation de 80% à 120%
+                this.deliveryPrice = Math.round(basePrice * randomMultiplier);
+                
+                // Afficher les options de livraison
+                document.getElementById('deliveryOptions').style.display = 'block';
+                
+                // Mettre à jour l'affichage avec le prix calculé
+                const deliveryOptions = document.querySelectorAll('.delivery-option');
+                deliveryOptions.forEach(option => {
+                    if (option.dataset.price !== "0") {
+                        const price = Math.round(parseInt(option.dataset.price) * randomMultiplier);
+                        option.querySelector('.delivery-price').textContent = price + ' MRU';
+                        option.dataset.actualPrice = price;
+                    }
+                });
+            }
+
+            showLocationOnMap() {
+                const mapElement = document.getElementById('gpsMap');
+                mapElement.innerHTML = `
+                    <div style="text-align: center; color: #2d3748; padding: 2rem;">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #e53e3e; margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem; color: #2d3748;">📍 Position détectée</h4>
+                        <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1rem;">
+                            Votre position a été localisée avec succès
+                        </p>
+                        <div style="background: #48bb78; color: white; padding: 0.5rem 1rem; border-radius: 20px; display: inline-block;">
+                            <i class="fas fa-check"></i> Livraison disponible
+                        </div>
+                    </div>
+                `;
+                
+                // Mettre à jour le résultat
+                const resultElement = document.getElementById('locationResult');
+                resultElement.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <i class="fas fa-check-circle" style="color: #48bb78; font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Livraison disponible dans votre zone</strong>
+                            <p style="margin: 0; color: #718096;">Frais de livraison calculés selon votre position</p>
+                        </div>
+                    </div>
+                `;
+                resultElement.style.display = 'block';
+                resultElement.classList.remove('error');
+            }
+
+            validateManualLocation() {
+                const manualInput = document.getElementById('manualLocation');
+                const address = manualInput.value.trim();
+                
+                if (address.length < 5) {
+                    showNotification('❌ Veuillez entrer une adresse valide (au moins 5 caractères)', 'error');
+                    return;
+                }
+
+                showNotification('📍 Validation de votre adresse...', 'info');
+
+                // Simulation de validation d'adresse
+                setTimeout(() => {
+                    this.currentLocation = {
+                        latitude: 18.0735 + (Math.random() - 0.5) * 0.1,
+                        longitude: -15.9582 + (Math.random() - 0.5) * 0.1,
+                        adresse: address
+                    };
+                    
+                    this.calculateDeliveryPrice();
+                    
+                    const mapElement = document.getElementById('gpsMap');
+                    mapElement.innerHTML = `
+                        <div style="text-align: center; color: #2d3748; padding: 2rem;">
+                            <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                            <h4 style="margin-bottom: 0.5rem; color: #2d3748;">📝 Adresse validée</h4>
+                            <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1rem;">
+                                ${address}
+                            </p>
+                            <div style="background: #48bb78; color: white; padding: 0.5rem 1rem; border-radius: 20px; display: inline-block;">
+                                <i class="fas fa-check"></i> Livraison disponible
+                            </div>
+                        </div>
+                    `;
+                    
+                    const resultElement = document.getElementById('locationResult');
+                    resultElement.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i class="fas fa-check-circle" style="color: #48bb78; font-size: 1.5rem;"></i>
+                            <div>
+                                <strong>Adresse validée avec succès</strong>
+                                <p style="margin: 0; color: #718096;">${address}</p>
+                            </div>
+                        </div>
+                    `;
+                    resultElement.style.display = 'block';
+                    resultElement.classList.remove('error');
+                    
+                    panierManager.validerLocalisation();
+                    
+                }, 1500);
+            }
+
+            showDeliveryZones() {
+                const zones = `
+🗺️ ZONES DE LIVRAISON ANDU-XARA
+
+🟢 ZONE 1 (50-100 MRU) :
+• Nouakchott centre
+• Tevragh-Zeina
+• Ksar
+• Sebkha
+• El Mina
+
+🟡 ZONE 2 (100-150 MRU) :
+• Arafat
+• Toujounine
+• Dar Naim
+• Riyad
+
+🔴 ZONE 3 (150-200 MRU) :
+• Nouadhibou
+• Rosso
+• Kaédi
+• Kiffa
+
+📞 Contactez-nous pour les autres villes !
+                `;
+                
+                alert(zones);
+            }
+        }
+
+        // ===== SYSTÈME DE NOTIFICATIONS ET CONFIRMATION =====
+        class NotificationManager {
+            constructor() {
+                this.emailServiceURL = 'https://api.emailjs.com/api/v1.0/email/send';
+            }
+
+            generateOrderNumber() {
+                const timestamp = Date.now().toString();
+                const random = Math.random().toString(36).substr(2, 5).toUpperCase();
+                return `AX${timestamp.substr(-6)}${random}`;
+            }
+
+            async sendConfirmationEmail(commandeData) {
+                // Simulation d'envoi d'email - À remplacer par votre service d'email
+                try {
+                    const templateParams = {
+                        to_email: commandeData.email,
+                        to_name: `${commandeData.prenom} ${commandeData.nom}`,
+                        order_number: commandeData.numeroCommande,
+                        order_date: new Date().toLocaleDateString('fr-FR'),
+                        order_total: commandeData.total + ' MRU',
+                        delivery_address: commandeData.adresse,
+                        customer_phone: commandeData.telephone
+                    };
+
+                    // Ici vous intégrerez votre service d'email (EmailJS, SendGrid, etc.)
+                    console.log('📧 Email de confirmation envoyé à:', commandeData.email);
+                    console.log('Données email:', templateParams);
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Erreur envoi email:', error);
+                    return false;
+                }
+            }
+
+            async sendAdminNotification(commandeData) {
+                // Notification à l'administrateur
+                try {
+                    const adminMessage = `
+Nouvelle commande Andu-Xara! 🎉
+
+📋 DÉTAILS DE LA COMMANDE :
+• Numéro: ${commandeData.numeroCommande}
+• Client: ${commandeData.prenom} ${commandeData.nom}
+• Email: ${commandeData.email}
+• Téléphone: ${commandeData.telephone}
+• Total: ${commandeData.total} MRU
+
+📍 LIVRAISON :
+• Adresse: ${commandeData.adresse}, ${commandeData.ville}
+• Frais: ${commandeData.fraisLivraison} MRU
+• Mode: ${commandeData.modeLivraison}
+
+🛒 PRODUITS :
+${commandeData.panier.map(p => `• ${p.nom} (x${p.quantite}) - ${p.prix * p.quantite} MRU`).join('\n')}
+
+⏰ Date: ${new Date().toLocaleString('fr-FR')}
+                    `;
+
+                    console.log('📱 Notification admin:', adminMessage);
+                    
+                    // Ici vous pouvez intégrer un webhook, email admin, etc.
+                    return true;
+                } catch (error) {
+                    console.error('Erreur notification admin:', error);
+                    return false;
+                }
+            }
+
+            showOrderConfirmation(commandeData) {
+                // Afficher la confirmation à l'utilisateur
+                document.querySelector('.commande-section').style.display = 'none';
+                document.getElementById('successSection').style.display = 'block';
+
+                // Remplir les détails de confirmation
+                document.getElementById('orderNumber').textContent = `Commande #${commandeData.numeroCommande}`;
+                document.getElementById('confirmationOrderNumber').textContent = commandeData.numeroCommande;
+                document.getElementById('confirmationDate').textContent = new Date().toLocaleDateString('fr-FR');
+                document.getElementById('confirmationTotal').textContent = commandeData.total + ' MRU';
+                document.getElementById('confirmationDelivery').textContent = commandeData.modeLivraison + ' - ' + commandeData.fraisLivraison + ' MRU';
+
+                showNotification(`✅ Commande #${commandeData.numeroCommande} confirmée !`, 'success');
+            }
+        }
+
+        // ===== FONCTIONS GLOBALES =====
+        let panierManager = null;
+        let localisationManager = null;
+        let notificationManager = null;
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            
+            if (type === 'success') {
+                notification.style.background = '#28a745';
+            } else if (type === 'error') {
+                notification.style.background = '#e53e3e';
+            } else if (type === 'warning') {
+                notification.style.background = '#ed8936';
+            } else if (type === 'info') {
+                notification.style.background = '#3498db';
+            }
+            
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSection').style.display = show ? 'block' : 'none';
+        }
+
+        function getUserLocation() {
+            if (localisationManager) {
+                localisationManager.getUserLocation();
+            }
+        }
+
+        function validateManualLocation() {
+            if (localisationManager) {
+                localisationManager.validateManualLocation();
+            }
+        }
+
+        function showDeliveryZones() {
+            if (localisationManager) {
+                localisationManager.showDeliveryZones();
+            }
+        }
+
+        function selectDeliveryOption(element, basePrice) {
+            // Retirer la sélection précédente
+            document.querySelectorAll('.delivery-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Ajouter la sélection
+            element.classList.add('selected');
+            
+            // Récupérer le prix actuel et le mode
+            const actualPrice = element.dataset.actualPrice || basePrice;
+            const mode = element.querySelector('strong').textContent;
+            
+            // Mettre à jour les frais de livraison
+            panierManager.setFraisLivraison(parseInt(actualPrice), mode);
+            
+            showNotification(`✅ ${mode} sélectionné : ${actualPrice} MRU`, 'success');
+        }
+
+        async function finaliserCommande() {
+            // Vérifier qu'il y a au moins un produit commandé
+            const produitsCommandes = panierManager.getProduitsCommandes();
+            if (produitsCommandes.length === 0) {
+                showNotification('❌ Veuillez sélectionner au moins un produit (quantité > 0)', 'error');
+                return;
+            }
+
+            // Validation du formulaire
+            const form = document.getElementById('commandeForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                showNotification('❌ Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+
+            // Vérifier que la localisation est validée
+            if (!panierManager.localisationValidee) {
+                showNotification('❌ Veuillez valider votre localisation d\'abord', 'error');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                // Préparer les données de commande
+                const totals = panierManager.calculerTotal();
+                const commandeData = {
+                    numeroCommande: notificationManager.generateOrderNumber(),
+                    date: new Date().toISOString(),
+                    prenom: document.getElementById('prenom').value,
+                    nom: document.getElementById('nom').value,
+                    email: document.getElementById('email').value,
+                    telephone: document.getElementById('telephone').value,
+                    adresse: document.getElementById('adresse').value,
+                    ville: document.getElementById('ville').value,
+                    codePostal: document.getElementById('codePostal').value,
+                    notes: document.getElementById('notes').value,
+                    localisation: localisationManager.currentLocation,
+                    fraisLivraison: panierManager.fraisLivraison,
+                    modeLivraison: panierManager.modeLivraison,
+                    panier: produitsCommandes,
+                    sousTotal: totals.sousTotal,
+                    reductionPromo: totals.reductionPromo,
+                    reductionParrainage: totals.reductionParrainage,
+                    total: totals.total
+                };
+
+                // Sauvegarder la commande
+                panierManager.sauvegarderCommande(commandeData);
+
+                // Envoyer les notifications
+                await notificationManager.sendConfirmationEmail(commandeData);
+                await notificationManager.sendAdminNotification(commandeData);
+
+                // Afficher la confirmation
+                notificationManager.showOrderConfirmation(commandeData);
+
+                // Vider le panier
+                panierManager.panier.forEach(item => item.quantite = 0);
+                panierManager.sauvegarderPanier();
+
+            } catch (error) {
+                console.error('Erreur lors de la commande:', error);
+                showNotification('❌ Une erreur est survenue. Veuillez réessayer.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function redirectToTracking() {
+            // Redirection vers la page de suivi
+            window.location.href = 'reductions.html?tracking=true';
+        }
+
+        function contactServiceClient() {
+            const commandeData = JSON.parse(localStorage.getItem('anduxara_derniere_commande'));
+            if (!commandeData) return;
+
+            const message = `Bonjour service client Andu-Xara ! 👋%0A%0A` +
+                           `Je souhaite avoir des informations sur ma commande :%0A` +
+                           `📋 Numéro: ${commandeData.numeroCommande}%0A` +
+                           `👤 Client: ${commandeData.prenom} ${commandeData.nom}%0A` +
+                           `📧 Email: ${commandeData.email}%0A%0A` +
+                           `Pouvez-vous m'aider ?`;
+
+            window.open(`https://wa.me/22249037697?text=${message}`, '_blank');
+        }
+
+        function printConfirmation() {
+            window.print();
+        }
+
+        // ===== INITIALISATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les managers
+            panierManager = new PanierManager();
+            localisationManager = new LocalisationManager();
+            notificationManager = new NotificationManager();
+
+            // Afficher le panier initial
+            panierManager.mettreAJourAffichage();
+
+            // Gestion du bouton finaliser commande
+            document.getElementById('btnFinaliserCommande').addEventListener('click', finaliserCommande);
+
+            // Gestion de la touche Entrée pour la localisation manuelle
+            document.getElementById('manualLocation').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validateManualLocation();
+                }
+            });
+
+            console.log('🛒 Système de commande Andu-Xara initialisé!');
+            console.log('📍 Système de localisation GPS activé');
+            console.log('📧 Système de notifications prêt');
+            console.log('📦 Produits disponibles:', panierManager.panier.length);
+            
+            // Afficher les produits chargés dans la console pour debug
+            console.log('Produits dans le panier:', panierManager.panier);
+        });
+    </script>
+</body>
+</html>

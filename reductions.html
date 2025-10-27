@@ -10,9 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="js/secure/firebase-unified-manager.js"></script>
     
-<!-- Script du parrainage automatique -->
     <style>
         * {
             margin: 0;
@@ -797,6 +795,16 @@
                             <i class="fas fa-sync-alt"></i> Actualiser
                         </button>
                     </div>
+
+                    <!-- Bouton pour utiliser les gains -->
+                    <div style="margin-top: 1rem;">
+                        <button class="btn-parrain" onclick="appliquerReductionAuPanier()" style="background: #e53e3e;">
+                            <i class="fas fa-shopping-cart"></i> Utiliser mes gains
+                        </button>
+                        <a href="dashboard-parrainage.html" class="btn-parrain" style="background: #9f7aea; display: inline-flex; text-decoration: none; margin-top: 0.5rem;">
+                            <i class="fas fa-chart-line"></i> Voir mon dashboard
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Comment ça marche -->
@@ -836,11 +844,6 @@
             </div>
         </div>
 
-<!-- AJOUTER CE BOUTON dans .parrainage-actions -->
-<a href="dashboard-parrainage.html" class="btn-parrain" style="background: #9f7aea;">
-    <i class="fas fa-chart-line"></i> Voir mon dashboard
-</a>
-
         <!-- Section Code Promo (visible seulement pour les clients connectés) -->
         <div id="promoSection" class="promo-section">
             <h2><i class="fas fa-ticket-alt"></i> Utiliser votre code promo</h2>
@@ -878,51 +881,6 @@
             <i class="fas fa-info-circle"></i>
             Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
         </div>
-<script>
-// === FONCTION POUR APPLIQUER LA RÉDUCTION AU PANIER ===
-function appliquerReductionAuPanier() {
-    console.log("🛒 Application des crédits au panier...");
-    
-    // Récupérer les crédits
-    let credits = 0;
-    if (window.firebaseManager) {
-        credits = window.firebaseManager.getCurrentCredits();
-    } else {
-        const stored = localStorage.getItem('anduxara_referral_credits');
-        credits = stored ? parseInt(stored) : 0;
-    }
-    
-    if (credits > 0) {
-        // Ouvrir index.html dans un nouvel onglet avec les crédits dans l'URL
-        const newWindow = window.open(`index.html?credits=${credits}`, '_blank');
-        
-        console.log("✅ Réduction de", credits, "MRU envoyée au panier");
-        
-        // Sauvegarder aussi dans sessionStorage (partagé entre onglets)
-        sessionStorage.setItem('anduxara_referral_credits', credits.toString());
-        
-        // Message d'information
-        setTimeout(() => {
-            if (newWindow && !newWindow.closed) {
-                // Envoyer les crédits via postMessage
-                newWindow.postMessage({
-                    type: 'REFERRAL_CREDITS',
-                    credits: credits
-                }, '*');
-                
-                console.log("📨 Crédits envoyés via postMessage:", credits);
-            }
-        }, 1000);
-        
-    } else {
-        alert("❌ Vous n'avez pas de crédits de parrainage disponibles.\n\nInvitez des amis pour gagner des réductions !");
-    }
-}
-</script>
-
-<button class="btn-parrain" onclick="appliquerReductionAuPanier()" style="background: #e53e3e;">
-    <i class="fas fa-shopping-cart"></i> Utiliser mes gains
-</button>
 
         <!-- SECTION ADMIN (visible seulement pour l'admin) -->
         <div id="adminSection" class="admin-section">
@@ -1030,679 +988,586 @@ function appliquerReductionAuPanier() {
         </div>
     </div>
 
-    <!-- SCRIPT DU SYSTÈME DE PARRAINAGE COMPLET -->
-    <script src="js/secure/firebase-parrainage-complet.js"></script>
-
     <script>
-// ===== CONFIGURATION FIREBASE =====
-const firebaseConfig = {
-    apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
-    authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
-    projectId: "andu-xara-promo-codes-ff69e",
-    storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
-    messagingSenderId: "653516716143",
-    appId: "1:653516716143:web:08ee1425191b4a1766359a"
-};
+        // ===== CONFIGURATION FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
 
-// Initialiser Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+        // ===== SYSTÈME D'EMAILS PROFESSIONNELS =====
+        class EmailManager {
+            constructor() {
+                this.emails = {
+                    contact: 'contact@andu-xara.store',
+                    support: 'support@andu-xara.store', 
+                    partenariat: 'partenariat@andu-xara.store'
+                };
+                console.log('📧 EmailManager initialisé:', this.emails);
+            }
 
-// ===== GESTIONNAIRE D'AUTHENTIFICATION FIREBASE =====
-class AuthManager {
-    constructor() {
-        this.user = null;
-        this.isAdmin = false;
-        this.unsubscribeStats = null;
-        this.init();
-    }
+            async envoyerEmailBienvenue(utilisateur) {
+                console.log('📧 Email de bienvenue simulé pour:', utilisateur.email);
+                return { success: true };
+            }
 
-    init() {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                this.user = user;
-                await this.checkAdminStatus();
-                this.updateUI();
-                await this.loadParrainageStats();
-                this.setupRealtimeStats();
-                console.log('✅ Utilisateur Firebase connecté:', user.email);
-            } else {
+            async envoyerEmailParrainage(parrain, filleul) {
+                console.log('📧 Email parrainage simulé pour:', parrain.email);
+                return { success: true };
+            }
+        }
+
+        // ===== GESTIONNAIRE D'AUTHENTIFICATION =====
+        class AuthManager {
+            constructor() {
                 this.user = null;
                 this.isAdmin = false;
-                if (this.unsubscribeStats) {
-                    this.unsubscribeStats();
+                this.unsubscribeStats = null;
+                
+                // Initialiser Firebase
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
                 }
-                this.updateUI();
-                console.log('🚪 Utilisateur déconnecté');
+                this.auth = firebase.auth();
+                this.db = firebase.firestore();
+                
+                this.init();
             }
-        });
-    }
 
-    async signIn(email, password) {
-        try {
-            showLoading(true);
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            await this.updateUserDocument(userCredential.user.uid, {
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            showLoading(false);
-            return { success: true, user: userCredential.user };
-        } catch (error) {
-            showLoading(false);
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-
-    async signUp(email, password, displayName) {
-        try {
-            showLoading(true);
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            await userCredential.user.updateProfile({
-                displayName: displayName
-            });
-            await userCredential.user.sendEmailVerification();
-            await this.createUserDocument(userCredential.user, displayName);
-
-// === SYSTÈME DE PARRAINAGE AUTOMATIQUE ===
-// Vérifier si un code parrain est présent dans l'URL
-const urlParams = new URLSearchParams(window.location.search);
-const codeParrain = urlParams.get('parrain');
-if (codeParrain) {
-    await this.enregistrerParrainage(userCredential.user, codeParrain);
-    console.log('✅ Parrainage enregistré pour:', codeParrain);
-}
-            showLoading(false);
-            return { success: true, user: userCredential.user };
-        } catch (error) {
-            showLoading(false);
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-    // === MÉTHODE PARRAINAGE ===
-    async enregistrerParrainage(user, codeParrain) {
-        try {
-            // Enregistrer le parrainage dans Firestore
-            await db.collection('parrainages').add({
-                parrainCode: codeParrain,
-                filleulId: user.uid,
-                filleulEmail: user.email,
-                filleulNom: user.displayName,
-                dateInscription: firebase.firestore.FieldValue.serverTimestamp(),
-                statut: 'actif',
-                gainsAttribues: false
-            });
-            
-            console.log('📝 Parrainage enregistré dans Firestore');
-            
-            // Mettre à jour les stats du parrain
-            await this.mettreAJourStatsParrain(codeParrain);
-            
-        } catch (error) {
-            console.error('❌ Erreur enregistrement parrainage:', error);
-        }
-    }
-
-    // === MISE À JOUR STATS PARRAIN ===
-    async mettreAJourStatsParrain(codeParrain) {
-        try {
-            console.log('🔍 Recherche parrain avec code:', codeParrain);
-            
-            // Trouver le parrain par son code
-            const parrainQuery = await db.collection('users')
-                .where('referralCode', '==', codeParrain)
-                .get();
-                
-            console.log('📊 Résultat recherche:', parrainQuery.size, 'parrain(s) trouvé(s)');
-                
-            if (!parrainQuery.empty) {
-                const parrainDoc = parrainQuery.docs[0];
-                const parrainData = parrainDoc.data();
-                const parrainId = parrainDoc.id;
-                
-                console.log('🎯 Parrain trouvé:', parrainData.email);
-                
-                // Calculer les nouveaux gains
-                const nouveauGain = 50; // 50 MRU bonus par parrainage
-                const gainsTotaux = (parrainData.parrainage?.totalEarnings || 0) + nouveauGain;
-                const gainsDisponibles = (parrainData.parrainage?.availableEarnings || 0) + nouveauGain;
-                const nouveauxFilleuls = (parrainData.parrainage?.referredCount || 0) + 1;
-                
-                // Mettre à jour Firestore
-                await db.collection('users').doc(parrainId).update({
-                    'parrainage.referredCount': nouveauxFilleuls,
-                    'parrainage.totalEarnings': gainsTotaux,
-                    'parrainage.availableEarnings': gainsDisponibles,
-                    'parrainage.lastUpdate': firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                console.log('💰 Stats parrain mises à jour:', { 
-                    nouveauxFilleuls, 
-                    gainsTotaux, 
-                    gainsDisponibles 
-                });
-                
-            } else {
-                console.warn('⚠️ Aucun parrain trouvé avec le code:', codeParrain);
-            }
-        } catch (error) {
-            console.error('❌ Erreur mise à jour stats parrain:', error);
-        }
-    }
-
-    async createUserDocument(user, displayName) {
-        const userData = {
-            uid: user.uid,
-            email: user.email,
-            displayName: displayName,
-            role: 'client',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-            isActive: true,
-            referralCode: this.generateReferralCode(),
-            parrainage: {
-                referredCount: 0,
-                totalEarnings: 0,
-                availableEarnings: 0
-            },
-            preferences: {
-                newsletter: true,
-                promotions: true
-            }
-        };
-        await db.collection('users').doc(user.uid).set(userData);
-        console.log('📝 Document utilisateur créé dans Firestore:', user.email);
-    }
-
-    generateReferralCode() {
-        return 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
-    }
-
-    async updateUserDocument(uid, data) {
-        await db.collection('users').doc(uid).update(data);
-    }
-
-    async checkAdminStatus() {
-        if (!this.user) return false;
-        try {
-            const userDoc = await db.collection('users').doc(this.user.uid).get();
-            this.isAdmin = userDoc.exists && userDoc.data().role === 'admin';
-            return this.isAdmin;
-        } catch (error) {
-            console.error('Erreur vérification admin:', error);
-            return false;
-        }
-    }
-
-    async loadParrainageStats() {
-        if (!this.user || this.isAdmin) return;
-        try {
-            const userDoc = await db.collection('users').doc(this.user.uid).get();
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                const parrainage = userData.parrainage || {};
-                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
-                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
-                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
-            }
-        } catch (error) {
-            console.error('Erreur chargement parrainage:', error);
-        }
-    }
-
-    async refreshParrainageStats() {
-        if (!this.user || this.isAdmin) return;
-        try {
-            console.log('🔄 Rafraîchissement des stats parrainage...');
-            const userDoc = await db.collection('users').doc(this.user.uid).get();
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                const parrainage = userData.parrainage || {};
-                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
-                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
-                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
-                console.log('✅ Stats mises à jour:', {
-                    referredCount: parrainage.referredCount,
-                    totalEarnings: parrainage.totalEarnings,
-                    availableEarnings: parrainage.availableEarnings
+            init() {
+                this.auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        this.user = user;
+                        await this.checkAdminStatus();
+                        this.updateUI();
+                        await this.loadParrainageStats();
+                        this.setupRealtimeStats();
+                        console.log('✅ Utilisateur connecté:', user.email);
+                    } else {
+                        this.user = null;
+                        this.isAdmin = false;
+                        if (this.unsubscribeStats) {
+                            this.unsubscribeStats();
+                        }
+                        this.updateUI();
+                        console.log('🚪 Utilisateur déconnecté');
+                    }
                 });
             }
-        } catch (error) {
-            console.error('❌ Erreur rafraîchissement stats:', error);
-        }
-    }
 
-setupRealtimeStats() {
-    if (!this.user || this.isAdmin) return;
-    this.unsubscribeStats = db.collection('users').doc(this.user.uid)
-        .onSnapshot((doc) => {
-            if (doc.exists) {
-                const userData = doc.data();
-                const parrainage = userData.parrainage || {};
-                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
-                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
-                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
-                console.log('🔄 Mise à jour temps réel des stats:', {
-                    referredCount: parrainage.referredCount,
-                    totalEarnings: parrainage.totalEarnings,
-                    availableEarnings: parrainage.availableEarnings
-                });
-
-                // SYNCHRONISATION AVEC INDEX.HTML
-                const credits = parrainage.availableEarnings || 0;
-                if (window.firebaseManager) {
-                    window.firebaseManager.setCredits(credits);
-                } else {
-                    localStorage.setItem('anduxara_referral_credits', credits.toString());
-                    console.log("💰 Crédits sauvegardés dans localStorage:", credits, "MRU");
+            async signIn(email, password) {
+                try {
+                    showLoading(true);
+                    const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
+                    await this.updateUserDocument(userCredential.user.uid, {
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    showLoading(false);
+                    return { success: true, user: userCredential.user };
+                } catch (error) {
+                    showLoading(false);
+                    return { success: false, error: this.getErrorMessage(error) };
                 }
             }
-        }, (error) => {
-            console.error('❌ Erreur écouteur temps réel:', error);
-        });
-}
-    updateUI() {
-        const authButtons = document.getElementById('authButtons');
-        const userProfile = document.getElementById('userProfile');
-        const promoSection = document.getElementById('promoSection');
-        const parrainageSection = document.getElementById('parrainageSection');
-        const infoMessage = document.getElementById('infoMessage');
-        const adminSection = document.getElementById('adminSection');
-        const verificationWarning = document.getElementById('verificationWarning');
 
-        if (this.user) {
-            authButtons.style.display = 'none';
-            userProfile.style.display = 'block';
-            infoMessage.style.display = 'none';
-            document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
-            document.getElementById('userEmail').textContent = this.user.email;
-            document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
-            
-            const statusElement = document.getElementById('userStatus');
-            if (this.user.emailVerified) {
-                statusElement.textContent = '✓ Email vérifié';
-                statusElement.style.color = '#38a169';
-                verificationWarning.style.display = 'none';
-            } else {
-                statusElement.textContent = '✗ Email non vérifié';
-                statusElement.style.color = '#e53e3e';
-                verificationWarning.style.display = 'block';
+            async signUp(email, password, displayName) {
+                try {
+                    showLoading(true);
+                    const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({ displayName: displayName });
+                    await userCredential.user.sendEmailVerification();
+                    await this.createUserDocument(userCredential.user, displayName);
+
+                    // Vérifier et traiter le parrainage
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const codeParrain = urlParams.get('parrain');
+                    if (codeParrain) {
+                        await this.enregistrerParrainage(userCredential.user, codeParrain);
+                        console.log('✅ Parrainage enregistré:', codeParrain);
+                    }
+
+                    showLoading(false);
+                    return { success: true, user: userCredential.user };
+                } catch (error) {
+                    showLoading(false);
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
             }
 
-            if (this.isAdmin) {
-                promoSection.style.display = 'none';
-                parrainageSection.style.display = 'none';
-                adminSection.style.display = 'block';
-                this.loadAdminStats();
-                console.log('🔑 Admin connecté - Interface admin activée');
-            } else {
-                promoSection.style.display = 'block';
-                parrainageSection.style.display = 'block';
-                adminSection.style.display = 'none';
-                this.refreshParrainageStats();
-                console.log('👤 Client connecté - Interface complète activée');
+            async createUserDocument(user, displayName) {
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: displayName,
+                    role: 'client',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    isActive: true,
+                    referralCode: this.generateReferralCode(),
+                    parrainage: {
+                        referredCount: 0,
+                        totalEarnings: 0,
+                        availableEarnings: 0
+                    }
+                };
+                
+                await this.db.collection('users').doc(user.uid).set(userData);
+                console.log('📝 Document utilisateur créé:', user.email);
+                
+                // Envoyer email de bienvenue
+                if (window.emailManager) {
+                    setTimeout(() => {
+                        window.emailManager.envoyerEmailBienvenue(user);
+                    }, 1000);
+                }
             }
-        } else {
-            authButtons.style.display = 'flex';
-            userProfile.style.display = 'none';
-            promoSection.style.display = 'none';
-            parrainageSection.style.display = 'none';
-            adminSection.style.display = 'none';
-            infoMessage.style.display = 'block';
-        }
-    }
 
-    async loadAdminStats() {
-        try {
-            const clientsSnapshot = await db.collection('users')
-                .where('role', '==', 'client')
-                .get();
-            document.getElementById('clientCount').textContent = clientsSnapshot.size;
-            document.getElementById('codesUsed').textContent = '156';
-        } catch (error) {
-            console.error('Erreur chargement stats:', error);
-        }
-    }
-
-    getErrorMessage(error) {
-        const errorMessages = {
-            'auth/invalid-email': 'Adresse email invalide',
-            'auth/user-disabled': 'Ce compte a été désactivé',
-            'auth/user-not-found': 'Aucun compte trouvé avec cet email',
-            'auth/wrong-password': 'Mot de passe incorrect',
-            'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
-            'auth/weak-password': 'Le mot de passe est trop faible',
-            'auth/network-request-failed': 'Erreur réseau. Veuillez réessayer.',
-            'auth/too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.'
-        };
-        return errorMessages[error.code] || error.message;
-    }
-}
-
-// ===== GESTIONNAIRE GLOBAL AUTH MANAGER =====
-let authManager = null;
-
-function getAuthManager() {
-    if (!authManager) {
-        authManager = new AuthManager();
-    }
-    return authManager;
-}
-
-// ===== FONCTIONS GLOBALES POUR LES BOUTONS =====
-async function deconnecterUtilisateur() {
-    try {
-        const authManager = getAuthManager();
-        const result = await authManager.signOut();
-        if (result.success) {
-            showNotification('✅ Déconnexion réussie!', 'success');
-        } else {
-            showNotification('❌ Erreur: ' + result.error, 'error');
-        }
-    } catch (error) {
-        showNotification('❌ Erreur lors de la déconnexion: ' + error.message, 'error');
-    }
-}
-
-function renvoyerEmailVerification() {
-    const authManager = getAuthManager();
-    if (authManager.user) {
-        authManager.user.sendEmailVerification()
-            .then(() => showNotification('📧 Email de vérification envoyé !', 'success'))
-            .catch(error => showNotification('❌ Erreur: ' + error.message, 'error'));
-    }
-}
-
-function actualiserStatsParrainage() {
-    const authManager = getAuthManager();
-    authManager.refreshParrainageStats();
-    showNotification('🔄 Statistiques actualisées!', 'success');
-}
-
-// ===== FONCTIONS PARRAINAGE AMÉLIORÉES =====
-async function copierCodeParrain() {
-    const codeText = document.getElementById('parrainCodeText').textContent;
-    if (codeText === 'Chargement...' || codeText === 'Code non disponible') {
-        showNotification('❌ Code de parrainage non disponible', 'error');
-        return;
-    }
-    
-    try {
-        await navigator.clipboard.writeText(codeText);
-        showNotification('✅ Code de parrainage copié !', 'success');
-    } catch (error) {
-        console.error('Erreur copie code:', error);
-        showNotification('❌ Erreur lors de la copie du code', 'error');
-    }
-}
-
-async function copierLienParrainage() {
-    if (!auth.currentUser) {
-        showNotification('Veuillez vous connecter pour utiliser le parrainage', 'error');
-        return;
-    }
-    try {
-        const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const referralCode = userData.referralCode;
-            const lienParrainage = 'https://anduxara2408-droid.github.io/andu-xara-site/inscription.html?parrain=' + referralCode;
-            await navigator.clipboard.writeText(lienParrainage);
-            showNotification('✅ Lien de parrainage copié !<br><small>Partagez ce lien avec vos amis</small>', 'success');
-            console.log('📋 Lien de parrainage copié:', lienParrainage);
-        }
-    } catch (error) {
-        console.error('Erreur copie lien:', error);
-        showNotification('❌ Erreur lors de la copie du lien', 'error');
-    }
-}
-
-function partagerParrainage() {
-    if (!auth.currentUser) {
-        showNotification('Veuillez vous connecter pour partager', 'error');
-        return;
-    }
-    
-    // Simuler le partage (pourrait être étendu avec Web Share API)
-    copierLienParrainage();
-    showNotification('🎯 Lien prêt à partager !<br><small>Collez-le sur vos réseaux</small>', 'success');
-}
-
-// ===== FONCTIONS UTILITAIRES =====
-function showLoading(show) {
-    document.getElementById('authLoading').style.display = show ? 'block' : 'none';
-}
-
-function showNotification(message, type = 'success') {
-    const notification = document.getElementById('notification');
-    notification.innerHTML = message;
-    notification.style.background = type === 'success' ? '#28a745' : '#e53e3e';
-    notification.style.display = 'block';
-    
-    setTimeout(() => {
-        notification.style.display = 'none';
-    }, 5000);
-}
-
-// ===== FONCTIONS CODES PROMO =====
-function appliquerCodePromo() {
-    const codeInput = document.getElementById('promoCodeInput');
-    const messageDiv = document.getElementById('promoMessage');
-    const successSection = document.getElementById('successSection');
-    const code = codeInput.value.trim().toUpperCase();
-    
-    if (!code) {
-        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
-        return;
-    }
-    
-    const codesValides = {
-        'BIENVENUE10': '10% de réduction',
-        'ANDU15': '15% de réduction', 
-        'XARA20': '20% de réduction',
-        'INSTA25': '25% de réduction (Instagram)',
-        'TIKTOK30': '30% de réduction (TikTok)',
-        'FACEBOOK20': '20% de réduction (Facebook)',
-        'NEWSLETTER15': '15% de réduction (Newsletter)',
-        'PARRAIN10': '10% de réduction (Parrainage)'
-    };
-    
-    if (codesValides[code]) {
-        messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
-        successSection.style.display = 'block';
-        codeInput.value = '';
-        localStorage.setItem('anduxara_active_promo', JSON.stringify({
-            code: code,
-            discount: getDiscountFromCode(code),
-            appliedAt: new Date().toISOString()
-        }));
-        console.log('🎉 Code promo sauvegardé pour index.html');
-    } else {
-        messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
-        successSection.style.display = 'none';
-    }
-}
-
-function getDiscountFromCode(code) {
-    const discountMap = {
-        'BIENVENUE10': 10,
-        'ANDU15': 15,
-        'XARA20': 20,
-        'INSTA25': 25,
-        'TIKTOK30': 30,
-        'FACEBOOK20': 20,
-        'NEWSLETTER15': 15,
-        'PARRAIN10': 10
-    };
-    return discountMap[code] || 0;
-}
-
-// ===== FONCTIONS ADMIN =====
-function showAdminDashboard() {
-    alert('🎯 Tableau de bord admin\n\n• Clients actifs: Voir Firestore\n• Codes utilisés: 156\n• Performance: Excellente');
-}
-
-function showAnalytics() {
-    alert('📊 Analytics détaillés\n\n📈 Graphiques des utilisations\n👥 Répartition clients\n💰 Revenus générés');
-}
-
-function showClientManager() {
-    alert('👥 Gestion des clients\n\n• Voir Firestore pour la liste complète\n• Chaque compte créé apparaît automatiquement');
-}
-
-// ===== FONCTIONS MODALS =====
-function showLoginModal() {
-    document.getElementById('loginModal').style.display = 'flex';
-}
-
-function showSignupModal() {
-    document.getElementById('signupModal').style.display = 'flex';
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
-
-// ===== INITIALISATION =====
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialiser authManager
-    const authManager = getAuthManager();
-
-    // Formulaire connexion
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const authManager = getAuthManager();
-        const result = await authManager.signIn(email, password);
-        if (result.success) {
-            closeModal('loginModal');
-            showNotification('✅ Connexion réussie!', 'success');
-        } else {
-            showNotification('❌ Erreur: ' + result.error, 'error');
-        }
-    });
-
-    // Formulaire inscription
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('signupName').value;
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-        const authManager = getAuthManager();
-        const result = await authManager.signUp(email, password, name);
-        if (result.success) {
-            closeModal('signupModal');
-            showNotification('✅ Compte créé avec succès! Un email de vérification a été envoyé.', 'success');
-        } else {
-            showNotification('❌ Erreur: ' + result.error, 'error');
-        }
-    });
-
-    // Fermer modals en cliquant dehors
-    window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-            e.target.style.display = 'none';
-        }
-    });
-
-    console.log('🚀 Système complet avec Parrainage intégré initialisé');
-    console.log('🔑 Admin: cheikhdiabira2408@gmail.com');
-    console.log('👤 Client: créez un nouveau compte pour tester');
-});
-
-// Instructions
-setTimeout(() => {
-    console.log('\n🎯 SOURCES DE CODES PROMO:');
-    console.log('• Instagram: @andu_xara → Codes exclusifs');
-    console.log('• TikTok: @andu_xara → Lives avec codes');
-    console.log('• Facebook: Andu Xara → Événements et concours');
-    console.log('• Newsletter: Inscription → Codes mensuels');
-    console.log('• Parrainage: Programme fidélité → Codes de récompense');
-}, 1000);
-
-// ===== SYSTÈME DE RÉDUCTIONS PARRAINAGE =====
-class ReductionManager {
-    constructor() {
-        this.db = firebase.firestore();
-        this.auth = firebase.auth();
-    }
-
-    // === APPLIQUER RÉDUCTION PARRAINAGE ===
-    async appliquerReductionPanier() {
-        try {
-            const user = this.auth.currentUser;
-            if (!user) return 0;
-
-            // Récupérer les gains disponibles
-            const userDoc = await this.db.collection('users').doc(user.uid).get();
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                const gainsDisponibles = userData.parrainage?.availableEarnings || 0;
-                
-                console.log('💰 Gains disponibles pour réduction:', gainsDisponibles + ' MRU');
-                
-                // Sauvegarder dans localStorage pour index.html
-                localStorage.setItem('anduxara_parrainage_reduction', gainsDisponibles.toString());
-                
-                return gainsDisponibles;
-            }
-            return 0;
-        } catch (error) {
-            console.error('❌ Erreur application réduction:', error);
-            return 0;
-        }
-    }
-
-    // === UTILISER LES GAINS POUR UN ACHAT ===
-    async utiliserGainsPourAchat(montantUtilise) {
-        try {
-            const user = this.auth.currentUser;
-            if (!user) return false;
-
-            const userDoc = await this.db.collection('users').doc(user.uid).get();
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                const gainsActuels = userData.parrainage?.availableEarnings || 0;
-                
-                if (gainsActuels >= montantUtilise) {
-                    const nouveauxGains = gainsActuels - montantUtilise;
-                    
-                    // Mettre à jour Firestore
-                    await this.db.collection('users').doc(user.uid).update({
-                        'parrainage.availableEarnings': nouveauxGains,
-                        'parrainage.lastPurchase': firebase.firestore.FieldValue.serverTimestamp()
+            async enregistrerParrainage(user, codeParrain) {
+                try {
+                    // Enregistrer le parrainage
+                    await this.db.collection('parrainages').add({
+                        parrainCode: codeParrain,
+                        filleulId: user.uid,
+                        filleulEmail: user.email,
+                        filleulNom: user.displayName,
+                        dateInscription: firebase.firestore.FieldValue.serverTimestamp(),
+                        statut: 'actif'
                     });
                     
-                    console.log('✅ Gains utilisés:', montantUtilise + ' MRU');
-                    return true;
+                    // Mettre à jour les stats du parrain
+                    await this.mettreAJourStatsParrain(codeParrain, user);
+                    
+                } catch (error) {
+                    console.error('❌ Erreur parrainage:', error);
                 }
             }
-            return false;
-        } catch (error) {
-            console.error('❌ Erreur utilisation gains:', error);
-            return false;
+
+            async mettreAJourStatsParrain(codeParrain, filleul) {
+                try {
+                    const parrainQuery = await this.db.collection('users')
+                        .where('referralCode', '==', codeParrain)
+                        .get();
+                        
+                    if (!parrainQuery.empty) {
+                        const parrainDoc = parrainQuery.docs[0];
+                        const parrainData = parrainDoc.data();
+                        const parrainId = parrainDoc.id;
+                        
+                        const nouveauGain = 50;
+                        const gainsTotaux = (parrainData.parrainage?.totalEarnings || 0) + nouveauGain;
+                        const gainsDisponibles = (parrainData.parrainage?.availableEarnings || 0) + nouveauGain;
+                        const nouveauxFilleuls = (parrainData.parrainage?.referredCount || 0) + 1;
+                        
+                        await this.db.collection('users').doc(parrainId).update({
+                            'parrainage.referredCount': nouveauxFilleuls,
+                            'parrainage.totalEarnings': gainsTotaux,
+                            'parrainage.availableEarnings': gainsDisponibles,
+                            'parrainage.lastUpdate': firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        // Envoyer email de parrainage
+                        if (window.emailManager) {
+                            const parrainInfo = {
+                                nom: parrainData.displayName || parrainData.email,
+                                email: parrainData.email,
+                                credits: gainsDisponibles
+                            };
+                            
+                            const filleulInfo = {
+                                nom: filleul.displayName || filleul.email
+                            };
+                            
+                            window.emailManager.envoyerEmailParrainage(parrainInfo, filleulInfo);
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Erreur mise à jour stats parrain:', error);
+                }
+            }
+
+            generateReferralCode() {
+                return 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            }
+
+            async updateUserDocument(uid, data) {
+                await this.db.collection('users').doc(uid).update(data);
+            }
+
+            async checkAdminStatus() {
+                if (!this.user) return false;
+                try {
+                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
+                    this.isAdmin = userDoc.exists && userDoc.data().role === 'admin';
+                    return this.isAdmin;
+                } catch (error) {
+                    console.error('Erreur vérification admin:', error);
+                    return false;
+                }
+            }
+
+            async loadParrainageStats() {
+                if (!this.user || this.isAdmin) return;
+                try {
+                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
+                    if (userDoc.exists) {
+                        this.updateStatsUI(userDoc.data());
+                    }
+                } catch (error) {
+                    console.error('Erreur chargement parrainage:', error);
+                }
+            }
+
+            async refreshParrainageStats() {
+                if (!this.user || this.isAdmin) return;
+                try {
+                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
+                    if (userDoc.exists) {
+                        this.updateStatsUI(userDoc.data());
+                        console.log('✅ Stats parrainage rafraîchies');
+                    }
+                } catch (error) {
+                    console.error('Erreur rafraîchissement stats:', error);
+                }
+            }
+
+            updateStatsUI(userData) {
+                const parrainage = userData.parrainage || {};
+                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
+                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
+                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
+                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
+                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
+
+                // Sauvegarder les crédits pour index.html
+                const credits = parrainage.availableEarnings || 0;
+                localStorage.setItem('anduxara_referral_credits', credits.toString());
+            }
+
+            setupRealtimeStats() {
+                if (!this.user || this.isAdmin) return;
+                this.unsubscribeStats = this.db.collection('users').doc(this.user.uid)
+                    .onSnapshot((doc) => {
+                        if (doc.exists) {
+                            this.updateStatsUI(doc.data());
+                        }
+                    }, (error) => {
+                        console.error('❌ Erreur écouteur temps réel:', error);
+                    });
+            }
+
+            updateUI() {
+                const authButtons = document.getElementById('authButtons');
+                const userProfile = document.getElementById('userProfile');
+                const promoSection = document.getElementById('promoSection');
+                const parrainageSection = document.getElementById('parrainageSection');
+                const infoMessage = document.getElementById('infoMessage');
+                const adminSection = document.getElementById('adminSection');
+                const verificationWarning = document.getElementById('verificationWarning');
+
+                if (this.user) {
+                    authButtons.style.display = 'none';
+                    userProfile.style.display = 'block';
+                    infoMessage.style.display = 'none';
+                    
+                    document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
+                    document.getElementById('userEmail').textContent = this.user.email;
+                    document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+                    
+                    const statusElement = document.getElementById('userStatus');
+                    if (this.user.emailVerified) {
+                        statusElement.textContent = '✓ Email vérifié';
+                        statusElement.style.color = '#38a169';
+                        verificationWarning.style.display = 'none';
+                    } else {
+                        statusElement.textContent = '✗ Email non vérifié';
+                        statusElement.style.color = '#e53e3e';
+                        verificationWarning.style.display = 'block';
+                    }
+
+                    if (this.isAdmin) {
+                        promoSection.style.display = 'none';
+                        parrainageSection.style.display = 'none';
+                        adminSection.style.display = 'block';
+                        this.loadAdminStats();
+                    } else {
+                        promoSection.style.display = 'block';
+                        parrainageSection.style.display = 'block';
+                        adminSection.style.display = 'none';
+                    }
+                } else {
+                    authButtons.style.display = 'flex';
+                    userProfile.style.display = 'none';
+                    promoSection.style.display = 'none';
+                    parrainageSection.style.display = 'none';
+                    adminSection.style.display = 'none';
+                    infoMessage.style.display = 'block';
+                }
+            }
+
+            async loadAdminStats() {
+                try {
+                    const clientsSnapshot = await this.db.collection('users')
+                        .where('role', '==', 'client')
+                        .get();
+                    document.getElementById('clientCount').textContent = clientsSnapshot.size;
+                } catch (error) {
+                    console.error('Erreur chargement stats admin:', error);
+                }
+            }
+
+            getErrorMessage(error) {
+                const errorMessages = {
+                    'auth/invalid-email': 'Adresse email invalide',
+                    'auth/user-disabled': 'Ce compte a été désactivé',
+                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
+                    'auth/wrong-password': 'Mot de passe incorrect',
+                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
+                    'auth/weak-password': 'Le mot de passe est trop faible'
+                };
+                return errorMessages[error.code] || error.message;
+            }
         }
-    }
-}
 
-// ===== INTÉGRATION AVEC INDEX.HTML =====
-function synchroniserAvecIndexHTML() {
-    // Cette fonction sera appelée par index.html
-    const reduction = localStorage.getItem('anduxara_parrainage_reduction');
-    return reduction ? parseInt(reduction) : 0;
-}
+        // ===== FONCTIONS GLOBALES =====
+        let authManager = null;
+        let emailManager = null;
 
-// Initialiser le manager de réductions
-let reductionManager = new ReductionManager();
+        function getAuthManager() {
+            if (!authManager) {
+                authManager = new AuthManager();
+                window.authManager = authManager;
+            }
+            return authManager;
+        }
 
+        function getEmailManager() {
+            if (!emailManager) {
+                emailManager = new EmailManager();
+                window.emailManager = emailManager;
+            }
+            return emailManager;
+        }
+
+        // Fonctions d'interface
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('authLoading').style.display = show ? 'block' : 'none';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.background = type === 'success' ? '#28a745' : '#e53e3e';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        async function deconnecterUtilisateur() {
+            try {
+                await firebase.auth().signOut();
+                showNotification('✅ Déconnexion réussie!', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } catch (error) {
+                console.log('Déconnexion effectuée');
+                window.location.reload();
+            }
+        }
+
+        function renvoyerEmailVerification() {
+            const user = firebase.auth().currentUser;
+            if (user) {
+                user.sendEmailVerification()
+                    .then(() => {
+                        showNotification('📧 Email de vérification renvoyé !', 'success');
+                    })
+                    .catch(error => {
+                        showNotification('❌ Erreur: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Fonctions parrainage
+        async function copierCodeParrain() {
+            const codeText = document.getElementById('parrainCodeText').textContent;
+            if (codeText === 'Chargement...' || codeText === 'Code non disponible') {
+                showNotification('❌ Code de parrainage non disponible', 'error');
+                return;
+            }
+            
+            try {
+                await navigator.clipboard.writeText(codeText);
+                showNotification('✅ Code de parrainage copié !', 'success');
+            } catch (error) {
+                showNotification('❌ Erreur lors de la copie', 'error');
+            }
+        }
+
+        async function copierLienParrainage() {
+            if (!firebase.auth().currentUser) {
+                showNotification('Veuillez vous connecter', 'error');
+                return;
+            }
+            try {
+                const userDoc = await firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const referralCode = userData.referralCode;
+                    const lienParrainage = window.location.origin + window.location.pathname + '?parrain=' + referralCode;
+                    await navigator.clipboard.writeText(lienParrainage);
+                    showNotification('✅ Lien de parrainage copié !', 'success');
+                }
+            } catch (error) {
+                showNotification('❌ Erreur lors de la copie', 'error');
+            }
+        }
+
+        function partagerParrainage() {
+            copierLienParrainage();
+        }
+
+        function actualiserStatsParrainage() {
+            if (authManager) {
+                authManager.refreshParrainageStats();
+                showNotification('🔄 Statistiques actualisées!', 'success');
+            }
+        }
+
+        // Fonction pour appliquer la réduction au panier
+        function appliquerReductionAuPanier() {
+            const credits = localStorage.getItem('anduxara_referral_credits') || 0;
+            if (parseInt(credits) > 0) {
+                // Ouvrir index.html avec les crédits
+                window.open(`index.html?credits=${credits}`, '_blank');
+                showNotification('🎉 Réduction appliquée au panier !', 'success');
+            } else {
+                showNotification('❌ Aucun crédit disponible', 'error');
+            }
+        }
+
+        // Fonctions codes promo
+        function appliquerCodePromo() {
+            const codeInput = document.getElementById('promoCodeInput');
+            const messageDiv = document.getElementById('promoMessage');
+            const successSection = document.getElementById('successSection');
+            const code = codeInput.value.trim().toUpperCase();
+            
+            if (!code) {
+                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
+                return;
+            }
+            
+            const codesValides = {
+                'BIENVENUE10': '10% de réduction',
+                'ANDU15': '15% de réduction', 
+                'XARA20': '20% de réduction',
+                'INSTA25': '25% de réduction (Instagram)',
+                'TIKTOK30': '30% de réduction (TikTok)'
+            };
+            
+            if (codesValides[code]) {
+                messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
+                successSection.style.display = 'block';
+                codeInput.value = '';
+                
+                // Sauvegarder le code pour index.html
+                localStorage.setItem('anduxara_active_promo', JSON.stringify({
+                    code: code,
+                    discount: getDiscountFromCode(code),
+                    appliedAt: new Date().toISOString()
+                }));
+            } else {
+                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide</span>';
+                successSection.style.display = 'none';
+            }
+        }
+
+        function getDiscountFromCode(code) {
+            const discountMap = {
+                'BIENVENUE10': 10,
+                'ANDU15': 15,
+                'XARA20': 20,
+                'INSTA25': 25,
+                'TIKTOK30': 30
+            };
+            return discountMap[code] || 0;
+        }
+
+        // Fonctions admin
+        function showAdminDashboard() {
+            alert('🎯 Tableau de bord admin\n\nFonctionnalité à développer');
+        }
+
+        function showAnalytics() {
+            alert('📊 Analytics\n\nFonctionnalité à développer');
+        }
+
+        function showClientManager() {
+            alert('👥 Gestion clients\n\nFonctionnalité à développer');
+        }
+
+        // ===== INITIALISATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les managers
+            getAuthManager();
+            getEmailManager();
+            
+            // Gestion des formulaires
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const result = await authManager.signIn(email, password);
+                if (result.success) {
+                    closeModal('loginModal');
+                    showNotification('✅ Connexion réussie!', 'success');
+                } else {
+                    showNotification('❌ Erreur: ' + result.error, 'error');
+                }
+            });
+
+            document.getElementById('signupForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const result = await authManager.signUp(email, password, name);
+                if (result.success) {
+                    closeModal('signupModal');
+                    showNotification('✅ Compte créé! Vérifiez votre email.', 'success');
+                } else {
+                    showNotification('❌ Erreur: ' + result.error, 'error');
+                }
+            });
+
+            // Fermer les modales en cliquant dehors
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+
+            console.log('🚀 Système Andu-Xara initialisé avec succès!');
+        });
     </script>
 </body>
 </html>
-
