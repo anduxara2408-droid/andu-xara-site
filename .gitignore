@@ -7,7 +7,6 @@
 
 # Fichiers de correction temporaires
 *.sh
-*.md
 *_fix*
 *_patch*
 *_test*
