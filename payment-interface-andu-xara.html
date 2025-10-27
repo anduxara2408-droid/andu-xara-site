@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andu-Xara | Paiement Sécurisé</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --primary-purple: #6a11cb;
+            --primary-blue: #2575fc;
+            --gold: #d4af37;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #25D366;
+            --danger: #ff4757;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --border-radius: 15px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .payment-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Header identique à ton site */
+        .payment-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            flex-shrink: 0;
+        }
+        
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid white;
+        }
+        
+        .header-text {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .header-text h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        /* Layout principal */
+        .payment-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+        
+        /* Section produits */
+        .products-section {
+            background: var(--light);
+            padding: 25px;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .selected-products {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: var(--primary-purple);
+            font-weight: bold;
+        }
+        
+        .product-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Section paiement */
+        .payment-section {
+            padding: 25px;
+        }
+        
+        .order-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .summary-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid var(--primary-purple);
+        }
+        
+        /* Méthodes de paiement */
+        .payment-methods {
+            margin: 25px 0;
+        }
+        
+        .country-section {
+            margin-bottom: 25px;
+        }
+        
+        .country-title {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .payment-options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .payment-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, #f8faff, #f0f4ff);
+        }
+        
+        .method-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .wave { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
+        .bankily { background: linear-gradient(135deg, #f46b45, #eea849); }
+        .masrvi { background: linear-gradient(135deg, #834d9b, #d04ed6); }
+        .paypal { background: linear-gradient(135deg, #0070ba, #1546a0); }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-name {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .method-desc {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .method-fee {
+            color: var(--success);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .payment-option.selected .checkmark {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .country-badge {
+            position: absolute;
+            top: -8px;
+            right: 15px;
+            background: var(--gold);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        /* Bouton de paiement */
+        .pay-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .pay-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
+        }
+        
+        .pay-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .security {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .processing .loading {
+            display: inline-block;
+        }
+        
+        .processing .button-text {
+            display: none;
+        }
+        
+        /* Footer */
+        .payment-footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .payment-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo-img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <!-- Header identique à ton site -->
+        <div class="payment-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo Andu-Xara" class="logo-img">
+                </div>
+                <div class="header-text">
+                    <h1>Andu-Xara • Paiement Sécurisé</h1>
+                    <p class="subtitle">Finalisez votre commande en toute sécurité</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-main">
+            <!-- Section Produits -->
+            <div class="products-section">
+                <div class="section-title">
+                    <i class="fas fa-shopping-bag"></i>
+                    Votre Commande
+                </div>
+                
+                <div class="selected-products">
+                    <!-- Produit 1 -->
+                    <div class="product-item">
+                        <div class="product-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                        <div class="product-details">
+                            <div class="product-name">T-shirt logo arabe</div>
+                            <div class="product-price">349 MRU</div>
+                        </div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn">-</button>
+                            <span>1</span>
+                            <button class="quantity-btn">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Produit 2 -->
+                    <div class="product-item">
+                        <div class="product-image" style="background: linear-gradient(135deg, #f46b45, #eea849);"></div>
+                        <div class="product-details">
+                            <div class="product-name">Ensemble capuche style arabe</div>
+                            <div class="product-price">419 MRU</div>
+                        </div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn">-</button>
+                            <span>1</span>
+                            <button class="quantity-btn">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Produit 3 -->
+                    <div class="product-item">
+                        <div class="product-image" style="background: linear-gradient(135deg, #834d9b, #d04ed6);"></div>
+                        <div class="product-details">
+                            <div class="product-name">Capuchon blanc</div>
+                            <div class="product-price">209 MRU</div>
+                        </div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn">-</button>
+                            <span>1</span>
+                            <button class="quantity-btn">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <div class="section-title">
+                        <i class="fas fa-receipt"></i>
+                        Récapitulatif
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Sous-total:</span>
+                        <span>977 MRU</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Livraison:</span>
+                        <span>Gratuite</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Frais de service:</span>
+                        <span id="service-fee">0 MRU</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span id="total-amount">977 MRU</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Paiement -->
+            <div class="payment-section">
+                <div class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    Méthode de Paiement
+                </div>
+                
+                <div class="payment-methods">
+                    <!-- Sénégal -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-flag"></i>
+                            🇸🇳 Sénégal
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('wave')">
+                                <div class="method-icon wave">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Wave</div>
+                                    <div class="method-desc">Paiement mobile instantané</div>
+                                    <div class="method-fee">Frais: 1%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mauritanie -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-flag"></i>
+                            🇲🇷 Mauritanie
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('bankily')">
+                                <div class="method-icon bankily">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Bankily</div>
+                                    <div class="method-desc">Mobile money Mauritanie</div>
+                                    <div class="method-fee">Frais: 1.5%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="country-badge">Populaire</div>
+                            </div>
+                            
+                            <div class="payment-option" onclick="selectPayment('masrvi')">
+                                <div class="method-icon masrvi">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Masrvi</div>
+                                    <div class="method-desc">Solution de paiement locale</div>
+                                    <div class="method-fee">Frais: 1.8%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- International -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-globe"></i>
+                            🌍 International
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('paypal')">
+                                <div class="method-icon paypal">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">PayPal</div>
+                                    <div class="method-desc">Cartes internationales (Visa, Mastercard)</div>
+                                    <div class="method-fee">Frais: 3.5%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="pay-button" id="payButton" onclick="processPayment()" disabled>
+                    <span class="button-text">
+                        <i class="fas fa-lock"></i>
+                        Payer Maintenant - 977 MRU
+                    </span>
+                    <div class="loading"></div>
+                </button>
+                
+                <div class="security">
+                    <i class="fas fa-shield-alt"></i>
+                    Paiement 100% sécurisé • Cryptage SSL
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-footer">
+            © 2024 Andu-Xara • Votre style, notre héritage • Service Client: +222 49 03 76 97
+        </div>
+    </div>
+
+    <script>
+        let selectedPayment = null;
+        let baseAmount = 977; // Montant de base des produits
+        
+        function selectPayment(method) {
+            // Retirer toutes les sélections
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Ajouter la nouvelle sélection
+            event.currentTarget.classList.add('selected');
+            selectedPayment = method;
+            
+            // Calculer les frais
+            calculateFees(method);
+            
+            // Activer le bouton
+            document.getElementById('payButton').disabled = false;
+        }
+        
+        function calculateFees(method) {
+            let fees = 0;
+            let total = baseAmount;
+            
+            switch(method) {
+                case 'wave':
+                    fees = baseAmount * 0.01;
+                    break;
+                case 'bankily':
+                    fees = baseAmount * 0.015;
+                    break;
+                case 'masrvi':
+                    fees = baseAmount * 0.018;
+                    break;
+                case 'paypal':
+                    fees = baseAmount * 0.035;
+                    break;
+            }
+            
+            total = baseAmount + fees;
+            
+            // Mettre à jour l'affichage
+            document.getElementById('service-fee').textContent = Math.round(fees) + ' MRU';
+            document.getElementById('total-amount').textContent = Math.round(total) + ' MRU';
+            
+            // Mettre à jour le bouton
+            const button = document.getElementById('payButton');
+            button.innerHTML = `<span class="button-text"><i class="fas fa-lock"></i> Payer Maintenant - ${Math.round(total)} MRU</span><div class="loading"></div>`;
+        }
+        
+        function processPayment() {
+            if (!selectedPayment) return;
+            
+            const button = document.getElementById('payButton');
+            button.classList.add('processing');
+            button.disabled = true;
+            
+            // Simulation de traitement
+            setTimeout(() => {
+                const total = document.getElementById('total-amount').textContent;
+                
+                alert(`✅ Paiement réussi via ${selectedPayment.toUpperCase()} !\n\nMontant: ${total}\n\nMerci pour votre achat chez Andu-Xara !\nVotre commande sera expédiée dans les 24h.`);
+                
+                button.classList.remove('processing');
+                button.disabled = false;
+                
+                // Réinitialiser
+                resetPayment();
+                
+            }, 3000);
+        }
+        
+        function resetPayment() {
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            selectedPayment = null;
+            
+            // Réinitialiser les montants
+            document.getElementById('service-fee').textContent = '0 MRU';
+            document.getElementById('total-amount').textContent = baseAmount + ' MRU';
+            
+            const button = document.getElementById('payButton');
+            button.innerHTML = `<span class="button-text"><i class="fas fa-lock"></i> Payer Maintenant - ${baseAmount} MRU</span><div class="loading"></div>`;
+            button.disabled = true;
+        }
+        
+        // Gestion des quantités
+        document.querySelectorAll('.quantity-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productItem = this.closest('.product-item');
+                const quantitySpan = productItem.querySelector('.product-quantity span');
+                let quantity = parseInt(quantitySpan.textContent);
+                
+                if (this.textContent === '+') {
+                    quantity++;
+                } else if (this.textContent === '-' && quantity > 1) {
+                    quantity--;
+                }
+                
+                quantitySpan.textContent = quantity;
+                
+                // Ici tu pourrais recalculer le total si besoin
+            });
+        });
+        
+        // Effet de chargement initial
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

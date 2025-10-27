@@ -1,0 +1,365 @@
+<!-- Interface de sélection de paiement -->
+<div id="payment-modal" class="payment-modal">
+    <div class="payment-modal-content">
+        <button class="close-payment" onclick="closePaymentModal()">×</button>
+        
+        <h2>🎯 Choisissez votre mode de paiement</h2>
+        <p class="payment-subtitle">Sélectionnez l'option qui vous convient le mieux</p>
+        
+        <div class="payment-options-grid">
+            <!-- SÉNÉGAL -->
+            <div class="payment-country-section">
+                <h3>🇸🇳 Pour le Sénégal</h3>
+                <div class="payment-options">
+                    <div class="payment-option wave-option" onclick="selectPayment('wave')">
+                        <div class="payment-logo">
+                            <img src="images/payment/wave-logo.png" alt="Wave" onerror="this.style.display='none'">
+                            <span class="payment-name">Wave</span>
+                        </div>
+                        <div class="payment-info">
+                            <p>Paiement mobile instantané</p>
+                            <span class="payment-fee">Frais: 1%</span>
+                        </div>
+                        <div class="payment-check">✓</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAURITANIE -->
+            <div class="payment-country-section">
+                <h3>🇲🇷 Pour la Mauritanie</h3>
+                <div class="payment-options">
+                    <div class="payment-option bankily-option" onclick="selectPayment('bankily')">
+                        <div class="payment-logo">
+                            <img src="images/payment/bankily-logo.png" alt="Bankily" onerror="this.style.display='none'">
+                            <span class="payment-name">Bankily</span>
+                        </div>
+                        <div class="payment-info">
+                            <p>Mobile money Mauritanie</p>
+                            <span class="payment-fee">Frais: 1.5%</span>
+                        </div>
+                        <div class="payment-check">✓</div>
+                    </div>
+
+                    <div class="payment-option masrvi-option" onclick="selectPayment('masrvi')">
+                        <div class="payment-logo">
+                            <img src="images/payment/masrvi-logo.png" alt="Masrvi" onerror="this.style.display='none'">
+                            <span class="payment-name">Masrvi</span>
+                        </div>
+                        <div class="payment-info">
+                            <p>Solution de paiement locale</p>
+                            <span class="payment-fee">Frais: 1.8%</span>
+                        </div>
+                        <div class="payment-check">✓</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERNATIONAL -->
+            <div class="payment-country-section">
+                <h3>🌍 International</h3>
+                <div class="payment-options">
+                    <div class="payment-option paypal-option" onclick="selectPayment('paypal')">
+                        <div class="payment-logo">
+                            <img src="images/payment/paypal-logo.png" alt="PayPal" onerror="this.style.display='none'">
+                            <span class="payment-name">PayPal</span>
+                        </div>
+                        <div class="payment-info">
+                            <p>Cartes internationales</p>
+                            <span class="payment-fee">Frais: 3.5%</span>
+                        </div>
+                        <div class="payment-check">✓</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-actions">
+            <button class="btn-payment-cancel" onclick="closePaymentModal()">Annuler</button>
+            <button class="btn-payment-confirm" onclick="confirmPayment()" disabled>
+                Confirmer le paiement
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Styles interface paiement */
+.payment-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.payment-modal-content {
+    position: relative;
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    animation: slideInUp 0.4s ease;
+}
+
+.close-payment {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.payment-subtitle {
+    color: #666;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.payment-country-section {
+    margin-bottom: 25px;
+}
+
+.payment-country-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    border-left: 4px solid #667eea;
+    padding-left: 10px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.payment-option:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+}
+
+.payment-option.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #f8faff, #ffffff);
+}
+
+.payment-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.payment-logo img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.payment-name {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.payment-info {
+    flex: 2;
+}
+
+.payment-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.payment-fee {
+    font-size: 0.8rem;
+    color: #10b981;
+    font-weight: 500;
+}
+
+.payment-check {
+    color: #667eea;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.payment-option.selected .payment-check {
+    opacity: 1;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-end;
+}
+
+.btn-payment-cancel, .btn-payment-confirm {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-payment-cancel {
+    background: #f8f9fa;
+    color: #666;
+}
+
+.btn-payment-cancel:hover {
+    background: #e9ecef;
+}
+
+.btn-payment-confirm {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-payment-confirm:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+}
+
+.btn-payment-confirm:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { 
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-modal-content {
+        margin: 10% 20px;
+        padding: 20px;
+    }
+    
+    .payment-option {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .payment-logo, .payment-info {
+        flex: none;
+    }
+}
+</style>
+
+<script>
+// JavaScript pour l'interface paiement
+let selectedPaymentMethod = null;
+
+function openPaymentModal() {
+    document.getElementById('payment-modal').style.display = 'block';
+    selectedPaymentMethod = null;
+    updateConfirmButton();
+}
+
+function closePaymentModal() {
+    document.getElementById('payment-modal').style.display = 'none';
+}
+
+function selectPayment(method) {
+    // Retirer la sélection précédente
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    // Ajouter la nouvelle sélection
+    const selectedOption = document.querySelector(`.${method}-option`);
+    selectedOption.classList.add('selected');
+    
+    selectedPaymentMethod = method;
+    updateConfirmButton();
+}
+
+function updateConfirmButton() {
+    const confirmBtn = document.querySelector('.btn-payment-confirm');
+    confirmBtn.disabled = !selectedPaymentMethod;
+}
+
+function confirmPayment() {
+    if (!selectedPaymentMethod) return;
+    
+    console.log('Méthode sélectionnée:', selectedPaymentMethod);
+    
+    // Rediriger vers le processeur de paiement
+    switch(selectedPaymentMethod) {
+        case 'wave':
+            initiateWavePayment();
+            break;
+        case 'bankily':
+            initiateBankilyPayment();
+            break;
+        case 'masrvi':
+            initiateMasrviPayment();
+            break;
+        case 'paypal':
+            initiatePayPalPayment();
+            break;
+    }
+    
+    closePaymentModal();
+}
+
+// Fonctions d'initiation (à compléter avec les vraies APIs)
+function initiateWavePayment() {
+    alert('Redirection vers Wave...');
+    // Intégration API Wave ici
+}
+
+function initiateBankilyPayment() {
+    alert('Redirection vers Bankily...');
+    // Intégration API Bankily ici
+}
+
+function initiateMasrviPayment() {
+    alert('Redirection vers Masrvi...');
+    // Intégration API Masrvi ici
+}
+
+function initiatePayPalPayment() {
+    alert('Redirection vers PayPal...');
+    // Intégration API PayPal ici
+}
+</script>
