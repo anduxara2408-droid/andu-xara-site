@@ -1,252 +1,511 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Andu-Xara - Notre Histoire</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(120deg, #f0f4ff, #e0ebff);
-    color: #1f2937;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andu-Xara - Notre Histoire • Racines Africaines, Style Moderne</title>
+    <meta name="description" content="Découvrez l'histoire inspirante d'Andu-Xara, marque mauritanienne née en 2020. De ses débuts difficiles à sa reconnaissance nationale, parcourez notre timeline interactive.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Andu-Xara - Notre Histoire • Racines Africaines, Style Moderne">
+    <meta property="og:description" content="Découvrez l'histoire inspirante de la marque mauritanienne Andu-Xara depuis sa création en 2020">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://andu-xara.store/histoire.html">
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET ET BASES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-header {
-    background: #667eea;
-    color: white;
-    padding: 30px 0;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-header h1 {
-    margin: 0;
-    font-size: 2.5em;
-    letter-spacing: 1px;
-}
+        /* ===== HEADER ===== */
+        .history-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-section#timeline {
-    max-width: 900px;
-    margin: 50px auto;
-    position: relative;
-    padding: 0 20px;
-}
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-.timeline-line {
-    position: absolute;
-    left: 50%;
-    width: 4px;
-    background: #667eea;
-    top: 0;
-    bottom: 0;
-    margin-left: -2px;
-}
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
 
-.timeline-item {
-    position: relative;
-    width: 50%;
-    padding: 20px 30px;
-    box-sizing: border-box;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease-out;
-    cursor: pointer;
-}
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
 
-.timeline-item.left { left: 0; text-align: right; }
-.timeline-item.right { left: 50%; }
+        .header-title {
+            text-align: center;
+            flex: 1;
+        }
 
-.timeline-item::before {
-    content: attr(data-icon);
-    position: absolute;
-    top: 20px;
-    font-size: 1.5em;
-    z-index: 1;
-}
+        .header-title h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
 
-.timeline-item.left::before { right: -30px; }
-.timeline-item.right::before { left: -30px; }
+        .header-title .subtitle {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 400;
+        }
 
-.timeline-content {
-    background: white;
-    padding: 20px 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
+        /* ===== TIMELINE CONTAINER ===== */
+        .timeline-hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
 
-.timeline-content:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-}
+        .hero-text {
+            text-align: center;
+            margin-bottom: 50px;
+        }
 
-.timeline-content h3 {
-    margin-top: 0;
-    color: #334155;
-    font-size: 1.5em;
-}
+        .hero-text h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
 
-.timeline-content p {
-    text-align: justify;
-    line-height: 1.6em;
-    margin-bottom: 0;
-}
+        .hero-text p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-.timeline-item.visible { opacity: 1; transform: translateY(0); }
+        /* ===== TIMELINE ===== */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-.timeline-item[data-color="blue"] .timeline-content { border-left: 5px solid #667eea; }
-.timeline-item[data-color="green"] .timeline-content { border-left: 5px solid #10b981; }
-.timeline-item[data-color="orange"] .timeline-content { border-left: 5px solid #f59e0b; }
-.timeline-item[data-color="purple"] .timeline-content { border-left: 5px solid #8b5cf6; }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            top: 0;
+            bottom: 0;
+            border-radius: 2px;
+        }
 
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-}
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 15px;
-    width: 80%;
-    max-width: 600px;
-    text-align: center;
-    position: relative;
-}
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+            padding-right: 60px;
+        }
 
-.modal-content img {
-    width: 100%;
-    max-height: 350px;
-    border-radius: 12px;
-}
+        .timeline-item.right {
+            left: 50%;
+            padding-left: 60px;
+        }
 
-.close {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            z-index: 2;
+        }
 
-.close:hover {
-    color: #000;
-}
-</style>
+        .timeline-item.left::before {
+            right: -10px;
+        }
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        .timeline-item.right::before {
+            left: -10px;
+        }
 
-  gtag('config', 'G-S9CBS21SVR');
-</script>
+        .timeline-icon {
+            position: absolute;
+            top: 35px;
+            font-size: 1.8rem;
+            z-index: 3;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
 
+        .timeline-item.left .timeline-icon {
+            right: -50px;
+        }
+
+        .timeline-item.right .timeline-icon {
+            left: -50px;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .timeline-content p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== MESSAGE DÉVELOPPEMENT ===== */
+        .dev-message {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 60px auto;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .dev-message h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .dev-message p {
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .history-footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-content p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-text h2 {
+                font-size: 2rem;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                text-align: left !important;
+                padding: 20px 20px 20px 80px !important;
+            }
+
+            .timeline-item::before {
+                left: 20px !important;
+                right: auto !important;
+            }
+
+            .timeline-item.left::before,
+            .timeline-item.right::before {
+                left: 20px;
+                right: auto;
+            }
+
+            .timeline-icon {
+                left: 20px !important;
+                right: auto !important;
+            }
+
+            .timeline-item.left .timeline-icon,
+            .timeline-item.right .timeline-icon {
+                left: 20px;
+                right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timeline-content {
+                padding: 20px;
+            }
+
+            .timeline-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .hero-text h2 {
+                font-size: 1.6rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<header>
-    <h1>Andu-Xara</h1>
-</header>
-
-<section id="timeline">
-    <div class="timeline-line"></div>
-
-    <div class="timeline-item left" data-color="blue" data-icon="📖" data-media="media/debuts.jpg">
-        <div class="timeline-content">
-            <h3>Les débuts</h3>
-            <p>Avant que le nom Andu-Xara ne voie le jour, plusieurs équipes ont été formées pour concrétiser l’idée. Les trois premières furent dissoutes en deux ans. Ces expériences ont été essentielles pour définir notre vision et notre persévérance.</p>
+    <!-- Header -->
+    <header class="history-header">
+        <div class="header-content">
+            <a href="index.html" class="back-button">
+                ← Retour à l'accueil
+            </a>
+            <div class="header-title">
+                <h1>Andu-Xara</h1>
+                <p class="subtitle">Notre Histoire • Depuis 2020</p>
+            </div>
+            <div style="width: 140px;"></div> <!-- Spacer pour l'alignement -->
         </div>
-    </div>
+    </header>
 
-    <div class="timeline-item right" data-color="green" data-icon="🗓" data-media="media/creation.jpg">
-        <div class="timeline-content">
-            <h3>Création officielle</h3>
-            <p>Le 18 octobre 2020, Andu-Xara a été créée par Cheikhou Diabira, originaire de Ajar, Mauritanie. Son nom signifie « se connaître soi-même » : Andu-Xara en soninké, Arav-Raassak en hassanya, Andu-Hoorema en halpular et Xam-Sabopp en wolof, symbolisant la philosophie de la marque.</p>
+    <!-- Hero Section -->
+    <section class="timeline-hero">
+        <div class="hero-text">
+            <h2>Notre Parcours Inspirant</h2>
+            <p>De l'idée à la réalité, découvrez l'histoire d'Andu-Xara à travers les moments clés qui ont façonné notre marque</p>
         </div>
-    </div>
 
-    <div class="timeline-item left" data-color="orange" data-icon="💪" data-media="media/equipe.jpg">
-        <div class="timeline-content">
-            <h3>Formation de l’équipe</h3>
-            <p>La troisième équipe formée a réuni Cheikhou Diabira, Bocar Bà, Halima Sokhona, Fatimetou Soumaré, Botkhol Daffa, Khadija Diallo, Moussa Diekhete et Bonco Sokhona. Cette équipe incarne la détermination et la passion du projet Andu-Xara.</p>
+        <!-- Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+
+            <!-- Étape 1 -->
+            <div class="timeline-item left" data-date="2018-2020">
+                <div class="timeline-icon">📖</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">2018-2020</span>
+                    <h3>Les Débuts et Persévérance</h3>
+                    <p>Avant qu'Andu-Xara ne voie le jour, plusieurs équipes se sont formées autour de cette vision. Trois tentatives en deux ans ont forgé notre résilience. Chaque échec fut une leçon précieuse qui a finalement conduit à la création de la marque telle que nous la connaissons aujourd'hui.</p>
+                </div>
+            </div>
+
+            <!-- Étape 2 -->
+            <div class="timeline-item right" data-date="18 Oct 2020">
+                <div class="timeline-icon">🗓️</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">18 Octobre 2020</span>
+                    <h3>Naissance d'Andu-Xara</h3>
+                    <p>Fondée par Cheikhou Diabira, originaire de Ajar en Mauritanie, Andu-Xara signifie "se connaître soi-même". Un nom qui résonne dans toutes les langues locales : <em>Andu-Xara</em> en soninké, <em>Arav-Raassak</em> en hassanya, <em>Andu-Hoorema</em> en halpular, <em>Xam-Sabopp</em> en wolof. Plus qu'une marque, une philosophie.</p>
+                </div>
+            </div>
+
+            <!-- Étape 3 -->
+            <div class="timeline-item left" data-date="2021">
+                <div class="timeline-icon">💪</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">2021</span>
+                    <h3>L'Équipe Fondatrice</h3>
+                    <p>Réunion des talents : Cheikhou Diabira, Bocar Bà, Halima Sokhona, Fatimetou Soumaré, Botkhol Daffa, Khadija Diallo, Mouna Diekhete et Bonco Sokhona. Une équipe soudée portant les valeurs d'innovation, de qualité et d'authenticité africaine.</p>
+                </div>
+            </div>
+
+            <!-- Étape 4 -->
+            <div class="timeline-item right" data-date="Juin 2023">
+                <div class="timeline-icon">🏆</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">17-18 Juin 2023</span>
+                    <h3>Première Reconnaissance Nationale</h3>
+                    <p>Au Forum International des Compétences à Nouakchott, Andu-Xara termine 2ème et remporte son premier prix. Un moment historique organisé par Hawa Drame et Sosso Bamba qui a marqué l'entrée de la marque sur la scène nationale.</p>
+                </div>
+            </div>
+
+            <!-- Étape 5 -->
+            <div class="timeline-item left" data-date="Nov 2024">
+                <div class="timeline-icon">🌟</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">15 Novembre 2024</span>
+                    <h3>Collaboration Artistique</h3>
+                    <p>Signature d'un contrat de collaboration avec l'artiste Kenzo Wouro. Andu-Xara s'impose comme un symbole de résilience et d'inspiration, fusionnant mode urbaine et héritage culturel africain.</p>
+                </div>
+            </div>
+
+            <!-- Étape 6 -->
+            <div class="timeline-item right" data-date="2025">
+                <div class="timeline-icon">🚀</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">2025</span>
+                    <h3>Vision Future</h3>
+                    <p>Andu-Xara continue son expansion avec de nouvelles collections innovantes, tout en restant fidèle à ses racines. Notre mission : démocratiser la mode africaine authentique à travers le monde tout en créant des opportunités pour la jeunesse entrepreneure africaine.</p>
+                </div>
+            </div>
         </div>
+    </section>
+
+    <!-- Message Développement -->
+    <div class="dev-message">
+        <h3>📸 Galerie Historique en Préparation</h3>
+        <p>Nous rassemblons actuellement nos photos et archives historiques pour enrichir cette timeline. Revenez bientôt découvrir les visages et moments qui ont façonné l'histoire d'Andu-Xara !</p>
     </div>
 
-    <div class="timeline-item right" data-color="purple" data-icon="🏆" data-media="media/forum.jpg">
-        <div class="timeline-content">
-            <h3>Premier succès</h3>
-            <p>Le 17 et 18 juin, au Forum International des Compétences à Nouakchott, Andu-Xara a terminé 2e et remporté son premier prix. Cet événement, organisé par Hawa Drame et Sosso Bal, a marqué la reconnaissance nationale du projet.</p>
+    <!-- Footer -->
+    <footer class="history-footer">
+        <div class="footer-content">
+            <p><strong>Andu-Xara • Racines Africaines, Style Moderne</strong></p>
+            <p>Marque mauritanienne de vêtements authentiques depuis 2020</p>
+            <p>📍 Mauritanie, Nouakchott • 📞 +222 49 03 76 97</p>
         </div>
-    </div>
+    </footer>
 
-    <div class="timeline-item left" data-color="blue" data-icon="🌟" data-media="media/kenzo.jpg">
-        <div class="timeline-content">
-            <h3>Aujourd’hui</h3>
-            <p>Le 15 novembre 2024, Andu-Xara a signé un contrat de collaboration avec l’artiste Kenzo Wouro. La marque s’impose désormais comme un symbole de résilience et d’inspiration pour tous.</p>
-        </div>
-    </div>
+    <script>
+        // Animation au défilement
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
 
-</section>
+        timelineItems.forEach(item => {
+            observer.observe(item);
+        });
 
-<!-- Modal -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <img id="modalMedia" src="" alt="Image événement">
-    </div>
-</div>
+        // Animation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                timelineItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 200);
+                });
+            }, 500);
+        });
 
-<script>
-// Animation au scroll
-const items = document.querySelectorAll('.timeline-item');
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if(entry.isIntersecting){
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.2 });
-items.forEach(item => observer.observe(item));
-
-// Modal logic
-const modal = document.getElementById("modal");
-const modalMedia = document.getElementById("modalMedia");
-const closeBtn = document.querySelector(".close");
-
-items.forEach(item => {
-    item.addEventListener('click', () => {
-        const mediaSrc = item.getAttribute("data-media");
-        modalMedia.src = mediaSrc;
-        modal.style.display = "block";
-    });
-});
-
-closeBtn.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-</script>
-
+        // Effet de survol amélioré
+        timelineItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
 </body>
 </html>
