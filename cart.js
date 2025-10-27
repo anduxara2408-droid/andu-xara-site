@@ -53,7 +53,7 @@ function placeOrder() {
 
     message += `\nTotal : ${total.toFixed(2)} Mru\n\nCordialement.`;
 
-    const email = "anduxara2408@gmail.com";
+    const email = "contact@andu-xara.store";
     const subject = "Nouvelle commande";
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
 

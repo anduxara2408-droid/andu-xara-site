@@ -267,7 +267,7 @@ html += '''
         
         <div class="footer">
             <p>© 2025 Andu-xara - Tous droits réservés</p>
-            <p>📧 Email: <a href="mailto:anduxara2408@gmail.com">anduxara2408@gmail.com</a></p>
+            <p>📧 Email: <a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></p>
             <p>📱 WhatsApp: <a href="https://wa.me/22249037697">+222 49037697</a></p>
             <p>📞 Téléphone: <a href="tel:+22231037697">+222 31037697</a></p>
             <p>📞 Sénégal: <a href="tel:+221762821163">+221 762821163</a></p>
