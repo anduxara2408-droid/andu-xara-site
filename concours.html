@@ -475,7 +475,7 @@
         const body = `QUIZ CULTUREL ANDU-XARA - NOUVEAU PARTICIPANT !\n\n📋 Nom: ${userInfo.name}\n📱 WhatsApp: ${userInfo.phone}\n📧 Email: ${userInfo.email || 'Non renseigné'}\n🎯 Score: ${score}/4\n🎫 Numéro: ${contestNumber}\n📢 Partages: ${sharesCount} réseau(x)\n⏰ Date: ${new Date().toLocaleString()}\n\n📞 CONTACT: https://wa.me/${userInfo.phone.replace(/[^0-9]/g, '')}`;
         
         // Envoyer email
-        window.location.href = `mailto:anduxara2408@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = `mailto:contact@andu-xara.store?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
     
     function shareVictory() {
