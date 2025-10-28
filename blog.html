@@ -12,9 +12,6 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://andu-xara.store/blog.html">
     
-    <!-- EmailJS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -566,10 +563,16 @@
         <section class="newsletter-section">
             <h3>📧 Restez Informé</h3>
             <p>Recevez les nouveaux podcasts et articles directement dans votre boîte mail. Ne manquez aucun contenu exclusif Andu-Xara !</p>
-            <form class="newsletter-form" id="newsletterForm">
-                <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Votre adresse email" required>
-                <button type="button" class="newsletter-btn" id="subscribeBtn" onclick="handleNewsletter()">S'abonner</button>
+            
+            <form class="newsletter-form" action="https://formspree.io/f/xjvqjvjw" method="POST" id="newsletterForm">
+                <input type="email" name="email" class="newsletter-input" id="newsletterEmail" placeholder="Votre adresse email" required>
+                <input type="hidden" name="_subject" value="🎉 Nouvel abonné newsletter Andu-Xara">
+                <input type="hidden" name="_replyto" value="contact@andu-xara.store">
+                <input type="hidden" name="_cc" value="contact@andu-xara.store">
+                
+                <button type="submit" class="newsletter-btn" id="subscribeBtn">S'abonner</button>
             </form>
+            
             <div id="statusMessage" class="status-message"></div>
         </section>
     </div>
@@ -584,92 +587,48 @@
     </footer>
 
     <script>
-        // ===== CONFIGURATION EMAILJS + BREVO =====
-        (function() {
-            emailjs.init("UQ4E5xAF7P-Y4Ii2_"); // Ta Public Key
-        })();
-
-        // ===== FONCTION NEWSLETTER COMPLÈTE =====
-        async function handleNewsletter() {
-            console.log('🎯 Newsletter - Démarrage...');
+        // ===== NEWSLETTER AVEC FORMSPREE =====
+        document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
             const emailInput = document.getElementById('newsletterEmail');
             const subscribeBtn = document.getElementById('subscribeBtn');
-            const statusMessage = document.getElementById('statusMessage');
-            const email = emailInput ? emailInput.value.trim() : '';
-            
-            // Validation email
-            if (!email || !email.includes('@') || !email.includes('.')) {
-                showStatus('❌ Veuillez entrer une adresse email valide.', 'error');
-                if (emailInput) emailInput.focus();
+            const email = emailInput.value.trim();
+
+            if (!email || !email.includes('@')) {
+                showStatus('❌ Email invalide', 'error');
                 return;
             }
 
-            // Désactiver le bouton
             subscribeBtn.disabled = true;
-            subscribeBtn.textContent = 'Envoi en cours...';
+            subscribeBtn.textContent = 'Envoi...';
             showStatus('📨 Traitement de votre inscription...', 'loading');
 
             try {
-                // 1. EMAIL DE BIENVENUE AU CLIENT
-                const welcomeEmailParams = {
-                    to_email: email,
-                    from_name: "Andu-Xara",
-                    to_name: "Cher Abonné",
-                    reply_to: "contact@andu-xara.store",
-                    website_url: "https://andu-xara.store",
-                    subscription_date: new Date().toLocaleDateString('fr-FR')
-                };
-
-                console.log('📧 Envoi email bienvenue à:', email);
+                const formData = new FormData(this);
                 
-                const welcomeResult = await emailjs.send(
-                    'service_nu9aipm', // Ton Service ID
-                    'template_anduxara_welcome', // Template bienvenue
-                    welcomeEmailParams
-                );
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
 
-                console.log('✅ Email bienvenue envoyé:', welcomeResult);
-
-                // 2. NOTIFICATION POUR TOI
-                const notificationParams = {
-                    to_email: "contact@andu-xara.store",
-                    from_name: "Système Newsletter",
-                    subscriber_email: email,
-                    subscription_date: new Date().toLocaleDateString('fr-FR'),
-                    subscription_time: new Date().toLocaleTimeString('fr-FR'),
-                    to_name: "Équipe Andu-Xara"
-                };
-
-                console.log('🔔 Envoi notification pour:', email);
-                
-                const notificationResult = await emailjs.send(
-                    'service_nu9aipm', // Même Service ID
-                    'template_anduxara_notification', // Template notification
-                    notificationParams
-                );
-
-                console.log('✅ Notification envoyée:', notificationResult);
-
-                // SUCCÈS
-                showStatus('🎉 Félicitations ! Vous êtes inscrit à la newsletter Andu-Xara. Vous recevrez un email de confirmation.', 'success');
-                emailInput.value = '';
-                
-                // Animation de succès
-                subscribeBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-                setTimeout(() => {
-                    subscribeBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                }, 2000);
+                if (response.ok) {
+                    showStatus('🎉 Félicitations ! Vous êtes inscrit à la newsletter Andu-Xara.', 'success');
+                    emailInput.value = '';
+                } else {
+                    throw new Error('Erreur d\'envoi');
+                }
 
             } catch (error) {
-                console.error('❌ Erreur envoi emails:', error);
-                showStatus('❌ Une erreur est survenue. Veuillez réessayer ou nous contacter directement.', 'error');
+                showStatus('❌ Erreur lors de l\'envoi. Veuillez réessayer.', 'error');
             } finally {
-                // Réactiver le bouton
                 subscribeBtn.disabled = false;
                 subscribeBtn.textContent = 'S\'abonner';
             }
-        }
+        });
 
         // ===== FONCTION AFFICHAGE STATUT =====
         function showStatus(message, type) {
@@ -693,7 +652,6 @@
             
             statusMessage.style.display = 'block';
             
-            // Masquer après 8 secondes pour les succès
             if (type === 'success') {
                 setTimeout(() => {
                     statusMessage.style.display = 'none';
@@ -741,20 +699,11 @@
             });
         });
 
-        // Soumission du formulaire avec Enter
-        document.getElementById('newsletterEmail').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleNewsletter();
-            }
-        });
-
         // Initialisation au chargement
         document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ Blog Andu-Xara initialisé avec succès');
-            console.log('📧 Système newsletter Brevo configuré');
-            console.log('🔑 Service ID: service_nu9aipm');
-            console.log('🔑 Public Key: UQ4E5xAF7P-Y4Ii2_');
+            console.log('📧 Système newsletter FormSubmit configuré');
+            console.log('🚀 Prêt à recevoir des abonnements !');
         });
     </script>
 
