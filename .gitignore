@@ -1,31 +1,13 @@
-# Fichiers de backup
-*.backup*
-*.backup.*
-*backup_*
-*avant_*
-*before_*
-
 # Fichiers de correction temporaires
-*.sh
-*_fix*
-*_patch*
-*_test*
-*_final*
-*_complete*
-*_duplicated*
-*_error*
-*_null*
+complete_functions.py
+fix_*.py
+optimisation-securisee/
 
-# Fichiers de debug
-*_debug*
-*_temp*
-*_old*
-*_new*
+# Fichiers CSS temporaires  
+css/common.css
+css/style-unified.css
 
 # Fichiers système
 .DS_Store
 Thumbs.db
-
-# Logs
 *.log
-npm-debug.log*
