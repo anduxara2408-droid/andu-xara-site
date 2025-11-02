@@ -11,3 +11,11 @@ css/style-unified.css
 .DS_Store
 Thumbs.db
 *.log
+
+# Fichiers de backup et scripts temporaires
+*.backup
+*.sh
+index_backup_*.html
+
+# Fichiers CSS temporaires
+css/style-min.css
