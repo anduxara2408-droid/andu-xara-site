@@ -798,7 +798,7 @@
 
                     <!-- Bouton pour utiliser les gains - CORRIGÉ -->
                     <div style="margin-top: 1rem;">
-                        <button class="btn-parrain" onclick="appliquerReductionAuPanier()" style="background: #e53e3e;">
+                        <button id="btnUtiliserGains" class="btn-parrain" onclick="utiliserMesGains()" style="background: #e53e3e;">
                             <i class="fas fa-shopping-cart"></i> Utiliser mes gains
                         </button>
                         <a href="dashboard-parrainage.html" class="btn-parrain" style="background: #9f7aea; display: inline-flex; text-decoration: none; margin-top: 0.5rem;">
@@ -1004,25 +1004,108 @@
             firebase.initializeApp(firebaseConfig);
         }
 
-        // ===== SYSTÈME D'EMAILS PROFESSIONNELS =====
-        class EmailManager {
-            constructor() {
-                this.emails = {
-                    contact: 'contact@andu-xara.store',
-                    support: 'support@andu-xara.store', 
-                    partenariat: 'partenariat@andu-xara.store'
-                };
-                console.log('📧 EmailManager initialisé:', this.emails);
+        // ===== FONCTIONS DE GESTION DES RÉCOMPENSES =====
+        function hasUsedRewards() {
+            const creditsUtilises = parseInt(localStorage.getItem('anduxara_credits_utilises')) || 0;
+            const rewardHistory = JSON.parse(localStorage.getItem('anduxara_reward_history')) || [];
+            
+            const hasUsedInOrder = rewardHistory.some(entry => 
+                entry.type === 'utilisation_commande' && entry.statut === 'utilise'
+            );
+            
+            return creditsUtilises > 0 || hasUsedInOrder;
+        }
+
+        function markRewardsAsUsed(credits) {
+            console.log('🎯 Marquage des récompenses comme utilisées:', credits + ' MRU');
+            
+            const creditsUtilises = parseInt(localStorage.getItem('anduxara_credits_utilises')) || 0;
+            localStorage.setItem('anduxara_credits_utilises', (creditsUtilises + credits).toString());
+            
+            const rewardHistory = JSON.parse(localStorage.getItem('anduxara_reward_history')) || [];
+            rewardHistory.push({
+                montant: credits,
+                date: new Date().toISOString(),
+                type: 'utilisation_commande',
+                statut: 'utilise'
+            });
+            localStorage.setItem('anduxara_reward_history', JSON.stringify(rewardHistory));
+            
+            localStorage.setItem('anduxara_referral_credits', '0');
+            
+            console.log('✅ Récompenses marquées comme utilisées');
+        }
+
+        // ===== FONCTION PRINCIPALE POUR UTILISER LES GAINS =====
+        async function utiliserMesGains() {
+            if (!firebase.auth().currentUser) {
+                showNotification("🔐 Connectez-vous pour utiliser vos gains", "error");
+                return;
             }
 
-            async envoyerEmailBienvenue(utilisateur) {
-                console.log('📧 Email de bienvenue simulé pour:', utilisateur.email);
-                return { success: true };
-            }
+            try {
+                showNotification("🔄 Vérification de vos crédits...", "success");
+                
+                // Vérifier si les récompenses ont déjà été utilisées
+                if (hasUsedRewards()) {
+                    showNotification("❌ Vous avez déjà utilisé vos récompenses sur une commande précédente.", "error");
+                    
+                    // Mettre à jour l'affichage
+                    document.getElementById("gainsDisponibles").textContent = "0 MRU";
+                    document.getElementById("gainsDisponibles").style.color = "#e53e3c";
+                    
+                    // Désactiver le bouton
+                    const btnUtiliser = document.getElementById('btnUtiliserGains');
+                    btnUtiliser.style.background = '#95a5a6';
+                    btnUtiliser.innerHTML = '<i class="fas fa-ban"></i> Récompenses déjà utilisées';
+                    btnUtiliser.onclick = null;
+                    
+                    return;
+                }
+                
+                // Récupérer les crédits depuis Firebase
+                const userDoc = await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get();
+                
+                if (!userDoc.exists) {
+                    showNotification("❌ Données utilisateur non trouvées", "error");
+                    return;
+                }
 
-            async envoyerEmailParrainage(parrain, filleul) {
-                console.log('📧 Email parrainage simulé pour:', parrain.email);
-                return { success: true };
+                const userData = userDoc.data();
+                const credits = userData.parrainage?.availableEarnings || 0;
+                
+                if (credits > 0) {
+                    // ✅ CRÉDITS DISPONIBLES - Préparer la redirection
+                    localStorage.setItem("anduxara_referral_credits", credits.toString());
+                    
+                    // Sauvegarder les informations pour index.html
+                    localStorage.setItem("anduxara_checkout_data", JSON.stringify({
+                        credits: credits,
+                        timestamp: new Date().toISOString(),
+                        source: "reductions",
+                        userId: firebase.auth().currentUser.uid,
+                        userCode: userData.referralCode,
+                        statut: "disponible"
+                    }));
+                    
+                    showNotification(`🎉 ${credits} MRU disponibles ! Redirection vers la boutique...`, "success");
+                    
+                    // Redirection vers index.html
+                    setTimeout(() => {
+                        window.location.href = "index.html?credits=" + credits + "&code=" + (userData.referralCode || "ANONYME") + "&source=reductions";
+                    }, 1500);
+                    
+                } else {
+                    // ✅ CRÉDITS ÉPUISÉS
+                    showNotification("❌ Aucun crédit disponible.", "error");
+                    
+                    // Mettre à jour l'affichage
+                    document.getElementById("gainsDisponibles").textContent = "0 MRU";
+                    document.getElementById("gainsDisponibles").style.color = "#e53e3c";
+                }
+            } catch (error) {
+                console.error("Erreur application réduction:", error);
+                showNotification("❌ Erreur lors de l'application des crédits", "error");
             }
         }
 
@@ -1118,13 +1201,6 @@
                 
                 await this.db.collection('users').doc(user.uid).set(userData);
                 console.log('📝 Document utilisateur créé:', user.email);
-                
-                // Envoyer email de bienvenue
-                if (window.emailManager) {
-                    setTimeout(() => {
-                        window.emailManager.envoyerEmailBienvenue(user);
-                    }, 1000);
-                }
             }
 
             async enregistrerParrainage(user, codeParrain) {
@@ -1169,21 +1245,6 @@
                             'parrainage.availableEarnings': gainsDisponibles,
                             'parrainage.lastUpdate': firebase.firestore.FieldValue.serverTimestamp()
                         });
-
-                        // Envoyer email de parrainage
-                        if (window.emailManager) {
-                            const parrainInfo = {
-                                nom: parrainData.displayName || parrainData.email,
-                                email: parrainData.email,
-                                credits: gainsDisponibles
-                            };
-                            
-                            const filleulInfo = {
-                                nom: filleul.displayName || filleul.email
-                            };
-                            
-                            window.emailManager.envoyerEmailParrainage(parrainInfo, filleulInfo);
-                        }
                     }
                 } catch (error) {
                     console.error('❌ Erreur mise à jour stats parrain:', error);
@@ -1237,15 +1298,37 @@
 
             updateStatsUI(userData) {
                 const parrainage = userData.parrainage || {};
+                
+                // Vérifier si les récompenses ont déjà été utilisées
+                const rewardsUsed = hasUsedRewards();
+                const gainsAffiches = rewardsUsed ? 0 : (parrainage.availableEarnings || 0);
+                
                 document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
                 document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                document.getElementById('gainsDisponibles').textContent = (parrainage.availableEarnings || 0) + ' MRU';
+                document.getElementById('gainsDisponibles').textContent = gainsAffiches + ' MRU';
                 document.getElementById('codeParrain').textContent = userData.referralCode || '-';
                 document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
 
-                // Sauvegarder les crédits pour index.html
-                const credits = parrainage.availableEarnings || 0;
-                localStorage.setItem('anduxara_referral_credits', credits.toString());
+                // Mettre à jour le bouton en fonction de l'état
+                const btnUtiliser = document.getElementById('btnUtiliserGains');
+                if (btnUtiliser) {
+                    if (rewardsUsed || gainsAffiches === 0) {
+                        btnUtiliser.style.background = '#95a5a6';
+                        btnUtiliser.innerHTML = '<i class="fas fa-ban"></i> Récompenses non disponibles';
+                        btnUtiliser.onclick = null;
+                    } else {
+                        btnUtiliser.style.background = '#e53e3e';
+                        btnUtiliser.innerHTML = '<i class="fas fa-shopping-cart"></i> Utiliser mes gains';
+                        btnUtiliser.onclick = utiliserMesGains;
+                    }
+                }
+
+                // Sauvegarder les crédits pour index.html (seulement si non utilisés)
+                if (!rewardsUsed) {
+                    localStorage.setItem('anduxara_referral_credits', gainsAffiches.toString());
+                } else {
+                    localStorage.setItem('anduxara_referral_credits', '0');
+                }
             }
 
             setupRealtimeStats() {
@@ -1316,7 +1399,6 @@
                         .get();
                     document.getElementById('clientCount').textContent = clientsSnapshot.size;
 
-                    // 🆕 Charger les commandes avec promotions
                     chargerCommandesAvecPromotions();
                 } catch (error) {
                     console.error('Erreur chargement stats admin:', error);
@@ -1338,7 +1420,6 @@
 
         // ===== FONCTIONS GLOBALES =====
         let authManager = null;
-        let emailManager = null;
 
         function getAuthManager() {
             if (!authManager) {
@@ -1346,14 +1427,6 @@
                 window.authManager = authManager;
             }
             return authManager;
-        }
-
-        function getEmailManager() {
-            if (!emailManager) {
-                emailManager = new EmailManager();
-                window.emailManager = emailManager;
-            }
-            return emailManager;
         }
 
         // Fonctions d'interface
@@ -1456,71 +1529,6 @@
             }
         }
 
-        // ===== FONCTION CORRIGÉE POUR UTILISER LES GAINS =====
-        async function appliquerReductionAuPanier() {
-            if (!firebase.auth().currentUser) {
-                showNotification("🔐 Connectez-vous pour utiliser vos gains", "error");
-                return;
-            }
-
-            try {
-                showNotification("🔄 Vérification de vos crédits...", "success");
-                
-                // Vérifier si récompenses déjà utilisées
-                const recompensesUtilisees = localStorage.getItem("recompenses_utilisees");
-                if (recompensesUtilisees === "true") {
-                    showNotification("❌ Vous avez déjà utilisé vos récompenses. Elles sont maintenant expirées.", "error");
-                    
-                    // Forcer la mise à jour de l'affichage
-                    if (window.authManager) {
-                        window.authManager.refreshParrainageStats();
-                    }
-                    return;
-                }
-                
-                // Récupérer les crédits depuis Firebase
-                const userDoc = await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get();
-                
-                if (!userDoc.exists) {
-                    showNotification("❌ Données utilisateur non trouvées", "error");
-                    return;
-                }
-
-                const userData = userDoc.data();
-                const credits = userData.parrainage?.availableEarnings || 0;
-                
-                if (credits > 0) {
-                    // ✅ CRÉDITS DISPONIBLES - Redirection vers index.html
-                    localStorage.setItem("anduxara_referral_credits", credits.toString());
-                    localStorage.setItem("anduxara_checkout_data", JSON.stringify({
-                        credits: credits,
-                        timestamp: new Date().toISOString(),
-                        source: "reductions",
-                        userId: firebase.auth().currentUser.uid,
-                        userCode: userData.referralCode
-                    }));
-                    
-                    showNotification(`🎉 ${credits} MRU appliqués ! Redirection vers la boutique...`, "success");
-                    
-                    // Redirection vers index.html
-                    setTimeout(() => {
-                        window.location.href = "index.html?credits=" + credits + "&code=" + (userData.referralCode || "ANONYME");
-                    }, 1500);
-                    
-                } else {
-                    // ✅ CRÉDITS ÉPUISÉS - Message d'erreur
-                    showNotification("❌ Aucun crédit disponible. Vos récompenses sont épuisées ou ont expiré.", "error");
-                    
-                    // Mettre à jour l'affichage
-                    document.getElementById("gainsDisponibles").textContent = "0 MRU";
-                    document.getElementById("gainsDisponibles").style.color = "#e53e3c";
-                }
-            } catch (error) {
-                console.error("Erreur application réduction:", error);
-                showNotification("❌ Erreur lors de l'application des crédits", "error");
-            }
-        }
-
         // Fonctions codes promo
         function appliquerCodePromo() {
             const codeInput = document.getElementById('promoCodeInput');
@@ -1587,16 +1595,12 @@
             const urlParams = new URLSearchParams(window.location.search);
             const commandeSuccess = urlParams.get("commande");
             const creditsUtilises = urlParams.get("credits");
-            const creditsRestants = urlParams.get("reste");
             
             if (commandeSuccess === "success" && creditsUtilises) {
                 showNotification(`✅ Commande réussie ! ${creditsUtilises} MRU de récompenses utilisés.`, "success");
                 
-                // Mettre à jour l'affichage IMMÉDIATEMENT
-                if (creditsRestants) {
-                    document.getElementById("gainsDisponibles").textContent = creditsRestants + " MRU";
-                    document.getElementById("gainsDisponibles").style.color = creditsRestants > 0 ? "#667eea" : "#e53e3c";
-                }
+                // Marquer les récompenses comme utilisées
+                markRewardsAsUsed(parseInt(creditsUtilises));
                 
                 // Forcer le rafraîchissement des stats
                 if (authManager) {
@@ -1607,21 +1611,6 @@
                 
                 // Nettoyer l'URL
                 window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            
-            // Vérifier si les récompenses ont expiré
-            const recompensesUtilisees = localStorage.getItem("recompenses_utilisees");
-            if (recompensesUtilisees === "true") {
-                document.getElementById("gainsDisponibles").textContent = "0 MRU";
-                document.getElementById("gainsDisponibles").style.color = "#e53e3c";
-                
-                // Désactiver le bouton
-                const btnUtiliser = document.querySelector('button[onclick="appliquerReductionAuPanier()"]');
-                if (btnUtiliser) {
-                    btnUtiliser.style.background = "#95a5a6";
-                    btnUtiliser.innerHTML = '<i class="fas fa-ban"></i> Récompenses expirées';
-                    btnUtiliser.onclick = null;
-                }
             }
         }
 
@@ -1639,10 +1628,8 @@
                     }
                 });
                 
-                // Mettre à jour l'interface admin
                 document.getElementById('codesUsed').textContent = commandesAvecPromo + ' commandes';
                 
-                // Créer l'élément si il n'existe pas
                 let totalPromoElement = document.getElementById('totalPromotions');
                 if (!totalPromoElement) {
                     const adminStats = document.querySelector('.admin-section .stats-grid');
@@ -1670,9 +1657,8 @@
         // ===== INITIALISATION =====
         document.addEventListener('DOMContentLoaded', function() {
             verifierSynchronisation();
-            // Initialiser les managers
+            // Initialiser le manager
             getAuthManager();
-            getEmailManager();
             
             // Gestion des formulaires
             document.getElementById('loginForm').addEventListener('submit', async (e) => {
