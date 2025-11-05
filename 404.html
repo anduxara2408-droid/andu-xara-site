@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirection...</title>
+    <script>
+        const redirects = {
+            '/index.html': '/',
+            '/contact.html': '/contact',
+            '/blog.html': '/blog',
+            '/acheter.html': '/acheter',
+            '/histoire.html': '/histoire',
+            '/reductions.html': '/reductions',
+            '/faq.html': '/faq',
+            '/conditions-generales.html': '/conditions-generales',
+            '/mentions-legales.html': '/mentions-legales',
+            '/politique-confidentialite.html': '/politique-confidentialite'
+        };
+        
+        const path = window.location.pathname;
+        if (redirects[path]) {
+            // Redirection 301 simulée
+            window.location.replace(redirects[path]);
+        } else {
+            // Page 404 normale
+            document.body.innerHTML = '<h1>Page non trouvée</h1><p>Retour à <a href="/">l\'accueil</a></p>';
+        }
+    </script>
+</head>
+<body>
+    <noscript>
+        <h1>Redirection requise</h1>
+        <p>Veuillez activer JavaScript ou <a href="/">cliquer ici</a> pour retourner à l'accueil.</p>
+    </noscript>
+</body>
+</html>

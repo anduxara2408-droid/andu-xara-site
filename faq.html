@@ -1,61 +1,132 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<style>
-/* Cacher complètement le menu sur la FAQ */
-.mobile-menu, .menu-toggle, .menu-overlay {
-    display: none !important;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Andu-Xara</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://andu-xara.store/faq" />
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ - Andu-Xara</title>
-<style>
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f9f9f9; margin:0; padding:20px; line-height:1.8; }
-h1 { text-align:center; color:#667eea; margin-bottom:30px; }
-.faq-container { max-width:800px; margin:auto; background:white; padding:30px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-.faq-item { margin-bottom:20px; }
-.faq-item h3 { margin:0 0 10px; color:#333; }
-.faq-item p { margin:0; color:#555; }
-.back-btn { display:block; text-align:center; margin-top:30px; }
-.back-btn a { text-decoration:none; color:#667eea; font-weight:600; }
-</style>
+    <!-- 🚨 REDIRECTION URGENTE POUR DOUBLONS .html -->
+    <script>
+        // Redirection immédiate pour faq.html
+        if (window.location.pathname === '/faq.html') {
+            window.location.replace('/faq');
+        }
+    </script>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <style>
+        /* Cacher complètement le menu sur la FAQ */
+        .mobile-menu, .menu-toggle, .menu-overlay {
+            display: none !important;
+        }
 
-  gtag('config', 'G-S9CBS21SVR');
-</script>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background:#f9f9f9; 
+            margin:0; 
+            padding:20px; 
+            line-height:1.8; 
+        }
+        h1 { 
+            text-align:center; 
+            color:#667eea; 
+            margin-bottom:30px; 
+        }
+        .faq-container { 
+            max-width:800px; 
+            margin:auto; 
+            background:white; 
+            padding:30px; 
+            border-radius:12px; 
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+        .faq-item { 
+            margin-bottom:20px; 
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item h3 { 
+            margin:0 0 10px; 
+            color:#333; 
+            font-size: 1.2rem;
+        }
+        .faq-item p { 
+            margin:0; 
+            color:#555; 
+        }
+        .back-btn { 
+            display:block; 
+            text-align:center; 
+            margin-top:30px; 
+        }
+        .back-btn a { 
+            text-decoration:none; 
+            color:#667eea; 
+            font-weight:600;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .back-btn a:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-S9CBS21SVR');
+    </script>
 
 </head>
 <body>
 
 <main>
-<h1>FAQ - Questions fréquentes</h1>
+<h1>❓ FAQ - Questions fréquentes</h1>
 <div class="faq-container">
 
     <div class="faq-item">
-      <h3>Quels sont vos délais de livraison ?</h3>
-      <p>Nos délais varient entre 3 à 7 jours ouvrables selon la destination.</p>
+      <h3>🚚 Quels sont vos délais de livraison ?</h3>
+      <p>Nos délais varient entre 3 à 7 jours ouvrables selon la destination. Pour Nouakchott, comptez 2-3 jours maximum.</p>
     </div>
 
     <div class="faq-item">
-      <h3>Quels modes de paiement acceptez-vous ?</h3>
-      <p>Nous acceptons les paiements par mobile money, carte bancaire et espèces à la livraison (selon la zone).</p>
+      <h3>💳 Quels modes de paiement acceptez-vous ?</h3>
+      <p>Nous acceptons les paiements par mobile money (MauriTel, Chinguitel, Mattel), carte bancaire et espèces à la livraison (selon la zone).</p>
     </div>
 
     <div class="faq-item">
-      <h3>Puis-je retourner un produit ?</h3>
-      <p>Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact.</p>
+      <h3>🔄 Puis-je retourner un produit ?</h3>
+      <p>Oui, les retours sont possibles sous 7 jours après réception, à condition que le produit soit intact et n'ait pas été porté.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>📏 Comment prendre mes mesures ?</h3>
+      <p>Utilisez un mètre ruban et consultez notre guide des tailles disponible sur chaque fiche produit.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>🎁 Offrez-vous des emballages cadeaux ?</h3>
+      <p>Oui ! Toutes nos commandes sont emballées avec soin dans un packaging cadeau Andu-Xara.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>📞 Comment vous contacter ?</h3>
+      <p>Par WhatsApp au +222 49 03 76 97, par email à contact@andu-xara.store, ou via nos réseaux sociaux @andu_xara.</p>
     </div>
 
 </div>
-<div class="back-btn"><a href="index.html">← Retour à l’accueil</a></div>
+<div class="back-btn"><a href="/">← Retour à l'accueil</a></div>
 
 </main>
 

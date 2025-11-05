@@ -22,14 +22,32 @@
     <title>Andu-Xara • Tradition Africaine, Style Moderne • Collection Authentique</title>
     <link rel="canonical" href="https://andu-xara.store/" />
 
+    <!-- 🚨 REDIRECTION URGENTE POUR DOUBLONS .html -->
+    <script>
+        // Redirection immédiate pour les URLs avec .html
+        if (window.location.pathname === '/index.html' || 
+            window.location.pathname.endsWith('.html') && 
+            window.location.pathname !== '/404.html') {
+            
+            const cleanPath = window.location.pathname
+                .replace('.html', '')
+                .replace('/index', '/');
+            
+            if (cleanPath !== window.location.pathname) {
+                // Simule une redirection 301 (ne garde pas dans l'historique)
+                window.location.replace(cleanPath + window.location.search + window.location.hash);
+            }
+        }
+    </script>
+
     <!-- DÉSACTIVATION SYSTÈMES PROBLÉMATIQUES -->
     <script src="js/secure/disable-problematic.js"></script>
     <meta name="google-site-verification" content="EN_ATTENTE_DU_CODE">
-    
+
     <!-- SEO OPTIMISÉ -->
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <meta name="description" content="Andu-Xara - Marque de vêtements alliant culture africaine et style urbain. Exprimez votre héritage avec nos créations uniques qui célèbrent nos racines.">
-    
+    <meta name="description" content="Andu-Xara - Marque de vêtements alliant culture africaine et style urbain. Exprimez votre héritage avec nos créations authentiques.">
+
     <!-- OPEN GRAPH -->
     <meta property="og:url" content="https://andu-xara.store/">
     <meta property="og:type" content="website">

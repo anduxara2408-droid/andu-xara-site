@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codes Promo - Andu Xara</title>
-    <link rel="canonical" href="https://andu-xara.store/reductions.html" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://andu-xara.store/reductions" />
 
+    <!-- 🚨 REDIRECTION URGENTE POUR DOUBLONS .html -->
+    <script>
+        // Redirection immédiate pour reductions.html
+        if (window.location.pathname === '/reductions.html') {
+            window.location.replace('/reductions');
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
+    
     <style>
         * {
             margin: 0;
@@ -802,7 +813,7 @@
                         <button id="btnUtiliserGains" class="btn-parrain" onclick="utiliserMesGains()" style="background: #e53e3e;">
                             <i class="fas fa-shopping-cart"></i> Utiliser mes gains
                         </button>
-                        <a href="dashboard-parrainage.html" class="btn-parrain" style="background: #9f7aea; display: inline-flex; text-decoration: none; margin-top: 0.5rem;">
+                        <a href="/dashboard-parrainage" class="btn-parrain" style="background: #9f7aea; display: inline-flex; text-decoration: none; margin-top: 0.5rem;">
                             <i class="fas fa-chart-line"></i> Voir mon dashboard
                         </a>
                     </div>
@@ -871,7 +882,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="index.html" class="btn-shop">
+                <a href="/" class="btn-shop">
                     <i class="fas fa-shopping-cart"></i> Passer commande maintenant
                 </a>
             </div>
@@ -1093,7 +1104,7 @@
                     
                     // Redirection vers index.html
                     setTimeout(() => {
-                        window.location.href = "index.html?credits=" + credits + "&code=" + (userData.referralCode || "ANONYME") + "&source=reductions";
+                        window.location.href = "/?credits=" + credits + "&code=" + (userData.referralCode || "ANONYME") + "&source=reductions";
                     }, 1500);
                     
                 } else {
@@ -1510,7 +1521,7 @@
                 if (userDoc.exists) {
                     const userData = userDoc.data();
                     const referralCode = userData.referralCode;
-                    const lienParrainage = window.location.origin + window.location.pathname + '?parrain=' + referralCode;
+                    const lienParrainage = window.location.origin + '/reductions?parrain=' + referralCode;
                     await navigator.clipboard.writeText(lienParrainage);
                     showNotification('✅ Lien de parrainage copié !', 'success');
                 }
