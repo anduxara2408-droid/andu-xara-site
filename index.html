@@ -1142,6 +1142,85 @@ body.lightbox-open {
     font-size: 0.9rem;
 }
 
+/* ===== NEWSLETTER POPUP ===== */
+.newsletter-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.newsletter-popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+}
+
+.close-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.popup-content h3 {
+    color: #6a11cb;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.popup-content p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.popup-content button {
+    width: 100%;
+    padding: 12px;
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.popup-content button:hover {
+    background: #2575fc;
+}
+
 /* ===== FOOTER ===== */
 footer {
     background-color: #2c3e50;
@@ -3542,34 +3621,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // ===== NEWSLETTER =====
-        function showNewsletterPopup() {
-            const alreadyShown = localStorage.getItem('newsletterShown');
-            if (!alreadyShown) {
-                setTimeout(() => {
-                    document.getElementById('newsletter-popup').classList.add('active');
-                    localStorage.setItem('newsletterShown', 'true');
-                }, 3000);
-            }
-        }
-
-        function closeNewsletter() {
-            document.getElementById('newsletter-popup').classList.remove('active');
-        }
-
-        function subscribeNewsletter() {
-            const email = document.getElementById('newsletter-email').value;
-            if (email && email.includes('@')) {
-                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers')) || [];
-                subscribers.push(email);
-                localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-                showNotification('Merci pour votre inscription ! ✅');
-                closeNewsletter();
-            } else {
-                showNotification('Veuillez entrer un email valide', 'error');
-            }
-        }
-
         // ===== NOTIFICATIONS =====
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
@@ -3880,59 +3931,6 @@ function resetCountdownForAll() {
 
 // Pour tester : décommentez la ligne ci-dessous
 // resetCountdownForAll();
-</script>
-        <!-- Popup Promotion Élégant -->
-        <div id="elegant-popup">
-            <div class="popup-content">
-                <div class="popup-header">
-                    <h2>🎉 Offre Spéciale Andu-Xara !</h2>
-                    <span class="popup-close" id="popup-close">&times;</span>
-                </div>
-                <div class="popup-body">
-                    <p>Profitez de <strong>30% de réduction</strong> sur toute la collection 2025</p>
-                    <p class="popup-details">📍 Livraison gratuite en Mauritanie(zones limitées)<br>
-                       ⏰ Offre valable jusqu'au 01 Novembre 2025</p>
-                </div>
-                <div class="popup-footer">
-                    <button class="popup-btn" onclick="closePopup()">Découvrir les promotions</button>
-                    <button class="popup-btn-secondary" onclick="closePopup()">Fermer</button>
-                </div>
-            </div>
-        </div>
-<script>
-// === POPUP ÉLÉGANT ===
-function showPopup() {
-    const popup = document.getElementById('elegant-popup');
-    popup.style.display = 'flex';
-    console.log('🎉 Popup affiché');
-}
-
-function closePopup() {
-    const popup = document.getElementById('elegant-popup');
-    popup.style.display = 'none';
-    console.log('❌ Popup fermé');
-}
-
-// Afficher le popup après 2 secondes
-setTimeout(showPopup, 2000);
-
-// Fermer en cliquant sur la croix
-document.getElementById('popup-close').addEventListener('click', closePopup);
-
-// Fermer en cliquant en dehors du popup
-document.getElementById('elegant-popup').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closePopup();
-    }
-});
-
-// Fermer avec la touche Échap
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closePopup();
-    }
-});
-
 </script>
 <script>
 // === FONCTION ADD TO CART CORRIGÉE ===
@@ -7607,4 +7605,4 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="js/pwa-install.js"></script>
 </body>
 </body>
-</html> 
+</html>
