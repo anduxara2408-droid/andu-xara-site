@@ -4,18 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codes Promo - Andu Xara</title>
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://andu-xara.store/reductions" />
-
-    <!-- 🚨 REDIRECTION URGENTE POUR DOUBLONS .html -->
-    <script>
-        // Redirection immédiate pour reductions.html
-        if (window.location.pathname === '/reductions.html') {
-            window.location.replace('/reductions');
-        }
-    </script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase -->
@@ -197,6 +185,18 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .promo-btn:hover:not(:disabled) {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .promo-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .info-message {
@@ -269,320 +269,6 @@
             margin-top: 0.5rem;
         }
 
-        .parrainage-section {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin: 2rem 0;
-            display: none;
-            border: 3px solid #667eea;
-        }
-
-        .parrainage-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .parrainage-header h2 {
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .parrainage-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .parrainage-stats {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 10px;
-        }
-
-        .parrainage-stats h3 {
-            margin-bottom: 1rem;
-            color: #2d3748;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #e2e8f0;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #718096;
-        }
-
-        .parrainage-actions {
-            background: #f0fff4;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 2px solid #9ae6b4;
-        }
-
-        .parrainage-actions h3 {
-            margin-bottom: 1rem;
-            color: #2d3748;
-        }
-
-        .code-display {
-            background: #2d3748;
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 1.1rem;
-            text-align: center;
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .code-display:hover {
-            background: #4a5568;
-            transform: scale(1.02);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-parrain {
-            flex: 1;
-            padding: 12px 16px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-parrain:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-        }
-
-        .btn-parrain.success {
-            background: #48bb78;
-        }
-
-        .btn-parrain.success:hover {
-            background: #38a169;
-        }
-
-        .parrainage-how {
-            grid-column: 1 / -1;
-            background: #fff3cd;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        .parrainage-how h3 {
-            margin-bottom: 1rem;
-            color: #856404;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .step-number {
-            background: #667eea;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .step-content {
-            flex: 1;
-        }
-
-        .step-title {
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-        }
-
-        .step-desc {
-            font-size: 0.9rem;
-            color: #718096;
-        }
-
-        .admin-section {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-top: 2rem;
-            display: none;
-        }
-
-        .admin-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .admin-btn {
-            padding: 15px 25px;
-            background: #e53e3e;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-
-        .admin-btn:hover {
-            background: #c53030;
-            transform: translateY(-2px);
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #718096;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .form-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .form-btn.primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .form-btn.secondary {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 1rem;
-            color: #667eea;
-        }
-
-        .loading i {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         .success-message {
             background: #f0fff4;
             border: 1px solid #9ae6b4;
@@ -606,10 +292,12 @@
             gap: 8px;
             margin-top: 1rem;
             text-decoration: none;
+            transition: all 0.3s;
         }
 
         .btn-shop:hover {
             background: #38a169;
+            transform: translateY(-2px);
         }
 
         .notification {
@@ -626,22 +314,186 @@
             max-width: 300px;
             text-align: center;
             display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.error {
+            background: #e53e3e;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #e53e3e;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .form-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .form-btn.primary:hover {
+            background: #5a6fd8;
+        }
+
+        .form-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .form-btn.secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #667eea;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .reset-section {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .reset-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
-            .parrainage-content {
-                grid-template-columns: 1fr;
-            }
-            
             .sources-grid {
                 grid-template-columns: 1fr 1fr;
             }
             
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .promo-input-group {
+                flex-direction: column;
             }
             
-            .action-buttons {
+            .auth-buttons {
                 flex-direction: column;
             }
         }
@@ -756,106 +608,6 @@
             </div>
         </div>
 
-        <!-- SECTION PARRAINAGE COMPLÈTE -->
-        <div id="parrainageSection" class="parrainage-section">
-            <div class="parrainage-header">
-                <h2><i class="fas fa-crown"></i> Programme de Parrainage</h2>
-                <p style="color: #718096;">Parrainez vos amis et gagnez ensemble des récompenses !</p>
-            </div>
-
-            <div class="parrainage-content">
-                <!-- Statistiques -->
-                <div class="parrainage-stats">
-                    <h3><i class="fas fa-chart-bar"></i> Vos Statistiques</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="parrainsCount">0</div>
-                            <div class="stat-label">Personnes parrainées</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="gainsTotal">0 MRU</div>
-                            <div class="stat-label">Gains totaux</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="gainsDisponibles">0 MRU</div>
-                            <div class="stat-label">Gains disponibles</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="codeParrain">-</div>
-                            <div class="stat-label">Votre code</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="parrainage-actions">
-                    <h3><i class="fas fa-rocket"></i> Actions Rapides</h3>
-                    
-                    <div class="code-display" id="codeParrainDisplay" onclick="copierCodeParrain()">
-                        <i class="fas fa-copy"></i> 
-                        <span id="parrainCodeText">Chargement...</span>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="btn-parrain" onclick="copierLienParrainage()">
-                            <i class="fas fa-link"></i> Copier le lien
-                        </button>
-                        <button class="btn-parrain success" onclick="partagerParrainage()">
-                            <i class="fas fa-share-alt"></i> Partager
-                        </button>
-                        <button class="btn-parrain" onclick="actualiserStatsParrainage()">
-                            <i class="fas fa-sync-alt"></i> Actualiser
-                        </button>
-                    </div>
-
-                    <!-- Bouton pour utiliser les gains - CORRIGÉ -->
-                    <div style="margin-top: 1rem;">
-                        <button id="btnUtiliserGains" class="btn-parrain" onclick="utiliserMesGains()" style="background: #e53e3e;">
-                            <i class="fas fa-shopping-cart"></i> Utiliser mes gains
-                        </button>
-                        <a href="/dashboard-parrainage" class="btn-parrain" style="background: #9f7aea; display: inline-flex; text-decoration: none; margin-top: 0.5rem;">
-                            <i class="fas fa-chart-line"></i> Voir mon dashboard
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Comment ça marche -->
-                <div class="parrainage-how">
-                    <h3><i class="fas fa-info-circle"></i> Comment ça marche ?</h3>
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <div class="step-title">Partagez votre lien</div>
-                                <div class="step-desc">Copiez et partagez votre lien unique avec vos amis</div>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <div class="step-title">Votre ami s'inscrit</div>
-                                <div class="step-desc">Il utilise votre lien pour créer son compte</div>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <div class="step-title">Récompenses automatiques</div>
-                                <div class="step-desc">Vous gagnez 15% de ses achats, lui gagne 10%</div>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
-                                <div class="step-title">Gains disponibles</div>
-                                <div class="step-desc">Utilisez vos gains pour vos propres achats</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Section Code Promo (visible seulement pour les clients connectés) -->
         <div id="promoSection" class="promo-section">
             <h2><i class="fas fa-ticket-alt"></i> Utiliser votre code promo</h2>
@@ -864,12 +616,24 @@
             </p>
             
             <div class="promo-input-group">
-                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: BIENVENUE15">
-                <button class="promo-btn" onclick="appliquerCodePromo()">
+                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: TEST15, ANDU20, SOLDE25">
+                <button class="promo-btn" onclick="appliquerCodePromo()" id="promoBtn">
                     <i class="fas fa-check"></i> Appliquer
                 </button>
             </div>
+            
             <div id="promoMessage" style="margin-top: 1rem; font-weight: 500;"></div>
+            
+            <!-- Section réinitialisation -->
+            <div id="resetSection" class="reset-section">
+                <p style="color: #744210; margin-bottom: 0.5rem;">
+                    <i class="fas fa-info-circle"></i>
+                    Vous avez déjà utilisé un code promo. Réinitialisez pour en utiliser un nouveau.
+                </p>
+                <button class="reset-btn" onclick="reinitialiserCodesPromo()">
+                    <i class="fas fa-redo"></i> Réinitialiser les codes promo
+                </button>
+            </div>
             
             <!-- Message de succès avec bouton vers la boutique -->
             <div id="successSection" class="success-message">
@@ -882,7 +646,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="/" class="btn-shop">
+                <a href="index.html" class="btn-shop" onclick="synchroniserAvecIndex()">
                     <i class="fas fa-shopping-cart"></i> Passer commande maintenant
                 </a>
             </div>
@@ -892,45 +656,6 @@
         <div id="infoMessage" class="info-message">
             <i class="fas fa-info-circle"></i>
             Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
-        </div>
-
-        <!-- SECTION ADMIN (visible seulement pour l'admin) -->
-        <div id="adminSection" class="admin-section">
-            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
-                <i class="fas fa-cogs"></i> Administration
-            </h2>
-            <p style="text-align: center; margin-bottom: 2rem; color: #718096;">
-                Gestion des comptes clients et analyse des performances
-            </p>
-            
-            <div class="admin-actions">
-                <button class="admin-btn" onclick="showAdminDashboard()">
-                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
-                </button>
-                <button class="admin-btn" onclick="showAnalytics()">
-                    <i class="fas fa-chart-bar"></i> Analytics
-                </button>
-                <button class="admin-btn" onclick="showClientManager()">
-                    <i class="fas fa-users"></i> Gérer les clients
-                </button>
-            </div>
-
-            <!-- Statistiques admin -->
-            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 10px;">
-                <h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Aperçu des performances</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; color: #667eea;">👥</div>
-                        <div style="font-weight: bold;">Clients actifs</div>
-                        <div id="clientCount" style="font-size: 1.5rem; font-weight: bold;">0</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; color: #48bb78;">💰</div>
-                        <div style="font-weight: bold;">Codes utilisés</div>
-                        <div id="codesUsed" style="font-size: 1.5rem; font-weight: bold;">0</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1016,121 +741,267 @@
             firebase.initializeApp(firebaseConfig);
         }
 
-        // ===== FONCTIONS DE GESTION DES RÉCOMPENSES =====
-        function hasUsedRewards() {
-            const creditsUtilises = parseInt(localStorage.getItem('anduxara_credits_utilises')) || 0;
-            const rewardHistory = JSON.parse(localStorage.getItem('anduxara_reward_history')) || [];
-            
-            const hasUsedInOrder = rewardHistory.some(entry => 
-                entry.type === 'utilisation_commande' && entry.statut === 'utilise'
-            );
-            
-            return creditsUtilises > 0 || hasUsedInOrder;
-        }
+        // ===== CODES PROMO PREDEFINIS =====
+        const CODES_PROMO_VALIDES = {
+            'TEST15': { discount: 15, description: 'Code test 15% de réduction' },
+            'BIENVENUE10': { discount: 10, description: 'Bienvenue 10% de réduction' },
+            'ANDU20': { discount: 20, description: 'Code spécial Andu Xara 20%' },
+            'SOLDE25': { discount: 25, description: 'Soldes 25% de réduction' },
+            'NEW2024': { discount: 15, description: 'Nouveau client 15%' },
+            'FIDELITE': { discount: 10, description: 'Code fidélité 10%' }
+        };
 
-        function markRewardsAsUsed(credits) {
-            console.log('🎯 Marquage des récompenses comme utilisées:', credits + ' MRU');
+        // ===== FONCTION PRINCIPALE POUR APPLIQUER LES CODES PROMO =====
+        async function appliquerCodePromo() {
+            const codeInput = document.getElementById('promoCodeInput');
+            const messageDiv = document.getElementById('promoMessage');
+            const promoBtn = document.getElementById('promoBtn');
+            const code = codeInput.value.trim().toUpperCase();
             
-            const creditsUtilises = parseInt(localStorage.getItem('anduxara_credits_utilises')) || 0;
-            localStorage.setItem('anduxara_credits_utilises', (creditsUtilises + credits).toString());
-            
-            const rewardHistory = JSON.parse(localStorage.getItem('anduxara_reward_history')) || [];
-            rewardHistory.push({
-                montant: credits,
-                date: new Date().toISOString(),
-                type: 'utilisation_commande',
-                statut: 'utilise'
-            });
-            localStorage.setItem('anduxara_reward_history', JSON.stringify(rewardHistory));
-            
-            localStorage.setItem('anduxara_referral_credits', '0');
-            
-            console.log('✅ Récompenses marquées comme utilisées');
-        }
-
-        // ===== FONCTION PRINCIPALE POUR UTILISER LES GAINS =====
-        async function utiliserMesGains() {
-            if (!firebase.auth().currentUser) {
-                showNotification("🔐 Connectez-vous pour utiliser vos gains", "error");
+            if (!code) {
+                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
                 return;
             }
 
             try {
-                showNotification("🔄 Vérification de vos crédits...", "success");
-                
-                // Vérifier si les récompenses ont déjà été utilisées
-                if (hasUsedRewards()) {
-                    showNotification("❌ Vous avez déjà utilisé vos récompenses sur une commande précédente.", "error");
-                    
-                    // Mettre à jour l'affichage
-                    document.getElementById("gainsDisponibles").textContent = "0 MRU";
-                    document.getElementById("gainsDisponibles").style.color = "#e53e3c";
-                    
-                    // Désactiver le bouton
-                    const btnUtiliser = document.getElementById('btnUtiliserGains');
-                    btnUtiliser.style.background = '#95a5a6';
-                    btnUtiliser.innerHTML = '<i class="fas fa-ban"></i> Récompenses déjà utilisées';
-                    btnUtiliser.onclick = null;
-                    
-                    return;
-                }
-                
-                // Récupérer les crédits depuis Firebase
-                const userDoc = await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get();
-                
-                if (!userDoc.exists) {
-                    showNotification("❌ Données utilisateur non trouvées", "error");
+                // Vérifier si l'utilisateur est connecté
+                if (!firebase.auth().currentUser) {
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Connectez-vous pour utiliser un code promo</span>';
                     return;
                 }
 
-                const userData = userDoc.data();
-                const credits = userData.parrainage?.availableEarnings || 0;
-                
-                if (credits > 0) {
-                    // ✅ CRÉDITS DISPONIBLES - Préparer la redirection
-                    localStorage.setItem("anduxara_referral_credits", credits.toString());
+                // Vérifier si un code a déjà été utilisé
+                const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
+                if (promoUtilise === 'true') {
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Vous avez déjà utilisé un code promo</span>';
+                    document.getElementById('resetSection').style.display = 'block';
+                    return;
+                }
+
+                // Désactiver le bouton pendant le traitement
+                promoBtn.disabled = true;
+                promoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
+
+                // Vérifier d'abord dans Firebase
+                let codeValide = false;
+                let promoData = null;
+
+                try {
+                    const promoQuery = await firebase.firestore()
+                        .collection('promoCodes')
+                        .where('code', '==', code)
+                        .where('isActive', '==', true)
+                        .get();
+
+                    if (!promoQuery.empty) {
+                        const promoDoc = promoQuery.docs[0];
+                        promoData = promoDoc.data();
+                        
+                        // Vérifier la date d'expiration
+                        if (promoData.expiration && new Date(promoData.expiration) < new Date()) {
+                            throw new Error('Code expiré');
+                        }
+
+                        // Vérifier les limites d'utilisation
+                        if (promoData.usedCount >= promoData.maxUses) {
+                            throw new Error('Code épuisé');
+                        }
+
+                        codeValide = true;
+                    }
+                } catch (firebaseError) {
+                    console.log('Firebase non disponible, utilisation des codes locaux');
+                }
+
+                // Si Firebase échoue ou code non trouvé, utiliser les codes locaux
+                if (!codeValide) {
+                    if (CODES_PROMO_VALIDES[code]) {
+                        promoData = CODES_PROMO_VALIDES[code];
+                        codeValide = true;
+                    }
+                }
+
+                if (codeValide && promoData) {
+                    // Enregistrer l'utilisation
+                    await enregistrerUtilisationPromo(code, promoData);
                     
-                    // Sauvegarder les informations pour index.html
-                    localStorage.setItem("anduxara_checkout_data", JSON.stringify({
-                        credits: credits,
-                        timestamp: new Date().toISOString(),
-                        source: "reductions",
-                        userId: firebase.auth().currentUser.uid,
-                        userCode: userData.referralCode,
-                        statut: "disponible"
-                    }));
+                    // Afficher le succès
+                    messageDiv.innerHTML = `<span style="color: #38a169;">
+                        ✅ Code "${code}" appliqué ! ${promoData.discount}% de réduction
+                        ${promoData.description ? '<br><small>' + promoData.description + '</small>' : ''}
+                    </span>`;
                     
-                    showNotification(`🎉 ${credits} MRU disponibles ! Redirection vers la boutique...`, "success");
+                    // Désactiver les champs
+                    codeInput.disabled = true;
+                    promoBtn.disabled = true;
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliqué';
                     
-                    // Redirection vers index.html
-                    setTimeout(() => {
-                        window.location.href = "/?credits=" + credits + "&code=" + (userData.referralCode || "ANONYME") + "&source=reductions";
-                    }, 1500);
+                    // Afficher la section succès
+                    document.getElementById('successSection').style.display = 'block';
+                    
+                    showNotification(`🎉 Code ${code} appliqué ! ${promoData.discount}% de réduction`, 'success');
                     
                 } else {
-                    // ✅ CRÉDITS ÉPUISÉS
-                    showNotification("❌ Aucun crédit disponible.", "error");
-                    
-                    // Mettre à jour l'affichage
-                    document.getElementById("gainsDisponibles").textContent = "0 MRU";
-                    document.getElementById("gainsDisponibles").style.color = "#e53e3c";
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
+                    promoBtn.disabled = false;
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
+                }
+
+            } catch (error) {
+                console.error('Erreur application code promo:', error);
+                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Erreur lors de l\'application du code</span>';
+                promoBtn.disabled = false;
+                promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
+            }
+        }
+
+        // ===== FONCTION POUR ENREGISTRER L'UTILISATION =====
+        async function enregistrerUtilisationPromo(code, promoData) {
+            const userId = firebase.auth().currentUser.uid;
+            const userEmail = firebase.auth().currentUser.email;
+            
+            try {
+                // Essayer d'enregistrer dans Firebase
+                await firebase.firestore().collection('promoUsage').add({
+                    userId: userId,
+                    userEmail: userEmail,
+                    promoCode: code,
+                    discount: promoData.discount,
+                    usedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'applied'
+                });
+
+                // Mettre à jour le compteur si c'est un code Firebase
+                const promoQuery = await firebase.firestore()
+                    .collection('promoCodes')
+                    .where('code', '==', code)
+                    .get();
+
+                if (!promoQuery.empty) {
+                    const promoId = promoQuery.docs[0].id;
+                    await firebase.firestore().collection('promoCodes').doc(promoId).update({
+                        usedCount: firebase.firestore.FieldValue.increment(1),
+                        lastUsed: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                 }
             } catch (error) {
-                console.error("Erreur application réduction:", error);
-                showNotification("❌ Erreur lors de l'application des crédits", "error");
+                console.log('Enregistrement Firebase échoué, utilisation du stockage local');
             }
+
+            // SAUVEGARDER DANS LE SYSTÈME UNIFIÉ POUR INDEX.HTML
+            const promoInfo = {
+                code: code,
+                discount: promoData.discount,
+                description: promoData.description,
+                appliedAt: new Date().toISOString(),
+                userId: userId,
+                source: 'reductions.html'
+            };
+
+            // Sauvegarder dans localStorage pour index.html
+            localStorage.setItem('anduxara_active_promo', JSON.stringify(promoInfo));
+            localStorage.setItem('anduxara_promo_utilise', 'true');
+            
+            // Sauvegarder aussi dans une clé spécifique pour le panier
+            localStorage.setItem('anduxara_cart_promo', JSON.stringify({
+                code: code,
+                discount: promoData.discount,
+                applied: true,
+                timestamp: new Date().getTime()
+            }));
+
+            console.log('💾 Code promo sauvegardé pour index.html:', promoInfo);
+        }
+
+        // ===== SYNCHRONISATION AVEC INDEX.HTML =====
+        function synchroniserAvecIndex() {
+            console.log('🔄 Synchronisation avec index.html...');
+            
+            const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
+            const promoData = localStorage.getItem('anduxara_active_promo');
+            
+            if (promoUtilise === 'true' && promoData) {
+                try {
+                    const promo = JSON.parse(promoData);
+                    
+                    // Forcer la sauvegarde dans une clé que index.html vérifie
+                    localStorage.setItem('anduxara_current_promo', JSON.stringify({
+                        active: true,
+                        code: promo.code,
+                        discount: promo.discount,
+                        source: 'reductions',
+                        timestamp: new Date().getTime()
+                    }));
+                    
+                    console.log('✅ Synchronisation réussie:', promo.code, promo.discount + '%');
+                    
+                    // Ajouter un paramètre à l'URL pour forcer le rafraîchissement
+                    setTimeout(() => {
+                        window.location.href = 'index.html?promo=' + promo.code + '&discount=' + promo.discount + '&source=reductions&t=' + new Date().getTime();
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('❌ Erreur synchronisation:', error);
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ===== FONCTION DE RÉINITIALISATION =====
+        function reinitialiserCodesPromo() {
+            console.log('🔄 Réinitialisation des codes promo...');
+            
+            // Supprimer tous les flags d'utilisation
+            localStorage.removeItem('anduxara_promo_utilise');
+            localStorage.removeItem('anduxara_active_promo');
+            localStorage.removeItem('anduxara_cart_promo');
+            localStorage.removeItem('anduxara_current_promo');
+            
+            // Réactiver les champs
+            const codeInput = document.getElementById('promoCodeInput');
+            const promoBtn = document.getElementById('promoBtn');
+            
+            if (codeInput) {
+                codeInput.disabled = false;
+                codeInput.value = '';
+                codeInput.placeholder = 'Ex: TEST15, ANDU20, SOLDE25';
+            }
+            
+            if (promoBtn) {
+                promoBtn.disabled = false;
+                promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
+            }
+            
+            // Effacer les messages
+            const messageDiv = document.getElementById('promoMessage');
+            if (messageDiv) {
+                messageDiv.innerHTML = '';
+            }
+            
+            // Cacher les sections
+            document.getElementById('resetSection').style.display = 'none';
+            document.getElementById('successSection').style.display = 'none';
+            
+            showNotification('🔄 Codes promo réinitialisés ! Vous pouvez utiliser un nouveau code.', 'success');
+        }
+
+        // ===== RÉINITIALISATION AUTOMATIQUE APRÈS COMMANDE =====
+        function reinitialiserPromosApresCommande() {
+            localStorage.removeItem('anduxara_active_promo');
+            localStorage.removeItem('anduxara_promo_utilise');
+            localStorage.removeItem('anduxara_cart_promo');
+            localStorage.removeItem('anduxara_current_promo');
+            console.log('🔄 Promos réinitialisées après commande');
         }
 
         // ===== GESTIONNAIRE D'AUTHENTIFICATION =====
         class AuthManager {
             constructor() {
                 this.user = null;
-                this.isAdmin = false;
-                this.unsubscribeStats = null;
-                
                 this.auth = firebase.auth();
                 this.db = firebase.firestore();
-                
                 this.init();
             }
 
@@ -1138,17 +1009,10 @@
                 this.auth.onAuthStateChanged(async (user) => {
                     if (user) {
                         this.user = user;
-                        await this.checkAdminStatus();
                         this.updateUI();
-                        await this.loadParrainageStats();
-                        this.setupRealtimeStats();
                         console.log('✅ Utilisateur connecté:', user.email);
                     } else {
                         this.user = null;
-                        this.isAdmin = false;
-                        if (this.unsubscribeStats) {
-                            this.unsubscribeStats();
-                        }
                         this.updateUI();
                         console.log('🚪 Utilisateur déconnecté');
                     }
@@ -1159,9 +1023,12 @@
                 try {
                     showLoading(true);
                     const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
-                    await this.updateUserDocument(userCredential.user.uid, {
+                    
+                    // Mettre à jour le dernier login
+                    await this.db.collection('users').doc(userCredential.user.uid).set({
                         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    }, { merge: true });
+                    
                     showLoading(false);
                     return { success: true, user: userCredential.user };
                 } catch (error) {
@@ -1176,15 +1043,17 @@
                     const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
                     await userCredential.user.updateProfile({ displayName: displayName });
                     await userCredential.user.sendEmailVerification();
-                    await this.createUserDocument(userCredential.user, displayName);
-
-                    // Vérifier et traiter le parrainage
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const codeParrain = urlParams.get('parrain');
-                    if (codeParrain) {
-                        await this.enregistrerParrainage(userCredential.user, codeParrain);
-                        console.log('✅ Parrainage enregistré:', codeParrain);
-                    }
+                    
+                    // Créer le document utilisateur
+                    await this.db.collection('users').doc(userCredential.user.uid).set({
+                        uid: userCredential.user.uid,
+                        email: userCredential.user.email,
+                        displayName: displayName,
+                        role: 'client',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                        isActive: true
+                    });
 
                     showLoading(false);
                     return { success: true, user: userCredential.user };
@@ -1194,180 +1063,30 @@
                 }
             }
 
-            async createUserDocument(user, displayName) {
-                const userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: displayName,
-                    role: 'client',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    isActive: true,
-                    referralCode: this.generateReferralCode(),
-                    parrainage: {
-                        referredCount: 0,
-                        totalEarnings: 0,
-                        availableEarnings: 0
-                    }
+            getErrorMessage(error) {
+                const errorMessages = {
+                    'auth/invalid-email': 'Adresse email invalide',
+                    'auth/user-disabled': 'Ce compte a été désactivé',
+                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
+                    'auth/wrong-password': 'Mot de passe incorrect',
+                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
+                    'auth/weak-password': 'Le mot de passe est trop faible'
                 };
-                
-                await this.db.collection('users').doc(user.uid).set(userData);
-                console.log('📝 Document utilisateur créé:', user.email);
-            }
-
-            async enregistrerParrainage(user, codeParrain) {
-                try {
-                    // Enregistrer le parrainage
-                    await this.db.collection('parrainages').add({
-                        parrainCode: codeParrain,
-                        filleulId: user.uid,
-                        filleulEmail: user.email,
-                        filleulNom: user.displayName,
-                        dateInscription: firebase.firestore.FieldValue.serverTimestamp(),
-                        statut: 'actif'
-                    });
-                    
-                    // Mettre à jour les stats du parrain
-                    await this.mettreAJourStatsParrain(codeParrain, user);
-                    
-                } catch (error) {
-                    console.error('❌ Erreur parrainage:', error);
-                }
-            }
-
-            async mettreAJourStatsParrain(codeParrain, filleul) {
-                try {
-                    const parrainQuery = await this.db.collection('users')
-                        .where('referralCode', '==', codeParrain)
-                        .get();
-                        
-                    if (!parrainQuery.empty) {
-                        const parrainDoc = parrainQuery.docs[0];
-                        const parrainData = parrainDoc.data();
-                        const parrainId = parrainDoc.id;
-                        
-                        const nouveauGain = 50;
-                        const gainsTotaux = (parrainData.parrainage?.totalEarnings || 0) + nouveauGain;
-                        const gainsDisponibles = (parrainData.parrainage?.availableEarnings || 0) + nouveauGain;
-                        const nouveauxFilleuls = (parrainData.parrainage?.referredCount || 0) + 1;
-                        
-                        await this.db.collection('users').doc(parrainId).update({
-                            'parrainage.referredCount': nouveauxFilleuls,
-                            'parrainage.totalEarnings': gainsTotaux,
-                            'parrainage.availableEarnings': gainsDisponibles,
-                            'parrainage.lastUpdate': firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                } catch (error) {
-                    console.error('❌ Erreur mise à jour stats parrain:', error);
-                }
-            }
-
-            generateReferralCode() {
-                return 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
-            }
-
-            async updateUserDocument(uid, data) {
-                await this.db.collection('users').doc(uid).update(data);
-            }
-
-            async checkAdminStatus() {
-                if (!this.user) return false;
-                try {
-                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
-                    this.isAdmin = userDoc.exists && userDoc.data().role === 'admin';
-                    return this.isAdmin;
-                } catch (error) {
-                    console.error('Erreur vérification admin:', error);
-                    return false;
-                }
-            }
-
-            async loadParrainageStats() {
-                if (!this.user || this.isAdmin) return;
-                try {
-                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
-                    if (userDoc.exists) {
-                        this.updateStatsUI(userDoc.data());
-                    }
-                } catch (error) {
-                    console.error('Erreur chargement parrainage:', error);
-                }
-            }
-
-            async refreshParrainageStats() {
-                if (!this.user || this.isAdmin) return;
-                try {
-                    const userDoc = await this.db.collection('users').doc(this.user.uid).get();
-                    if (userDoc.exists) {
-                        this.updateStatsUI(userDoc.data());
-                        console.log('✅ Stats parrainage rafraîchies');
-                    }
-                } catch (error) {
-                    console.error('Erreur rafraîchissement stats:', error);
-                }
-            }
-
-            updateStatsUI(userData) {
-                const parrainage = userData.parrainage || {};
-                
-                // Vérifier si les récompenses ont déjà été utilisées
-                const rewardsUsed = hasUsedRewards();
-                const gainsAffiches = rewardsUsed ? 0 : (parrainage.availableEarnings || 0);
-                
-                document.getElementById('parrainsCount').textContent = parrainage.referredCount || 0;
-                document.getElementById('gainsTotal').textContent = (parrainage.totalEarnings || 0) + ' MRU';
-                document.getElementById('gainsDisponibles').textContent = gainsAffiches + ' MRU';
-                document.getElementById('codeParrain').textContent = userData.referralCode || '-';
-                document.getElementById('parrainCodeText').textContent = userData.referralCode || 'Code non disponible';
-
-                // Mettre à jour le bouton en fonction de l'état
-                const btnUtiliser = document.getElementById('btnUtiliserGains');
-                if (btnUtiliser) {
-                    if (rewardsUsed || gainsAffiches === 0) {
-                        btnUtiliser.style.background = '#95a5a6';
-                        btnUtiliser.innerHTML = '<i class="fas fa-ban"></i> Récompenses non disponibles';
-                        btnUtiliser.onclick = null;
-                    } else {
-                        btnUtiliser.style.background = '#e53e3e';
-                        btnUtiliser.innerHTML = '<i class="fas fa-shopping-cart"></i> Utiliser mes gains';
-                        btnUtiliser.onclick = utiliserMesGains;
-                    }
-                }
-
-                // Sauvegarder les crédits pour index.html (seulement si non utilisés)
-                if (!rewardsUsed) {
-                    localStorage.setItem('anduxara_referral_credits', gainsAffiches.toString());
-                } else {
-                    localStorage.setItem('anduxara_referral_credits', '0');
-                }
-            }
-
-            setupRealtimeStats() {
-                if (!this.user || this.isAdmin) return;
-                this.unsubscribeStats = this.db.collection('users').doc(this.user.uid)
-                    .onSnapshot((doc) => {
-                        if (doc.exists) {
-                            this.updateStatsUI(doc.data());
-                        }
-                    }, (error) => {
-                        console.error('❌ Erreur écouteur temps réel:', error);
-                    });
+                return errorMessages[error.code] || error.message;
             }
 
             updateUI() {
                 const authButtons = document.getElementById('authButtons');
                 const userProfile = document.getElementById('userProfile');
                 const promoSection = document.getElementById('promoSection');
-                const parrainageSection = document.getElementById('parrainageSection');
                 const infoMessage = document.getElementById('infoMessage');
-                const adminSection = document.getElementById('adminSection');
                 const verificationWarning = document.getElementById('verificationWarning');
 
                 if (this.user) {
                     authButtons.style.display = 'none';
                     userProfile.style.display = 'block';
                     infoMessage.style.display = 'none';
+                    promoSection.style.display = 'block';
                     
                     document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
                     document.getElementById('userEmail').textContent = this.user.email;
@@ -1384,49 +1103,48 @@
                         verificationWarning.style.display = 'block';
                     }
 
-                    if (this.isAdmin) {
-                        promoSection.style.display = 'none';
-                        parrainageSection.style.display = 'none';
-                        adminSection.style.display = 'block';
-                        this.loadAdminStats();
-                    } else {
-                        promoSection.style.display = 'block';
-                        parrainageSection.style.display = 'block';
-                        adminSection.style.display = 'none';
-                    }
+                    // Vérifier l'état des codes promo
+                    this.verifierEtatPromo();
                 } else {
                     authButtons.style.display = 'flex';
                     userProfile.style.display = 'none';
                     promoSection.style.display = 'none';
-                    parrainageSection.style.display = 'none';
-                    adminSection.style.display = 'none';
                     infoMessage.style.display = 'block';
                 }
             }
 
-            async loadAdminStats() {
-                try {
-                    const clientsSnapshot = await this.db.collection('users')
-                        .where('role', '==', 'client')
-                        .get();
-                    document.getElementById('clientCount').textContent = clientsSnapshot.size;
+            verifierEtatPromo() {
+                const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
+                const codeInput = document.getElementById('promoCodeInput');
+                const promoBtn = document.getElementById('promoBtn');
+                const resetSection = document.getElementById('resetSection');
+                const messageDiv = document.getElementById('promoMessage');
 
-                    chargerCommandesAvecPromotions();
-                } catch (error) {
-                    console.error('Erreur chargement stats admin:', error);
+                if (promoUtilise === 'true') {
+                    codeInput.disabled = true;
+                    promoBtn.disabled = true;
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliqué';
+                    resetSection.style.display = 'block';
+                    
+                    const promoData = localStorage.getItem('anduxara_active_promo');
+                    if (promoData) {
+                        try {
+                            const promo = JSON.parse(promoData);
+                            messageDiv.innerHTML = `<span style="color: #38a169;">
+                                ✅ Code "${promo.code}" appliqué - ${promo.discount}% de réduction
+                            </span>`;
+                            document.getElementById('successSection').style.display = 'block';
+                        } catch (e) {
+                            messageDiv.innerHTML = '<span style="color: #38a169;">✅ Code promo déjà utilisé</span>';
+                        }
+                    }
+                } else {
+                    codeInput.disabled = false;
+                    promoBtn.disabled = false;
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
+                    resetSection.style.display = 'none';
+                    messageDiv.innerHTML = '';
                 }
-            }
-
-            getErrorMessage(error) {
-                const errorMessages = {
-                    'auth/invalid-email': 'Adresse email invalide',
-                    'auth/user-disabled': 'Ce compte a été désactivé',
-                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
-                    'auth/wrong-password': 'Mot de passe incorrect',
-                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
-                    'auth/weak-password': 'Le mot de passe est trop faible'
-                };
-                return errorMessages[error.code] || error.message;
             }
         }
 
@@ -1436,12 +1154,10 @@
         function getAuthManager() {
             if (!authManager) {
                 authManager = new AuthManager();
-                window.authManager = authManager;
             }
             return authManager;
         }
 
-        // Fonctions d'interface
         function showLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
         }
@@ -1461,7 +1177,7 @@
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.innerHTML = message;
-            notification.style.background = type === 'success' ? '#28a745' : '#e53e3e';
+            notification.className = type === 'success' ? 'notification' : 'notification error';
             notification.style.display = 'block';
             
             setTimeout(() => {
@@ -1473,12 +1189,8 @@
             try {
                 await firebase.auth().signOut();
                 showNotification('✅ Déconnexion réussie!', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
             } catch (error) {
                 console.log('Déconnexion effectuée');
-                window.location.reload();
             }
         }
 
@@ -1495,180 +1207,22 @@
             }
         }
 
-        // Fonctions parrainage
-        async function copierCodeParrain() {
-            const codeText = document.getElementById('parrainCodeText').textContent;
-            if (codeText === 'Chargement...' || codeText === 'Code non disponible') {
-                showNotification('❌ Code de parrainage non disponible', 'error');
-                return;
-            }
-            
-            try {
-                await navigator.clipboard.writeText(codeText);
-                showNotification('✅ Code de parrainage copié !', 'success');
-            } catch (error) {
-                showNotification('❌ Erreur lors de la copie', 'error');
-            }
-        }
-
-        async function copierLienParrainage() {
-            if (!firebase.auth().currentUser) {
-                showNotification('Veuillez vous connecter', 'error');
-                return;
-            }
-            try {
-                const userDoc = await firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    const referralCode = userData.referralCode;
-                    const lienParrainage = window.location.origin + '/reductions?parrain=' + referralCode;
-                    await navigator.clipboard.writeText(lienParrainage);
-                    showNotification('✅ Lien de parrainage copié !', 'success');
-                }
-            } catch (error) {
-                showNotification('❌ Erreur lors de la copie', 'error');
-            }
-        }
-
-        function partagerParrainage() {
-            copierLienParrainage();
-        }
-
-        function actualiserStatsParrainage() {
-            if (authManager) {
-                authManager.refreshParrainageStats();
-                showNotification('🔄 Statistiques actualisées!', 'success');
-            }
-        }
-
-        // Fonctions codes promo
-        function appliquerCodePromo() {
-            const codeInput = document.getElementById('promoCodeInput');
-            const messageDiv = document.getElementById('promoMessage');
-            const successSection = document.getElementById('successSection');
-            const code = codeInput.value.trim().toUpperCase();
-            
-            if (!code) {
-                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
-                return;
-            }
-            
-            const codesValides = {
-                'BIENVENUE10': '10% de réduction',
-                'ANDU15': '15% de réduction', 
-                'XARA20': '20% de réduction',
-                'INSTA25': '25% de réduction (Instagram)',
-                'TIKTOK30': '30% de réduction (TikTok)'
-            };
-            
-            if (codesValides[code]) {
-                messageDiv.innerHTML = `<span style="color: #38a169;">✅ Code "${code}" appliqué ! ${codesValides[code]}</span>`;
-                successSection.style.display = 'block';
-                codeInput.value = '';
-                
-                // Sauvegarder le code pour index.html
-                localStorage.setItem('anduxara_active_promo', JSON.stringify({
-                    code: code,
-                    discount: getDiscountFromCode(code),
-                    appliedAt: new Date().toISOString()
-                }));
-            } else {
-                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide</span>';
-                successSection.style.display = 'none';
-            }
-        }
-
-        function getDiscountFromCode(code) {
-            const discountMap = {
-                'BIENVENUE10': 10,
-                'ANDU15': 15,
-                'XARA20': 20,
-                'INSTA25': 25,
-                'TIKTOK30': 30
-            };
-            return discountMap[code] || 0;
-        }
-
-        // Fonctions admin
-        function showAdminDashboard() {
-            alert('🎯 Tableau de bord admin\n\nFonctionnalité à développer');
-        }
-
-        function showAnalytics() {
-            alert('📊 Analytics\n\nFonctionnalité à développer');
-        }
-
-        function showClientManager() {
-            alert('👥 Gestion clients\n\nFonctionnalité à développer');
-        }
-
-        // ===== FONCTION DE SYNCHRONISATION =====
+        // ===== VÉRIFICATION DE SYNCHRONISATION =====
         function verifierSynchronisation() {
             const urlParams = new URLSearchParams(window.location.search);
             const commandeSuccess = urlParams.get("commande");
-            const creditsUtilises = urlParams.get("credits");
             
-            if (commandeSuccess === "success" && creditsUtilises) {
-                showNotification(`✅ Commande réussie ! ${creditsUtilises} MRU de récompenses utilisés.`, "success");
-                
-                // Marquer les récompenses comme utilisées
-                markRewardsAsUsed(parseInt(creditsUtilises));
-                
-                // Forcer le rafraîchissement des stats
-                if (authManager) {
-                    setTimeout(() => {
-                        authManager.refreshParrainageStats();
-                    }, 1000);
-                }
-                
-                // Nettoyer l'URL
+            if (commandeSuccess === "success") {
+                showNotification("✅ Commande réussie ! Votre code promo a été utilisé.", "success");
+                reinitialiserPromosApresCommande();
                 window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        }
-
-        async function chargerCommandesAvecPromotions() {
-            try {
-                const commandesSnapshot = await firebase.firestore().collection('commandes').get();
-                let commandesAvecPromo = 0;
-                let totalPromotions = 0;
-                
-                commandesSnapshot.forEach(doc => {
-                    const commande = doc.data();
-                    if (commande.creditsUtilises && commande.creditsUtilises > 0) {
-                        commandesAvecPromo++;
-                        totalPromotions += commande.creditsUtilises;
-                    }
-                });
-                
-                document.getElementById('codesUsed').textContent = commandesAvecPromo + ' commandes';
-                
-                let totalPromoElement = document.getElementById('totalPromotions');
-                if (!totalPromoElement) {
-                    const adminStats = document.querySelector('.admin-section .stats-grid');
-                    if (adminStats) {
-                        adminStats.innerHTML += `
-                            <div style="text-align: center;">
-                                <div style="font-size: 2rem; color: #e53e3c;">💰</div>
-                                <div style="font-weight: bold;">Promotions utilisées</div>
-                                <div id="totalPromotions" style="font-size: 1.5rem; font-weight: bold;">0 MRU</div>
-                            </div>
-                        `;
-                        totalPromoElement = document.getElementById('totalPromotions');
-                    }
-                }
-                
-                if (totalPromoElement) {
-                    totalPromoElement.textContent = totalPromotions + ' MRU';
-                }
-                
-            } catch (error) {
-                console.error('Erreur chargement commandes:', error);
             }
         }
 
         // ===== INITIALISATION =====
         document.addEventListener('DOMContentLoaded', function() {
             verifierSynchronisation();
+            
             // Initialiser le manager
             getAuthManager();
             
@@ -1699,7 +1253,20 @@
                     showNotification('❌ Erreur: ' + result.error, 'error');
                 }
             });
+
+            // Enter key pour le champ code promo
+            document.getElementById('promoCodeInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    appliquerCodePromo();
+                }
+            });
         });
+
+        // Exposer les fonctions globalement
+        window.reinitialiserPromosApresCommande = reinitialiserPromosApresCommande;
+        window.reinitialiserCodesPromo = reinitialiserCodesPromo;
+        window.appliquerCodePromo = appliquerCodePromo;
+        window.synchroniserAvecIndex = synchroniserAvecIndex;
     </script>
 </body>
 </html>
