@@ -7579,27 +7579,6 @@ setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight);
 
-// ===== CORRECTION NEWSLETTER =====
-function initNewsletterPopup() {
-    // Afficher la newsletter après 3 secondes seulement si pas déjà vu
-    const newsletterShown = localStorage.getItem('newsletterShown');
-    if (!newsletterShown) {
-        setTimeout(() => {
-            const popup = document.getElementById('newsletter-popup');
-            if (popup) {
-                popup.classList.add('active');
-                console.log('✅ Newsletter affichée');
-            } else {
-                console.error('❌ Popup newsletter non trouvée');
-            }
-        }, 3000);
-    }
-}
-
-// Appeler cette fonction au chargement
-document.addEventListener('DOMContentLoaded', function() {
-    initNewsletterPopup();
-});
 </script>
     <!-- PWA Installation -->
     <script src="js/pwa-install.js"></script>
