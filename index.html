@@ -1142,85 +1142,6 @@ body.lightbox-open {
     font-size: 0.9rem;
 }
 
-/* ===== NEWSLETTER POPUP ===== */
-.newsletter-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.newsletter-popup.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.popup-content {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    position: relative;
-}
-
-.close-popup {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #999;
-}
-
-.popup-content h3 {
-    color: #6a11cb;
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-}
-
-.popup-content p {
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.popup-content input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 1rem;
-}
-
-.popup-content button {
-    width: 100%;
-    padding: 12px;
-    background: #6a11cb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.popup-content button:hover {
-    background: #2575fc;
-}
-
 /* ===== FOOTER ===== */
 footer {
     background-color: #2c3e50;
@@ -5030,6 +4951,146 @@ function updateActivePromoDisplay() {
         }
     }
 }
+// ===== GESTION DES RÉCOMPENSES APRÈS ACHAT =====
+function retirerRecompensesApresAchat() {
+    try {
+        console.log('🎯 Marquage des récompenses comme utilisées...');
+        
+        const userData = JSON.parse(localStorage.getItem('anduxara_user_data')) || {};
+        const creditsActuels = userData.rewards || 0;
+        
+        if (creditsActuels > 0) {
+            console.log(`💰 Retrait de ${creditsActuels} MRU de récompenses`);
+            
+            // Historique
+            userData.historique = userData.historique || [];
+            userData.historique.push({
+                type: 'recompenses_utilisees',
+                montant: creditsActuels,
+                date: new Date().toISOString(),
+                statut: 'utilise'
+            });
+            
+            // Réinitialiser
+            userData.rewards = 0;
+            localStorage.setItem('anduxara_user_data', JSON.stringify(userData));
+            
+            console.log(`✅ Récompenses marquées comme utilisées: ${creditsActuels} MRU`);
+            
+            // Mettre à jour l'interface
+            setTimeout(() => {
+                updateRewardsDisplay();
+                masquerBoutonParrainage();
+            }, 1000);
+        }
+        
+    } catch (error) {
+        console.error('❌ Erreur retrait récompenses:', error);
+    }
+}
+
+function masquerBoutonParrainage() {
+    const rewardsDisplay = document.getElementById('rewards-display');
+    const boutonParrainage = document.querySelector('[onclick*="parrain"]');
+    const sectionParrainage = document.querySelector('.reduction-section');
+    
+    if (rewardsDisplay) {
+        rewardsDisplay.style.display = 'none';
+        rewardsDisplay.innerHTML = '<p style="color: #27ae60; text-align: center; padding: 20px;">✅ Récompenses utilisées avec succès !</p>';
+    }
+    
+    if (boutonParrainage) {
+        boutonParrainage.style.display = 'none';
+    }
+    
+    if (sectionParrainage) {
+        sectionParrainage.style.opacity = '0.6';
+        sectionParrainage.innerHTML += '<p style="color: #27ae60; text-align: center; margin-top: 10px;">🎁 Récompenses appliquées avec succès !</p>';
+    }
+    
+    console.log('🎁 Interface parrainage mise à jour');
+}
+
+// === SYSTÈME DE RÉCOMPENSES CORRIGÉ ===
+class RewardManager {
+    constructor() {
+        this.rewardsData = this.loadRewardsData();
+    }
+
+    loadRewardsData() {
+        return JSON.parse(localStorage.getItem('anduxara_rewards')) || {
+            availableRewards: 0,
+            usedRewards: 0,
+            pendingRewards: 0,
+            history: []
+        };
+    }
+
+    saveRewardsData() {
+        localStorage.setItem('anduxara_rewards', JSON.stringify(this.rewardsData));
+    }
+
+    // Ajouter des récompenses (parrainage, etc.)
+    addRewards(amount, reason) {
+        this.rewardsData.availableRewards += amount;
+        this.rewardsData.history.push({
+            type: 'reward_added',
+            amount: amount,
+            reason: reason,
+            date: new Date().toISOString(),
+            status: 'available'
+        });
+        this.saveRewardsData();
+        this.updateRewardsDisplay();
+    }
+
+    // Utiliser des récompenses pour une commande
+    useRewards(amount) {
+        if (amount > this.rewardsData.availableRewards) {
+            throw new Error('Fonds insuffisants');
+        }
+
+        // Marquer les récompenses comme utilisées
+        this.rewardsData.availableRewards -= amount;
+        this.rewardsData.usedRewards += amount;
+        
+        // Ajouter à l'historique avec statut "used"
+        this.rewardsData.history.push({
+            type: 'reward_used',
+            amount: amount,
+            reason: 'Commande',
+            date: new Date().toISOString(),
+            status: 'used',
+            orderId: 'CMD_' + Date.now()
+        });
+
+        this.saveRewardsData();
+        this.updateRewardsDisplay();
+        
+        console.log(`✅ ${amount} MRU de récompenses utilisés pour la commande`);
+    }
+
+    // Vérifier si des récompenses sont disponibles
+    getAvailableRewards() {
+        return this.rewardsData.availableRewards;
+    }
+
+    // Mettre à jour l'affichage des récompenses
+    updateRewardsDisplay() {
+        const rewardsDisplay = document.getElementById('rewards-display');
+        const rewardsAmount = document.getElementById('rewards-amount');
+        
+        if (rewardsDisplay && rewardsAmount) {
+            rewardsAmount.textContent = this.rewardsData.availableRewards + ' MRU';
+            rewardsDisplay.style.display = this.rewardsData.availableRewards > 0 ? 'block' : 'none';
+        }
+    }
+
+    // Obtenir l'historique des récompenses
+    getRewardsHistory() {
+        return this.rewardsData.history.filter(entry => entry.status === 'available');
+    }
+}
 
 // ===== FONCTIONS DE PAIEMENT =====
 function processFloatingCheckout() {
@@ -5044,6 +5105,24 @@ function processFloatingCheckout() {
         return sum + (item.promoPrice || item.price) * item.quantity;
     }, 0);
     
+    const montantOriginal = totalMRU; // Sauvegarder le montant original
+    
+    // Vérifier si le client a utilisé des récompenses
+    let aUtiliseRecompenses = false;
+    let reductionRecompenses = 0;
+    
+    // Vérifier les crédits de parrainage
+    const credits = localStorage.getItem('anduxara_referral_credits') || 0;
+    const creditsUtilisables = parseInt(credits);
+    
+    if (creditsUtilisables > 0 && creditsUtilisables <= totalMRU) {
+        reductionRecompenses = creditsUtilisables;
+        totalMRU -= reductionRecompenses;
+        aUtiliseRecompenses = true;
+        console.log(`🎁 Réduction parrainage appliquée: -${reductionRecompenses} MRU`);
+    }
+    
+    // Appliquer promo code si actif
     if (activePromoCode && promoDiscount > 0) {
         totalMRU = totalMRU * (1 - promoDiscount / 100);
     }
@@ -5051,19 +5130,54 @@ function processFloatingCheckout() {
     totalMRU = Math.round(totalMRU);
     const totalFCFA = Math.round(totalMRU * 2.5);
     
-    integrerFideliteAchat(totalMRU);
+// CORRECTION : Intégration fidélité sécurisée
+try {
+    if (typeof integrerFideliteAchat === 'function') {
+        integrerFideliteAchat(totalMRU);
+    } else {
+        console.log('⚠️ Système fidélité temporairement indisponible');
+        // Version de secours
+        const pointsGagnes = Math.floor(totalMRU / 10);
+        console.log(`🎯 ${pointsGagnes} points fidélité gagnés (simulation)`);
+    }
+} catch (error) {
+    console.log('⚠️ Erreur fidélité, continuation sans interruption');
+}
     
     const productList = floatingCart.map(item => 
         `${item.name} (x${item.quantity}) - ${(item.promoPrice || item.price) * item.quantity} MRU`
     ).join('\n');
     
-    const message = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU\n\nPouvez-vous m'aider pour la suite ?`;
+    // Message différent selon utilisation récompenses
+    const message = aUtiliseRecompenses ? 
+        `🎁 COMMANDE AVEC RÉCOMPENSES ANDU-XARA !\n\n` +
+        `Je souhaite commander avec mes récompenses :\n\n${productList}\n\n` +
+        `💰 Montant original : ${montantOriginal} MRU\n` +
+        `🎁 Réduction parrainage : -${reductionRecompenses} MRU\n` +
+        `💵 Total à payer : ${totalMRU} MRU\n\n` +
+        `Pouvez-vous m'aider pour la suite ?` :
+        
+        `Bonjour Andu-Xara ! 👋\n\n` +
+        `Je souhaite commander :\n\n${productList}\n\n` +
+        `💰 Total : ${totalMRU} MRU\n\n` +
+        `Pouvez-vous m'aider pour la suite ?`;
     
-    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
+    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n` +
+        (aUtiliseRecompenses ? 
+            `🎁 COMMANDE AVEC RÉCOMPENSES\n` +
+            `💰 Montant original : ${montantOriginal} MRU\n` +
+            `🎁 Réduction parrainage : -${reductionRecompenses} MRU\n` +
+            `💵 Total à payer : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n` :
+            `💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n`) +
+        `🔢 Tapez 1, 2 ou 3 :\n\n` +
+        `1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n` +
+        `2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n` +
+        `3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n` +
+        `⚠️ Votre choix (1/2/3) :`;
     
     const choice = prompt(paymentChoice);
 
-    if (choice === '1') {
+if (choice === '1') {
         processWavePayment(totalFCFA, totalMRU, message);
     } else if (choice === '2') {
         processBankilyPayment(totalMRU, message);
@@ -5071,7 +5185,14 @@ function processFloatingCheckout() {
         processWhatsAppPayment(message);
     } else {
         showNotification('Commande annulée', 'warning');
+        return; // Arrêter ici si annulé
     }
+    
+    // ⭐⭐ AJOUT IMPORTANT : Retirer les récompenses APRÈS le paiement réussi
+    // Cette ligne doit être APRÈS le processus de paiement mais AVANT la fin de la fonction
+    retirerRecompensesApresAchat();
+    
+    console.log('🎯 Processus checkout terminé');
 }
 
 function processWavePayment(totalFCFA, totalMRU, message) {
@@ -5121,17 +5242,29 @@ function processBankilyPayment(totalMRU, message) {
     }
 }
 
-function processWhatsAppPayment(message) {
-    const whatsappMessage = `💬 CONTACT WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour :\n• Confirmer votre commande\n• Choisir le mode de paiement\n• Organiser la livraison\n\n🕒 Réponse sous 5 minutes !\n\n✅ OK → Ouvrir WhatsApp maintenant\n❌ Annuler → Retour au panier`;
+function processWhatsAppPayment(message, montantOriginal = 0, aUtiliseRecompenses = false) {
+    const whatsappMessage = `💬 CONTACT WHATSAPP\n\n` +
+        (aUtiliseRecompenses ? 
+            `🎁 COMMANDE AVEC RÉCOMPENSES\n` +
+            `📱 Nous allons ouvrir WhatsApp pour :\n` +
+            `• Confirmer votre commande avec récompenses\n` +
+            `• Finaliser les détails\n` +
+            `• Organiser la livraison\n\n` :
+            `📱 Nous allons ouvrir WhatsApp pour :\n` +
+            `• Confirmer votre commande\n` +
+            `• Choisir le mode de paiement\n` +
+            `• Organiser la livraison\n\n`) +
+        `🕒 Réponse sous 5 minutes !\n\n` +
+        `✅ OK → Ouvrir WhatsApp maintenant\n` +
+        `❌ Annuler → Retour au panier`;
     
     if (confirm(whatsappMessage)) {
-        const whatsappText = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${message}\n\nPouvez-vous m'aider pour la suite ?`;
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappText)}`, '_blank');
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
         
         showNotification('✅ WhatsApp ouvert ! Notre équipe vous contactera.', 'success');
         
         setTimeout(() => {
-            finaliserCommande(0, message, 'WhatsApp');
+            finaliserCommande(0, message, 'WhatsApp', montantOriginal, aUtiliseRecompenses);
         }, 3000);
         
     } else {
@@ -5139,15 +5272,65 @@ function processWhatsAppPayment(message) {
     }
 }
 
-function finaliserCommande(totalMRU, message, methode) {
-    const confirmation = `🎉 COMMANDE CONFIRMÉE !\n\n✅ Votre commande a été enregistrée\n💳 Méthode : ${methode}\n💰 Montant : ${totalMRU} MRU\n\n📦 Prochaines étapes :\n1. Notre équipe va vous contacter\n2. Confirmation sous 24h maximum\n3. Livraison express selon votre zone\n\n📞 Contact : +222 49 03 76 97\n\nMerci pour votre confiance ! 🤝`;
+function finaliserCommande(totalMRU, message, methode, montantOriginal = totalMRU, aUtiliseRecompenses = false) {
+    const clientMessage = aUtiliseRecompenses ? 
+        `🎉 COMMANDE AVEC RÉCOMPENSES !\n\n` +
+        `✅ Commande enregistrée (Récompenses utilisées)\n` +
+        `💳 Méthode : ${methode}\n` +
+        `💰 Montant original : ${montantOriginal} MRU\n` +
+        `🎁 Réduction parrainage : -${montantOriginal - totalMRU} MRU\n` +
+        `💵 Total payé : ${totalMRU} MRU\n\n` +
+        `📦 Livraison express selon votre zone\n` +
+        `📞 Contact : +222 49 03 76 97\n\n` +
+        `Merci pour votre fidélité ! 🤝` :
+        
+        `🎉 COMMANDE CONFIRMÉE !\n\n` +
+        `✅ Votre commande a été enregistrée\n` +
+        `💳 Méthode : ${methode}\n` +
+        `💰 Montant : ${totalMRU} MRU\n\n` +
+        `📦 Prochaines étapes :\n` +
+        `1. Notre équipe va vous contacter\n` +
+        `2. Confirmation sous 24h maximum\n` +
+        `3. Livraison express selon votre zone\n\n` +
+        `📞 Contact : +222 49 03 76 97\n\n` +
+        `Merci pour votre confiance ! 🤝`;
     
-    alert(confirmation);
+    alert(clientMessage);
     
+// ===== RÉINITIALISATION DES RÉCOMPENSES =====
+function reinitialiserRecompensesApresCommande() {
+    console.log('🔄 Réinitialisation des récompenses après commande...');
+    
+    // Réinitialiser dans Firebase
+    if (window.firebaseManager) {
+        window.firebaseManager.setCredits(0);
+        console.log('✅ Récompenses réinitialisées dans Firebase');
+    }
+    
+    // Réinitialiser dans localStorage
+    localStorage.setItem('anduxara_referral_credits', '0');
+    localStorage.setItem('anduxara_recompenses_utilisees', 'true');
+    localStorage.setItem('anduxara_derniere_commande', new Date().toISOString());
+    
+    console.log('✅ Récompenses réinitialisées dans localStorage');
+    
+    // Mettre à jour l'affichage
+    if (typeof updateRewardsDisplay === 'function') {
+        updateRewardsDisplay();
+    }
+}
+
+    // RÉINITIALISER LES RÉCOMPENSES SI UTILISÉES
+    if (aUtiliseRecompenses) {
+        reinitialiserRecompensesApresCommande();
+    }
+    
+    // Vider le panier
     floatingCart = [];
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
     closeFloatingCart();
+    
     showNotification('🎉 Commande finalisée ! Merci pour votre achat.', 'success');
 }
 
