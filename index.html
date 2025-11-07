@@ -3522,8 +3522,6 @@ if ('serviceWorker' in navigator) {
     });
 }
  </script>
-    <!-- Manager Firebase Unifié pour parrainage -->
-    <script src="js/secure/firebase-unified-manager.js"></script>
     
     <!-- Réception des crédits depuis reductions.html -->
     <script>
@@ -6999,8 +6997,6 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.removeItem('anduxara_user_data');
     localStorage.removeItem('anduxara_fidelite');
     localStorage.removeItem('anduxara_active_promo');
-    console.log('🧹 Anciennes données parrainage nettoyées');
-    
     // RÉINITIALISER LES PRIX SANS RÉDUCTION
     floatingCart.forEach(item => {
         item.promoPrice = item.price;
@@ -7043,9 +7039,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
     
     // ===== INITIALISATION SYSTÈME DE PARRAINAGE =====
-    console.log('💎 Initialisation du système de parrainage...');
-    console.log('✅ Système de parrainage activé');
-    
     // ===== INITIALISATION SYSTÈME DE LIVRAISON =====
     console.log('🚚 Initialisation du système de livraison...');
     
