@@ -96,18 +96,31 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            height: 400px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 500px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .banner-content {
             color: white;
             padding: 40px;
             z-index: 2;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            max-width: 90%;
         }
 
         .banner-content h1 {
@@ -125,7 +138,7 @@
         }
 
         .soninke-decoration {
-            font-size: 8rem;
+            font-size: 4rem;
             margin-bottom: 20px;
             display: block;
         }
@@ -418,7 +431,7 @@
             }
 
             .soninke-decoration {
-                font-size: 5rem;
+                font-size: 3rem;
             }
 
             .section-title {
@@ -438,7 +451,7 @@
             }
 
             .hero-banner {
-                height: 300px;
+                height: 400px;
                 margin: 20px auto;
             }
         }
@@ -458,11 +471,15 @@
             }
 
             .soninke-decoration {
-                font-size: 4rem;
+                font-size: 2.5rem;
             }
 
             .newsletter-section {
                 padding: 30px 20px;
+            }
+
+            .hero-banner {
+                height: 350px;
             }
         }
     </style>
@@ -484,6 +501,9 @@
 
     <!-- Hero Banner -->
     <section class="hero-banner">
+        <!-- ✅ CHEMIN CORRECT : images/soninke.jpg -->
+        <img src="images/soninke.jpg" alt="Journée Internationale de la Langue Soninké" class="banner-image">
+        
         <div class="banner-content">
             <span class="soninke-decoration">🌍</span>
             <h1>Journée Internationale de la Langue Soninké</h1>
@@ -625,25 +645,11 @@
             const emails = subscriptions.map(sub => sub.email).join('\n');
             
             console.log('📧 Liste des emails à copier:\n' + emails);
-            console.log('📋 Copiez-collez manuellement la liste ci-dessus');
             
-            const textarea = document.createElement('textarea');
-            textarea.value = emails;
-            document.body.appendChild(textarea);
-            textarea.select();
+            // Méthode simple et fiable
+            const emailList = `Voici la liste des ${subscriptions.length} email(s) inscrit(s) :\n\n${emails}\n\n📋 Copiez-collez cette liste dans votre Google Sheets ou fichier texte.`;
+            alert(emailList);
             
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    alert('✅ Emails copiés dans le presse-papier !');
-                } else {
-                    alert('📋 Voici la liste des emails à copier manuellement :\n\n' + emails);
-                }
-            } catch (err) {
-                alert('📋 Voici la liste des emails à copier manuellement :\n\n' + emails);
-            }
-            
-            document.body.removeChild(textarea);
             return emails;
         }
 
