@@ -2297,10 +2297,9 @@ if (window.location.hostname !== 'localhost' &&
                     Votre navigateur ne supporte pas la lecture audio.
                 </audio>
             </div>
-
-<!-- ===== SYSTÈME DE PARRAINAGE CORRIGÉ ===== -->
+<!-- ===== SYSTÈME DE CODES PROMO SIMPLES ===== -->
 <div class="reduction-section">
-    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Système de Parrainage</h3>
+    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Codes Promotionnels</h3>
     
     <!-- Affichage du code actif -->
     <div id="active-promo-display" style="display: none; background: #e8f5e8; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
@@ -2311,32 +2310,8 @@ if (window.location.hostname !== 'localhost' &&
         </button>
     </div>
     
-    <!-- BOUTON PARRAINAGE CORRIGÉ -->
-    <div style="text-align: center; margin: 20px 0;">
-        <a href="reductions.html" 
-           style="display: inline-block; text-decoration: none; width: 100%; max-width: 300px;"
-           onclick="event.preventDefault(); ouvrirPageReductions();">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                       color: white; 
-                       padding: 20px; 
-                       border-radius: 15px; 
-                       text-align: center;
-                       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-                       transition: all 0.3s ease;
-                       border: none;
-                       cursor: pointer;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🎁</div>
-                <div style="font-weight: bold; font-size: 1.3rem; margin-bottom: 5px;">300 MRU</div>
-                <div style="font-size: 1rem; opacity: 0.9; margin-bottom: 8px;">Réduction parrainage</div>
-                <div style="font-size: 0.9rem; opacity: 0.8;">
-                    <i class="fas fa-arrow-right"></i> Cliquer pour activer
-                </div>
-            </div>
-        </a>
-    </div>
-    
     <!-- Section code promo rapide -->
-    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 20px;">
+    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 10px;">
         <input type="text" id="promoInput" placeholder="Ex: BIENVENUE15" 
                style="flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
         <button id="promoButton" onclick="validateAndApplyPromo()"
@@ -2352,6 +2327,7 @@ if (window.location.hostname !== 'localhost' &&
         </a>
     </div>
 </div>
+
             <!-- Recherche -->
             <div class="search-bar">
                 <input type="text" placeholder="🔍 Rechercher un produit..." id="search-input" aria-label="Rechercher un produit">
@@ -3076,42 +3052,6 @@ if (window.location.hostname !== 'localhost' &&
 
         </div>
 
-<!-- Dans la section du tableau de bord client, ajoutez : -->
-<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-        <div style="background: #9b59b6; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
-            💎
-        </div>
-        <h3 style="margin: 0; color: #2c3e50;">Système de Parrainage</h3>
-    </div>
-    
-    <div id="rewards-display" style="display: none;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 2rem; font-weight: bold; color: #9b59b6;" id="rewards-amount">0 MRU</div>
-            <div style="color: #666; font-size: 0.9rem; margin-top: 5px;" id="user-code">Code: AX00000</div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button onclick="copyParrainLink()" 
-                    style="background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
-                📋 Copier lien
-            </button>
-            <button onclick="showParrainInfo()" 
-                    style="background: #95a5a6; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
-                ℹ️ Infos
-            </button>
-        </div>
-    </div>
-    
-    <div style="text-align: center; color: #666; font-size: 0.8rem;">
-        <p>💡 Parrainez des amis et cumulez des récompenses !</p>
-        <button onclick="debugParrainages()" 
-                style="background: #7f8c8d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; margin-top: 5px;">
-            🐛 Debug
-        </button>
-    </div>
-</div>
-
         <!-- Bouton de réinitialisation -->
         <div style="text-align: center; margin-top: 30px;">
             <button onclick="resetDashboard()" style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-size: 0.9rem;">
@@ -3313,7 +3253,7 @@ if (window.location.hostname !== 'localhost' &&
 
                     <div class="footer-section">
                         <h3>Contact</h3>
-                        <p>📧 Email: anduxara2408@gmail.com</p>
+                        <p>📧 Email: contact@andu-xara.store</p>
                         <p>📞 Téléphone: +222 49 03 76 97</p>
                         <p>💬 WhatsApp: +222 49 03 76 97</p>
                         <p>📍 Mauritanie, Nouakchott</p>
@@ -4963,21 +4903,6 @@ function closeFloatingCart() {
         cart.classList.remove('open');
     }
 }
-
-// Dans votre script principal, ajoutez :
-function cleanParrainageData() {
-    // Supprimer toutes les données de parrainage
-    localStorage.removeItem('anduxara_referral_credits');
-    localStorage.removeItem('anduxara_user_data');
-    localStorage.removeItem('anduxara_fidelite');
-    localStorage.removeItem('anduxara_active_promo');
-    console.log('🧹 Données parrainage nettoyées');
-}
-
-// Appeler au chargement
-document.addEventListener('DOMContentLoaded', function() {
-    cleanParrainageData();
-});
 
 // ===== FONCTIONS DE PAIEMENT =====
 function processFloatingCheckout() {
@@ -7284,30 +7209,6 @@ window.addEventListener('orientationchange', setViewportHeight);
     <script src="js/pwa-install.js"></script>
 <script>
 // ===== FONCTIONS POUR LE SYSTÈME DE PARRAINAGE =====
-
-// Fonction pour ouvrir la page reductions
-function ouvrirPageReductions() {
-    console.log("🔗 Ouverture de la page reductions.html");
-    
-    // Vérifier si un code promo est déjà actif
-    const promoActif = localStorage.getItem('anduxara_promo_utilise');
-    const promoData = localStorage.getItem('anduxara_active_promo');
-    
-    if (promoActif === 'true' && promoData) {
-        try {
-            const promo = JSON.parse(promoData);
-            const confirmer = confirm(`✅ Vous avez déjà un code promo actif : ${promo.code} - ${promo.discount}%\n\nSouhaitez-vous voir vos réductions ou réinitialiser pour utiliser un nouveau code ?`);
-            
-            if (confirmer) {
-                window.location.href = 'reductions.html';
-            }
-        } catch (error) {
-            window.location.href = 'reductions.html';
-        }
-    } else {
-        window.location.href = 'reductions.html';
-    }
-}
 
 // Vérifier les codes promo au chargement
 function verifierCodePromoAuChargement() {
