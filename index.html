@@ -4904,30 +4904,62 @@ function closeFloatingCart() {
 
 // ===== FONCTIONS DE PAIEMENT =====
 function processFloatingCheckout() {
-    console.log('🛒 Début du processus de checkout');
+    console.log('🛒 Début du processus de checkout avec promo...');
     
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
         return;
     }
     
+    // RÉCUPÉRER LES INFOS PROMO
+    const promoData = localStorage.getItem('commande_promo_info');
+    let promoInfo = null;
     let totalMRU = floatingCart.reduce((sum, item) => {
         return sum + (item.promoPrice || item.price) * item.quantity;
     }, 0);
     
+    if (promoData) {
+        try {
+            promoInfo = JSON.parse(promoData);
+            console.log('🎫 Promotion appliquée:', promoInfo);
+        } catch (error) {
+            console.log('❌ Erreur lecture promo');
+        }
+    }
+    
+    // APPLIQUER LA RÉDUCTION SI PROMO ACTIVE
+    let reductionAppliquee = 0;
+    if (promoInfo && promoInfo.discount) {
+        reductionAppliquee = (totalMRU * promoInfo.discount) / 100;
+        totalMRU = totalMRU - reductionAppliquee;
+    }
+    
     totalMRU = Math.round(totalMRU);
     const totalFCFA = Math.round(totalMRU * 2.5);
     
+    // CONSTRUIRE LE MESSAGE AVEC INFO PROMO
     const productList = floatingCart.map(item => 
         `${item.name} (x${item.quantity}) - ${(item.promoPrice || item.price) * item.quantity} MRU`
     ).join('\n');
     
-    const message = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${productList}\n\n💰 Total : ${totalMRU} MRU\n\nPouvez-vous m'aider pour la suite ?`;
+    let message = `Bonjour Andu-Xara ! 👋\n\n`;
+    message += `Je souhaite commander :\n\n${productList}\n\n`;
     
-    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
+    // AJOUTER LES INFOS PROMO DANS LE MESSAGE
+    if (promoInfo) {
+        message += `🎫 CODE PROMO APPLIQUÉ : ${promoInfo.code}\n`;
+        message += `💰 RÉDUCTION : ${promoInfo.discount}% (-${reductionAppliquee} MRU)\n\n`;
+    }
+    
+    message += `💰 Total : ${totalMRU} MRU${promoInfo ? ` (après réduction)` : ''}\n\n`;
+    message += `Pouvez-vous m'aider pour la suite ?`;
+    
+    // SUITE DE LA FONCTION EXISTANTE...
+    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo ? `\n🎫 Réduction : ${promoInfo.discount}% appliquée` : ''}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équire)\n\n⚠️ Votre choix (1/2/3) :`;
     
     const choice = prompt(paymentChoice);
-
+    // ... reste du code existant
+}
     if (choice === '1') {
         processWavePayment(totalFCFA, totalMRU, message);
     } else if (choice === '2') {
@@ -5379,6 +5411,40 @@ function handleDeliveryKeypress(event) {
         checkDelivery();
     }
 }
+// ===== GÉNÉRATION DU REÇU =====
+function genererRecuCommande(products, total, promoInfo = null) {
+    console.log('🧾 Génération du reçu...');
+    
+    let recu = `=== ANDU-XARA - REÇU DE COMMANDE ===\n\n`;
+    recu += `📅 Date: ${new Date().toLocaleString()}\n`;
+    recu += `🆔 Commande: #${Date.now().toString().slice(-6)}\n\n`;
+    
+    recu += `📦 PRODUITS COMMANDÉS:\n`;
+    recu += '─'.repeat(40) + '\n';
+    
+    products.forEach((item, index) => {
+        recu += `${index + 1}. ${item.name}\n`;
+        recu += `   Quantité: ${item.quantity} x ${item.promoPrice || item.price} MRU\n`;
+        recu += `   Sous-total: ${(item.promoPrice || item.price) * item.quantity} MRU\n\n`;
+    });
+    
+    recu += '─'.repeat(40) + '\n';
+    
+    if (promoInfo) {
+        recu += `🎫 CODE PROMO: ${promoInfo.code}\n`;
+        recu += `💰 RÉDUCTION: ${promoInfo.discount}%\n`;
+        recu += `🎁 ORIGINE: Promotion Andu-Xara\n\n`;
+    }
+    
+    recu += `💰 TOTAL: ${total} MRU\n`;
+    recu += `💳 Statut: En attente de paiement\n\n`;
+    recu += `📞 Contact: +222 49 03 76 97\n`;
+    recu += `📧 Email: anduxara2408@gmail.com\n\n`;
+    recu += `Merci pour votre confiance ! 🛍️`;
+    
+    return recu;
+}
+
 // ===== ASSISTANT IA INTELLIGENT ANDU-XARA =====
 class IntelligentAssistant {
     constructor() {

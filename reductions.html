@@ -675,7 +675,7 @@
                 </div>
                 
                 <div style="margin-top: 1rem;">
-                    <a href="index.html" class="btn-shop" onclick="synchroniserAvecIndex()">
+                    <a href="#" class="btn-shop" onclick="synchroniserAvecCommande()">
                         <i class="fas fa-shopping-cart"></i> Passer commande maintenant
                     </a>
                     <button class="btn-shop" style="background: #667eea; margin-left: 10px;" onclick="testerSynchronisation()">
@@ -947,35 +947,33 @@
                 timestamp: new Date().getTime()
             }));
 
-            // Sauvegarder pour la synchronisation avec le panier
-            localStorage.setItem('anduxara_current_promo', JSON.stringify({
-                active: true,
+            // SAUVEGARDER POUR LE PROCESSUS DE COMMANDE
+            localStorage.setItem('commande_promo_info', JSON.stringify({
                 code: code,
                 discount: promoData.discount,
+                appliedAt: new Date().toISOString(),
                 source: 'reductions',
-                timestamp: new Date().getTime()
+                description: promoData.description
             }));
 
-            console.log('💾 Code promo sauvegardé pour index.html:', promoInfo);
+            console.log('💾 Code promo sauvegardé pour le processus de commande:', promoInfo);
         }
 
-        // ===== SYNCHRONISATION AVEC INDEX.HTML =====
-        function synchroniserAvecIndex() {
-            console.log('🔄 Synchronisation avec index.html...');
+        // ===== SYNCHRONISATION AVEC LE PROCESSUS DE COMMANDE =====
+        function synchroniserAvecCommande() {
+            console.log('🔄 Synchronisation avec le processus de commande...');
             
-            const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
-            const promoData = localStorage.getItem('anduxara_active_promo');
-            
-            if (promoUtilise === 'true' && promoData) {
+            const promoData = localStorage.getItem('commande_promo_info');
+            if (promoData) {
                 try {
                     const promo = JSON.parse(promoData);
                     
                     // Vérifier la synchronisation
                     updateSyncStatus('synced', `🔄 Redirection vers le panier avec ${promo.discount}% de réduction...`);
                     
-                    // Ajouter un paramètre à l'URL pour forcer le rafraîchissement
+                    // Redirection vers index.html
                     setTimeout(() => {
-                        window.location.href = 'index.html?promo=' + promo.code + '&discount=' + promo.discount + '&source=reductions&t=' + new Date().getTime();
+                        window.location.href = 'index.html';
                     }, 1000);
                     
                 } catch (error) {
@@ -992,7 +990,7 @@
 
         // ===== TEST DE SYNCHRONISATION =====
         function testerSynchronisation() {
-            const promoData = localStorage.getItem('anduxara_current_promo');
+            const promoData = localStorage.getItem('commande_promo_info');
             if (promoData) {
                 try {
                     const promo = JSON.parse(promoData);
@@ -1040,6 +1038,7 @@
             localStorage.removeItem('anduxara_active_promo');
             localStorage.removeItem('anduxara_cart_promo');
             localStorage.removeItem('anduxara_current_promo');
+            localStorage.removeItem('commande_promo_info');
             
             // Réactiver les champs
             const codeInput = document.getElementById('promoCodeInput');
@@ -1076,6 +1075,7 @@
             localStorage.removeItem('anduxara_promo_utilise');
             localStorage.removeItem('anduxara_cart_promo');
             localStorage.removeItem('anduxara_current_promo');
+            localStorage.removeItem('commande_promo_info');
             console.log('🔄 Promos réinitialisées après commande');
         }
 
@@ -1236,7 +1236,7 @@
 
             verifierSynchronisationPanier() {
                 // Vérifier si un code est déjà actif depuis le panier
-                const promoData = localStorage.getItem('anduxara_current_promo');
+                const promoData = localStorage.getItem('commande_promo_info');
                 if (promoData) {
                     try {
                         const promo = JSON.parse(promoData);
@@ -1322,7 +1322,7 @@
             }
 
             // Vérifier la synchronisation avec le panier
-            const promoFromPanier = localStorage.getItem('anduxara_current_promo');
+            const promoFromPanier = localStorage.getItem('commande_promo_info');
             if (promoFromPanier) {
                 try {
                     const promo = JSON.parse(promoFromPanier);
@@ -1382,7 +1382,7 @@
         window.reinitialiserPromosApresCommande = reinitialiserPromosApresCommande;
         window.reinitialiserCodesPromo = reinitialiserCodesPromo;
         window.appliquerCodePromo = appliquerCodePromo;
-        window.synchroniserAvecIndex = synchroniserAvecIndex;
+        window.synchroniserAvecCommande = synchroniserAvecCommande;
         window.testerSynchronisation = testerSynchronisation;
     </script>
 </body>
