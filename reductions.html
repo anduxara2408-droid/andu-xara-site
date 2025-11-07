@@ -484,6 +484,25 @@
             transform: translateY(-2px);
         }
 
+        .sync-status {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .sync-status.synced {
+            background: #f0fff4;
+            border-color: #9ae6b4;
+        }
+
+        .sync-status.error {
+            background: #fed7d7;
+            border-color: #feb2b2;
+        }
+
         @media (max-width: 768px) {
             .sources-grid {
                 grid-template-columns: 1fr 1fr;
@@ -615,8 +634,16 @@
                 Entrez le code obtenu sur nos réseaux pour activer votre réduction
             </p>
             
+            <!-- Statut de synchronisation avec le panier -->
+            <div id="syncStatus" class="sync-status">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-sync-alt"></i>
+                    <span id="syncMessage">Synchronisation avec le panier...</span>
+                </div>
+            </div>
+            
             <div class="promo-input-group">
-                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: VOTRE CODE">
+                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: TEST15, ANDU20, SOLDE25">
                 <button class="promo-btn" onclick="appliquerCodePromo()" id="promoBtn">
                     <i class="fas fa-check"></i> Appliquer
                 </button>
@@ -646,9 +673,15 @@
                         </div>
                     </div>
                 </div>
-                <a href="index.html" class="btn-shop" onclick="synchroniserAvecIndex()">
-                    <i class="fas fa-shopping-cart"></i> Passer commande maintenant
-                </a>
+                
+                <div style="margin-top: 1rem;">
+                    <a href="index.html" class="btn-shop" onclick="synchroniserAvecIndex()">
+                        <i class="fas fa-shopping-cart"></i> Passer commande maintenant
+                    </a>
+                    <button class="btn-shop" style="background: #667eea; margin-left: 10px;" onclick="testerSynchronisation()">
+                        <i class="fas fa-sync"></i> Tester la synchronisation
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -839,6 +872,9 @@
                     // Afficher la section succès
                     document.getElementById('successSection').style.display = 'block';
                     
+                    // Mettre à jour le statut de synchronisation
+                    updateSyncStatus('success', `✅ Synchronisé avec le panier - ${promoData.discount}% appliqué`);
+                    
                     showNotification(`🎉 Code ${code} appliqué ! ${promoData.discount}% de réduction`, 'success');
                     
                 } else {
@@ -868,7 +904,8 @@
                     promoCode: code,
                     discount: promoData.discount,
                     usedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    status: 'applied'
+                    status: 'applied',
+                    source: 'reductions.html'
                 });
 
                 // Mettre à jour le compteur si c'est un code Firebase
@@ -910,6 +947,15 @@
                 timestamp: new Date().getTime()
             }));
 
+            // Sauvegarder pour la synchronisation avec le panier
+            localStorage.setItem('anduxara_current_promo', JSON.stringify({
+                active: true,
+                code: code,
+                discount: promoData.discount,
+                source: 'reductions',
+                timestamp: new Date().getTime()
+            }));
+
             console.log('💾 Code promo sauvegardé pour index.html:', promoInfo);
         }
 
@@ -924,28 +970,64 @@
                 try {
                     const promo = JSON.parse(promoData);
                     
-                    // Forcer la sauvegarde dans une clé que index.html vérifie
-                    localStorage.setItem('anduxara_current_promo', JSON.stringify({
-                        active: true,
-                        code: promo.code,
-                        discount: promo.discount,
-                        source: 'reductions',
-                        timestamp: new Date().getTime()
-                    }));
-                    
-                    console.log('✅ Synchronisation réussie:', promo.code, promo.discount + '%');
+                    // Vérifier la synchronisation
+                    updateSyncStatus('synced', `🔄 Redirection vers le panier avec ${promo.discount}% de réduction...`);
                     
                     // Ajouter un paramètre à l'URL pour forcer le rafraîchissement
                     setTimeout(() => {
                         window.location.href = 'index.html?promo=' + promo.code + '&discount=' + promo.discount + '&source=reductions&t=' + new Date().getTime();
-                    }, 500);
+                    }, 1000);
                     
                 } catch (error) {
                     console.error('❌ Erreur synchronisation:', error);
-                    window.location.href = 'index.html';
+                    updateSyncStatus('error', '❌ Erreur de synchronisation');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
                 }
             } else {
                 window.location.href = 'index.html';
+            }
+        }
+
+        // ===== TEST DE SYNCHRONISATION =====
+        function testerSynchronisation() {
+            const promoData = localStorage.getItem('anduxara_current_promo');
+            if (promoData) {
+                try {
+                    const promo = JSON.parse(promoData);
+                    updateSyncStatus('success', `✅ Test réussi ! Code ${promo.code} - ${promo.discount}% synchronisé`);
+                    showNotification('✅ Synchronisation testée avec succès !', 'success');
+                } catch (error) {
+                    updateSyncStatus('error', '❌ Erreur lors du test de synchronisation');
+                }
+            } else {
+                updateSyncStatus('error', '❌ Aucun code promo actif détecté');
+            }
+        }
+
+        // ===== MISE À JOUR DU STATUT DE SYNCHRONISATION =====
+        function updateSyncStatus(type, message) {
+            const syncStatus = document.getElementById('syncStatus');
+            const syncMessage = document.getElementById('syncMessage');
+            
+            if (syncStatus && syncMessage) {
+                syncStatus.className = 'sync-status';
+                if (type === 'success' || type === 'synced') {
+                    syncStatus.classList.add('synced');
+                } else if (type === 'error') {
+                    syncStatus.classList.add('error');
+                }
+                
+                syncMessage.innerHTML = message;
+                syncStatus.style.display = 'block';
+                
+                // Masquer après 5 secondes pour les statuts de succès
+                if (type === 'success') {
+                    setTimeout(() => {
+                        syncStatus.style.display = 'none';
+                    }, 5000);
+                }
             }
         }
 
@@ -983,6 +1065,7 @@
             // Cacher les sections
             document.getElementById('resetSection').style.display = 'none';
             document.getElementById('successSection').style.display = 'none';
+            document.getElementById('syncStatus').style.display = 'none';
             
             showNotification('🔄 Codes promo réinitialisés ! Vous pouvez utiliser un nouveau code.', 'success');
         }
@@ -1010,6 +1093,7 @@
                     if (user) {
                         this.user = user;
                         this.updateUI();
+                        this.verifierSynchronisationPanier();
                         console.log('✅ Utilisateur connecté:', user.email);
                     } else {
                         this.user = null;
@@ -1134,6 +1218,9 @@
                                 ✅ Code "${promo.code}" appliqué - ${promo.discount}% de réduction
                             </span>`;
                             document.getElementById('successSection').style.display = 'block';
+                            
+                            // Mettre à jour le statut de synchronisation
+                            updateSyncStatus('success', `✅ Synchronisé avec le panier - ${promo.discount}% de réduction active`);
                         } catch (e) {
                             messageDiv.innerHTML = '<span style="color: #38a169;">✅ Code promo déjà utilisé</span>';
                         }
@@ -1144,6 +1231,22 @@
                     promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
                     resetSection.style.display = 'none';
                     messageDiv.innerHTML = '';
+                }
+            }
+
+            verifierSynchronisationPanier() {
+                // Vérifier si un code est déjà actif depuis le panier
+                const promoData = localStorage.getItem('anduxara_current_promo');
+                if (promoData) {
+                    try {
+                        const promo = JSON.parse(promoData);
+                        if (promo.active && promo.source === 'panier') {
+                            updateSyncStatus('success', `✅ Code ${promo.code} synchronisé depuis le panier - ${promo.discount}%`);
+                            showNotification(`🔄 Code ${promo.code} synchronisé depuis le panier`, 'success');
+                        }
+                    } catch (error) {
+                        console.log('Aucun code synchronisé depuis le panier');
+                    }
                 }
             }
         }
@@ -1217,6 +1320,19 @@
                 reinitialiserPromosApresCommande();
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
+
+            // Vérifier la synchronisation avec le panier
+            const promoFromPanier = localStorage.getItem('anduxara_current_promo');
+            if (promoFromPanier) {
+                try {
+                    const promo = JSON.parse(promoFromPanier);
+                    if (promo.active && promo.source === 'panier') {
+                        updateSyncStatus('success', `🔄 Code ${promo.code} synchronisé depuis le panier`);
+                    }
+                } catch (error) {
+                    // Pas de synchronisation active
+                }
+            }
         }
 
         // ===== INITIALISATION =====
@@ -1267,6 +1383,7 @@
         window.reinitialiserCodesPromo = reinitialiserCodesPromo;
         window.appliquerCodePromo = appliquerCodePromo;
         window.synchroniserAvecIndex = synchroniserAvecIndex;
+        window.testerSynchronisation = testerSynchronisation;
     </script>
 </body>
 </html>

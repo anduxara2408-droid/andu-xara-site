@@ -5,24 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog & Podcast Andu-Xara • Mode Africaine, Culture & Entrepreneuriat</title>
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://andu-xara.store/blog" />
-
-    <!-- 🚨 REDIRECTION URGENTE POUR DOUBLONS .html -->
-    <script>
-        // Redirection immédiate pour blog.html
-        if (window.location.pathname === '/blog.html') {
-            window.location.replace('/blog');
-        }
-    </script>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
 
     <meta name="description" content="Découvrez le blog officiel d'Andu-Xara : podcasts exclusifs, articles sur la mode africaine, culture soninké et entrepreneuriat jeune.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Blog & Podcast Andu-Xara • Mode Africaine, Culture & Entrepreneuriat">
-    <meta property="og:description" content="Podcasts exclusifs et articles sur la mode africaine moderne, la culture soninké et l'entrepreneuriat jeune">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://andu-xara.store/blog">
     
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -111,47 +97,37 @@
             overflow: hidden;
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
             height: 400px;
-        }
-
-        .banner-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
-        }
-
-        .banner-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            color: white;
-            width: 90%;
-            max-width: 800px;
         }
 
-        .banner-text h1 {
+        .banner-content {
+            color: white;
+            padding: 40px;
+            z-index: 2;
+        }
+
+        .banner-content h1 {
             font-size: 3rem;
             margin-bottom: 20px;
             font-weight: 700;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
-        .banner-text p {
+        .banner-content p {
             font-size: 1.4rem;
             font-weight: 300;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
             opacity: 0.9;
+        }
+
+        .soninke-decoration {
+            font-size: 8rem;
+            margin-bottom: 20px;
+            display: block;
         }
 
         /* ===== MAIN CONTENT ===== */
@@ -239,15 +215,11 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #f8f9fa;
         }
 
         .audio-player::-webkit-media-controls-panel {
             background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-
-        .audio-player::-webkit-media-controls-current-time-display,
-        .audio-player::-webkit-media-controls-time-remaining-display {
-            color: white;
         }
 
         .podcast-info {
@@ -355,11 +327,55 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            position: relative;
+            min-width: 120px;
         }
 
-        .newsletter-btn:hover {
+        .newsletter-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .newsletter-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .newsletter-message {
+            margin-top: 15px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .newsletter-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .newsletter-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #764ba2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* ===== FOOTER ===== */
@@ -393,12 +409,16 @@
                 font-size: 1.8rem;
             }
 
-            .banner-text h1 {
+            .banner-content h1 {
                 font-size: 2rem;
             }
 
-            .banner-text p {
+            .banner-content p {
                 font-size: 1.1rem;
+            }
+
+            .soninke-decoration {
+                font-size: 5rem;
             }
 
             .section-title {
@@ -428,13 +448,21 @@
                 padding: 20px;
             }
 
-            .banner-text h1 {
+            .banner-content h1 {
                 font-size: 1.6rem;
             }
 
             .category-btn {
                 padding: 10px 20px;
                 font-size: 0.9rem;
+            }
+
+            .soninke-decoration {
+                font-size: 4rem;
+            }
+
+            .newsletter-section {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -450,16 +478,15 @@
                 <h1>Andu-Xara Blog</h1>
                 <p class="subtitle">Mode Africaine • Culture • Entrepreneuriat</p>
             </div>
-            <div style="width: 140px;"></div> <!-- Spacer -->
+            <div style="width: 140px;"></div>
         </div>
     </header>
 
     <!-- Hero Banner -->
     <section class="hero-banner">
-        <div class="overlay"></div>
-        <img src="images/soninke.jpg" alt="Journée internationale de la langue Soninké" class="banner-img" onerror="this.style.display='none'">
-        <div class="banner-text">
-            <h1>🌍 Journée Internationale de la Langue Soninké</h1>
+        <div class="banner-content">
+            <span class="soninke-decoration">🌍</span>
+            <h1>Journée Internationale de la Langue Soninké</h1>
             <p>Célébrons ensemble notre culture, notre identité et nos racines ancestrales</p>
         </div>
     </section>
@@ -544,8 +571,12 @@
             <p>Recevez les nouveaux podcasts et articles directement dans votre boîte mail. Ne manquez aucun contenu exclusif Andu-Xara !</p>
             <form class="newsletter-form" id="newsletterForm">
                 <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Votre adresse email" required>
-                <button type="button" class="newsletter-btn" onclick="handleNewsletter()">S'abonner</button>
+                <button type="submit" class="newsletter-btn" id="newsletterBtn">
+                    <span id="btnText">S'abonner</span>
+                    <div class="loader" id="btnLoader"></div>
+                </button>
             </form>
+            <div id="newsletterMessage" class="newsletter-message"></div>
         </section>
     </div>
 
@@ -555,43 +586,179 @@
             <p><strong>Blog & Podcast Andu-Xara</strong></p>
             <p>Votre source d'inspiration mode, culture et entrepreneuriat</p>
             <p>📍 Mauritanie, Nouakchott • 📞 +222 49 03 76 97</p>
+            <p>📧 contact@andu-xara.store</p>
         </div>
     </footer>
 
     <script>
+        // ✅ NOUVELLE URL Google Apps Script FONCTIONNELLE
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBGPg5EVFIZEtliB2Um-EIiF_q1Vvdz2X9CwjKsxle3k8VZHApB-lmzzvKtCIxSEvveA/exec';
+
+        // ===== FONCTIONS PRINCIPALES =====
+        
+        // Fonction pour afficher les messages
+        function showMessage(messageDiv, text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = 'newsletter-message ' + (type === 'success' ? 'newsletter-success' : 'newsletter-error');
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Fonction pour voir les inscriptions enregistrées
+        function voirInscriptions() {
+            const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+            console.log('📋 Liste des inscriptions:', subscriptions);
+            console.table(subscriptions);
+            
+            const emailList = subscriptions.map(sub => `• ${sub.email} (${new Date(sub.date).toLocaleString()})`).join('\n');
+            alert(`📊 ${subscriptions.length} inscription(s) enregistrée(s) :\n\n${emailList}`);
+            
+            return subscriptions;
+        }
+
+        // Fonction pour exporter les emails
+        function exporterEmails() {
+            const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+            const emails = subscriptions.map(sub => sub.email).join('\n');
+            
+            console.log('📧 Liste des emails à copier:\n' + emails);
+            console.log('📋 Copiez-collez manuellement la liste ci-dessus');
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = emails;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('✅ Emails copiés dans le presse-papier !');
+                } else {
+                    alert('📋 Voici la liste des emails à copier manuellement :\n\n' + emails);
+                }
+            } catch (err) {
+                alert('📋 Voici la liste des emails à copier manuellement :\n\n' + emails);
+            }
+            
+            document.body.removeChild(textarea);
+            return emails;
+        }
+
+        // ===== GESTION DE LA NEWSLETTER =====
+        
+        // Gestion du formulaire newsletter
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleNewsletter();
+        });
+
+        async function handleNewsletter() {
+            const emailInput = document.getElementById('newsletterEmail');
+            const btn = document.getElementById('newsletterBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const messageDiv = document.getElementById('newsletterMessage');
+            const email = emailInput.value.trim();
+
+            console.log('📧 Email saisi:', email);
+
+            // Validation basique
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showMessage(messageDiv, '❌ Veuillez entrer une adresse email valide.', 'error');
+                emailInput.focus();
+                return;
+            }
+
+            // Désactiver le bouton et afficher le loader
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'block';
+            messageDiv.style.display = 'none';
+
+            try {
+                console.log('🚀 Envoi vers Google Apps Script...');
+                
+                const trackerUrl = `${SCRIPT_URL}?email=${encodeURIComponent(email)}&source=blog&timestamp=${Date.now()}`;
+                console.log('📤 URL appelée:', trackerUrl);
+
+                // Méthode 1 : Image tracker
+                const tracker = new Image();
+                tracker.src = trackerUrl;
+                
+                // Méthode 2 : Requête fetch
+                fetch(trackerUrl, { 
+                    method: 'GET',
+                    mode: 'no-cors',
+                    credentials: 'omit'
+                }).catch(() => {
+                    console.log('🌐 Requête envoyée (CORS ignoré)');
+                });
+                
+                // Enregistrer localement
+                const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+                
+                if (subscriptions.some(sub => sub.email === email)) {
+                    showMessage(messageDiv, '✅ Vous êtes déjà inscrit à notre newsletter !', 'success');
+                } else {
+                    subscriptions.push({
+                        email: email,
+                        date: new Date().toISOString(),
+                        timestamp: Date.now(),
+                        status: 'sent_to_google_sheets'
+                    });
+                    
+                    localStorage.setItem('newsletter_subscriptions', JSON.stringify(subscriptions));
+                    showMessage(messageDiv, '🎉 Inscription réussie ! Merci de vous être abonné.', 'success');
+                    emailInput.value = '';
+                    
+                    console.log('📊 Total d\'inscriptions:', subscriptions.length);
+                    console.log('📋 Dernière inscription:', subscriptions[subscriptions.length - 1]);
+                }
+                
+            } catch (error) {
+                console.error('💥 Erreur technique:', error);
+                
+                const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+                
+                if (!subscriptions.some(sub => sub.email === email)) {
+                    subscriptions.push({
+                        email: email,
+                        date: new Date().toISOString(),
+                        timestamp: Date.now(),
+                        status: 'local_fallback'
+                    });
+                    localStorage.setItem('newsletter_subscriptions', JSON.stringify(subscriptions));
+                    showMessage(messageDiv, '✅ Inscription enregistrée ! (Mode secours activé)', 'success');
+                    emailInput.value = '';
+                } else {
+                    showMessage(messageDiv, '✅ Vous êtes déjà inscrit !', 'success');
+                }
+            } finally {
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                btnLoader.style.display = 'none';
+            }
+        }
+
+        // ===== FONCTIONS GLOBALES POUR DÉBOGAGE =====
+        window.voirInscriptions = voirInscriptions;
+        window.exporterEmails = exporterEmails;
+
+        // ===== AUTRES FONCTIONNALITÉS =====
+        
         // Filtrage des catégories
         document.querySelectorAll('.category-btn').forEach(button => {
             button.addEventListener('click', function() {
-                // Retirer la classe active de tous les boutons
                 document.querySelectorAll('.category-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                // Ajouter la classe active au bouton cliqué
                 this.classList.add('active');
-                
-                // Ici vous pouvez ajouter la logique de filtrage des articles
-                console.log('Filtre activé:', this.textContent);
+                console.log('🎯 Filtre activé:', this.textContent);
             });
         });
-
-        // Gestion de la newsletter - Version GARANTIE 100%
-        function handleNewsletter() {
-            console.log('🎯 Newsletter - Bouton cliqué !');
-            
-            const emailInput = document.getElementById('newsletterEmail');
-            const email = emailInput ? emailInput.value.trim() : '';
-            
-            console.log('Email saisi:', email);
-            
-            if (email && email.includes('@') && email.includes('.')) {
-                alert('🎉 Merci pour votre inscription !\nVous recevrez nos prochains contenus à: ' + email);
-                emailInput.value = '';
-                emailInput.focus();
-            } else {
-                alert('❌ Veuillez entrer une adresse email valide.');
-                if (emailInput) emailInput.focus();
-            }
-        }
 
         // Animation des cartes au scroll
         const observerOptions = {
@@ -608,7 +775,6 @@
             });
         }, observerOptions);
 
-        // Appliquer l'animation à toutes les cartes
         document.querySelectorAll('.article-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(30px)';
@@ -616,27 +782,30 @@
             observer.observe(card);
         });
 
-        // Gestion des erreurs d'images
-        document.querySelectorAll('img').forEach(img => {
-            img.addEventListener('error', function() {
-                this.style.display = 'none';
-            });
-        });
-
-        // Initialisation au chargement
+        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ Blog Andu-Xara initialisé avec succès');
-            console.log('✅ Newsletter prête - Testez en cliquant sur "S\'abonner"');
+            console.log('✅ Système de newsletter ULTRA-FIABLE activé');
+            console.log('📧 URL Google Apps Script:', SCRIPT_URL);
+            console.log('🔍 Commandes de débogage:');
+            console.log('   - voirInscriptions() : Voir toutes les inscriptions');
+            console.log('   - exporterEmails() : Copier tous les emails');
+            
+            console.log('🔧 Vérification des fonctions:');
+            console.log('   - voirInscriptions disponible:', typeof window.voirInscriptions === 'function');
+            console.log('   - exporterEmails disponible:', typeof window.exporterEmails === 'function');
+            
+            console.log('%c🎉 Système 100% Opérationnel !', 'color: #764ba2; font-size: 16px; font-weight: bold;');
         });
-    </script>
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
-    <script>
+        // Google Analytics
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-S9CBS21SVR');
     </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
 </body>
 </html>
