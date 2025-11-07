@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="fr">
 <head>
     <!-- PWA Manifest -->
@@ -1896,6 +1896,146 @@ footer {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
+/* Styles pour le panier */
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+#cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e53e3e;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#panier-content {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.panier-vide {
+    text-align: center;
+    padding: 2rem;
+    color: #718096;
+}
+
+.panier-vide i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #cbd5e0;
+}
+
+.panier-items {
+    padding: 1rem;
+}
+
+.panier-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.panier-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-details h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d3748;
+}
+
+.item-details p {
+    margin: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.quantity-controls button {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #cbd5e0;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-item {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.panier-total {
+    padding: 1rem;
+    border-top: 2px solid #e2e8f0;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #2d3748;
+}
+
+.panier-actions {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-commander {
+    flex: 2;
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-vider {
+    flex: 1;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -4905,19 +5045,19 @@ function closeFloatingCart() {
 // ===== FONCTIONS DE PAIEMENT =====
 function processFloatingCheckout() {
     console.log('🛒 Début du processus de checkout avec promo...');
-    
+
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
         return;
     }
-    
+
     // RÉCUPÉRER LES INFOS PROMO
     const promoData = localStorage.getItem('commande_promo_info');
     let promoInfo = null;
     let totalMRU = floatingCart.reduce((sum, item) => {
         return sum + (item.promoPrice || item.price) * item.quantity;
     }, 0);
-    
+
     if (promoData) {
         try {
             promoInfo = JSON.parse(promoData);
@@ -4926,40 +5066,39 @@ function processFloatingCheckout() {
             console.log('❌ Erreur lecture promo');
         }
     }
-    
+
     // APPLIQUER LA RÉDUCTION SI PROMO ACTIVE
     let reductionAppliquee = 0;
     if (promoInfo && promoInfo.discount) {
         reductionAppliquee = (totalMRU * promoInfo.discount) / 100;
         totalMRU = totalMRU - reductionAppliquee;
     }
-    
+
     totalMRU = Math.round(totalMRU);
     const totalFCFA = Math.round(totalMRU * 2.5);
-    
+
     // CONSTRUIRE LE MESSAGE AVEC INFO PROMO
     const productList = floatingCart.map(item => 
         `${item.name} (x${item.quantity}) - ${(item.promoPrice || item.price) * item.quantity} MRU`
     ).join('\n');
-    
+
     let message = `Bonjour Andu-Xara ! 👋\n\n`;
     message += `Je souhaite commander :\n\n${productList}\n\n`;
-    
+
     // AJOUTER LES INFOS PROMO DANS LE MESSAGE
     if (promoInfo) {
         message += `🎫 CODE PROMO APPLIQUÉ : ${promoInfo.code}\n`;
         message += `💰 RÉDUCTION : ${promoInfo.discount}% (-${reductionAppliquee} MRU)\n\n`;
     }
-    
+
     message += `💰 Total : ${totalMRU} MRU${promoInfo ? ` (après réduction)` : ''}\n\n`;
     message += `Pouvez-vous m'aider pour la suite ?`;
-    
-    // SUITE DE LA FONCTION EXISTANTE...
+
+    // CHOIX DE PAIEMENT
     const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo ? `\n🎫 Réduction : ${promoInfo.discount}% appliquée` : ''}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équire)\n\n⚠️ Votre choix (1/2/3) :`;
-    
+
     const choice = prompt(paymentChoice);
-    // ... reste du code existant
-}
+    
     if (choice === '1') {
         processWavePayment(totalFCFA, totalMRU, message);
     } else if (choice === '2') {
@@ -4970,7 +5109,6 @@ function processFloatingCheckout() {
         showNotification('Commande annulée', 'warning');
     }
 }
-
 function processWavePayment(totalFCFA, totalMRU, message) {
     const waveLink = "https://pay.wave.com/m/M_sn_WWTLh5q4mXHC/c/sn/";
     
