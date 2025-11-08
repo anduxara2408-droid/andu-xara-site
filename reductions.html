@@ -433,6 +433,38 @@
             border-color: #feb2b2;
         }
 
+        .promo-history {
+            background: #edf2f7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .promo-history h4 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #48bb78;
+        }
+
+        .history-item.used {
+            border-left-color: #48bb78;
+        }
+
+        .history-item.expired {
+            border-left-color: #e53e3e;
+        }
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -531,6 +563,12 @@
             </div>
             
             <div id="promoMessage" style="margin-top: 1rem; font-weight: 500;"></div>
+
+            <!-- Historique des codes utilisés -->
+            <div id="promoHistory" class="promo-history">
+                <h4><i class="fas fa-history"></i> Historique de vos codes promo</h4>
+                <div id="historyList"></div>
+            </div>
             
             <!-- Section réinitialisation -->
             <div id="resetSection" class="reset-section">
@@ -665,6 +703,94 @@
             'FIDELITE': { discount: 10, description: 'Code fidélité 10%' }
         };
 
+        // ===== FONCTIONS PERSISTANTES FIREBASE =====
+        async function verifierCodeDejaUtilise(userId, code) {
+            try {
+                const usageQuery = await firebase.firestore()
+                    .collection('promoUsage')
+                    .where('userId', '==', userId)
+                    .where('promoCode', '==', code)
+                    .where('status', 'in', ['applied', 'used'])
+                    .get();
+
+                return !usageQuery.empty;
+            } catch (error) {
+                console.error('Erreur vérification usage:', error);
+                return false;
+            }
+        }
+
+        async function getHistoriqueCodesUtilises(userId) {
+            try {
+                const historyQuery = await firebase.firestore()
+                    .collection('promoUsage')
+                    .where('userId', '==', userId)
+                    .orderBy('usedAt', 'desc')
+                    .limit(10)
+                    .get();
+
+                return historyQuery.docs.map(doc => doc.data());
+            } catch (error) {
+                console.error('Erreur récupération historique:', error);
+                return [];
+            }
+        }
+
+        async function enregistrerUtilisationPermanente(userId, userEmail, code, promoData) {
+            try {
+                // Vérifier si le code a déjà été utilisé par cet utilisateur
+                const dejaUtilise = await verifierCodeDejaUtilise(userId, code);
+                if (dejaUtilise) {
+                    throw new Error('Code déjà utilisé par cet utilisateur');
+                }
+
+                // Enregistrer l'utilisation dans Firebase
+                const usageData = {
+                    userId: userId,
+                    userEmail: userEmail,
+                    promoCode: code,
+                    discount: promoData.discount,
+                    description: promoData.description,
+                    usedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'applied',
+                    source: 'reductions.html',
+                    ip: await getIPAddress()
+                };
+
+                await firebase.firestore().collection('promoUsage').add(usageData);
+
+                // Mettre à jour le compteur d'utilisation du code
+                const promoQuery = await firebase.firestore()
+                    .collection('promoCodes')
+                    .where('code', '==', code)
+                    .get();
+
+                if (!promoQuery.empty) {
+                    const promoId = promoQuery.docs[0].id;
+                    await firebase.firestore().collection('promoCodes').doc(promoId).update({
+                        usedCount: firebase.firestore.FieldValue.increment(1),
+                        lastUsed: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastUsedBy: userEmail
+                    });
+                }
+
+                return usageData;
+            } catch (error) {
+                console.error('Erreur enregistrement permanent:', error);
+                throw error;
+            }
+        }
+
+        async function getIPAddress() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return 'unknown';
+            }
+        }
+
         // ===== FONCTION PRINCIPALE POUR APPLIQUER LES CODES PROMO =====
         async function appliquerCodePromo() {
             const codeInput = document.getElementById('promoCodeInput');
@@ -679,16 +805,9 @@
 
             try {
                 // Vérifier si l'utilisateur est connecté
-                if (!firebase.auth().currentUser) {
+                const user = firebase.auth().currentUser;
+                if (!user) {
                     messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Connectez-vous pour utiliser un code promo</span>';
-                    return;
-                }
-
-                // Vérifier si un code a déjà été utilisé
-                const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
-                if (promoUtilise === 'true') {
-                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Vous avez déjà utilisé un code promo</span>';
-                    document.getElementById('resetSection').style.display = 'block';
                     return;
                 }
 
@@ -696,7 +815,17 @@
                 promoBtn.disabled = true;
                 promoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
 
-                // Vérifier d'abord dans Firebase
+                // Vérifier d'abord si l'utilisateur a déjà utilisé ce code (PERSISTANT)
+                const dejaUtilise = await verifierCodeDejaUtilise(user.uid, code);
+                if (dejaUtilise) {
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Vous avez déjà utilisé ce code promo</span>';
+                    document.getElementById('resetSection').style.display = 'block';
+                    promoBtn.disabled = false;
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
+                    return;
+                }
+
+                // Vérifier la validité du code
                 let codeValide = false;
                 let promoData = null;
 
@@ -736,9 +865,30 @@
                 }
 
                 if (codeValide && promoData) {
-                    // Enregistrer l'utilisation
-                    await enregistrerUtilisationPromo(code, promoData);
+                    // ENREGISTRER L'UTILISATION DE MANIÈRE PERSISTANTE
+                    await enregistrerUtilisationPermanente(user.uid, user.email, code, promoData);
                     
+                    // Sauvegarder aussi en local pour la session courante
+                    const promoInfo = {
+                        code: code,
+                        discount: promoData.discount,
+                        description: promoData.description,
+                        appliedAt: new Date().toISOString(),
+                        userId: user.uid,
+                        source: 'reductions.html',
+                        persistent: true // Marquer comme persistant
+                    };
+
+                    localStorage.setItem('anduxara_active_promo', JSON.stringify(promoInfo));
+                    localStorage.setItem('anduxara_promo_utilise', 'true');
+                    localStorage.setItem('anduxara_cart_promo', JSON.stringify({
+                        code: code,
+                        discount: promoData.discount,
+                        applied: true,
+                        timestamp: new Date().getTime(),
+                        persistent: true
+                    }));
+
                     // Afficher le succès
                     messageDiv.innerHTML = `<span style="color: #38a169;">
                         ✅ Code "${code}" appliqué ! ${promoData.discount}% de réduction
@@ -756,6 +906,9 @@
                     // Mettre à jour le statut de synchronisation
                     updateSyncStatus('success', `✅ Synchronisé avec le panier - ${promoData.discount}% appliqué`);
                     
+                    // Charger l'historique mis à jour
+                    await chargerHistoriqueUtilisateur(user.uid);
+                    
                     showNotification(`🎉 Code ${code} appliqué ! ${promoData.discount}% de réduction`, 'success');
                     
                 } else {
@@ -766,69 +919,43 @@
 
             } catch (error) {
                 console.error('Erreur application code promo:', error);
-                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Erreur lors de l\'application du code</span>';
+                if (error.message.includes('déjà utilisé')) {
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Vous avez déjà utilisé ce code promo</span>';
+                    document.getElementById('resetSection').style.display = 'block';
+                } else {
+                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Erreur lors de l\'application du code</span>';
+                }
                 promoBtn.disabled = false;
                 promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
             }
         }
 
-        // ===== FONCTION POUR ENREGISTRER L'UTILISATION =====
-        async function enregistrerUtilisationPromo(code, promoData) {
-            const userId = firebase.auth().currentUser.uid;
-            const userEmail = firebase.auth().currentUser.email;
-            
+        // ===== CHARGEMENT DE L'HISTORIQUE =====
+        async function chargerHistoriqueUtilisateur(userId) {
             try {
-                // Essayer d'enregistrer dans Firebase
-                await firebase.firestore().collection('promoUsage').add({
-                    userId: userId,
-                    userEmail: userEmail,
-                    promoCode: code,
-                    discount: promoData.discount,
-                    usedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    status: 'applied',
-                    source: 'reductions.html'
-                });
+                const historique = await getHistoriqueCodesUtilises(userId);
+                const historyList = document.getElementById('historyList');
+                const promoHistory = document.getElementById('promoHistory');
 
-                // Mettre à jour le compteur si c'est un code Firebase
-                const promoQuery = await firebase.firestore()
-                    .collection('promoCodes')
-                    .where('code', '==', code)
-                    .get();
-
-                if (!promoQuery.empty) {
-                    const promoId = promoQuery.docs[0].id;
-                    await firebase.firestore().collection('promoCodes').doc(promoId).update({
-                        usedCount: firebase.firestore.FieldValue.increment(1),
-                        lastUsed: firebase.firestore.FieldValue.serverTimestamp()
+                if (historique.length > 0) {
+                    historyList.innerHTML = '';
+                    historique.forEach(usage => {
+                        const item = document.createElement('div');
+                        item.className = 'history-item used';
+                        item.innerHTML = `
+                            <strong>${usage.promoCode}</strong> - ${usage.discount}% 
+                            <br><small>Utilisé le ${new Date(usage.usedAt?.toDate()).toLocaleDateString('fr-FR')}</small>
+                            ${usage.description ? `<br><small>${usage.description}</small>` : ''}
+                        `;
+                        historyList.appendChild(item);
                     });
+                    promoHistory.style.display = 'block';
+                } else {
+                    promoHistory.style.display = 'none';
                 }
             } catch (error) {
-                console.log('Enregistrement Firebase échoué, utilisation du stockage local');
+                console.error('Erreur chargement historique:', error);
             }
-
-            // SAUVEGARDER DANS LE SYSTÈME UNIFIÉ POUR INDEX.HTML
-            const promoInfo = {
-                code: code,
-                discount: promoData.discount,
-                description: promoData.description,
-                appliedAt: new Date().toISOString(),
-                userId: userId,
-                source: 'reductions.html'
-            };
-
-            // Sauvegarder dans localStorage pour index.html
-            localStorage.setItem('anduxara_active_promo', JSON.stringify(promoInfo));
-            localStorage.setItem('anduxara_promo_utilise', 'true');
-            
-            // Sauvegarder aussi dans une clé spécifique pour le panier
-            localStorage.setItem('anduxara_cart_promo', JSON.stringify({
-                code: code,
-                discount: promoData.discount,
-                applied: true,
-                timestamp: new Date().getTime()
-            }));
-
-            console.log('💾 Code promo sauvegardé pour le processus de commande:', promoInfo);
         }
 
         // ===== SYNCHRONISATION AVEC LE PROCESSUS DE COMMANDE =====
@@ -902,10 +1029,11 @@
         }
 
         // ===== FONCTION DE RÉINITIALISATION =====
-        function reinitialiserCodesPromo() {
+        async function reinitialiserCodesPromo() {
             console.log('🔄 Réinitialisation des codes promo...');
             
-            // Supprimer tous les flags d'utilisation
+            // Supprimer tous les flags d'utilisation LOCAUX seulement
+            // Les données Firebase restent pour l'historique
             localStorage.removeItem('anduxara_promo_utilise');
             localStorage.removeItem('anduxara_active_promo');
             localStorage.removeItem('anduxara_cart_promo');
@@ -937,10 +1065,10 @@
             document.getElementById('successSection').style.display = 'none';
             document.getElementById('syncStatus').style.display = 'none';
             
-            showNotification('🔄 Codes promo réinitialisés ! Vous pouvez utiliser un nouveau code.', 'success');
+            showNotification('🔄 Codes promo réinitialisés pour cette session !', 'success');
         }
 
-        // ===== GESTIONNAIRE D'AUTHENTIFICATION =====
+        // ===== GESTIONNAIRE D'AUTHENTIFICATION AMÉLIORÉ =====
         class AuthManager {
             constructor() {
                 this.user = null;
@@ -953,15 +1081,63 @@
                 this.auth.onAuthStateChanged(async (user) => {
                     if (user) {
                         this.user = user;
-                        this.updateUI();
+                        await this.updateUI();
                         this.verifierSynchronisationPanier();
                         console.log('✅ Utilisateur connecté:', user.email);
+                        
+                        // CHARGER L'HISTORIQUE DES CODES UTILISÉS
+                        await chargerHistoriqueUtilisateur(user.uid);
+                        
+                        // VÉRIFIER SI UN CODE EST DÉJÀ ACTIF (PERSISTANT)
+                        await this.verifierCodeActifPersistant(user.uid);
                     } else {
                         this.user = null;
                         this.updateUI();
                         console.log('🚪 Utilisateur déconnecté');
                     }
                 });
+            }
+
+            async verifierCodeActifPersistant(userId) {
+                try {
+                    // Vérifier dans Firebase si l'utilisateur a un code actif
+                    const activeUsageQuery = await firebase.firestore()
+                        .collection('promoUsage')
+                        .where('userId', '==', userId)
+                        .where('status', '==', 'applied')
+                        .orderBy('usedAt', 'desc')
+                        .limit(1)
+                        .get();
+
+                    if (!activeUsageQuery.empty) {
+                        const lastUsage = activeUsageQuery.docs[0].data();
+                        const usageDate = lastUsage.usedAt?.toDate();
+                        const now = new Date();
+                        const diffHours = (now - usageDate) / (1000 * 60 * 60);
+
+                        // Considérer le code comme actif s'il a été utilisé dans les dernières 24h
+                        if (diffHours < 24) {
+                            // Mettre à jour le localStorage avec les données persistantes
+                            const promoInfo = {
+                                code: lastUsage.promoCode,
+                                discount: lastUsage.discount,
+                                description: lastUsage.description,
+                                appliedAt: usageDate.toISOString(),
+                                userId: userId,
+                                source: 'reductions.html',
+                                persistent: true
+                            };
+
+                            localStorage.setItem('anduxara_active_promo', JSON.stringify(promoInfo));
+                            localStorage.setItem('anduxara_promo_utilise', 'true');
+                            
+                            this.verifierEtatPromo();
+                            showNotification(`🔄 Code ${lastUsage.promoCode} restauré depuis votre historique`, 'success');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erreur vérification code actif:', error);
+                }
             }
 
             async signIn(email, password) {
@@ -1020,7 +1196,7 @@
                 return errorMessages[error.code] || error.message;
             }
 
-            updateUI() {
+            async updateUI() {
                 const authButtons = document.getElementById('authButtons');
                 const userProfile = document.getElementById('userProfile');
                 const promoSection = document.getElementById('promoSection');
@@ -1178,7 +1354,9 @@
             
             if (commandeSuccess === "success") {
                 showNotification("✅ Commande réussie ! Votre code promo a été utilisé.", "success");
-                reinitialiserCodesPromo();
+                // Ne pas réinitialiser complètement, garder l'historique
+                localStorage.removeItem('anduxara_promo_utilise');
+                localStorage.removeItem('anduxara_active_promo');
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
