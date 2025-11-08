@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes Promo - Andu Xara</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Blog & Podcast Andu-Xara • Mode Africaine, Culture & Entrepreneuriat</title>
     
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+
+    <meta name="description" content="Découvrez le blog officiel d'Andu-Xara : podcasts exclusifs, articles sur la mode africaine, culture soninké et entrepreneuriat jeune.">
     
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ===== RESET ET BASES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -19,1371 +21,719 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
-            color: #333;
         }
 
-        .container {
-            max-width: 900px;
+        /* ===== HEADER ===== */
+        .blog-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .header p {
-            font-size: 1.1rem;
+        .header-title {
+            text-align: center;
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header-title .subtitle {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* ===== HERO BANNER ===== */
+        .hero-banner {
+            position: relative;
+            max-width: 1200px;
+            margin: 40px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            height: 500px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .banner-content {
+            color: white;
+            padding: 40px;
+            z-index: 2;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            max-width: 90%;
+        }
+
+        .banner-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .banner-content p {
+            font-size: 1.4rem;
+            font-weight: 300;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
             opacity: 0.9;
         }
 
-        .auth-section {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 2rem;
+        .soninke-decoration {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
         }
 
-        .auth-buttons {
+        /* ===== MAIN CONTENT ===== */
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* ===== ARTICLES GRID ===== */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .article-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .article-content {
+            padding: 30px;
+        }
+
+        .article-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .article-card h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .article-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* ===== AUDIO PLAYER ===== */
+        .audio-player {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #f8f9fa;
+        }
+
+        .audio-player::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .podcast-info {
             display: flex;
-            gap: 1rem;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .podcast-icon {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .podcast-duration {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* ===== CATEGORIES ===== */
+        .categories-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter-section {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .newsletter-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .newsletter-section p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
             flex-wrap: wrap;
             justify-content: center;
         }
 
-        .auth-btn {
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .auth-btn:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-        }
-
-        .auth-btn.outline {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-
-        .auth-btn.outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .user-profile {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            display: none;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .user-info {
+        .newsletter-input {
             flex: 1;
-        }
-
-        .user-name {
-            font-weight: bold;
-            display: block;
-            color: #2d3748;
-        }
-
-        .user-email {
-            color: #718096;
-            font-size: 0.9rem;
-        }
-
-        .verification-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: none;
-        }
-
-        .promo-section {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 2rem;
-            display: none;
-        }
-
-        .promo-section h2 {
-            color: #4a5568;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .promo-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .promo-input {
-            flex: 1;
-            padding: 14px 16px;
+            min-width: 250px;
+            padding: 15px 20px;
             border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
 
-        .promo-btn {
-            padding: 14px 28px;
-            background: #667eea;
+        .newsletter-input:focus {
+            border-color: #667eea;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 10px;
+            padding: 15px 30px;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 120px;
         }
 
-        .promo-btn:hover:not(:disabled) {
-            background: #5a6fd8;
+        .newsletter-btn:hover:not(:disabled) {
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .promo-btn:disabled {
-            background: #a0aec0;
+        .newsletter-btn:disabled {
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
 
-        .info-message {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 2rem;
-            font-weight: 500;
-        }
-
-        .sources-codes {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin: 2rem 0;
-        }
-
-        .sources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .source-card {
-            text-align: center;
-            padding: 1.5rem;
-            background: #f7fafc;
+        .newsletter-message {
+            margin-top: 15px;
+            padding: 12px 20px;
             border-radius: 10px;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .source-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: #667eea;
-        }
-
-        .source-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .source-name {
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-        }
-
-        .source-link {
-            color: #667eea;
-            text-decoration: none;
             font-weight: 500;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .source-link:hover {
-            text-decoration: underline;
-        }
-
-        .source-desc {
-            font-size: 0.8rem;
-            color: #718096;
-            margin-top: 0.5rem;
-        }
-
-        .success-message {
-            background: #f0fff4;
-            border: 1px solid #9ae6b4;
-            color: #2d7d32;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
             display: none;
         }
 
-        .btn-shop {
-            background: #48bb78;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 1rem;
-            text-decoration: none;
-            transition: all 0.3s;
+        .newsletter-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
-        .btn-shop:hover {
-            background: #38a169;
-            transform: translateY(-2px);
+        .newsletter-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            z-index: 10000;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            max-width: 300px;
-            text-align: center;
+        .loader {
             display: none;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .notification.error {
-            background: #e53e3e;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            animation: modalAppear 0.3s ease-out;
-        }
-
-        @keyframes modalAppear {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #718096;
-            transition: color 0.3s;
-        }
-
-        .close:hover {
-            color: #e53e3e;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .form-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .form-btn.primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .form-btn.primary:hover {
-            background: #5a6fd8;
-        }
-
-        .form-btn.secondary {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-
-        .form-btn.secondary:hover {
-            background: #cbd5e0;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 1rem;
-            color: #667eea;
-        }
-
-        .loading i {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #764ba2;
+            border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .reset-section {
-            background: #fff5f5;
-            border: 1px solid #fed7d7;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            display: none;
+        /* ===== FOOTER ===== */
+        .blog-footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
         }
 
-        .reset-btn {
-            background: #e53e3e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .reset-btn:hover {
-            background: #c53030;
-            transform: translateY(-2px);
+        .footer-content p {
+            color: #666;
+            margin-bottom: 10px;
         }
 
-        .sync-status {
-            background: #e6fffa;
-            border: 1px solid #81e6d9;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 1rem 0;
-            display: none;
-        }
-
-        .sync-status.synced {
-            background: #f0fff4;
-            border-color: #9ae6b4;
-        }
-
-        .sync-status.error {
-            background: #fed7d7;
-            border-color: #feb2b2;
-        }
-
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .sources-grid {
-                grid-template-columns: 1fr 1fr;
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
             }
-            
-            .promo-input-group {
+
+            .header-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .banner-content h1 {
+                font-size: 2rem;
+            }
+
+            .banner-content p {
+                font-size: 1.1rem;
+            }
+
+            .soninke-decoration {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
                 flex-direction: column;
             }
-            
-            .auth-buttons {
-                flex-direction: column;
+
+            .newsletter-input {
+                min-width: auto;
+            }
+
+            .hero-banner {
+                height: 400px;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-content {
+                padding: 20px;
+            }
+
+            .banner-content h1 {
+                font-size: 1.6rem;
+            }
+
+            .category-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .soninke-decoration {
+                font-size: 2.5rem;
+            }
+
+            .newsletter-section {
+                padding: 30px 20px;
+            }
+
+            .hero-banner {
+                height: 350px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- En-tête -->
-        <div class="header">
-            <h1><i class="fas fa-tag"></i> Codes Promo Andu Xara</h1>
-            <p>Obtenez vos réductions et passez commande</p>
+    <!-- Header -->
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="index.html" class="back-button">
+                ← Accueil
+            </a>
+            <div class="header-title">
+                <h1>Andu-Xara Blog</h1>
+                <p class="subtitle">Mode Africaine • Culture • Entrepreneuriat</p>
+            </div>
+            <div style="width: 140px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <img src="images/soninke.jpg" alt="Journée Internationale de la Langue Soninké" class="banner-image">
+        
+        <div class="banner-content">
+            <span class="soninke-decoration">🌍</span>
+            <h1>Journée Internationale de la Langue Soninké</h1>
+            <p>Célébrons ensemble notre culture, notre identité et nos racines ancestrales</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="blog-container">
+        <h2 class="section-title">🎙️ Podcasts Exclusifs</h2>
+
+        <!-- Categories Navigation -->
+        <div class="categories-nav">
+            <button class="category-btn active">Tous</button>
+            <button class="category-btn">Culture</button>
+            <button class="category-btn">Mode</button>
+            <button class="category-btn">Entrepreneuriat</button>
+            <button class="category-btn">Interview</button>
         </div>
 
-        <!-- Section Authentification -->
-        <div class="auth-section">
-            <div id="authButtons" class="auth-buttons">
-                <button class="auth-btn" onclick="showLoginModal()">
-                    <i class="fas fa-sign-in-alt"></i> Se connecter
+        <!-- Articles Grid -->
+        <div class="articles-grid">
+            <!-- Article 1 -->
+            <article class="article-card">
+                <div class="article-badge">Nouveau</div>
+                <div class="article-content">
+                    <span class="article-category">🎉 Événement Culturel</span>
+                    <h2>Journée Internationale de la Langue Soninké</h2>
+                    <p>À l'occasion du 25 septembre, Andu-Xara vous propose un podcast dédié à la célébration et à la valorisation de la langue Soninké. Découvrez l'importance de préserver notre héritage linguistique.</p>
+                    
+                    <audio controls class="audio-player">
+                        <source src="audio/journée.mp3" type="audio/mpeg">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Épisode spécial • 25 Septembre</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="article-card">
+                <div class="article-content">
+                    <span class="article-category">👗 Mode Africaine</span>
+                    <h2>Mode Africaine : Héritage et Modernité</h2>
+                    <p>La mode africaine inspire le monde entier. Andu-Xara célèbre l'héritage tout en innovant. Découvrez comment nous fusionnons traditions et design contemporain.</p>
+                    
+                    <audio controls class="audio-player">
+                        <source src="audio/voix_fouley.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">voix-off • 40 sec</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="article-card">
+                <div class="article-content">
+                    <span class="article-category">🚀 Entrepreneuriat</span>
+                    <h2>Entrepreneuriat Jeune en Afrique</h2>
+                    <p>Nos jeunes entrepreneurs africains réinventent le commerce et créent de nouvelles opportunités. Témoignages et conseils pour se lancer.</p>
+                    
+                    <audio controls class="audio-player">
+                        <source src="audio/voix_cheikh.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">voix-off • 46 sec</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Newsletter -->
+        <section class="newsletter-section">
+            <h3>📧 Restez Informé</h3>
+            <p>Recevez les nouveaux podcasts et articles directement dans votre boîte mail. Ne manquez aucun contenu exclusif Andu-Xara !</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Votre adresse email" required>
+                <button type="submit" class="newsletter-btn" id="newsletterBtn">
+                    <span id="btnText">S'abonner</span>
+                    <div class="loader" id="btnLoader"></div>
                 </button>
-                <button class="auth-btn outline" onclick="showSignupModal()">
-                    <i class="fas fa-user-plus"></i> Créer un compte
-                </button>
-            </div>
-
-            <div id="userProfile" class="user-profile">
-                <div class="profile-header">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <div class="user-info">
-                        <span class="user-name" id="userDisplayName">Utilisateur</span>
-                        <span class="user-email" id="userEmail">email@example.com</span>
-                        <span class="user-status" id="userStatus" style="font-size: 0.8rem; color: #718096;"></span>
-                    </div>
-                </div>
-                
-                <div id="verificationWarning" class="verification-warning">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Vérifiez votre email pour activer votre compte
-                        </div>
-                        <button onclick="renvoyerEmailVerification()" style="background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
-                            Renvoyer
-                        </button>
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button class="auth-btn" style="background: #718096;" onclick="deconnecterUtilisateur()">
-                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </button>
-                </div>
-            </div>
-
-            <div id="authLoading" class="loading">
-                <i class="fas fa-spinner"></i> Traitement en cours...
-            </div>
-        </div>
-
-        <!-- Section Où obtenir des codes promo -->
-        <div class="sources-codes">
-            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">
-                <i class="fas fa-gift"></i> Où obtenir vos codes promo ?
-            </h2>
-            <p style="text-align: center; color: #718096; margin-bottom: 1rem;">
-                Suivez-nous sur nos réseaux pour recevoir des codes exclusifs
-            </p>
-            
-            <div class="sources-grid">
-                <div class="source-card">
-                    <div class="source-icon">📷</div>
-                    <div class="source-name">Instagram</div>
-                    <a href="https://instagram.com/andu_xara" target="_blank" class="source-link">
-                        @andu_xara
-                    </a>
-                    <div class="source-desc">
-                        Codes exclusifs chaque semaine
-                    </div>
-                </div>
-                
-                <div class="source-card">
-                    <div class="source-icon">🎵</div>
-                    <div class="source-name">TikTok</div>
-                    <a href="https://tiktok.com/@andu_xara" target="_blank" class="source-link">
-                        @andu_xara
-                    </a>
-                    <div class="source-desc">
-                        Lives avec codes surprises
-                    </div>
-                </div>
-                
-                <div class="source-card">
-                    <div class="source-icon">📘</div>
-                    <div class="source-name">Facebook</div>
-                    <a href="https://facebook.com/anduxara" target="_blank" class="source-link">
-                        Andu Xara
-                    </a>
-                    <div class="source-desc">
-                        Événements et concours
-                    </div>
-                </div>
-                
-                <div class="source-card">
-                    <div class="source-icon">📧</div>
-                    <div class="source-name">Newsletter</div>
-                    <div style="color: #667eea; font-weight: 500;">
-                        Inscription sur le site
-                    </div>
-                    <div class="source-desc">
-                        Codes mensuels par email
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section Code Promo (visible seulement pour les clients connectés) -->
-        <div id="promoSection" class="promo-section">
-            <h2><i class="fas fa-ticket-alt"></i> Utiliser votre code promo</h2>
-            <p style="color: #718096; margin-bottom: 1.5rem;">
-                Entrez le code obtenu sur nos réseaux pour activer votre réduction
-            </p>
-            
-            <!-- Statut de synchronisation avec le panier -->
-            <div id="syncStatus" class="sync-status">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-sync-alt"></i>
-                    <span id="syncMessage">Synchronisation avec le panier...</span>
-                </div>
-            </div>
-            
-            <div class="promo-input-group">
-                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Ex: TEST15, ANDU20, SOLDE25">
-                <button class="promo-btn" onclick="appliquerCodePromo()" id="promoBtn">
-                    <i class="fas fa-check"></i> Appliquer
-                </button>
-            </div>
-            
-            <div id="promoMessage" style="margin-top: 1rem; font-weight: 500;"></div>
-            
-            <!-- Section réinitialisation -->
-            <div id="resetSection" class="reset-section">
-                <p style="color: #744210; margin-bottom: 0.5rem;">
-                    <i class="fas fa-info-circle"></i>
-                    Vous avez déjà utilisé un code promo. Réinitialisez pour en utiliser un nouveau.
-                </p>
-                <button class="reset-btn" onclick="reinitialiserCodesPromo()">
-                    <i class="fas fa-redo"></i> Réinitialiser les codes promo
-                </button>
-            </div>
-            
-            <!-- Message de succès avec bouton vers la boutique -->
-            <div id="successSection" class="success-message">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
-                    <div>
-                        <strong>Réduction activée !</strong>
-                        <div style="font-size: 0.9rem; margin-top: 0.25rem;">
-                            Votre code promo a été appliqué avec succès
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 1rem;">
-                    <a href="#" class="btn-shop" onclick="synchroniserAvecCommande()">
-                        <i class="fas fa-shopping-cart"></i> Passer commande maintenant
-                    </a>
-                    <button class="btn-shop" style="background: #667eea; margin-left: 10px;" onclick="testerSynchronisation()">
-                        <i class="fas fa-sync"></i> Tester la synchronisation
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Message d'information pour les non-connectés -->
-        <div id="infoMessage" class="info-message">
-            <i class="fas fa-info-circle"></i>
-            Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
-
-    <!-- Modal de connexion -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="form-btn primary">
-                        <i class="fas fa-sign-in-alt"></i> Se connecter
-                    </button>
-                    <button type="button" class="form-btn secondary" onclick="closeModal('loginModal')">
-                        Annuler
-                    </button>
-                </div>
             </form>
-        </div>
+            <div id="newsletterMessage" class="newsletter-message"></div>
+        </section>
     </div>
 
-    <!-- Modal d'inscription -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('signupModal')">&times;</span>
-            <h2><i class="fas fa-user-plus"></i> Créer un compte</h2>
-            
-            <form id="signupForm">
-                <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" id="signupName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="signupEmail" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="signupPassword" required minlength="6">
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="form-btn primary">
-                        <i class="fas fa-user-plus"></i> S'inscrire
-                    </button>
-                    <button type="button" class="form-btn secondary" onclick="closeModal('signupModal')">
-                        Annuler
-                    </button>
-                </div>
-            </form>
+    <!-- Footer -->
+    <footer class="blog-footer">
+        <div class="footer-content">
+            <p><strong>Blog & Podcast Andu-Xara</strong></p>
+            <p>Votre source d'inspiration mode, culture et entrepreneuriat</p>
+            <p>📍 Mauritanie, Nouakchott • 📞 +222 49 03 76 97</p>
+            <p>📧 contact@andu-xara.store</p>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // ===== CONFIGURATION FIREBASE =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
-            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
-            projectId: "andu-xara-promo-codes-ff69e",
-            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
-            messagingSenderId: "653516716143",
-            appId: "1:653516716143:web:08ee1425191b4a1766359a"
-        };
-
-        // Initialiser Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        // ===== FONCTION ESSENTIELLE POUR LES CODES PROMO =====
+        function applyCodeAndRedirect(code) {
+            console.log('🎯 Application du code:', code);
+            
+            // Sauvegarder le code dans localStorage
+            localStorage.setItem('anduxara_promo_code', code);
+            localStorage.setItem('anduxara_promo_timestamp', Date.now());
+            
+            // Rediriger vers index.html avec le code dans l'URL
+            window.location.href = `index.html?codePromo=${code}`;
         }
 
-        // ===== CODES PROMO PREDEFINIS =====
-        const CODES_PROMO_VALIDES = {
-            'TEST15': { discount: 15, description: 'Code test 15% de réduction' },
-            'BIENVENUE10': { discount: 10, description: 'Bienvenue 10% de réduction' },
-            'ANDU20': { discount: 20, description: 'Code spécial Andu Xara 20%' },
-            'SOLDE25': { discount: 25, description: 'Soldes 25% de réduction' },
-            'NEW2024': { discount: 15, description: 'Nouveau client 15%' },
-            'FIDELITE': { discount: 10, description: 'Code fidélité 10%' }
-        };
+        // ===== FONCTIONS EXISTANTES (conservées) =====
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBGPg5EVFIZEtliB2Um-EIiF_q1Vvdz2X9CwjKsxle3k8VZHApB-lmzzvKtCIxSEvveA/exec';
 
-        // ===== FONCTION PRINCIPALE POUR APPLIQUER LES CODES PROMO =====
-        async function appliquerCodePromo() {
-            const codeInput = document.getElementById('promoCodeInput');
-            const messageDiv = document.getElementById('promoMessage');
-            const promoBtn = document.getElementById('promoBtn');
-            const code = codeInput.value.trim().toUpperCase();
+        function showMessage(messageDiv, text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = 'newsletter-message ' + (type === 'success' ? 'newsletter-success' : 'newsletter-error');
+            messageDiv.style.display = 'block';
             
-            if (!code) {
-                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Veuillez entrer un code promo</span>';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleNewsletter();
+        });
+
+        async function handleNewsletter() {
+            const emailInput = document.getElementById('newsletterEmail');
+            const btn = document.getElementById('newsletterBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const messageDiv = document.getElementById('newsletterMessage');
+            const email = emailInput.value.trim();
+
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showMessage(messageDiv, '❌ Veuillez entrer une adresse email valide.', 'error');
+                emailInput.focus();
                 return;
             }
 
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'block';
+            messageDiv.style.display = 'none';
+
             try {
-                // Vérifier si l'utilisateur est connecté
-                if (!firebase.auth().currentUser) {
-                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Connectez-vous pour utiliser un code promo</span>';
-                    return;
-                }
-
-                // Vérifier si un code a déjà été utilisé
-                const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
-                if (promoUtilise === 'true') {
-                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Vous avez déjà utilisé un code promo</span>';
-                    document.getElementById('resetSection').style.display = 'block';
-                    return;
-                }
-
-                // Désactiver le bouton pendant le traitement
-                promoBtn.disabled = true;
-                promoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
-
-                // Vérifier d'abord dans Firebase
-                let codeValide = false;
-                let promoData = null;
-
-                try {
-                    const promoQuery = await firebase.firestore()
-                        .collection('promoCodes')
-                        .where('code', '==', code)
-                        .where('isActive', '==', true)
-                        .get();
-
-                    if (!promoQuery.empty) {
-                        const promoDoc = promoQuery.docs[0];
-                        promoData = promoDoc.data();
-                        
-                        // Vérifier la date d'expiration
-                        if (promoData.expiration && new Date(promoData.expiration) < new Date()) {
-                            throw new Error('Code expiré');
-                        }
-
-                        // Vérifier les limites d'utilisation
-                        if (promoData.usedCount >= promoData.maxUses) {
-                            throw new Error('Code épuisé');
-                        }
-
-                        codeValide = true;
-                    }
-                } catch (firebaseError) {
-                    console.log('Firebase non disponible, utilisation des codes locaux');
-                }
-
-                // Si Firebase échoue ou code non trouvé, utiliser les codes locaux
-                if (!codeValide) {
-                    if (CODES_PROMO_VALIDES[code]) {
-                        promoData = CODES_PROMO_VALIDES[code];
-                        codeValide = true;
-                    }
-                }
-
-                if (codeValide && promoData) {
-                    // Enregistrer l'utilisation
-                    await enregistrerUtilisationPromo(code, promoData);
-                    
-                    // Afficher le succès
-                    messageDiv.innerHTML = `<span style="color: #38a169;">
-                        ✅ Code "${code}" appliqué ! ${promoData.discount}% de réduction
-                        ${promoData.description ? '<br><small>' + promoData.description + '</small>' : ''}
-                    </span>`;
-                    
-                    // Désactiver les champs
-                    codeInput.disabled = true;
-                    promoBtn.disabled = true;
-                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliqué';
-                    
-                    // Afficher la section succès
-                    document.getElementById('successSection').style.display = 'block';
-                    
-                    // Mettre à jour le statut de synchronisation
-                    updateSyncStatus('success', `✅ Synchronisé avec le panier - ${promoData.discount}% appliqué`);
-                    
-                    showNotification(`🎉 Code ${code} appliqué ! ${promoData.discount}% de réduction`, 'success');
-                    
+                const trackerUrl = `${SCRIPT_URL}?email=${encodeURIComponent(email)}&source=blog&timestamp=${Date.now()}`;
+                
+                const tracker = new Image();
+                tracker.src = trackerUrl;
+                
+                fetch(trackerUrl, { 
+                    method: 'GET',
+                    mode: 'no-cors',
+                    credentials: 'omit'
+                }).catch(() => {});
+                
+                const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+                
+                if (subscriptions.some(sub => sub.email === email)) {
+                    showMessage(messageDiv, '✅ Vous êtes déjà inscrit à notre newsletter !', 'success');
                 } else {
-                    messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Code promo invalide ou expiré</span>';
-                    promoBtn.disabled = false;
-                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
-                }
-
-            } catch (error) {
-                console.error('Erreur application code promo:', error);
-                messageDiv.innerHTML = '<span style="color: #e53e3c;">❌ Erreur lors de l\'application du code</span>';
-                promoBtn.disabled = false;
-                promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
-            }
-        }
-
-        // ===== FONCTION POUR ENREGISTRER L'UTILISATION =====
-        async function enregistrerUtilisationPromo(code, promoData) {
-            const userId = firebase.auth().currentUser.uid;
-            const userEmail = firebase.auth().currentUser.email;
-            
-            try {
-                // Essayer d'enregistrer dans Firebase
-                await firebase.firestore().collection('promoUsage').add({
-                    userId: userId,
-                    userEmail: userEmail,
-                    promoCode: code,
-                    discount: promoData.discount,
-                    usedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    status: 'applied',
-                    source: 'reductions.html'
-                });
-
-                // Mettre à jour le compteur si c'est un code Firebase
-                const promoQuery = await firebase.firestore()
-                    .collection('promoCodes')
-                    .where('code', '==', code)
-                    .get();
-
-                if (!promoQuery.empty) {
-                    const promoId = promoQuery.docs[0].id;
-                    await firebase.firestore().collection('promoCodes').doc(promoId).update({
-                        usedCount: firebase.firestore.FieldValue.increment(1),
-                        lastUsed: firebase.firestore.FieldValue.serverTimestamp()
+                    subscriptions.push({
+                        email: email,
+                        date: new Date().toISOString(),
+                        timestamp: Date.now(),
+                        status: 'sent_to_google_sheets'
                     });
-                }
-            } catch (error) {
-                console.log('Enregistrement Firebase échoué, utilisation du stockage local');
-            }
-
-            // SAUVEGARDER DANS LE SYSTÈME UNIFIÉ POUR INDEX.HTML
-            const promoInfo = {
-                code: code,
-                discount: promoData.discount,
-                description: promoData.description,
-                appliedAt: new Date().toISOString(),
-                userId: userId,
-                source: 'reductions.html'
-            };
-
-            // Sauvegarder dans localStorage pour index.html
-            localStorage.setItem('anduxara_active_promo', JSON.stringify(promoInfo));
-            localStorage.setItem('anduxara_promo_utilise', 'true');
-            
-            // Sauvegarder aussi dans une clé spécifique pour le panier
-            localStorage.setItem('anduxara_cart_promo', JSON.stringify({
-                code: code,
-                discount: promoData.discount,
-                applied: true,
-                timestamp: new Date().getTime()
-            }));
-
-            // SAUVEGARDER POUR LE PROCESSUS DE COMMANDE
-            localStorage.setItem('commande_promo_info', JSON.stringify({
-                code: code,
-                discount: promoData.discount,
-                appliedAt: new Date().toISOString(),
-                source: 'reductions',
-                description: promoData.description
-            }));
-
-            console.log('💾 Code promo sauvegardé pour le processus de commande:', promoInfo);
-        }
-
-        // ===== SYNCHRONISATION AVEC LE PROCESSUS DE COMMANDE =====
-        function synchroniserAvecCommande() {
-            console.log('🔄 Synchronisation avec le processus de commande...');
-            
-            const promoData = localStorage.getItem('commande_promo_info');
-            if (promoData) {
-                try {
-                    const promo = JSON.parse(promoData);
                     
-                    // Vérifier la synchronisation
-                    updateSyncStatus('synced', `🔄 Redirection vers le panier avec ${promo.discount}% de réduction...`);
-                    
-                    // Redirection vers index.html
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                    
-                } catch (error) {
-                    console.error('❌ Erreur synchronisation:', error);
-                    updateSyncStatus('error', '❌ Erreur de synchronisation');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
-                }
-            } else {
-                window.location.href = 'index.html';
-            }
-        }
-
-        // ===== TEST DE SYNCHRONISATION =====
-        function testerSynchronisation() {
-            const promoData = localStorage.getItem('commande_promo_info');
-            if (promoData) {
-                try {
-                    const promo = JSON.parse(promoData);
-                    updateSyncStatus('success', `✅ Test réussi ! Code ${promo.code} - ${promo.discount}% synchronisé`);
-                    showNotification('✅ Synchronisation testée avec succès !', 'success');
-                } catch (error) {
-                    updateSyncStatus('error', '❌ Erreur lors du test de synchronisation');
-                }
-            } else {
-                updateSyncStatus('error', '❌ Aucun code promo actif détecté');
-            }
-        }
-
-        // ===== MISE À JOUR DU STATUT DE SYNCHRONISATION =====
-        function updateSyncStatus(type, message) {
-            const syncStatus = document.getElementById('syncStatus');
-            const syncMessage = document.getElementById('syncMessage');
-            
-            if (syncStatus && syncMessage) {
-                syncStatus.className = 'sync-status';
-                if (type === 'success' || type === 'synced') {
-                    syncStatus.classList.add('synced');
-                } else if (type === 'error') {
-                    syncStatus.classList.add('error');
+                    localStorage.setItem('newsletter_subscriptions', JSON.stringify(subscriptions));
+                    showMessage(messageDiv, '🎉 Inscription réussie ! Merci de vous être abonné.', 'success');
+                    emailInput.value = '';
                 }
                 
-                syncMessage.innerHTML = message;
-                syncStatus.style.display = 'block';
-                
-                // Masquer après 5 secondes pour les statuts de succès
-                if (type === 'success') {
-                    setTimeout(() => {
-                        syncStatus.style.display = 'none';
-                    }, 5000);
-                }
-            }
-        }
-
-        // ===== FONCTION DE RÉINITIALISATION =====
-        function reinitialiserCodesPromo() {
-            console.log('🔄 Réinitialisation des codes promo...');
-            
-            // Supprimer tous les flags d'utilisation
-            localStorage.removeItem('anduxara_promo_utilise');
-            localStorage.removeItem('anduxara_active_promo');
-            localStorage.removeItem('anduxara_cart_promo');
-            localStorage.removeItem('anduxara_current_promo');
-            localStorage.removeItem('commande_promo_info');
-            
-            // Réactiver les champs
-            const codeInput = document.getElementById('promoCodeInput');
-            const promoBtn = document.getElementById('promoBtn');
-            
-            if (codeInput) {
-                codeInput.disabled = false;
-                codeInput.value = '';
-                codeInput.placeholder = 'Ex: TEST15, ANDU20, SOLDE25';
-            }
-            
-            if (promoBtn) {
-                promoBtn.disabled = false;
-                promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
-            }
-            
-            // Effacer les messages
-            const messageDiv = document.getElementById('promoMessage');
-            if (messageDiv) {
-                messageDiv.innerHTML = '';
-            }
-            
-            // Cacher les sections
-            document.getElementById('resetSection').style.display = 'none';
-            document.getElementById('successSection').style.display = 'none';
-            document.getElementById('syncStatus').style.display = 'none';
-            
-            showNotification('🔄 Codes promo réinitialisés ! Vous pouvez utiliser un nouveau code.', 'success');
-        }
-
-        // ===== RÉINITIALISATION AUTOMATIQUE APRÈS COMMANDE =====
-        function reinitialiserPromosApresCommande() {
-            localStorage.removeItem('anduxara_active_promo');
-            localStorage.removeItem('anduxara_promo_utilise');
-            localStorage.removeItem('anduxara_cart_promo');
-            localStorage.removeItem('anduxara_current_promo');
-            localStorage.removeItem('commande_promo_info');
-            console.log('🔄 Promos réinitialisées après commande');
-        }
-
-        // ===== GESTIONNAIRE D'AUTHENTIFICATION =====
-        class AuthManager {
-            constructor() {
-                this.user = null;
-                this.auth = firebase.auth();
-                this.db = firebase.firestore();
-                this.init();
-            }
-
-            init() {
-                this.auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        this.user = user;
-                        this.updateUI();
-                        this.verifierSynchronisationPanier();
-                        console.log('✅ Utilisateur connecté:', user.email);
-                    } else {
-                        this.user = null;
-                        this.updateUI();
-                        console.log('🚪 Utilisateur déconnecté');
-                    }
-                });
-            }
-
-            async signIn(email, password) {
-                try {
-                    showLoading(true);
-                    const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
-                    
-                    // Mettre à jour le dernier login
-                    await this.db.collection('users').doc(userCredential.user.uid).set({
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                    
-                    showLoading(false);
-                    return { success: true, user: userCredential.user };
-                } catch (error) {
-                    showLoading(false);
-                    return { success: false, error: this.getErrorMessage(error) };
-                }
-            }
-
-            async signUp(email, password, displayName) {
-                try {
-                    showLoading(true);
-                    const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
-                    await userCredential.user.updateProfile({ displayName: displayName });
-                    await userCredential.user.sendEmailVerification();
-                    
-                    // Créer le document utilisateur
-                    await this.db.collection('users').doc(userCredential.user.uid).set({
-                        uid: userCredential.user.uid,
-                        email: userCredential.user.email,
-                        displayName: displayName,
-                        role: 'client',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                        isActive: true
-                    });
-
-                    showLoading(false);
-                    return { success: true, user: userCredential.user };
-                } catch (error) {
-                    showLoading(false);
-                    return { success: false, error: this.getErrorMessage(error) };
-                }
-            }
-
-            getErrorMessage(error) {
-                const errorMessages = {
-                    'auth/invalid-email': 'Adresse email invalide',
-                    'auth/user-disabled': 'Ce compte a été désactivé',
-                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
-                    'auth/wrong-password': 'Mot de passe incorrect',
-                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
-                    'auth/weak-password': 'Le mot de passe est trop faible'
-                };
-                return errorMessages[error.code] || error.message;
-            }
-
-            updateUI() {
-                const authButtons = document.getElementById('authButtons');
-                const userProfile = document.getElementById('userProfile');
-                const promoSection = document.getElementById('promoSection');
-                const infoMessage = document.getElementById('infoMessage');
-                const verificationWarning = document.getElementById('verificationWarning');
-
-                if (this.user) {
-                    authButtons.style.display = 'none';
-                    userProfile.style.display = 'block';
-                    infoMessage.style.display = 'none';
-                    promoSection.style.display = 'block';
-                    
-                    document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur';
-                    document.getElementById('userEmail').textContent = this.user.email;
-                    document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
-                    
-                    const statusElement = document.getElementById('userStatus');
-                    if (this.user.emailVerified) {
-                        statusElement.textContent = '✓ Email vérifié';
-                        statusElement.style.color = '#38a169';
-                        verificationWarning.style.display = 'none';
-                    } else {
-                        statusElement.textContent = '✗ Email non vérifié';
-                        statusElement.style.color = '#e53e3e';
-                        verificationWarning.style.display = 'block';
-                    }
-
-                    // Vérifier l'état des codes promo
-                    this.verifierEtatPromo();
-                } else {
-                    authButtons.style.display = 'flex';
-                    userProfile.style.display = 'none';
-                    promoSection.style.display = 'none';
-                    infoMessage.style.display = 'block';
-                }
-            }
-
-            verifierEtatPromo() {
-                const promoUtilise = localStorage.getItem('anduxara_promo_utilise');
-                const codeInput = document.getElementById('promoCodeInput');
-                const promoBtn = document.getElementById('promoBtn');
-                const resetSection = document.getElementById('resetSection');
-                const messageDiv = document.getElementById('promoMessage');
-
-                if (promoUtilise === 'true') {
-                    codeInput.disabled = true;
-                    promoBtn.disabled = true;
-                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliqué';
-                    resetSection.style.display = 'block';
-                    
-                    const promoData = localStorage.getItem('anduxara_active_promo');
-                    if (promoData) {
-                        try {
-                            const promo = JSON.parse(promoData);
-                            messageDiv.innerHTML = `<span style="color: #38a169;">
-                                ✅ Code "${promo.code}" appliqué - ${promo.discount}% de réduction
-                            </span>`;
-                            document.getElementById('successSection').style.display = 'block';
-                            
-                            // Mettre à jour le statut de synchronisation
-                            updateSyncStatus('success', `✅ Synchronisé avec le panier - ${promo.discount}% de réduction active`);
-                        } catch (e) {
-                            messageDiv.innerHTML = '<span style="color: #38a169;">✅ Code promo déjà utilisé</span>';
-                        }
-                    }
-                } else {
-                    codeInput.disabled = false;
-                    promoBtn.disabled = false;
-                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Appliquer';
-                    resetSection.style.display = 'none';
-                    messageDiv.innerHTML = '';
-                }
-            }
-
-            verifierSynchronisationPanier() {
-                // Vérifier si un code est déjà actif depuis le panier
-                const promoData = localStorage.getItem('commande_promo_info');
-                if (promoData) {
-                    try {
-                        const promo = JSON.parse(promoData);
-                        if (promo.active && promo.source === 'panier') {
-                            updateSyncStatus('success', `✅ Code ${promo.code} synchronisé depuis le panier - ${promo.discount}%`);
-                            showNotification(`🔄 Code ${promo.code} synchronisé depuis le panier`, 'success');
-                        }
-                    } catch (error) {
-                        console.log('Aucun code synchronisé depuis le panier');
-                    }
-                }
-            }
-        }
-
-        // ===== FONCTIONS GLOBALES =====
-        let authManager = null;
-
-        function getAuthManager() {
-            if (!authManager) {
-                authManager = new AuthManager();
-            }
-            return authManager;
-        }
-
-        function showLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-
-        function showSignupModal() {
-            document.getElementById('signupModal').style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function showLoading(show) {
-            document.getElementById('authLoading').style.display = show ? 'block' : 'none';
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = message;
-            notification.className = type === 'success' ? 'notification' : 'notification error';
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 4000);
-        }
-
-        async function deconnecterUtilisateur() {
-            try {
-                await firebase.auth().signOut();
-                showNotification('✅ Déconnexion réussie!', 'success');
             } catch (error) {
-                console.log('Déconnexion effectuée');
-            }
-        }
-
-        function renvoyerEmailVerification() {
-            const user = firebase.auth().currentUser;
-            if (user) {
-                user.sendEmailVerification()
-                    .then(() => {
-                        showNotification('📧 Email de vérification renvoyé !', 'success');
-                    })
-                    .catch(error => {
-                        showNotification('❌ Erreur: ' + error.message, 'error');
+                const subscriptions = JSON.parse(localStorage.getItem('newsletter_subscriptions') || '[]');
+                
+                if (!subscriptions.some(sub => sub.email === email)) {
+                    subscriptions.push({
+                        email: email,
+                        date: new Date().toISOString(),
+                        timestamp: Date.now(),
+                        status: 'local_fallback'
                     });
+                    localStorage.setItem('newsletter_subscriptions', JSON.stringify(subscriptions));
+                    showMessage(messageDiv, '✅ Inscription enregistrée ! (Mode secours activé)', 'success');
+                    emailInput.value = '';
+                } else {
+                    showMessage(messageDiv, '✅ Vous êtes déjà inscrit !', 'success');
+                }
+            } finally {
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                btnLoader.style.display = 'none';
             }
         }
 
-        // ===== VÉRIFICATION DE SYNCHRONISATION =====
-        function verifierSynchronisation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const commandeSuccess = urlParams.get("commande");
-            
-            if (commandeSuccess === "success") {
-                showNotification("✅ Commande réussie ! Votre code promo a été utilisé.", "success");
-                reinitialiserPromosApresCommande();
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            // Vérifier la synchronisation avec le panier
-            const promoFromPanier = localStorage.getItem('commande_promo_info');
-            if (promoFromPanier) {
-                try {
-                    const promo = JSON.parse(promoFromPanier);
-                    if (promo.active && promo.source === 'panier') {
-                        updateSyncStatus('success', `🔄 Code ${promo.code} synchronisé depuis le panier`);
-                    }
-                } catch (error) {
-                    // Pas de synchronisation active
-                }
-            }
-        }
-
-        // ===== INITIALISATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            verifierSynchronisation();
-            
-            // Initialiser le manager
-            getAuthManager();
-            
-            // Gestion des formulaires
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                const result = await authManager.signIn(email, password);
-                if (result.success) {
-                    closeModal('loginModal');
-                    showNotification('✅ Connexion réussie!', 'success');
-                } else {
-                    showNotification('❌ Erreur: ' + result.error, 'error');
-                }
-            });
-
-            document.getElementById('signupForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('signupName').value;
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
-                const result = await authManager.signUp(email, password, name);
-                if (result.success) {
-                    closeModal('signupModal');
-                    showNotification('✅ Compte créé ! Vérifiez votre email.', 'success');
-                } else {
-                    showNotification('❌ Erreur: ' + result.error, 'error');
-                }
-            });
-
-            // Enter key pour le champ code promo
-            document.getElementById('promoCodeInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    appliquerCodePromo();
-                }
+        // Filtrage des catégories
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
             });
         });
 
-        // Exposer les fonctions globalement
-        window.reinitialiserPromosApresCommande = reinitialiserPromosApresCommande;
-        window.reinitialiserCodesPromo = reinitialiserCodesPromo;
-        window.appliquerCodePromo = appliquerCodePromo;
-        window.synchroniserAvecCommande = synchroniserAvecCommande;
-        window.testerSynchronisation = testerSynchronisation;
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ reductions.html chargé');
+        });
+
+        // Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-S9CBS21SVR');
     </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
 </body>
 </html>
