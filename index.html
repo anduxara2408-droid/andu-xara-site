@@ -5496,6 +5496,27 @@ async function processFloatingCheckout() {
         return;
     }
 
+ // Collecte des informations client
+    let userPhone = "";
+    let userAddress = "";
+    let userCity = "";
+    
+    try {
+        userPhone = prompt("📱 Pour finaliser la commande, veuillez entrer votre numéro de téléphone :") || "Non fourni";
+        userAddress = prompt("📍 Entrez votre adresse de livraison complète :") || "Non fournie";
+        userCity = prompt("🏙️ Entrez votre ville :") || "Non fournie";
+        
+        if (userPhone === "Non fourni" || userAddress === "Non fournie") {
+            if (!confirm("⚠️ Certaines informations sont manquantes. Souhaitez-vous quand même continuer ?")) {
+                showNotification('Commande annulée', 'warning');
+                return;
+            }
+        }
+    } catch (error) {
+        console.log('❌ Erreur collecte infos client:', error);
+        showNotification('⚠️ Informations client incomplètes', 'warning');
+    }
+
     // === CALCUL DU TOTAL CORRECT ===
     let totalMRU = floatingCart.reduce((sum, item) => {
         const itemPrice = item.promoPrice || item.price;
@@ -5615,23 +5636,34 @@ async function processFloatingCheckout() {
         }
     }
 
-    // 👤 INFORMATIONS CLIENT AMÉLIORÉES - CORRECTION ICI
-    let userDisplayInfo = '';
-    if (userInfo.isAuthenticated) {
-        userDisplayInfo = `\n👤 CLIENT CONNECTÉ:\n📧 ${userInfo.userEmail}`;
-        if (userInfo.userCode) {
-            userDisplayInfo += `\n🔖 Code: ${userInfo.userCode}`;
-        }
-        userDisplayInfo += `\n🔐 Type: ${userInfo.userType}`;
-    } else {
-        userDisplayInfo = `\n👤 CLIENT VISITEUR:\n🔒 Non connecté (pas de compte)`;
-        userDisplayInfo += `\n💡 Conseil: Créez un compte pour profiter des réductions !`;
+// 👤 INFORMATIONS CLIENT AMÉLIORÉES - CORRECTION ICI
+let userDisplayInfo = '';
+if (userInfo.isAuthenticated) {
+    userDisplayInfo = `\n👤 CLIENT CONNECTÉ:\n📧 ${userInfo.userEmail}`;
+    if (userInfo.userCode) {
+        userDisplayInfo += `\n🔖 Code: ${userInfo.userCode}`;
     }
+    // AJOUT DES INFORMATIONS DE LIVRAISON
+    userDisplayInfo += `\n📱 Téléphone: ${userPhone}`;
+    userDisplayInfo += `\n📍 Adresse: ${userAddress}`;
+    userDisplayInfo += `\n🏙️ Ville: ${userCity}`;
+    userDisplayInfo += `\n🚚 Livraison: Express (24-48h)`;
+    userDisplayInfo += `\n🔐 Type: ${userInfo.userType}`;
+} else {
+    userDisplayInfo = `\n👤 CLIENT VISITEUR:\n🔒 Non connecté (pas de compte)`;
+    // AJOUT DES INFORMATIONS DE LIVRAISON POUR LES VISITEURS AUSSI
+    userDisplayInfo += `\n📱 Téléphone: ${userPhone}`;
+    userDisplayInfo += `\n📍 Adresse: ${userAddress}`;
+    userDisplayInfo += `\n🏙️ Ville: ${userCity}`;
+    userDisplayInfo += `\n🚚 Livraison: Express (24-48h)`;
+    userDisplayInfo += `\n💡 Conseil: Créez un compte pour profiter des réductions !`;
+}
 
-    // 🏷️ STATUT COMMANDE
-    const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 COMMANDE STANDARD';
+// 🏷️ STATUT COMMANDE
+const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 COMMANDE STANDARD';
 
-const message = `COMMANDE AVEC RÉDUCTION 🔥\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)\n${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+// CORRECTION DE LA LIGNE TRONQUÉE - COMPLÉTEZ AVEC :
+const message = `COMMANDE AVEC RÉDUCTION 🔥\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
 
     // === PROCESSUS DE PAIEMENT ===
     const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
