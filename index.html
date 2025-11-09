@@ -5261,12 +5261,9 @@ function updateFloatingCart() {
     const cartTotalElement = document.getElementById('cart-total-floating');
     const cartBadge = document.getElementById('cart-badge-floating');
 
-    if (!cartItemsContainer || !cartTotalElement || !cartBadge) {
-        console.log('❌ Éléments du panier non trouvés');
-        return;
-    }
+    if (!cartItemsContainer || !cartTotalElement || !cartBadge) return;
 
-    let total = 0;
+    let subtotal = 0;
     let totalItems = 0;
 
     cartItemsContainer.innerHTML = '';
@@ -5278,23 +5275,23 @@ function updateFloatingCart() {
         return;
     }
 
-    // Afficher le code promo actif en haut
+    // Afficher l'en-tête promo si actif
     if (activePromoCode && promoDiscount > 0) {
         const promoHeader = document.createElement('div');
         promoHeader.style.cssText = `
             background: linear-gradient(135deg, #e8f5e8, #d4edda);
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-align: center;
-            border: 1px solid #27ae60;
+            border: 2px solid #27ae60;
         `;
         promoHeader.innerHTML = `
             <div style="font-weight: bold; color: #27ae60; font-size: 0.9rem;">
                 🎁 CODE PROMO ACTIF: ${activePromoCode}
             </div>
-            <div style="font-size: 0.8rem; color: #2c3e50;">
-                Réduction de ${promoDiscount}% appliquée
+            <div style="font-size: 0.8rem; color: #2c3e50; margin-top: 5px;">
+                Réduction de ${promoDiscount}% appliquée sur tous les articles
             </div>
         `;
         cartItemsContainer.appendChild(promoHeader);
@@ -5304,13 +5301,16 @@ function updateFloatingCart() {
     floatingCart.forEach((item, index) => {
         totalItems += item.quantity;
         
+        // Prix avec promo si disponible
         const itemPrice = item.promoPrice || item.price;
         const itemTotal = itemPrice * item.quantity;
-        total += itemTotal;
+        subtotal += itemTotal;
 
+        // Calcul de la réduction
         const hasPromo = item.promoPrice && item.promoPrice !== item.price;
         const originalTotal = item.price * item.quantity;
-        const discountAmount = originalTotal - itemTotal;
+        const discountAmount = hasPromo ? (originalTotal - itemTotal) : 0;
+        const discountPercentage = hasPromo ? Math.round((1 - item.promoPrice / item.price) * 100) : 0;
 
         const itemElement = document.createElement('div');
         itemElement.className = 'cart-item-floating';
@@ -5319,41 +5319,38 @@ function updateFloatingCart() {
                 <h4>${item.name}</h4>
                 <p>Quantité: ${item.quantity}</p>
                 ${hasPromo ? `
-                    <div style="color: #27ae60; font-size: 0.7rem; font-weight: bold;">
-                        🔥 PROMO: -${Math.round((1 - item.promoPrice / item.price) * 100)}%
+                    <div style="color: #27ae60; font-size: 0.7rem; font-weight: bold; margin-top: 5px;">
+                        🔥 PROMO: -${discountPercentage}% (Économie: ${discountAmount} MRU)
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 2px;">
-                        <span style="text-decoration: line-through; color: #888; font-size: 0.7rem;">
+                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 3px;">
+                        <span style="text-decoration: line-through; color: #888; font-size: 0.75rem;">
                             ${originalTotal} MRU
                         </span>
-                        <span style="color: #e74c3c; font-weight: bold; font-size: 0.8rem;">
+                        <span style="color: #e74c3c; font-weight: bold; font-size: 0.85rem;">
                             ${itemTotal} MRU
                         </span>
                     </div>
                 ` : `
-                    <div style="color: #2c3e50; font-weight: bold; font-size: 0.8rem;">
+                    <div style="color: #2c3e50; font-weight: bold; font-size: 0.85rem; margin-top: 8px;">
                         ${itemTotal} MRU
                     </div>
                 `}
             </div>
             <div class="cart-item-price">
-                <div style="font-weight: bold; color: #e74c3c; margin-bottom: 5px;">
-                    ${itemTotal} MRU
-                </div>
+                ${itemTotal} MRU
                 <button class="remove-item" onclick="removeFromFloatingCart(${index})">❌</button>
             </div>
         `;
         cartItemsContainer.appendChild(itemElement);
     });
 
-    // Calcul du total final avec réduction
-    let finalTotal = total;
+    // Calculer le total final avec réduction
+    let finalTotal = subtotal;
     let discountInfo = '';
 
     if (activePromoCode && promoDiscount > 0) {
-        const discountAmount = total * (promoDiscount / 100);
-        finalTotal = Math.round(total - discountAmount);
-        
+        const discountAmount = subtotal * (promoDiscount / 100);
+        finalTotal = subtotal - discountAmount;
         discountInfo = `
             <div style="border-top: 1px dashed #ddd; padding-top: 8px; margin-top: 8px;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #27ae60;">
@@ -5364,17 +5361,17 @@ function updateFloatingCart() {
         `;
     }
 
-    // Mise à jour de l'affichage du total
+    // Mettre à jour l'affichage du total
     cartTotalElement.innerHTML = `
         <div style="text-align: left;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
                 <span>Sous-total:</span>
-                <span>${Math.round(total)} MRU</span>
+                <span>${Math.round(subtotal)} MRU</span>
             </div>
             ${discountInfo}
-            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 5px; font-size: 1.1rem;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 8px; font-size: 1rem; border-top: 1px solid #ddd; padding-top: 8px;">
                 <span>Total:</span>
-                <span style="color: #e74c3c;">${finalTotal} MRU</span>
+                <span style="color: #e74c3c;">${Math.round(finalTotal)} MRU</span>
             </div>
         </div>
     `;
@@ -5383,10 +5380,9 @@ function updateFloatingCart() {
     
     console.log('🛒 Panier mis à jour:', {
         items: floatingCart.length,
-        totalItems: totalItems,
-        sousTotal: total,
-        totalFinal: finalTotal,
-        promoActive: !!activePromoCode
+        subtotal: subtotal,
+        discount: activePromoCode ? promoDiscount + '%' : 'none',
+        finalTotal: finalTotal
     });
 }
 
@@ -5429,20 +5425,28 @@ function applyPromoToCart(promoCode, discountPercentage) {
     activePromoCode = promoCode;
     promoDiscount = discountPercentage;
     
-    floatingCart.forEach(item => {
-        item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
-    });
-    
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    updateFloatingCart();
-    
+    // === SAUVEGARDER DANS LES DEUX FORMATS POUR COMPATIBILITÉ ===
+    // Ancien format (pour la rétrocompatibilité)
     localStorage.setItem('anduxara_active_promo', JSON.stringify({
         code: promoCode,
         discount: discountPercentage,
         appliedAt: new Date().toISOString()
     }));
     
+    // Nouveau format (plus simple)
+    localStorage.setItem('anduxara_active_promo_code', promoCode);
+    localStorage.setItem('anduxara_promo_discount', discountPercentage.toString());
+    
+    // Appliquer la réduction à chaque produit
+    floatingCart.forEach(item => {
+        item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
+        item.appliedPromo = promoCode;
+    });
+    
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    updateFloatingCart();
     updateActivePromoDisplay();
+    
     showNotification('✅ Code ' + promoCode + ' appliqué : ' + discountPercentage + '% de réduction !');
 }
 
@@ -5452,13 +5456,19 @@ function removePromoFromCart() {
     activePromoCode = null;
     promoDiscount = 0;
     
+    // Supprimer les deux formats
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_active_promo_code');
+    localStorage.removeItem('anduxara_promo_discount');
+    
+    // Retirer les réductions des produits
     floatingCart.forEach(item => {
         item.promoPrice = item.price;
+        delete item.appliedPromo;
     });
     
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
-    localStorage.removeItem('anduxara_active_promo');
     updateActivePromoDisplay();
     showNotification('🗑️ Code promo retiré');
 }
@@ -7966,34 +7976,57 @@ function selectSize(button) {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du panier et fidélité...');
-    
+
     // Charger le panier depuis le localStorage
     floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
-    
-    // Charger le code promo actif
+
+    // === CORRECTION : CHARGEMENT COMPATIBLE DES CODES PROMO ===
+    // Essayer d'abord l'ancien format, puis le nouveau
     const savedPromo = localStorage.getItem('anduxara_active_promo');
     if (savedPromo) {
-        const promoData = JSON.parse(savedPromo);
-        activePromoCode = promoData.code;
-        promoDiscount = promoData.discount;
-        updateActivePromoDisplay();
+        try {
+            const promoData = JSON.parse(savedPromo);
+            activePromoCode = promoData.code;
+            promoDiscount = promoData.discount;
+            console.log('🔄 Promo chargée (ancien format):', activePromoCode, promoDiscount + '%');
+        } catch (error) {
+            console.error('❌ Erreur chargement promo ancien format:', error);
+        }
+    } else {
+        // Essayer le nouveau format
+        activePromoCode = localStorage.getItem('anduxara_active_promo_code');
+        promoDiscount = parseInt(localStorage.getItem('anduxara_promo_discount')) || 0;
+        if (activePromoCode) {
+            console.log('🔄 Promo chargée (nouveau format):', activePromoCode, promoDiscount + '%');
+        }
     }
+
+    // Appliquer les réductions aux produits si un code est actif
+    if (activePromoCode && promoDiscount > 0) {
+        floatingCart.forEach(item => {
+            item.promoPrice = Math.round(item.price * (1 - promoDiscount / 100));
+            item.appliedPromo = activePromoCode;
+        });
+        console.log('🎯 Réductions appliquées aux produits du panier');
+    }
+
+    updateActivePromoDisplay();
     
     // Mettre à jour l'affichage initial du panier
     updateFloatingCart();
 
     // Fermer le panier en cliquant à l'extérieur
-    document.addEventListener('click', function(event) {
-        const cart = document.getElementById('floating-cart');
-        const toggle = document.querySelector('.cart-toggle');
+document.addEventListener('click', function(event) {
+    const cart = document.getElementById('floating-cart');
+    const toggle = document.querySelector('.cart-toggle');
 
-        if (cart && cart.classList.contains('open') &&
-            !cart.contains(event.target) &&
-            !toggle.contains(event.target)) {
-            closeFloatingCart();
-        }
-    });
-    
+    if (cart && cart.classList.contains('open') &&
+        !cart.contains(event.target) &&
+        !toggle.contains(event.target)) {
+        closeFloatingCart();
+    }
+}); 
+
     // ===== INITIALISATION VUE RAPIDE =====
     console.log('👁️ Initialisation de la vue rapide...');
     setupQuickView();
