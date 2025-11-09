@@ -2681,6 +2681,23 @@ if (window.location.hostname !== 'localhost' &&
 <!-- Code promo amélioré avec intégration panier -->
 <div class="reduction-section">
     <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Code Promo</h3>
+ <!-- ===== SYSTÈME AUTHENTIFICATION VISIBLE ===== -->
+    <div id="auth-status-section" style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+        <div id="auth-status">
+            <p style="margin-bottom: 10px; color: #666;">
+                <strong>🔐 Statut :</strong> 
+                <span id="auth-status-text">Non connecté</span>
+            </p>
+            <button onclick="showAuthBenefits()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                Créer un compte gratuit
+            </button>
+            <div id="auth-benefits" style="display: none; margin-top: 10px; padding: 10px; background: #e8f5e8; border-radius: 5px;">
+                <p style="margin: 5px 0; font-size: 0.8rem;">✅ Codes promo exclusifs</p>
+                <p style="margin: 5px 0; font-size: 0.8rem;">✅ Historique de commandes</p>
+                <p style="margin: 5px 0; font-size: 0.8rem;">✅ Récompenses fidélité</p>
+            </div>
+        </div>
+    </div>
      <!-- Afficher les infos utilisateur -->
     <div id="user-info-display" style="display: none;"></div>   
     <!-- Affichage du code actif -->
@@ -5228,23 +5245,54 @@ async function processFloatingCheckout() {
     // === FIDÉLITÉ ===
     integrerFideliteAchat(totalMRU);
 
-    // === PRÉPARATION DU MESSAGE WHATSAPP AVEC TOUTES LES INFOS ===
-    const productList = floatingCart.map(item => {
-        const itemPrice = item.promoPrice || item.price;
-        const itemTotal = itemPrice * item.quantity;
-        return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${item.appliedPromo ? ' 🔥' : ''}`;
-    }).join('\n');
+// === PRÉPARATION DU MESSAGE WHATSAPP AVEC TOUTES LES INFOS ===
+const productList = floatingCart.map(item => {
+    const itemPrice = item.promoPrice || item.price;
+    const itemTotal = itemPrice * item.quantity;
+    const hasPromo = item.promoPrice && item.promoPrice !== item.price;
+    return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${hasPromo ? ' 🔥 PROMO' : ''}`;
+}).join('\n');
 
-    const promoInfo = promoSystem && promoSystem.activePromo
-        ? `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`
-        : '';
+// 🎁 DÉTECTION DES CODES PROMO APPLIQUÉS
+let promoInfo = '';
+let hasActivePromo = false;
 
-    const userInfo = finalOrderData.userEmail
-        ? `\n👤 CLIENT: ${finalOrderData.userEmail}\n🔖 CODE CLIENT: ${finalOrderData.userCode || 'N/A'}`
-        : '\n👤 CLIENT: Visiteur (non connecté)';
+// Vérifier dans le système promo
+if (promoSystem && promoSystem.activePromo) {
+    promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`;
+    hasActivePromo = true;
+} 
+// Vérifier dans les items du panier
+else {
+    const promoItems = floatingCart.filter(item => item.promoPrice && item.promoPrice !== item.price);
+    if (promoItems.length > 0) {
+        const uniquePromoCodes = [...new Set(promoItems.map(item => item.appliedPromo).filter(Boolean))];
+        if (uniquePromoCodes.length > 0) {
+            promoInfo = `\n🎁 CODES PROMO APPLIQUÉS: ${uniquePromoCodes.join(', ')}`;
+            hasActivePromo = true;
+        } else {
+            promoInfo = `\n🎁 RÉDUCTIONS APPLIQUÉES (source inconnue)`;
+            hasActivePromo = true;
+        }
+    }
+}
 
-    // 🐛 CORRECTION : MESSAGE COMPLET ET BIEN FERMÉ
-    const message = `Bonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}${userInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+// 👤 INFORMATIONS CLIENT AMÉLIORÉES
+let userInfo = '';
+if (finalOrderData.userEmail) {
+    userInfo = `\n👤 CLIENT CONNECTÉ:\n📧 ${finalOrderData.userEmail}\n🔖 Code: ${finalOrderData.userCode || 'N/A'}`;
+} else {
+    userInfo = `\n👤 CLIENT VISITEUR:\n🔒 Non connecté (pas de compte)`;
+    
+    // Ajouter une incitation à créer un compte
+    userInfo += `\n💡 Conseil: Créez un compte pour profiter des réductions !`;
+}
+
+// 🏷️ STATUT COMMANDE
+const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 COMMANDE STANDARD';
+
+
+const message = `${orderStatus}\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
 
     // === PROCESSUS DE PAIEMENT ===
     const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
@@ -7846,6 +7894,42 @@ window.testCommande = function() {
 };
 
 console.log('🐛 Tapez testCommande() dans la console pour tester');
+
+// ===== SYSTÈME AUTHENTIFICATION VISIBLE =====
+function showAuthBenefits() {
+    const benefits = document.getElementById('auth-benefits');
+    if (benefits) {
+        benefits.style.display = benefits.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function updateAuthStatus() {
+    const statusElement = document.getElementById('auth-status-text');
+    const statusSection = document.getElementById('auth-status-section');
+    
+    if (!statusElement || !statusSection) return;
+    
+    if (promoSystem && promoSystem.currentUser) {
+        statusElement.textContent = `Connecté (${promoSystem.currentUser.email})`;
+        statusElement.style.color = '#27ae60';
+        statusSection.style.background = '#e8f5e8';
+        
+        // Cacher les avantages si connecté
+        const benefits = document.getElementById('auth-benefits');
+        if (benefits) benefits.style.display = 'none';
+    } else {
+        statusElement.textContent = 'Non connecté - Codes promo désactivés';
+        statusElement.style.color = '#e74c3c';
+        statusSection.style.background = '#ffe8e8';
+    }
+}
+
+// Mettre à jour le statut au chargement et périodiquement
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(updateAuthStatus, 1000);
+    setInterval(updateAuthStatus, 3000);
+});
+
 </script>
 </body>
 </html>
