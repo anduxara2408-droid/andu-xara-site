@@ -636,9 +636,9 @@
                 </div>
                 
                 <div style="margin-top: 1rem;">
-                    <a href="index.html" class="btn-shop">
+                    <button onclick="redirectToIndexWithAuth()" class="btn-shop">
                         <i class="fas fa-shopping-cart"></i> Aller à la boutique
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -888,6 +888,39 @@
             }
         }
 
+        // ===== FONCTIONS DE SYNCHRONISATION ENTRE PAGES =====
+        function redirectToIndexWithAuth() {
+            const user = firebase.auth().currentUser;
+            if (user) {
+                const authParams = new URLSearchParams({
+                    auth: 'connected',
+                    email: user.email,
+                    timestamp: Date.now()
+                });
+                
+                window.location.href = 'index.html?' + authParams.toString();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Vérifier si on vient d'index.html avec des paramètres d'auth
+        function checkAuthFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authToken = urlParams.get('auth');
+            const userEmail = urlParams.get('email');
+            
+            if (authToken && userEmail) {
+                console.log('🔄 Récupération auth depuis URL:', userEmail);
+                
+                // Nettoyer l'URL
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+                
+                showNotification(`🔄 Reconnexion automatique pour ${userEmail}`, 'success');
+            }
+        }
+
         // ===== FONCTION PRINCIPALE POUR APPLIQUER LES CODES PROMO =====
         async function appliquerCodePromo() {
             const codeInput = document.getElementById('promoCodeInput');
@@ -992,6 +1025,9 @@
                         timestamp: new Date().getTime(),
                         persistent: true
                     }));
+
+                    // Sauvegarder l'utilisateur pour la persistance
+                    localStorage.setItem('anduxara_last_user', user.email);
 
                     // Afficher le succès
                     messageDiv.innerHTML = `<span style="color: #38a169;">
@@ -1098,6 +1134,9 @@
                         this.user = user;
                         await this.updateUI();
                         console.log('✅ Utilisateur connecté:', user.email);
+                        
+                        // Sauvegarder pour la persistance
+                        localStorage.setItem('anduxara_last_user', user.email);
                         
                         // CHARGER L'HISTORIQUE DES CODES UTILISÉS
                         chargerHistoriqueUtilisateur(user.uid);
@@ -1287,6 +1326,7 @@
         async function deconnecterUtilisateur() {
             try {
                 await firebase.auth().signOut();
+                localStorage.removeItem('anduxara_last_user');
                 showNotification('✅ Déconnexion réussie!', 'success');
             } catch (error) {
                 console.log('Déconnexion effectuée');
@@ -1308,6 +1348,9 @@
 
         // ===== INITIALISATION =====
         document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification depuis l'URL
+            setTimeout(checkAuthFromURL, 500);
+            
             // Initialiser le manager
             getAuthManager();
             
@@ -1351,6 +1394,7 @@
         window.appliquerCodePromo = appliquerCodePromo;
         window.deconnecterUtilisateur = deconnecterUtilisateur;
         window.renvoyerEmailVerification = renvoyerEmailVerification;
+        window.redirectToIndexWithAuth = redirectToIndexWithAuth;
     </script>
 </body>
 </html>
