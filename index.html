@@ -2344,55 +2344,6 @@ footer {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
-/* ===== CORRECTION URGENTE PANIER MOBILE CENTRÉ ===== */
-@media (max-width: 768px) {
-    .floating-cart {
-        position: fixed;
-        bottom: 20px;
-        right: 50% !important;
-        transform: translateX(50%) !important;
-        z-index: 1000;
-    }
-    
-    .cart-panel {
-        position: fixed !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        right: auto !important;
-        bottom: 70px !important;
-        width: 90vw !important;
-        max-width: 350px !important;
-        margin: 0 auto !important;
-        z-index: 1001 !important;
-    }
-    
-    .cart-toggle {
-        transform: none !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .floating-cart {
-        bottom: 15px;
-        right: 50% !important;
-        transform: translateX(50%) !important;
-    }
-    
-    .cart-panel {
-        width: 95vw !important;
-        max-width: 320px !important;
-        bottom: 65px !important;
-    }
-}
-
-/* Correction pour très petits écrans */
-@media (max-width: 360px) {
-    .cart-panel {
-        width: 98vw !important;
-        max-width: 300px !important;
-    }
-}
-
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -5195,6 +5146,33 @@ function closeFloatingCart() {
         console.log('✅ Panier fermé');
     }
 }
+
+function removeFromFloatingCart(index) {
+    console.log('🗑️ removeFromFloatingCart appelée avec index:', index);
+    
+    // Validation
+    if (index < 0 || index >= floatingCart.length) {
+        console.error('❌ Index invalide:', index, 'Taille du panier:', floatingCart.length);
+        return;
+    }
+    
+    const removedProduct = floatingCart[index].name;
+    
+    // Retirer le produit
+    floatingCart.splice(index, 1);
+    
+    // Sauvegarder
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Mettre à jour l'affichage
+    updateFloatingCart();
+    
+    // Notification
+    showNotification(`🗑️ ${removedProduct} retiré du panier`);
+    
+    console.log('✅ Produit retiré. Panier mis à jour:', floatingCart);
+}
+
 
 // ===== CORRECTION SIMPLIFIÉE PANIER MOBILE =====
 function adjustCartForMobile() {
