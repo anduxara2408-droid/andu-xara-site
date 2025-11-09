@@ -1,0 +1,103 @@
+// ===== UTILITAIRES CODES PROMO - FONCTIONS PARTAGÉES =====
+
+/**
+ * Marque un code promo comme utilisé après une commande
+ */
+async function marquerCodeUtilise(userId, code) {
+    try {
+        console.log('🔄 Marquage code comme utilisé:', code, 'pour user:', userId);
+        
+        const usageQuery = await firebase.firestore()
+            .collection('promoUsage')
+            .where('userId', '==', userId)
+            .where('promoCode', '==', code)
+            .where('status', '==', 'applied')
+            .get();
+
+        if (!usageQuery.empty) {
+            const usageId = usageQuery.docs[0].id;
+            await firebase.firestore().collection('promoUsage').doc(usageId).update({
+                status: 'used',
+                usedInOrder: true,
+                orderCompletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                orderCompleted: true
+            });
+            
+            console.log('✅ Code marqué comme utilisé avec succès:', code);
+            return true;
+        } else {
+            console.log('⚠️ Aucun usage trouvé à marquer comme utilisé');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur marquage code utilisé:', error);
+        return false;
+    }
+}
+
+/**
+ * Vérifie si un utilisateur a un code promo actif
+ */
+async function verifierCodeActifUtilisateur(userId) {
+    try {
+        const activeUsageQuery = await firebase.firestore()
+            .collection('promoUsage')
+            .where('userId', '==', userId)
+            .where('status', '==', 'applied')
+            .orderBy('usedAt', 'desc')
+            .limit(1)
+            .get();
+
+        if (!activeUsageQuery.empty) {
+            const lastUsage = activeUsageQuery.docs[0].data();
+            const usageDate = lastUsage.usedAt?.toDate();
+            const now = new Date();
+            const diffHours = (now - usageDate) / (1000 * 60 * 60);
+
+            // Code valide si utilisé dans les 24h
+            if (diffHours < 24) {
+                return {
+                    code: lastUsage.promoCode,
+                    discount: lastUsage.discount,
+                    description: lastUsage.description,
+                    usedAt: usageDate,
+                    persistent: true
+                };
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('Erreur vérification code actif:', error);
+        return null;
+    }
+}
+
+/**
+ * Récupère l'historique des codes utilisés par un utilisateur
+ */
+async function getHistoriqueCodesUtilisateur(userId) {
+    try {
+        const historyQuery = await firebase.firestore()
+            .collection('promoUsage')
+            .where('userId', '==', userId)
+            .orderBy('usedAt', 'desc')
+            .limit(10)
+            .get();
+
+        return historyQuery.docs.map(doc => {
+            const data = doc.data();
+            return {
+                ...data,
+                usedAt: data.usedAt?.toDate()
+            };
+        });
+    } catch (error) {
+        console.error('Erreur récupération historique:', error);
+        return [];
+    }
+}
+
+// Exposer les fonctions globalement
+window.marquerCodeUtilise = marquerCodeUtilise;
+window.verifierCodeActifUtilisateur = verifierCodeActifUtilisateur;
+window.getHistoriqueCodesUtilisateur = getHistoriqueCodesUtilisateur;

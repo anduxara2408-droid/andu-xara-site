@@ -1,0 +1,45 @@
+function retirerReduction() {
+    console.log('🗑️ Retrait de la réduction...');
+    
+    // Supprimer les données de promotion
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_cart_promo');
+    
+    // Supprimer le badge
+    const badge = document.getElementById('badge-reduction-active');
+    if (badge) {
+        badge.remove();
+    }
+    
+    // Restaurer les prix originaux dans le panier
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    panier.forEach(produit => {
+        if (produit.prixOriginal) {
+            produit.prix = produit.prixOriginal;
+            delete produit.prixReduit;
+            delete produit.reduction;
+            delete produit.codePromo;
+        }
+    });
+    
+    localStorage.setItem('panier', JSON.stringify(panier));
+    
+    // Rafraîchir l'affichage du panier
+    if (typeof afficherPanier === 'function') {
+        afficherPanier();
+    }
+    
+    // Afficher une notification
+    if (typeof showNotification === 'function') {
+        showNotification('🔓 Réduction retirée', 'success');
+    } else {
+        alert('🔓 Réduction retirée');
+    }
+    
+    console.log('✅ Réduction retirée');
+}
+
+// Exposer la fonction globalement
+window.retirerReduction = retirerReduction;
+
+// Fonction pour afficher le badge de réduction

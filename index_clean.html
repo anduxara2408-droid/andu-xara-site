@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="fr">
 <head>
     <!-- PWA Manifest -->
@@ -18,352 +18,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Andu-Xara • Tradition Africaine, Style Moderne • Collection Authentique</title>
-<!-- Firebase App -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<!-- Firebase Auth -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<!-- Firebase Firestore -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-<script>
-// Configuration Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyBjzBW5ADllWk2292Xv1C3mlm4X08XyknM",
-    authDomain: "andu-xara-online-counter.firebaseapp.com",
-    databaseURL: "https://andu-xara-online-counter-default-rtdb.firebaseio.com",
-    projectId: "andu-xara-online-counter",
-    storageBucket: "andu-xara-online-counter.firebasestorage.app",
-    messagingSenderId: "89485701999",
-    appId: "1:89485701999:web:0884ea2f5d246570f1ee9a",
-    measurementId: "G-0FN2XN1QGG"
-};
-
-// Initialiser Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore(); // Firestore au lieu de Realtime Database
-
-console.log('🔥 Firebase Firestore initialisé pour le système de réductions');
-</script>
-
-<script>
-// ===== SYSTÈME AUTHENTIFICATION ET RÉDUCTIONS AVEC FIRESTORE =====
-class PromoSystem {
-    constructor() {
-        this.currentUser = null;
-        this.userData = null;
-        this.activePromo = null;
-        this.init();
-    }
-
-    async init() {
-        // Vérifier si l'utilisateur est déjà connecté
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                this.currentUser = user;
-                await this.loadUserData();
-                console.log('✅ Utilisateur connecté:', user.email);
-                this.updateUIWithUserInfo();
-            } else {
-                console.log('🔐 Utilisateur non connecté');
-                // Ne pas montrer la popup tout de suite, attendre qu'un code soit saisi
-            }
-        });
-    }
-
-    async loadUserData() {
-        if (!this.currentUser) return;
-        
-        try {
-            const userDoc = await db.collection('users').doc(this.currentUser.uid).get();
-            
-            if (userDoc.exists) {
-                this.userData = userDoc.data();
-                console.log('📊 Données utilisateur chargées:', this.userData);
-                
-                // Vérifier si un code promo est actif
-                if (this.userData.activePromo) {
-                    this.activePromo = this.userData.activePromo;
-                    this.applyPromoToCart(this.activePromo.code, this.activePromo.discount);
-                }
-            } else {
-                // Créer un nouvel utilisateur
-                await this.createUserData();
-            }
-        } catch (error) {
-            console.error('❌ Erreur chargement données:', error);
-        }
-    }
-
-    async createUserData() {
-        const userData = {
-            email: this.currentUser.email,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            usedPromoCodes: [],
-            orders: [],
-            rewards: 0,
-            userCode: this.generateUserCode()
-        };
-        
-        await db.collection('users').doc(this.currentUser.uid).set(userData);
-        this.userData = userData;
-        console.log('👤 Nouvel utilisateur créé');
-    }
-
-    generateUserCode() {
-        return 'AX' + Date.now().toString(36).toUpperCase();
-    }
-
-    async validateAndApplyPromo(code) {
-        if (!this.currentUser) {
-            this.showLoginPrompt();
-            return { success: false, message: 'Veuillez vous connecter d\'abord' };
-        }
-
-        try {
-            // Vérifier si le code existe et est valide
-            const promoDoc = await db.collection('promoCodes').doc(code.toUpperCase()).get();
-            
-            if (!promoDoc.exists) {
-                return { success: false, message: 'Code promo invalide' };
-            }
-
-            const promoData = promoDoc.data();
-            
-            // Vérifier les conditions
-            const validation = await this.validatePromoConditions(promoData, code);
-            if (!validation.success) {
-                return validation;
-            }
-
-            // Appliquer la réduction
-            await this.applyPromoToUser(promoData, code);
-            return { 
-                success: true, 
-                message: `✅ Code ${code} appliqué ! Réduction de ${promoData.discount}%`,
-                discount: promoData.discount
-            };
-
-        } catch (error) {
-            console.error('❌ Erreur validation promo:', error);
-            return { success: false, message: 'Erreur système' };
-        }
-    }
-
-    async validatePromoConditions(promoData, code) {
-        // Vérifier si le code est expiré
-        if (promoData.expiresAt && promoData.expiresAt.toDate() < new Date()) {
-            return { success: false, message: 'Code promo expiré' };
-        }
-
-        // Vérifier les limites d'utilisation
-        if (promoData.usageLimit && promoData.usedCount >= promoData.usageLimit) {
-            return { success: false, message: 'Code promo épuisé' };
-        }
-
-        // Vérifier si l'utilisateur a déjà utilisé ce code
-        if (this.userData.usedPromoCodes && this.userData.usedPromoCodes.includes(code.toUpperCase())) {
-            return { success: false, message: 'Code promo déjà utilisé' };
-        }
-
-        // Vérifier la date de début
-        if (promoData.startsAt && promoData.startsAt.toDate() > new Date()) {
-            return { success: false, message: 'Code pas encore valide' };
-        }
-
-        return { success: true };
-    }
-
-    async applyPromoToUser(promoData, code) {
-        const codeUpper = code.toUpperCase();
-        
-        // Marquer le code comme utilisé
-        const newUsedCode = {
-            code: codeUpper,
-            usedAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        
-        await db.collection('users').doc(this.currentUser.uid).update({
-            usedPromoCodes: firebase.firestore.FieldValue.arrayUnion(newUsedCode)
-        });
-        
-        // Incrémenter le compteur d'utilisation
-        await db.collection('promoCodes').doc(codeUpper).update({
-            usedCount: firebase.firestore.FieldValue.increment(1)
-        });
-
-        // Sauvegarder le code actif
-        this.activePromo = {
-            code: codeUpper,
-            discount: promoData.discount,
-            appliedAt: new Date()
-        };
-
-        await db.collection('users').doc(this.currentUser.uid).update({
-            activePromo: this.activePromo
-        });
-        
-        // Appliquer au panier local
-        this.applyPromoToCart(codeUpper, promoData.discount);
-        
-        console.log('🎯 Promo appliquée:', this.activePromo);
-    }
-
-    applyPromoToCart(code, discount) {
-        // Mettre à jour le panier avec la réduction
-        if (window.floatingCart && Array.isArray(window.floatingCart)) {
-            window.floatingCart.forEach(item => {
-                item.promoPrice = Math.round(item.price * (1 - discount / 100));
-                item.appliedPromo = code;
-            });
-            
-            localStorage.setItem('anduxara_cart', JSON.stringify(window.floatingCart));
-            
-            if (typeof window.updateFloatingCart === 'function') {
-                window.updateFloatingCart();
-            }
-        }
-        
-        this.updateActivePromoDisplay(code, discount);
-    }
-
-    updateActivePromoDisplay(code, discount) {
-        const display = document.getElementById('active-promo-display');
-        const codeElement = document.getElementById('active-promo-code');
-        
-        if (display && codeElement) {
-            display.style.display = 'block';
-            codeElement.textContent = `${code} (-${discount}%)`;
-        }
-    }
-
-    async removePromo() {
-        if (!this.currentUser || !this.activePromo) return;
-        
-        try {
-            // Retirer le code actif
-            await db.collection('users').doc(this.currentUser.uid).update({
-                activePromo: firebase.firestore.FieldValue.delete()
-            });
-            
-            this.activePromo = null;
-            
-            // Retirer la réduction du panier
-            if (window.floatingCart && Array.isArray(window.floatingCart)) {
-                window.floatingCart.forEach(item => {
-                    item.promoPrice = item.price;
-                    delete item.appliedPromo;
-                });
-                
-                localStorage.setItem('anduxara_cart', JSON.stringify(window.floatingCart));
-                
-                if (typeof window.updateFloatingCart === 'function') {
-                    window.updateFloatingCart();
-                }
-            }
-            
-            this.updateActivePromoDisplay();
-            showNotification('🗑️ Code promo retiré');
-            
-        } catch (error) {
-            console.error('❌ Erreur retrait promo:', error);
-        }
-    }
-
-    showLoginPrompt() {
-        const message = `🔐 Connexion Requise
-    
-Pour utiliser les codes promo, veuillez vous connecter à votre compte.
-
-Cela permet de :
-• Sauvegarder vos réductions
-• Éviter les abus
-• Personnaliser votre expérience
-
-Voulez-vous vous connecter maintenant ?`;
-
-        if (confirm(message)) {
-            this.redirectToLogin();
-        }
-    }
-
-    redirectToLogin() {
-        // Redirection vers la page de connexion
-        window.location.href = 'reductions.html?action=login';
-    }
-
-    updateUIWithUserInfo() {
-        // Mettre à jour l'UI avec les infos utilisateur
-        const userInfoElement = document.getElementById('user-info-display');
-        if (userInfoElement && this.currentUser) {
-            userInfoElement.innerHTML = `
-                <div style="background: #e8f5e8; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
-                    <span style="color: #27ae60; font-weight: bold;">👤 Connecté: ${this.currentUser.email}</span>
-                    ${this.userData ? `<br><small>Code: ${this.userData.userCode}</small>` : ''}
-                </div>
-            `;
-        }
-    }
-
-    async processOrderWithPromo(orderData) {
-        if (!this.currentUser) return orderData;
-
-        try {
-            const orderWithPromo = {
-                ...orderData,
-                userId: this.currentUser.uid,
-                userEmail: this.currentUser.email,
-                userCode: this.userData.userCode,
-                appliedPromo: this.activePromo,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            // Sauvegarder la commande
-            const orderRef = await db.collection('orders').add(orderWithPromo);
-
-            // Sauvegarder dans l'historique utilisateur
-            await db.collection('users').doc(this.currentUser.uid).update({
-                orders: firebase.firestore.FieldValue.arrayUnion({
-                    orderId: orderRef.id,
-                    ...orderWithPromo
-                })
-            });
-
-            // Marquer le code comme utilisé définitivement
-            if (this.activePromo) {
-                await this.markPromoAsUsed(this.activePromo.code);
-            }
-
-            console.log('✅ Commande enregistrée avec promo:', orderWithPromo);
-            return orderWithPromo;
-
-        } catch (error) {
-            console.error('❌ Erreur enregistrement commande:', error);
-            return orderData;
-        }
-    }
-
-    async markPromoAsUsed(code) {
-        if (!this.currentUser) return;
-        
-        await db.collection('users').doc(this.currentUser.uid).update({
-            activePromo: firebase.firestore.FieldValue.delete()
-        });
-        this.activePromo = null;
-    }
-}
-
-// Initialiser le système promo
-let promoSystem;
-
-function initPromoSystem() {
-    if (!promoSystem) {
-        promoSystem = new PromoSystem();
-    }
-    return promoSystem;
-}
-</script>
-
  <!-- DÉSACTIVATION SYSTÈMES PROBLÉMATIQUES -->
     <script src="js/secure/disable-problematic.js"></script>
    <meta name="google-site-verification" content="EN_ATTENTE_DU_CODE">
@@ -2242,6 +1896,146 @@ footer {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
+/* Styles pour le panier */
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+#cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e53e3e;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#panier-content {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.panier-vide {
+    text-align: center;
+    padding: 2rem;
+    color: #718096;
+}
+
+.panier-vide i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #cbd5e0;
+}
+
+.panier-items {
+    padding: 1rem;
+}
+
+.panier-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.panier-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-details h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d3748;
+}
+
+.item-details p {
+    margin: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.quantity-controls button {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #cbd5e0;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-item {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.panier-total {
+    padding: 1rem;
+    border-top: 2px solid #e2e8f0;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #2d3748;
+}
+
+.panier-actions {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-commander {
+    flex: 2;
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-vider {
+    flex: 1;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -2328,40 +2122,6 @@ footer {
         });
     }
 
-    // ===== CORRECTION AFFICHAGE EN TEMPS RÉEL =====
-    function updateRewardsDisplay() {
-        if (!window.userManager) return;
-
-        const stats = window.userManager.getUserStats();
-        const display = document.getElementById('rewards-display');
-        const amount = document.getElementById('rewards-amount');
-        const code = document.getElementById('user-code');
-
-        if (display && amount && code) {
-            amount.textContent = stats.rewards + ' MRU';
-            code.textContent = 'Code: ' + stats.userCode;
-            display.style.display = 'block';
-
-            // Afficher un message de bienvenue si c'est un nouveau parrainage
-            if (stats.hasUsedParrainage && stats.rewards > 0) {
-                setTimeout(() => {
-                    alert(`🎉 BIENVENUE ! Vous avez reçu ${stats.rewards} MRU grâce au parrainage !\nCode parrain: ${stats.parrainCode}`);
-                }, 1000);
-            }
-        }
-    }
-
-    // Surcharger la fonction existante
-    if (window.userManager) {
-        const originalInit = window.userManager.init;
-        window.userManager.init = function() {
-            originalInit.call(this);
-            setTimeout(updateRewardsDisplay, 500);
-        };
-    }
-
-    // Mettre à jour toutes les 2 secondes
-    setInterval(updateRewardsDisplay, 2000);
 </script>
 </head>
 <body>
@@ -2677,37 +2437,43 @@ if (window.location.hostname !== 'localhost' &&
                     Votre navigateur ne supporte pas la lecture audio.
                 </audio>
             </div>
-
-<!-- Code promo amélioré avec intégration panier -->
+<!-- ===== SYSTÈME DE CODES PROMO SIMPLES ===== -->
+<!-- ===== SYSTÈME DE CODES PROMO AMÉLIORÉ ===== -->
 <div class="reduction-section">
-    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Code Promo</h3>
-     <!-- Afficher les infos utilisateur -->
-    <div id="user-info-display" style="display: none;"></div>   
+    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">🎁 Codes Promotionnels</h3>
+    
     <!-- Affichage du code actif -->
-    <div id="active-promo-display" style="display: none; background: #e8f5e8; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
-        <span style="color: #27ae60; font-weight: bold;">✅ Code actif: </span>
-        <span id="active-promo-code"></span>
-        <button onclick="removePromoFromCart()" style="margin-left: 10px; background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;">
-            Retirer
-        </button>
+    <div id="active-promo-display" style="display: none; background: #e8f5e8; padding: 12px 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; border: 2px solid #27ae60;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <span style="color: #27ae60; font-weight: bold; font-size: 1rem;">✅ Code actif: </span>
+            <span id="active-promo-code" style="font-weight: bold; font-size: 1.1rem;"></span>
+            <button onclick="removePromoFromCart()" 
+                    style="background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                ❌ Retirer
+            </button>
+        </div>
     </div>
     
-    <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-        <input type="text" id="promoInput" placeholder="Ex: BIENVENUE15" 
-               style="flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
+    <!-- Section code promo rapide -->
+    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+        <input type="text" id="promoInput" placeholder="Ex: TEST15, WELCOME10..." 
+               style="flex: 1; min-width: 200px; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; text-align: center;"
+               onkeypress="if(event.key === 'Enter') validateAndApplyPromo()">
         <button id="promoButton" onclick="validateAndApplyPromo()"
-                style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; min-width: 120px;">
             Appliquer ✅
         </button>
     </div>
-    <p id="promoMessage" style="margin-top: 10px; text-align: center; font-weight: 500;"></p>
+    
+    <p id="promoMessage" style="margin-top: 10px; text-align: center; font-weight: 500; min-height: 24px;"></p>
     
     <div style="text-align: center; margin-top: 15px;">
-        <a href="reductions.html" style="color: #667eea; text-decoration: none; font-size: 0.9rem;">
-            📋 Voir tous les codes promo disponibles
+        <a href="reductions.html" style="color: #667eea; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+            📋 Voir tous les codes promo disponibles →
         </a>
     </div>
 </div>
+
             <!-- Recherche -->
             <div class="search-bar">
                 <input type="text" placeholder="🔍 Rechercher un produit..." id="search-input" aria-label="Rechercher un produit">
@@ -3432,42 +3198,6 @@ if (window.location.hostname !== 'localhost' &&
 
         </div>
 
-<!-- Dans la section du tableau de bord client, ajoutez : -->
-<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-        <div style="background: #9b59b6; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
-            💎
-        </div>
-        <h3 style="margin: 0; color: #2c3e50;">Système de Parrainage</h3>
-    </div>
-    
-    <div id="rewards-display" style="display: none;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 2rem; font-weight: bold; color: #9b59b6;" id="rewards-amount">0 MRU</div>
-            <div style="color: #666; font-size: 0.9rem; margin-top: 5px;" id="user-code">Code: AX00000</div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button onclick="copyParrainLink()" 
-                    style="background: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
-                📋 Copier lien
-            </button>
-            <button onclick="showParrainInfo()" 
-                    style="background: #95a5a6; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
-                ℹ️ Infos
-            </button>
-        </div>
-    </div>
-    
-    <div style="text-align: center; color: #666; font-size: 0.8rem;">
-        <p>💡 Parrainez des amis et cumulez des récompenses !</p>
-        <button onclick="debugParrainages()" 
-                style="background: #7f8c8d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; margin-top: 5px;">
-            🐛 Debug
-        </button>
-    </div>
-</div>
-
         <!-- Bouton de réinitialisation -->
         <div style="text-align: center; margin-top: 30px;">
             <button onclick="resetDashboard()" style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-size: 0.9rem;">
@@ -3669,7 +3399,7 @@ if (window.location.hostname !== 'localhost' &&
 
                     <div class="footer-section">
                         <h3>Contact</h3>
-                        <p>📧 Email: anduxara2408@gmail.com</p>
+                        <p>📧 Email: contact@andu-xara.store</p>
                         <p>📞 Téléphone: +222 49 03 76 97</p>
                         <p>💬 WhatsApp: +222 49 03 76 97</p>
                         <p>📍 Mauritanie, Nouakchott</p>
@@ -3886,7 +3616,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-
         // ===== NOTIFICATIONS =====
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
@@ -3939,6 +3668,165 @@ if ('serviceWorker' in navigator) {
     });
 }
  </script>
+    
+    <!-- Réception des crédits depuis reductions.html -->
+    <script>
+    // Réception des crédits via URL et postMessage
+    function receiveCreditsFromReductions() {
+        console.log("🎯 Réception des crédits - Démarrage");
+        
+        // Méthode 1: Récupérer depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const creditsFromUrl = urlParams.get('credits');
+        if (creditsFromUrl) {
+            const credits = parseInt(creditsFromUrl);
+            localStorage.setItem('anduxara_referral_credits', credits.toString());
+            console.log("📥 Crédits reçus depuis URL:", credits, "MRU");
+        }
+        
+        // Méthode 2: Récupérer depuis sessionStorage
+        const creditsFromSession = sessionStorage.getItem('anduxara_referral_credits');
+        if (creditsFromSession) {
+            const credits = parseInt(creditsFromSession);
+            localStorage.setItem('anduxara_referral_credits', credits.toString());
+            console.log("📥 Crédits reçus depuis sessionStorage:", credits, "MRU");
+            sessionStorage.removeItem('anduxara_referral_credits');
+        }
+        
+        // Méthode 3: Écouter les messages
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'REFERRAL_CREDITS') {
+                const credits = event.data.credits;
+                localStorage.setItem('anduxara_referral_credits', credits.toString());
+                console.log("📨 Crédits reçus via postMessage:", credits, "MRU");
+                
+                // Afficher le badge immédiatement
+                if (window.createCreditsBadge) {
+                    window.createCreditsBadge();
+                }
+            }
+        });
+        
+        console.log("🎯 Réception des crédits - Prêt");
+    }
+    
+    // Démarrer la réception
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', receiveCreditsFromReductions);
+    } else {
+        receiveCreditsFromReductions();
+    }
+    </script>
+    <!-- Badge crédits -->
+    <script src="js/secure/credits-badge-no-icons.js"></script>
+<script src="js/secure/fix.js"></script>
+<script src="js/secure/promo-enhanced.js"></script>
+    
+<!-- Panier Integration Désactivée -->
+<!-- <script src="js/secure/panier-integration-stable.js"></script> -->
+    
+<script type="module">
+    import { getDatabase, ref, set, onDisconnect, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+    // Configuration Firebase - utilise ton projet andu-xara-online-counter
+    const firebaseConfig = {
+        apiKey: "AIzaSyBjzBW5ADllWk2292Xv1C3mlm4X08XyknM",
+        authDomain: "andu-xara-online-counter.firebaseapp.com",
+        databaseURL: "https://andu-xara-online-counter-default-rtdb.firebaseio.com",
+        projectId: "andu-xara-online-counter",
+        storageBucket: "andu-xara-online-counter.firebasestorage.app",
+        messagingSenderId: "89485701999",
+        appId: "1:89485701999:web:0884ea2f5d246570f1ee9a",
+        measurementId: "G-0FN2XN1QGG"
+    };
+
+    // Initialiser Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+ <!-- Correctif Compteur Utilisateurs -->
+    <script src="js/secure/user-counter-fix.js"></script>
+
+
+<script>
+
+   
+ console.log('🚀 Initialisation du vrai compteur Firebase...');
+
+    // Créer un ID unique pour cet utilisateur
+    const userId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    const userRef = ref(db, 'onlineUsers/' + userId);
+
+    // Fonction pour mettre à jour l'affichage
+    function updateCounterDisplay(count) {
+        document.getElementById('visitorCount').textContent = count;
+        console.log('👥 Vrais utilisateurs en ligne:', count);
+    }
+
+    // SE CONNECTER - cet utilisateur rejoint
+    set(userRef, {
+        joinedAt: serverTimestamp(),
+        lastSeen: Date.now(),
+        userAgent: navigator.userAgent.substring(0, 80)
+    }).then(() => {
+        console.log('✅ Utilisateur connecté:', userId);
+    }).catch(error => {
+        console.error('❌ Erreur connexion:', error);
+    });
+
+    // SE DÉCONNECTER AUTOMATIQUEMENT quand l'onglet se ferme
+    onDisconnect(userRef).remove().then(() => {
+        console.log('✅ Déconnexion automatique configurée');
+    });
+
+    // SURVEILLER TOUS LES UTILISATEURS EN TEMPS RÉEL
+    const onlineUsersRef = ref(db, 'onlineUsers');
+    onValue(onlineUsersRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const users = snapshot.val();
+            const realTimeCount = Object.keys(users).length;
+            console.log('📊 Vrai compteur temps réel:', realTimeCount, 'utilisateurs');
+            updateCounterDisplay(realTimeCount);
+            
+            // Nettoyer les utilisateurs inactifs (optionnel)
+            cleanInactiveUsers(users);
+        } else {
+            // Personne en ligne
+            console.log('📊 Aucun utilisateur en ligne');
+            updateCounterDisplay(0);
+        }
+    });
+
+    // Nettoyer les utilisateurs inactifs (plus de 5 minutes)
+    function cleanInactiveUsers(users) {
+        const now = Date.now();
+        const fiveMinutesAgo = now - 300000; // 5 minutes
+        
+        for (const [uid, userData] of Object.entries(users)) {
+            if (userData.lastSeen && userData.lastSeen < fiveMinutesAgo) {
+                // Supprimer l'utilisateur inactif
+                const inactiveUserRef = ref(db, 'onlineUsers/' + uid);
+                set(inactiveUserRef, null);
+                console.log('🧹 Utilisateur inactif nettoyé:', uid);
+            }
+        }
+    }
+
+    // Maintenir la connexion active AVEC GESTION D'ERREURS
+    setInterval(() => {
+        try {
+    setInterval(() => {
+        try {
+            set(userRef, {
+                lastSeen: Date.now(),
+                active: true
+            }).catch(error => {
+                console.warn("⚠️ Mise à jour connexion échouée:", error);
+            });
+        } catch (error) {
+            console.warn("⚠️ Erreur mise à jour connexion:", error);
+        }
+    }, 30000);
+
 <script>
 // === COMPTE À REBOURS AMÉLIORÉ ===
 console.log('🎯 Initialisation compte à rebours amélioré...');
@@ -4043,10 +3931,115 @@ function resetCountdownForAll() {
 // resetCountdownForAll();
 </script>
 <script>
-// === FONCTION ADD TO CART CORRIGÉE ===
-function addToCart(productName, oldPrice, promoPrice) {
-    console.log('🛒 Ajout au panier:', productName, 'Prix:', promoPrice + ' MRU');
+// ===== FONCTIONS DU PANIER =====
+function updateFloatingCart() {
+    console.log('🔄 Mise à jour du panier flottant...');
     
+    const cartItemsContainer = document.getElementById('cart-items-floating');
+    const cartTotalElement = document.getElementById('cart-total-floating');
+    const cartBadge = document.getElementById('cart-badge-floating');
+
+    if (!cartItemsContainer || !cartTotalElement || !cartBadge) {
+        console.error('❌ Éléments du panier non trouvés');
+        return;
+    }
+
+    let total = 0;
+    let totalItems = 0;
+
+    cartItemsContainer.innerHTML = '';
+
+    if (floatingCart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart-floating">Votre panier est vide</div>';
+        cartTotalElement.textContent = '0';
+        cartBadge.textContent = '0';
+        console.log('🛒 Panier vide');
+        return;
+    }
+
+    floatingCart.forEach((item, index) => {
+        totalItems += item.quantity;
+        const itemTotal = (item.promoPrice || item.price) * item.quantity;
+        total += itemTotal;
+
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item-floating';
+        itemElement.innerHTML = `
+            <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <p>Quantité: ${item.quantity}</p>
+            </div>
+            <div class="cart-item-price">
+                ${itemTotal} MRU
+                <button class="remove-item" onclick="removeFromFloatingCart(${index})">❌</button>
+            </div>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+    });
+
+    cartTotalElement.textContent = Math.round(total);
+    cartBadge.textContent = totalItems;
+    
+    console.log(`✅ Panier mis à jour: ${totalItems} articles, Total: ${total} MRU`);
+}
+
+function removeFromFloatingCart(index) {
+    if (floatingCart[index]) {
+        const productName = floatingCart[index].name;
+        floatingCart.splice(index, 1);
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        updateFloatingCart();
+        showNotification(`🗑️ ${productName} retiré du panier`);
+    }
+}
+
+function ajouterAuPanier(productName, category, price) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
+    
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    const existingItem = floatingCart.find(item => item.name === productName);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        floatingCart.push({
+            name: productName,
+            category: category,
+            price: price,
+            promoPrice: price,
+            quantity: 1,
+            addedAt: new Date().toISOString()
+        });
+    }
+    
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+    updateFloatingCart();
+    
+    if (typeof trackAddToCart === 'function') {
+        trackAddToCart(productName, category, price);
+    }
+}
+
+function toggleFloatingCart() {
+    console.log('🛒 toggleFloatingCart appelé');
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        console.log("Panier état:", cart.classList.contains('open') ? "ouvert" : "fermé");
+        if (cart.classList.contains('open')) {
+            updateFloatingCart();
+        }
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+    }
+}    
     // Vibration si supporté
     if (navigator.vibrate) navigator.vibrate(50);
 
@@ -4130,7 +4123,22 @@ function addToCartFromModal(productName, productPrice) {
 // Initialiser les événements au chargement
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initialisation du système de livraison...');
+
+// Vérifier la synchronisation des codes promo
+    verifierSynchronisationPromo();
     
+    // Réappliquer la réduction si le panier change
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                appliquerReductionPanier();
+            }
+    
+    // Observer les changements dans le panier
+    const panierContainer = document.getElementById('panier');
+    if (panierContainer) {
+        observer.observe(panierContainer, { childList: true, subtree: true });
+        
     // Événement pour la touche Entrée
     const addressInput = document.getElementById('delivery-address');
     if (addressInput) {
@@ -4854,6 +4862,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
     <!-- ... VOTRE CONTENU EXISTANT ... -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <!-- ✅ BANNIÈRE COOKIES RGPD -->
     <div id="cookie-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #2c3e50; color: white; padding: 20px; text-align: center; z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3);">
@@ -4959,48 +4969,33 @@ setTimeout(() => {
 
 // ===== VARIABLES GLOBALES =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
-let activePromoCode = null;
-let promoDiscount = 0;
 
 function ajouterAuPanier(productName, category, price) {
-    console.log('🛒 Ajout au panier:', productName, 'Prix reçu:', price, 'Type:', typeof price);
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
     
-    // 🐛 CORRECTION : Convertir le prix en nombre
-    const numericPrice = typeof price === 'string' ? parseInt(price.replace(' MRU', '').replace(/\s/g, '')) : Number(price);
-    
-    if (isNaN(numericPrice)) {
-        console.error('❌ Prix invalide après conversion:', price, '→', numericPrice);
-        showNotification('❌ Erreur: Prix invalide', 'error');
-        return;
-    }
-    
-    console.log('💰 Prix numérique converti:', numericPrice);
-
     if (navigator.vibrate) navigator.vibrate(50);
 
     const existingItem = floatingCart.find(item => item.name === productName);
 
     if (existingItem) {
         existingItem.quantity += 1;
-        console.log('📈 Quantité augmentée:', existingItem.quantity);
     } else {
         floatingCart.push({
             name: productName,
             category: category,
-            price: numericPrice, // 🐛 CORRECTION : Utiliser le prix numérique
-            promoPrice: numericPrice, // 🐛 CORRECTION : Initialiser le prix promo
+            price: price,
+            promoPrice: price,
             quantity: 1,
             addedAt: new Date().toISOString()
         });
-        console.log('🆕 Nouveau produit ajouté');
     }
     
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     showNotification('✅ ' + productName + ' ajouté au panier !');
     updateFloatingCart();
     
-    // Track l'ajout au panier
-    trackAddToCart(productName, category, numericPrice);
+    // ⭐⭐ AJOUT IMPORTANT : Track l'ajout au panier
+    trackAddToCart(productName, category, price);
 }
 
 function updateFloatingCart() {
@@ -5042,9 +5037,6 @@ function updateFloatingCart() {
         cartItemsContainer.appendChild(itemElement);
     });
 
-    if (activePromoCode && promoDiscount > 0) {
-        total = total * (1 - promoDiscount / 100);
-    }
 
     cartTotalElement.textContent = Math.round(total);
     cartBadge.textContent = totalItems;
@@ -5076,249 +5068,131 @@ function closeFloatingCart() {
     }
 }
 
-// ===== FONCTIONS CODES PROMO =====
-async function validateAndApplyPromo() {
-    const promoInput = document.getElementById('promoInput');
-    const promoMessage = document.getElementById('promoMessage');
-    const code = promoInput.value.trim();
-
-    if (!code) {
-        promoMessage.textContent = 'Veuillez entrer un code promo';
-        promoMessage.style.color = 'red';
-        return;
-    }
-
-    // Initialiser le système promo si nécessaire
-    if (!promoSystem) {
-        promoSystem = initPromoSystem();
-    }
-
-    const result = await promoSystem.validateAndApplyPromo(code);
-    
-    promoMessage.textContent = result.message;
-    promoMessage.style.color = result.success ? 'green' : 'red';
-
-    if (result.success) {
-        promoInput.value = '';
-    }
-}
-
-function removePromoFromCart() {
-    if (promoSystem) {
-        promoSystem.removePromo();
-    }
-}
-
-function applyPromoToCart(promoCode, discountPercentage) {
-    console.log('🎯 Application code promo:', promoCode, discountPercentage + '%');
-    
-    activePromoCode = promoCode;
-    promoDiscount = discountPercentage;
-    
-    floatingCart.forEach(item => {
-        item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
-    });
-    
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    updateFloatingCart();
-    
-    localStorage.setItem('anduxara_active_promo', JSON.stringify({
-        code: promoCode,
-        discount: discountPercentage,
-        appliedAt: new Date().toISOString()
-    }));
-    
-    updateActivePromoDisplay();
-    showNotification('✅ Code ' + promoCode + ' appliqué : ' + discountPercentage + '% de réduction !');
-}
-
-function removePromoFromCart() {
-    console.log('🗑️ Retrait du code promo');
-    
-    activePromoCode = null;
-    promoDiscount = 0;
-    
-    floatingCart.forEach(item => {
-        item.promoPrice = item.price;
-    });
-    
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    updateFloatingCart();
-    localStorage.removeItem('anduxara_active_promo');
-    updateActivePromoDisplay();
-    showNotification('🗑️ Code promo retiré');
-}
-
-function updateActivePromoDisplay() {
-    const display = document.getElementById('active-promo-display');
-    const codeElement = document.getElementById('active-promo-code');
-    
-    if (display && codeElement) {
-        if (activePromoCode && promoDiscount > 0) {
-            display.style.display = 'block';
-            codeElement.textContent = activePromoCode + ' (-' + promoDiscount + '%)';
-        } else {
-            display.style.display = 'none';
-        }
-    }
-}
-
 // ===== FONCTIONS DE PAIEMENT =====
-async function processFloatingCheckout() {
-    console.log('🛒 Début du processus de checkout');
+function processFloatingCheckout() {
+    console.log('🛒 Début du processus de checkout avec promo...');
 
     if (floatingCart.length === 0) {
         showNotification('Panier vide !', 'error');
         return;
     }
 
-    // === CALCUL DU TOTAL CORRECT ===
+    // RÉCUPÉRER LES INFOS PROMO
+    const promoData = localStorage.getItem('commande_promo_info');
+    let promoInfo = null;
     let totalMRU = floatingCart.reduce((sum, item) => {
-        const itemPrice = item.promoPrice || item.price;
-        return sum + (itemPrice * item.quantity);
+        return sum + (item.promoPrice || item.price) * item.quantity;
     }, 0);
+
+    if (promoData) {
+        try {
+            promoInfo = JSON.parse(promoData);
+            console.log('🎫 Promotion appliquée:', promoInfo);
+        } catch (error) {
+            console.log('❌ Erreur lecture promo');
+        }
+    }
+
+    // APPLIQUER LA RÉDUCTION SI PROMO ACTIVE
+    let reductionAppliquee = 0;
+    if (promoInfo && promoInfo.discount) {
+        reductionAppliquee = (totalMRU * promoInfo.discount) / 100;
+        totalMRU = totalMRU - reductionAppliquee;
+    }
 
     totalMRU = Math.round(totalMRU);
     const totalFCFA = Math.round(totalMRU * 2.5);
 
-    console.log('💰 Total calculé:', totalMRU + ' MRU');
+    // CONSTRUIRE LE MESSAGE AVEC INFO PROMO
+    const productList = floatingCart.map(item => 
+        `${item.name} (x${item.quantity}) - ${(item.promoPrice || item.price) * item.quantity} MRU`
+    ).join('\n');
 
-    // === PRÉPARATION DES DONNÉES COMMANDE ===
-    const orderData = {
-        products: floatingCart.map(item => ({
-            name: item.name,
-            price: item.price,
-            promoPrice: item.promoPrice,
-            quantity: item.quantity,
-            category: item.category,
-            itemTotal: (item.promoPrice || item.price) * item.quantity
-        })),
-        total: totalMRU,
-        totalFCFA: totalFCFA,
-        timestamp: new Date().toISOString(),
-        cartId: 'cart_' + Date.now()
-    };
+    let message = `Bonjour Andu-Xara ! 👋\n\n`;
+    message += `Je souhaite commander :\n\n${productList}\n\n`;
 
-    // === AJOUT DES INFOS CLIENT SI DISPONIBLE ===
-    let finalOrderData = orderData;
-    if (promoSystem && promoSystem.currentUser) {
-        console.log('👤 Utilisateur connecté, ajout des infos...');
-        finalOrderData = {
-            ...orderData,
-            userId: promoSystem.currentUser.uid,
-            userEmail: promoSystem.currentUser.email,
-            userCode: promoSystem.userData ? promoSystem.userData.userCode : 'N/A',
-            appliedPromo: promoSystem.activePromo || null
-        };
-
-        // Sauvegarder dans Firebase si le système promo est disponible
-        if (typeof promoSystem.processOrderWithPromo === 'function') {
-            try {
-                finalOrderData = await promoSystem.processOrderWithPromo(orderData);
-                console.log('✅ Commande sauvegardée dans Firebase');
-            } catch (error) {
-                console.error('❌ Erreur sauvegarde Firebase:', error);
-            }
-        }
-    } else {
-        console.log('👤 Utilisateur non connecté - commande anonyme');
-        finalOrderData.guest = true;
+    // AJOUTER LES INFOS PROMO DANS LE MESSAGE
+    if (promoInfo) {
+        message += `🎫 CODE PROMO APPLIQUÉ : ${promoInfo.code}\n`;
+        message += `💰 RÉDUCTION : ${promoInfo.discount}% (-${reductionAppliquee} MRU)\n\n`;
     }
 
-    // === FIDÉLITÉ ===
-    integrerFideliteAchat(totalMRU);
+    message += `💰 Total : ${totalMRU} MRU${promoInfo ? ` (après réduction)` : ''}\n\n`;
+    message += `Pouvez-vous m'aider pour la suite ?`;
 
-    // === PRÉPARATION DU MESSAGE WHATSAPP AVEC TOUTES LES INFOS ===
-    const productList = floatingCart.map(item => {
-        const itemPrice = item.promoPrice || item.price;
-        const itemTotal = itemPrice * item.quantity;
-        return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${item.appliedPromo ? ' 🔥' : ''}`;
-    }).join('\n');
-
-    const promoInfo = promoSystem && promoSystem.activePromo
-        ? `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`
-        : '';
-
-    const userInfo = finalOrderData.userEmail
-        ? `\n👤 CLIENT: ${finalOrderData.userEmail}\n🔖 CODE CLIENT: ${finalOrderData.userCode || 'N/A'}`
-        : '\n👤 CLIENT: Visiteur (non connecté)';
-
-    // 🐛 CORRECTION : MESSAGE COMPLET ET BIEN FERMÉ
-    const message = `Bonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}${userInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
-
-    // === PROCESSUS DE PAIEMENT ===
-    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
+    // CHOIX DE PAIEMENT
+    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo ? `\n🎫 Réduction : ${promoInfo.discount}% appliquée` : ''}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équire)\n\n⚠️ Votre choix (1/2/3) :`;
 
     const choice = prompt(paymentChoice);
-
+    
     if (choice === '1') {
-        processWavePayment(totalFCFA, totalMRU, message, finalOrderData);
+        processWavePayment(totalFCFA, totalMRU, message);
     } else if (choice === '2') {
-        processBankilyPayment(totalMRU, message, finalOrderData);
+        processBankilyPayment(totalMRU, message);
     } else if (choice === '3') {
-        processWhatsAppPayment(message, finalOrderData);
+        processWhatsAppPayment(message);
     } else {
         showNotification('Commande annulée', 'warning');
     }
 }
-
-function processWavePayment(totalFCFA, totalMRU, message, orderData) {
+function processWavePayment(totalFCFA, totalMRU, message) {
     const waveLink = "https://pay.wave.com/m/M_sn_WWTLh5q4mXHC/c/sn/";
-
+    
     const waveMessage = `🌊 PAIEMENT WAVE SÉNÉGAL\n\n💸 Montant : ${totalFCFA} FCFA\n🔗 Lien de paiement : ${waveLink}\n\n📱 Instructions :\n1. Cliquez sur le lien Wave ci-dessus\n2. Confirmez le paiement de ${totalFCFA} FCFA\n\n✅ OK → Ouvrir Wave maintenant\n❌ Annuler → Retour au choix de paiement`;
-
+    
     if (confirm(waveMessage)) {
         window.open(waveLink, '_blank');
-
+        
         setTimeout(() => {
             const instructions = `📋 INSTRUCTIONS WAVE COMPLÈTES\n\nSi Wave ne s'ouvre pas automatiquement :\n\n1. COPIEZ CE LIEN :\n${waveLink}\n\n2. COLLEZ-LE dans votre navigateur\n\n3. OU ouvrez l'application Wave et :\n• Allez dans "Envoyer de l'argent"\n• Numéro : +221 76 282 11 33\n• Montant : ${totalFCFA} FCFA\n• Message : "Commande Andu-Xara"\n\n📞 Besoin d'aide ? Contactez-nous sur WhatsApp !`;
             
             if (confirm(instructions)) {
-                finaliserCommande(totalMRU, message, 'Wave', orderData);
+                finaliserCommande(totalMRU, message, 'Wave');
             } else {
                 const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Wave\n\nMontant : ${totalFCFA} FCFA\n\nDétails :\n${message}`;
                 window.open(`https://wa.me/221762821133?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
             }
         }, 1000);
-
+        
     } else {
         showNotification('Paiement Wave annulé', 'info');
     }
 }
 
-function processBankilyPayment(totalMRU, message, orderData) {
+function processBankilyPayment(totalMRU, message) {
     const bankilyMessage = `🏦 PAIEMENT BANKILY MAURITANIE\n\n💸 Montant : ${totalMRU} MRU\n📱 Numéro Bankily : +222 49 03 76 97\n\n📋 Instructions :\n1. Ouvrez l'application Bankily\n2. Allez dans "Transférer"\n3. Entrez le numéro : 49037697\n4. Montant : ${totalMRU} MRU\n5. Message : "Commande Andu-Xara"\n6. Confirmez la transaction\n\n✅ OK → J'ai effectué le transfert\n❌ Annuler → Support WhatsApp`;
-
+    
     if (confirm(bankilyMessage)) {
         const bankilyDeepLink = `bankily://transfer?phone=49037697&amount=${totalMRU}`;
         window.location.href = bankilyDeepLink;
-
+        
         setTimeout(() => {
             const finalCheck = confirm(`✅ TRANSFERT EFFECTUÉ ?\n\nAvez-vous bien effectué le transfert Bankily ?\n\n• Numéro : 49 03 76 97\n• Montant : ${totalMRU} MRU\n\n✅ OUI → Finaliser la commande\n❌ NON → Assistance WhatsApp`);
             
             if (finalCheck) {
-                finaliserCommande(totalMRU, message, 'Bankily', orderData);
+                finaliserCommande(totalMRU, message, 'Bankily');
             } else {
                 const assistanceMessage = `🆘 J'ai besoin d'aide pour le paiement Bankily\n\nMontant : ${totalMRU} MRU\n\nDétails :\n${message}`;
                 window.open(`https://wa.me/22249037697?text=${encodeURIComponent(assistanceMessage)}`, '_blank');
             }
         }, 2000);
-
+        
     } else {
         showNotification('Paiement Bankily annulé', 'info');
     }
 }
 
-function processWhatsAppPayment(message, orderData) {
+function processWhatsAppPayment(message) {
     const whatsappMessage = `💬 CONTACT WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour :\n• Confirmer votre commande\n• Choisir le mode de paiement\n• Organiser la livraison\n\n🕒 Réponse sous 5 minutes !\n\n✅ OK → Ouvrir WhatsApp maintenant\n❌ Annuler → Retour au panier`;
     
     if (confirm(whatsappMessage)) {
-        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(message)}`, '_blank');
+        const whatsappText = `Bonjour Andu-Xara ! 👋\n\nJe souhaite commander :\n\n${message}\n\nPouvez-vous m'aider pour la suite ?`;
+        window.open(`https://wa.me/22249037697?text=${encodeURIComponent(whatsappText)}`, '_blank');
         
         showNotification('✅ WhatsApp ouvert ! Notre équipe vous contactera.', 'success');
         
         setTimeout(() => {
-            finaliserCommande(orderData.total, message, 'WhatsApp', orderData);
+            finaliserCommande(0, message, 'WhatsApp');
         }, 3000);
         
     } else {
@@ -5326,73 +5200,52 @@ function processWhatsAppPayment(message, orderData) {
     }
 }
 
-function finaliserCommande(totalMRU, message, methode, orderData) {
-    const userInfo = orderData.userEmail 
-        ? `\n👤 Client: ${orderData.userEmail}\n📧 Email: ${orderData.userEmail}\n🔖 Code: ${orderData.userCode || 'N/A'}`
-        : '\n👤 Client: Visiteur (non connecté)';
-    
-    const promoInfo = orderData.appliedPromo 
-        ? `\n🎁 Code promo: ${orderData.appliedPromo.code} (-${orderData.appliedPromo.discount}%)`
-        : '';
-    
-    const confirmation = `🎉 COMMANDE CONFIRMÉE !\n\n✅ Votre commande a été enregistrée\n💳 Méthode : ${methode}\n💰 Montant : ${totalMRU} MRU${userInfo}${promoInfo}\n\n📦 Prochaines étapes :\n1. Notre équipe va vous contacter\n2. Confirmation sous 24h maximum\n3. Livraison express selon votre zone\n\n📞 Contact : +222 49 03 76 97\n\nMerci pour votre confiance ! 🤝`;
+function finaliserCommande(totalMRU, message, methode) {
+    const confirmation = `🎉 COMMANDE CONFIRMÉE !\n\n✅ Votre commande a été enregistrée\n💳 Méthode : ${methode}\n💰 Montant : ${totalMRU} MRU\n\n📦 Prochaines étapes :\n1. Notre équipe va vous contacter\n2. Confirmation sous 24h maximum\n3. Livraison express selon votre zone\n\n📞 Contact : +222 49 03 76 97\n\nMerci pour votre confiance ! 🤝`;
     
     alert(confirmation);
     
-    // === VIDER LE PANIER ===
     floatingCart = [];
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
     closeFloatingCart();
-    
-    // === RETIRER LE CODE PROMO ACTIF ===
-    if (promoSystem && promoSystem.activePromo) {
-        promoSystem.removePromo();
-    }
-    
     showNotification('🎉 Commande finalisée ! Merci pour votre achat.', 'success');
-    
-    // === LOG POUR DEBUG ===
-    console.log('📦 Commande finalisée:', {
-        total: totalMRU,
-        methode: methode,
-        user: orderData.userEmail || 'guest',
-        promo: orderData.appliedPromo || 'none',
-        products: orderData.products.length
-    });
 }
 
-function integrerFideliteAchat(totalMRU) {
+// Dans index.html - fonction pour vérifier les codes persistants
+async function verifierCodePersistant() {
     try {
-        console.log('🎯 Intégration fidélité pour achat:', totalMRU + ' MRU');
-        const pointsGagnes = Math.floor(totalMRU / 10);
-        
-        const fideliteData = JSON.parse(localStorage.getItem('anduxara_fidelite')) || {
-            points: 0,
-            niveau: 1,
-            historique: []
-        };
-        
-        fideliteData.points += pointsGagnes;
-        fideliteData.historique.push({
-            type: 'achat_reussi',
-            points: pointsGagnes,
-            montant: totalMRU,
-            date: new Date().toISOString()
-        });
-        
-        localStorage.setItem('anduxara_fidelite', JSON.stringify(fideliteData));
-        console.log(`✅ ${pointsGagnes} points fidélité ajoutés`);
-        
-        if (pointsGagnes > 0) {
-            showNotification(`🎯 ${pointsGagnes} points fidélité gagnés !`, 'success');
+        const user = firebase.auth().currentUser;
+        if (!user) return null;
+
+        // Vérifier dans Firebase si l'utilisateur a un code actif
+        const activeUsageQuery = await firebase.firestore()
+            .collection('promoUsage')
+            .where('userId', '==', user.uid)
+            .where('status', '==', 'applied')
+            .orderBy('usedAt', 'desc')
+            .limit(1)
+            .get();
+
+        if (!activeUsageQuery.empty) {
+            const lastUsage = activeUsageQuery.docs[0].data();
+            const usageDate = lastUsage.usedAt?.toDate();
+            const now = new Date();
+            const diffHours = (now - usageDate) / (1000 * 60 * 60);
+
+            // Code valide si utilisé dans les 24h
+            if (diffHours < 24) {
+                return {
+                    code: lastUsage.promoCode,
+                    discount: lastUsage.discount,
+                    persistent: true
+                };
+            }
         }
-        
-        return pointsGagnes;
     } catch (error) {
-        console.error('Erreur intégration fidélité:', error);
-        return 0;
+        console.error('Erreur vérification code persistant:', error);
     }
+    return null;
 }
 
 // ===== FONCTION NOTIFICATION =====
@@ -5758,6 +5611,40 @@ function handleDeliveryKeypress(event) {
         checkDelivery();
     }
 }
+// ===== GÉNÉRATION DU REÇU =====
+function genererRecuCommande(products, total, promoInfo = null) {
+    console.log('🧾 Génération du reçu...');
+    
+    let recu = `=== ANDU-XARA - REÇU DE COMMANDE ===\n\n`;
+    recu += `📅 Date: ${new Date().toLocaleString()}\n`;
+    recu += `🆔 Commande: #${Date.now().toString().slice(-6)}\n\n`;
+    
+    recu += `📦 PRODUITS COMMANDÉS:\n`;
+    recu += '─'.repeat(40) + '\n';
+    
+    products.forEach((item, index) => {
+        recu += `${index + 1}. ${item.name}\n`;
+        recu += `   Quantité: ${item.quantity} x ${item.promoPrice || item.price} MRU\n`;
+        recu += `   Sous-total: ${(item.promoPrice || item.price) * item.quantity} MRU\n\n`;
+    });
+    
+    recu += '─'.repeat(40) + '\n';
+    
+    if (promoInfo) {
+        recu += `🎫 CODE PROMO: ${promoInfo.code}\n`;
+        recu += `💰 RÉDUCTION: ${promoInfo.discount}%\n`;
+        recu += `🎁 ORIGINE: Promotion Andu-Xara\n\n`;
+    }
+    
+    recu += `💰 TOTAL: ${total} MRU\n`;
+    recu += `💳 Statut: En attente de paiement\n\n`;
+    recu += `📞 Contact: +222 49 03 76 97\n`;
+    recu += `📧 Email: anduxara2408@gmail.com\n\n`;
+    recu += `Merci pour votre confiance ! 🛍️`;
+    
+    return recu;
+}
+
 // ===== ASSISTANT IA INTELLIGENT ANDU-XARA =====
 class IntelligentAssistant {
     constructor() {
@@ -6124,217 +6011,6 @@ function handleAIKeypress(event) {
     if (event.key === 'Enter') {
         sendAIMessage();
     }
-}
-// ===== SYSTÈME DE PARRAINAGE ET RÉCOMPENSES =====
-class UserManager {
-    constructor() {
-        this.userData = this.loadUserData();
-        this.init();
-    }
-
-    loadUserData() {
-        return JSON.parse(localStorage.getItem('anduxara_user_data')) || {
-            userCode: this.generateUserCode(),
-            rewards: 0,
-            parrainCode: null,
-            hasUsedParrainage: false,
-            parrains: [],
-            filleuls: [],
-            historique: []
-        };
-    }
-
-    generateUserCode() {
-        return 'AX' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 3).toUpperCase();
-    }
-
-    init() {
-        // Vérifier si un code parrain est présent dans l'URL
-        this.checkURLParrain();
-        this.saveUserData();
-        this.updateRewardsDisplay();
-    }
-
-    checkURLParrain() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const parrainCode = urlParams.get('parrain');
-        
-        if (parrainCode && !this.userData.hasUsedParrainage) {
-            this.applyParrainage(parrainCode);
-        }
-    }
-
-    applyParrainage(parrainCode) {
-        if (this.userData.hasUsedParrainage) {
-            console.log('❌ Parrainage déjà utilisé');
-            return;
-        }
-
-        this.userData.parrainCode = parrainCode;
-        this.userData.hasUsedParrainage = true;
-        this.userData.rewards += 50; // 50 MRU de bonus
-        this.userData.historique.push({
-            type: 'bonus_parrainage',
-            montant: 50,
-            raison: 'Bonus parrainage utilisateur ' + parrainCode,
-            date: new Date().toISOString()
-        });
-
-        this.saveUserData();
-        this.updateRewardsDisplay();
-        
-        console.log('✅ Bonus parrainage appliqué: 50 MRU');
-        showNotification('🎉 Bonus de 50 MRU obtenu grâce au parrainage !');
-    }
-
-    addFilleul(filleulCode) {
-        this.userData.filleuls.push({
-            code: filleulCode,
-            date: new Date().toISOString(),
-            statut: 'actif'
-        });
-        
-        this.userData.rewards += 30; // 30 MRU par filleul
-        this.userData.historique.push({
-            type: 'bonus_filleul',
-            montant: 30,
-            raison: 'Nouveau filleul ' + filleulCode,
-            date: new Date().toISOString()
-        });
-
-        this.saveUserData();
-        this.updateRewardsDisplay();
-        
-        console.log('✅ Nouveau filleul:', filleulCode, '+30 MRU');
-    }
-
-    getUserStats() {
-        return {
-            rewards: this.userData.rewards,
-            userCode: this.userData.userCode,
-            parrainCode: this.userData.parrainCode,
-            hasUsedParrainage: this.userData.hasUsedParrainage,
-            totalFilleuls: this.userData.filleuls.length,
-            totalParrains: this.userData.parrains.length
-        };
-    }
-
-    getParrainLink() {
-        return window.location.origin + window.location.pathname + '?parrain=' + this.userData.userCode;
-    }
-
-    saveUserData() {
-        localStorage.setItem('anduxara_user_data', JSON.stringify(this.userData));
-    }
-
-    updateRewardsDisplay() {
-        const display = document.getElementById('rewards-display');
-        const amount = document.getElementById('rewards-amount');
-        const code = document.getElementById('user-code');
-        const reductionCumulee = document.getElementById('reduction-cumulee');
-
-        if (display && amount && code) {
-            amount.textContent = this.userData.rewards + ' MRU';
-            code.textContent = 'Code: ' + this.userData.userCode;
-            display.style.display = 'block';
-        }
-
-        if (reductionCumulee) {
-            reductionCumulee.textContent = this.userData.rewards + ' MRU';
-        }
-
-        // Afficher un message de bienvenue si c'est un nouveau parrainage
-        if (this.userData.hasUsedParrainage && this.userData.rewards > 0) {
-            const recentBonus = this.userData.historique.find(h => 
-                h.type === 'bonus_parrainage' && 
-                new Date() - new Date(h.date) < 5000
-            );
-            
-            if (recentBonus) {
-                setTimeout(() => {
-                    showNotification(`🎉 BIENVENUE ! Vous avez reçu ${recentBonus.montant} MRU grâce au parrainage !`);
-                }, 1000);
-            }
-        }
-    }
-}
-
-// ===== FONCTIONS GLOBALES POUR LE PARRAINAGE =====
-let userManager;
-
-function initUserManager() {
-    if (!userManager) {
-        userManager = new UserManager();
-    }
-    return userManager;
-}
-
-function debugParrainages() {
-    console.log('🔍 DEBUG PARRAINAGES');
-    console.log('UserManager:', userManager);
-    console.log('UserData:', userManager ? userManager.userData : 'Non initialisé');
-    console.log('LocalStorage:', localStorage.getItem('anduxara_user_data'));
-    
-    if (userManager) {
-        const stats = userManager.getUserStats();
-        alert(`🔍 DEBUG PARRAINAGES\n\n` +
-              `💰 Récompenses: ${stats.rewards} MRU\n` +
-              `👤 Votre code: ${stats.userCode}\n` +
-              `👥 Filleuls: ${stats.totalFilleuls}\n` +
-              `📊 Parrain utilisé: ${stats.hasUsedParrainage ? 'Oui' : 'Non'}\n\n` +
-              `🔗 Lien parrain: ${userManager.getParrainLink()}`);
-    } else {
-        alert('❌ UserManager non initialisé');
-    }
-}
-
-function copyParrainLink() {
-    if (!userManager) {
-        userManager = new UserManager();
-    }
-    
-    const link = userManager.getParrainLink();
-    navigator.clipboard.writeText(link).then(() => {
-        showNotification('✅ Lien de parrainage copié !');
-    }).catch(() => {
-        // Fallback pour les navigateurs sans clipboard API
-        const tempInput = document.createElement('input');
-        tempInput.value = link;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        showNotification('✅ Lien de parrainage copié !');
-    });
-}
-
-function showParrainInfo() {
-    if (!userManager) {
-        userManager = new UserManager();
-    }
-    
-    const stats = userManager.getUserStats();
-    const info = `
-        🎯 SYSTÈME DE PARRAINAGE ANDU-XARA
-        
-        💰 VOS RÉCOMPENSES : ${stats.rewards} MRU
-        🔑 VOTRE CODE : ${stats.userCode}
-        
-        👥 STATISTIQUES :
-        • Filleuls actifs : ${stats.totalFilleuls}
-        • Parrainage utilisé : ${stats.hasUsedParrainage ? 'Oui' : 'Non'}
-        
-        💎 COMMENT ÇA MARCHE :
-        • Parrainez un ami : +30 MRU
-        • Utilisez un parrain : +50 MRU
-        • Cumulez jusqu'à 500 MRU
-        
-        🔗 VOTRE LIEN : ${userManager.getParrainLink()}
-        
-        🎁 Utilisez vos MRU sur votre prochaine commande !
-    `;
-    
-    alert(info.replace(/ {2,}/g, ''));
 }
 // ===== TABLEAU DE BORD CLIENT INTELLIGENT =====
 class ClientDashboard {
@@ -7583,14 +7259,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Charger le panier depuis le localStorage
     floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
     
-    // Charger le code promo actif
-    const savedPromo = localStorage.getItem('anduxara_active_promo');
-    if (savedPromo) {
-        const promoData = JSON.parse(savedPromo);
-        activePromoCode = promoData.code;
-        promoDiscount = promoData.discount;
-        updateActivePromoDisplay();
-    }
+    // NETTOYER LES ANCIENNES DONNÉES PARRAINAGE
+    localStorage.removeItem('anduxara_user_data');
+    localStorage.removeItem('anduxara_fidelite');
+    localStorage.removeItem('anduxara_active_promo');
+    // RÉINITIALISER LES PRIX SANS RÉDUCTION
+    floatingCart.forEach(item => {
+        item.promoPrice = item.price;
+    });
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     
     // Mettre à jour l'affichage initial du panier
     updateFloatingCart();
@@ -7628,10 +7305,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
     
     // ===== INITIALISATION SYSTÈME DE PARRAINAGE =====
-    console.log('💎 Initialisation du système de parrainage...');
-    userManager = initUserManager();
-    console.log('✅ Système de parrainage activé');
-    
     // ===== INITIALISATION SYSTÈME DE LIVRAISON =====
     console.log('🚚 Initialisation du système de livraison...');
     
@@ -7791,61 +7464,752 @@ window.addEventListener('resize', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight);
 
 </script>
+    <!-- PWA Installation -->
+    <script src="js/pwa-install.js"></script>
 <script>
-// 🐛 DEBUG TEMPORAIRE - Processus de commande
-console.log('🐛 Debug commande activé');
+// ===== FONCTIONS POUR LE SYSTÈME DE PARRAINAGE =====
 
-// Surcharger processFloatingCheckout pour voir ce qui se passe
-const originalProcessCheckout = window.processFloatingCheckout;
-window.processFloatingCheckout = async function() {
-    console.log('🔍 processFloatingCheckout DÉBUT');
+// Vérifier les codes promo au chargement
+function verifierCodePromoAuChargement() {
+    const promoActif = localStorage.getItem('anduxara_promo_utilise');
+    const promoData = localStorage.getItem('anduxara_active_promo');
     
-    try {
-        // Vérifier le panier avant calcul
-        console.log('📦 Panier avant calcul:', JSON.parse(JSON.stringify(floatingCart)));
+    if (promoActif === 'true' && promoData) {
+        try {
+            const promo = JSON.parse(promoData);
+            console.log('🎫 Code promo actif détecté:', promo.code, '-', promo.discount + '%');
+            
+            // Mettre à jour l'affichage
+            const display = document.getElementById('active-promo-display');
+            const codeElement = document.getElementById('active-promo-code');
+            
+            if (display && codeElement) {
+                display.style.display = 'block';
+                codeElement.textContent = `${promo.code} (-${promo.discount}%)`;
+            }
+            
+            // Appliquer la réduction au panier
+            if (typeof updateFloatingCart === 'function') {
+                setTimeout(updateFloatingCart, 500);
+            }
+            
+        } catch (error) {
+            console.error('Erreur lecture promo actif:', error);
+        }
+    }
+}
+
+// Initialiser au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(verifierCodePromoAuChargement, 1000);
+});
+</script>
+<script>
+// ===== SYSTÈME COMPLET DE GESTION DES CODES PROMO =====
+
+// ===== RÉCEPTION DES CODES DEPUIS REDUCTIONS.HTML =====
+function receivePromoCodeFromReductions() {
+    console.log('🎯 Réception des codes promo - Démarrage...');
+    
+    // Méthode 1: Récupérer depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeFromURL = urlParams.get('codePromo');
+    
+    if (codeFromURL) {
+        console.log('📥 Code reçu depuis URL:', codeFromURL);
+        processIncomingPromoCode(codeFromURL);
+        cleanURL();
+        return;
+    }
+    
+    // Méthode 2: Récupérer depuis sessionStorage
+    const codeFromSession = sessionStorage.getItem('anduxara_promo_code');
+    if (codeFromSession) {
+        console.log('📥 Code reçu depuis sessionStorage:', codeFromSession);
+        processIncomingPromoCode(codeFromSession);
         
-        // Calcul manuel de vérification
-        const manualTotal = floatingCart.reduce((sum, item) => {
-            const itemPrice = item.promoPrice || item.price;
-            const itemTotal = itemPrice * item.quantity;
-            console.log(`🧮 ${item.name}: ${itemPrice} × ${item.quantity} = ${itemTotal}`);
-            return sum + itemTotal;
-        }, 0);
+        // Nettoyer après utilisation
+        sessionStorage.removeItem('anduxara_promo_code');
+        sessionStorage.removeItem('anduxara_promo_timestamp');
+        return;
+    }
+    
+    // Méthode 3: Écouter les messages entre pages
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'APPLY_PROMO_CODE') {
+            const code = event.data.code;
+            console.log('📨 Code reçu via postMessage:', code);
+            processIncomingPromoCode(code);
+        }
+    });
+    
+    console.log('🎯 Système de réception des codes promo activé');
+}
+
+// Traiter un code promo entrant
+function processIncomingPromoCode(code) {
+    if (!code) return;
+    
+    console.log('🔄 Traitement du code entrant:', code);
+    
+    // Sauvegarder temporairement
+    localStorage.setItem('anduxara_promo_code', code);
+    localStorage.setItem('anduxara_promo_timestamp', Date.now());
+    
+    // Appliquer automatiquement après un court délai
+    setTimeout(() => {
+        applyPromoCodeAutomatically(code);
         
-        console.log('💰 Total manuel:', manualTotal);
+        // Afficher une notification
+        showNotification(`🎉 Code "${code}" appliqué automatiquement !`);
         
-        // Appeler la fonction originale
-        const result = await originalProcessCheckout.apply(this, arguments);
-        console.log('✅ processFloatingCheckout FIN - Succès');
-        return result;
+    }, 1000);
+}
+
+// ===== FONCTIONS DE GESTION DES CODES PROMO =====
+
+// Fonction pour récupérer le code depuis l'URL
+function getPromoCodeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('codePromo');
+}
+
+// Fonction pour récupérer depuis localStorage
+function getPromoCodeFromStorage() {
+    const savedCode = localStorage.getItem('anduxara_promo_code');
+    const savedTime = localStorage.getItem('anduxara_promo_timestamp');
+    
+    // Vérifier si le code est encore valide (30 minutes)
+    if (savedCode && savedTime && (Date.now() - savedTime < 30 * 60 * 1000)) {
+        return savedCode;
+    }
+    return null;
+}
+
+// Fonction pour appliquer automatiquement un code promo
+function applyPromoCodeAutomatically(code) {
+    console.log('🎯 Application automatique du code:', code);
+    
+    if (!code) return;
+    
+    // Remplir le champ et appliquer
+    const promoInput = document.getElementById('promoInput');
+    if (promoInput) {
+        promoInput.value = code;
+        validateAndApplyPromo();
+    }
+}
+
+// Fonction pour valider et appliquer un code promo
+    const codeInput = document.getElementById('promoInput');
+    const messageElement = document.getElementById('promoMessage');
+    
+    if (!codeInput || !messageElement) {
+        console.error('❌ Éléments promo non trouvés');
+        return;
+    }
+    
+    const code = codeInput.value.trim().toUpperCase();
+    
+    // Codes valides avec leurs réductions
+    const validCodes = {
+        'TEST15': 15,
+        'WELCOME10': 10,
+        'ANDU20': 20,
+        'SONINKE25': 25,
+        'AFRICA15': 15,
+        'MODE10': 10,
+        'BIENVENUE15': 15,
+        'ANDU2025': 20,
+        'SOLDE30': 30,
+        'PREMIUM25': 25
+    };
+    
+    if (validCodes[code]) {
+        const discount = validCodes[code];
         
-    } catch (error) {
-        console.error('❌ processFloatingCheckout ERREUR:', error);
-        throw error;
+        // Sauvegarder le code actif
+        const promoData = {
+            code: code,
+            discount: discount,
+            appliedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('anduxara_active_promo', JSON.stringify(promoData));
+        localStorage.setItem('anduxara_promo_utilise', 'true');
+        
+        // Mettre à jour l'affichage
+        updateActivePromoDisplay();
+        
+        // Appliquer la réduction au panier existant
+        applyDiscountToCart(discount);
+        
+        messageElement.innerHTML = `<span style="color: #27ae60;">✅ Code "${code}" appliqué ! ${discount}% de réduction</span>`;
+        messageElement.style.display = 'block';
+        
+        console.log(`🎉 Réduction de ${discount}% appliquée avec le code ${code}`);
+        
+    } else {
+        messageElement.innerHTML = `<span style="color: #e74c3c;">❌ Code invalide ou expiré</span>`;
+        messageElement.style.display = 'block';
+    }
+}
+
+// Fonction pour mettre à jour l'affichage du code actif
+function updateActivePromoDisplay() {
+    const display = document.getElementById('active-promo-display');
+    const codeElement = document.getElementById('active-promo-code');
+    
+    if (!display || !codeElement) return;
+    
+    const promoData = localStorage.getItem('anduxara_active_promo');
+    
+    if (promoData) {
+        try {
+            const promo = JSON.parse(promoData);
+            display.style.display = 'block';
+            codeElement.textContent = `${promo.code} (-${promo.discount}%)`;
+        } catch (error) {
+            console.error('Erreur lecture promo:', error);
+        }
+    } else {
+        display.style.display = 'none';
+    }
+}
+
+// Fonction pour appliquer la réduction au panier
+function applyDiscountToCart(discount) {
+    floatingCart.forEach(item => {
+        // Calculer le nouveau prix promo
+        const discountAmount = (item.price * discount) / 100;
+        item.promoPrice = Math.round(item.price - discountAmount);
+    });
+    
+    // Sauvegarder le panier mis à jour
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Mettre à jour l'affichage du panier
+    if (typeof updateFloatingCart === 'function') {
+        updateFloatingCart();
+    }
+    
+    console.log(`💰 Réduction de ${discount}% appliquée au panier`);
+}
+
+// Fonction pour retirer le code promo
+function removePromoFromCart() {
+    // Réinitialiser les prix dans le panier
+    floatingCart.forEach(item => {
+        item.promoPrice = item.price;
+    });
+    
+    // Sauvegarder le panier
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Supprimer les données promo
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_promo_utilise');
+    
+    // Mettre à jour l'affichage
+    updateActivePromoDisplay();
+    updateFloatingCart();
+    
+    // Mettre à jour le message
+    const messageElement = document.getElementById('promoMessage');
+    if (messageElement) {
+        messageElement.innerHTML = `<span style="color: #666;">🔓 Code promo retiré</span>`;
+        setTimeout(() => {
+            messageElement.style.display = 'none';
+        }, 3000);
+    }
+    
+    console.log('🗑️ Code promo retiré');
+}
+
+// Vérifier et appliquer les codes promo au chargement
+function initPromoSystem() {
+    console.log('🎯 Initialisation du système promo...');
+    
+    // Vérifier l'URL d'abord
+    const urlCode = getPromoCodeFromURL();
+    if (urlCode) {
+        console.log('📥 Code détecté dans URL:', urlCode);
+        applyPromoCodeAutomatically(urlCode);
+        
+        // Nettoyer l'URL
+        cleanURL();
+        return;
+    }
+    
+    // Vérifier le localStorage ensuite
+    const storageCode = getPromoCodeFromStorage();
+    if (storageCode) {
+        console.log('📥 Code détecté dans storage:', storageCode);
+        applyPromoCodeAutomatically(storageCode);
+        
+        // Nettoyer le storage après utilisation
+        localStorage.removeItem('anduxara_promo_code');
+        localStorage.removeItem('anduxara_promo_timestamp');
+        return;
+    }
+    
+    // Vérifier s'il y a un code actif sauvegardé
+    const activePromo = localStorage.getItem('anduxara_active_promo');
+    if (activePromo) {
+        console.log('📥 Code actif déjà présent');
+        updateActivePromoDisplay();
+    }
+}
+
+// Nettoyer l'URL après utilisation du code
+function cleanURL() {
+    const cleanURL = window.location.pathname;
+    window.history.replaceState({}, document.title, cleanURL);
+}
+
+// ===== FONCTION POUR APPLIQUER LA RÉDUCTION DANS LE PANIER =====
+function retirerReduction() {
+    console.log('🗑️ Retrait de la réduction...');
+    
+    // Supprimer les données de promotion
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_cart_promo');
+    
+    // Supprimer le badge
+    const badge = document.getElementById('badge-reduction-active');
+    if (badge) {
+        badge.remove();
+    }
+    
+    // Restaurer les prix originaux dans le panier
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    panier.forEach(produit => {
+        if (produit.prixOriginal) {
+            produit.prix = produit.prixOriginal;
+            delete produit.prixReduit;
+            delete produit.reduction;
+            delete produit.codePromo;
+            // Ne pas supprimer prixOriginal pour pouvoir le réutiliser
+        }
+    });
+    
+    localStorage.setItem('panier', JSON.stringify(panier));
+    
+    // Rafraîchir l'affichage du panier
+    if (typeof afficherPanier === 'function') {
+        afficherPanier();
+    }
+    
+    // Afficher une notification
+    if (typeof showNotification === 'function') {
+        showNotification('🔓 Réduction retirée', 'success');
+    } else {
+        alert('🔓 Réduction retirée');
+    }
+    
+    console.log('✅ Réduction retirée');
+}
+
+// Fonction pour formater le prix
+function formatPrix(prix) {
+    return new Intl.NumberFormat('fr-FR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(prix);
+}
+
+// Modifier la fonction afficherPanier existante pour inclure les réductions
+function afficherPanierAvecReductions() {
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    const panierContainer = document.getElementById('panier');
+    const totalElement = document.getElementById('total-panier');
+    
+    let total = 0;
+    let totalOriginal = 0;
+    let reductionActive = false;
+    let discount = 0;
+    let codePromo = '';
+    
+    // Vérifier si une réduction est active
+    const promoData = localStorage.getItem('anduxara_active_promo');
+    if (promoData) {
+        try {
+            const promo = JSON.parse(promoData);
+            reductionActive = true;
+            discount = promo.discount;
+            codePromo = promo.code;
+        } catch (error) {
+            console.error('Erreur parsing promo data:', error);
+        }
+    }
+    
+    if (panier.length === 0) {
+        if (panierContainer) {
+            panierContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>Votre panier est vide</p>
+                </div>
+            `;
+        }
+        if (totalElement) {
+            totalElement.textContent = '0 MRU';
+        }
+        return;
+    }
+    
+    let html = '';
+    
+    panier.forEach((produit, index) => {
+        // Calculer les prix
+        let prixUnitaire = produit.prix;
+        let sousTotal = prixUnitaire * produit.quantite;
+        
+        // Si réduction active et prix original disponible
+        if (reductionActive && produit.prixOriginal) {
+            prixUnitaire = produit.prixReduit || produit.prix;
+            sousTotal = prixUnitaire * produit.quantite;
+            totalOriginal += produit.prixOriginal * produit.quantite;
+        } else {
+            totalOriginal += sousTotal;
+            // Si pas de prix original, le sauvegarder
+            if (!produit.prixOriginal) {
+                produit.prixOriginal = produit.prix;
+            }
+        }
+        
+        total += sousTotal;
+        
+        html += `
+            <div class="panier-item" style="border-bottom: 1px solid #eee; padding: 15px 0; display: flex; align-items: center; justify-content: space-between;">
+                <div style="flex: 1;">
+                    <strong>${produit.nom}</strong>
+                    <div style="color: #666; font-size: 0.9rem;">
+                        Quantité: ${produit.quantite}
+                    </div>
+                    <div style="margin-top: 5px;">
+                        ${reductionActive && produit.prixOriginal && produit.prixOriginal !== prixUnitaire ? `
+                            <span style="text-decoration: line-through; color: #999; margin-right: 8px;">
+                                ${formatPrix(produit.prixOriginal)} MRU
+                            </span>
+                        ` : ''}
+                        <span style="color: #2c3e50; font-weight: bold;">
+                            ${formatPrix(prixUnitaire)} MRU
+                        </span>
+                        ${reductionActive && produit.prixOriginal && produit.prixOriginal !== prixUnitaire ? `
+                            <span style="color: #27ae60; font-size: 0.8rem; margin-left: 5px;">
+                                (-${discount}%)
+                            </span>
+                        ` : ''}
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong>${formatPrix(sousTotal)} MRU</strong>
+                    <button onclick="supprimerDuPanier(${index})" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-left: 10px; cursor: pointer;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    if (panierContainer) {
+        panierContainer.innerHTML = html;
+    }
+    
+    if (totalElement) {
+        if (reductionActive && totalOriginal > total) {
+            totalElement.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="text-decoration: line-through; color: #999; font-size: 0.9rem;">
+                        ${formatPrix(totalOriginal)} MRU
+                    </div>
+                    <div style="color: #27ae60; font-weight: bold; font-size: 1.2rem;">
+                        ${formatPrix(total)} MRU
+                    </div>
+                    <div style="color: #27ae60; font-size: 0.8rem;">
+                        Économie: ${formatPrix(totalOriginal - total)} MRU • Code: ${codePromo}
+                    </div>
+                </div>
+            `;
+        } else {
+            totalElement.textContent = formatPrix(total) + ' MRU';
+        }
+    }
+}
+
+// Surcharger la fonction afficherPanier existante
+if (typeof afficherPanier === 'function') {
+    // Sauvegarder l'ancienne fonction
+    const ancienneAfficherPanier = afficherPanier;
+    
+    // Remplacer par la nouvelle version
+    afficherPanier = function() {
+        afficherPanierAvecReductions();
+    };
+} else {
+    // Si la fonction n'existe pas, la créer
+    function afficherPanier() {
+        afficherPanierAvecReductions();
+    }
+}
+
+// Vérifier la synchronisation au chargement de la page
+function verifierSynchronisationPromo() {
+    console.log('🔍 Vérification synchronisation promo...');
+    
+    // Vérifier si on vient de reductions.html avec un code
+    const urlParams = new URLSearchParams(window.location.search);
+    const codePromo = urlParams.get('codePromo');
+    
+    if (codePromo) {
+        console.log('🎯 Code promo détecté dans URL:', codePromo);
+        // Nettoyer l'URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // Vérifier et appliquer les réductions existantes
+    setTimeout(() => {
+        initialiserReductionsPanier();
+    }, 1000);
+}
+
+// Initialiser au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation du système de réductions...');
+    
+    // Vérifier la synchronisation des codes promo
+    verifierSynchronisationPromo();
+    
+    // Réappliquer la réduction si le panier change
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // Re-vérifier les réductions si le panier change
+                initialiserReductionsPanier();
+            }
+        });
+    });
+    
+    // Observer les changements dans le panier
+    const panierContainer = document.getElementById('panier');
+    if (panierContainer) {
+        observer.observe(panierContainer, { childList: true, subtree: true });
+    }
+});
+
+// Exposer les fonctions globalement
+window.retirerReduction = retirerReduction;
+window.appliquerReductionPanier = appliquerReductionPanier;
+
+// ===== METTRE À JOUR LE PANIER AVEC RÉDUCTION =====
+function mettreAJourPanierAvecReduction(discount) {
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    
+    if (panier.length > 0) {
+        let totalOriginal = 0;
+        let totalReduit = 0;
+        
+        panier.forEach(produit => {
+            // Sauvegarder le prix original
+            if (!produit.prixOriginal) {
+                produit.prixOriginal = produit.prix;
+            }
+            
+            // Calculer le prix réduit
+            produit.prixReduit = produit.prixOriginal * (1 - discount / 100);
+            produit.prix = produit.prixReduit;
+            produit.reduction = discount;
+            
+            totalOriginal += produit.prixOriginal * produit.quantite;
+            totalReduit += produit.prixReduit * produit.quantite;
+        });
+        
+        // Sauvegarder le panier mis à jour
+        localStorage.setItem('panier', JSON.stringify(panier));
+        
+        // Mettre à jour l'affichage du panier
+        if (typeof afficherPanier === 'function') {
+            afficherPanier();
+        }
+        
+        console.log('💰 Panier mis à jour avec réduction:', discount + '%');
+        console.log('📊 Total original:', totalOriginal, 'Total réduit:', totalReduit);
+    }
+}
+
+// ===== AFFICHER LE BADGE DE RÉDUCTION =====
+function afficherBadgeReduction(codeActif) {
+    // Supprimer l'ancien badge s'il existe
+    const ancienBadge = document.getElementById('badge-reduction-active');
+    if (ancienBadge) {
+        ancienBadge.remove();
+    }
+    
+    // Créer le nouveau badge
+    const badge = document.createElement('div');
+    badge.id = 'badge-reduction-active';
+    badge.innerHTML = `
+        <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 10px 15px; border-radius: 8px; margin: 10px 0; text-align: center; box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);">
+            🎉 RÉDUCTION ACTIVE : <strong>${codeActif.code}</strong> (-${codeActif.discount}%)
+            <br><small>${codeActif.description || 'Code promo appliqué'}</small>
+            <button onclick="retirerReduction()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 4px 8px; border-radius: 4px; margin-left: 10px; cursor: pointer; font-size: 12px;">
+                ❌ Retirer
+            </button>
+        </div>
+    `;
+    
+    // Ajouter le badge en haut de la page
+    const header = document.querySelector('header') || document.body;
+    header.insertAdjacentElement('afterend', badge);
+}
+
+// ===== RETIRER LA RÉDUCTION =====
+function retirerReduction() {
+    console.log('🗑️ Retrait de la réduction...');
+    
+    // Supprimer les données de promotion
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_cart_promo');
+    
+    // Supprimer le badge
+    const badge = document.getElementById('badge-reduction-active');
+    if (badge) {
+        badge.remove();
+    }
+    
+    // Restaurer les prix originaux
+    const prixElements = document.querySelectorAll('[data-original-price]');
+    prixElements.forEach(element => {
+        const prixOriginal = element.getAttribute('data-original-price');
+        element.textContent = prixOriginal;
+        element.removeAttribute('data-original-price');
+    });
+    
+    // Mettre à jour le panier sans réduction
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    panier.forEach(produit => {
+        if (produit.prixOriginal) {
+            produit.prix = produit.prixOriginal;
+            delete produit.prixReduit;
+            delete produit.reduction;
+            delete produit.prixOriginal;
+        }
+    });
+    
+    localStorage.setItem('panier', JSON.stringify(panier));
+    
+    // Rafraîchir l'affichage du panier
+    if (typeof afficherPanier === 'function') {
+        afficherPanier();
+    }
+    
+    // Afficher une notification
+    if (typeof showNotification === 'function') {
+        showNotification('🔓 Réduction retirée', 'success');
+    } else {
+        alert('🔓 Réduction retirée');
+    }
+    
+    console.log('✅ Réduction retirée');
+}
+
+// ===== FORMATER LE PRIX =====
+function formatPrix(prix) {
+    return new Intl.NumberFormat('fr-FR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(prix);
+}
+
+// ===== VÉRIFIER LA SYNCHRONISATION AU CHARGEMENT =====
+function verifierSynchronisationPromo() {
+    console.log('🔍 Vérification synchronisation promo...');
+    
+    // Vérifier si on vient de reductions.html avec un code
+    const urlParams = new URLSearchParams(window.location.search);
+    const codePromo = urlParams.get('codePromo');
+    
+    if (codePromo) {
+        console.log('🎯 Code promo détecté dans URL:', codePromo);
+        // Nettoyer l'URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // Vérifier et appliquer les réductions existantes
+    setTimeout(() => {
+        appliquerReductionPanier();
+    }, 1000);
+}
+
+// ===== MODIFICATIONS À LA FONCTION DE CHECKOUT =====
+
+// Surcharger la fonction processFloatingCheckout pour inclure les infos promo
+const originalProcessFloatingCheckout = window.processFloatingCheckout;
+window.processFloatingCheckout = function() {
+    // Récupérer les infos promo avant de procéder
+    const promoData = localStorage.getItem('anduxara_active_promo');
+    if (promoData) {
+        try {
+            const promo = JSON.parse(promoData);
+            localStorage.setItem('commande_promo_info', JSON.stringify({
+                code: promo.code,
+                discount: promo.discount,
+                appliedAt: promo.appliedAt
+            }));
+            console.log('🎫 Info promo sauvegardée pour commande:', promo.code);
+        } catch (error) {
+            console.error('Erreur sauvegarde info promo:', error);
+        }
+    }
+    
+    // Appeler la fonction originale
+    if (originalProcessFloatingCheckout) {
+        originalProcessFloatingCheckout();
     }
 };
 
-// Test manuel de la commande
-window.testCommande = function() {
-    console.log('🧪 Test manuel de commande');
+// ===== INITIALISATION COMPLÈTE =====
+function initCompletePromoSystem() {
+    // 1. Démarrer la réception des codes
+    receivePromoCodeFromReductions();
     
-    // Simuler un panier
-    floatingCart = [{
-        name: 'TEST PRODUIT',
-        category: 'test',
-        price: 1000,
-        promoPrice: 1000,
-        quantity: 2,
-        addedAt: new Date().toISOString()
-    }];
+    // 2. Initialiser le système promo
+    setTimeout(initPromoSystem, 1500);
+    setTimeout(updateActivePromoDisplay, 1000);
     
-    console.log('📦 Panier de test:', floatingCart);
-    
-    // Lancer le processus de commande
-    processFloatingCheckout();
-};
+    console.log('✅ Système promo complet initialisé');
+}
 
-console.log('🐛 Tapez testCommande() dans la console pour tester');
+// Démarrer au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    initCompletePromoSystem();
+});
+
+// Quand l'utilisateur finalise sa commande
+async function finaliserCommande() {
+    // ... vos validations existantes ...
+    
+    // Gestion du code promo
+    const promoData = localStorage.getItem('anduxara_active_promo');
+    if (promoData) {
+        const promo = JSON.parse(promoData);
+        const user = firebase.auth().currentUser;
+        
+        if (user && promo.persistent) {
+            await marquerCodeUtilise(user.uid, promo.code);
+        }
+        
+        // Nettoyer le localStorage
+        localStorage.removeItem('anduxara_active_promo');
+        localStorage.removeItem('anduxara_cart_promo');
+    }
+    
+    // Continuer avec le processus de paiement...
+}
+
+<!-- Dans la section scripts -->
+<script src="js/secure/promo-utils.js"></script>
 </script>
 </body>
 </html>
