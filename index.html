@@ -2344,6 +2344,55 @@ footer {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
+/* ===== CORRECTION URGENTE PANIER MOBILE CENTRÉ ===== */
+@media (max-width: 768px) {
+    .floating-cart {
+        position: fixed;
+        bottom: 20px;
+        right: 50% !important;
+        transform: translateX(50%) !important;
+        z-index: 1000;
+    }
+    
+    .cart-panel {
+        position: fixed !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+        bottom: 70px !important;
+        width: 90vw !important;
+        max-width: 350px !important;
+        margin: 0 auto !important;
+        z-index: 1001 !important;
+    }
+    
+    .cart-toggle {
+        transform: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-cart {
+        bottom: 15px;
+        right: 50% !important;
+        transform: translateX(50%) !important;
+    }
+    
+    .cart-panel {
+        width: 95vw !important;
+        max-width: 320px !important;
+        bottom: 65px !important;
+    }
+}
+
+/* Correction pour très petits écrans */
+@media (max-width: 360px) {
+    .cart-panel {
+        width: 98vw !important;
+        max-width: 300px !important;
+    }
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -5147,32 +5196,33 @@ function closeFloatingCart() {
     }
 }
 
-// ===== CORRECTION REDIMENSIONNEMENT PANIER MOBILE =====
+// ===== CORRECTION SIMPLIFIÉE PANIER MOBILE =====
 function adjustCartForMobile() {
+    const cart = document.getElementById('floating-cart');
     const cartPanel = document.querySelector('.cart-panel');
     const isMobile = window.innerWidth <= 768;
     
-    if (cartPanel && isMobile) {
-        // Forcer le centrage sur mobile
-        cartPanel.style.left = '50%';
-        cartPanel.style.transform = 'translateX(-50%)';
-        cartPanel.style.right = 'auto';
+    if (cart && isMobile) {
+        // Centrer le bouton panier
+        cart.style.right = '50%';
+        cart.style.transform = 'translateX(50%)';
         
-        // Ajuster la largeur
-        const viewportWidth = window.innerWidth;
-        if (viewportWidth <= 480) {
-            cartPanel.style.width = '95vw';
-            cartPanel.style.maxWidth = '320px';
-        } else {
-            cartPanel.style.width = '90vw';
-            cartPanel.style.maxWidth = '350px';
+        // Centrer le panneau
+        if (cartPanel) {
+            cartPanel.style.left = '50%';
+            cartPanel.style.transform = 'translateX(-50%)';
+            cartPanel.style.right = 'auto';
         }
-    } else if (cartPanel) {
+    } else if (cart) {
         // Reset pour desktop
-        cartPanel.style.left = 'auto';
-        cartPanel.style.transform = 'none';
-        cartPanel.style.right = '0';
-        cartPanel.style.width = '350px';
+        cart.style.right = '15px';
+        cart.style.transform = 'none';
+        
+        if (cartPanel) {
+            cartPanel.style.left = 'auto';
+            cartPanel.style.transform = 'none';
+            cartPanel.style.right = '0';
+        }
     }
 }
 
