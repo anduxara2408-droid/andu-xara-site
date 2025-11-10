@@ -5805,23 +5805,64 @@ const orderData = {
         return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${hasPromo ? ' 🔥 PROMO' : ''}`;
     }).join('\n');
 
-    // 🎁 DÉTECTION DES CODES PROMO APPLIQUÉS
-    let promoInfo = '';
-    let hasActivePromo = false;
+// 🎁 DÉTECTION ROBUSTE DES CODES PROMO APPLIQUÉS - VERSION CORRIGÉE
+let promoInfo = '';
+let hasActivePromo = false;
 
-    if (promoSystem && promoSystem.activePromo) {
-        promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`;
-        hasActivePromo = true;
-    } else {
-        const promoItems = floatingCart.filter(item => item.promoPrice && item.promoPrice !== item.price);
-        if (promoItems.length > 0) {
-            const uniquePromoCodes = [...new Set(promoItems.map(item => item.appliedPromo).filter(Boolean))];
-            if (uniquePromoCodes.length > 0) {
-                promoInfo = `\n🎁 CODES PROMO APPLIQUÉS: ${uniquePromoCodes.join(', ')}`;
+// 1. Vérifier d'abord le système promo principal
+if (promoSystem && promoSystem.activePromo && promoSystem.activePromo.code) {
+    const promo = promoSystem.activePromo;
+    promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promo.code} (-${promo.discount}%)`;
+    hasActivePromo = true;
+    console.log('✅ Promo détectée via promoSystem:', promo);
+} 
+// 2. Vérifier les variables globales
+else if (activePromoCode && promoDiscount > 0) {
+    promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${activePromoCode} (-${promoDiscount}%)`;
+    hasActivePromo = true;
+    console.log('✅ Promo détectée via variables globales:', activePromoCode);
+}
+// 3. Vérifier le localStorage
+else {
+    const savedPromo = localStorage.getItem('anduxara_active_promo');
+    if (savedPromo) {
+        try {
+            const promoData = JSON.parse(savedPromo);
+            if (promoData.code && promoData.discount > 0) {
+                promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promoData.code} (-${promoData.discount}%)`;
                 hasActivePromo = true;
+                console.log('✅ Promo détectée via localStorage:', promoData.code);
             }
+        } catch (e) {
+            console.error('Erreur parsing promo localStorage:', e);
         }
     }
+}
+
+// 4. Vérifier en dernier recours si des produits ont des prix réduits
+if (!hasActivePromo) {
+    const promoItems = floatingCart.filter(item => 
+        item.promoPrice && 
+        item.promoPrice !== item.price && 
+        item.promoPrice < item.price
+    );
+    
+    if (promoItems.length > 0) {
+        const uniquePromoCodes = [...new Set(promoItems.map(item => item.appliedPromo).filter(Boolean))];
+        if (uniquePromoCodes.length > 0) {
+            promoInfo = `\n🎁 CODES PROMO APPLIQUÉS: ${uniquePromoCodes.join(', ')}`;
+            hasActivePromo = true;
+            console.log('✅ Promo détectée via produits réduits:', uniquePromoCodes);
+        } else {
+            // Produits en promo mais sans code spécifique
+            promoInfo = '\n🎁 PRODUITS EN PROMOTION APPLIQUÉE';
+            hasActivePromo = true;
+            console.log('✅ Produits en promo détectés');
+        }
+    }
+}
+
+console.log('🔍 Résultat détection promo:', { hasActivePromo, promoInfo });
 
 // 👤 INFORMATIONS CLIENT AMÉLIORÉES - CORRECTION ICI
 let userDisplayInfo = '';
@@ -5849,8 +5890,55 @@ if (userInfo.isAuthenticated) {
 // 🏷️ STATUT COMMANDE ADAPTÉ
 const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 NOUVELLE COMMANDE';
 
-// 📱 MESSAGE WHATSAPP CORRECTEMENT ADAPTÉ
-const message = `${orderStatus} ${hasActivePromo ? '🔥' : '📦'}\n\nBonjour Andu-Xara ! 👋\n\n${hasActivePromo ? 'COMMANDE AVEC RÉDUCTION :' : 'NOUVELLE COMMANDE :'}\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+// 📱 MESSAGES WHATSAPP CLAIREMENT DIFFÉRENCIÉS
+let whatsappMessage;
+
+if (hasActivePromo) {
+    whatsappMessage = `🎁🔥 COMMANDE AVEC CODE PROMO - URGENT 🔥🎁
+
+🚨 ATTENTION : CETTE COMMANDE BÉNÉFICIE D'UNE RÉDUCTION !
+
+Bonjour Andu-Xara ! 👋
+
+📦 COMMANDE AVEC PROMOTION :
+
+${productList}
+
+💰 MONTANT FINAL : ${totalMRU} MRU (${totalFCFA} FCFA)
+${promoInfo}
+
+👤 INFORMATIONS CLIENT :
+${userDisplayInfo}
+
+🆔 ID COMMANDE: ${finalOrderData.cartId}
+
+⚠️ CETTE COMMANDE EST PRIORITAIRE - PROMO EN COURS
+⏱️ Traitement immédiat requis
+
+Pouvez-vous confirmer et traiter cette commande en URGENCE ?`;
+} else {
+    whatsappMessage = `📦 NOUVELLE COMMANDE STANDARD 📦
+
+Bonjour Andu-Xara ! 👋
+
+NOUVELLE COMMANDE STANDARD :
+
+${productList}
+
+💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)
+
+👤 INFORMATIONS CLIENT :
+${userDisplayInfo}
+
+🆔 ID COMMANDE: ${finalOrderData.cartId}
+
+✅ Commande standard - Traitement normal
+
+Pouvez-vous confirmer cette commande ?`;
+}
+
+// Utiliser le message adapté
+const message = whatsappMessage;
 
     // === PROCESSUS DE PAIEMENT ===
     const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
