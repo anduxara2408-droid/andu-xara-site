@@ -372,8 +372,8 @@ class PromoSystem {
         }
     }
 
-    showLoginPrompt() {
-        const message = `🔐 Connexion Requise
+showLoginPrompt() {
+    const message = `🔐 Connexion Requise
     
 Pour utiliser les codes promo, veuillez vous connecter à votre compte.
 
@@ -384,15 +384,20 @@ Cela permet de :
 
 Voulez-vous vous connecter maintenant ?`;
 
-        if (confirm(message)) {
-            this.redirectToLogin();
+    if (confirm(message)) {
+        // Sauvegarder le code saisi avant redirection
+        const promoInput = document.getElementById('promoInput');
+        if (promoInput && promoInput.value.trim()) {
+            localStorage.setItem('pending_promo_code', promoInput.value.trim());
         }
+        this.redirectToLogin();
     }
+}
 
-    redirectToLogin() {
-        // Redirection vers la page de connexion
-        window.location.href = 'reductions.html?action=login';
-    }
+redirectToLogin() {
+    // Redirection vers reductions.html avec le code en attente
+    window.location.href = 'reductions.html?action=login&source=homepage';
+}
 
     updateUIWithUserInfo() {
         // Mettre à jour l'UI avec les infos utilisateur
@@ -2857,7 +2862,7 @@ if (window.location.hostname !== 'localhost' &&
     </div>
     
     <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-        <input type="text" id="promoInput" placeholder="Ex: BIENVENUE15" 
+        <input type="text" id="promoInput" placeholder="Saisissez votre code promo" 
                style="flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
         <button id="promoButton" onclick="validateAndApplyPromo()"
                 style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
@@ -5403,8 +5408,37 @@ async function validateAndApplyPromo() {
         promoSystem = initPromoSystem();
     }
 
+    // Vérifier d'abord si l'utilisateur est connecté
+    const isAuthenticated = await checkUserAuthentication();
+
+    if (!isAuthenticated) {
+        // Application temporaire sans connexion
+        const result = await applyTemporaryPromo(code);
+        if (result.success) {
+            promoMessage.textContent = result.message;
+            promoMessage.style.color = 'green';
+            promoInput.value = '';
+
+            // Inviter à créer un compte pour sauvegarder
+            setTimeout(() => {
+                if (confirm('🎁 Code appliqué temporairement ! Créer un compte pour sauvegarder cette réduction et profiter d\'avantages exclusifs ?')) {
+                    if (promoSystem && typeof promoSystem.redirectToLogin === 'function') {
+                        promoSystem.redirectToLogin();
+                    } else {
+                        // Fallback si la fonction n'existe pas
+                        window.location.href = 'reductions.html?action=login&source=homepage';
+                    }
+                }
+            }, 1500);
+        } else {
+            promoMessage.textContent = result.message;
+            promoMessage.style.color = 'red';
+        }
+        return;
+    }
+
+    // Utilisateur connecté - procédure normale
     const result = await promoSystem.validateAndApplyPromo(code);
-    
     promoMessage.textContent = result.message;
     promoMessage.style.color = result.success ? 'green' : 'red';
 
@@ -5413,18 +5447,12 @@ async function validateAndApplyPromo() {
     }
 }
 
-function removePromoFromCart() {
-    if (promoSystem) {
-        promoSystem.removePromo();
-    }
-}
-
 function applyPromoToCart(promoCode, discountPercentage) {
     console.log('🎯 Application code promo:', promoCode, discountPercentage + '%');
-    
+
     activePromoCode = promoCode;
     promoDiscount = discountPercentage;
-    
+
     // === SAUVEGARDER DANS LES DEUX FORMATS POUR COMPATIBILITÉ ===
     // Ancien format (pour la rétrocompatibilité)
     localStorage.setItem('anduxara_active_promo', JSON.stringify({
@@ -5432,78 +5460,78 @@ function applyPromoToCart(promoCode, discountPercentage) {
         discount: discountPercentage,
         appliedAt: new Date().toISOString()
     }));
-    
+
     // Nouveau format (plus simple)
     localStorage.setItem('anduxara_active_promo_code', promoCode);
     localStorage.setItem('anduxara_promo_discount', discountPercentage.toString());
-    
+
     // Appliquer la réduction à chaque produit
     floatingCart.forEach(item => {
         item.promoPrice = Math.round(item.price * (1 - discountPercentage / 100));
         item.appliedPromo = promoCode;
     });
-    
+
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
     updateActivePromoDisplay();
-    
+
     showNotification('✅ Code ' + promoCode + ' appliqué : ' + discountPercentage + '% de réduction !');
 }
 
 function removePromoFromCart() {
     console.log('🗑️ Retrait manuel du code promo');
-    
+
     // 1. Retirer via le système promo
     if (promoSystem && typeof promoSystem.removePromo === 'function') {
         promoSystem.removePromo();
     }
-    
+
     // 2. Nettoyer le localStorage
     localStorage.removeItem('anduxara_active_promo');
     localStorage.removeItem('anduxara_active_promo_code');
     localStorage.removeItem('anduxara_promo_discount');
-    
+
     // 3. Réinitialiser les variables globales
     activePromoCode = null;
     promoDiscount = 0;
-    
+
     // 4. Réappliquer les prix originaux à tous les produits
     if (floatingCart && Array.isArray(floatingCart)) {
         floatingCart.forEach(item => {
             item.promoPrice = item.price;
             delete item.appliedPromo;
         });
-        
+
         // 5. Sauvegarder le panier mis à jour
         localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     }
-    
+
     // 6. Mettre à jour l'affichage
     updateFloatingCart();
     updateActivePromoDisplay();
-    
+
     // 7. Notification
     showNotification('🗑️ Code promo retiré - Prix originaux rétablis');
-    
+
     console.log('✅ Code promo complètement retiré et synchronisé');
 }
 
 function updateActivePromoDisplay() {
     const display = document.getElementById('active-promo-display');
     const codeElement = document.getElementById('active-promo-code');
-    
+
     if (!display || !codeElement) {
         console.log('❌ Éléments d\'affichage promo non trouvés');
         return;
     }
-    
+
     // Vérifier l'état actuel depuis multiple sources
     const hasActivePromo = activePromoCode && promoDiscount > 0;
     const localStoragePromo = localStorage.getItem('anduxara_active_promo_code');
     const systemPromo = promoSystem && promoSystem.activePromo;
-    
+
     console.log('🔍 État promo - Global:', {activePromoCode, promoDiscount}, 'LocalStorage:', localStoragePromo, 'Système:', systemPromo);
-    
+
     if (hasActivePromo) {
         display.style.display = 'block';
         codeElement.textContent = `${activePromoCode} (-${promoDiscount}%)`;
@@ -5519,6 +5547,72 @@ function updateActivePromoDisplay() {
         display.style.display = 'none';
         console.log('❌ Aucun code promo actif - affichage masqué');
     }
+}
+
+// Fonction pour appliquer temporairement un code promo
+async function applyTemporaryPromo(code) {
+    try {
+        // Simuler la validation du code
+        const validCodes = {
+            'BIENVENUE15': 15,
+            'ANDU2025': 20,
+            'SOLDE30': 30,
+            'PREMIUM25': 25
+        };
+
+        const codeUpper = code.toUpperCase();
+        
+        if (validCodes[codeUpper]) {
+            const discount = validCodes[codeUpper];
+            
+            // Appliquer la réduction temporairement
+            applyPromoToCart(codeUpper, discount);
+            
+            return {
+                success: true,
+                message: `✅ Code ${codeUpper} appliqué temporairement ! (-${discount}%)`,
+                discount: discount
+            };
+        } else {
+            return {
+                success: false,
+                message: '❌ Code promo invalide'
+            };
+        }
+    } catch (error) {
+        console.error('Erreur application temporaire:', error);
+        return {
+            success: false,
+            message: '❌ Erreur lors de l\'application du code'
+        };
+    }
+}
+
+// Vérifier si l'utilisateur est authentifié
+async function checkUserAuthentication() {
+    return new Promise((resolve) => {
+        // Vérifier Firebase
+        const firebaseUser = firebase.auth().currentUser;
+        if (firebaseUser) {
+            resolve(true);
+            return;
+        }
+        
+        // Vérifier le système promo
+        if (promoSystem && promoSystem.currentUser && promoSystem.currentUser.email) {
+            resolve(true);
+            return;
+        }
+        
+        // Vérifier localStorage
+        const lastUser = localStorage.getItem('anduxara_last_user');
+        if (lastUser) {
+            resolve(true);
+            return;
+        }
+        
+        resolve(false);
+    });
 }
 
 // ===== FONCTIONS DE PAIEMENT =====
@@ -5940,9 +6034,9 @@ async function simulatePromoValidation(code) {
         'SOLDE30': 30,
         'PREMIUM25': 25
     };
-    
+
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     if (validCodes[code]) {
         return {
             valid: true,
@@ -5955,6 +6049,72 @@ async function simulatePromoValidation(code) {
             message: 'Code invalide'
         };
     }
+}
+
+// Fonction pour appliquer temporairement un code promo
+async function applyTemporaryPromo(code) {
+    try {
+        // Simuler la validation du code
+        const validCodes = {
+            'BIENVENUE15': 15,
+            'ANDU2025': 20,
+            'SOLDE30': 30,
+            'PREMIUM25': 25
+        };
+
+        const codeUpper = code.toUpperCase();
+        
+        if (validCodes[codeUpper]) {
+            const discount = validCodes[codeUpper];
+            
+            // Appliquer la réduction temporairement
+            applyPromoToCart(codeUpper, discount);
+            
+            return {
+                success: true,
+                message: `✅ Code ${codeUpper} appliqué temporairement ! (-${discount}%)`,
+                discount: discount
+            };
+        } else {
+            return {
+                success: false,
+                message: '❌ Code promo invalide'
+            };
+        }
+    } catch (error) {
+        console.error('Erreur application temporaire:', error);
+        return {
+            success: false,
+            message: '❌ Erreur lors de l\'application du code'
+        };
+    }
+}
+
+// Vérifier si l'utilisateur est authentifié
+async function checkUserAuthentication() {
+    return new Promise((resolve) => {
+        // Vérifier Firebase
+        const firebaseUser = firebase.auth().currentUser;
+        if (firebaseUser) {
+            resolve(true);
+            return;
+        }
+        
+        // Vérifier le système promo
+        if (promoSystem && promoSystem.currentUser && promoSystem.currentUser.email) {
+            resolve(true);
+            return;
+        }
+        
+        // Vérifier localStorage
+        const lastUser = localStorage.getItem('anduxara_last_user');
+        if (lastUser) {
+            resolve(true);
+            return;
+        }
+        
+        resolve(false);
+    });
 }
 
 // ===== SYSTÈME DE RECOMMANDATIONS IA =====
