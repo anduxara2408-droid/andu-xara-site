@@ -5131,6 +5131,33 @@ let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 let activePromoCode = null;
 let promoDiscount = 0;
 
+// 🎯 FONCTION DE DÉTECTION DE RÉDUCTION FIABLE
+function detectActivePromo() {
+    // Méthode 1: Via le système promo
+    if (promoSystem && promoSystem.activePromo) {
+        return promoSystem.activePromo;
+    }
+    
+    // Méthode 2: Via localStorage
+    const savedPromo = localStorage.getItem('anduxara_active_promo');
+    if (savedPromo) {
+        try {
+            return JSON.parse(savedPromo);
+        } catch (e) {
+            console.error('Erreur parsing promo:', e);
+        }
+    }
+    
+    // Méthode 3: Via les variables globales
+    if (activePromoCode && promoDiscount > 0) {
+        return {
+            code: activePromoCode,
+            discount: promoDiscount
+        };
+    }
+    
+    return null;
+}
 // ===== FONCTIONS PANIER FLOTTANT MANQUANTES =====
 function toggleFloatingCart() {
     console.log('🛒 toggleFloatingCart appelée');
@@ -5683,21 +5710,24 @@ async function processFloatingCheckout() {
 
     console.log('💰 Total calculé:', totalMRU + ' MRU');
 
-    // === PRÉPARATION DES DONNÉES COMMANDE ===
-    const orderData = {
-        products: floatingCart.map(item => ({
-            name: item.name,
-            price: item.price,
-            promoPrice: item.promoPrice,
-            quantity: item.quantity,
-            category: item.category,
-            itemTotal: (item.promoPrice || item.price) * item.quantity
-        })),
-        total: totalMRU,
-        totalFCFA: totalFCFA,
-        timestamp: new Date().toISOString(),
-        cartId: 'cart_' + Date.now()
-    };
+// === PRÉPARATION DES DONNÉES COMMANDE ===
+const orderData = {
+    products: floatingCart.map(item => ({
+        name: item.name,
+        price: item.price,
+        promoPrice: item.promoPrice,
+        quantity: item.quantity,
+        category: item.category,
+        itemTotal: (item.promoPrice || item.price) * item.quantity
+    })),
+    total: totalMRU,
+    totalFCFA: totalFCFA,
+    timestamp: new Date().toISOString(),
+    cartId: 'cart_' + Date.now(),
+    // 🎁 TRANSMETTRE EXPLICITEMENT LES INFOS PROMO
+    appliedPromo: (promoSystem && promoSystem.activePromo) ? promoSystem.activePromo : null,
+    hasActivePromo: !!(promoSystem && promoSystem.activePromo)
+};
 
     // === DÉTECTION DE L'UTILISATEUR AVEC LA MÊME LOGIQUE QUE updateAuthStatus() ===
     let userInfo = {};
@@ -5916,19 +5946,90 @@ function finaliserCommande(totalMRU, message, methode, orderData) {
         userDisplay = '\n👤 Client: Visiteur (non connecté)';
     }
     
-    const promoInfo = orderData.appliedPromo 
-        ? `\n🎁 Code promo: ${orderData.appliedPromo.code} (-${orderData.appliedPromo.discount}%)`
-        : '';
+    // 🎁 DÉTECTION CORRECTE SI COMMANDE AVEC RÉDUCTION
+    const activePromo = detectActivePromo();
+    const hasPromo = activePromo && activePromo.code && activePromo.discount > 0;
+    const promoCode = hasPromo ? activePromo.code : null;
+    const promoDiscount = hasPromo ? activePromo.discount : 0;
     
-    const confirmation = `🎉 COMMANDE CONFIRMÉE !\n\n✅ Votre commande a été enregistrée\n💳 Méthode : ${methode}\n💰 Montant : ${totalMRU} MRU${userDisplay}${promoInfo}\n\n📦 Prochaines étapes :\n1. Notre équipe va vous contacter\n2. Confirmation sous 24h maximum\n3. Livraison express selon votre zone\n\n📞 Contact : +222 49 03 76 97\n\nMerci pour votre confiance ! 🤝`;
+    // 🔍 CALCUL DES MONTANTS
+    let originalTotal = totalMRU;
+    let finalTotal = totalMRU;
+    let economy = 0;
+    
+    if (hasPromo && promoDiscount > 0) {
+        // Calculer le montant original avant réduction
+        originalTotal = Math.round(totalMRU / (1 - promoDiscount / 100));
+        economy = originalTotal - finalTotal;
+        console.log('💰 Calcul réduction:', {
+            final: finalTotal,
+            discount: promoDiscount + '%',
+            original: originalTotal,
+            economy: economy
+        });
+    }
+    
+    // 🎯 DEUX MESSAGES DISTINCTS AVEC DÉTECTION FIABLE
+    let confirmation = '';
+    
+    if (hasPromo && promoDiscount > 0) {
+        // ✅ MESSAGE AVEC CODE PROMO - met en valeur l'économie
+        confirmation = `🎉 FÉLICITATIONS ! COMMANDE AVEC RÉDUCTION CONFIRMÉE 🎉
+
+🔥 VOUS AVEZ ÉCONOMISÉ ${economy} MRU GRÂCE À VOTRE CODE PROMO !
+
+✅ Commande enregistrée avec succès
+🎁 Code promo appliqué : ${promoCode} (-${promoDiscount}%)
+💰 Montant original : ~~${originalTotal} MRU~~ 
+💰 Montant final après réduction : ${finalTotal} MRU
+💳 Méthode de paiement : ${methode}
+${userDisplay}
+
+📦 VOTRE COMMANDE EST PRIVILÉGIÉE :
+• Traitement express prioritaire
+• Livraison accélérée (24-48h)
+• Support client dédié
+
+🎯 PROCHAINES ÉTAPES :
+1. Notre équipe vous contacte sous 2h maximum
+2. Préparation immédiate de votre commande
+3. Livraison express selon votre zone
+4. Suivi en temps réel
+
+📞 Contact dédié : +222 49 03 76 97
+
+Merci d'avoir utilisé votre code promo ! 
+Votre fidélité est récompensée ! 🌟🤝`;
+    } else {
+        // ✅ MESSAGE STANDARD SANS CODE PROMO
+        confirmation = `🎉 COMMANDE CONFIRMÉE !
+
+✅ Votre commande a été enregistrée avec succès
+💳 Méthode de paiement : ${methode}
+💰 Montant total : ${finalTotal} MRU
+${userDisplay}
+
+📦 PROCHAINES ÉTAPES :
+1. Notre équipe va vous contacter sous 24h maximum
+2. Confirmation et préparation de votre commande
+3. Livraison express selon votre zone
+4. Suivi de livraison en temps réel
+
+💡 CONSEIL : 
+Lors de votre prochaine commande, utilisez un code promo 
+pour bénéficier de réductions exclusives !
+
+📞 Contact : +222 49 03 76 97
+
+Merci pour votre confiance ! 🤝`;
+    }
     
     alert(confirmation);
     
-    // === CORRECTION CRITIQUE : NETTOYAGE DU CODE PROMO AVANT DE VIDER LE PANIER ===
-    if (typeof cleanupPromoAfterOrder === 'function') {
+    // === NETTOYAGE DU CODE PROMO SI APPLICABLE ===
+    if (hasPromo && typeof cleanupPromoAfterOrder === 'function') {
         cleanupPromoAfterOrder();
     } else {
-        console.error('❌ cleanupPromoAfterOrder non disponible, nettoyage manuel...');
         // Fallback manuel
         localStorage.removeItem('anduxara_active_promo');
         localStorage.removeItem('anduxara_active_promo_code');
@@ -5944,16 +6045,23 @@ function finaliserCommande(totalMRU, message, methode, orderData) {
     updateFloatingCart();
     closeFloatingCart();
     
-    showNotification('🎉 Commande finalisée ! Merci pour votre achat.', 'success');
+    // 🎯 NOTIFICATION ADAPTÉE AUSSI
+    if (hasPromo) {
+        showNotification(`🎉 Commande avec promo ${promoCode} finalisée ! Économie de ${economy} MRU.`, 'success');
+    } else {
+        showNotification('🎉 Commande finalisée ! Merci pour votre achat.', 'success');
+    }
     
     // === LOG POUR DEBUG ===
-    console.log('📦 Commande finalisée avec nettoyage promo:', {
-        total: totalMRU,
+    console.log('📦 Commande finalisée:', {
+        hasPromo: hasPromo,
+        promoCode: promoCode,
+        promoDiscount: promoDiscount + '%',
+        originalTotal: originalTotal,
+        finalTotal: finalTotal,
+        economy: economy,
         methode: methode,
-        user: orderData.userEmail || 'guest',
-        userType: orderData.userType || 'unknown',
-        promo: orderData.appliedPromo || 'none',
-        products: orderData.products.length
+        user: orderData.userEmail || 'guest'
     });
 }
 
