@@ -2564,29 +2564,7 @@ if (window.location.hostname !== 'localhost' &&
         <div class="mini-counter">
             👁️ <span class="counter-number" id="visitorCount">0</span> en ligne
         </div>
-<!-- ===== PANIER FLOTTANT CORRIGÉ ===== -->
-<div id="floating-cart" class="floating-cart">
-    <div class="cart-toggle" onclick="toggleFloatingCart()">
-        🛒 <span id="cart-badge-floating">0</span>
-    </div>
-    <div class="cart-panel">
-        <div class="cart-items-container" id="cart-items-floating"></div>
-        <div class="cart-summary">
-            <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
-            <button class="buy-btn" onclick="processFloatingCheckout()">Acheter</button>
-            <button class="close-cart-btn" onclick="closeFloatingCart()">Fermer</button>
-        </div>
-    </div>
-</div>
-
-<style>
-/* ===== STYLES DU PANIER CORRIGÉS ===== */
-.floating-cart {
-    position: fixed;
-    bottom: 80px;
-    right: 15px;
-    z-index: 1000;
-}
+<!-- ===== FONCTIONS PANIER (DÉPLACÉES ICI) ==== -->
 
 .cart-toggle {
     background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -4211,38 +4189,6 @@ function resetCountdownForAll() {
 // Pour tester : décommentez la ligne ci-dessous
 // resetCountdownForAll();
 </script>
-<script>
-// === FONCTION ADD TO CART CORRIGÉE ===
-function addToCart(productName, oldPrice, promoPrice) {
-    console.log('🛒 Ajout au panier:', productName, 'Prix:', promoPrice + ' MRU');
-    
-    // Vibration si supporté
-    if (navigator.vibrate) navigator.vibrate(50);
-
-    // Synchroniser floatingCart avec localStorage
-    
-    // Rechercher si le produit existe déjà
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-
-    } else {
-        cartItems.push({
-            name: productName,
-            price: promoPrice,
-            quantity: 1,
-            addedAt: new Date().toISOString()
-        });
-    }
-    
-    // Sauvegarder dans le localStorage
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    
-    // Afficher une notification
-    showNotification('✅ ' + productName + ' ajouté au panier !');
-    
-    // Mettre à jour l'affichage du panier
-}
 
 // === NOTIFICATION ===
 function showNotification(message) {
@@ -4261,21 +4207,21 @@ function showNotification(message) {
         animation: slideInRight 0.3s ease;
     `;
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     // Supprimer après 3 secondes
     setTimeout(() => {
         notification.style.animation = 'fadeOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
-}
+} // ⚠️ SUPPRIMEZ CE COMMENTAIRE JUSQU'À "=== COMPTEUR PANIER ==="
 
 // === COMPTEUR PANIER ===
 function updateCartCounter() {
     const cart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
     const counter = document.getElementById('cart-counter');
-    
+
     if (counter) {
         counter.textContent = cart.length;
         counter.style.display = cart.length > 0 ? 'inline' : 'none';
@@ -4683,11 +4629,12 @@ class ClientDashboard {
             item => item.name === productName
         );
 
-        if (existingView) {
-            existingView.viewCount += 1;
-            existingView.lastViewed = new Date().toISOString();
-    } else {
-        {
+if (existingView) {
+    existingView.viewCount += 1;
+    existingView.lastViewed = new Date().toISOString();
+} else {
+       
+ {
             name: productName,
             price: promoPrice,
             quantity: 1,
@@ -5158,26 +5105,6 @@ function detectActivePromo() {
     
     return null;
 }
-// ===== FONCTIONS PANIER FLOTTANT MANQUANTES =====
-function toggleFloatingCart() {
-    console.log('🛒 toggleFloatingCart appelée');
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.toggle('open');
-        console.log('✅ Panier ouvert/fermé');
-    } else {
-        console.error('❌ Élément floating-cart non trouvé');
-    }
-}
-
-function closeFloatingCart() {
-    console.log('🛒 closeFloatingCart appelée');
-    const cart = document.getElementById('floating-cart');
-    if (cart) {
-        cart.classList.remove('open');
-        console.log('✅ Panier fermé');
-    }
-}
 
 function removeFromFloatingCart(index) {
     console.log('🗑️ removeFromFloatingCart appelée avec index:', index);
@@ -5247,176 +5174,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(adjustCartForMobile, 500);
 });
 
-function ajouterAuPanier(productName, category, price) {
-    console.log('🛒 Ajout au panier:', productName, 'Prix reçu:', price, 'Type:', typeof price);
-    
-    // 🐛 CORRECTION : Convertir le prix en nombre
-    const numericPrice = typeof price === 'string' ? parseInt(price.replace(' MRU', '').replace(/\s/g, '')) : Number(price);
-    
-    if (isNaN(numericPrice)) {
-        console.error('❌ Prix invalide après conversion:', price, '→', numericPrice);
-        showNotification('❌ Erreur: Prix invalide', 'error');
-        return;
-    }
-    
-    console.log('💰 Prix numérique converti:', numericPrice);
-
-    if (navigator.vibrate) navigator.vibrate(50);
-
-    const existingItem = floatingCart.find(item => item.name === productName);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-        console.log('📈 Quantité augmentée:', existingItem.quantity);
-    } else {
-        floatingCart.push({
-            name: productName,
-            category: category,
-            price: numericPrice, // 🐛 CORRECTION : Utiliser le prix numérique
-            promoPrice: numericPrice, // 🐛 CORRECTION : Initialiser le prix promo
-            quantity: 1,
-            addedAt: new Date().toISOString()
-        });
-        console.log('🆕 Nouveau produit ajouté');
-    }
-    
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-    showNotification('✅ ' + productName + ' ajouté au panier !');
-    updateFloatingCart();
-    
-    // Track l'ajout au panier
-    trackAddToCart(productName, category, numericPrice);
-}
-
-function updateFloatingCart() {
-    const cartItemsContainer = document.getElementById('cart-items-floating');
-    const cartTotalElement = document.getElementById('cart-total-floating');
-    const cartBadge = document.getElementById('cart-badge-floating');
-
-    if (!cartItemsContainer || !cartTotalElement || !cartBadge) return;
-
-    let subtotal = 0;
-    let totalItems = 0;
-
-    cartItemsContainer.innerHTML = '';
-
-    if (floatingCart.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart-floating">Votre panier est vide</div>';
-        cartTotalElement.textContent = '0';
-        cartBadge.textContent = '0';
-        return;
-    }
-
-    // Afficher l'en-tête promo si actif
-    if (activePromoCode && promoDiscount > 0) {
-        const promoHeader = document.createElement('div');
-        promoHeader.style.cssText = `
-            background: linear-gradient(135deg, #e8f5e8, #d4edda);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            border: 2px solid #27ae60;
-        `;
-        promoHeader.innerHTML = `
-            <div style="font-weight: bold; color: #27ae60; font-size: 0.9rem;">
-                🎁 CODE PROMO ACTIF: ${activePromoCode}
-            </div>
-            <div style="font-size: 0.8rem; color: #2c3e50; margin-top: 5px;">
-                Réduction de ${promoDiscount}% appliquée sur tous les articles
-            </div>
-        `;
-        cartItemsContainer.appendChild(promoHeader);
-    }
-
-    // Afficher les produits
-    floatingCart.forEach((item, index) => {
-        totalItems += item.quantity;
-        
-        // Prix avec promo si disponible
-        const itemPrice = item.promoPrice || item.price;
-        const itemTotal = itemPrice * item.quantity;
-        subtotal += itemTotal;
-
-        // Calcul de la réduction
-        const hasPromo = item.promoPrice && item.promoPrice !== item.price;
-        const originalTotal = item.price * item.quantity;
-        const discountAmount = hasPromo ? (originalTotal - itemTotal) : 0;
-        const discountPercentage = hasPromo ? Math.round((1 - item.promoPrice / item.price) * 100) : 0;
-
-        const itemElement = document.createElement('div');
-        itemElement.className = 'cart-item-floating';
-        itemElement.innerHTML = `
-            <div class="cart-item-info">
-                <h4>${item.name}</h4>
-                <p>Quantité: ${item.quantity}</p>
-                ${hasPromo ? `
-                    <div style="color: #27ae60; font-size: 0.7rem; font-weight: bold; margin-top: 5px;">
-                        🔥 PROMO: -${discountPercentage}% (Économie: ${discountAmount} MRU)
-                    </div>
-                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 3px;">
-                        <span style="text-decoration: line-through; color: #888; font-size: 0.75rem;">
-                            ${originalTotal} MRU
-                        </span>
-                        <span style="color: #e74c3c; font-weight: bold; font-size: 0.85rem;">
-                            ${itemTotal} MRU
-                        </span>
-                    </div>
-                ` : `
-                    <div style="color: #2c3e50; font-weight: bold; font-size: 0.85rem; margin-top: 8px;">
-                        ${itemTotal} MRU
-                    </div>
-                `}
-            </div>
-            <div class="cart-item-price">
-                ${itemTotal} MRU
-                <button class="remove-item" onclick="removeFromFloatingCart(${index})">❌</button>
-            </div>
-        `;
-        cartItemsContainer.appendChild(itemElement);
-    });
-
-    // Calculer le total final avec réduction
-    let finalTotal = subtotal;
-    let discountInfo = '';
-
-    if (activePromoCode && promoDiscount > 0) {
-        const discountAmount = subtotal * (promoDiscount / 100);
-        finalTotal = subtotal - discountAmount;
-        discountInfo = `
-            <div style="border-top: 1px dashed #ddd; padding-top: 8px; margin-top: 8px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #27ae60;">
-                    <span>🎁 Code ${activePromoCode} (-${promoDiscount}%)</span>
-                    <span>-${Math.round(discountAmount)} MRU</span>
-                </div>
-            </div>
-        `;
-    }
-
-    // Mettre à jour l'affichage du total
-    cartTotalElement.innerHTML = `
-        <div style="text-align: left;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
-                <span>Sous-total:</span>
-                <span>${Math.round(subtotal)} MRU</span>
-            </div>
-            ${discountInfo}
-            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 8px; font-size: 1rem; border-top: 1px solid #ddd; padding-top: 8px;">
-                <span>Total:</span>
-                <span style="color: #e74c3c;">${Math.round(finalTotal)} MRU</span>
-            </div>
-        </div>
-    `;
-
-    cartBadge.textContent = totalItems;
-    
-    console.log('🛒 Panier mis à jour:', {
-        items: floatingCart.length,
-        subtotal: subtotal,
-        discount: activePromoCode ? promoDiscount + '%' : 'none',
-        finalTotal: finalTotal
-    });
-}
 
 // ===== FONCTIONS CODES PROMO =====
 async function validateAndApplyPromo() {
@@ -5803,25 +5560,27 @@ const orderData = {
         return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${hasPromo ? ' 🔥 PROMO' : ''}`;
     }).join('\n');
 
-    // 🎁 DÉTECTION DES CODES PROMO APPLIQUÉS
-    let promoInfo = '';
-    let hasActivePromo = false;
+// 🎁 DÉTECTION DES CODES PROMO APPLIQUÉS - CORRIGÉE
+let promoInfo = '';
+let hasActivePromo = false;
 
-    if (promoSystem && promoSystem.activePromo) {
-        promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`;
-        hasActivePromo = true;
-    } else {
-        const promoItems = floatingCart.filter(item => item.promoPrice && item.promoPrice !== item.price);
-        if (promoItems.length > 0) {
-            const uniquePromoCodes = [...new Set(promoItems.map(item => item.appliedPromo).filter(Boolean))];
-            if (uniquePromoCodes.length > 0) {
-                promoInfo = `\n🎁 CODES PROMO APPLIQUÉS: ${uniquePromoCodes.join(', ')}`;
-                hasActivePromo = true;
-            }
+// Méthode principale : via le système promo
+if (promoSystem && promoSystem.activePromo && promoSystem.activePromo.code) {
+    promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${promoSystem.activePromo.code} (-${promoSystem.activePromo.discount}%)`;
+    hasActivePromo = true;
+} else {
+    // Méthode alternative : vérifier les produits avec promo
+    const promoItems = floatingCart.filter(item => item.promoPrice && item.promoPrice !== item.price);
+    if (promoItems.length > 0) {
+        const uniquePromoCodes = [...new Set(promoItems.map(item => item.appliedPromo).filter(Boolean))];
+        if (uniquePromoCodes.length > 0) {
+            promoInfo = `\n🎁 CODES PROMO APPLIQUÉS: ${uniquePromoCodes.join(', ')}`;
+            hasActivePromo = true;
         }
     }
+}
 
-// 👤 INFORMATIONS CLIENT AMÉLIORÉES - CORRECTION ICI
+// 👤 INFORMATIONS CLIENT AMÉLIORÉES
 let userDisplayInfo = '';
 if (userInfo.isAuthenticated) {
     userDisplayInfo = `\n👤 CLIENT CONNECTÉ:\n📧 ${userInfo.userEmail}`;
@@ -5844,26 +5603,40 @@ if (userInfo.isAuthenticated) {
     userDisplayInfo += `\n💡 Conseil: Créez un compte pour profiter des réductions !`;
 }
 
-// 🏷️ STATUT COMMANDE
-const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 COMMANDE STANDARD';
+// 🎁 DÉTECTION FIABLE DES PROMOTIONS ACTIVES
+hasActivePromo = false;
+const activePromo = detectActivePromo();
 
-// CORRECTION DE LA LIGNE TRONQUÉE - COMPLÉTEZ AVEC :
-const message = `COMMANDE AVEC RÉDUCTION 🔥\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+if (activePromo && activePromo.code && activePromo.discount > 0) {
+    promoInfo = `\n🎁 CODE PROMO APPLIQUÉ: ${activePromo.code} (-${activePromo.discount}%)`;
+    hasActivePromo = true;
+    console.log('✅ Promotion détectée pour WhatsApp:', activePromo);
+} else {
+    console.log('❌ Aucune promotion active détectée');
+}
 
-    // === PROCESSUS DE PAIEMENT ===
-    const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
+// 🎯 MESSAGE WHATSAPP CORRECT SELON LA PRÉSENCE DE RÉDUCTION
+let whatsappMessage = '';
 
-    const choice = prompt(paymentChoice);
+if (hasActivePromo) {
+    whatsappMessage = `🔥 COMMANDE AVEC RÉDUCTION\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE AVEC PROMOTION :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL AVEC RÉDUCTION : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande privilégiée ?`;
+} else {
+    whatsappMessage = `📦 NOUVELLE COMMANDE\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+}
 
-    if (choice === '1') {
-        processWavePayment(totalFCFA, totalMRU, message, finalOrderData);
-    } else if (choice === '2') {
-        processBankilyPayment(totalMRU, message, finalOrderData);
-    } else if (choice === '3') {
-        processWhatsAppPayment(message, finalOrderData);
-    } else {
-        showNotification('Commande annulée', 'warning');
-    }
+// === PROCESSUS DE PAIEMENT ===
+const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
+
+const choice = prompt(paymentChoice);
+
+if (choice === '1') {
+    processWavePayment(totalFCFA, totalMRU, whatsappMessage, finalOrderData);
+} else if (choice === '2') {
+    processBankilyPayment(totalMRU, whatsappMessage, finalOrderData);
+} else if (choice === '3') {
+    processWhatsAppPayment(whatsappMessage, finalOrderData);
+} else {
+    showNotification('Commande annulée', 'warning');
 }
 
 function processWavePayment(totalFCFA, totalMRU, message, orderData) {
@@ -7146,11 +6919,12 @@ class ClientDashboard {
         const existingView = this.userData.viewedProducts.find(
             item => item.name === productName
         );
+if (existingView) {
+    existingView.viewCount += 1;
+    existingView.lastViewed = new Date().toISOString();
+} else {
 
-        if (existingView) {
-            existingView.viewCount += 1;
-            existingView.lastViewed = new Date().toISOString();
-        } else {
+
             this.userData.viewedProducts.push({
                 name: productName,
                 category: category,
