@@ -5451,43 +5451,104 @@ function applyPromoToCart(promoCode, discountPercentage) {
 }
 
 function removePromoFromCart() {
-    console.log('🗑️ Retrait du code promo');
+    console.log('🗑️ Retrait manuel du code promo');
     
-    activePromoCode = null;
-    promoDiscount = 0;
+    // 1. Retirer via le système promo
+    if (promoSystem && typeof promoSystem.removePromo === 'function') {
+        promoSystem.removePromo();
+    }
     
-    // Supprimer les deux formats
+    // 2. Nettoyer le localStorage
     localStorage.removeItem('anduxara_active_promo');
     localStorage.removeItem('anduxara_active_promo_code');
     localStorage.removeItem('anduxara_promo_discount');
     
-    // Retirer les réductions des produits
-    floatingCart.forEach(item => {
-        item.promoPrice = item.price;
-        delete item.appliedPromo;
-    });
+    // 3. Réinitialiser les variables globales
+    activePromoCode = null;
+    promoDiscount = 0;
     
-    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    // 4. Réappliquer les prix originaux à tous les produits
+    if (floatingCart && Array.isArray(floatingCart)) {
+        floatingCart.forEach(item => {
+            item.promoPrice = item.price;
+            delete item.appliedPromo;
+        });
+        
+        // 5. Sauvegarder le panier mis à jour
+        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    }
+    
+    // 6. Mettre à jour l'affichage
     updateFloatingCart();
     updateActivePromoDisplay();
-    showNotification('🗑️ Code promo retiré');
+    
+    // 7. Notification
+    showNotification('🗑️ Code promo retiré - Prix originaux rétablis');
+    
+    console.log('✅ Code promo complètement retiré et synchronisé');
 }
 
 function updateActivePromoDisplay() {
     const display = document.getElementById('active-promo-display');
     const codeElement = document.getElementById('active-promo-code');
     
-    if (display && codeElement) {
-        if (activePromoCode && promoDiscount > 0) {
-            display.style.display = 'block';
-            codeElement.textContent = activePromoCode + ' (-' + promoDiscount + '%)';
-        } else {
-            display.style.display = 'none';
-        }
+    if (!display || !codeElement) {
+        console.log('❌ Éléments d\'affichage promo non trouvés');
+        return;
+    }
+    
+    // Vérifier l'état actuel depuis multiple sources
+    const hasActivePromo = activePromoCode && promoDiscount > 0;
+    const localStoragePromo = localStorage.getItem('anduxara_active_promo_code');
+    const systemPromo = promoSystem && promoSystem.activePromo;
+    
+    console.log('🔍 État promo - Global:', {activePromoCode, promoDiscount}, 'LocalStorage:', localStoragePromo, 'Système:', systemPromo);
+    
+    if (hasActivePromo) {
+        display.style.display = 'block';
+        codeElement.textContent = `${activePromoCode} (-${promoDiscount}%)`;
+        console.log('✅ Affichage promo activé:', activePromoCode);
+    } else if (systemPromo) {
+        // Synchroniser avec le système
+        activePromoCode = systemPromo.code;
+        promoDiscount = systemPromo.discount;
+        display.style.display = 'block';
+        codeElement.textContent = `${activePromoCode} (-${promoDiscount}%)`;
+        console.log('✅ Affichage promo synchronisé depuis système:', activePromoCode);
+    } else {
+        display.style.display = 'none';
+        console.log('❌ Aucun code promo actif - affichage masqué');
     }
 }
 
 // ===== FONCTIONS DE PAIEMENT =====
+
+// === CORRECTION : NETTOYAGE DU CODE PROMO APRÈS COMMANDE ===
+function cleanupPromoAfterOrder() {
+    console.log('🧹 Nettoyage du code promo après commande...');
+
+    // 1. Retirer le code actif du système promo
+    if (promoSystem && promoSystem.activePromo) {
+        const usedCode = promoSystem.activePromo.code;
+        promoSystem.removePromo();
+        console.log('✅ Code promo retiré du système:', usedCode);
+    }
+
+    // 2. Nettoyer le localStorage
+    localStorage.removeItem('anduxara_active_promo');
+    localStorage.removeItem('anduxara_active_promo_code');
+    localStorage.removeItem('anduxara_promo_discount');
+
+    // 3. Réinitialiser les variables globales
+    activePromoCode = null;
+    promoDiscount = 0;
+
+    // 4. Mettre à jour l'affichage
+    updateActivePromoDisplay();
+
+    console.log('🎯 Synchronisation promo terminée');
+}
+
 async function processFloatingCheckout() {
     console.log('🛒 Début du processus de checkout');
 
@@ -5496,16 +5557,16 @@ async function processFloatingCheckout() {
         return;
     }
 
- // Collecte des informations client
+    // Collecte des informations client
     let userPhone = "";
     let userAddress = "";
     let userCity = "";
-    
+
     try {
         userPhone = prompt("📱 Pour finaliser la commande, veuillez entrer votre numéro de téléphone :") || "Non fourni";
         userAddress = prompt("📍 Entrez votre adresse de livraison complète :") || "Non fournie";
         userCity = prompt("🏙️ Entrez votre ville :") || "Non fournie";
-        
+
         if (userPhone === "Non fourni" || userAddress === "Non fournie") {
             if (!confirm("⚠️ Certaines informations sont manquantes. Souhaitez-vous quand même continuer ?")) {
                 showNotification('Commande annulée', 'warning');
@@ -5746,6 +5807,8 @@ function processWhatsAppPayment(message, orderData) {
 }
 
 function finaliserCommande(totalMRU, message, methode, orderData) {
+    console.log('📦 Finalisation de commande avec nettoyage promo...');
+    
     // 👤 DÉTECTION PRÉCISE DE L'UTILISATEUR POUR L'AFFICHAGE
     let userDisplay = '';
     
@@ -5767,21 +5830,30 @@ function finaliserCommande(totalMRU, message, methode, orderData) {
     
     alert(confirmation);
     
+    // === CORRECTION CRITIQUE : NETTOYAGE DU CODE PROMO AVANT DE VIDER LE PANIER ===
+    if (typeof cleanupPromoAfterOrder === 'function') {
+        cleanupPromoAfterOrder();
+    } else {
+        console.error('❌ cleanupPromoAfterOrder non disponible, nettoyage manuel...');
+        // Fallback manuel
+        localStorage.removeItem('anduxara_active_promo');
+        localStorage.removeItem('anduxara_active_promo_code');
+        localStorage.removeItem('anduxara_promo_discount');
+        activePromoCode = null;
+        promoDiscount = 0;
+        updateActivePromoDisplay();
+    }
+    
     // === VIDER LE PANIER ===
     floatingCart = [];
     localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
     updateFloatingCart();
     closeFloatingCart();
     
-    // === RETIRER LE CODE PROMO ACTIF ===
-    if (promoSystem && promoSystem.activePromo) {
-        promoSystem.removePromo();
-    }
-    
     showNotification('🎉 Commande finalisée ! Merci pour votre achat.', 'success');
     
     // === LOG POUR DEBUG ===
-    console.log('📦 Commande finalisée:', {
+    console.log('📦 Commande finalisée avec nettoyage promo:', {
         total: totalMRU,
         methode: methode,
         user: orderData.userEmail || 'guest',
