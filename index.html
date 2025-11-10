@@ -5125,6 +5125,7 @@ setTimeout(() => {
     console.log('✅ Bannière affichée manuellement');
 }, 1000);
 
+
 // ===== VARIABLES GLOBALES =====
 let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
 let activePromoCode = null;
@@ -5156,7 +5157,10 @@ function detectActivePromo() {
     }
     
     return null;
-}// ===== FONCTIONS PANIER FLOTTANT MANQUANTES =====
+}
+
+
+// ===== FONCTIONS PANIER FLOTTANT MANQUANTES =====
 function toggleFloatingCart() {
     console.log('🛒 toggleFloatingCart appelée');
     const cart = document.getElementById('floating-cart');
@@ -5179,7 +5183,7 @@ function closeFloatingCart() {
 
 function removeFromFloatingCart(index) {
     console.log('🗑️ removeFromFloatingCart appelée avec index:', index);
-
+    
     // Validation
     if (index < 0 || index >= floatingCart.length) {
         console.error('❌ Index invalide:', index, 'Taille du panier:', floatingCart.length);
@@ -5842,11 +5846,11 @@ if (userInfo.isAuthenticated) {
     userDisplayInfo += `\n💡 Conseil: Créez un compte pour profiter des réductions !`;
 }
 
-// 🏷️ STATUT COMMANDE
-const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 COMMANDE STANDARD';
+// 🏷️ STATUT COMMANDE ADAPTÉ
+const orderStatus = hasActivePromo ? '🔥 COMMANDE AVEC RÉDUCTION' : '📦 NOUVELLE COMMANDE';
 
-// CORRECTION DE LA LIGNE TRONQUÉE - COMPLÉTEZ AVEC :
-const message = `COMMANDE AVEC RÉDUCTION 🔥\n\nBonjour Andu-Xara ! 👋\n\nNOUVELLE COMMANDE :\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
+// 📱 MESSAGE WHATSAPP CORRECTEMENT ADAPTÉ
+const message = `${orderStatus} ${hasActivePromo ? '🔥' : '📦'}\n\nBonjour Andu-Xara ! 👋\n\n${hasActivePromo ? 'COMMANDE AVEC RÉDUCTION :' : 'NOUVELLE COMMANDE :'}\n\n📦 PRODUITS :\n${productList}\n\n💰 TOTAL : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n${userDisplayInfo}\n\n🆔 ID COMMANDE: ${finalOrderData.cartId}\n\nPouvez-vous confirmer cette commande ?`;
 
     // === PROCESSUS DE PAIEMENT ===
     const paymentChoice = `💳 CHOISISSEZ VOTRE MÉTHODE DE PAIEMENT\n\n💰 Montant : ${totalMRU} MRU (${totalFCFA} FCFA)${promoInfo}\n\n🔢 Tapez 1, 2 ou 3 :\n\n1️⃣ → Wave Sénégal (${totalFCFA} FCFA)\n2️⃣ → Bankily Mauritanie (${totalMRU} MRU)\n3️⃣ → WhatsApp (Discuter avec notre équipe)\n\n⚠️ Votre choix (1/2/3) :`;
@@ -5927,6 +5931,7 @@ function processWhatsAppPayment(message, orderData) {
         showNotification('Ouverture WhatsApp annulée', 'info');
     }
 }
+
 
 function finaliserCommande(totalMRU, message, methode, orderData) {
     console.log('📦 Finalisation de commande avec nettoyage promo...');
