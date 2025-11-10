@@ -5797,13 +5797,20 @@ const orderData = {
     // === FIDÉLITÉ ===
     integrerFideliteAchat(totalMRU);
 
-    // === PRÉPARATION DU MESSAGE WHATSAPP AVEC TOUTES LES INFOS ===
-    const productList = floatingCart.map(item => {
-        const itemPrice = item.promoPrice || item.price;
-        const itemTotal = itemPrice * item.quantity;
-        const hasPromo = item.promoPrice && item.promoPrice !== item.price;
-        return `${item.name} (x${item.quantity}) - ${itemTotal} MRU${hasPromo ? ' 🔥 PROMO' : ''}`;
-    }).join('\n');
+// === PRÉPARATION DU MESSAGE WHATSAPP AVEC PRIX BARRÉS ===
+const productList = floatingCart.map(item => {
+    const itemPrice = item.promoPrice || item.price;
+    const itemTotal = itemPrice * item.quantity;
+    const hasPromo = item.promoPrice && item.promoPrice !== item.price;
+    
+    if (hasPromo) {
+        const originalTotal = item.price * item.quantity;
+        const economy = originalTotal - itemTotal;
+        return `${item.name} (x${item.quantity}) - ~~${originalTotal} MRU~~ ${itemTotal} MRU 🔥 Économie: ${economy} MRU`;
+    } else {
+        return `${item.name} (x${item.quantity}) - ${itemTotal} MRU`;
+    }
+}).join('\n');
 
 // 🎁 DÉTECTION ROBUSTE DES CODES PROMO APPLIQUÉS - VERSION CORRIGÉE
 let promoInfo = '';
