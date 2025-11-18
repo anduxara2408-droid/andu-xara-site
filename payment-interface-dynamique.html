@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andu-Xara | Paiement Sécurisé</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --primary-purple: #6a11cb;
+            --primary-blue: #2575fc;
+            --gold: #d4af37;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #25D366;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --border-radius: 15px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .payment-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Header identique à ton site */
+        .payment-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            flex-shrink: 0;
+        }
+        
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid white;
+        }
+        
+        .header-text {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .header-text h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        /* Layout principal */
+        .payment-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+        
+        /* Section recherche et produits */
+        .products-section {
+            background: var(--light);
+            padding: 25px;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Barre de recherche */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-result-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f5;
+            transition: background 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Produit sélectionné */
+        .selected-product-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+        }
+        
+        .selected-product {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .product-image-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .product-price {
+            color: var(--primary-purple);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Contrôle quantité */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .quantity-label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--primary-purple);
+            color: white;
+            border-color: var(--primary-purple);
+        }
+        
+        .quantity-display {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        /* Section paiement */
+        .payment-section {
+            padding: 25px;
+        }
+        
+        .order-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .summary-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid var(--primary-purple);
+        }
+        
+        /* Information limite */
+        .limit-info {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffecb5;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .limit-info.warning {
+            background: linear-gradient(135deg, #ffe6e6, #ffcccc);
+            border-color: #ffb8b8;
+        }
+        
+        .limit-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .limit-text {
+            color: #856404;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .limit-text.warning {
+            color: #d63031;
+        }
+        
+        .contact-email {
+            color: var(--primary-purple);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .contact-email:hover {
+            text-decoration: underline;
+        }
+        
+        /* Méthodes de paiement */
+        .payment-methods {
+            margin: 25px 0;
+        }
+        
+        .country-section {
+            margin-bottom: 25px;
+        }
+        
+        .country-title {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .payment-options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .payment-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, #f8faff, #f0f4ff);
+        }
+        
+        .method-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .wave { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
+        .bankily { background: linear-gradient(135deg, #f46b45, #eea849); }
+        .masrvi { background: linear-gradient(135deg, #834d9b, #d04ed6); }
+        .paypal { background: linear-gradient(135deg, #0070ba, #1546a0); }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-name {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .method-desc {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .method-fee {
+            color: var(--success);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .payment-option.selected .checkmark {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .country-badge {
+            position: absolute;
+            top: -8px;
+            right: 15px;
+            background: var(--gold);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        /* Bouton de paiement */
+        .pay-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .pay-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
+        }
+        
+        .pay-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .security {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .processing .loading {
+            display: inline-block;
+        }
+        
+        .processing .button-text {
+            display: none;
+        }
+        
+        /* Footer */
+        .payment-footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .payment-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo-img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .selected-product {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <!-- Header identique à ton site -->
+        <div class="payment-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo Andu-Xara" class="logo-img">
+                </div>
+                <div class="header-text">
+                    <h1>Andu-Xara • Paiement Sécurisé</h1>
+                    <p class="subtitle">Recherchez votre produit et finalisez votre commande</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-main">
+            <!-- Section Recherche et Produits -->
+            <div class="products-section">
+                <div class="section-title">
+                    <i class="fas fa-search"></i>
+                    Rechercher un Produit
+                </div>
+                
+                <!-- Barre de recherche -->
+                <div class="search-container">
+                    <input type="text" class="search-input" id="productSearch" 
+                           placeholder="🔍 Tapez le nom d'un produit (ex: T-shirt, Ensemble, Capuche...)" 
+                           aria-label="Rechercher un produit">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                
+                <!-- Produit sélectionné -->
+                <div class="selected-product-container" id="selectedProductContainer">
+                    <div class="section-title">
+                        <i class="fas fa-check-circle"></i>
+                        Produit Sélectionné
+                    </div>
+                    <div class="selected-product">
+                        <div class="product-image-preview" id="productImage">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="product-details">
+                            <div class="product-name" id="selectedProductName">Nom du produit</div>
+                            <div class="product-price" id="selectedProductPrice">0 MRU</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contrôle quantité -->
+                    <div class="quantity-control">
+                        <div class="quantity-label">Quantité souhaitée :</div>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                            <span class="quantity-display" id="quantityDisplay">1</span>
+                            <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Information limite de commande -->
+                <div class="limit-info" id="limitInfo">
+                    <div class="limit-icon">📦</div>
+                    <div class="limit-text">
+                        <strong>Information importante :</strong><br>
+                        Commandez de <strong>1 à 100 articles maximum</strong> via cette interface.<br>
+                        Pour les commandes de <strong>plus de 100 articles</strong>, contactez-nous directement à :
+                        <a href="mailto:contact@andu-xara.store" class="contact-email">contact@andu-xara.store</a>
+                    </div>
+                </div>
+                
+                <!-- Récapitulatif -->
+                <div class="order-summary">
+                    <div class="section-title">
+                        <i class="fas fa-receipt"></i>
+                        Récapitulatif de Commande
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Produit sélectionné:</span>
+                        <span id="summary-product">Aucun</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Quantité:</span>
+                        <span id="summary-quantity">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Prix unitaire:</span>
+                        <span id="summary-unit-price">0 MRU</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Sous-total:</span>
+                        <span id="summary-subtotal">0 MRU</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Livraison:</span>
+                        <span>Gratuite</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Frais de service:</span>
+                        <span id="summary-service-fee">0 MRU</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span id="summary-total">0 MRU</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Paiement -->
+            <div class="payment-section">
+                <div class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    Méthode de Paiement
+                </div>
+                
+                <div class="payment-methods">
+                    <!-- Sénégal -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-flag"></i>
+                            🇸🇳 Sénégal
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('wave')">
+                                <div class="method-icon wave">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Wave</div>
+                                    <div class="method-desc">Paiement mobile instantané</div>
+                                    <div class="method-fee">Frais: 1%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mauritanie -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-flag"></i>
+                            🇲🇷 Mauritanie
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('bankily')">
+                                <div class="method-icon bankily">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Bankily</div>
+                                    <div class="method-desc">Mobile money Mauritanie</div>
+                                    <div class="method-fee">Frais: 1.5%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="country-badge">Populaire</div>
+                            </div>
+                            
+                            <div class="payment-option" onclick="selectPayment('masrvi')">
+                                <div class="method-icon masrvi">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">Masrvi</div>
+                                    <div class="method-desc">Solution de paiement locale</div>
+                                    <div class="method-fee">Frais: 1.8%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- International -->
+                    <div class="country-section">
+                        <div class="country-title">
+                            <i class="fas fa-globe"></i>
+                            🌍 International
+                        </div>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment('paypal')">
+                                <div class="method-icon paypal">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="method-info">
+                                    <div class="method-name">PayPal</div>
+                                    <div class="method-desc">Cartes internationales (Visa, Mastercard)</div>
+                                    <div class="method-fee">Frais: 3.5%</div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="pay-button" id="payButton" onclick="processPayment()" disabled>
+                    <span class="button-text">
+                        <i class="fas fa-lock"></i>
+                        Finaliser la Commande
+                    </span>
+                    <div class="loading"></div>
+                </button>
+                
+                <div class="security">
+                    <i class="fas fa-shield-alt"></i>
+                    Paiement 100% sécurisé • Cryptage SSL
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-footer">
+            © 2025 Andu-Xara • Votre style, notre héritage • Service Client: +222 49 03 76 97 / +221 76 282 11 63
+        </div>
+    </div>
+
+    <script>
+        // Base de données des produits Andu-Xara
+        const products = [
+            { id: 1, name: "T-shirt logo arabe", price: 349, category: "t-shirts", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #667eea, #764ba2)" },
+            { id: 2, name: "Ensemble capuche style arabe", price: 419, category: "ensembles", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #f46b45, #eea849)" },
+            { id: 3, name: "Combinaison T-shirt et Capuche", price: 419, category: "ensembles", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #834d9b, #d04ed6)" },
+            { id: 4, name: "T-shirt Enfant", price: 279, category: "enfants", icon: "fas fa-child", color: "linear-gradient(135deg, #00b09b, #96c93d)" },
+            { id: 5, name: "Ensemble T-shirt et jogging", price: 559, category: "ensembles", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #667eea, #764ba2)" },
+            { id: 6, name: "Pull bleu", price: 489, category: "t-shirts", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+            { id: 7, name: "Capuchon blanc", price: 209, category: "accessoires", icon: "fas fa-hat-cowboy", color: "linear-gradient(135deg, #667eea, #764ba2)" },
+            { id: 8, name: "T-shirt et jogging Complet", price: 629, category: "ensembles", icon: "fas fa-tshirt", color: "linear-gradient(135deg, #f46b45, #eea849)" },
+            { id: 9, name: "Babs Premium", price: 1049, category: "ensembles", icon: "fas fa-crown", color: "linear-gradient(135deg, #ff9a9e, #fecfef)" },
+            { id: 10, name: "T-shirt Fille Noir", price: 279, category: "t-shirts", icon: "fas fa-female", color: "linear-gradient(135deg, #2c3e50, #4ca1af)" },
+            { id: 11, name: "T-shirt Fille Blanc", price: 419, category: "t-shirts", icon: "fas fa-female", color: "linear-gradient(135deg, #667eea, #764ba2)" }
+        ];
+
+        let selectedProduct = null;
+        let selectedPayment = null;
+        let quantity = 1;
+        const MAX_QUANTITY = 100;
+
+        // Recherche de produits
+        const searchInput = document.getElementById('productSearch');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            if (searchTerm.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
+
+            displaySearchResults(filteredProducts);
+        });
+
+        function displaySearchResults(products) {
+            if (products.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">Aucun produit trouvé</div>';
+            } else {
+                searchResults.innerHTML = products.map(product => `
+                    <div class="search-result-item" onclick="selectProduct(${product.id})">
+                        <strong>${product.name}</strong> - ${product.price} MRU
+                    </div>
+                `).join('');
+            }
+            searchResults.style.display = 'block';
+        }
+
+        // Sélection d'un produit
+        function selectProduct(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            quantity = 1;
+            
+            // Mettre à jour l'affichage du produit sélectionné
+            document.getElementById('selectedProductName').textContent = selectedProduct.name;
+            document.getElementById('selectedProductPrice').textContent = selectedProduct.price + ' MRU';
+            document.getElementById('productImage').innerHTML = `<i class="${selectedProduct.icon}"></i>`;
+            document.getElementById('productImage').style.background = selectedProduct.color;
+            document.getElementById('quantityDisplay').textContent = quantity;
+            
+            // Afficher le conteneur du produit sélectionné
+            document.getElementById('selectedProductContainer').style.display = 'block';
+            
+            // Masquer les résultats de recherche
+            searchResults.style.display = 'none';
+            searchInput.value = '';
+            
+            // Mettre à jour le récapitulatif
+            updateOrderSummary();
+            
+            // Vérifier la limite
+            checkQuantityLimit();
+        }
+
+        // Changement de quantité
+        function changeQuantity(change) {
+            const newQuantity = quantity + change;
+            
+            if (newQuantity >= 1 && newQuantity <= MAX_QUANTITY) {
+                quantity = newQuantity;
+                document.getElementById('quantityDisplay').textContent = quantity;
+                updateOrderSummary();
+                checkQuantityLimit();
+            }
+        }
+
+        // Vérification de la limite de quantité
+        function checkQuantityLimit() {
+            const limitInfo = document.getElementById('limitInfo');
+            
+            if (quantity >= 80) {
+                limitInfo.classList.add('warning');
+                limitInfo.innerHTML = `
+                    <div class="limit-icon">⚠️</div>
+                    <div class="limit-text warning">
+                        <strong>Attention : Vous approchez de la limite !</strong><br>
+                        Quantité actuelle : <strong>${quantity} articles</strong><br>
+                        Maximum autorisé : <strong>100 articles</strong><br>
+                        Pour commander plus, contactez : 
+                        <a href="mailto:contact@andu-xara.store" class="contact-email">contact@andu-xara.store</a>
+                    </div>
+                `;
+            } else {
+                limitInfo.classList.remove('warning');
+                limitInfo.innerHTML = `
+                    <div class="limit-icon">📦</div>
+                    <div class="limit-text">
+                        <strong>Information importante :</strong><br>
+                        Commandez de <strong>1 à 100 articles maximum</strong> via cette interface.<br>
+                        Pour les commandes de <strong>plus de 100 articles</strong>, contactez-nous à :
+                        <a href="mailto:contact@andu-xara.store" class="contact-email">contact@andu-xara.store</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Mise à jour du récapitulatif
+        function updateOrderSummary() {
+            if (!selectedProduct) return;
+
+            const subtotal = selectedProduct.price * quantity;
+            const serviceFee = selectedPayment ? calculateFees(subtotal) : 0;
+            const total = subtotal + serviceFee;
+
+            document.getElementById('summary-product').textContent = selectedProduct.name;
+            document.getElementById('summary-quantity').textContent = quantity;
+            document.getElementById('summary-unit-price').textContent = selectedProduct.price + ' MRU';
+            document.getElementById('summary-subtotal').textContent = subtotal + ' MRU';
+            document.getElementById('summary-service-fee').textContent = serviceFee + ' MRU';
+            document.getElementById('summary-total').textContent = total + ' MRU';
+
+            // Mettre à jour le bouton de paiement
+            const button = document.getElementById('payButton');
+            button.innerHTML = `<span class="button-text"><i class="fas fa-lock"></i> Payer ${total} MRU</span><div class="loading"></div>`;
+        }
+
+        // Sélection du mode de paiement
+        function selectPayment(method) {
+            // Retirer toutes les sélections
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Ajouter la nouvelle sélection
+            event.currentTarget.classList.add('selected');
+            selectedPayment = method;
+            
+            // Calculer les frais et mettre à jour
+            updateOrderSummary();
+            
+            // Activer le bouton si produit sélectionné
+            document.getElementById('payButton').disabled = !selectedProduct;
+        }
+
+        function calculateFees(amount) {
+            switch(selectedPayment) {
+                case 'wave': return Math.round(amount * 0.01);
+                case 'bankily': return Math.round(amount * 0.015);
+                case 'masrvi': return Math.round(amount * 0.018);
+                case 'paypal': return Math.round(amount * 0.035);
+                default: return 0;
+            }
+        }
+
+        // Traitement du paiement
+        function processPayment() {
+            if (!selectedProduct || !selectedPayment) return;
+
+            const button = document.getElementById('payButton');
+            button.classList.add('processing');
+            button.disabled = true;
+
+            // Simulation de traitement
+            setTimeout(() => {
+                const total = document.getElementById('summary-total').textContent;
+                
+                alert(`✅ Commande validée !\n\nProduit: ${selectedProduct.name}\nQuantité: ${quantity}\nMéthode: ${selectedPayment.toUpperCase()}\nMontant: ${total}\n\nMerci pour votre achat chez Andu-Xara !\nVotre commande sera expédiée dans les 24h.`);
+                
+                button.classList.remove('processing');
+                button.disabled = false;
+                
+                // Réinitialiser
+                resetOrder();
+                
+            }, 3000);
+        }
+
+        function resetOrder() {
+            selectedProduct = null;
+            selectedPayment = null;
+            quantity = 1;
+            
+            document.getElementById('selectedProductContainer').style.display = 'none';
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            document.getElementById('payButton').disabled = true;
+            document.getElementById('payButton').innerHTML = `<span class="button-text"><i class="fas fa-lock"></i> Finaliser la Commande</span><div class="loading"></div>`;
+            
+            // Réinitialiser le récapitulatif
+            document.getElementById('summary-product').textContent = 'Aucun';
+            document.getElementById('summary-quantity').textContent = '0';
+            document.getElementById('summary-unit-price').textContent = '0 MRU';
+            document.getElementById('summary-subtotal').textContent = '0 MRU';
+            document.getElementById('summary-service-fee').textContent = '0 MRU';
+            document.getElementById('summary-total').textContent = '0 MRU';
+            
+            checkQuantityLimit();
+        }
+
+        // Fermer les résultats de recherche en cliquant ailleurs
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Effet de chargement initial
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // Afficher l'information de limite
+            checkQuantityLimit();
+        });
+    </script>
+</body>
+</html>

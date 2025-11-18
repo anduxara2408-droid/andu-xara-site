@@ -1,0 +1,28 @@
+# Fichiers de correction temporaires
+complete_functions.py
+fix_*.py
+optimisation-securisee/
+
+# Fichiers CSS temporaires  
+css/common.css
+css/style-unified.css
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+*.log
+
+# Fichiers de backup et scripts temporaires
+*.backup
+*.sh
+index_backup_*.html
+
+# Fichiers CSS temporaires
+css/style-min.css
+*.deb
+node_modules/
+.DS_Store
+*.log
+service-account-key.json
+*.json
+*.key

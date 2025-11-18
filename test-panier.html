@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andu-Xara - Test Panier</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .product { border: 1px solid #ddd; padding: 15px; margin: 10px; border-radius: 5px; }
+        button { background: #6a11cb; color: white; border: none; padding: 10px; cursor: pointer; }
+        #floating-cart { position: fixed; bottom: 20px; right: 20px; background: white; border: 1px solid #ccc; padding: 15px; }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Test Panier Andu-Xara</h1>
+    
+    <div class="product">
+        <h3>T-shirt Logo Arabe</h3>
+        <p>Prix: 349 MRU</p>
+        <button onclick="ajouterAuPanier('T-shirt Logo Arabe', 't-shirts', 349)">Ajouter au panier</button>
+    </div>
+    
+    <div class="product">
+        <h3>Ensemble Capuche</h3>
+        <p>Prix: 419 MRU</p>
+        <button onclick="ajouterAuPanier('Ensemble Capuche', 'ensembles', 419)">Ajouter au panier</button>
+    </div>
+    
+    <div id="floating-cart">
+        <h3>🛒 Votre Panier</h3>
+        <div id="cart-items-floating"></div>
+        <p>Total: <span id="cart-total-floating">0</span> MRU</p>
+        <button onclick="toggleFloatingCart()">Ouvrir/Fermer</button>
+        <button onclick="processFloatingCheckout()">Commander</button>
+    </div>
+    
+    <script src="corrections-essentielles.js"></script>
+</body>
+</html>

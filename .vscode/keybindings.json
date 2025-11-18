@@ -1,0 +1,7 @@
+[
+    {
+        "key": "ctrl+shift+m",
+        "command": "mobile-preview.openPreview",
+        "when": "editorFocus"
+    }
+]

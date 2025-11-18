@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://andu-xara.store/sitemap.xml

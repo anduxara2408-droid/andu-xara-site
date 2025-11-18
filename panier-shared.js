@@ -1,0 +1,1 @@
+// Panier partagé - Placeholder

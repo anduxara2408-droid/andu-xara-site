@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générateur Icônes PWA</title>
+</head>
+<body>
+    <canvas id="canvas" width="512" height="512" style="border:1px solid #ccc"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Fond marron
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(0, 0, 512, 512);
+        
+        // Texte blanc
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 200px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('AX', 256, 256);
+        
+        // Télécharger
+        canvas.toBlob(blob => {
+            const link = document.createElement('a');
+            link.download = 'icon-512x512.png';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        });
+    </script>
+</body>
+</html>

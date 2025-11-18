@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acheter & Offrir - Andu-xara</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:20px; }
+    h1, h2 { text-align:center; color:#667eea; }
+    form { max-width:500px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1);}
+    input, textarea, select { width:100%; margin:10px 0; padding:10px; border:1px solid #ccc; border-radius:6px; }
+    button { background:#667eea; color:white; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; }
+    a { display:block; text-align:center; margin-top:20px; text-decoration:none; color:#667eea; font-weight:bold; }
+  </style>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S9CBS21SVR');
+  </script>
+</head>
+<body>
+  <section id="offrir" style="padding:30px; background:#f9f9f9; border-radius:10px; margin:30px 0;">
+    <h2>🎁 Acheter et Offrir</h2>
+    <form action="https://formspree.io/f/xeoldwyv" method="POST">
+
+      <label for="produit">Produit :</label><br>
+      <select id="produit" name="produit" required>
+        <option value="">-- Sélectionnez un produit --</option>
+        <option value="tshirt">T-shirt logo arabe</option>
+        <option value="ensemble">Esemble capuche</option>
+        <option value="pull">Ensemble pull</option>
+        <option value="enfant">Modéle enfants</option>
+      </select><br>
+
+      <label for="nom_destinataire">Nom du destinataire :</label><br>
+      <input type="text" id="nom_destinataire" name="nom_destinataire" required><br>
+
+      <label for="numero_destinataire">Numéro du destinataire :</label><br>
+      <input type="tel" id="numero_destinataire" name="numero_destinataire" placeholder="+222 0000000" required><br>
+
+      <label for="adresse_destinataire">Adresse du destinataire :</label><br>
+      <textarea id="adresse_destinataire" name="adresse_destinataire" required></textarea><br>
+
+      <label for="message">Message personnalisé :</label><br>
+      <textarea id="message" name="message" required></textarea><br>
+
+      <button type="submit">Envoyer 🎁</button>
+    </form>
+
+    <a href="index.html">⬅️ Retour au menu</a>
+  </section>
+</body>
+</html>

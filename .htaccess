@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# Rediriger www vers non-www
+RewriteCond %{HTTP_HOST} ^www\.andu-xara\.store [NC]
+RewriteRule ^(.*)$ https://andu-xara.store/$1 [R=301,L]
+
+# Rediriger HTTP vers HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Rediriger index.html vers /
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Rediriger toutes les pages .html vers sans extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# === CORRECTION URGENTE TYPE MIME ===
+<Files "sitemap.xml">
+    ForceType application/xml
+    Header set Content-Type "application/xml"
+</Files>
+
+<Files "robots.txt">
+    ForceType text/plain
+    Header set Content-Type "text/plain"
+</Files>

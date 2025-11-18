@@ -1,0 +1,46 @@
+{
+  "name": "mobile-preview",
+  "displayName": "📱 Mobile Preview",
+  "description": "Aperçu téléphone virtuel intégré dans VS Code",
+  "version": "1.0.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:mobilePreview"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "mobilePreview",
+          "name": "📱 Mobile Preview",
+          "when": "workspaceFolderCount > 0"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mobile-preview.openPanel",
+        "title": "📱 Ouvrir Aperçu Mobile",
+        "when": "workspaceFolderCount > 0"
+      },
+      {
+        "command": "mobile-preview.refresh",
+        "title": "🔄 Recharger l'aperçu"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mobile-preview.openPanel",
+        "key": "ctrl+shift+p",
+        "when": "editorTextFocus"
+      }
+    ]
+  }
+}
