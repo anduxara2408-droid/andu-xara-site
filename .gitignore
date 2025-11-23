@@ -1,28 +1,51 @@
-# Fichiers de correction temporaires
-complete_functions.py
-fix_*.py
-optimisation-securisee/
-
-# Fichiers CSS temporaires  
-css/common.css
-css/style-unified.css
+# Fichiers temporaires et scripts de développement
+*.py
+*.pyc
+html_parts/
+html_parts_corrected/
+*_complet*.html
+*_corrige*.html
+*_final*.html
+split_*.js
+combine_*.py
+analyze_*.py
+smart_*.py
+template_*.md
+0
 
 # Fichiers système
 .DS_Store
 Thumbs.db
 *.log
 
-# Fichiers de backup et scripts temporaires
-*.backup
-*.sh
-index_backup_*.html
+# Environnements virtuels
+venv/
+env/
+.venv/
 
-# Fichiers CSS temporaires
-css/style-min.css
-*.deb
-node_modules/
-.DS_Store
-*.log
+# Backup files
+*.backup
+*.bak
+
+# Scripts de correction temporaires
+*.sh
+apply_fix.sh
+clean_duplicates.sh
+correction_urgence.sh
+deploy_fix.sh
+fix-*.sh
+restauration_urgence.sh
+restore_panier.sh
+
+# Fichiers de configuration sensibles
 service-account-key.json
 *.json
-*.key
+
+# Dossiers de développement
+.devcontainer/
+node_modules/
+preparation-lancement-andu-xara/
+
+# Fichiers CSS temporaires
+css/common.css
+css/style-unified.css
