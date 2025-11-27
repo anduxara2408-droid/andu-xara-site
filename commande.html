@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finaliser la Commande - Andu Xara</title>
+    <title>Finaliser la Commande - Andu-Xara</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -655,6 +655,7 @@
                 <p><strong>📦 Numéro de commande:</strong> ${numeroCommande || 'N/A'}</p>
                 <p><strong>💳 Méthode:</strong> ${methodesNoms[selectedPaiement]}</p>
                 <p><strong>💰 Montant:</strong> ${formatPrix(totaux.totalReduit)} MRU</p>
+
                 ${totaux.codePromo ? `<p><strong>🎁 Code promo:</strong> ${totaux.codePromo} (-${totaux.discount}%)</p>` : ''}
                 ${totaux.economie > 0 ? `<p><strong>💸 Économie:</strong> ${formatPrix(totaux.economie)} MRU</p>` : ''}
                 
@@ -667,6 +668,7 @@
                 
                 <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
                     <p><strong>📞 Contact:</strong> +222 49 03 76 97</p>
+                    <p><strong>📞 Contact:</strong> +222 34 19 63 04</p>
                 </div>
             `;
 

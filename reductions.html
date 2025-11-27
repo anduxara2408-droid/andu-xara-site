@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Codes Promo - Andu Xara</title>
-
+    <title>Codes Promo - Andu-Xara</title>
+    
+    <!-- ✅ FAVICON CORRIGÉ - Icône ticket emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+    
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
-        html,body { height: 100%; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+        html,body { height: 100%; -webkit-font-smoothing:antialiased; }
+        
         body {
             background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
             color: #1f2d3d;
@@ -332,6 +336,63 @@
             margin-top: 10px;
             width: 100%;
         }
+
+        /* Styles pour l'indicateur de période promo */
+        .promo-period-info {
+            background: linear-gradient(90deg, #fff3cd, #ffeaa7);
+            border-left: 4px solid #f39c12;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+        .promo-period-info.available {
+            background: linear-gradient(90deg, #d4edda, #c3e6cb);
+            border-left-color: #28a745;
+        }
+        .promo-period-info.ended {
+            background: linear-gradient(90deg, #f8d7da, #f5c6cb);
+            border-left-color: #dc3545;
+        }
+
+        /* Admin panel */
+        .admin-panel {
+            background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        .admin-btn {
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+        }
+        .admin-btn.success {
+            background: linear-gradient(90deg, #16a34a, #22c55e);
+        }
+        .codes-list {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .code-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        .code-info { flex: 1; }
+        .code-actions { display: flex; gap: 8px; }
     </style>
 </head>
 <body>
@@ -340,6 +401,23 @@
             <div style="font-size:48px; margin-bottom:6px;"><i class="fas fa-tag"></i></div>
             <h1 id="siteTitle">Codes Promo Andu Xara</h1>
             <p>Activez votre code promo pour obtenir une réduction exclusive</p>
+        </div>
+
+        <!-- Panel Admin (caché par défaut) -->
+        <div id="adminPanel" class="admin-panel">
+            <h3 style="color:#dc2626; margin-bottom:15px;"><i class="fas fa-crown"></i> Panel Administrateur</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="admin-btn success" onclick="ajouterCodesPromoFirestore()">
+                    <i class="fas fa-plus"></i> Ajouter Codes Promo
+                </button>
+                <button class="admin-btn" onclick="verifierCodesPromo()">
+                    <i class="fas fa-search"></i> Vérifier Codes
+                </button>
+                <button class="admin-btn" onclick="viderCodesPromo()">
+                    <i class="fas fa-trash"></i> Vider Codes
+                </button>
+            </div>
+            <div id="codesList" class="codes-list"></div>
         </div>
 
         <div class="card" style="padding:22px;">
@@ -380,6 +458,19 @@
 
         <div id="promoSection" class="card promo-section">
             <h2><i class="fas fa-ticket-alt"></i> Activer votre code promo</h2>
+
+            <!-- Indicateur de période promo -->
+            <div id="promoPeriodInfo" class="promo-period-info">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
+                    <div>
+                        <strong>Période des codes promos</strong>
+                        <div style="font-size: 0.9rem; color: #7d6608;">
+                            Du 3 Décembre 2025 (23h59) au 13 Décembre 2025 (23h59)
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Badge du code actif -->
             <div id="activePromoBadge" class="active-promo-badge" style="display:none;">
@@ -572,6 +663,229 @@
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
+        // ===== FONCTIONS ADMIN POUR CODES PROMO =====
+        
+        // ✅ Fonction pour ajouter automatiquement les codes promo dans Firestore
+        async function ajouterCodesPromoFirestore() {
+            try {
+                showNotification('🔄 Ajout des codes promo en cours...', 'success');
+                
+                const db = firebase.firestore();
+                
+                // Codes promo avec dates exactes du 3 au 13 décembre 2025
+                const codesPromo = [
+                    {
+                        code: "BIENVENUE10",
+                        description: "Code de bienvenue 10% de réduction",
+                        discount: 10,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 1000,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "ANDU20",
+                        description: "Code spécial Andu Xara 20% de réduction",
+                        discount: 20,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 500,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "SONINKE25",
+                        description: "Code communauté Soninké 25% de réduction",
+                        discount: 25,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 300,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "AFRICA15",
+                        description: "Code Afrique 15% de réduction",
+                        discount: 15,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 400,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "MODE10",
+                        description: "Code mode 10% de réduction",
+                        discount: 10,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 600,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "PREMIUM25",
+                        description: "Code premium 25% de réduction",
+                        discount: 25,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 200,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    },
+                    {
+                        code: "ANDU30",
+                        description: "Code spécial Andu 30% de réduction",
+                        discount: 30,
+                        type: "pourcentage",
+                        isActive: true,
+                        maxUses: 100,
+                        usedCount: 0,
+                        validFrom: new Date("2025-12-03T23:59:59"),
+                        validUntil: new Date("2025-12-13T23:59:59"),
+                        createdAt: new Date(),
+                        createdBy: "admin"
+                    }
+                ];
+
+                let addedCount = 0;
+                let updatedCount = 0;
+
+                // Ajouter chaque code promo à Firestore
+                for (const promo of codesPromo) {
+                    // Vérifier si le code existe déjà
+                    const existingQuery = await db.collection('promoCodes')
+                        .where('code', '==', promo.code)
+                        .get();
+
+                    if (existingQuery.empty) {
+                        // Code n'existe pas, l'ajouter
+                        await db.collection('promoCodes').add(promo);
+                        addedCount++;
+                        console.log(`✅ Code promo "${promo.code}" ajouté avec succès`);
+                    } else {
+                        // Code existe, le mettre à jour
+                        const docId = existingQuery.docs[0].id;
+                        await db.collection('promoCodes').doc(docId).update(promo);
+                        updatedCount++;
+                        console.log(`🔄 Code promo "${promo.code}" mis à jour`);
+                    }
+                }
+
+                const message = `🎉 ${addedCount} codes ajoutés, ${updatedCount} codes mis à jour !`;
+                showNotification(message, 'success');
+                console.log(message);
+                
+                // Recharger la liste des codes
+                verifierCodesPromo();
+                
+                return { success: true, added: addedCount, updated: updatedCount };
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de l\'ajout des codes promo:', error);
+                showNotification('❌ Erreur lors de l\'ajout des codes: ' + error.message, 'error');
+                return { success: false, error: error.message };
+            }
+        }
+
+        // ✅ Fonction pour vérifier les codes promo dans Firestore
+        async function verifierCodesPromo() {
+            try {
+                const db = firebase.firestore();
+                const snapshot = await db.collection('promoCodes').get();
+                const codesList = document.getElementById('codesList');
+                
+                if (!codesList) return;
+                
+                codesList.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    codesList.innerHTML = '<p style="text-align:center; color:#64748b;">Aucun code promo trouvé</p>';
+                    return;
+                }
+                
+                console.log('📋 Codes promo dans Firestore:');
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const validFrom = data.validFrom ? data.validFrom.toDate() : new Date();
+                    const validUntil = data.validUntil ? data.validUntil.toDate() : new Date();
+                    
+                    console.log(`- ${data.code}: ${data.discount}% (${data.description})`);
+                    
+                    const codeItem = document.createElement('div');
+                    codeItem.className = 'code-item';
+                    codeItem.innerHTML = `
+                        <div class="code-info">
+                            <strong>${data.code}</strong> - ${data.discount}% 
+                            <div style="font-size:0.85rem; color:#64748b;">
+                                ${data.description}
+                            </div>
+                            <div style="font-size:0.75rem; color:#94a3b8;">
+                                Utilisations: ${data.usedCount || 0}/${data.maxUses} | 
+                                Valide du ${validFrom.toLocaleDateString('fr-FR')} au ${validUntil.toLocaleDateString('fr-FR')}
+                            </div>
+                        </div>
+                        <div class="code-actions">
+                            <span style="color:${data.isActive ? '#16a34a' : '#dc2625'}; font-size:0.8rem;">
+                                ${data.isActive ? '✅ Actif' : '❌ Inactif'}
+                            </span>
+                        </div>
+                    `;
+                    codesList.appendChild(codeItem);
+                });
+                
+                showNotification(`🔍 ${snapshot.size} codes promo trouvés`, 'success');
+                return snapshot.size;
+            } catch (error) {
+                console.error('❌ Erreur vérification codes:', error);
+                showNotification('❌ Erreur vérification codes: ' + error.message, 'error');
+                return 0;
+            }
+        }
+
+        // ✅ Fonction pour vider les codes promo (admin seulement)
+        async function viderCodesPromo() {
+            if (!confirm('⚠️ Êtes-vous sûr de vouloir supprimer TOUS les codes promo ?')) {
+                return;
+            }
+            
+            try {
+                const db = firebase.firestore();
+                const snapshot = await db.collection('promoCodes').get();
+                
+                const batch = db.batch();
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                await batch.commit();
+                showNotification('🗑️ Tous les codes promo ont été supprimés', 'success');
+                document.getElementById('codesList').innerHTML = '<p style="text-align:center; color:#64748b;">Aucun code promo</p>';
+            } catch (error) {
+                console.error('❌ Erreur suppression codes:', error);
+                showNotification('❌ Erreur suppression codes: ' + error.message, 'error');
+            }
+        }
+
         // ===== FONCTIONS UTILITAIRES MANQUANTES =====
         
         // ✅ Fonction pour générer des couleurs aléatoires
@@ -693,7 +1007,7 @@
             if (el) el.style.display = show ? 'block' : 'none'; 
         }
 
-        // ===== NOUVEAU SYSTÈME DE GESTION DES CODES PROMO =====
+        // ===== NOUVEAU SYSTÈME DE GESTION DES CODES PROMO AVEC DATES =====
         class PromoCodeManager {
             constructor() {
                 this.STORAGE_KEYS = {
@@ -705,6 +1019,12 @@
                     LAST_USER: 'anduxara_last_user'
                 };
                 
+                // ✅ DATES DE VALIDITÉ DES CODES PROMOS
+                this.PROMO_DATES = {
+                    start: new Date('2025-12-03T23:59:59'), // 3 Décembre 2025 à 23h59min59s
+                    end: new Date('2025-12-13T23:59:59')    // 13 Décembre 2025 à 23h59min59s
+                };
+                
                 this.init();
             }
 
@@ -713,6 +1033,96 @@
                 this.initializeGlobalVariables();
                 this.setupStorageListener();
                 this.checkExistingPromo();
+                this.updatePromoPeriodDisplay();
+                
+                // Vérifier les codes au démarrage
+                setTimeout(() => verifierCodesPromo(), 2000);
+            }
+
+            // ✅ Mettre à jour l'affichage de la période promo
+            updatePromoPeriodDisplay() {
+                const promoPeriodInfo = document.getElementById('promoPeriodInfo');
+                if (!promoPeriodInfo) return;
+
+                const now = new Date();
+                const timeUntilStart = this.PROMO_DATES.start - now;
+                const timeUntilEnd = this.PROMO_DATES.end - now;
+
+                promoPeriodInfo.className = 'promo-period-info';
+
+                if (now < this.PROMO_DATES.start) {
+                    // Période pas encore commencée
+                    const daysUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
+                    promoPeriodInfo.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-clock" style="color: #e67e22;"></i>
+                            <div>
+                                <strong>Codes promos bientôt disponibles</strong>
+                                <div style="font-size: 0.9rem; color: #7d6608;">
+                                    Début dans ${daysUntilStart} jour${daysUntilStart > 1 ? 's' : ''} - Le 3 Décembre 2025 à 23h59
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (now > this.PROMO_DATES.end) {
+                    // Période terminée
+                    promoPeriodInfo.classList.add('ended');
+                    promoPeriodInfo.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-calendar-times" style="color: #dc3545;"></i>
+                            <div>
+                                <strong>Période des codes promos terminée</strong>
+                                <div style="font-size: 0.9rem; color: #721c24;">
+                                    La période était du 3 au 13 Décembre 2025
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Période en cours
+                    promoPeriodInfo.classList.add('available');
+                    const daysRemaining = Math.ceil(timeUntilEnd / (1000 * 60 * 60 * 24));
+                    promoPeriodInfo.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-bolt" style="color: #28a745;"></i>
+                            <div>
+                                <strong>🎉 Codes promos actifs !</strong>
+                                <div style="font-size: 0.9rem; color: #155724;">
+                                    ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''} - Jusqu'au 13 Décembre 23h59
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // ✅ Vérifier si nous sommes dans la période de validité
+            isPromoPeriodActive() {
+                const now = new Date();
+                return now >= this.PROMO_DATES.start && now <= this.PROMO_DATES.end;
+            }
+
+            // ✅ Obtenir le statut de la période promo
+            getPromoPeriodStatus() {
+                const now = new Date();
+                if (now < this.PROMO_DATES.start) {
+                    return {
+                        status: 'not_started',
+                        message: `Les codes promos seront disponibles à partir du ${this.formatFrenchDate(this.PROMO_DATES.start)}`,
+                        daysRemaining: Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60 * 24))
+                    };
+                } else if (now > this.PROMO_DATES.end) {
+                    return {
+                        status: 'ended',
+                        message: 'La période des codes promos est terminée'
+                    };
+                } else {
+                    return {
+                        status: 'active',
+                        message: 'Période promo en cours',
+                        daysRemaining: Math.ceil((this.PROMO_DATES.end - now) / (1000 * 60 * 60 * 24))
+                    };
+                }
             }
 
             // ✅ CORRECTION CRITIQUE: Initialiser les variables globales window
@@ -870,6 +1280,15 @@
                 console.log('🎯 Application code promo:', code);
                 
                 try {
+                    // Vérifier la période de validité d'abord
+                    const periodStatus = this.getPromoPeriodStatus();
+                    if (periodStatus.status === 'not_started') {
+                        throw new Error(periodStatus.message);
+                    }
+                    if (periodStatus.status === 'ended') {
+                        throw new Error(periodStatus.message);
+                    }
+
                     // Vérifier la validité du code
                     const promoData = await this.validatePromoCode(code, user.uid);
                     if (!promoData) {
@@ -895,45 +1314,65 @@
                 }
             }
 
-            // ✅ Valider le code promo
+            // ✅ Valider le code promo (AVEC VÉRIFICATION DES DATES DANS FIRESTORE)
             async validatePromoCode(code, userId) {
-                const CODES_PROMO_VALIDES = {
-                    'TEST15': { discount: 15, description: 'Code test 15% de réduction' },
-                    'BIENVENUE10': { discount: 10, description: 'Bienvenue 10% de réduction' },
-                    'ANDU20': { discount: 20, description: 'Code spécial Andu Xara 20%' },
-                    'SOLDE25': { discount: 25, description: 'Soldes 25% de réduction' },
-                    'NEW2024': { discount: 15, description: 'Nouveau client 15%' },
-                    'FIDELITE': { discount: 10, description: 'Code fidélité 10%' },
-                    'ANDU2025': { discount: 20, description: 'Code Andu 2025 20%' },
-                    'SONINKE25': { discount: 25, description: 'Code Soninké 25%' },
-                    'AFRICA15': { discount: 15, description: 'Code Afrique 15%' },
-                    'MODE10': { discount: 10, description: 'Code Mode 10%' },
-                    'PREMIUM25': { discount: 25, description: 'Code Premium 25%' },
-                    'WELCOME10': { discount: 10, description: 'Welcome 10%' },
-                    'ANDU30': { discount: 30, description: 'Code spécial Andu 30%' }
-                };
-
-                // Vérifier dans les codes locaux d'abord
-                if (CODES_PROMO_VALIDES[code]) {
-                    return CODES_PROMO_VALIDES[code];
-                }
-
-                // Vérifier dans Firebase
+                // Vérifier dans Firebase d'abord
                 try {
                     const promoQuery = await firebase.firestore()
                         .collection('promoCodes')
-                        .where('code', '==', code)
+                        .where('code', '==', code.toUpperCase())
                         .where('isActive', '==', true)
                         .get();
                     
                     if (!promoQuery.empty) {
-                        return promoQuery.docs[0].data();
+                        const promoDoc = promoQuery.docs[0];
+                        const promoData = promoDoc.data();
+                        
+                        // ✅ Vérifier les dates de validité
+                        const now = new Date();
+                        const validFrom = promoData.validFrom ? promoData.validFrom.toDate() : this.PROMO_DATES.start;
+                        const validUntil = promoData.validUntil ? promoData.validUntil.toDate() : this.PROMO_DATES.end;
+                        
+                        if (now < validFrom) {
+                            throw new Error(`Ce code sera disponible à partir du ${this.formatFrenchDate(validFrom)}`);
+                        }
+                        
+                        if (now > validUntil) {
+                            throw new Error('Ce code promo a expiré');
+                        }
+                        
+                        // Vérifier les limites d'utilisation
+                        if (promoData.usedCount >= promoData.maxUses) {
+                            throw new Error('Limite d\'utilisation atteinte pour ce code');
+                        }
+                        
+                        return {
+                            discount: promoData.discount,
+                            description: promoData.description,
+                            type: promoData.type,
+                            promoId: promoDoc.id,
+                            maxUses: promoData.maxUses,
+                            usedCount: promoData.usedCount
+                        };
                     }
                 } catch (firebaseError) {
                     console.log('🔍 Code non trouvé dans Firebase:', firebaseError);
+                    // Continuer avec la vérification des codes locaux
                 }
 
-                return null;
+                // Fallback vers les codes locaux (pour compatibilité)
+                const CODES_PROMO_VALIDES = {
+                    'TEST15': { discount: 15, description: 'Code test 15% de réduction' },
+                    'BIENVENUE10': { discount: 10, description: 'Bienvenue 10% de réduction' },
+                    'ANDU20': { discount: 20, description: 'Code spécial Andu Xara 20%' },
+                    'SOLDE25': { discount: 25, description: 'Soldes 25% de réduction' }
+                };
+
+                if (CODES_PROMO_VALIDES[code.toUpperCase()]) {
+                    return CODES_PROMO_VALIDES[code.toUpperCase()];
+                }
+
+                throw new Error('Code promo invalide ou expiré');
             }
 
             // ✅ Vérifier si le code a déjà été utilisé
@@ -980,6 +1419,13 @@
                 // Sauvegarder dans Firebase (avec fallback)
                 try {
                     await firebase.firestore().collection('promoUsage').add(usageData);
+                    
+                    // Mettre à jour le compteur d'utilisation du code promo
+                    if (promoData.promoId) {
+                        await firebase.firestore().collection('promoCodes').doc(promoData.promoId).update({
+                            usedCount: firebase.firestore.FieldValue.increment(1)
+                        });
+                    }
                     
                     // Mettre à jour l'utilisateur
                     await firebase.firestore().collection('users').doc(user.uid).update({
@@ -1081,6 +1527,19 @@
                 }
             }
 
+            // ✅ Formater les dates en français
+            formatFrenchDate(date) {
+                const options = { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+                return date.toLocaleDateString('fr-FR', options);
+            }
+
             // ✅ Utilitaires
             async getIPAddress() {
                 try {
@@ -1168,7 +1627,7 @@
                 }
             } catch (error) {
                 console.error('Erreur application code promo:', error);
-                messageDiv.innerHTML = '<span style="color:#e53e3e;">❌ Erreur lors de l\'activation du code</span>';
+                messageDiv.innerHTML = `<span style="color:#e53e3e;">❌ ${error.message || 'Erreur lors de l\'activation du code'}</span>`;
                 promoBtn.disabled = false;
                 promoBtn.innerHTML = '<i class="fas fa-check"></i> Activer';
             }
@@ -1180,12 +1639,14 @@
             if (user) {
                 console.log('🔄 Synchronisation complète avec index.html...');
                 
-                // Sauvegarder les infos utilisateur
-                localStorage.setItem('anduxara_last_user', user.email);
                 localStorage.setItem('anduxara_user_authenticated', 'true');
                 localStorage.setItem('anduxara_user_email', user.email);
                 localStorage.setItem('anduxara_user_id', user.uid);
-                
+                localStorage.setItem('anduxara_user_name', user.displayName);
+
+                sessionStorage.setItem('anduxara_user_authenticated', 'true');
+                sessionStorage.setItem('anduxara_user_email', user.email);
+   
                 // Synchroniser le code promo actif si existant
                 const manager = getPromoManager();
                 const activeCode = localStorage.getItem(manager.STORAGE_KEYS.ACTIVE_CODE);
@@ -1219,8 +1680,14 @@
                         localStorage.setItem('anduxara_last_user', user.email);
                         chargerHistoriqueUtilisateur(user.uid);
                         this.verifierCodeActifLocal(user.uid);
+                        
+                        // Afficher le panel admin si c'est un admin
+                        if (user.email === 'admin@anduxara.com' || user.email.includes('admin')) {
+                            document.getElementById('adminPanel').style.display = 'block';
+                        }
                     } else {
                         this.user = null; this.updateUI(); console.log('🚪 Utilisateur déconnecté');
+                        document.getElementById('adminPanel').style.display = 'none';
                     }
                 });
             }
@@ -1509,7 +1976,7 @@
         // ===== INITIALISATION COMPLÈTE =====
         document.addEventListener('DOMContentLoaded', () => {
             // Initialiser le manager de codes promo
-            getPromoManager();
+            const promoManager = getPromoManager();
             
             // Initialiser les couleurs du titre
             applyRandomColorsToTitle({ intervalMs: 6000 });
@@ -1607,6 +2074,11 @@
             if (promoInput) promoInput.addEventListener('keypress', function(e){ 
                 if (e.key === 'Enter') appliquerCodePromo(); 
             });
+
+            // Actualiser l'affichage de la période promo toutes les minutes
+            setInterval(() => {
+                promoManager.updatePromoPeriodDisplay();
+            }, 60000);
         });
 
         // Exposer les fonctions globales pour le débogage
@@ -1622,6 +2094,10 @@
         window.goHome = goHome;
         window.connectWithSocial = connectWithSocial;
         window.synchroniserAvecIndex = synchroniserAvecIndex;
+        window.ajouterCodesPromoFirestore = ajouterCodesPromoFirestore;
+        window.verifierCodesPromo = verifierCodesPromo;
+        window.viderCodesPromo = viderCodesPromo;
     </script>
 </body>
 </html>
+

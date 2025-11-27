@@ -114,3 +114,21 @@ function loadPromoState() {
     }
     updateActivePromoDisplay();
 }
+// Fonction pour mettre à jour l'affichage des promos
+window.updateActivePromoDisplay = function() {
+    const display = document.getElementById('active-promo-display');
+    const codeElement = document.getElementById('active-promo-code');
+
+    if (!display || !codeElement) return;
+
+    const hasGlobalPromo = window.activePromoCode && window.promoDiscount > 0;
+    const hasLocalPromo = localStorage.getItem('anduxara_active_promo_code');
+
+    if (hasGlobalPromo && hasLocalPromo) {
+        display.style.display = 'block';
+        codeElement.textContent = `${window.activePromoCode} (-${window.promoDiscount}%)`;
+    } else {
+        display.style.display = 'none';
+        codeElement.textContent = '';
+    }
+};
