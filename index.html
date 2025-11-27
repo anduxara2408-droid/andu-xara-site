@@ -41,6 +41,7 @@ const firebaseConfig = {
 };
 
 // Initialiser Firebase
+// Remplacer l'initialisation Firebase actuelle par :
 function initializeFirebase() {
     return new Promise((resolve, reject) => {
         try {
@@ -61,7 +62,7 @@ function initializeFirebase() {
                 return;
             }
             
-            // Initialiser avec la BONNE configuration
+            // Initialiser avec la configuration
             firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
             db = firebase.firestore();
@@ -519,140 +520,140 @@ window.PromoSystem = class PromoSystem {
         }
     }
 
-async createUserData() {
-    if (!window.FIRESTORE_AVAILABLE) {
-        console.log('⚠️ Création données en mode local');
-        this.userData = {
+    async createUserData() {
+        if (!window.FIRESTORE_AVAILABLE) {
+            console.log('⚠️ Création données en mode local');
+            this.userData = {
+                email: this.currentUser.email,
+                usedPromoCodes: [],
+                orders: [],
+                rewards: 0,
+                userCode: this.generateUserCode()
+            };
+            return;
+        }
+
+        const now = new Date();
+        const timestamp = firebase.firestore.Timestamp.fromDate(now);
+
+        const userData = {
             email: this.currentUser.email,
+            createdAt: timestamp,
             usedPromoCodes: [],
             orders: [],
             rewards: 0,
             userCode: this.generateUserCode()
         };
-        return;
+
+        try {
+            await db.collection('users').doc(this.currentUser.uid).set(userData);
+            this.userData = userData;
+            console.log('👤 Nouvel utilisateur créé');
+        } catch (error) {
+            console.error('❌ Erreur création utilisateur:', error);
+            this.userData = userData;
+        }
     }
 
-    const now = new Date();
-    const timestamp = firebase.firestore.Timestamp.fromDate(now);
-
-    const userData = {
-        email: this.currentUser.email,
-        createdAt: timestamp,
-        usedPromoCodes: [],
-        orders: [],
-        rewards: 0,
-        userCode: this.generateUserCode()
-    };
-
-    try {
-        await db.collection('users').doc(this.currentUser.uid).set(userData);
-        this.userData = userData;
-        console.log('👤 Nouvel utilisateur créé');
-    } catch (error) {
-        console.error('❌ Erreur création utilisateur:', error);
-        this.userData = userData;
-    }
-}
-
-generateUserCode() {
-    return 'AX' + Date.now().toString(36).toUpperCase();
-}
-
-async validateAndApplyPromo(code) {
-    if (!this.currentUser) {
-        this.showLoginPrompt();
-        return { success: false, message: 'Veuillez vous connecter d\\'abord' };
+    generateUserCode() {
+        return 'AX' + Date.now().toString(36).toUpperCase();
     }
 
-    try {
-        // ✅ CORRECTION : VÉRIFIER EN PREMIER
-        const alreadyUsed = await this.checkIfPromoAlreadyUsed(code);
-        if (alreadyUsed) {
-            console.log('❌ Code déjà utilisé détecté AVANT application');
-            return {
-                success: false,
-                message: '❌ Vous avez déjà utilisé ce code promo.'
-            };
+    async validateAndApplyPromo(code) {
+        if (!this.currentUser) {
+            this.showLoginPrompt();
+            return { success: false, message: 'Veuillez vous connecter d\\'abord' };
         }
 
-        if (!window.FIRESTORE_AVAILABLE) {
+        try {
+            // ✅ CORRECTION : VÉRIFIER EN PREMIER
+            const alreadyUsed = await this.checkIfPromoAlreadyUsed(code);
+            if (alreadyUsed) {
+                console.log('❌ Code déjà utilisé détecté AVANT application');
+                return {
+                    success: false,
+                    message: '❌ Vous avez déjà utilisé ce code promo.'
+                };
+            }
+
+            if (!window.FIRESTORE_AVAILABLE) {
+                return this.applyPromoOffline(code);
+            }
+
+            const promoDoc = await db.collection('promoCodes').doc(code.toUpperCase()).get();
+
+            if (!promoDoc.exists) {
+                return { success: false, message: 'Code promo invalide' };
+            }
+
+            const promoData = promoDoc.data();
+
+            const validation = await this.validatePromoConditions(promoData, code);
+            if (!validation.success) {
+                return validation;
+            }
+
+            // ✅ MARQUER IMMÉDIATEMENT COMME UTILISÉ
+            await this.applyPromoToUser(promoData, code);
+
+            return {
+                success: true,
+                message: `✅ Code ${code} appliqué ! Réduction de ${promoData.discount}%`,
+                discount: promoData.discount
+            };
+
+        } catch (error) {
+            console.error('❌ Erreur validation promo:', error);
             return this.applyPromoOffline(code);
         }
+    } // ✅ CORRECTION : ACCOLADE FERMANTE AJOUTÉE
 
-        const promoDoc = await db.collection('promoCodes').doc(code.toUpperCase()).get();
+    async checkIfPromoAlreadyUsed(code) {
+        const codeUpper = code.toUpperCase();
 
-        if (!promoDoc.exists) {
-            return { success: false, message: 'Code promo invalide' };
-        }
-
-        const promoData = promoDoc.data();
-
-        const validation = await this.validatePromoConditions(promoData, code);
-        if (!validation.success) {
-            return validation;
-        }
-
-        // ✅ MARQUER IMMÉDIATEMENT COMME UTILISÉ
-        await this.applyPromoToUser(promoData, code);
-
-        return {
-            success: true,
-            message: `✅ Code ${code} appliqué ! Réduction de ${promoData.discount}%`,
-            discount: promoData.discount
-        };
-
-    } catch (error) {
-        console.error('❌ Erreur validation promo:', error);
-        return this.applyPromoOffline(code);
-    }
-} // 
-
-async checkIfPromoAlreadyUsed(code) {
-    const codeUpper = code.toUpperCase();
-
-    // ✅ VÉRIFICATION 1 : Code actuellement actif
-    if (this.activePromo && this.activePromo.code === codeUpper) {
-        console.log('❌ Code déjà actif actuellement');
-        return true;
-    }
-
-    // ✅ VÉRIFICATION 2 : Firestore
-    if (window.FIRESTORE_AVAILABLE && this.userData && this.userData.usedPromoCodes) {
-        const firestoreUsed = this.userData.usedPromoCodes.some(function(usedCode) {
-            // Accepter TOUT orderId (même "locked-", "order-", "pending-")
-            return usedCode.code === codeUpper;
-        });
-
-        if (firestoreUsed) {
-            console.log('❌ Code déjà utilisé (Firestore):', codeUpper);
+        // ✅ VÉRIFICATION 1 : Code actuellement actif
+        if (this.activePromo && this.activePromo.code === codeUpper) {
+            console.log('❌ Code déjà actif actuellement');
             return true;
         }
-    }
 
-    // ✅ VÉRIFICATION 3 : Stockage local
-    try {
-        const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
-        const localUsed = localUsedPromos.some(function(promo) {
-            return promo.code === codeUpper &&
-                   promo.userEmail === (this.currentUser ? this.currentUser.email : 'guest');
-        }.bind(this));
+        // ✅ VÉRIFICATION 2 : Firestore
+        if (window.FIRESTORE_AVAILABLE && this.userData && this.userData.usedPromoCodes) {
+            const firestoreUsed = this.userData.usedPromoCodes.some(function(usedCode) {
+                // Accepter TOUT orderId (même "locked-", "order-", "pending-")
+                return usedCode.code === codeUpper;
+            });
 
-        if (localUsed) {
-            console.log('❌ Code déjà utilisé (Local):', codeUpper);
+            if (firestoreUsed) {
+                console.log('❌ Code déjà utilisé (Firestore):', codeUpper);
+                return true;
+            }
+        }
+
+        // ✅ VÉRIFICATION 3 : Stockage local
+        try {
+            const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
+            const localUsed = localUsedPromos.some(function(promo) {
+                return promo.code === codeUpper &&
+                       promo.userEmail === (this.currentUser ? this.currentUser.email : 'guest');
+            }.bind(this));
+
+            if (localUsed) {
+                console.log('❌ Code déjà utilisé (Local):', codeUpper);
+                return true;
+            }
+        } catch (error) {
+            console.error('Erreur vérification locale:', error);
+        }
+
+        // ✅ VÉRIFICATION 4 : Variable globale activePromoCode
+        if (window.activePromoCode === codeUpper) {
+            console.log('❌ Code déjà dans variable globale');
             return true;
         }
-    } catch (error) {
-        console.error('Erreur vérification locale:', error);
-    }
 
-    // ✅ VÉRIFICATION 4 : Variable globale activePromoCode
-    if (window.activePromoCode === codeUpper) {
-        console.log('❌ Code déjà dans variable globale');
-        return true;
+        return false;
     }
-
-    return false;
-}
 
     applyPromoOffline(code) {
         console.log('🔄 Application promo en mode hors ligne...');
@@ -726,67 +727,66 @@ async checkIfPromoAlreadyUsed(code) {
         return { success: true };
     }
 
-} 
-
-async applyPromoToUser(promoData, code) {
-    const codeUpper = code.toUpperCase();
-    const now = new Date();
-    const timestamp = firebase.firestore.Timestamp.fromDate(now);
-    
-    // ✅ MARQUAGE IMMÉDIAT ET PERMANENT
-    const usageEntry = {
-        code: codeUpper,
-        usedAt: timestamp,
-        orderId: 'locked-' + Date.now(), // ← Ne commence PAS par "pending"
-        discount: promoData.discount,
-        status: 'used', // ← Statut définitif
-        permanent: true // ← Marqueur permanent
-    };
-    
-    if (window.FIRESTORE_AVAILABLE) {
-        try {
-            // ✅ ÉCRITURE ATOMIQUE FIRESTORE
-            await db.collection('users').doc(this.currentUser.uid).update({
-                usedPromoCodes: firebase.firestore.FieldValue.arrayUnion(usageEntry),
-                activePromo: {
-                    code: codeUpper,
-                    discount: promoData.discount,
-                    appliedAt: now,
-                    locked: true // ← Code verrouillé
-                }
-            });
-            
-            await db.collection('promoCodes').doc(codeUpper).update({
-                usedCount: firebase.firestore.FieldValue.increment(1)
-            });
-            
-            console.log('🔒 Code IMMÉDIATEMENT verrouillé dans Firestore');
-        } catch (error) {
-            console.error('❌ Erreur Firestore:', error);
+    async applyPromoToUser(promoData, code) {
+        const codeUpper = code.toUpperCase();
+        const now = new Date();
+        const timestamp = firebase.firestore.Timestamp.fromDate(now);
+        
+        // ✅ MARQUAGE IMMÉDIAT ET PERMANENT
+        const usageEntry = {
+            code: codeUpper,
+            usedAt: timestamp,
+            orderId: 'locked-' + Date.now(), // ← Ne commence PAS par "pending"
+            discount: promoData.discount,
+            status: 'used', // ← Statut définitif
+            permanent: true // ← Marqueur permanent
+        };
+        
+        if (window.FIRESTORE_AVAILABLE) {
+            try {
+                // ✅ ÉCRITURE ATOMIQUE FIRESTORE
+                await db.collection('users').doc(this.currentUser.uid).update({
+                    usedPromoCodes: firebase.firestore.FieldValue.arrayUnion(usageEntry),
+                    activePromo: {
+                        code: codeUpper,
+                        discount: promoData.discount,
+                        appliedAt: now,
+                        locked: true // ← Code verrouillé
+                    }
+                });
+                
+                await db.collection('promoCodes').doc(codeUpper).update({
+                    usedCount: firebase.firestore.FieldValue.increment(1)
+                });
+                
+                console.log('🔒 Code IMMÉDIATEMENT verrouillé dans Firestore');
+            } catch (error) {
+                console.error('❌ Erreur Firestore:', error);
+            }
         }
+        
+        // ✅ MARQUER AUSSI EN LOCAL (double sécurité)
+        const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
+        localUsedPromos.push({
+            code: codeUpper,
+            usedAt: now.toISOString(),
+            userEmail: this.currentUser.email,
+            permanent: true
+        });
+        localStorage.setItem('local_used_promos', JSON.stringify(localUsedPromos));
+        
+        this.activePromo = {
+            code: codeUpper,
+            discount: promoData.discount,
+            appliedAt: now,
+            locked: true
+        };
+        
+        this.applyPromoToCart(codeUpper, promoData.discount);
+        
+        console.log('🔒 Code promo DÉFINITIVEMENT BLOQUÉ:', codeUpper);
     }
-    
-    // ✅ MARQUER AUSSI EN LOCAL (double sécurité)
-    const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
-    localUsedPromos.push({
-        code: codeUpper,
-        usedAt: now.toISOString(),
-        userEmail: this.currentUser.email,
-        permanent: true
-    });
-    localStorage.setItem('local_used_promos', JSON.stringify(localUsedPromos));
-    
-    this.activePromo = {
-        code: codeUpper,
-        discount: promoData.discount,
-        appliedAt: now,
-        locked: true
-    };
-    
-    this.applyPromoToCart(codeUpper, promoData.discount);
-    
-    console.log('🔒 Code promo DÉFINITIVEMENT BLOQUÉ:', codeUpper);
-}
+
     applyPromoToCart(code, discount) {
         if (window.floatingCart && Array.isArray(window.floatingCart)) {
             window.floatingCart.forEach(item => {
@@ -804,138 +804,109 @@ async applyPromoToUser(promoData, code) {
         this.updateActivePromoDisplay(code, discount);
     }
 
-// ===== FONCTION CORRIGÉE COMPLÈTE =====
-async markPromoAsUsedDefinitively(orderData) {
-    console.log('🔒 Début markPromoAsUsedDefinitively');
+    // ===== FONCTION CORRIGÉE COMPLÈTE =====
+    async markPromoAsUsedDefinitively(orderData) {
+        console.log('🔒 Début markPromoAsUsedDefinitively');
 
-    if (!window.FIRESTORE_AVAILABLE) {
-        console.log('⚠️ Firestore indisponible - Marquage local uniquement');
-        this.markPromoUsedLocally(orderData);
-        return;
-    }
-
-    if (!this.currentUser) {
-        console.log('❌ Pas d\\'utilisateur connecté');
-        return;
-    }
-
-    const promoCode = this.activePromo ? this.activePromo.code :
-                     (orderData.promoStatusBeforeCheckout ? orderData.promoStatusBeforeCheckout.promoCode : null);
-
-    if (!promoCode) {
-        console.log('❌ Pas de code promo à finaliser');
-        return;
-    }
-
-    console.log('🔒 Finalisation du code:', promoCode);
-
-    try {
-        const userRef = db.collection('users').doc(this.currentUser.uid);
-        const userDoc = await userRef.get();
-
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const now = new Date();
-            const timestamp = firebase.firestore.Timestamp.fromDate(now);
-
-            let codeFound = false;
-            const updatedCodes = userData.usedPromoCodes.map(function(entry) {
-                if (entry.code === promoCode && entry.orderId && entry.orderId.startsWith('pending-')) {
-                    codeFound = true;
-                    return {
-                        code: entry.code,
-                        usedAt: entry.usedAt,
-                        orderId: orderData.cartId || 'order-' + Date.now(),
-                        orderAmount: orderData.total,
-                        finalizedAt: timestamp,
-                        discount: entry.discount
-                    };
-                }
-                return entry;
-            });
-
-            if (!codeFound) {
-                console.log('⚠️ Code pas trouvé en pending, ajout maintenant');
-                updatedCodes.push({
-                    code: promoCode,
-                    usedAt: timestamp,
-                    orderId: orderData.cartId || 'order-' + Date.now(),
-                    orderAmount: orderData.total,
-                    finalizedAt: timestamp,
-                    discount: orderData.promoStatusBeforeCheckout ? orderData.promoStatusBeforeCheckout.promoDiscount : 0
-                });
-            }
-
-            await userRef.update({
-                usedPromoCodes: updatedCodes,
-                activePromo: firebase.firestore.FieldValue.delete()
-            });
-
-            console.log('✅ Firestore mis à jour avec code définitif');
+        if (!window.FIRESTORE_AVAILABLE) {
+            console.log('⚠️ Firestore indisponible - Marquage local uniquement');
+            markPromoUsedLocally(orderData);
+            return;
         }
 
-        this.cleanupPromoStorage();
-        console.log('🔒 Code promo définitivement marqué comme utilisé');
-
-    } catch (error) {
-        console.error('❌ Erreur marquage définitif:', error);
-        this.markPromoUsedLocally(orderData);
-    }
-}
-
-// Fonction séparée - doit être en dehors de markPromoAsUsedDefinitively
-markPromoUsedLocally(orderData) {
-    console.log('🔄 Marquage local du code promo...');
-
-    try {
-        const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
+        if (!this.currentUser) {
+            console.log('❌ Pas d\\'utilisateur connecté');
+            return;
+        }
 
         const promoCode = this.activePromo ? this.activePromo.code :
                          (orderData.promoStatusBeforeCheckout ? orderData.promoStatusBeforeCheckout.promoCode : null);
 
-        if (promoCode) {
-            localUsedPromos.push({
-                code: promoCode,
-                usedAt: new Date().toISOString(),
-                orderId: orderData.cartId || 'order-' + Date.now(),
-                orderAmount: orderData.total,
-                userEmail: this.currentUser ? this.currentUser.email : 'guest'
-            });
-
-            localStorage.setItem('local_used_promos', JSON.stringify(localUsedPromos));
-            console.log('✅ Code promo marqué localement');
+        if (!promoCode) {
+            console.log('❌ Pas de code promo à finaliser');
+            return;
         }
 
-        this.cleanupPromoStorage();
+        console.log('🔒 Finalisation du code:', promoCode);
 
-    } catch (error) {
-        console.error('❌ Erreur marquage local:', error);
+        try {
+            const userRef = db.collection('users').doc(this.currentUser.uid);
+            const userDoc = await userRef.get();
+
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                const now = new Date();
+                const timestamp = firebase.firestore.Timestamp.fromDate(now);
+
+                let codeFound = false;
+                const updatedCodes = userData.usedPromoCodes.map(function(entry) {
+                    if (entry.code === promoCode && entry.orderId && entry.orderId.startsWith('pending-')) {
+                        codeFound = true;
+                        return {
+                            code: entry.code,
+                            usedAt: entry.usedAt,
+                            orderId: orderData.cartId || 'order-' + Date.now(),
+                            orderAmount: orderData.total,
+                            finalizedAt: timestamp,
+                            discount: entry.discount
+                        };
+                    }
+                    return entry;
+                });
+
+                if (!codeFound) {
+                    console.log('⚠️ Code pas trouvé en pending, ajout maintenant');
+                    updatedCodes.push({
+                        code: promoCode,
+                        usedAt: timestamp,
+                        orderId: orderData.cartId || 'order-' + Date.now(),
+                        orderAmount: orderData.total,
+                        finalizedAt: timestamp,
+                        discount: orderData.promoStatusBeforeCheckout ? orderData.promoStatusBeforeCheckout.promoDiscount : 0
+                    });
+                }
+
+                await userRef.update({
+                    usedPromoCodes: updatedCodes,
+                    activePromo: firebase.firestore.FieldValue.delete()
+                });
+
+                console.log('✅ Firestore mis à jour avec code définitif');
+            }
+
+            this.cleanupPromoStorage();
+            console.log('🔒 Code promo définitivement marqué comme utilisé');
+
+        } catch (error) {
+            console.error('❌ Erreur marquage définitif:', error);
+            markPromoUsedLocally(orderData);
+        }
     }
-}
 
-cleanupPromoStorage() {
-    localStorage.removeItem('anduxara_active_promo');
-    localStorage.removeItem('anduxara_active_promo_code');
-    localStorage.removeItem('anduxara_promo_discount');
+    cleanupPromoStorage() {
+        localStorage.removeItem('anduxara_active_promo');
+        localStorage.removeItem('anduxara_active_promo_code');
+        localStorage.removeItem('anduxara_promo_discount');
 
-    if (window.activePromoCode) window.activePromoCode = null;
-    if (window.promoDiscount) window.promoDiscount = 0;
+        if (window.activePromoCode) window.activePromoCode = null;
+        if (window.promoDiscount) window.promoDiscount = 0;
 
-    this.activePromo = null;
+        this.activePromo = null;
 
-    if (typeof updateActivePromoDisplay === 'function') {
-        updateActivePromoDisplay();
+        if (typeof updateActivePromoDisplay === 'function') {
+            updateActivePromoDisplay();
+        }
     }
-}
-updateActivePromoDisplay(code, discount) {
-    const display = document.getElementById('active-promo-display');
-    const codeElement = document.getElementById('active-promo-code');
 
-    if (display && codeElement) {
-        display.style.display = 'block';
-        codeElement.textContent = `${code} (-${discount}%)`;
+    updateActivePromoDisplay(code, discount) {
+        const display = document.getElementById('active-promo-display');
+        const codeElement = document.getElementById('active-promo-code');
+
+        if (display && codeElement) {
+            display.style.display = 'block';
+            codeElement.textContent = `${code} (-${discount}%)`;
+        }
     }
-}
 
     async removePromo() {
         if (!this.currentUser || !this.activePromo) return;
@@ -1001,6 +972,40 @@ Voulez-vous vous connecter maintenant ?`;
             `;
         }
     }
+} // ✅ CORRECTION : FERMETURE CORRECTE DE LA CLASSE
+
+// Fonction séparée - doit être en dehors de la classe PromoSystem
+function markPromoUsedLocally(orderData) {
+    console.log('🔄 Marquage local du code promo...');
+
+    try {
+        const localUsedPromos = JSON.parse(localStorage.getItem('local_used_promos') || '[]');
+
+        const promoCode = window.promoSystem && window.promoSystem.activePromo ? 
+                         window.promoSystem.activePromo.code :
+                         (orderData.promoStatusBeforeCheckout ? orderData.promoStatusBeforeCheckout.promoCode : null);
+
+        if (promoCode) {
+            localUsedPromos.push({
+                code: promoCode,
+                usedAt: new Date().toISOString(),
+                orderId: orderData.cartId || 'order-' + Date.now(),
+                orderAmount: orderData.total,
+                userEmail: window.promoSystem && window.promoSystem.currentUser ? 
+                          window.promoSystem.currentUser.email : 'guest'
+            });
+
+            localStorage.setItem('local_used_promos', JSON.stringify(localUsedPromos));
+            console.log('✅ Code promo marqué localement');
+        }
+
+        if (window.promoSystem && window.promoSystem.cleanupPromoStorage) {
+            window.promoSystem.cleanupPromoStorage();
+        }
+
+    } catch (error) {
+        console.error('❌ Erreur marquage local:', error);
+    }
 }
 
 // Initialiser le système promo
@@ -1012,6 +1017,21 @@ window.initPromoSystem = function initPromoSystem() {
         console.log('✅ PromoSystem initialisé avec succès');
     }
     return window.promoSystem;
+}
+
+// ✅ AJOUT NÉCESSAIRE : Fonction de sécurité pour appeler promoSystem
+function safePromoSystemCall(method, ...args) {
+    if (!window.promoSystem) {
+        console.warn('⚠️ promoSystem non initialisé');
+        return null;
+    }
+    
+    if (typeof window.promoSystem[method] !== 'function') {
+        console.error(`❌ Méthode ${method} non trouvée dans promoSystem`);
+        return null;
+    }
+    
+    return window.promoSystem[method](...args);
 }
 
 // Initialiser le système promo IMMÉDIATEMENT
@@ -6617,10 +6637,8 @@ async function validateAndApplyPromo() {
         return;
     }
 
-    // Initialiser le système promo si nécessaire
-    if (!promoSystem) {
-        promoSystem = initPromoSystem();
-    }
+    // ✅ SÉCURITÉ : Vérifier que promoSystem est initialisé
+    ensurePromoSystem();
 
     // Vérifier d'abord si l'utilisateur est connecté
     const isAuthenticated = await checkUserAuthentication();
@@ -6636,8 +6654,8 @@ async function validateAndApplyPromo() {
             // Inviter à créer un compte pour sauvegarder
             setTimeout(() => {
                 if (confirm('🎁 Code appliqué temporairement ! Créer un compte pour sauvegarder cette réduction et profiter d\'avantages exclusifs ?')) {
-                    if (promoSystem && typeof promoSystem.redirectToLogin === 'function') {
-                        promoSystem.redirectToLogin();
+                    if (window.promoSystem && typeof window.promoSystem.redirectToLogin === 'function') {
+                        window.promoSystem.redirectToLogin();
                     } else {
                         // Fallback si la fonction n'existe pas
                         window.location.href = 'reductions.html?action=login&source=homepage';
@@ -6652,12 +6670,17 @@ async function validateAndApplyPromo() {
     }
 
     // Utilisateur connecté - procédure normale
-    const result = await promoSystem.validateAndApplyPromo(code);
-    promoMessage.textContent = result.message;
-    promoMessage.style.color = result.success ? 'green' : 'red';
+    if (window.promoSystem && typeof window.promoSystem.validateAndApplyPromo === 'function') {
+        const result = await window.promoSystem.validateAndApplyPromo(code);
+        promoMessage.textContent = result.message;
+        promoMessage.style.color = result.success ? 'green' : 'red';
 
-    if (result.success) {
-        promoInput.value = '';
+        if (result.success) {
+            promoInput.value = '';
+        }
+    } else {
+        promoMessage.textContent = '❌ Système promo temporairement indisponible';
+        promoMessage.style.color = 'red';
     }
 }
 
@@ -6690,9 +6713,15 @@ function applyPromoToCart(promoCode, discountPercentage) {
 function removePromoFromCart() {
     console.log('🗑️ Retrait manuel du code promo');
 
-    // 1. Retirer via le système promo
-    if (promoSystem && typeof promoSystem.removePromo === 'function') {
-        promoSystem.removePromo();
+    // 1. Retirer via le système promo (avec vérification de sécurité)
+    if (window.promoSystem && typeof window.promoSystem.removePromo === 'function') {
+        window.promoSystem.removePromo();
+    } else {
+        console.warn('⚠️ promoSystem non disponible, nettoyage manuel');
+        // Nettoyage manuel si promoSystem n'est pas disponible
+        if (window.promoSystem) {
+            window.promoSystem.activePromo = null;
+        }
     }
 
     // 2. Nettoyer le localStorage
@@ -6701,18 +6730,18 @@ function removePromoFromCart() {
     localStorage.removeItem('anduxara_promo_discount');
 
     // 3. Réinitialiser les variables globales
-    activePromoCode = null;
-    promoDiscount = 0;
+    if (window.activePromoCode) window.activePromoCode = null;
+    if (window.promoDiscount) window.promoDiscount = 0;
 
     // 4. Réappliquer les prix originaux à tous les produits
-    if (floatingCart && Array.isArray(floatingCart)) {
-        floatingCart.forEach(item => {
+    if (window.floatingCart && Array.isArray(window.floatingCart)) {
+        window.floatingCart.forEach(item => {
             item.promoPrice = item.price;
             delete item.appliedPromo;
         });
 
         // 5. Sauvegarder le panier mis à jour
-        localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+        localStorage.setItem('anduxara_cart', JSON.stringify(window.floatingCart));
     }
 
     // 6. Mettre à jour l'affichage
@@ -6763,7 +6792,6 @@ function updateActivePromoDisplay() {
         console.log('❌ Promo masquée - Données incomplètes');
     }
 }
-
 // Fonction pour appliquer temporairement un code promo
 async function applyTemporaryPromo(code) {
     try {
