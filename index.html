@@ -2051,10 +2051,10 @@ body.lightbox-open {
     opacity: 1;
 }
 
-/* ===== PANIER FLOTTANT ===== */
+/* ===== PANIER FLOTTANT - OUVERTURE À GAUCHE ===== */
 .floating-cart {
     position: fixed;
-    bottom: 80px;
+    bottom: 20px;
     right: 15px;
     z-index: 1000;
 }
@@ -2073,8 +2073,30 @@ body.lightbox-open {
     align-items: center;
     justify-content: center;
     position: relative;
+    transition: all 0.3s ease;
 }
 
+.cart-toggle:hover {
+    transform: scale(1.1);
+}
+
+#cart-badge-floating {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Panneau du panier */
 .cart-panel {
     position: absolute;
     bottom: 70px;
@@ -2083,12 +2105,59 @@ body.lightbox-open {
     background: white;
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    margin-top: 10px;
     display: none;
     max-height: 70vh;
     overflow: hidden;
+    flex-direction: column;
+    z-index: 1001;
 }
 
+.floating-cart.open .cart-panel {
+    display: flex;
+}
+
+/* Overlay */
+.cart-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.floating-cart.open .cart-overlay {
+    display: block;
+}
+
+/* En-tête mobile */
+.cart-header-mobile {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+.cart-header-mobile h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.close-mobile-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+}
+
+/* Contenu du panier */
 .cart-items-container {
     flex: 1;
     overflow-y: auto;
@@ -2101,54 +2170,6 @@ body.lightbox-open {
     border-top: 2px solid #6a11cb;
     background: #f8f9fa;
     flex-shrink: 0;
-}
-
-.cart-item-floating {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 0.8rem;
-}
-
-.cart-item-info h4 {
-    margin: 0;
-    font-size: 0.85rem;
-    max-width: 160px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.cart-item-info p {
-    margin: 3px 0;
-    font-size: 0.75rem;
-    color: #666;
-    line-height: 1.2;
-}
-
-.cart-item-price {
-    text-align: right;
-    flex-shrink: 0;
-    font-size: 0.8rem;
-}
-
-.remove-item {
-    background: #ff4757;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 3px 6px;
-    cursor: pointer;
-    font-size: 0.65rem;
-    margin-top: 3px;
-}
-
-.remove-item:hover {
-    background: #ff3742;
 }
 
 .cart-total-floating {
@@ -2198,6 +2219,106 @@ body.lightbox-open {
     font-size: 0.9rem;
 }
 
+/* ===== VERSION MOBILE - OUVERTURE À GAUCHE ===== */
+@media (max-width: 768px) {
+    .floating-cart {
+        bottom: 20px;
+        right: 15px;
+    }
+    
+    .cart-toggle {
+        width: 55px;
+        height: 55px;
+        font-size: 1.3rem;
+    }
+    
+    /* PANEAU MOBILE - OUVERTURE VERS LA GAUCHE */
+    .cart-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: auto;
+        width: 85vw;
+        height: 70vh;
+        max-height: none;
+        border-radius: 0 20px 0 0;
+        margin: 0;
+        animation: slideInLeft 0.3s ease;
+        z-index: 1001;
+    }
+    
+    .cart-header-mobile {
+        display: flex;
+    }
+    
+    .cart-items-container {
+        max-height: calc(70vh - 180px);
+    }
+    
+    .cart-summary {
+        margin-top: auto;
+    }
+    
+    /* Bloquer le scroll du body quand le panier est ouvert */
+    body.cart-open {
+        overflow: hidden;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+    .floating-cart {
+        bottom: 15px;
+        right: 10px;
+    }
+    
+    .cart-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .cart-panel {
+        width: 90vw;
+        height: 65vh;
+    }
+    
+    .cart-items-container {
+        max-height: calc(65vh - 180px);
+    }
+}
+
+/* Animation d'entrée depuis la gauche */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Désactiver l'overlay sur desktop */
+@media (min-width: 769px) {
+    .cart-overlay {
+        display: none !important;
+    }
+    
+    .cart-header-mobile {
+        display: none !important;
+    }
+    
+    .cart-panel {
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        width: 350px;
+        border-radius: 15px;
+        animation: none;
+    }
+}
 
 /* ===== FOOTER ===== */
 footer {
@@ -2394,38 +2515,6 @@ footer {
     border-radius: 10px;
     min-width: 45px;
     display: inline-block;
-}
-
-/* ===== COMPTEUR EN LIGNE ===== */
-.mini-counter {
-    position: fixed;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
-    animation: fadeIn 0.5s ease;
-    white-space: nowrap;
-}
-
-.counter-number {
-    font-weight: bold;
-    color: #fff;
-    margin: 0 3px;
-    font-size: 13px;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -3253,24 +3342,38 @@ footer {
 }
 
 /* ===== COMPTEUR EN LIGNE ANIMÉ ===== */
+/* Pour desktop */
 .mini-counter {
-    position: fixed;
-    top: 15px;
+    position: sticky;
+    top: 10px; /* Reste à 10px du haut quand on défile */
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #27ae60, #2ecc71);
     color: white;
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 9px;
+    font-weight: 600;
     z-index: 1000;
-    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 6px rgba(39, 174, 96, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     animation: pulse-online 2s infinite;
+    white-space: nowrap;
+    max-width: 90px;
+    line-height: 1.2;
+    margin: 0 auto; /* Centrage supplémentaire */
 }
 
+/* Pour mobile */
+@media (max-width: 768px) {
+    .mini-counter {
+        top: 60px; /* Plus proche sur mobile */
+        padding: 2px 8px;
+        font-size: 8px;
+        max-width: 75px;
+    }
+}
 .counter-number {
     font-weight: bold;
     color: #fff;
@@ -3281,10 +3384,10 @@ footer {
 
 @keyframes pulse-online {
     0%, 100% { 
-        box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        box-shadow: 0 1px 5px rgba(39, 174, 96, 0.3);
     }
     50% { 
-        box-shadow: 0 4px 20px rgba(39, 174, 96, 0.7);
+        box-shadow: 0 1px 8px rgba(39, 174, 96, 0.5);
     }
 }
 
@@ -3298,6 +3401,62 @@ footer {
         transform: translateX(-50%) translateY(0); 
     }
 }
+/* Pour mobile - encore plus petit */
+@media (max-width: 768px) {
+    .mini-counter {
+        top: 5px;
+        padding: 2px 6px;
+        font-size: 8px;
+        border-radius: 10px;
+        max-width: 80px;
+    }
+    
+    .counter-number {
+        font-size: 9px !important;
+    }
+}
+
+/* ===== TEXTE RETOUR EN HAUT COLLÉ EN BAS ===== */
+#backToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+#backToTopBtn:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+    padding: 18px 0;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+    #backToTopBtn {
+        padding: 12px 0;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    #backToTopBtn {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -3687,12 +3846,22 @@ setInterval(() => {
 
 </script>
 
-<!-- ===== PANIER FLOTTANT CORRIGÉ ===== -->
+<!-- ===== PANIER AVEC OVERLAY ===== -->
 <div id="floating-cart" class="floating-cart">
     <div class="cart-toggle" onclick="toggleFloatingCart()">
         🛒 <span id="cart-badge-floating">0</span>
     </div>
+    
+    <!-- Overlay pour fermer -->
+    <div class="cart-overlay" onclick="closeFloatingCart()"></div>
+    
     <div class="cart-panel">
+        <!-- En-tête du panier mobile -->
+        <div class="cart-header-mobile" style="display: none;">
+            <h3 style="margin: 0; color: #2c3e50;">🛒 Votre Panier</h3>
+            <button onclick="closeFloatingCart()" style="background: none; border: none; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+        
         <div class="cart-items-container" id="cart-items-floating"></div>
         <div class="cart-summary">
             <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
@@ -3701,235 +3870,6 @@ setInterval(() => {
         </div>
     </div>
 </div>
-
-<style>
-/* ===== STYLES DU PANIER CORRIGÉS ===== */
-.floating-cart {
-    position: fixed;
-    bottom: 80px;
-    right: 15px;
-    z-index: 1000;
-}
-
-.cart-toggle {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    padding: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    font-size: 1.5rem;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.cart-panel {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 350px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    display: none;
-    max-height: 70vh;
-    overflow: hidden;
-    flex-direction: column;
-}
-
-.floating-cart.open .cart-panel {
-    display: flex;
-}
-
-.cart-items-container {
-    flex: 1;
-    overflow-y: auto;
-    max-height: calc(70vh - 150px);
-    padding: 12px;
-}
-
-.cart-summary {
-    padding: 12px;
-    border-top: 2px solid #6a11cb;
-    background: #f8f9fa;
-    flex-shrink: 0;
-}
-
-.cart-item-floating {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 0.8rem;
-}
-
-.cart-item-info h4 {
-    margin: 0;
-    font-size: 0.85rem;
-    max-width: 160px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.cart-item-info p {
-    margin: 3px 0;
-    font-size: 0.75rem;
-    color: #666;
-    line-height: 1.2;
-}
-
-.cart-item-price {
-    text-align: right;
-    flex-shrink: 0;
-    font-size: 0.8rem;
-}
-
-.remove-item {
-    background: #ff4757;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 3px 6px;
-    cursor: pointer;
-    font-size: 0.65rem;
-    margin-top: 3px;
-}
-
-.remove-item:hover {
-    background: #ff3742;
-}
-
-.cart-total-floating {
-    font-weight: bold;
-    margin-bottom: 8px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #2c3e50;
-}
-
-.buy-btn, .close-cart-btn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-bottom: 6px;
-    font-weight: bold;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-}
-
-.buy-btn {
-    background: #25D366;
-    color: white;
-}
-
-.buy-btn:hover {
-    background: #1da851;
-    transform: translateY(-2px);
-}
-
-.close-cart-btn {
-    background: #6a11cb;
-    color: white;
-}
-
-.close-cart-btn:hover {
-    background: #2575fc;
-}
-
-.empty-cart-floating {
-    text-align: center;
-    color: #888;
-    padding: 20px;
-    font-style: italic;
-    font-size: 0.9rem;
-}
-
-/* === NOUVEAU CODE CORRIGÉ === */
-@media (max-width: 768px) {
-    .floating-cart {
-        bottom: 20px;
-        right: 15px;
-    }
-    
-    .cart-panel {
-        width: 90vw; /* Largeur relative à l'écran */
-        max-width: 350px;
-        left: 50%; /* Centrage horizontal */
-        transform: translateX(-50%); /* Ajustement pour vrai centrage */
-        right: auto; /* Reset de la position droite */
-        bottom: 70px;
-    }
-}
-
-@media (max-width: 480px) {
-    .floating-cart {
-        bottom: 15px;
-        right: 10px;
-    }
-    
-    .cart-panel {
-        width: 95vw; /* Encore plus large sur petits écrans */
-        max-width: 320px;
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-        bottom: 65px;
-        max-height: 60vh;
-    }
-}
-
-/* Correction pour très petits écrans */
-@media (max-width: 360px) {
-    .cart-panel {
-        width: 98vw;
-        max-width: 300px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-}
-
-/* ===== CORRECTION CENTRAGE PANIER MOBILE ===== */
-.cart-panel {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 350px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    display: none;
-    max-height: 70vh;
-    overflow: hidden;
-    flex-direction: column;
-    /* Assurance pour le centrage mobile */
-    margin: 0 auto;
-}
-
-.floating-cart.open .cart-panel {
-    display: flex;
-}
-
-/* Safe area pour iPhone avec encoche */
-@supports (padding: max(0px)) {
-    .cart-panel {
-        padding-left: max(15px, env(safe-area-inset-left));
-        padding-right: max(15px, env(safe-area-inset-right));
-    }
-}
-
-</style>
-
-
 </script>
 
 <!-- Main Content -->
@@ -5237,44 +5177,37 @@ if ('serviceWorker' in navigator) {
 // === COMPTE À REBOURS ULTRA-PRÉCIS ===
 console.log('🎯 Initialisation compte à rebours corrigé...');
 
-// ===== DATES CORRIGÉES - PROMOTION ACTIVE MAINTENANT =====
+// === COMPTE À REBOURS CORRIGÉ - DÉBUT 2 DÉCEMBRE ===
 function initializePromoCountdown() {
-    // 🎯 DATES RÉALISTES DE LA PROMOTION
-    // ✅ OPTION 1 : Promotion ACTIVE maintenant (commence hier, finit dans 20 jours)
-    const START_DATE = new Date();
-    START_DATE.setDate(START_DATE.getDate() - 1); // Commencée hier
-    
-    const END_DATE = new Date();
-    END_DATE.setDate(END_DATE.getDate() + 20); // Se termine dans 20 jours
-    END_DATE.setHours(23, 59, 59); // À 23h59:59
-    
-    // ✅ OPTION 2 : Dates fixes (décommentez si vous préférez)
-    // const START_DATE = new Date('2024-11-20T00:00:00'); // Début : 20 nov 2024
-    // const END_DATE = new Date('2024-12-14T23:59:59');   // Fin : 14 déc 2024
+    console.log('🎯 Initialisation compte à rebours corrigé...');
+
+    // 🎯 DATES EXACTES DE LA PROMOTION
+    const START_DATE = new Date('2025-12-02T23:59:59'); // Début : 2 déc 2025 à 23h59
+    const END_DATE = new Date('2025-12-14T23:59:59');   // Fin : 14 déc 2025 à 23h59
     
     const now = new Date();
     
     console.log('📅 Dates promotion:', {
-        debut: START_DATE.toISOString(),
-        fin: END_DATE.toISOString(),
-        maintenant: now.toISOString()
+        debut: START_DATE.toLocaleString('fr-FR'),
+        fin: END_DATE.toLocaleString('fr-FR'),
+        maintenant: now.toLocaleString('fr-FR')
     });
     
-    // ===== CAS 1 : AVANT LE DÉBUT =====
+    // ===== CAS 1 : AVANT LE DÉBUT (2 DÉCEMBRE) =====
     if (now < START_DATE) {
-        console.log('⏸️ AVANT le début - Message statique');
-        showStaticPromoMessage();
+        console.log('⏳ AVANT le début - Affichage date de début');
+        showBeforePromoStart(START_DATE);
         return;
     }
     
-    // ===== CAS 2 : PENDANT LA PROMOTION =====
+    // ===== CAS 2 : PENDANT LA PROMOTION (2-14 DÉCEMBRE) =====
     if (now >= START_DATE && now < END_DATE) {
         console.log('🔥 PENDANT la promotion - Décompte actif');
         startActiveCountdown(END_DATE);
         return;
     }
     
-    // ===== CAS 3 : APRÈS LA FIN =====
+    // ===== CAS 3 : APRÈS LA FIN (APRÈS 14 DÉCEMBRE) =====
     if (now >= END_DATE) {
         console.log('🏁 APRÈS la fin - Promotion terminée');
         showPromoEnded();
@@ -5282,27 +5215,38 @@ function initializePromoCountdown() {
     }
 }
 
-// Message statique AVANT le début
-function showStaticPromoMessage() {
+// Message AVANT le début (avant le 2 décembre)
+function showBeforePromoStart(startDate) {
     const countdownSection = document.querySelector('.promo-countdown');
     if (!countdownSection) return;
+    
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    
+    const startDateFormatted = startDate.toLocaleDateString('fr-FR', options);
     
     countdownSection.innerHTML = `
         <div style="text-align: center; padding: 20px;">
             <h2 style="margin-bottom: 15px; color: white;">
-                🛑 Promotion Décembre 2025
+                🗓️ Promotion Décembre 2025
             </h2>
             <p style="font-size: 1.2rem; color: white; margin: 0;">
-                Démarre le <strong>2 décembre 2025 à 23h59</strong>
+                Démarre le <strong>${startDateFormatted}</strong>
             </p>
             <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-top: 10px;">
-                Restez connecté pour ne pas manquer l'événement !
+                ⏳ La promotion n'a pas encore commencé
             </p>
         </div>
     `;
 }
 
-// Compte à rebours ACTIF pendant la promotion
+// Compte à rebours ACTIF pendant la promotion (2-14 décembre)
 function startActiveCountdown(endDate) {
     const countdownSection = document.querySelector('.promo-countdown');
     if (!countdownSection) return;
@@ -5316,6 +5260,9 @@ function startActiveCountdown(endDate) {
             <span id="minutes">00</span>m
             <span id="seconds">00</span>s
         </div>
+        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+            🎯 Débutée le 2 décembre - Se termine le 14 décembre
+        </p>
     `;
     
     updateCountdown(endDate);
@@ -5362,40 +5309,49 @@ function showPromoEnded() {
         <div style="text-align: center; padding: 20px;">
             <h2 style="margin-bottom: 10px; color: white;">🏁 Promotion terminée</h2>
             <p style="color: rgba(255,255,255,0.9);">
-                Merci pour votre participation ! Restez connecté pour les prochaines offres.
+                La promotion Décembre 2025 est terminée. Merci pour votre participation !
+            </p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 10px;">
+                Restez connecté pour les prochaines offres.
             </p>
         </div>
     `;
 }
 
-// Démarrer le compte à rebours si l'élément existe
-if (document.querySelector('.promo-countdown')) {
-    initializePromoCountdown();
+// Vérification périodique des changements d'état
+function startPromoStateChecker() {
+    const START_DATE = new Date('2025-12-02T23:59:59');
+    const END_DATE = new Date('2025-12-14T23:59:59');
     
-    // Vérifier toutes les 30 secondes si on change d'état
     setInterval(() => {
         const now = new Date();
-        const START_DATE = new Date('2025-12-02T23:59:59');
-        const END_DATE = new Date('2025-12-14T23:59:59');
         
-        // Si on vient de passer le début
+        // Si on vient de passer le début (2 décembre 23h59)
         if (now >= START_DATE && now < END_DATE) {
             const isActive = document.getElementById('countdown');
             if (!isActive) {
-                console.log('🔄 Transition vers promotion active');
+                console.log('🔄 Transition vers promotion active - RECALCUL!');
                 initializePromoCountdown();
             }
         }
         
-        // Si on vient de passer la fin
+        // Si on vient de passer la fin (14 décembre 23h59)
         if (now >= END_DATE) {
-            const isEnded = document.querySelector('.promo-countdown').innerHTML.includes('terminée');
+            const isEnded = document.querySelector('.promo-countdown')?.innerHTML.includes('terminée');
             if (!isEnded) {
-                console.log('🔄 Transition vers promotion terminée');
+                console.log('🔄 Transition vers promotion terminée - RECALCUL!');
                 showPromoEnded();
             }
         }
     }, 30000); // Vérifier toutes les 30 secondes
+}
+
+// Démarrer le compte à rebours si l'élément existe
+if (document.querySelector('.promo-countdown')) {
+    initializePromoCountdown();
+    startPromoStateChecker();
+    
+    console.log('✅ Compte à rebours Décembre 2025 initialisé');
 }
 
 </script>
@@ -6461,47 +6417,6 @@ function removeFromFloatingCart(index) {
 }
 
 
-// ===== CORRECTION SIMPLIFIÉE PANIER MOBILE =====
-function adjustCartForMobile() {
-    const cart = document.getElementById('floating-cart');
-    const cartPanel = document.querySelector('.cart-panel');
-    const isMobile = window.innerWidth <= 768;
-    
-    if (cart && isMobile) {
-        // Centrer le bouton panier
-        cart.style.right = '50%';
-        cart.style.transform = 'translateX(50%)';
-        
-        // Centrer le panneau
-        if (cartPanel) {
-            cartPanel.style.left = '50%';
-            cartPanel.style.transform = 'translateX(-50%)';
-            cartPanel.style.right = 'auto';
-        }
-    } else if (cart) {
-        // Reset pour desktop
-        cart.style.right = '15px';
-        cart.style.transform = 'none';
-        
-        if (cartPanel) {
-            cartPanel.style.left = 'auto';
-            cartPanel.style.transform = 'none';
-            cartPanel.style.right = '0';
-        }
-    }
-}
-
-// Appeler la fonction aux événements de redimensionnement
-window.addEventListener('resize', adjustCartForMobile);
-window.addEventListener('orientationchange', function() {
-    setTimeout(adjustCartForMobile, 100);
-});
-
-// Initialiser au chargement
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(adjustCartForMobile, 500);
-});
-
 function ajouterAuPanier(productName, category, price) {
     console.log('🛒 Ajout au panier:', productName, 'Prix:', price);
     
@@ -6979,7 +6894,7 @@ let userAddress = "";
 let userCity = "";
 let selectedCountry = null;
 let isInternational = false;
-
+let deliveryInfoResolved = false; 
 // Liste des pays disponibles
 const availableCountries = [
     { name: 'Mauritanie', code: '+222', flag: '🇲🇷' },
@@ -7133,15 +7048,15 @@ try {
         e.target.value = formatted;
     });
 
-    let deliveryInfoResolved = false;
-
-    window.cancelDeliveryModal = function() {
-        document.body.removeChild(overlay);
-        document.body.style.overflow = '';
-        showNotification('❌ Commande annulée', 'warning');
-        deliveryInfoResolved = true;
-        throw new Error('Commande annulée par l\'utilisateur');
-    };
+window.cancelDeliveryModal = function() {
+    console.log('❌ Commande annulée par l\'utilisateur');
+    document.body.removeChild(overlay);
+    document.body.style.overflow = '';
+    showNotification('❌ Commande annulée', 'warning');
+    deliveryInfoResolved = true;
+    // NE PAS lancer d'erreur, simplement retourner
+    return;
+};
 
     window.confirmDeliveryInfo = function() {
         const countryCode = document.getElementById('countrySelect').value;
@@ -7224,10 +7139,24 @@ ${isInternational ?
     });
 
 } catch (error) {
-
-    console.log('❌ Erreur ou annulation:', error);
+    // Gestion propre des erreurs d'annulation
+    if (error.message && error.message.includes('Commande annulée')) {
+        console.log('✅ Annulation propre de la commande');
+        return; // Sortie propre sans erreur
+    }
+    
+    console.log('❌ Erreur lors de la saisie des informations:', error);
+    showNotification('❌ Erreur lors de la saisie des informations', 'error');
     return;
 }
+
+// Vérification que les informations sont bien remplies
+if (!userPhone || !userAddress || !userCity) {
+    console.log('❌ Informations de livraison incomplètes - Commande annulée');
+    showNotification('❌ Informations de livraison manquantes', 'error');
+    return;
+}
+
 
     // CALCUL DU TOTAL AVEC RÉDUCTION
     let totalMRU = floatingCart.reduce(function(sum, item) {
@@ -10267,6 +10196,51 @@ function updateAuthStatus() {
     }
 }
 
+// ===== BOUTON TEXTE COLLÉ EN BAS =====
+function initBackToTopButton() {
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    
+    if (!backToTopBtn) {
+        console.error('❌ Bouton backToTopBtn non trouvé');
+        return;
+    }
+    
+    console.log('✅ Bouton texte en bas initialisé');
+    
+    // Afficher le bouton UNIQUEMENT quand on arrive tout en bas
+    window.addEventListener('scroll', function() {
+        // Calculer si on est à moins de 100px du bas de la page
+        const scrollPosition = window.pageYOffset;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Si on est à moins de 100px du bas
+        if (documentHeight - (scrollPosition + windowHeight) < 100) {
+            backToTopBtn.style.display = 'block';
+        } else {
+            backToTopBtn.style.display = 'none';
+        }
+    });
+    
+    // Fonction pour remonter en haut
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation bouton texte en bas...');
+    initBackToTopButton();
+});
+
 </script>
+<!-- Bouton Retour en haut -->
+<button id="backToTopBtn" title="Retour en haut de la page">
+    ↑ Haut de page
+</button>
 </body>
 </html>
