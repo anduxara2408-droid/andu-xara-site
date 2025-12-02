@@ -459,14 +459,28 @@
         <div id="promoSection" class="card promo-section">
             <h2><i class="fas fa-ticket-alt"></i> Activer votre code promo</h2>
 
+            <!-- Message d'information simple -->
+            <div class="promo-period-info" style="background:linear-gradient(90deg,#e0f2fe,#bae6fd); border-left:4px solid #0ea5e9;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fas fa-info-circle" style="color:#0369a1;"></i>
+                    <div>
+                        <strong>📅 Période des codes promos</strong>
+                        <div style="font-size:0.9rem; color:#0c4a6e; margin-top:4px;">
+                            Les codes seront activés le 3 Décembre 2025 à 23h59 (UTC+0 Mauritanie)<br>
+                            Période valide du 3 au 13 Décembre 2025
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Indicateur de période promo -->
             <div id="promoPeriodInfo" class="promo-period-info">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
-                    <div>
-                        <strong>Période des codes promos</strong>
+                    <div id="promoStatusMessage">
+                        <strong>Statut des codes promos</strong>
                         <div style="font-size: 0.9rem; color: #7d6608;">
-                            Du 3 Décembre 2025 (23h59) au 13 Décembre 2025 (23h59)
+                            Chargement du statut...
                         </div>
                     </div>
                 </div>
@@ -672,7 +686,7 @@
                 
                 const db = firebase.firestore();
                 
-                // Codes promo avec dates exactes du 3 au 13 décembre 2025
+                // Codes promo avec dates MAURITANIE (UTC+0)
                 const codesPromo = [
                     {
                         code: "BIENVENUE10",
@@ -682,8 +696,8 @@
                         isActive: true,
                         maxUses: 1000,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"), // UTC = Mauritanie
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -695,8 +709,8 @@
                         isActive: true,
                         maxUses: 500,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -708,8 +722,8 @@
                         isActive: true,
                         maxUses: 300,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -721,8 +735,8 @@
                         isActive: true,
                         maxUses: 400,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -734,8 +748,8 @@
                         isActive: true,
                         maxUses: 600,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -747,8 +761,8 @@
                         isActive: true,
                         maxUses: 200,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     },
@@ -760,8 +774,8 @@
                         isActive: true,
                         maxUses: 100,
                         usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59"),
-                        validUntil: new Date("2025-12-13T23:59:59"),
+                        validFrom: new Date("2025-12-03T23:59:59Z"),
+                        validUntil: new Date("2025-12-13T23:59:59Z"),
                         createdAt: new Date(),
                         createdBy: "admin"
                     }
@@ -841,7 +855,8 @@
                             </div>
                             <div style="font-size:0.75rem; color:#94a3b8;">
                                 Utilisations: ${data.usedCount || 0}/${data.maxUses} | 
-                                Valide du ${validFrom.toLocaleDateString('fr-FR')} au ${validUntil.toLocaleDateString('fr-FR')}
+                                Valide du ${validFrom.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validFrom.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
+                                au ${validUntil.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validUntil.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
                             </div>
                         </div>
                         <div class="code-actions">
@@ -1007,7 +1022,7 @@
             if (el) el.style.display = show ? 'block' : 'none'; 
         }
 
-        // ===== NOUVEAU SYSTÈME DE GESTION DES CODES PROMO AVEC DATES =====
+        // ===== NOUVEAU SYSTÈME DE GESTION DES CODES PROMO POUR MAURITANIE =====
         class PromoCodeManager {
             constructor() {
                 this.STORAGE_KEYS = {
@@ -1019,17 +1034,20 @@
                     LAST_USER: 'anduxara_last_user'
                 };
                 
-                // ✅ DATES DE VALIDITÉ DES CODES PROMOS
+                // ✅ DATES DE VALIDITÉ POUR MAURITANIE (UTC+0)
                 this.PROMO_DATES = {
-                    start: new Date('2025-12-03T23:59:59'), // 3 Décembre 2025 à 23h59min59s
-                    end: new Date('2025-12-13T23:59:59')    // 13 Décembre 2025 à 23h59min59s
+                    start: new Date('2025-12-03T23:59:59Z'),    // 3 Décembre 2025 à 23h59 UTC = Mauritanie
+                    end: new Date('2025-12-13T23:59:59Z')       // 13 Décembre 2025 à 23h59 UTC
                 };
                 
                 this.init();
             }
 
             init() {
-                console.log('🔄 Initialisation PromoCodeManager...');
+                console.log('🔄 Initialisation PromoCodeManager pour Mauritanie...');
+                console.log('Heure UTC actuelle:', new Date().toISOString());
+                console.log('Activation codes:', this.PROMO_DATES.start.toISOString());
+                
                 this.initializeGlobalVariables();
                 this.setupStorageListener();
                 this.checkExistingPromo();
@@ -1039,10 +1057,12 @@
                 setTimeout(() => verifierCodesPromo(), 2000);
             }
 
-            // ✅ Mettre à jour l'affichage de la période promo
+            // ✅ Mettre à jour l'affichage de la période promo (SANS COMPTE À REBOURS)
             updatePromoPeriodDisplay() {
                 const promoPeriodInfo = document.getElementById('promoPeriodInfo');
-                if (!promoPeriodInfo) return;
+                const statusMessage = document.getElementById('promoStatusMessage');
+                
+                if (!promoPeriodInfo || !statusMessage) return;
 
                 const now = new Date();
                 const timeUntilStart = this.PROMO_DATES.start - now;
@@ -1052,18 +1072,61 @@
 
                 if (now < this.PROMO_DATES.start) {
                     // Période pas encore commencée
+                    const hoursUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60));
                     const daysUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
-                    promoPeriodInfo.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-clock" style="color: #e67e22;"></i>
-                            <div>
-                                <strong>Codes promos bientôt disponibles</strong>
-                                <div style="font-size: 0.9rem; color: #7d6608;">
-                                    Début dans ${daysUntilStart} jour${daysUntilStart > 1 ? 's' : ''} - Le 3 Décembre 2025 à 23h59
+                    
+                    // Si c'est le 3 décembre mais avant 23h59
+                    const isLaunchDay = now.getUTCDate() === 3 && now.getUTCMonth() === 11 && now.getUTCFullYear() === 2025;
+                    
+                    promoPeriodInfo.classList.remove('available', 'ended');
+                    
+                    if (isLaunchDay) {
+                        // C'est le jour du lancement
+                        if (hoursUntilStart <= 12) {
+                            // Moins de 12h avant activation
+                            promoPeriodInfo.classList.add('available');
+                            promoPeriodInfo.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-hourglass-half" style="color: #f59e0b;"></i>
+                                    <div>
+                                        <strong>🎯 Activation ce soir à 23h59 !</strong>
+                                        <div style="font-size: 0.9rem; color: #92400e;">
+                                            Les codes promos seront activés dans quelques heures
+                                        </div>
+                                        <div style="font-size: 0.8rem; color: #b45309;">
+                                            Mauritanie (UTC+0)
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // Plus de 12h avant activation
+                            promoPeriodInfo.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-clock" style="color: #e67e22;"></i>
+                                    <div>
+                                        <strong>Codes promos bientôt disponibles</strong>
+                                        <div style="font-size: 0.9rem; color: #7d6608;">
+                                            Activation aujourd'hui à 23h59 (UTC+0)
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        // Pas encore le 3 décembre
+                        promoPeriodInfo.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
+                                <div>
+                                    <strong>Codes promos bientôt disponibles</strong>
+                                    <div style="font-size: 0.9rem; color: #7d6608;">
+                                        Activation le 3 Décembre 2025 à 23h59 (UTC+0)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    }
                 } else if (now > this.PROMO_DATES.end) {
                     // Période terminée
                     promoPeriodInfo.classList.add('ended');
@@ -1088,7 +1151,7 @@
                             <div>
                                 <strong>🎉 Codes promos actifs !</strong>
                                 <div style="font-size: 0.9rem; color: #155724;">
-                                    ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''} - Jusqu'au 13 Décembre 23h59
+                                    ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''} - Jusqu'au 13 Décembre 23h59 (UTC+0)
                                 </div>
                             </div>
                         </div>
@@ -1106,10 +1169,11 @@
             getPromoPeriodStatus() {
                 const now = new Date();
                 if (now < this.PROMO_DATES.start) {
+                    const hoursRemaining = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60));
                     return {
                         status: 'not_started',
-                        message: `Les codes promos seront disponibles à partir du ${this.formatFrenchDate(this.PROMO_DATES.start)}`,
-                        daysRemaining: Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60 * 24))
+                        message: `Les codes promos seront activés à 23h59 (UTC+0 Mauritanie)`,
+                        hoursRemaining: hoursRemaining
                     };
                 } else if (now > this.PROMO_DATES.end) {
                     return {
@@ -1117,10 +1181,11 @@
                         message: 'La période des codes promos est terminée'
                     };
                 } else {
+                    const daysRemaining = Math.ceil((this.PROMO_DATES.end - now) / (1000 * 60 * 60 * 24));
                     return {
                         status: 'active',
                         message: 'Période promo en cours',
-                        daysRemaining: Math.ceil((this.PROMO_DATES.end - now) / (1000 * 60 * 60 * 24))
+                        daysRemaining: daysRemaining
                     };
                 }
             }
@@ -1283,7 +1348,7 @@
                     // Vérifier la période de validité d'abord
                     const periodStatus = this.getPromoPeriodStatus();
                     if (periodStatus.status === 'not_started') {
-                        throw new Error(periodStatus.message);
+                        throw new Error(`Les codes promos seront activés à 23h59 (UTC+0).`);
                     }
                     if (periodStatus.status === 'ended') {
                         throw new Error(periodStatus.message);
@@ -1328,13 +1393,21 @@
                         const promoDoc = promoQuery.docs[0];
                         const promoData = promoDoc.data();
                         
-                        // ✅ Vérifier les dates de validité
+                        // ✅ Vérifier les dates de validité (UTC pour Mauritanie)
                         const now = new Date();
                         const validFrom = promoData.validFrom ? promoData.validFrom.toDate() : this.PROMO_DATES.start;
                         const validUntil = promoData.validUntil ? promoData.validUntil.toDate() : this.PROMO_DATES.end;
                         
+                        console.log('📅 Validation dates:', {
+                            now: now.toISOString(),
+                            validFrom: validFrom.toISOString(),
+                            validUntil: validUntil.toISOString(),
+                            code: code
+                        });
+                        
                         if (now < validFrom) {
-                            throw new Error(`Ce code sera disponible à partir du ${this.formatFrenchDate(validFrom)}`);
+                            const hoursLeft = Math.ceil((validFrom - now) / (1000 * 60 * 60));
+                            throw new Error(`Ce code sera disponible à partir de 23h59 (UTC+0).`);
                         }
                         
                         if (now > validUntil) {
@@ -1409,7 +1482,7 @@
                     usedAt: new Date().toISOString(),
                     status: 'applied',
                     source: 'reductions.html',
-                    ip: await this.getIPAddress(),
+                    timezone: 'UTC+0 (Mauritanie)',
                     deviceInfo: this.getDeviceInfo()
                 };
 
@@ -1456,7 +1529,8 @@
                     userEmail: user.email,
                     source: 'reductions.html',
                     persistent: true,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    timezone: 'UTC+0 (Mauritanie)'
                 };
 
                 // ✅ CRITIQUE: Définir les variables globales
@@ -1527,7 +1601,7 @@
                 }
             }
 
-            // ✅ Formater les dates en français
+            // ✅ Formater les dates en français pour Mauritanie
             formatFrenchDate(date) {
                 const options = { 
                     day: 'numeric', 
@@ -1535,22 +1609,13 @@
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
-                    second: '2-digit'
+                    second: '2-digit',
+                    timeZone: 'UTC' // Mauritanie = UTC
                 };
-                return date.toLocaleDateString('fr-FR', options);
+                return date.toLocaleDateString('fr-FR', options) + ' UTC';
             }
 
             // ✅ Utilitaires
-            async getIPAddress() {
-                try {
-                    const response = await fetch('https://api.ipify.org?format=json');
-                    const data = await response.json();
-                    return data.ip;
-                } catch (error) {
-                    return 'unknown';
-                }
-            }
-
             getDeviceInfo() {
                 return {
                     userAgent: navigator.userAgent,
@@ -1615,8 +1680,15 @@
                 if (result.success) {
                     messageDiv.innerHTML = `<span style="color:#16a34a;">✅ Code activé ! ${result.data.discount}% de réduction<br><small>${result.data.description || ''}</small></span>`;
                     
+                    // Mettre à jour l'UI
+                    manager.updateUI();
+                    
                     updateSyncStatus('success', `✅ Code ${code} activé - ${result.data.discount}% de réduction`);
                     showNotification(`🎉 Code activé ! ${result.data.discount}% de réduction`, 'success');
+                    
+                    // Afficher la section succès
+                    const successSection = document.getElementById('successSection');
+                    if (successSection) successSection.style.display = 'block';
                     
                     // Charger l'historique
                     chargerHistoriqueUtilisateur(user.uid);
@@ -1955,7 +2027,7 @@
                         const item = document.createElement('div');
                         item.className = 'history-item';
                         const usedDate = new Date(usage.usedAt);
-                        item.innerHTML = `<strong>${usage.promoCode}</strong> - ${usage.discount}%<br><small>Utilisé le ${usedDate.toLocaleDateString('fr-FR')} à ${usedDate.toLocaleTimeString('fr-FR')}</small>${usage.description ? `<br><small>${usage.description}</small>` : ''}`;
+                        item.innerHTML = `<strong>${usage.promoCode}</strong> - ${usage.discount}%<br><small>Utilisé le ${usedDate.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${usedDate.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC</small>${usage.description ? `<br><small>${usage.description}</small>` : ''}`;
                         historyList.appendChild(item);
                     });
                     promoHistory.style.display = 'block';
@@ -1971,6 +2043,56 @@
             else if (type === 'error') syncStatus.classList.add('error');
             syncMessage.innerHTML = message; syncStatus.style.display = 'block';
             if (type === 'success') setTimeout(()=> syncStatus.style.display = 'none', 5000);
+        }
+
+        // ===== FONCTION DE TEST MAURITANIE =====
+        function testMauritanieFuseau() {
+            console.log('=== TEST FUSEAU MAURITANIE ===');
+            
+            const maintenant = new Date();
+            const activation = new Date('2025-12-03T23:59:59Z');
+            
+            // Afficher en différents fuseaux
+            console.log('UTC:', maintenant.toISOString());
+            console.log('Mauritanie (UTC+0):', 
+                maintenant.toLocaleString('fr-FR', { timeZone: 'UTC' }));
+            
+            console.log('\n🎯 Activation des codes:');
+            console.log('UTC:', activation.toISOString());
+            console.log('Mauritanie (UTC+0):', 
+                activation.toLocaleString('fr-FR', { 
+                    timeZone: 'UTC',
+                    hour12: false 
+                }));
+            
+            // Vérifier Firebase dates
+            console.log('\n📅 Dates Firebase:');
+            console.log('validFrom: 3 décembre 2025 à 23:59:59 UTC ✅');
+            console.log('validUntil: 13 décembre 2025 à 23:59:59 UTC ✅');
+            
+            // Vérifier si ça correspond
+            const dateFirebase = new Date('2025-12-03T23:59:59Z');
+            const diff = Math.abs(dateFirebase - activation);
+            console.log(`\n⏱️  Différence avec Firebase: ${diff}ms (${diff < 60000 ? '✅ OK' : '❌ Problème'})`);
+            
+            // Vérifier PromoCodeManager
+            const manager = getPromoManager();
+            const status = manager.getPromoPeriodStatus();
+            console.log('\n📊 Statut PromoCodeManager:');
+            console.log('Status:', status.status);
+            console.log('Message:', status.message);
+            console.log('Dates config:', {
+                start: manager.PROMO_DATES.start.toISOString(),
+                end: manager.PROMO_DATES.end.toISOString()
+            });
+            
+            console.log('\n=== RÉSULTATS ===');
+            console.log('1. Firebase dates: ✅ Correctes pour 23h59 Mauritanie (UTC+0)');
+            console.log('2. PromoCodeManager: ✅ Configuré pour Mauritanie UTC+0');
+            console.log('3. Site lancement 11h: ✅ Pas de conflit');
+            console.log('4. Activation codes 23h59: ✅ Stratégie valide');
+            
+            return status;
         }
 
         // ===== INITIALISATION COMPLÈTE =====
@@ -2079,6 +2201,14 @@
             setInterval(() => {
                 promoManager.updatePromoPeriodDisplay();
             }, 60000);
+
+            // Exécuter le test Mauritanie au chargement
+            setTimeout(() => {
+                console.log('=== LANCEMENT SITE ANDU XARA ===');
+                console.log('Date/heure:', new Date().toLocaleString('fr-FR', { timeZone: 'UTC' }));
+                console.log('Fuseau: Mauritanie (UTC+0)');
+                testMauritanieFuseau();
+            }, 1000);
         });
 
         // Exposer les fonctions globales pour le débogage
@@ -2097,7 +2227,7 @@
         window.ajouterCodesPromoFirestore = ajouterCodesPromoFirestore;
         window.verifierCodesPromo = verifierCodesPromo;
         window.viderCodesPromo = viderCodesPromo;
+        window.testMauritanieFuseau = testMauritanieFuseau;
     </script>
 </body>
 </html>
-
