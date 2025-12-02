@@ -1,29 +1,19 @@
-import { createClient } from '@supabase/supabase-js';
+// sync-simple.js - Version simple de test
+console.log('📋 Vérification des dépendances...');
 
-// Configuration Supabase
-const supabaseUrl = 'https://vxvrjeelertkdhfyuiue.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dnJqZWVsZXJ0a2RoZnl1aXVlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTczMjk4MSwiZXhwIjoyMDc3MzA4OTgxfQ.0ksgc8JZF2N5J9FnW3CLoG_v_CAQxUtm3ISLRJPLE3I';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-async function verifierStatut() {
-  try {
-    console.log('📊 Vérification du statut...');
-    
-    // Compter les abonnés
-    const { count, error } = await supabase
-      .from('subscribers')
-      .select('*', { count: 'exact', head: true });
-
-    if (error) throw error;
-
-    console.log(`✅ ${count} abonnés dans la base de données`);
-    console.log('💡 Pour ajouter manuellement un nouvel abonné:');
-    console.log('   node ajouter-abonne.js email@exemple.com');
-    
-  } catch (error) {
-    console.log('❌ Erreur:', error.message);
-  }
+// Vérifier si dotenv est disponible
+try {
+  require('dotenv').config();
+  console.log('✅ dotenv chargé');
+} catch (error) {
+  console.log('❌ dotenv non trouvé, installation: npm install dotenv');
+  process.exit(1);
 }
 
+// Vérifier les variables
+console.log('\n🔍 Variables d\'environnement chargées:');
+console.log('- EMAIL_USER:', process.env.EMAIL_USER ? '✅ Défini' : '❌ Non défini');
+console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? '✅ Défini' : '❌ Non défini');
+console.log('- SUPABASE_URL:', process.env.SUPABASE_URL ? '✅ Défini' : '❌ Non défini');
 
-verifierStatut();
+console.log('\n🎯 Étape suivante: Créer le script complet');

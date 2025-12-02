@@ -1,11 +1,15 @@
 {
+  "name": "andu-xara-newsletter",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "send": "node send-all-newsletter.js",
+    "test": "node send-all-newsletter.js --test",
+    "all": "node send-all-newsletter.js --all"
+  },
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6",
-    "@supabase/supabase-js": "^2.81.1",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "firebase-admin": "^13.6.0",
-    "node-fetch": "^3.3.2",
-    "nodemailer": "^7.0.10"
+    "@supabase/supabase-js": "^2.39.0",
+    "nodemailer": "^6.9.1",
+    "dotenv": "^16.0.0"
   }
 }
