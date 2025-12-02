@@ -407,14 +407,11 @@
         <div id="adminPanel" class="admin-panel">
             <h3 style="color:#dc2626; margin-bottom:15px;"><i class="fas fa-crown"></i> Panel Administrateur</h3>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="admin-btn success" onclick="ajouterCodesPromoFirestore()">
-                    <i class="fas fa-plus"></i> Ajouter Codes Promo
-                </button>
-                <button class="admin-btn" onclick="verifierCodesPromo()">
+                <button class="admin-btn success" onclick="verifierCodesPromo()">
                     <i class="fas fa-search"></i> Vérifier Codes
                 </button>
-                <button class="admin-btn" onclick="viderCodesPromo()">
-                    <i class="fas fa-trash"></i> Vider Codes
+                <button class="admin-btn" onclick="forcerActivationCodes()">
+                    <i class="fas fa-bolt"></i> Activer Codes
                 </button>
             </div>
             <div id="codesList" class="codes-list"></div>
@@ -466,8 +463,7 @@
                     <div>
                         <strong>📅 Période des codes promos</strong>
                         <div style="font-size:0.9rem; color:#0c4a6e; margin-top:4px;">
-                            Les codes seront activés le 3 Décembre 2025 à 23h59 (UTC+0 Mauritanie)<br>
-                            Période valide du 3 au 13 Décembre 2025
+                            Les codes sont actifs du 2 Décembre 2025 au 13 Décembre 2025 (UTC+0 Mauritanie)
                         </div>
                     </div>
                 </div>
@@ -677,231 +673,7 @@
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
-        // ===== FONCTIONS ADMIN POUR CODES PROMO =====
-        
-        // ✅ Fonction pour ajouter automatiquement les codes promo dans Firestore
-        async function ajouterCodesPromoFirestore() {
-            try {
-                showNotification('🔄 Ajout des codes promo en cours...', 'success');
-                
-                const db = firebase.firestore();
-                
-                // Codes promo avec dates MAURITANIE (UTC+0)
-                const codesPromo = [
-                    {
-                        code: "BIENVENUE10",
-                        description: "Code de bienvenue 10% de réduction",
-                        discount: 10,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 1000,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"), // UTC = Mauritanie
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "ANDU20",
-                        description: "Code spécial Andu Xara 20% de réduction",
-                        discount: 20,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 500,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "SONINKE25",
-                        description: "Code communauté Soninké 25% de réduction",
-                        discount: 25,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 300,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "AFRICA15",
-                        description: "Code Afrique 15% de réduction",
-                        discount: 15,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 400,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "MODE10",
-                        description: "Code mode 10% de réduction",
-                        discount: 10,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 600,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "PREMIUM25",
-                        description: "Code premium 25% de réduction",
-                        discount: 25,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 200,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    },
-                    {
-                        code: "ANDU30",
-                        description: "Code spécial Andu 30% de réduction",
-                        discount: 30,
-                        type: "pourcentage",
-                        isActive: true,
-                        maxUses: 100,
-                        usedCount: 0,
-                        validFrom: new Date("2025-12-03T23:59:59Z"),
-                        validUntil: new Date("2025-12-13T23:59:59Z"),
-                        createdAt: new Date(),
-                        createdBy: "admin"
-                    }
-                ];
-
-                let addedCount = 0;
-                let updatedCount = 0;
-
-                // Ajouter chaque code promo à Firestore
-                for (const promo of codesPromo) {
-                    // Vérifier si le code existe déjà
-                    const existingQuery = await db.collection('promoCodes')
-                        .where('code', '==', promo.code)
-                        .get();
-
-                    if (existingQuery.empty) {
-                        // Code n'existe pas, l'ajouter
-                        await db.collection('promoCodes').add(promo);
-                        addedCount++;
-                        console.log(`✅ Code promo "${promo.code}" ajouté avec succès`);
-                    } else {
-                        // Code existe, le mettre à jour
-                        const docId = existingQuery.docs[0].id;
-                        await db.collection('promoCodes').doc(docId).update(promo);
-                        updatedCount++;
-                        console.log(`🔄 Code promo "${promo.code}" mis à jour`);
-                    }
-                }
-
-                const message = `🎉 ${addedCount} codes ajoutés, ${updatedCount} codes mis à jour !`;
-                showNotification(message, 'success');
-                console.log(message);
-                
-                // Recharger la liste des codes
-                verifierCodesPromo();
-                
-                return { success: true, added: addedCount, updated: updatedCount };
-                
-            } catch (error) {
-                console.error('❌ Erreur lors de l\'ajout des codes promo:', error);
-                showNotification('❌ Erreur lors de l\'ajout des codes: ' + error.message, 'error');
-                return { success: false, error: error.message };
-            }
-        }
-
-        // ✅ Fonction pour vérifier les codes promo dans Firestore
-        async function verifierCodesPromo() {
-            try {
-                const db = firebase.firestore();
-                const snapshot = await db.collection('promoCodes').get();
-                const codesList = document.getElementById('codesList');
-                
-                if (!codesList) return;
-                
-                codesList.innerHTML = '';
-                
-                if (snapshot.empty) {
-                    codesList.innerHTML = '<p style="text-align:center; color:#64748b;">Aucun code promo trouvé</p>';
-                    return;
-                }
-                
-                console.log('📋 Codes promo dans Firestore:');
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const validFrom = data.validFrom ? data.validFrom.toDate() : new Date();
-                    const validUntil = data.validUntil ? data.validUntil.toDate() : new Date();
-                    
-                    console.log(`- ${data.code}: ${data.discount}% (${data.description})`);
-                    
-                    const codeItem = document.createElement('div');
-                    codeItem.className = 'code-item';
-                    codeItem.innerHTML = `
-                        <div class="code-info">
-                            <strong>${data.code}</strong> - ${data.discount}% 
-                            <div style="font-size:0.85rem; color:#64748b;">
-                                ${data.description}
-                            </div>
-                            <div style="font-size:0.75rem; color:#94a3b8;">
-                                Utilisations: ${data.usedCount || 0}/${data.maxUses} | 
-                                Valide du ${validFrom.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validFrom.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
-                                au ${validUntil.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validUntil.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
-                            </div>
-                        </div>
-                        <div class="code-actions">
-                            <span style="color:${data.isActive ? '#16a34a' : '#dc2625'}; font-size:0.8rem;">
-                                ${data.isActive ? '✅ Actif' : '❌ Inactif'}
-                            </span>
-                        </div>
-                    `;
-                    codesList.appendChild(codeItem);
-                });
-                
-                showNotification(`🔍 ${snapshot.size} codes promo trouvés`, 'success');
-                return snapshot.size;
-            } catch (error) {
-                console.error('❌ Erreur vérification codes:', error);
-                showNotification('❌ Erreur vérification codes: ' + error.message, 'error');
-                return 0;
-            }
-        }
-
-        // ✅ Fonction pour vider les codes promo (admin seulement)
-        async function viderCodesPromo() {
-            if (!confirm('⚠️ Êtes-vous sûr de vouloir supprimer TOUS les codes promo ?')) {
-                return;
-            }
-            
-            try {
-                const db = firebase.firestore();
-                const snapshot = await db.collection('promoCodes').get();
-                
-                const batch = db.batch();
-                snapshot.docs.forEach(doc => {
-                    batch.delete(doc.ref);
-                });
-                
-                await batch.commit();
-                showNotification('🗑️ Tous les codes promo ont été supprimés', 'success');
-                document.getElementById('codesList').innerHTML = '<p style="text-align:center; color:#64748b;">Aucun code promo</p>';
-            } catch (error) {
-                console.error('❌ Erreur suppression codes:', error);
-                showNotification('❌ Erreur suppression codes: ' + error.message, 'error');
-            }
-        }
-
-        // ===== FONCTIONS UTILITAIRES MANQUANTES =====
+        // ===== FONCTIONS UTILITAIRES =====
         
         // ✅ Fonction pour générer des couleurs aléatoires
         function randomColors(count) {
@@ -972,7 +744,7 @@
             }, 5000);
         }
 
-        // ✅ Fonctions de gestion des modales
+        // ===== GESTION DES MODALES =====
         function setActiveTab(tabName) {
             const tabLogin = document.getElementById('tabLogin');
             const tabRegister = document.getElementById('tabRegister');
@@ -1022,7 +794,7 @@
             if (el) el.style.display = show ? 'block' : 'none'; 
         }
 
-        // ===== NOUVEAU SYSTÈME DE GESTION DES CODES PROMO POUR MAURITANIE =====
+        // ===== SYSTÈME DE GESTION DES CODES PROMO =====
         class PromoCodeManager {
             constructor() {
                 this.STORAGE_KEYS = {
@@ -1035,10 +807,17 @@
                 };
                 
                 // ✅ DATES DE VALIDITÉ POUR MAURITANIE (UTC+0)
+                // Selon vos données : validFrom 2 décembre 2025 à 23:59:59 UTC
+                // validUntil 13 décembre 2025 à 23:59:59 UTC
                 this.PROMO_DATES = {
-                    start: new Date('2025-12-03T23:59:59Z'),    // 3 Décembre 2025 à 23h59 UTC = Mauritanie
+                    start: new Date('2025-12-02T23:59:59Z'),    // 2 Décembre 2025 à 23h59 UTC
                     end: new Date('2025-12-13T23:59:59Z')       // 13 Décembre 2025 à 23h59 UTC
                 };
+                
+                console.log('📅 PromoCodeManager initialisé avec les dates:', {
+                    start: this.PROMO_DATES.start.toISOString(),
+                    end: this.PROMO_DATES.end.toISOString()
+                });
                 
                 this.init();
             }
@@ -1057,7 +836,7 @@
                 setTimeout(() => verifierCodesPromo(), 2000);
             }
 
-            // ✅ Mettre à jour l'affichage de la période promo (SANS COMPTE À REBOURS)
+            // ✅ Mettre à jour l'affichage de la période promo
             updatePromoPeriodDisplay() {
                 const promoPeriodInfo = document.getElementById('promoPeriodInfo');
                 const statusMessage = document.getElementById('promoStatusMessage');
@@ -1065,69 +844,16 @@
                 if (!promoPeriodInfo || !statusMessage) return;
 
                 const now = new Date();
-                const timeUntilStart = this.PROMO_DATES.start - now;
                 const timeUntilEnd = this.PROMO_DATES.end - now;
 
                 promoPeriodInfo.className = 'promo-period-info';
 
-                if (now < this.PROMO_DATES.start) {
-                    // Période pas encore commencée
-                    const hoursUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60));
-                    const daysUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
-                    
-                    // Si c'est le 3 décembre mais avant 23h59
-                    const isLaunchDay = now.getUTCDate() === 3 && now.getUTCMonth() === 11 && now.getUTCFullYear() === 2025;
-                    
-                    promoPeriodInfo.classList.remove('available', 'ended');
-                    
-                    if (isLaunchDay) {
-                        // C'est le jour du lancement
-                        if (hoursUntilStart <= 12) {
-                            // Moins de 12h avant activation
-                            promoPeriodInfo.classList.add('available');
-                            promoPeriodInfo.innerHTML = `
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <i class="fas fa-hourglass-half" style="color: #f59e0b;"></i>
-                                    <div>
-                                        <strong>🎯 Activation ce soir à 23h59 !</strong>
-                                        <div style="font-size: 0.9rem; color: #92400e;">
-                                            Les codes promos seront activés dans quelques heures
-                                        </div>
-                                        <div style="font-size: 0.8rem; color: #b45309;">
-                                            Mauritanie (UTC+0)
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            // Plus de 12h avant activation
-                            promoPeriodInfo.innerHTML = `
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <i class="fas fa-clock" style="color: #e67e22;"></i>
-                                    <div>
-                                        <strong>Codes promos bientôt disponibles</strong>
-                                        <div style="font-size: 0.9rem; color: #7d6608;">
-                                            Activation aujourd'hui à 23h59 (UTC+0)
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    } else {
-                        // Pas encore le 3 décembre
-                        promoPeriodInfo.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
-                                <div>
-                                    <strong>Codes promos bientôt disponibles</strong>
-                                    <div style="font-size: 0.9rem; color: #7d6608;">
-                                        Activation le 3 Décembre 2025 à 23h59 (UTC+0)
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                } else if (now > this.PROMO_DATES.end) {
+                // Vérifier si nous sommes le même jour que le début
+                const isSameDayAsStart = now.getUTCFullYear() === this.PROMO_DATES.start.getUTCFullYear() &&
+                                       now.getUTCMonth() === this.PROMO_DATES.start.getUTCMonth() &&
+                                       now.getUTCDate() === this.PROMO_DATES.start.getUTCDate();
+
+                if (now > this.PROMO_DATES.end) {
                     // Période terminée
                     promoPeriodInfo.classList.add('ended');
                     promoPeriodInfo.innerHTML = `
@@ -1136,22 +862,71 @@
                             <div>
                                 <strong>Période des codes promos terminée</strong>
                                 <div style="font-size: 0.9rem; color: #721c24;">
-                                    La période était du 3 au 13 Décembre 2025
+                                    La période était du 2 au 13 Décembre 2025
                                 </div>
                             </div>
                         </div>
                     `;
-                } else {
-                    // Période en cours
+                } else if (isSameDayAsStart || now >= this.PROMO_DATES.start) {
+                    // Période en cours OU même jour
                     promoPeriodInfo.classList.add('available');
                     const daysRemaining = Math.ceil(timeUntilEnd / (1000 * 60 * 60 * 24));
+                    const hoursRemaining = Math.ceil(timeUntilEnd / (1000 * 60 * 60));
+                    
+                    if (isSameDayAsStart && now < this.PROMO_DATES.start) {
+                        // Même jour, avant 23:59
+                        const hoursUntilActivation = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60));
+                        const minutesUntilActivation = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60));
+                        
+                        promoPeriodInfo.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-bolt" style="color: #28a745;"></i>
+                                <div>
+                                    <strong>🎉 Codes promos actifs dès aujourd'hui !</strong>
+                                    <div style="font-size: 0.9rem; color: #155724;">
+                                        Vous pouvez utiliser les codes maintenant
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: #166534;">
+                                        Période jusqu'au 13 Décembre 23h59 UTC (${daysRemaining} jour(s) restant)
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // Période pleinement active
+                        promoPeriodInfo.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-bolt" style="color: #28a745;"></i>
+                                <div>
+                                    <strong>🎉 Codes promos pleinement actifs !</strong>
+                                    <div style="font-size: 0.9rem; color: #155724;">
+                                        Période en cours - ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''}
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: #166534;">
+                                        Jusqu'au 13 Décembre 2025 à 23h59 UTC (${hoursRemaining} heure(s))
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    // Période pas encore commencée (pas le même jour)
+                    const timeUntilStart = this.PROMO_DATES.start - now;
+                    const daysUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60 * 24));
+                    const hoursUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60));
+                    
+                    promoPeriodInfo.classList.remove('available', 'ended');
+                    
                     promoPeriodInfo.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-bolt" style="color: #28a745;"></i>
+                            <i class="fas fa-clock" style="color: #e67e22;"></i>
                             <div>
-                                <strong>🎉 Codes promos actifs !</strong>
-                                <div style="font-size: 0.9rem; color: #155724;">
-                                    ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''} - Jusqu'au 13 Décembre 23h59 (UTC+0)
+                                <strong>Codes promos bientôt disponibles</strong>
+                                <div style="font-size: 0.9rem; color: #7d6608;">
+                                    Activation le 2 Décembre 2025 à 23h59 (UTC+0)
+                                </div>
+                                <div style="font-size: 0.8rem; color: #7d6608;">
+                                    Dans ${daysUntilStart} jour(s) (${hoursUntilStart} heure(s))
                                 </div>
                             </div>
                         </div>
@@ -1162,35 +937,17 @@
             // ✅ Vérifier si nous sommes dans la période de validité
             isPromoPeriodActive() {
                 const now = new Date();
-                return now >= this.PROMO_DATES.start && now <= this.PROMO_DATES.end;
+                const validFrom = this.PROMO_DATES.start;
+                
+                // Autoriser si nous sommes le même jour que validFrom (2 décembre)
+                const isSameDayAsStart = now.getUTCFullYear() === validFrom.getUTCFullYear() &&
+                                       now.getUTCMonth() === validFrom.getUTCMonth() &&
+                                       now.getUTCDate() === validFrom.getUTCDate();
+                
+                return (isSameDayAsStart || now >= validFrom) && now <= this.PROMO_DATES.end;
             }
 
-            // ✅ Obtenir le statut de la période promo
-            getPromoPeriodStatus() {
-                const now = new Date();
-                if (now < this.PROMO_DATES.start) {
-                    const hoursRemaining = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60));
-                    return {
-                        status: 'not_started',
-                        message: `Les codes promos seront activés à 23h59 (UTC+0 Mauritanie)`,
-                        hoursRemaining: hoursRemaining
-                    };
-                } else if (now > this.PROMO_DATES.end) {
-                    return {
-                        status: 'ended',
-                        message: 'La période des codes promos est terminée'
-                    };
-                } else {
-                    const daysRemaining = Math.ceil((this.PROMO_DATES.end - now) / (1000 * 60 * 60 * 24));
-                    return {
-                        status: 'active',
-                        message: 'Période promo en cours',
-                        daysRemaining: daysRemaining
-                    };
-                }
-            }
-
-            // ✅ CORRECTION CRITIQUE: Initialiser les variables globales window
+            // ✅ Initialiser les variables globales window
             initializeGlobalVariables() {
                 window.activePromoCode = null;
                 window.promoDiscount = 0;
@@ -1209,7 +966,7 @@
                 }
             }
 
-            // ✅ NOUVEAU: Écouter les changements de storage entre onglets
+            // ✅ Écouter les changements de storage entre onglets
             setupStorageListener() {
                 window.addEventListener('storage', (e) => {
                     console.log('🔄 Événement storage détecté:', e.key, e.newValue);
@@ -1264,7 +1021,7 @@
                 });
             }
 
-            // ✅ SAUVEGARDER DANS TOUS LES FORMATS (CRITIQUE)
+            // ✅ SAUVEGARDER DANS TOUS LES FORMATS
             savePromoToAllFormats(promoData) {
                 const timestamp = Date.now();
                 
@@ -1345,13 +1102,9 @@
                 console.log('🎯 Application code promo:', code);
                 
                 try {
-                    // Vérifier la période de validité d'abord
-                    const periodStatus = this.getPromoPeriodStatus();
-                    if (periodStatus.status === 'not_started') {
-                        throw new Error(`Les codes promos seront activés à 23h59 (UTC+0).`);
-                    }
-                    if (periodStatus.status === 'ended') {
-                        throw new Error(periodStatus.message);
+                    // Vérifier la période de validité
+                    if (!this.isPromoPeriodActive()) {
+                        throw new Error(`Les codes promos sont actifs du 2 au 13 Décembre 2025.`);
                     }
 
                     // Vérifier la validité du code
@@ -1379,9 +1132,11 @@
                 }
             }
 
-            // ✅ Valider le code promo (AVEC VÉRIFICATION DES DATES DANS FIRESTORE)
+            // ✅ Valider le code promo
             async validatePromoCode(code, userId) {
-                // Vérifier dans Firebase d'abord
+                console.log('🔍 Validation code:', code);
+                
+                // Vérifier dans Firebase
                 try {
                     const promoQuery = await firebase.firestore()
                         .collection('promoCodes')
@@ -1393,7 +1148,14 @@
                         const promoDoc = promoQuery.docs[0];
                         const promoData = promoDoc.data();
                         
-                        // ✅ Vérifier les dates de validité (UTC pour Mauritanie)
+                        console.log('📅 Données code Firebase:', {
+                            code: promoData.code,
+                            discount: promoData.discount,
+                            validFrom: promoData.validFrom?.toDate()?.toISOString(),
+                            validUntil: promoData.validUntil?.toDate()?.toISOString()
+                        });
+                        
+                        // ✅ Vérifier les dates de validité avec tolérance pour le jour même
                         const now = new Date();
                         const validFrom = promoData.validFrom ? promoData.validFrom.toDate() : this.PROMO_DATES.start;
                         const validUntil = promoData.validUntil ? promoData.validUntil.toDate() : this.PROMO_DATES.end;
@@ -1405,13 +1167,18 @@
                             code: code
                         });
                         
-                        if (now < validFrom) {
-                            const hoursLeft = Math.ceil((validFrom - now) / (1000 * 60 * 60));
-                            throw new Error(`Ce code sera disponible à partir de 23h59 (UTC+0).`);
+                        // Vérifier si nous sommes le même jour que validFrom
+                        const isSameDay = now.getUTCFullYear() === validFrom.getUTCFullYear() &&
+                                        now.getUTCMonth() === validFrom.getUTCMonth() &&
+                                        now.getUTCDate() === validFrom.getUTCDate();
+                        
+                        if (!isSameDay && now < validFrom) {
+                            const daysLeft = Math.ceil((validFrom - now) / (1000 * 60 * 60 * 24));
+                            throw new Error(`Ce code sera disponible le 2 Décembre 2025`);
                         }
                         
                         if (now > validUntil) {
-                            throw new Error('Ce code promo a expiré');
+                            throw new Error('Ce code promo a expiré (période terminée le 13 Décembre 2025)');
                         }
                         
                         // Vérifier les limites d'utilisation
@@ -1427,25 +1194,14 @@
                             maxUses: promoData.maxUses,
                             usedCount: promoData.usedCount
                         };
+                    } else {
+                        console.log('🔍 Code non trouvé dans Firebase:', code);
+                        throw new Error('Code promo invalide');
                     }
                 } catch (firebaseError) {
-                    console.log('🔍 Code non trouvé dans Firebase:', firebaseError);
-                    // Continuer avec la vérification des codes locaux
+                    console.log('🔍 Erreur Firebase lors de la validation:', firebaseError);
+                    throw new Error('Erreur de validation du code promo');
                 }
-
-                // Fallback vers les codes locaux (pour compatibilité)
-                const CODES_PROMO_VALIDES = {
-                    'TEST15': { discount: 15, description: 'Code test 15% de réduction' },
-                    'BIENVENUE10': { discount: 10, description: 'Bienvenue 10% de réduction' },
-                    'ANDU20': { discount: 20, description: 'Code spécial Andu Xara 20%' },
-                    'SOLDE25': { discount: 25, description: 'Soldes 25% de réduction' }
-                };
-
-                if (CODES_PROMO_VALIDES[code.toUpperCase()]) {
-                    return CODES_PROMO_VALIDES[code.toUpperCase()];
-                }
-
-                throw new Error('Code promo invalide ou expiré');
             }
 
             // ✅ Vérifier si le code a déjà été utilisé
@@ -1482,14 +1238,13 @@
                     usedAt: new Date().toISOString(),
                     status: 'applied',
                     source: 'reductions.html',
-                    timezone: 'UTC+0 (Mauritanie)',
-                    deviceInfo: this.getDeviceInfo()
+                    timezone: 'UTC+0 (Mauritanie)'
                 };
 
                 // Sauvegarder localement
                 this.addToLocalHistory(usageData);
 
-                // Sauvegarder dans Firebase (avec fallback)
+                // Sauvegarder dans Firebase
                 try {
                     await firebase.firestore().collection('promoUsage').add(usageData);
                     
@@ -1513,11 +1268,11 @@
                     
                     console.log('✅ Usage enregistré dans Firebase');
                 } catch (error) {
-                    console.log('🔄 Fallback vers stockage local uniquement');
+                    console.error('❌ Erreur enregistrement Firebase:', error);
                 }
             }
 
-            // ✅ Activer le code promo (SYNCHRONISATION COMPLÈTE)
+            // ✅ Activer le code promo
             async activatePromoCode(user, code, promoData) {
                 const promoInfo = {
                     code: code,
@@ -1533,25 +1288,21 @@
                     timezone: 'UTC+0 (Mauritanie)'
                 };
 
-                // ✅ CRITIQUE: Définir les variables globales
+                // Définir les variables globales
                 window.activePromoCode = code;
                 window.promoDiscount = promoData.discount;
 
-                // ✅ CRITIQUE: Sauvegarder dans tous les formats
+                // Sauvegarder dans tous les formats
                 this.savePromoToAllFormats(promoInfo);
 
-                // ✅ CRITIQUE: Déclencher l'événement storage pour synchroniser les autres onglets
+                // Déclencher l'événement storage pour synchroniser les autres onglets
                 this.triggerStorageEvent(this.STORAGE_KEYS.ACTIVE_PROMO, JSON.stringify(promoInfo));
                 this.triggerStorageEvent(this.STORAGE_KEYS.ACTIVE_CODE, code);
                 this.triggerStorageEvent(this.STORAGE_KEYS.DISCOUNT, promoData.discount.toString());
 
                 console.log('🎉 Code activé et synchronisé:', {
                     code: code,
-                    discount: promoData.discount,
-                    windowVars: {
-                        activePromoCode: window.activePromoCode,
-                        promoDiscount: window.promoDiscount
-                    }
+                    discount: promoData.discount
                 });
 
                 // Mettre à jour l'UI
@@ -1601,31 +1352,6 @@
                 }
             }
 
-            // ✅ Formater les dates en français pour Mauritanie
-            formatFrenchDate(date) {
-                const options = { 
-                    day: 'numeric', 
-                    month: 'long', 
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZone: 'UTC' // Mauritanie = UTC
-                };
-                return date.toLocaleDateString('fr-FR', options) + ' UTC';
-            }
-
-            // ✅ Utilitaires
-            getDeviceInfo() {
-                return {
-                    userAgent: navigator.userAgent,
-                    platform: navigator.platform,
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`,
-                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                };
-            }
-
             // ✅ Nettoyer les données promo (déconnexion, etc.)
             clearActivePromo() {
                 window.activePromoCode = null;
@@ -1650,9 +1376,9 @@
             return promoManager;
         }
 
-        // ===== FONCTIONS GLOBALES MISE À JOUR =====
+        // ===== FONCTIONS GLOBALES =====
 
-        // ✅ NOUVELLE FONCTION: Appliquer code promo
+        // ✅ Fonction pour appliquer code promo
         async function appliquerCodePromo() {
             const codeInput = document.getElementById('promoCodeInput');
             const messageDiv = document.getElementById('promoMessage');
@@ -1705,7 +1431,118 @@
             }
         }
 
-        // ✅ FONCTION: Synchroniser avec index.html (AMÉLIORÉE)
+        // ✅ Fonction pour vérifier les codes promo dans Firestore
+        async function verifierCodesPromo() {
+            try {
+                const db = firebase.firestore();
+                const snapshot = await db.collection('promoCodes').get();
+                const codesList = document.getElementById('codesList');
+                
+                if (!codesList) return;
+                
+                codesList.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    codesList.innerHTML = '<p style="text-align:center; color:#64748b;">Aucun code promo trouvé</p>';
+                    return;
+                }
+                
+                console.log('📋 Codes promo dans Firestore:');
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const validFrom = data.validFrom ? data.validFrom.toDate() : new Date();
+                    const validUntil = data.validUntil ? data.validUntil.toDate() : new Date();
+                    const now = new Date();
+                    
+                    // Vérifier si nous sommes le même jour
+                    const isSameDayAsStart = now.getUTCFullYear() === validFrom.getUTCFullYear() &&
+                                           now.getUTCMonth() === validFrom.getUTCMonth() &&
+                                           now.getUTCDate() === validFrom.getUTCDate();
+                    
+                    const isCurrentlyActive = (isSameDayAsStart || now >= validFrom) && now <= validUntil;
+                    
+                    console.log(`- ${data.code}: ${data.discount}% (${data.description}) - ${isCurrentlyActive ? '✅ Actif' : '❌ Inactif'}`);
+                    
+                    const codeItem = document.createElement('div');
+                    codeItem.className = 'code-item';
+                    codeItem.innerHTML = `
+                        <div class="code-info">
+                            <strong>${data.code}</strong> - ${data.discount}% 
+                            <div style="font-size:0.85rem; color:#64748b;">
+                                ${data.description}
+                            </div>
+                            <div style="font-size:0.75rem; color:#94a3b8;">
+                                Utilisations: ${data.usedCount || 0}/${data.maxUses} | 
+                                <span style="color:${isCurrentlyActive ? '#16a34a' : '#dc2625'}">
+                                    ${isCurrentlyActive ? '✅ Actuellement actif' : '❌ Hors période'}
+                                </span>
+                            </div>
+                            <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">
+                                <strong>Période:</strong><br>
+                                Du ${validFrom.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validFrom.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC<br>
+                                Au ${validUntil.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validUntil.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
+                            </div>
+                        </div>
+                        <div class="code-actions">
+                            <span style="color:${data.isActive ? '#16a34a' : '#dc2625'}; font-size:0.8rem;">
+                                ${data.isActive ? '✅ Actif' : '❌ Inactif'}
+                            </span>
+                        </div>
+                    `;
+                    codesList.appendChild(codeItem);
+                });
+                
+                showNotification(`🔍 ${snapshot.size} codes promo trouvés`, 'success');
+                return snapshot.size;
+            } catch (error) {
+                console.error('❌ Erreur vérification codes:', error);
+                showNotification('❌ Erreur vérification codes: ' + error.message, 'error');
+                return 0;
+            }
+        }
+
+        // ✅ Fonction pour forcer l'activation des codes (admin)
+        async function forcerActivationCodes() {
+            try {
+                showNotification('🔄 Activation forcée des codes en cours...', 'success');
+                
+                const db = firebase.firestore();
+                const snapshot = await db.collection('promoCodes').get();
+                
+                if (snapshot.empty) {
+                    showNotification('ℹ️ Aucun code promo trouvé', 'success');
+                    return;
+                }
+                
+                // Mettre à jour les dates pour qu'elles soient actives dès maintenant
+                const now = new Date();
+                const batch = db.batch();
+                let updatedCount = 0;
+                
+                snapshot.docs.forEach(doc => {
+                    batch.update(doc.ref, {
+                        validFrom: now, // Début immédiat
+                        validUntil: new Date('2025-12-13T23:59:59Z'), // Fin inchangée
+                        updatedAt: new Date()
+                    });
+                    updatedCount++;
+                });
+                
+                await batch.commit();
+                showNotification(`✅ ${updatedCount} codes activés dès maintenant !`, 'success');
+                verifierCodesPromo();
+                
+                // Redémarrer le manager
+                promoManager = new PromoCodeManager();
+                promoManager.updatePromoPeriodDisplay();
+                
+            } catch (error) {
+                console.error('❌ Erreur activation forcée:', error);
+                showNotification('❌ Erreur activation forcée: ' + error.message, 'error');
+            }
+        }
+
+        // ✅ Synchroniser avec index.html
         function synchroniserAvecIndex() {
             const user = firebase.auth().currentUser;
             if (user) {
@@ -1736,7 +1573,7 @@
             }
         }
 
-        // ===== AUTH MANAGER (SANS OTP) =====
+        // ===== AUTH MANAGER =====
         class AuthManager {
             constructor() {
                 this.user = null; this.auth = firebase.auth(); this.db = firebase.firestore();
@@ -1757,6 +1594,9 @@
                         if (user.email === 'admin@anduxara.com' || user.email.includes('admin')) {
                             document.getElementById('adminPanel').style.display = 'block';
                         }
+                        
+                        // Synchroniser avec index.html
+                        synchroniserAvecIndex();
                     } else {
                         this.user = null; this.updateUI(); console.log('🚪 Utilisateur déconnecté');
                         document.getElementById('adminPanel').style.display = 'none';
@@ -1770,22 +1610,22 @@
                     if (!promoData) return;
                     const promo = JSON.parse(promoData);
                     if (promo.userId === userId) {
-                        const appliedAt = new Date(promo.appliedAt);
-                        const now = new Date();
-                        const diffHours = (now - appliedAt) / (1000 * 60 * 60);
-                        if (diffHours < 24) {
-                            this.activerInterfaceCode(promo);
-                            updateSyncStatus('success', `✅ Code restauré - ${promo.discount}% actif`);
-                            showNotification(`🔄 Code restauré depuis votre historique`, 'success');
-                        }
+                        this.activerInterfaceCode(promo);
+                        updateSyncStatus('success', `✅ Code restauré - ${promo.discount}% actif`);
+                        showNotification(`🔄 Code restauré depuis votre historique`, 'success');
                     }
                 } catch (error) { console.error('Erreur vérification code actif local:', error); }
             }
 
             activerInterfaceCode(promo) {
-                const codeInput = document.getElementById('promoCodeInput'); const promoBtn = document.getElementById('promoBtn'); const messageDiv = document.getElementById('promoMessage');
+                const codeInput = document.getElementById('promoCodeInput'); 
+                const promoBtn = document.getElementById('promoBtn'); 
+                const messageDiv = document.getElementById('promoMessage');
                 if (codeInput && promoBtn) {
-                    codeInput.disabled = true; codeInput.value = '••••••••'; promoBtn.disabled = true; promoBtn.innerHTML = '<i class="fas fa-check"></i> Déjà activé';
+                    codeInput.disabled = true; 
+                    codeInput.value = '••••••••'; 
+                    promoBtn.disabled = true; 
+                    promoBtn.innerHTML = '<i class="fas fa-check"></i> Déjà activé';
                     document.getElementById('successSection').style.display = 'block';
                     messageDiv.innerHTML = `<span style="color:#16a34a;">✅ Code déjà activé - ${promo.discount}% de réduction</span>`;
                 }
@@ -1796,7 +1636,7 @@
                     showLoading(true);
                     const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
                     
-                    // AJOUT: Synchroniser avec index.html
+                    // Synchroniser avec index.html
                     synchroniserAvecIndex();
                     
                     await this.db.collection('users').doc(userCredential.user.uid).set({ 
@@ -1818,7 +1658,7 @@
                     await userCredential.user.updateProfile({ displayName: displayName });
                     await userCredential.user.sendEmailVerification();
                     
-                    // AJOUT: Synchroniser avec index.html
+                    // Synchroniser avec index.html
                     synchroniserAvecIndex();
                     
                     // Téléphone optionnel sans vérification OTP
@@ -1856,15 +1696,37 @@
             }
 
             async updateUI() {
-                const authButtons = document.getElementById('authButtons'); const userProfile = document.getElementById('userProfile'); const promoSection = document.getElementById('promoSection'); const infoMessage = document.getElementById('infoMessage'); const verificationWarning = document.getElementById('verificationWarning');
+                const authButtons = document.getElementById('authButtons'); 
+                const userProfile = document.getElementById('userProfile'); 
+                const promoSection = document.getElementById('promoSection'); 
+                const infoMessage = document.getElementById('infoMessage'); 
+                const verificationWarning = document.getElementById('verificationWarning');
+                
                 if (this.user) {
-                    authButtons.style.display = 'none'; userProfile.style.display = 'block'; infoMessage.style.display = 'none'; promoSection.style.display = 'block';
-                    document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur'; document.getElementById('userEmail').textContent = this.user.email; document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+                    authButtons.style.display = 'none'; 
+                    userProfile.style.display = 'block'; 
+                    infoMessage.style.display = 'none'; 
+                    promoSection.style.display = 'block';
+                    
+                    document.getElementById('userDisplayName').textContent = this.user.displayName || 'Utilisateur'; 
+                    document.getElementById('userEmail').textContent = this.user.email; 
+                    document.getElementById('userAvatar').textContent = (this.user.displayName || 'U').charAt(0).toUpperCase();
+                    
                     const statusElement = document.getElementById('userStatus');
-                    if (this.user.emailVerified) { statusElement.textContent = '✓ Email vérifié'; statusElement.style.color = '#16a34a'; verificationWarning.style.display = 'none'; }
-                    else { statusElement.textContent = '✗ Email non vérifié'; statusElement.style.color = '#e53e3e'; verificationWarning.style.display = 'block'; }
+                    if (this.user.emailVerified) { 
+                        statusElement.textContent = '✓ Email vérifié'; 
+                        statusElement.style.color = '#16a34a'; 
+                        verificationWarning.style.display = 'none'; 
+                    } else { 
+                        statusElement.textContent = '✗ Email non vérifié'; 
+                        statusElement.style.color = '#e53e3e'; 
+                        verificationWarning.style.display = 'block'; 
+                    }
                 } else {
-                    authButtons.style.display = 'flex'; userProfile.style.display = 'none'; promoSection.style.display = 'none'; infoMessage.style.display = 'block';
+                    authButtons.style.display = 'flex'; 
+                    userProfile.style.display = 'none'; 
+                    promoSection.style.display = 'none'; 
+                    infoMessage.style.display = 'block';
                 }
             }
         }
@@ -1935,7 +1797,7 @@
                 const result = await firebase.auth().signInWithPopup(authProvider);
                 const user = result.user;
                 
-                // AJOUT: Synchroniser avec index.html
+                // Synchroniser avec index.html
                 synchroniserAvecIndex();
                 
                 // Enregistrer l'utilisateur dans Firestore
@@ -2036,63 +1898,15 @@
         }
 
         function updateSyncStatus(type, message) {
-            const syncStatus = document.getElementById('syncStatus'); const syncMessage = document.getElementById('syncMessage');
+            const syncStatus = document.getElementById('syncStatus'); 
+            const syncMessage = document.getElementById('syncMessage');
             if (!syncStatus || !syncMessage) return;
             syncStatus.className = 'sync-status';
             if (type === 'success' || type === 'synced') syncStatus.classList.add('synced');
             else if (type === 'error') syncStatus.classList.add('error');
-            syncMessage.innerHTML = message; syncStatus.style.display = 'block';
+            syncMessage.innerHTML = message; 
+            syncStatus.style.display = 'block';
             if (type === 'success') setTimeout(()=> syncStatus.style.display = 'none', 5000);
-        }
-
-        // ===== FONCTION DE TEST MAURITANIE =====
-        function testMauritanieFuseau() {
-            console.log('=== TEST FUSEAU MAURITANIE ===');
-            
-            const maintenant = new Date();
-            const activation = new Date('2025-12-03T23:59:59Z');
-            
-            // Afficher en différents fuseaux
-            console.log('UTC:', maintenant.toISOString());
-            console.log('Mauritanie (UTC+0):', 
-                maintenant.toLocaleString('fr-FR', { timeZone: 'UTC' }));
-            
-            console.log('\n🎯 Activation des codes:');
-            console.log('UTC:', activation.toISOString());
-            console.log('Mauritanie (UTC+0):', 
-                activation.toLocaleString('fr-FR', { 
-                    timeZone: 'UTC',
-                    hour12: false 
-                }));
-            
-            // Vérifier Firebase dates
-            console.log('\n📅 Dates Firebase:');
-            console.log('validFrom: 3 décembre 2025 à 23:59:59 UTC ✅');
-            console.log('validUntil: 13 décembre 2025 à 23:59:59 UTC ✅');
-            
-            // Vérifier si ça correspond
-            const dateFirebase = new Date('2025-12-03T23:59:59Z');
-            const diff = Math.abs(dateFirebase - activation);
-            console.log(`\n⏱️  Différence avec Firebase: ${diff}ms (${diff < 60000 ? '✅ OK' : '❌ Problème'})`);
-            
-            // Vérifier PromoCodeManager
-            const manager = getPromoManager();
-            const status = manager.getPromoPeriodStatus();
-            console.log('\n📊 Statut PromoCodeManager:');
-            console.log('Status:', status.status);
-            console.log('Message:', status.message);
-            console.log('Dates config:', {
-                start: manager.PROMO_DATES.start.toISOString(),
-                end: manager.PROMO_DATES.end.toISOString()
-            });
-            
-            console.log('\n=== RÉSULTATS ===');
-            console.log('1. Firebase dates: ✅ Correctes pour 23h59 Mauritanie (UTC+0)');
-            console.log('2. PromoCodeManager: ✅ Configuré pour Mauritanie UTC+0');
-            console.log('3. Site lancement 11h: ✅ Pas de conflit');
-            console.log('4. Activation codes 23h59: ✅ Stratégie valide');
-            
-            return status;
         }
 
         // ===== INITIALISATION COMPLÈTE =====
@@ -2202,16 +2016,19 @@
                 promoManager.updatePromoPeriodDisplay();
             }, 60000);
 
-            // Exécuter le test Mauritanie au chargement
+            // Exécuter le test au chargement
             setTimeout(() => {
                 console.log('=== LANCEMENT SITE ANDU XARA ===');
-                console.log('Date/heure:', new Date().toLocaleString('fr-FR', { timeZone: 'UTC' }));
+                console.log('Date/heure:', new Date().toLocaleString('fr-FR', { 
+                    timeZone: 'UTC',
+                    dateStyle: 'full',
+                    timeStyle: 'full'
+                }));
                 console.log('Fuseau: Mauritanie (UTC+0)');
-                testMauritanieFuseau();
             }, 1000);
         });
 
-        // Exposer les fonctions globales pour le débogage
+        // Exposer les fonctions globales
         window.randomColors = randomColors;
         window.applyRandomColorsToTitle = applyRandomColorsToTitle;
         window.appliquerCodePromo = appliquerCodePromo;
@@ -2224,10 +2041,8 @@
         window.goHome = goHome;
         window.connectWithSocial = connectWithSocial;
         window.synchroniserAvecIndex = synchroniserAvecIndex;
-        window.ajouterCodesPromoFirestore = ajouterCodesPromoFirestore;
         window.verifierCodesPromo = verifierCodesPromo;
-        window.viderCodesPromo = viderCodesPromo;
-        window.testMauritanieFuseau = testMauritanieFuseau;
+        window.forcerActivationCodes = forcerActivationCodes;
     </script>
 </body>
 </html>
