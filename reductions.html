@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Codes Promo - Andu-Xara</title>
     
     <!-- ✅ FAVICON CORRIGÉ - Icône ticket emoji -->
@@ -13,92 +13,236 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
-        html,body { height: 100%; -webkit-font-smoothing:antialiased; }
+        /* ===== RESET ET BASE ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            max-width: 100%;
+        }
+        
+        html, body { 
+            height: 100%; 
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
         
         body {
             background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
             color: #1f2d3d;
-            padding: 28px;
+            padding: 20px 15px;
             min-height: 100vh;
+            width: 100vw;
+            left: 0;
+            right: 0;
         }
 
-        .container { max-width: 980px; margin: 0 auto; }
+        .container { 
+            max-width: 980px; 
+            margin: 0 auto; 
+            width: 100%;
+            padding: 0 10px;
+        }
 
-        .header { text-align: center; margin-bottom: 1.8rem; color: white; }
+        /* ===== HEADER ===== */
+        .header { 
+            text-align: center; 
+            margin-bottom: 1.5rem; 
+            color: white; 
+            width: 100%;
+        }
+        
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin-bottom: .25rem;
             text-shadow: 0 4px 18px rgba(0,0,0,0.25);
             display: inline-block;
             line-height: 1.05;
             letter-spacing: 0.6px;
+            word-wrap: break-word;
+            max-width: 100%;
         }
+        
         .header h1 span {
             display: inline-block;
             transition: color .6s ease, transform .6s cubic-bezier(.2,.9,.25,1);
             will-change: color, transform;
         }
+        
         .header h1 span:hover {
             transform: translateY(-6px) scale(1.06);
             text-shadow: 0 10px 24px rgba(0,0,0,0.18);
         }
 
-        .header p { opacity: .95; }
+        .header p { 
+            opacity: .95; 
+            font-size: 0.95rem;
+        }
 
+        /* ===== CARTES ===== */
         .card {
             background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             box-shadow: 0 18px 40px rgba(2,6,23,0.2);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            width: 100%;
+            overflow: hidden;
         }
 
-        /* top auth buttons */
-        .auth-buttons { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+        /* ===== BOUTONS AUTH ===== */
+        .auth-buttons { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
         .auth-btn {
-            padding: 12px 22px;
+            padding: 12px 20px;
             background: linear-gradient(90deg,#4f6be8,#6f8fee);
             color: #fff;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            display:flex; gap:10px; align-items:center;
+            display: flex; 
+            gap: 10px; 
+            align-items: center;
             transition: transform .28s ease, box-shadow .28s ease;
+            min-width: 140px;
+            justify-content: center;
         }
+        
         .auth-btn.green-outline {
             background: transparent;
             color: #16a34a;
             border: 2px solid #16a34a;
             box-shadow: none;
         }
-        .auth-btn.green-outline:hover { background:#16a34a; color:#fff; }
+        
+        .auth-btn.green-outline:hover { 
+            background: #16a34a; 
+            color: #fff; 
+        }
 
-        .user-profile { background: #f7fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; display: none; }
+        /* ===== PROFIL UTILISATEUR ===== */
+        .user-profile { 
+            background: #f7fafc; 
+            padding: 1.2rem; 
+            border-radius: 12px; 
+            margin-bottom: 1rem; 
+            display: none; 
+            width: 100%;
+        }
 
-        .promo-section { display:none; }
-        .promo-section h2 { text-align:center; color:#2d3748; }
+        .promo-section { 
+            display: none; 
+            width: 100%;
+        }
+        
+        .promo-section h2 { 
+            text-align: center; 
+            color: #2d3748; 
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
 
-        .promo-input { width:100%; padding:14px 16px; border-radius:10px; border:2px solid #e2e8f0; text-align:center; font-size:16px; }
-        .promo-btn { padding:14px 28px; border-radius:10px; background:linear-gradient(90deg,#667eea,#5a6fd8); color:white; border:none; cursor:pointer; font-weight:700; }
-        .success-message { display:none; background:#f0fff4; border:1px solid #9ae6b4; padding:16px; border-radius:10px; text-align:center; }
+        /* ===== CHAMPS PROMO ===== */
+        .promo-input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border-radius: 10px; 
+            border: 2px solid #e2e8f0; 
+            text-align: center; 
+            font-size: 16px; 
+            box-sizing: border-box;
+        }
+        
+        .promo-btn { 
+            padding: 14px 24px; 
+            border-radius: 10px; 
+            background: linear-gradient(90deg,#667eea,#5a6fd8); 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .success-message { 
+            display: none; 
+            background: #f0fff4; 
+            border: 1px solid #9ae6b4; 
+            padding: 16px; 
+            border-radius: 10px; 
+            text-align: center; 
+            width: 100%;
+        }
 
-        .notification { position: fixed; top: 20px; right: 20px; background:#28a745; color:#fff; padding:12px 18px; border-radius:10px; display:none; box-shadow:0 8px 28px rgba(0,0,0,0.2); z-index:1200; }
-        .notification.error { background:#e53e3e; }
+        /* ===== NOTIFICATIONS ===== */
+        .notification { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            background: #28a745; 
+            color: #fff; 
+            padding: 12px 18px; 
+            border-radius: 10px; 
+            display: none; 
+            box-shadow: 0 8px 28px rgba(0,0,0,0.2); 
+            z-index: 1200;
+            max-width: 90%;
+            word-wrap: break-word;
+        }
+        
+        .notification.error { 
+            background: #e53e3e; 
+        }
 
-        /* Modal & auth UI */
-        .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: linear-gradient(180deg, rgba(2,6,23,0.45), rgba(2,6,23,0.6)); z-index: 10000; animation: fadeIn .28s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* ===== MODAL AUTH ===== */
+        .modal { 
+            position: fixed; 
+            inset: 0; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            background: linear-gradient(180deg, rgba(2,6,23,0.45), rgba(2,6,23,0.6)); 
+            z-index: 10000; 
+            animation: fadeIn .28s ease forwards;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
         .modal-content {
-            width: 920px; max-width: calc(100% - 36px); height: 580px;
-            border-radius: 20px; overflow: hidden; position: relative; background: #fff;
-            box-shadow: 0 30px 80px rgba(2,6,23,0.45); transform: translateY(20px);
+            width: 920px;
+            max-width: calc(100% - 20px);
+            height: auto;
+            min-height: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+            box-shadow: 0 30px 80px rgba(2,6,23,0.45);
+            transform: translateY(20px);
             animation: popIn .36s cubic-bezier(.2,.9,.25,1) forwards;
         }
-        @keyframes popIn { to { transform: translateY(0); } }
+        
+        @keyframes popIn { 
+            to { transform: translateY(0); } 
+        }
 
-        /* top tab nav */
+        /* Tabs du modal */
         .modal-tabs {
             position: absolute;
             left: 50%;
@@ -108,6 +252,7 @@
             gap: 8px;
             z-index: 2100;
         }
+        
         .modal-tabs .tab {
             background: rgba(255,255,255,0.06);
             color: #fff;
@@ -117,27 +262,39 @@
             cursor: pointer;
             font-weight: 700;
             backdrop-filter: blur(6px);
+            font-size: 14px;
         }
+        
         .modal-tabs .tab.active {
             background: #fff;
             color: #263544;
             box-shadow: 0 8px 30px rgba(7,22,61,0.12);
         }
 
-        .auth-container { position: relative; width: 100%; height: 100%; overflow: hidden; display:flex; }
+        /* Container auth */
+        .auth-container { 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: row;
+        }
+        
         .panel-left {
             width: 46%;
-            padding: 36px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
             background: linear-gradient(180deg,#f6fbff 0%, #eef7ff 100%);
             overflow: hidden;
         }
+        
         .panel-left::before {
             content: '';
-            position:absolute;
+            position: absolute;
             inset: -30% -10% auto -10%;
             height: 200%;
             background: radial-gradient(circle at 10% 10%, rgba(99,102,241,0.08), transparent 8%),
@@ -145,103 +302,170 @@
             transform: rotate(-12deg);
             pointer-events: none;
         }
+        
         .mascot-wrap {
             position: relative;
-            width: 320px;
-            height: 420px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            width: 280px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transform-origin: center;
             transition: transform .6s cubic-bezier(.2,.9,.25,1);
         }
+        
         .mascot-wrap .bg-shape {
             position: absolute;
-            width: 380px;
-            height: 380px;
+            width: 320px;
+            height: 320px;
             border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
             background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(72,187,120,0.08));
             filter: blur(18px);
             z-index: 1;
             transition: transform .8s ease, opacity .6s ease;
         }
+        
         .mascot-wrap img {
-            width: 260px;
+            width: 220px;
             height: auto;
             z-index: 2;
             border-radius: 18px;
             box-shadow: 0 18px 40px rgba(8,15,40,0.18);
             transform: translateY(0);
             transition: transform .9s cubic-bezier(.2,.9,.25,1), filter .4s ease;
+            max-width: 100%;
         }
+        
         @keyframes floaty {
             0% { transform: translateY(0) rotate(-1deg); }
             50% { transform: translateY(-10px) rotate(1deg); }
             100% { transform: translateY(0) rotate(-1deg); }
         }
-        .mascot-wrap.floating img { animation: floaty 4.2s ease-in-out infinite; }
-        .mascot-wrap:hover { transform: scale(1.03) rotate(-1deg); }
-        .mascot-wrap:hover .bg-shape { transform: scale(1.06) rotate(-6deg); opacity: .95; }
-        .mascot-wrap:active { transform: scale(.98); }
+        
+        .mascot-wrap.floating img { 
+            animation: floaty 4.2s ease-in-out infinite; 
+        }
+        
+        .mascot-wrap:hover { 
+            transform: scale(1.03) rotate(-1deg); 
+        }
+        
+        .mascot-wrap:hover .bg-shape { 
+            transform: scale(1.06) rotate(-6deg); 
+            opacity: .95; 
+        }
+        
+        .mascot-wrap:active { 
+            transform: scale(.98); 
+        }
 
+        /* Côté formulaire */
         .form-side {
             width: 54%;
-            padding: 36px 44px;
+            padding: 30px 35px;
             background: transparent;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            gap:8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
         }
 
         .form-card {
             background: linear-gradient(180deg,#fff,#fbfdff);
             border-radius: 14px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 18px 36px rgba(6,18,55,0.06);
+            width: 100%;
         }
 
-        .form-card h1 { font-size:22px; margin-bottom:10px; color:#0f172a; }
+        .form-card h1 { 
+            font-size: 1.4rem; 
+            margin-bottom: 10px; 
+            color: #0f172a; 
+        }
 
-        .input-box { margin:12px 0; }
+        .input-box { 
+            margin: 10px 0; 
+            width: 100%;
+        }
+        
         .input-box input, .input-box select {
-            width:100%;
-            padding:12px 14px;
-            border-radius:10px;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
             border: 1px solid #e6eefc;
             background: linear-gradient(180deg,#fbfdff,#f7fbff);
             outline: none;
             transition: box-shadow .18s ease, transform .12s ease;
+            font-size: 15px;
         }
+        
         .input-box input:focus, .input-box select:focus {
             box-shadow: 0 8px 30px rgba(79,107,232,0.12);
             transform: translateY(-3px);
             border-color: #647eff;
         }
 
-        .btn { margin-top:8px; width:100%; height:48px; border-radius:10px; border:none; cursor:pointer; color:#fff; background: linear-gradient(90deg,#4f6be8,#5a6fd8); font-weight:800; font-size:15px; transition: transform .18s ease, box-shadow .18s ease; }
-        .btn:active { transform: translateY(2px); }
-
-        .social-row { display:flex; gap:12px; margin-top:12px; justify-content:flex-start; align-items:center; }
-        .social-btn {
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            gap:8px;
-            padding:10px 12px;
-            border-radius:10px;
-            background:#fff;
-            border:1px solid #e6eefc;
-            color:#374151;
-            cursor:pointer;
-            transition: transform .25s cubic-bezier(.2,.9,.25,1), box-shadow .25s ease;
-            position:relative;
-            overflow:visible;
-            text-decoration: none;
+        /* Boutons généraux */
+        .btn { 
+            margin-top: 8px; 
+            width: 100%; 
+            height: 48px; 
+            border-radius: 10px; 
+            border: none; 
+            cursor: pointer; 
+            color: #fff; 
+            background: linear-gradient(90deg,#4f6be8,#5a6fd8); 
+            font-weight: 800; 
+            font-size: 15px; 
+            transition: transform .18s ease, box-shadow .18s ease; 
         }
-        .social-btn i { font-size:18px; }
-        .social-btn:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 18px 40px rgba(15,23,55,0.12); }
-        .social-btn:active { transform: scale(.96); }
+        
+        .btn:active { 
+            transform: translateY(2px); 
+        }
+
+        /* Boutons sociaux */
+        .social-row { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 12px; 
+            justify-content: flex-start; 
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 11px;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #e6eefc;
+            color: #374151;
+            cursor: pointer;
+            transition: transform .25s cubic-bezier(.2,.9,.25,1), box-shadow .25s ease;
+            position: relative;
+            overflow: visible;
+            text-decoration: none;
+            font-size: 14px;
+            min-width: 100px;
+        }
+        
+        .social-btn i { 
+            font-size: 16px; 
+        }
+        
+        .social-btn:hover { 
+            transform: translateY(-6px) scale(1.03); 
+            box-shadow: 0 18px 40px rgba(15,23,55,0.12); 
+        }
+        
+        .social-btn:active { 
+            transform: scale(.96); 
+        }
 
         .social-btn::after {
             content: '';
@@ -253,6 +477,7 @@
             transform: scale(0);
             transition: transform .4s cubic-bezier(.2,.9,.25,1), opacity .4s;
         }
+        
         .social-btn.burst::after {
             opacity: .9;
             transform: scale(30);
@@ -260,30 +485,158 @@
             background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), transparent 35%);
         }
 
-        .social-btn.google:hover { background: linear-gradient(90deg,#fff 0%, #fff 100%); border-color:#e6eefc; color:#db4437; }
-        .social-btn.facebook:hover { color:#1877f2; }
-        .social-btn.github:hover { color:#111; }
-        .social-btn.linkedin:hover { color:#0077b5; }
-
-        @media (max-width: 980px) {
-            .modal-content { width: 96%; height: auto; }
-            .auth-container { flex-direction: column; }
-            .panel-left, .form-side { width: 100%; }
-            .panel-left { padding: 22px; height: 320px; }
-            .form-side { padding: 22px; }
-            .mascot-wrap { 
-                width: 220px; 
-                height: 300px; 
-                transform: translateY(5mm);
-            }
-            .mascot-wrap img { width: 180px; }
+        .social-btn.google:hover { 
+            background: linear-gradient(90deg,#fff 0%, #fff 100%); 
+            border-color: #e6eefc; 
+            color: #db4437; 
+        }
+        
+        .social-btn.facebook:hover { 
+            color: #1877f2; 
+        }
+        
+        .social-btn.github:hover { 
+            color: #111; 
+        }
+        
+        .social-btn.linkedin:hover { 
+            color: #0077b5; 
         }
 
-        .loading { display:none; text-align:center; color:#667eea; padding:12px; }
-        .promo-history { display:none; background:#edf2f7; padding:12px; border-radius:8px; margin-top:12px; }
-        .history-item { background:#fff; padding:10px; border-radius:6px; margin-bottom:8px; border-left:4px solid #48bb78; }
+        /* ===== MEDIA QUERIES MOBILE ===== */
+        @media (max-width: 980px) {
+            body {
+                padding: 15px 10px;
+            }
+            
+            .container {
+                padding: 0 8px;
+            }
+            
+            .modal-content { 
+                width: 96% !important; 
+                height: auto !important;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+            
+            .auth-container { 
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .panel-left, .form-side { 
+                width: 100% !important;
+                padding: 20px !important;
+            }
+            
+            .panel-left { 
+                height: 250px !important;
+                padding: 15px !important;
+            }
+            
+            .mascot-wrap { 
+                width: 180px !important; 
+                height: 180px !important; 
+            }
+            
+            .mascot-wrap img { 
+                width: 140px !important; 
+            }
+            
+            .form-side {
+                padding: 20px !important;
+            }
+            
+            .header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+            }
+            
+            .auth-btn {
+                width: 100%;
+            }
+        }
 
-        /* Nouveaux styles pour la synchronisation */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px 8px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .promo-section h2 {
+                font-size: 1.3rem;
+            }
+            
+            .card {
+                padding: 14px;
+                margin-bottom: 14px;
+            }
+            
+            .form-card h1 {
+                font-size: 1.2rem;
+            }
+            
+            .social-btn {
+                min-width: 80px;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            .input-box input, .input-box select {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .btn, .promo-btn, .auth-btn {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .modal-tabs .tab {
+                padding: 5px 10px;
+                font-size: 13px;
+            }
+        }
+
+        /* ===== STYLES COMPLÉMENTAIRES ===== */
+        .loading { 
+            display: none; 
+            text-align: center; 
+            color: #667eea; 
+            padding: 12px; 
+        }
+        
+        .promo-history { 
+            display: none; 
+            background: #edf2f7; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-top: 12px; 
+            width: 100%;
+        }
+        
+        .history-item { 
+            background: #fff; 
+            padding: 10px; 
+            border-radius: 6px; 
+            margin-bottom: 8px; 
+            border-left: 4px solid #48bb78; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Synchronisation */
         .sync-status { 
             background: #edf2f7; 
             padding: 12px; 
@@ -291,15 +644,19 @@
             margin-top: 12px; 
             text-align: center;
             border-left: 4px solid #a0aec0;
+            width: 100%;
         }
+        
         .sync-status.synced { 
             background: #f0fff4; 
             border-left-color: #48bb78; 
         }
+        
         .sync-status.error { 
             background: #fed7d7; 
             border-left-color: #e53e3e; 
         }
+        
         .active-promo-badge {
             background: linear-gradient(90deg, #48bb78, #38a169);
             color: white;
@@ -310,7 +667,10 @@
             gap: 8px;
             margin-top: 10px;
             animation: pulse 2s infinite;
+            max-width: 100%;
+            box-sizing: border-box;
         }
+        
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -337,50 +697,61 @@
             width: 100%;
         }
 
-        /* Styles pour l'indicateur de période promo */
+        /* Période promo */
         .promo-period-info {
             background: linear-gradient(90deg, #fff3cd, #ffeaa7);
             border-left: 4px solid #f39c12;
             margin-bottom: 15px;
             padding: 12px 16px;
             border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
         }
+        
         .promo-period-info.available {
             background: linear-gradient(90deg, #d4edda, #c3e6cb);
             border-left-color: #28a745;
         }
+        
         .promo-period-info.ended {
             background: linear-gradient(90deg, #f8d7da, #f5c6cb);
             border-left-color: #dc3545;
         }
 
-        /* Admin panel */
+        /* Panel admin */
         .admin-panel {
             background: linear-gradient(90deg, #f8fafc, #f1f5f9);
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 18px;
+            margin: 18px 0;
             display: none;
+            width: 100%;
         }
+        
         .admin-btn {
             background: linear-gradient(90deg, #dc2626, #ef4444);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            margin: 5px;
+            margin: 4px;
+            font-size: 14px;
         }
+        
         .admin-btn.success {
             background: linear-gradient(90deg, #16a34a, #22c55e);
         }
+        
         .codes-list {
             margin-top: 15px;
             max-height: 300px;
             overflow-y: auto;
+            width: 100%;
         }
+        
         .code-item {
             background: white;
             padding: 12px;
@@ -388,36 +759,120 @@
             border-radius: 8px;
             border-left: 4px solid #3b82f6;
             display: flex;
-            justify-content: between;
-            align-items: center;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .code-info { flex: 1; }
-        .code-actions { display: flex; gap: 8px; }
+        
+        .code-info { 
+            flex: 1; 
+            min-width: 200px;
+        }
+        
+        .code-actions { 
+            display: flex; 
+            gap: 8px; 
+            flex-wrap: wrap;
+        }
+
+        /* Liens sociaux */
+        .social-links {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .social-links .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #e6eefc;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+            min-width: 120px;
+            margin: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Correction pour les petits écrans */
+        @media (max-width: 360px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .social-btn {
+                min-width: 70px;
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+            
+            .auth-btn {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .promo-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Empêche le zoom sur iOS */
+        @viewport {
+            width: device-width;
+            zoom: 1.0;
+        }
+
+        /* Correction pour Safari iOS */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        /* Correction pour les éléments flexibles */
+        .flex-container {
+            flex-wrap: wrap;
+        }
+
+        /* Correction pour les textes longs */
+        a, span, div, p, h1, h2, h3, h4 {
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div style="font-size:48px; margin-bottom:6px;"><i class="fas fa-tag"></i></div>
+            <div style="font-size:42px; margin-bottom:6px;"><i class="fas fa-tag"></i></div>
             <h1 id="siteTitle">Codes Promo Andu Xara</h1>
             <p>Activez votre code promo pour obtenir une réduction exclusive</p>
         </div>
 
         <!-- Panel Admin (caché par défaut) -->
         <div id="adminPanel" class="admin-panel">
-            <h3 style="color:#dc2626; margin-bottom:15px;"><i class="fas fa-crown"></i> Panel Administrateur</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="admin-btn success" onclick="verifierCodesPromo()">
+            <h3 style="color:#dc2626; margin-bottom:12px;"><i class="fas fa-crown"></i> Panel Administrateur</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="admin-btn" onclick="verifierCodesPromo()">
                     <i class="fas fa-search"></i> Vérifier Codes
                 </button>
-                <button class="admin-btn" onclick="forcerActivationCodes()">
+                <button class="admin-btn success" onclick="forcerActivationCodes()">
                     <i class="fas fa-bolt"></i> Activer Codes
                 </button>
             </div>
             <div id="codesList" class="codes-list"></div>
         </div>
 
-        <div class="card" style="padding:22px;">
+        <div class="card" style="padding:20px;">
             <div id="authButtons" class="auth-buttons">
                 <button class="auth-btn" onclick="showLoginModal()">
                     <i class="fas fa-sign-in-alt"></i> Se connecter
@@ -428,24 +883,24 @@
             </div>
 
             <div id="userProfile" class="user-profile">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div style="width:56px; height:56px; border-radius:50%; background:linear-gradient(90deg,#667eea,#5a6fd8); color:white; display:flex;align-items:center;justify-content:center; font-weight:700; font-size:20px;" id="userAvatar">U</div>
-                    <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <div style="width:50px; height:50px; border-radius:50%; background:linear-gradient(90deg,#667eea,#5a6fd8); color:white; display:flex;align-items:center;justify-content:center; font-weight:700; font-size:18px;" id="userAvatar">U</div>
+                    <div style="flex:1; min-width:200px;">
                         <div style="font-weight:700;" id="userDisplayName">Utilisateur</div>
                         <div style="color:#64748b;" id="userEmail">email@example.com</div>
-                        <div id="userStatus" style="font-size:13px; margin-top:6px;"></div>
+                        <div id="userStatus" style="font-size:12px; margin-top:4px;"></div>
                     </div>
                     <div>
-                        <button class="auth-btn" style="background:#718096;" onclick="deconnecterUtilisateur()">
+                        <button class="auth-btn" style="background:#718096; padding:10px 14px;" onclick="deconnecterUtilisateur()">
                             <i class="fas fa-sign-out-alt"></i> Déconnexion
                         </button>
                     </div>
                 </div>
 
                 <div id="verificationWarning" style="margin-top:12px; display:none; background:#fff3cd; padding:10px; border-radius:8px; border:1px solid #ffeaa7;">
-                    <div style="display:flex;justify-content:space-between; align-items:center;">
-                        <div><i class="fas fa-exclamation-triangle"></i> Vérifiez votre e-mail pour activer votre compte</div>
-                        <button onclick="renvoyerEmailVerification()" style="background:#856404; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Renvoyer</button>
+                    <div style="display:flex;justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div style="flex:1;"><i class="fas fa-exclamation-triangle"></i> Vérifiez votre e-mail pour activer votre compte</div>
+                        <button onclick="renvoyerEmailVerification()" style="background:#856404; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:13px;">Renvoyer</button>
                     </div>
                 </div>
             </div>
@@ -458,11 +913,11 @@
 
             <!-- Message d'information simple -->
             <div class="promo-period-info" style="background:linear-gradient(90deg,#e0f2fe,#bae6fd); border-left:4px solid #0ea5e9;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <i class="fas fa-info-circle" style="color:#0369a1;"></i>
-                    <div>
-                        <strong>📅 Période des codes promos</strong>
-                        <div style="font-size:0.9rem; color:#0c4a6e; margin-top:4px;">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <i class="fas fa-info-circle" style="color:#0369a1; font-size:18px;"></i>
+                    <div style="flex:1;">
+                        <strong style="font-size:15px;">📅 Période des codes promos</strong>
+                        <div style="font-size:0.85rem; color:#0c4a6e; margin-top:4px;">
                             Les codes sont actifs du 2 Décembre 2025 au 13 Décembre 2025 (UTC+0 Mauritanie)
                         </div>
                     </div>
@@ -471,11 +926,11 @@
 
             <!-- Indicateur de période promo -->
             <div id="promoPeriodInfo" class="promo-period-info">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
-                    <div id="promoStatusMessage">
-                        <strong>Statut des codes promos</strong>
-                        <div style="font-size: 0.9rem; color: #7d6608;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <i class="fas fa-calendar-alt" style="color: #e67e22; font-size:18px;"></i>
+                    <div id="promoStatusMessage" style="flex:1;">
+                        <strong style="font-size:15px;">Statut des codes promos</strong>
+                        <div style="font-size: 0.85rem; color: #7d6608;">
                             Chargement du statut...
                         </div>
                     </div>
@@ -490,8 +945,8 @@
             </div>
 
             <div style="margin:12px 0;" class="instructions card" >
-                <p style="font-weight:700;">Comment obtenir un code promo ?</p>
-                <p style="font-size:0.95rem; margin-top:6px; color:#475569;">
+                <p style="font-weight:700; font-size:15px;">Comment obtenir un code promo ?</p>
+                <p style="font-size:0.9rem; margin-top:6px; color:#475569;">
                     Suivez-nous sur nos réseaux sociaux et obtenez des codes exclusifs. Les codes sont limités dans le temps.
                 </p>
             </div>
@@ -501,53 +956,53 @@
                 <button id="promoBtn" class="promo-btn" onclick="appliquerCodePromo()"><i class="fas fa-check"></i> Activer</button>
             </div>
 
-            <div id="promoMessage" style="margin-top:12px; text-align:center; font-weight:600;"></div>
+            <div id="promoMessage" style="margin-top:12px; text-align:center; font-weight:600; font-size:14px;"></div>
 
             <div id="syncStatus" class="sync-status" style="display:none;">
-                <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
-                    <i class="fas fa-sync-alt"></i><span id="syncMessage">Synchronisation avec le panier...</span>
+                <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
+                    <i class="fas fa-sync-alt"></i><span id="syncMessage" style="font-size:14px;">Synchronisation avec le panier...</span>
                 </div>
             </div>
 
             <div id="promoHistory" class="promo-history">
-                <h4 style="text-align:center;"><i class="fas fa-history"></i> Historique de vos codes promo</h4>
+                <h4 style="text-align:center; font-size:16px;"><i class="fas fa-history"></i> Historique de vos codes promo</h4>
                 <div id="historyList"></div>
             </div>
 
             <div id="successSection" class="success-message" style="margin-top:12px;">
-                <div class="success-anim">
-                    <i class="fas fa-check-circle" style="font-size:24px; color:#16a34a;"></i>
-                    <div>
-                        <strong>Réduction activée !</strong>
-                        <div style="font-size:0.92rem; margin-top:6px;">Votre code promo a été appliqué avec succès</div>
+                <div class="success-anim" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:center;">
+                    <i class="fas fa-check-circle" style="font-size:22px; color:#16a34a;"></i>
+                    <div style="flex:1; min-width:200px;">
+                        <strong style="font-size:16px;">Réduction activée !</strong>
+                        <div style="font-size:0.9rem; margin-top:4px;">Votre code promo a été appliqué avec succès</div>
                     </div>
                 </div>
                 <div style="margin-top:12px;">
-                    <button onclick="redirectToIndexWithAuth()" class="btn" style="width:auto; padding:10px 18px;"><i class="fas fa-shopping-cart"></i> Aller à la boutique</button>
+                    <button onclick="redirectToIndexWithAuth()" class="btn" style="width:100%; max-width:250px; padding:10px 16px; margin:0 auto;"><i class="fas fa-shopping-cart"></i> Aller à la boutique</button>
                 </div>
             </div>
         </div>
 
         <div class="card social-links" style="text-align:center;">
-            <h3 style="margin-bottom:6px;"><i class="fas fa-share-alt"></i> Suivez-nous</h3>
-            <p style="color:#64748b; margin-bottom:12px;">Obtenez des codes promo exclusifs sur nos réseaux</p>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:8px;">
+            <h3 style="margin-bottom:6px; font-size:18px;"><i class="fas fa-share-alt"></i> Suivez-nous</h3>
+            <p style="color:#64748b; margin-bottom:12px; font-size:14px;">Obtenez des codes promo exclusifs sur nos réseaux</p>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; justify-content:center;">
                 <a href="https://www.facebook.com/share/1P1ce6Q9a8/?mibextid=wwXIfr" class="social-btn" target="_blank" rel="noopener noreferrer" title="Facebook">
-                    <i class="fab fa-facebook social-icon" style="font-size:18px;"></i> Facebook
+                    <i class="fab fa-facebook social-icon" style="font-size:16px;"></i> Facebook
                 </a>
                 <a href="https://www.instagram.com/andu_xara?igsh=cTFrcTFhMHQ3ZTlx&utm_source=qr" class="social-btn" target="_blank" rel="noopener noreferrer" title="Instagram">
-                    <i class="fab fa-instagram social-icon" style="font-size:18px;"></i> Instagram
+                    <i class="fab fa-instagram social-icon" style="font-size:16px;"></i> Instagram
                 </a>
                 <a href="https://www.tiktok.com/@andu_xara?_r=1&_t=ZM-91TgN6IDdVr" class="social-btn" target="_blank" rel="noopener noreferrer" title="TikTok">
-                    <i class="fab fa-tiktok social-icon" style="font-size:18px;"></i> TikTok
+                    <i class="fab fa-tiktok social-icon" style="font-size:16px;"></i> TikTok
                 </a>
                 <a href="https://youtube.com/@andu-xaratv5737?si=G6vytclMQxvuMkz_" class="social-btn" target="_blank" rel="noopener noreferrer" title="YouTube">
-                    <i class="fab fa-youtube social-icon" style="font-size:18px;"></i> YouTube
+                    <i class="fab fa-youtube social-icon" style="font-size:16px;"></i> YouTube
                 </a>
             </div>
         </div>
 
-        <div id="infoMessage" class="card info-message" style="text-align:center;">
+        <div id="infoMessage" class="card info-message" style="text-align:center; font-size:14px;">
             <i class="fas fa-info-circle"></i>
             Connectez-vous ou créez un compte pour utiliser vos codes promo et passer commande
         </div>
@@ -558,8 +1013,8 @@
     <!-- Unified Auth Modal -->
     <div id="authModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
-            <div style="position:absolute; right:12px; top:12px; z-index:2200;">
-                <button onclick="closeAuthModal()" style="background:transparent; border:none; color:#fff; font-size:20px; padding:8px 10px; cursor:pointer;">
+            <div style="position:absolute; right:10px; top:10px; z-index:2200;">
+                <button onclick="closeAuthModal()" style="background:transparent; border:none; color:#fff; font-size:20px; padding:6px 8px; cursor:pointer;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -573,7 +1028,7 @@
                 <div class="panel-left" id="panelLeft" aria-hidden="true">
                     <div class="mascot-wrap" id="mascotWrap" title="Andu Xara Mascotte">
                         <div class="bg-shape"></div>
-                        <img src="./images/mascotte.jpg" alt="Mascotte Andu Xara">
+                        <img src="./images/mascotte.jpg" alt="Mascotte Andu Xara" onerror="this.style.display='none'">
                     </div>
                 </div>
 
@@ -588,12 +1043,12 @@
                                 <input id="modalLoginPassword" type="password" placeholder="Mot de passe" required>
                             </div>
 
-                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:10px;">
                                 <div class="forgot-link">
-                                    <a id="forgotPasswordLink" href="#" onclick="forgotPassword(event)">Mot de passe oublié ?</a>
+                                    <a id="forgotPasswordLink" href="#" onclick="forgotPassword(event)" style="font-size:13px;">Mot de passe oublié ?</a>
                                 </div>
                                 <div>
-                                    <button class="link-like" type="button" onclick="setActiveTab('register');">Créer un compte</button>
+                                    <button class="link-like" type="button" onclick="setActiveTab('register');" style="font-size:13px;">Créer un compte</button>
                                 </div>
                             </div>
 
@@ -601,7 +1056,7 @@
                                 <button id="modalLoginBtn" class="btn" type="submit"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
                             </div>
 
-                            <p style="margin-top:10px; color:#64748b;">ou connectez-vous avec</p>
+                            <p style="margin-top:10px; color:#64748b; font-size:14px;">ou connectez-vous avec</p>
 
                             <div class="social-row" style="margin-top:10px;">
                                 <button class="social-btn google" type="button" onclick="connectWithSocial('google')" title="Google"><i class="fab fa-google"></i> Google</button>
@@ -609,7 +1064,7 @@
                                 <button class="social-btn github" type="button" onclick="connectWithSocial('github')" title="GitHub"><i class="fab fa-github"></i> GitHub</button>
                             </div>
 
-                            <div>
+                            <div style="margin-top:12px;">
                                 <button type="button" class="btn-home" onclick="goHome()">Retour à l'accueil</button>
                             </div>
                         </form>
@@ -617,9 +1072,9 @@
 
                     <div class="form-card form-box register" aria-hidden="true" style="display:none; margin-top:12px;">
                         <form id="modalSignupForm" onsubmit="return false;">
-                            <h1 style="display:flex; align-items:center; gap:8px; justify-content:flex-start;">
-                                <span>Créer un compte</span>
-                                <button type="button" class="link-like" id="backToLoginFromRegister" style="margin-left:8px;">Se connecter</button>
+                            <h1 style="display:flex; align-items:center; gap:8px; justify-content:flex-start; flex-wrap:wrap;">
+                                <span style="font-size:1.4rem;">Créer un compte</span>
+                                <button type="button" class="link-like" id="backToLoginFromRegister" style="margin-left:8px; font-size:13px;">Se connecter</button>
                             </h1>
 
                             <div class="input-box">
@@ -643,7 +1098,7 @@
                                 <button id="modalSignupBtn" class="btn" type="submit"><i class="fas fa-user-plus"></i> S'inscrire</button>
                             </div>
 
-                            <p style="margin-top:10px; color:#64748b;">ou inscrivez-vous avec</p>
+                            <p style="margin-top:10px; color:#64748b; font-size:14px;">ou inscrivez-vous avec</p>
                             <div class="social-row">
                                 <button class="social-btn google" type="button" onclick="connectWithSocial('google')" title="Google"><i class="fab fa-google"></i> Google</button>
                                 <button class="social-btn facebook" type="button" onclick="connectWithSocial('facebook')" title="Facebook"><i class="fab fa-facebook"></i> Facebook</button>
@@ -671,7 +1126,10 @@
             messagingSenderId: "653516716143",
             appId: "1:653516716143:web:08ee1425191b4a1766359a"
         };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
         // ===== FONCTIONS UTILITAIRES =====
         
@@ -687,10 +1145,12 @@
         function applyRandomColorsToTitle({ intervalMs = 0 } = {}) {
             const titleEl = document.getElementById('siteTitle');
             if (!titleEl) return;
+            
             const text = titleEl.textContent || '';
             titleEl.innerHTML = '';
             const chars = Array.from(text);
             const colorArray = randomColors(chars.length);
+            
             chars.forEach((ch, i) => {
                 const span = document.createElement('span');
                 span.textContent = ch;
@@ -699,11 +1159,13 @@
                 span.style.transform = 'translateY(6px)';
                 span.style.transitionDelay = `${i * 35}ms`;
                 titleEl.appendChild(span);
+                
                 requestAnimationFrame(() => {
                     span.style.opacity = '1';
                     span.style.transform = 'translateY(0)';
                 });
             });
+            
             titleEl.querySelectorAll('span').forEach(span => {
                 span.addEventListener('mouseenter', () => {
                     span.style.transform = 'translateY(-8px) scale(1.08)';
@@ -713,8 +1175,12 @@
                     span.style.transform = 'translateY(0) scale(1)';
                 });
             });
+            
             if (intervalMs && intervalMs > 500) {
-                if (titleEl._randomColorInterval) clearInterval(titleEl._randomColorInterval);
+                if (titleEl._randomColorInterval) {
+                    clearInterval(titleEl._randomColorInterval);
+                }
+                
                 titleEl._randomColorInterval = setInterval(() => {
                     const spans = titleEl.querySelectorAll('span');
                     const newColors = randomColors(spans.length);
@@ -722,7 +1188,9 @@
                         s.style.transition = 'color 800ms ease, transform 500ms cubic-bezier(.2,.9,.25,1)';
                         s.style.color = newColors[idx];
                         s.style.transform = 'translateY(-6px)';
-                        setTimeout(() => { s.style.transform = 'translateY(0)'; }, 300 + (idx * 15));
+                        setTimeout(() => { 
+                            s.style.transform = 'translateY(0)'; 
+                        }, 300 + (idx * 15));
                     });
                 }, intervalMs);
             }
@@ -736,9 +1204,13 @@
             
             notification.textContent = message;
             notification.className = 'notification';
-            if (type === 'error') notification.classList.add('error');
+            
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
             
             notification.style.display = 'block';
+            
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 5000);
@@ -750,48 +1222,75 @@
             const tabRegister = document.getElementById('tabRegister');
             const loginBox = document.querySelector('.form-box.login');
             const registerBox = document.querySelector('.form-box.register');
-            const panelLeft = document.getElementById('panelLeft');
+            
             if (tabName === 'login') {
-                tabLogin.classList.add('active'); tabLogin.setAttribute('aria-selected','true');
-                tabRegister.classList.remove('active'); tabRegister.setAttribute('aria-selected','false');
+                tabLogin.classList.add('active');
+                tabLogin.setAttribute('aria-selected', 'true');
+                tabRegister.classList.remove('active');
+                tabRegister.setAttribute('aria-selected', 'false');
                 loginBox.style.display = 'block';
                 registerBox.style.display = 'none';
-                if (panelLeft) panelLeft.style.opacity = '0.48';
             } else {
-                tabRegister.classList.add('active'); tabRegister.setAttribute('aria-selected','true');
-                tabLogin.classList.remove('active'); tabLogin.setAttribute('aria-selected','false');
+                tabRegister.classList.add('active');
+                tabRegister.setAttribute('aria-selected', 'true');
+                tabLogin.classList.remove('active');
+                tabLogin.setAttribute('aria-selected', 'false');
                 loginBox.style.display = 'none';
                 registerBox.style.display = 'block';
-                if (panelLeft) panelLeft.style.opacity = '1';
             }
         }
 
         function showLoginModal() {
             const m = document.getElementById('authModal');
-            if (m) m.style.display = 'flex';
+            if (m) {
+                m.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
             setActiveTab('login');
-            setTimeout(()=> { const el = document.getElementById('modalLoginEmail'); if (el) el.focus(); }, 200);
+            
+            setTimeout(() => { 
+                const el = document.getElementById('modalLoginEmail'); 
+                if (el) el.focus(); 
+            }, 200);
         }
 
         function showSignupModal() {
             const m = document.getElementById('authModal');
-            if (m) m.style.display = 'flex';
+            if (m) {
+                m.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
             setActiveTab('register');
-            setTimeout(()=> { const el = document.getElementById('modalSignupName'); if (el) el.focus(); }, 200);
+            
+            setTimeout(() => { 
+                const el = document.getElementById('modalSignupName'); 
+                if (el) el.focus(); 
+            }, 200);
+            
             const mascot = document.getElementById('mascotWrap');
-            if (mascot) mascot.classList.add('floating');
+            if (mascot) {
+                mascot.classList.add('floating');
+            }
         }
 
         function closeAuthModal() {
             const m = document.getElementById('authModal');
-            if (m) m.style.display = 'none';
+            if (m) {
+                m.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
             const mascot = document.getElementById('mascotWrap');
-            if (mascot) mascot.classList.remove('floating');
+            if (mascot) {
+                mascot.classList.remove('floating');
+            }
         }
 
         function showLoading(show) { 
             const el = document.getElementById('authLoading'); 
-            if (el) el.style.display = show ? 'block' : 'none'; 
+            if (el) {
+                el.style.display = show ? 'block' : 'none'; 
+            }
         }
 
         // ===== SYSTÈME DE GESTION DES CODES PROMO =====
@@ -807,11 +1306,9 @@
                 };
                 
                 // ✅ DATES DE VALIDITÉ POUR MAURITANIE (UTC+0)
-                // Selon vos données : validFrom 2 décembre 2025 à 23:59:59 UTC
-                // validUntil 13 décembre 2025 à 23:59:59 UTC
                 this.PROMO_DATES = {
-                    start: new Date('2025-12-02T23:59:59Z'),    // 2 Décembre 2025 à 23h59 UTC
-                    end: new Date('2025-12-13T23:59:59Z')       // 13 Décembre 2025 à 23h59 UTC
+                    start: new Date('2025-12-02T23:59:59Z'),
+                    end: new Date('2025-12-13T23:59:59Z')
                 };
                 
                 console.log('📅 PromoCodeManager initialisé avec les dates:', {
@@ -825,7 +1322,6 @@
             init() {
                 console.log('🔄 Initialisation PromoCodeManager pour Mauritanie...');
                 console.log('Heure UTC actuelle:', new Date().toISOString());
-                console.log('Activation codes:', this.PROMO_DATES.start.toISOString());
                 
                 this.initializeGlobalVariables();
                 this.setupStorageListener();
@@ -857,11 +1353,11 @@
                     // Période terminée
                     promoPeriodInfo.classList.add('ended');
                     promoPeriodInfo.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-calendar-times" style="color: #dc3545;"></i>
-                            <div>
-                                <strong>Période des codes promos terminée</strong>
-                                <div style="font-size: 0.9rem; color: #721c24;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <i class="fas fa-calendar-times" style="color: #dc3545; font-size:18px;"></i>
+                            <div style="flex:1;">
+                                <strong style="font-size:15px;">Période des codes promos terminée</strong>
+                                <div style="font-size: 0.85rem; color: #721c24;">
                                     La période était du 2 au 13 Décembre 2025
                                 </div>
                             </div>
@@ -875,15 +1371,12 @@
                     
                     if (isSameDayAsStart && now < this.PROMO_DATES.start) {
                         // Même jour, avant 23:59
-                        const hoursUntilActivation = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60 * 60));
-                        const minutesUntilActivation = Math.ceil((this.PROMO_DATES.start - now) / (1000 * 60));
-                        
                         promoPeriodInfo.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <i class="fas fa-bolt" style="color: #28a745;"></i>
-                                <div>
-                                    <strong>🎉 Codes promos actifs dès aujourd'hui !</strong>
-                                    <div style="font-size: 0.9rem; color: #155724;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                <i class="fas fa-bolt" style="color: #28a745; font-size:18px;"></i>
+                                <div style="flex:1;">
+                                    <strong style="font-size:15px;">🎉 Codes promos actifs dès aujourd'hui !</strong>
+                                    <div style="font-size: 0.85rem; color: #155724;">
                                         Vous pouvez utiliser les codes maintenant
                                     </div>
                                     <div style="font-size: 0.8rem; color: #166534;">
@@ -895,11 +1388,11 @@
                     } else {
                         // Période pleinement active
                         promoPeriodInfo.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <i class="fas fa-bolt" style="color: #28a745;"></i>
-                                <div>
-                                    <strong>🎉 Codes promos pleinement actifs !</strong>
-                                    <div style="font-size: 0.9rem; color: #155724;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                <i class="fas fa-bolt" style="color: #28a745; font-size:18px;"></i>
+                                <div style="flex:1;">
+                                    <strong style="font-size:15px;">🎉 Codes promos pleinement actifs !</strong>
+                                    <div style="font-size: 0.85rem; color: #155724;">
                                         Période en cours - ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''}
                                     </div>
                                     <div style="font-size: 0.8rem; color: #166534;">
@@ -918,11 +1411,11 @@
                     promoPeriodInfo.classList.remove('available', 'ended');
                     
                     promoPeriodInfo.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-clock" style="color: #e67e22;"></i>
-                            <div>
-                                <strong>Codes promos bientôt disponibles</strong>
-                                <div style="font-size: 0.9rem; color: #7d6608;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <i class="fas fa-clock" style="color: #e67e22; font-size:18px;"></i>
+                            <div style="flex:1;">
+                                <strong style="font-size:15px;">Codes promos bientôt disponibles</strong>
+                                <div style="font-size: 0.85rem; color: #7d6608;">
                                     Activation le 2 Décembre 2025 à 23h59 (UTC+0)
                                 </div>
                                 <div style="font-size: 0.8rem; color: #7d6608;">
@@ -1576,7 +2069,9 @@
         // ===== AUTH MANAGER =====
         class AuthManager {
             constructor() {
-                this.user = null; this.auth = firebase.auth(); this.db = firebase.firestore();
+                this.user = null; 
+                this.auth = firebase.auth(); 
+                this.db = firebase.firestore();
                 this.init();
             }
 
@@ -1598,7 +2093,9 @@
                         // Synchroniser avec index.html
                         synchroniserAvecIndex();
                     } else {
-                        this.user = null; this.updateUI(); console.log('🚪 Utilisateur déconnecté');
+                        this.user = null; 
+                        this.updateUI(); 
+                        console.log('🚪 Utilisateur déconnecté');
                         document.getElementById('adminPanel').style.display = 'none';
                     }
                 });
@@ -1614,7 +2111,9 @@
                         updateSyncStatus('success', `✅ Code restauré - ${promo.discount}% actif`);
                         showNotification(`🔄 Code restauré depuis votre historique`, 'success');
                     }
-                } catch (error) { console.error('Erreur vérification code actif local:', error); }
+                } catch (error) { 
+                    console.error('Erreur vérification code actif local:', error); 
+                }
             }
 
             activerInterfaceCode(promo) {
@@ -1740,19 +2239,23 @@
 
         // Forgot password implementation
         async function forgotPassword(event) {
-            event && event.preventDefault();
+            if (event) event.preventDefault();
+            
             const emailInput = document.getElementById('modalLoginEmail');
             const email = (emailInput && emailInput.value || '').trim();
+            
             if (!email) {
                 showNotification('❗ Entrez votre adresse email dans le champ Email puis cliquez sur "Mot de passe oublié ?"', 'error');
                 if (emailInput) emailInput.focus();
                 return;
             }
+            
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showNotification('❌ Adresse email invalide', 'error');
                 return;
             }
+            
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
                 showNotification('✅ Email de réinitialisation envoyé. Vérifiez votre boîte mail.', 'success');
@@ -1766,10 +2269,12 @@
             btn.classList.add('burst');
             btn.style.transform = 'scale(1.12)';
             btn.style.boxShadow = '0 22px 44px rgba(6,18,55,0.12)';
+            
             setTimeout(() => {
                 btn.style.transform = '';
                 btn.style.boxShadow = '';
             }, 420);
+            
             setTimeout(() => btn.classList.remove('burst'), 650);
         }
 
@@ -1834,9 +2339,15 @@
         function redirectToIndexWithAuth() {
             const user = firebase.auth().currentUser;
             if (user) {
-                const authParams = new URLSearchParams({ auth: 'connected', email: user.email, timestamp: Date.now() });
+                const authParams = new URLSearchParams({ 
+                    auth: 'connected', 
+                    email: user.email, 
+                    timestamp: Date.now() 
+                });
                 window.location.href = 'index.html?' + authParams.toString();
-            } else { window.location.href = 'index.html'; }
+            } else { 
+                window.location.href = 'index.html'; 
+            }
         }
 
         function goHome() {
@@ -1847,6 +2358,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const authToken = urlParams.get('auth');
             const userEmail = urlParams.get('email');
+            
             if (authToken && userEmail) {
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
@@ -1883,6 +2395,7 @@
                 const historique = manager.getLocalHistory(userId);
                 const historyList = document.getElementById('historyList');
                 const promoHistory = document.getElementById('promoHistory');
+                
                 if (historique.length > 0) {
                     historyList.innerHTML = '';
                     historique.forEach(usage => {
@@ -1893,20 +2406,34 @@
                         historyList.appendChild(item);
                     });
                     promoHistory.style.display = 'block';
-                } else { promoHistory.style.display = 'none'; }
-            } catch (error) { console.error('Erreur chargement historique:', error); }
+                } else { 
+                    promoHistory.style.display = 'none'; 
+                }
+            } catch (error) { 
+                console.error('Erreur chargement historique:', error); 
+            }
         }
 
         function updateSyncStatus(type, message) {
             const syncStatus = document.getElementById('syncStatus'); 
             const syncMessage = document.getElementById('syncMessage');
+            
             if (!syncStatus || !syncMessage) return;
+            
             syncStatus.className = 'sync-status';
-            if (type === 'success' || type === 'synced') syncStatus.classList.add('synced');
-            else if (type === 'error') syncStatus.classList.add('error');
+            
+            if (type === 'success' || type === 'synced') {
+                syncStatus.classList.add('synced');
+            } else if (type === 'error') {
+                syncStatus.classList.add('error');
+            }
+            
             syncMessage.innerHTML = message; 
             syncStatus.style.display = 'block';
-            if (type === 'success') setTimeout(()=> syncStatus.style.display = 'none', 5000);
+            
+            if (type === 'success') {
+                setTimeout(() => syncStatus.style.display = 'none', 5000);
+            }
         }
 
         // ===== INITIALISATION COMPLÈTE =====
@@ -1926,59 +2453,71 @@
             // Écouteurs d'événements pour les tabs
             const tabLogin = document.getElementById('tabLogin');
             const tabRegister = document.getElementById('tabRegister');
-            if (tabLogin) tabLogin.addEventListener('click', () => { 
-                setActiveTab('login'); 
-                setTimeout(()=> { 
-                    const el = document.getElementById('modalLoginEmail'); 
-                    if (el) el.focus(); 
-                }, 150); 
-            });
-            if (tabRegister) tabRegister.addEventListener('click', () => { 
-                setActiveTab('register'); 
-                setTimeout(()=> { 
-                    const el = document.getElementById('modalSignupName'); 
-                    if (el) el.focus(); 
-                }, 150); 
-            });
+            
+            if (tabLogin) {
+                tabLogin.addEventListener('click', () => { 
+                    setActiveTab('login'); 
+                    setTimeout(() => { 
+                        const el = document.getElementById('modalLoginEmail'); 
+                        if (el) el.focus(); 
+                    }, 150); 
+                });
+            }
+            
+            if (tabRegister) {
+                tabRegister.addEventListener('click', () => { 
+                    setActiveTab('register'); 
+                    setTimeout(() => { 
+                        const el = document.getElementById('modalSignupName'); 
+                        if (el) el.focus(); 
+                    }, 150); 
+                });
+            }
 
             // Formulaire de connexion
             const loginForm = document.getElementById('modalLoginForm');
-            if (loginForm) loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('modalLoginEmail').value.trim();
-                const password = document.getElementById('modalLoginPassword').value;
-                const result = await authManager.signIn(email, password);
-                if (result.success) {
-                    closeAuthModal();
-                    showNotification('✅ Connexion réussie!', 'success');
-                } else {
-                    showNotification('❌ Erreur: ' + result.error, 'error');
-                }
-            });
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('modalLoginEmail').value.trim();
+                    const password = document.getElementById('modalLoginPassword').value;
+                    const result = await authManager.signIn(email, password);
+                    
+                    if (result.success) {
+                        closeAuthModal();
+                        showNotification('✅ Connexion réussie!', 'success');
+                    } else {
+                        showNotification('❌ Erreur: ' + result.error, 'error');
+                    }
+                });
+            }
 
             // Formulaire d'inscription
             const signupForm = document.getElementById('modalSignupForm');
-            if (signupForm) signupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('modalSignupName').value.trim();
-                const email = document.getElementById('modalSignupEmail').value.trim();
-                const phone = document.getElementById('modalSignupPhone').value.trim();
-                const password = document.getElementById('modalSignupPassword').value;
+            if (signupForm) {
+                signupForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('modalSignupName').value.trim();
+                    const email = document.getElementById('modalSignupEmail').value.trim();
+                    const phone = document.getElementById('modalSignupPhone').value.trim();
+                    const password = document.getElementById('modalSignupPassword').value;
 
-                const result = await authManager.signUp(email, password, name, phone);
-                if (result.success) {
-                    closeAuthModal();
-                    showNotification('✅ Compte créé avec succès! Vérifiez votre email.', 'success');
-                } else {
-                    showNotification('❌ Erreur création compte: ' + result.error, 'error');
-                }
-            });
+                    const result = await authManager.signUp(email, password, name, phone);
+                    if (result.success) {
+                        closeAuthModal();
+                        showNotification('✅ Compte créé avec succès! Vérifiez votre email.', 'success');
+                    } else {
+                        showNotification('❌ Erreur création compte: ' + result.error, 'error');
+                    }
+                });
+            }
 
             // Boutons sociaux
             document.querySelectorAll('.social-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     animateSocialButton(btn);
                 });
+                
                 btn.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -1994,22 +2533,31 @@
                 mascot.addEventListener('mouseleave', () => mascot.classList.remove('floating'));
                 mascot.addEventListener('click', () => {
                     mascot.classList.add('pulse');
-                    setTimeout(()=> mascot.classList.remove('pulse'), 600);
+                    setTimeout(() => mascot.classList.remove('pulse'), 600);
                 });
             }
 
             // Bouton retour connexion
             const backToLogin = document.getElementById('backToLoginFromRegister');
-            if (backToLogin) backToLogin.addEventListener('click', () => {
-                setActiveTab('login');
-                setTimeout(()=> { const el = document.getElementById('modalLoginEmail'); if (el) el.focus(); }, 200);
-            });
+            if (backToLogin) {
+                backToLogin.addEventListener('click', () => {
+                    setActiveTab('login');
+                    setTimeout(() => { 
+                        const el = document.getElementById('modalLoginEmail'); 
+                        if (el) el.focus(); 
+                    }, 200);
+                });
+            }
 
             // Entrée dans le champ code promo
             const promoInput = document.getElementById('promoCodeInput');
-            if (promoInput) promoInput.addEventListener('keypress', function(e){ 
-                if (e.key === 'Enter') appliquerCodePromo(); 
-            });
+            if (promoInput) {
+                promoInput.addEventListener('keypress', function(e) { 
+                    if (e.key === 'Enter') {
+                        appliquerCodePromo(); 
+                    }
+                });
+            }
 
             // Actualiser l'affichage de la période promo toutes les minutes
             setInterval(() => {
