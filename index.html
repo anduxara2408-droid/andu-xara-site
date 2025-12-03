@@ -1145,9 +1145,11 @@ body {
     color: #333;
     line-height: 1.6;
     overflow-x: hidden;
-    overflow-y: auto;
-    height: auto;
-    min-height: 100vh;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    position: relative !important;
+    height: auto !important;
 }
 
 .main-container {
@@ -3688,6 +3690,85 @@ body {
     body, .container {
         padding-left: max(15px, env(safe-area-inset-left));
         padding-right: max(15px, env(safe-area-inset-right));
+    }
+}
+
+/* ===== CORRECTION DÉFILEMENT ANDROID - AJOUTER DANS LA SECTION <style> ===== */
+@media (max-width: 768px) {
+    /* Correction globale pour mobile */
+    html, body {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        position: relative !important;
+    }
+    
+    body {
+        overscroll-behavior-y: none !important;
+        touch-action: pan-y !important;
+    }
+    
+    .main-container {
+        overflow-y: visible !important;
+        min-height: 100vh !important;
+        height: auto !important;
+    }
+    
+    /* Correction pour Chrome Android */
+    @supports (-webkit-touch-callout: none) {
+        html, body {
+            height: -webkit-fill-available !important;
+        }
+        .main-container {
+            min-height: -webkit-fill-available !important;
+        }
+    }
+    
+    /* Assurer que tous les conteneurs permettent le défilement */
+    .container, section, .produits-container, .products-grid,
+    .promo-countdown, .faq-container, #timeline {
+        overflow-y: visible !important;
+        max-height: none !important;
+        height: auto !important;
+    }
+    
+    /* Correction spécifique pour les produits */
+    .produits-container, .products-grid {
+        overflow-y: visible !important;
+        max-height: none !important;
+    }
+    
+    /* Correction pour les modales */
+    .quick-view-modal, .delivery-modal-overlay, #lightbox {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Bloquer le scroll seulement quand une modale est ouverte */
+    body.lightbox-open, body.modal-open {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    /* Réactiver le scroll quand pas de modale */
+    body:not(.lightbox-open):not(.modal-open) {
+        overflow-y: auto !important;
+    }
+    
+    /* Correction pour le panier mobile */
+    .cart-panel, .cart-items-container {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-height: 70vh !important;
     }
 }
 
@@ -11393,5 +11474,71 @@ window.debugScroll = {
 
 console.log('🐛 Debug disponible: window.debugScroll.test()');
 </script>
+// ===== CORRECTION DÉFILEMENT ANDROID - AJOUTER DANS <script> =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📱 Correction défilement Android en cours...');
+    
+    // Détection Android
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isMobile = /Mobile/i.test(navigator.userAgent);
+    
+    if (isAndroid && isMobile) {
+        console.log('🤖 Appareil Android mobile détecté - Application des correctifs');
+        
+        // 1. Forcer le défilement vertical
+        document.body.style.overflowY = 'auto';
+        document.body.style.webkitOverflowScrolling = 'touch';
+        document.documentElement.style.overflowY = 'auto';
+        
+        // 2. Correction hauteur viewport
+        function fixViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
+        }
+        
+        fixViewportHeight();
+        
+        // 3. Mettre à jour après chargement et redimensionnement
+        window.addEventListener('load', fixViewportHeight);
+        window.addEventListener('resize', fixViewportHeight);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(fixViewportHeight, 300);
+        });
+        
+        // 4. Autoriser le défilement tactile
+        document.addEventListener('touchmove', function(e) {
+            // Ne pas empêcher le défilement par défaut
+        }, { passive: true });
+        
+        // 5. Correction spécifique pour les conteneurs
+        setTimeout(function() {
+            const containers = document.querySelectorAll('.container, section, main');
+            containers.forEach(container => {
+                container.style.overflow = 'visible';
+                container.style.overflowY = 'visible';
+                container.style.maxHeight = 'none';
+            });
+        }, 500);
+        
+        console.log('✅ Correctifs Android appliqués');
+    }
+    
+    // Fonction de test
+    window.testScrollFix = function() {
+        console.log('🧪 Test de défilement:');
+        console.log('- window.innerHeight:', window.innerHeight);
+        console.log('- document.body.scrollHeight:', document.body.scrollHeight);
+        console.log('- Peut scroller:', document.body.scrollHeight > window.innerHeight);
+        console.log('- Body overflow:', window.getComputedStyle(document.body).overflow);
+        
+        alert(
+            'Test défilement:\n' +
+            'Hauteur fenêtre: ' + window.innerHeight + 'px\n' +
+            'Hauteur document: ' + document.body.scrollHeight + 'px\n' +
+            'Scroll activé: ' + (document.body.scrollHeight > window.innerHeight ? 'OUI' : 'NON')
+        );
+    };
+});
 </body>
 </html>
