@@ -1124,6 +1124,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="style-min.css">
+    <!-- URL canonique -->
+<link rel="canonical" href="https://andu-xara.store/">
     <meta name="theme-color" content="#6a11cb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
@@ -1143,13 +1145,17 @@ body {
     color: #333;
     line-height: 1.6;
     overflow-x: hidden;
+    overflow-y: auto !important; /* ← AJOUTER CE LIGNE */
+    position: relative;
+    min-height: 100vh;
 }
 
 .main-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh; /* ← CHANGER de 100% à 100vh */
+    position: relative;
 }
 
 section, .promo-countdown, .faq-container, #timeline {
@@ -3505,6 +3511,105 @@ footer {
         font-size: 13px;
     }
 }
+/* ===== CORRECTION DÉFILEMENT ANDROID ===== */
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto; /* ← ESSENTIEL : autorise le défilement vertical */
+    -webkit-overflow-scrolling: touch; /* ← Défilement fluide sur iOS/Android */
+    position: relative;
+}
+
+body {
+    overscroll-behavior-y: none; /* Empêche les effets de rebond gênants */
+    touch-action: pan-y; /* Autorise uniquement le défilement vertical */
+}
+
+/* Désactiver le zoom sur mobile */
+@viewport {
+    width: device-width;
+    zoom: 1.0;
+}
+
+/* Correction hauteur viewport mobile */
+:root {
+    --vh: 1vh;
+}
+
+body {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Correction pour éviter le débordement horizontal */
+.container, .main-container, section {
+    overflow: visible !important;
+    max-width: 100% !important;
+}
+
+/* ===== CORRECTION SPÉCIFIQUE ANDROID ===== */
+@media screen and (max-width: 768px) {
+    body, html {
+        position: static !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-y: scroll !important;
+    }
+    
+    .main-container {
+        position: relative !important;
+        min-height: 100vh !important;
+    }
+    
+    /* Désactiver le zoom sur les inputs */
+    input, select, textarea {
+        font-size: 16px !important; /* Empêche le zoom automatique sur iOS */
+    }
+    
+    /* Corriger les problèmes de défilement dans les modals */
+    .quick-view-modal, .delivery-modal-overlay, #lightbox {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+/* === CORRECTION BADGE SONINKÉ === */
+#soninke-badge-left {
+    bottom: 100px !important; /* Descendre de 100px */
+    left: 10px !important;
+    z-index: 100 !important; /* Pas trop haut */
+    font-size: 0.8rem !important;
+    padding: 8px 12px !important;
+    max-width: 150px !important;
+    opacity: 0.9;
+}
+
+/* Sur mobile, le cacher ou le déplacer */
+@media (max-width: 768px) {
+    #soninke-badge-left {
+        bottom: 80px !important;
+        left: 5px !important;
+        font-size: 0.7rem !important;
+        padding: 6px 10px !important;
+        max-width: 120px !important;
+    }
+    
+    /* Ou optionnellement, le cacher sur mobile */
+    /* #soninke-badge-left { display: none !important; } */
+}
+
+/* === ASSURER QUE LE COMPTEUR EST VISIBLE === */
+.promo-countdown {
+    position: relative !important;
+    z-index: 50 !important;
+    margin-top: 20px !important;
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -5307,7 +5412,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        // ===== BADGE SONINKÉ =====
+        // ===== BADGE SONINKÉ CORRIGÉ =====
         function initSoninkeBadge() {
             const messagesLeft = [
                 "Xa kéé biré waaga Soninko",
@@ -5317,16 +5422,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let indexLeft = 0;
             const textElLeft = document.getElementById('soninke-text-left');
+            const badge = document.getElementById('soninke-badge-left');
+
+            // Réduire la taille du badge pour ne pas couvrir le compteur
+            if (badge) {
+                badge.style.cssText = `
+                    position: fixed;
+                    bottom: 100px;
+                    left: 10px;
+                    background: linear-gradient(135deg, #ff9966, #ff5e62);
+                    color: #fff;
+                    font-weight: bold;
+                    padding: 8px 12px;
+                    border-radius: 20px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    cursor: default;
+                    z-index: 100;
+                    font-size: 0.8rem;
+                    max-width: 150px;
+                    text-align: center;
+                    line-height: 1.3;
+                    animation: popupLeft 0.6s forwards;
+                `;
+            }
 
             setInterval(() => {
-                textElLeft.style.opacity = 0;
-                setTimeout(() => {
-                    indexLeft = (indexLeft + 1) % messagesLeft.length;
-                    textElLeft.textContent = messagesLeft[indexLeft];
-                    textElLeft.style.opacity = 1;
-                }, 500);
+                if (textElLeft) {
+                    textElLeft.style.opacity = 0;
+                    setTimeout(() => {
+                        indexLeft = (indexLeft + 1) % messagesLeft.length;
+                        textElLeft.textContent = messagesLeft[indexLeft];
+                        textElLeft.style.opacity = 1;
+                    }, 500);
+                }
             }, 3000);
-              } 
+        }
 
 
         // ===== VARIATIONS PRODUITS =====
@@ -10517,5 +10647,96 @@ document.addEventListener('DOMContentLoaded', function() {
 <button id="backToTopBtn" title="Retour en haut de la page">
     ↑ Haut de page
 </button>
+<script>
+// ===== CORRECTION DÉFILEMENT ANDROID =====
+function fixAndroidScrolling() {
+    // Détection Android
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (isAndroid) {
+        console.log('🤖 Correction défilement Android...');
+        
+        // 1. Forcer le défilement sur le body
+        document.body.style.overflowY = 'scroll';
+        document.body.style.webkitOverflowScrolling = 'touch';
+        
+        // 2. Supprimer tout overflow:hidden sur les conteneurs principaux
+        const containers = document.querySelectorAll('.container, .main-container, section');
+        containers.forEach(container => {
+            container.style.overflow = 'visible';
+            container.style.overflowY = 'auto';
+        });
+        
+        // 3. Correction hauteur viewport
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
+        
+        // 4. Empêcher le blocage du défilement par JavaScript
+        document.addEventListener('touchmove', function(e) {
+            // Autoriser tous les événements de défilement
+        }, { passive: true });
+        
+        // 5. Correction pour les éléments position:fixed
+        const fixedElements = document.querySelectorAll('.floating-cart, #soninke-badge-left, .mini-counter');
+        fixedElements.forEach(el => {
+            el.style.position = 'fixed';
+            el.style.zIndex = '9999';
+        });
+        
+        console.log('✅ Corrections Android appliquées');
+    }
+}
+
+// ===== CORRECTION HAUTEUR 100% SUR MOBILE =====
+function fixMobileHeight() {
+    // Définir une hauteur CSS personnalisée pour mobile
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    
+    // Appliquer à tous les éléments nécessaires
+    document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
+}
+
+// ===== INITIALISATION AU CHARGEMENT =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📱 Correction défilement mobile...');
+    
+    // Appliquer les corrections
+    fixAndroidScrolling();
+    fixMobileHeight();
+    
+    // Réappliquer lors des changements d'orientation
+    window.addEventListener('orientationchange', function() {
+        setTimeout(function() {
+            fixAndroidScrolling();
+            fixMobileHeight();
+        }, 300);
+    });
+    
+    // Réappliquer lors du redimensionnement
+    window.addEventListener('resize', fixMobileHeight);
+});
+
+// ===== FONCTION DE DÉBOGAGE =====
+function debugScrolling() {
+    console.log('🔍 Débogage défilement:');
+    console.log('- window.innerHeight:', window.innerHeight);
+    console.log('- document.body.scrollHeight:', document.body.scrollHeight);
+    console.log('- document.body.style.overflow:', document.body.style.overflow);
+    console.log('- User Agent:', navigator.userAgent);
+    
+    // Forcer le défilement si bloqué
+    document.body.style.overflowY = 'scroll';
+    document.documentElement.style.overflowY = 'scroll';
+    
+    alert('Défilement forcé - Essayez maintenant');
+}
+</script>
 </body>
 </html>
