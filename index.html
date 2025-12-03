@@ -10537,33 +10537,9 @@ function optimizeForMobile() {
         
         // Optimisations spécifiques mobile
         optimizeTouchInteractions();
-        preventHorizontalScroll();
+        // ✅ preventHorizontalScroll() SUPPRIMÉ - causait des problèmes Android
         optimizeImagesForMobile();
     }
-}
-
-function optimizeTouchInteractions() {
-    // Améliorer les interactions tactiles
-    const touchElements = document.querySelectorAll('button, a, .product-card, .category-btn');
-    touchElements.forEach(element => {
-        element.style.cursor = 'pointer';
-    });
-}
-
-function preventHorizontalScroll() {
-    // Empêcher le défilement horizontal
-    window.addEventListener('scroll', function() {
-        if (window.scrollX !== 0) {
-            window.scrollTo(0, window.scrollY);
-        }
-    });
-    
-    // Empêcher le zoom sur le document
-    document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) {
-            e.preventDefault();
-        }
-    }, { passive: false });
 }
 
 function optimizeImagesForMobile() {
@@ -11070,6 +11046,352 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     };
 });
+</script>
+<script>
+// ===== CORRECTIF SCROLL ANDROID - VERSION FINALE =====
+console.log('🔧 Chargement correctif scroll Android...');
+
+// 1. FONCTION CORRECTE POUR PRÉVENIR LE SCROLL HORIZONTAL
+function preventHorizontalScrollFixed() {
+    console.log('📱 Configuration scroll horizontal...');
+    
+    // Prévenir UNIQUEMENT le scroll horizontal, pas le vertical
+    window.addEventListener('scroll', function() {
+        if (window.scrollX !== 0) {
+            window.scrollTo(0, window.scrollY);
+        }
+    }, { passive: true });
+    
+    // ✅ VERSION CORRIGÉE - Ne bloque que le pinch-zoom
+    let touchCount = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchCount = e.touches.length;
+    }, { passive: true });
+    
+    document.addEventListener('touchmove', function(e) {
+        // Bloquer seulement si 2+ doigts (pinch-zoom)
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+        // Autoriser le scroll avec 1 doigt
+    }, { passive: false });
+    
+    console.log('✅ Scroll horizontal configuré sans bloquer le vertical');
+}
+
+// 2. FORCER L'AUTORISATION DU SCROLL VERTICAL
+function forceEnableScroll() {
+    console.log('📜 Activation forcée du scroll...');
+    
+    // Retirer tous les styles qui bloquent le scroll
+    const bodyStyle = document.body.style;
+    const htmlStyle = document.documentElement.style;
+    
+    bodyStyle.overflow = 'auto';
+    bodyStyle.overflowY = 'auto';
+    bodyStyle.overflowX = 'hidden';
+    bodyStyle.position = 'relative';
+    bodyStyle.height = 'auto';
+    bodyStyle.webkitOverflowScrolling = 'touch';
+    
+    htmlStyle.overflow = 'auto';
+    htmlStyle.overflowY = 'auto';
+    htmlStyle.overflowX = 'hidden';
+    htmlStyle.position = 'relative';
+    htmlStyle.webkitOverflowScrolling = 'touch';
+    
+    // Retirer les classes bloquantes
+    document.body.classList.remove('lightbox-open');
+    document.body.classList.remove('no-scroll');
+    document.body.classList.remove('modal-open');
+    
+    console.log('✅ Scroll activé sur body et html');
+}
+
+// 3. CORRIGER LE MENU MOBILE
+function fixMobileMenu() {
+    console.log('📱 Correction menu mobile...');
+    
+    const menuOverlay = document.querySelector('.menu-overlay');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const menuToggle = document.querySelector('.menu-toggle');
+    
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', function() {
+            document.body.style.overflow = 'auto';
+            mobileMenu?.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            console.log('✅ Menu fermé via overlay');
+        });
+    }
+    
+    if (mobileMenu) {
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === 'class') {
+                    const isActive = mobileMenu.classList.contains('active');
+                    if (!isActive) {
+                        // Menu fermé - restaurer le scroll
+                        setTimeout(() => {
+                            document.body.style.overflow = 'auto';
+                            console.log('✅ Menu inactif - scroll restauré');
+                        }, 100);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(mobileMenu, { attributes: true });
+    }
+    
+    console.log('✅ Menu mobile corrigé');
+}
+
+// 4. DÉTECTER LES ÉLÉMENTS BLOQUANTS
+function detectBlockingElements() {
+    console.log('🔍 Détection éléments bloquants...');
+    
+    const fixedElements = document.querySelectorAll('*');
+    let blockingCount = 0;
+    
+    fixedElements.forEach((element) => {
+        const style = window.getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        
+        // Vérifier si l'élément occupe tout l'écran et est visible
+        if (style.position === 'fixed' &&
+            rect.width >= window.innerWidth * 0.95 &&
+            rect.height >= window.innerHeight * 0.95 &&
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            style.opacity !== '0') {
+            
+            blockingCount++;
+            console.warn(`⚠️ Élément bloquant détecté:`, {
+                id: element.id || 'sans-id',
+                class: element.className || 'sans-class',
+                tagName: element.tagName,
+                zIndex: style.zIndex
+            });
+        }
+    });
+    
+    console.log(`📊 Total éléments bloquants: ${blockingCount}`);
+    return blockingCount;
+}
+
+// 5. CORRECTIF ANDROID SPÉCIFIQUE
+function androidScrollFix() {
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (!isAndroid) {
+        console.log('ℹ️ Pas Android - correctif général uniquement');
+        return;
+    }
+    
+    console.log('🤖 APPLICATION CORRECTIF ANDROID...');
+    
+    // Forcer les propriétés CSS critiques pour Android
+    const style = document.createElement('style');
+    style.id = 'android-scroll-fix';
+    style.textContent = `
+        /* CORRECTIF SCROLL ANDROID */
+        html {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            -webkit-overflow-scrolling: touch !important;
+            height: auto !important;
+            position: relative !important;
+        }
+        
+        body {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            -webkit-overflow-scrolling: touch !important;
+            height: auto !important;
+            position: relative !important;
+            overscroll-behavior-y: auto !important;
+        }
+        
+        /* Autoriser le scroll sur les containers principaux */
+        .container,
+        .main-container,
+        main {
+            overflow-y: visible !important;
+            height: auto !important;
+        }
+        
+        /* Empêcher les overlays invisibles de bloquer */
+        .menu-overlay:not(.active) {
+            display: none !important;
+            pointer-events: none !important;
+        }
+    `;
+    
+    document.head.appendChild(style);
+    console.log('✅ CSS Android injecté');
+    
+    // Nettoyer les event listeners problématiques
+    const events = ['touchmove', 'touchstart', 'touchend'];
+    events.forEach(eventType => {
+        const oldListeners = window[`_${eventType}_listeners`] || [];
+        oldListeners.forEach(listener => {
+            document.removeEventListener(eventType, listener);
+        });
+    });
+    
+    console.log('✅ Event listeners nettoyés');
+}
+
+// 6. TEST DE SCROLL
+function testScroll() {
+    console.log('🧪 TEST DE SCROLL...');
+    console.log('═══════════════════════════════════');
+    
+    const results = {
+        'Hauteur document': document.documentElement.scrollHeight + 'px',
+        'Hauteur fenêtre': window.innerHeight + 'px',
+        'Peut scroller': document.documentElement.scrollHeight > window.innerHeight,
+        'Body overflow': window.getComputedStyle(document.body).overflow,
+        'HTML overflow': window.getComputedStyle(document.documentElement).overflow,
+        'Body overflowY': window.getComputedStyle(document.body).overflowY,
+        'HTML overflowY': window.getComputedStyle(document.documentElement).overflowY,
+        'Body position': window.getComputedStyle(document.body).position,
+        'Body height': window.getComputedStyle(document.body).height,
+        'Scroll actuel': window.scrollY + 'px',
+        'Appareil': /Android/.test(navigator.userAgent) ? 'Android' : 
+                    /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iOS' : 'Autre'
+    };
+    
+    console.table(results);
+    
+    // Diagnostic
+    const bodyOverflow = window.getComputedStyle(document.body).overflowY;
+    const htmlOverflow = window.getComputedStyle(document.documentElement).overflowY;
+    const canScroll = document.documentElement.scrollHeight > window.innerHeight;
+    
+    if (!canScroll) {
+        console.warn('⚠️ PROBLÈME: Contenu pas assez grand pour scroller');
+    } else if (bodyOverflow === 'hidden' || htmlOverflow === 'hidden') {
+        console.error('❌ PROBLÈME: overflow:hidden détecté!');
+        console.log('🔧 Application correctif...');
+        forceEnableScroll();
+    } else {
+        console.log('✅ Configuration scroll OK');
+    }
+    
+    // Test des éléments bloquants
+    const blocking = detectBlockingElements();
+    if (blocking > 0) {
+        console.error(`❌ PROBLÈME: ${blocking} élément(s) bloquant(s) détecté(s)`);
+    }
+    
+    console.log('═══════════════════════════════════');
+}
+
+// 7. SURVEILLANCE CONTINUE
+function monitorScroll() {
+    console.log('👁️ Surveillance scroll activée...');
+    
+    let checkCount = 0;
+    const maxChecks = 20; // Surveiller pendant 20 secondes
+    
+    const interval = setInterval(() => {
+        checkCount++;
+        
+        const bodyOverflow = window.getComputedStyle(document.body).overflowY;
+        const htmlOverflow = window.getComputedStyle(document.documentElement).overflowY;
+        
+        // Vérifier si le scroll est bloqué
+        if ((bodyOverflow === 'hidden' || htmlOverflow === 'hidden') &&
+            !document.querySelector('.mobile-menu.active') &&
+            !document.querySelector('.quick-view-modal') &&
+            !document.querySelector('#lightbox[style*="display: flex"]')) {
+            
+            console.warn('⚠️ Scroll bloqué détecté - correction automatique...');
+            forceEnableScroll();
+        }
+        
+        if (checkCount >= maxChecks) {
+            clearInterval(interval);
+            console.log('✅ Surveillance scroll terminée (20s)');
+        }
+    }, 1000); // Vérifier chaque seconde
+}
+
+// 8. INITIALISATION PRINCIPALE
+function initScrollFix() {
+    console.log('🚀 INITIALISATION CORRECTIF SCROLL...');
+    console.log('═══════════════════════════════════');
+    
+    // Attendre le DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScrollFix);
+        return;
+    }
+    
+    // Étape 1: Activer le scroll immédiatement
+    forceEnableScroll();
+    console.log('✅ Étape 1: Scroll activé');
+    
+    // Étape 2: Configurer le scroll horizontal
+    preventHorizontalScrollFixed();
+    console.log('✅ Étape 2: Scroll horizontal configuré');
+    
+    // Étape 3: Corriger le menu mobile
+    fixMobileMenu();
+    console.log('✅ Étape 3: Menu mobile corrigé');
+    
+    // Étape 4: Appliquer correctifs Android
+    androidScrollFix();
+    console.log('✅ Étape 4: Correctifs Android appliqués');
+    
+    // Étape 5: Tests après 500ms
+    setTimeout(() => {
+        testScroll();
+        monitorScroll();
+    }, 500);
+    
+    // Étape 6: Re-vérifier après interactions
+    ['click', 'touchstart'].forEach(eventType => {
+        document.addEventListener(eventType, function checkScrollAfterInteraction() {
+            setTimeout(() => {
+                const bodyOverflow = window.getComputedStyle(document.body).overflowY;
+                if (bodyOverflow === 'hidden' && 
+                    !document.querySelector('.mobile-menu.active')) {
+                    console.warn('⚠️ Scroll bloqué après interaction - correction...');
+                    forceEnableScroll();
+                }
+            }, 100);
+        }, { passive: true });
+    });
+    
+    console.log('═══════════════════════════════════');
+    console.log('✅ CORRECTIF SCROLL COMPLÈTEMENT INITIALISÉ');
+    console.log('💡 Tapez testScroll() dans la console pour diagnostics');
+}
+
+// EXÉCUTION IMMÉDIATE
+initScrollFix();
+
+// Re-exécuter après chaque changement d'orientation
+window.addEventListener('orientationchange', function() {
+    console.log('🔄 Changement orientation - réinitialisation...');
+    setTimeout(() => {
+        initScrollFix();
+    }, 300);
+});
+
+// Exposer les fonctions pour debug
+window.debugScroll = {
+    test: testScroll,
+    fix: forceEnableScroll,
+    detect: detectBlockingElements,
+    monitor: monitorScroll
+};
+
+console.log('🐛 Debug disponible: window.debugScroll.test()');
 </script>
 </body>
 </html>
