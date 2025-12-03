@@ -14,7 +14,7 @@
     <meta name="msapplication-TileColor" content="#8B4513">
     <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Andu-Xara • Tradition Africaine, Style Moderne • Collection Authentique</title>
 
@@ -3640,6 +3640,57 @@ body.lightbox-open {
 body:not(.lightbox-open):not(.menu-open) {
     overflow-y: auto !important;
 }
+/* ===== CORRECTION DÉFILEMENT ANDROID ===== */
+html {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+}
+
+.main-container {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+}
+
+/* Correction spécifique pour Chrome Android */
+@supports (-webkit-touch-callout: none) {
+    body, html {
+        height: -webkit-fill-available;
+    }
+    .main-container {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Désactiver le pull-to-refresh sur Android Chrome */
+body {
+    overscroll-behavior-y: contain;
+}
+
+/* Assurer que tous les conteneurs permettent le défilement */
+.container, section, .produits-container, .products-grid {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+/* Correction pour les appareils avec encoche */
+@supports (padding: max(0px)) {
+    body, .container {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+    }
+}
+
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -10959,6 +11010,66 @@ window.testScrollFix = function() {
     fixAndroidScrolling();
     alert('Corrections appliquées manuellement!\nHauteur écran: ' + window.innerHeight + 'px');
 };
+</script>
+<script>
+// ===== CORRECTION DÉFILEMENT ANDROID =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📱 Initialisation correction défilement Android...');
+    
+    // Détection Android
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isChromeAndroid = /Chrome\/[.0-9]* Mobile/i.test(navigator.userAgent);
+    
+    if (isAndroid) {
+        console.log('🤖 Appareil Android détecté - Application des corrections');
+        
+        // 1. Forcer le défilement sur le body
+        document.body.style.overflowY = 'scroll';
+        document.body.style.webkitOverflowScrolling = 'touch';
+        
+        // 2. Correction hauteur viewport
+        function fixViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
+        }
+        
+        fixViewportHeight();
+        
+        // 3. Recalculer après chargement d'images
+        window.addEventListener('load', fixViewportHeight);
+        
+        // 4. Correction sur redimensionnement et changement d'orientation
+        window.addEventListener('resize', fixViewportHeight);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(fixViewportHeight, 300);
+        });
+        
+        // 5. Autoriser le défilement tactile partout
+        document.addEventListener('touchmove', function(e) {
+            // Ne pas empêcher le défilement par défaut
+        }, { passive: true });
+        
+        // 6. Correction pour Chrome Android spécifiquement
+        if (isChromeAndroid) {
+            document.documentElement.style.overflow = 'auto';
+            document.documentElement.style.height = '100%';
+            
+            // Désactiver les comportements de défilement gênants
+            document.body.style.overscrollBehaviorY = 'none';
+        }
+    }
+    
+    // Fonction de test pour vérifier le défilement
+    window.testScroll = function() {
+        alert(
+            'Test défilement:\n' +
+            'Height: ' + window.innerHeight + 'px\n' +
+            'ScrollHeight: ' + document.body.scrollHeight + 'px\n' +
+            'UserAgent: ' + navigator.userAgent
+        );
+    };
+});
 </script>
 </body>
 </html>
