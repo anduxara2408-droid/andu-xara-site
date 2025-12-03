@@ -22,6 +22,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js" crossorigin="anonymous"></script>
+<!-- AJOUTEZ CETTE LIGNE -->
 
 <script>
 // ===== CONFIGURATION FIREBASE CORRECTE =====
@@ -37,9 +39,9 @@ const firebaseConfig = {
     projectId: "andu-xara-promo-codes-ff69e",
     storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
     messagingSenderId: "653516716143",
-    appId: "1:653516716143:web:08ee1425191b4a1766359a"
+    appId: "1:653516716143:web:08ee1425191b4a1766359a",
+    databaseURL: "https://andu-xara-promo-codes-ff69e-default-rtdb.europe-west1.firebasedatabase.app/" // AJOUTEZ CETTE LIGNE
 };
-
 // Initialiser Firebase
 // Remplacer l'initialisation Firebase actuelle par :
 function initializeFirebase() {
@@ -3457,6 +3459,52 @@ footer {
     }
 }
 
+/* === BADGE COMPTEUR FONCTIONNEL === */
+.mini-counter {
+    position: sticky;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    min-width: 140px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#visitorCount {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 4px;
+    display: inline-block;
+    min-width: 25px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .mini-counter {
+        top: 5px;
+        padding: 6px 12px;
+        font-size: 11px;
+        min-width: 120px;
+        max-width: 160px;
+    }
+    
+    #visitorCount {
+        font-size: 13px;
+    }
+}
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -3673,177 +3721,404 @@ if (window.location.hostname !== 'localhost' &&
 </div>
 
 <script>
-// === COMPTEUR VISITEURS 100% RÉEL ===
-console.log('👁️ Initialisation compteur visiteurs RÉEL...');
+// ===== COMPTEUR VISITEURS RÉEL INSTANTANÉ =====
+console.log('👁️ Initialisation compteur réel instantané...');
 
-class RealVisitorCounter {
+class RealTimeCounter {
     constructor() {
-        this.sessionId = this.generateSessionId();
-        this.heartbeatInterval = null;
+        this.sessionId = 'visitor_' + Math.random().toString(36).substr(2, 9);
+        this.lastActivity = Date.now();
+        this.visitors = 0;
         this.init();
     }
     
-    generateSessionId() {
-        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    async init() {
+        console.log('🚀 Session ID:', this.sessionId.substring(0, 15));
+        
+        // 1. IMMÉDIATEMENT - S'enregistrer comme visiteur
+        await this.registerVisitor();
+        
+        // 2. IMMÉDIATEMENT - Compter les visiteurs actuels
+        await this.countCurrentVisitors();
+        
+        // 3. Surveillance en temps réel
+        this.startRealTimeMonitoring();
+        
+        // 4. Gestion déconnexion
+        this.setupDisconnectHandling();
     }
     
-    init() {
-        console.log('🚀 Session ID:', this.sessionId);
-        
-        // Enregistrer cette session
-        this.registerSession();
-        
-        // Heartbeat toutes les 30 secondes
-        this.startHeartbeat();
-        
-        // Nettoyer à la fermeture
-        this.setupCleanup();
-        
-        // Afficher le compteur
-        this.updateDisplay();
-    }
-    
-    registerSession() {
-        const sessions = this.getActiveSessions();
-        
-        // Ajouter cette session
-        sessions[this.sessionId] = {
-            timestamp: Date.now(),
-            userAgent: navigator.userAgent.substring(0, 50) // Tronqué pour la taille
-        };
-        
-        // Nettoyer les sessions expirées (>2 minutes d'inactivité)
-        this.cleanExpiredSessions(sessions);
-        
-        // Sauvegarder
-        this.saveSessions(sessions);
-        
-        console.log('✅ Session enregistrée. Total:', Object.keys(sessions).length);
-    }
-    
-    getActiveSessions() {
-        try {
-            const data = localStorage.getItem('anduxara_active_sessions');
-            return data ? JSON.parse(data) : {};
-        } catch (e) {
-            console.error('Erreur lecture sessions:', e);
-            return {};
+    async registerVisitor() {
+        if (typeof firebase === 'undefined') {
+            console.log('⚠️ Firebase non disponible');
+            return;
         }
-    }
-    
-    saveSessions(sessions) {
-        try {
-            localStorage.setItem('anduxara_active_sessions', JSON.stringify(sessions));
-        } catch (e) {
-            console.error('Erreur sauvegarde sessions:', e);
-        }
-    }
-    
-    cleanExpiredSessions(sessions) {
-        const now = Date.now();
-        const TIMEOUT = 2 * 60 * 1000; // 2 minutes
         
-        let cleanedCount = 0;
-        for (const sessionId in sessions) {
-            if (now - sessions[sessionId].timestamp > TIMEOUT) {
-                delete sessions[sessionId];
-                cleanedCount++;
+        try {
+            // Initialiser Firebase
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
             }
-        }
-        
-        if (cleanedCount > 0) {
-            console.log('🧹 Nettoyé', cleanedCount, 'sessions expirées');
+            
+            const db = firebase.database();
+            const visitorRef = db.ref('real_time_visitors/' + this.sessionId);
+            
+            // Données du visiteur
+            const visitorData = {
+                id: this.sessionId,
+                joined: Date.now(),
+                lastActive: Date.now(),
+                userAgent: navigator.userAgent.substring(0, 40),
+                page: window.location.pathname,
+                ip: await this.getIP() || 'unknown'
+            };
+            
+            // ENREGISTRER le visiteur
+            await visitorRef.set(visitorData);
+            console.log('✅ Visiteur enregistré:', this.sessionId);
+            
+            // Heartbeat toutes les 10 secondes
+            setInterval(() => {
+                visitorRef.update({
+                    lastActive: Date.now(),
+                    page: window.location.pathname
+                });
+            }, 10000);
+            
+            // Supprimer à la déconnexion
+            visitorRef.onDisconnect().remove();
+            
+        } catch (error) {
+            console.error('❌ Erreur enregistrement:', error);
         }
     }
     
-    startHeartbeat() {
-        // Heartbeat toutes les 30 secondes
-        this.heartbeatInterval = setInterval(() => {
-            this.registerSession();
+    async countCurrentVisitors() {
+        if (typeof firebase === 'undefined') {
+            this.visitors = 1; // Mode dégradé
             this.updateDisplay();
-        }, 30000);
-    }
-    
-    updateDisplay() {
-        const sessions = this.getActiveSessions();
-        const count = Object.keys(sessions).length;
+            return;
+        }
         
-        const counterElement = document.getElementById('visitorCount');
-        if (counterElement) {
-            counterElement.textContent = count;
-            console.log('👁️ Visiteurs en ligne:', count);
+        try {
+            const db = firebase.database();
+            const visitorsRef = db.ref('real_time_visitors');
+            
+            // LIRE IMMÉDIATEMENT tous les visiteurs
+            const snapshot = await visitorsRef.once('value');
+            const visitorsData = snapshot.val() || {};
+            
+            // Compter les visiteurs ACTIFS (moins de 30 secondes)
+            const activeThreshold = Date.now() - 30000; // 30 secondes
+            let activeCount = 0;
+            
+            Object.values(visitorsData).forEach(visitor => {
+                if (visitor.lastActive > activeThreshold) {
+                    activeCount++;
+                } else {
+                    // Nettoyer les inactifs
+                    const visitorRef = db.ref('real_time_visitors/' + visitor.id);
+                    visitorRef.remove();
+                }
+            });
+            
+            // Toujours au moins 1 (vous)
+            this.visitors = Math.max(1, activeCount);
+            this.updateDisplay();
+            
+            console.log('👥 Visiteurs actifs trouvés:', activeCount);
+            
+        } catch (error) {
+            console.error('❌ Erreur comptage:', error);
+            this.visitors = 1;
+            this.updateDisplay();
         }
     }
     
-    setupCleanup() {
-        // Supprimer la session à la fermeture/départ de la page
-        const cleanup = () => {
-            const sessions = this.getActiveSessions();
-            delete sessions[this.sessionId];
-            this.saveSessions(sessions);
-            console.log('🚪 Session supprimée:', this.sessionId);
-        };
+    startRealTimeMonitoring() {
+        if (typeof firebase === 'undefined') return;
         
-        window.addEventListener('beforeunload', cleanup);
-        window.addEventListener('pagehide', cleanup);
+        const db = firebase.database();
+        const visitorsRef = db.ref('real_time_visitors');
         
-        // Détecter quand l'onglet devient inactif
+        // 1. ÉCOUTER LES NOUVEAUX VISITEURS (instant)
+        visitorsRef.on('child_added', (snapshot) => {
+            console.log('➕ Nouveau visiteur détecté');
+            this.recalculateVisitors();
+        });
+        
+        // 2. ÉCOUTER LES DÉCONNEXIONS (instant)
+        visitorsRef.on('child_removed', (snapshot) => {
+            console.log('➖ Visiteur déconnecté');
+            this.recalculateVisitors();
+        });
+        
+        // 3. NETTOYAGE AUTOMATIQUE des inactifs
+        setInterval(() => {
+            this.cleanInactiveVisitors();
+        }, 15000); // Toutes les 15 secondes
+    }
+    
+    async recalculateVisitors() {
+        if (typeof firebase === 'undefined') return;
+        
+        try {
+            const db = firebase.database();
+            const visitorsRef = db.ref('real_time_visitors');
+            const snapshot = await visitorsRef.once('value');
+            const visitorsData = snapshot.val() || {};
+            
+            // Compter seulement les actifs (dernières 30s)
+            const activeThreshold = Date.now() - 30000;
+            let activeCount = 0;
+            
+            Object.values(visitorsData).forEach(visitor => {
+                if (visitor.lastActive > activeThreshold) {
+                    activeCount++;
+                }
+            });
+            
+            // Si changement, mettre à jour
+            if (activeCount !== this.visitors) {
+                this.visitors = Math.max(1, activeCount);
+                this.updateDisplay();
+                console.log('🔄 Mise à jour en temps réel:', activeCount, 'visiteurs');
+            }
+            
+        } catch (error) {
+            console.error('❌ Erreur recalcul:', error);
+        }
+    }
+    
+    async cleanInactiveVisitors() {
+        if (typeof firebase === 'undefined') return;
+        
+        try {
+            const db = firebase.database();
+            const visitorsRef = db.ref('real_time_visitors');
+            const snapshot = await visitorsRef.once('value');
+            const visitorsData = snapshot.val() || {};
+            
+            const inactiveThreshold = Date.now() - 30000; // 30 secondes
+            
+            Object.entries(visitorsData).forEach(([id, visitor]) => {
+                if (visitor.lastActive < inactiveThreshold) {
+                    // Supprimer les inactifs
+                    const visitorRef = db.ref('real_time_visitors/' + id);
+                    visitorRef.remove();
+                    console.log('🧹 Visiteur inactif nettoyé:', id);
+                }
+            });
+            
+        } catch (error) {
+            console.error('❌ Erreur nettoyage:', error);
+        }
+    }
+    
+    setupDisconnectHandling() {
+        // Détecter quand l'utilisateur quitte
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                console.log('🔕 Page cachée');
+                console.log('👤 Vous avez quitté la page');
             } else {
-                console.log('👀 Page visible - Rafraîchissement');
-                this.registerSession();
-                this.updateDisplay();
+                console.log('👤 Vous êtes de retour');
+                this.recalculateVisitors();
             }
+        });
+        
+        // Détecter la fermeture de l'onglet/navigateur
+        window.addEventListener('beforeunload', () => {
+            this.cleanup();
         });
     }
     
-    destroy() {
-        if (this.heartbeatInterval) {
-            clearInterval(this.heartbeatInterval);
+    async getIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch {
+            return null;
+        }
+    }
+    
+    updateDisplay() {
+        const counterEl = document.getElementById('visitorCount');
+        if (!counterEl) {
+            console.error('❌ Élément visitorCount non trouvé');
+            return;
         }
         
-        const sessions = this.getActiveSessions();
-        delete sessions[this.sessionId];
-        this.saveSessions(sessions);
-    }
-}
-
-// Initialiser le compteur RÉEL
-let realVisitorCounter;
-
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        realVisitorCounter = new RealVisitorCounter();
-        console.log('✅ Compteur visiteurs RÉEL activé');
-    }, 1000);
-});
-
-// Nettoyage périodique global (toutes les 5 minutes)
-setInterval(() => {
-    try {
-        const sessions = JSON.parse(localStorage.getItem('anduxara_active_sessions') || '{}');
-        const now = Date.now();
-        const TIMEOUT = 2 * 60 * 1000;
+        const oldCount = parseInt(counterEl.textContent) || 0;
         
-        let cleaned = 0;
-        for (const sessionId in sessions) {
-            if (now - sessions[sessionId].timestamp > TIMEOUT) {
-                delete sessions[sessionId];
-                cleaned++;
+        // Mettre à jour le nombre
+        counterEl.textContent = this.visitors;
+        
+        // Animation si changement
+        if (this.visitors !== oldCount) {
+            counterEl.classList.add('counter-update');
+            setTimeout(() => {
+                counterEl.classList.remove('counter-update');
+            }, 500);
+            
+            console.log('📈 Affichage mis à jour:', oldCount, '→', this.visitors);
+            
+            // Son de notification pour les changements
+            if (this.visitors > oldCount) {
+                this.playJoinSound();
+            } else if (this.visitors < oldCount) {
+                this.playLeaveSound();
             }
         }
         
-        if (cleaned > 0) {
-            localStorage.setItem('anduxara_active_sessions', JSON.stringify(sessions));
-            console.log('🧹 Nettoyage global:', cleaned, 'sessions');
-        }
-    } catch (e) {
-        console.error('Erreur nettoyage global:', e);
+        // Mettre à jour le style
+        this.updateBadgeStyle();
     }
-}, 5 * 60 * 1000); // 5 minutes
+    
+    updateBadgeStyle() {
+        const badge = document.querySelector('.mini-counter');
+        if (!badge) return;
+        
+        if (this.visitors > 20) {
+            badge.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+            badge.innerHTML = '🔥 <span id="visitorCount">' + this.visitors + '</span> en ligne';
+        } else if (this.visitors > 5) {
+            badge.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+            badge.innerHTML = '👥 <span id="visitorCount">' + this.visitors + '</span> en ligne';
+        } else {
+            badge.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+            badge.innerHTML = '👁️ <span id="visitorCount">' + this.visitors + '</span> en ligne';
+        }
+    }
+    
+    playJoinSound() {
+        // Son doux pour nouveau visiteur
+        try {
+            if (window.AudioContext || window.webkitAudioContext) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 600;
+                oscillator.type = 'sine';
+                gainNode.gain.value = 0.05;
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.1);
+            }
+        } catch (error) {
+            // Ignorer les erreurs audio
+        }
+    }
+    
+    playLeaveSound() {
+        // Son différent pour départ
+        try {
+            if (window.AudioContext || window.webkitAudioContext) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 400;
+                oscillator.type = 'sine';
+                gainNode.gain.value = 0.03;
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.15);
+            }
+        } catch (error) {
+            // Ignorer
+        }
+    }
+    
+    cleanup() {
+        if (typeof firebase !== 'undefined' && firebase.database) {
+            try {
+                const db = firebase.database();
+                const visitorRef = db.ref('real_time_visitors/' + this.sessionId);
+                visitorRef.remove();
+                console.log('🧹 Session nettoyée:', this.sessionId);
+            } catch (error) {
+                console.error('Erreur nettoyage:', error);
+            }
+        }
+    }
+}
 
+// ===== INITIALISATION INSTANTANÉE =====
+let realTimeCounter;
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Lancement compteur instantané...');
+    
+    // Démarrer IMMÉDIATEMENT
+    realTimeCounter = new RealTimeCounter();
+    
+    // Nettoyer à la fermeture
+    window.addEventListener('beforeunload', () => {
+        if (realTimeCounter && realTimeCounter.cleanup) {
+            realTimeCounter.cleanup();
+        }
+    });
+});
+
+// CSS pour animations
+const counterStyles = `
+    .counter-update {
+        animation: counterPulse 0.5s ease;
+        color: #FFD700;
+    }
+    
+    @keyframes counterPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+    
+    #visitorCount {
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: inline-block;
+        min-width: 25px;
+        text-align: center;
+    }
+    
+    .mini-counter {
+        transition: background 0.5s ease;
+        font-size: 14px !important;
+        padding: 8px 15px !important;
+    }
+`;
+
+// Ajouter les styles
+const styleEl = document.createElement('style');
+styleEl.textContent = counterStyles;
+document.head.appendChild(styleEl);
+
+// ===== CORRECTION RÈGLES FIREBASE =====
+/*
+⚠️ METTEZ À JOUR VOS RÈGLES FIREBASE :
+
+{
+  "rules": {
+    "real_time_visitors": {
+      ".read": true,
+      ".write": true, // Pour test - en prod: "auth != null"
+      "$sessionId": {
+        ".validate": "newData.hasChildren(['id', 'joined', 'lastActive'])"
+      }
+    }
+  }
+}
+*/
+
+console.log('✅ Compteur instantané prêt à fonctionner !');
 </script>
 
 <!-- ===== PANIER AVEC OVERLAY ===== -->
