@@ -14,7 +14,7 @@
     <meta name="msapplication-TileColor" content="#8B4513">
     <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5, user-scalable=yes, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Andu-Xara • Tradition Africaine, Style Moderne • Collection Authentique</title>
 
@@ -1144,20 +1144,16 @@ body {
     background-color: #f5f7fa;
     color: #333;
     line-height: 1.6;
-    overflow-x: hidden;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    touch-action: pan-y !important;
-    position: relative !important;
-    height: auto !important;
+    overflow-x: auto; /* ⬅️ NOUVEAU */
+    width: 100%;
+    position: relative;
 }
 
 .main-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 100vh;
-    overflow-y: visible;
+    min-height: 100%;
 }
 
 section, .promo-countdown, .faq-container, #timeline {
@@ -3513,262 +3509,54 @@ footer {
         font-size: 13px;
     }
 }
-/* ===== CORRECTION DÉFILEMENT ANDROID ===== */
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto; /* ← ESSENTIEL : autorise le défilement vertical */
-    -webkit-overflow-scrolling: touch; /* ← Défilement fluide sur iOS/Android */
-    position: relative;
-}
-
-body {
-    overscroll-behavior-y: none; /* Empêche les effets de rebond gênants */
-    touch-action: pan-y; /* Autorise uniquement le défilement vertical */
-}
-
-/* Désactiver le zoom sur mobile */
-@viewport {
-    width: device-width;
-    zoom: 1.0;
-}
-
-/* Correction hauteur viewport mobile */
-:root {
-    --vh: 1vh;
-}
-
-body {
-    min-height: 100vh;
-    min-height: calc(var(--vh, 1vh) * 100);
-}
-
-/* Correction pour éviter le débordement horizontal */
-.container, .main-container, section {
-    overflow: visible !important;
-    max-width: 100% !important;
-}
-
-/* ===== CORRECTION SPÉCIFIQUE ANDROID ===== */
-@media screen and (max-width: 768px) {
-    body, html {
-        position: static !important;
-        height: auto !important;
-        min-height: 100vh !important;
-        overflow-y: scroll !important;
-    }
-    
-    .main-container {
-        position: relative !important;
-        min-height: 100vh !important;
-    }
-    
-    /* Désactiver le zoom sur les inputs */
-    input, select, textarea {
-        font-size: 16px !important; /* Empêche le zoom automatique sur iOS */
-    }
-    
-    /* Corriger les problèmes de défilement dans les modals */
-    .quick-view-modal, .delivery-modal-overlay, #lightbox {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-}
-/* === CORRECTION BADGE SONINKÉ === */
-#soninke-badge-left {
-    bottom: 100px !important; /* Descendre de 100px */
-    left: 10px !important;
-    z-index: 100 !important; /* Pas trop haut */
-    font-size: 0.8rem !important;
-    padding: 8px 12px !important;
-    max-width: 150px !important;
-    opacity: 0.9;
-}
-
-/* Sur mobile, le cacher ou le déplacer */
 @media (max-width: 768px) {
-    #soninke-badge-left {
-        bottom: 80px !important;
-        left: 5px !important;
-        font-size: 0.7rem !important;
-        padding: 6px 10px !important;
-        max-width: 120px !important;
-    }
-    
-    /* Ou optionnellement, le cacher sur mobile */
-    /* #soninke-badge-left { display: none !important; } */
-}
-
-/* === ASSURER QUE LE COMPTEUR EST VISIBLE === */
-.promo-countdown {
-    position: relative !important;
-    z-index: 50 !important;
-    margin-top: 20px !important;
-}
-
-/* ===== CORRECTIONS DÉFILEMENT POUR TOUS LES CONTENEURS ===== */
-section, .container, .products-grid, .produits-container,
-.promo-countdown, .faq-container, #timeline {
-    overflow-y: visible !important;
-    overflow-x: hidden !important;
-    max-height: none !important;
-}
-
-/* Assurer le défilement sur mobile */
-@media (max-width: 768px) {
-    .products-grid, .produits-container {
-        overflow-y: visible !important;
-    }
-    
-    .cart-panel, .cart-items-container {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-}
-
-/* Correction pour les modales */
-body.lightbox-open {
-    overflow: hidden !important;
-    position: fixed !important;
-    width: 100% !important;
-}
-
-body:not(.lightbox-open):not(.menu-open) {
-    overflow-y: auto !important;
-}
-/* ===== CORRECTION DÉFILEMENT ANDROID ===== */
-html {
-    height: 100%;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-body {
-    height: 100%;
-    overflow: auto;
-    overflow-x: hidden;
-    position: relative;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: none;
-}
-
-.main-container {
-    min-height: 100vh;
-    height: auto;
-    overflow: visible;
-}
-
-/* Correction spécifique pour Chrome Android */
-@supports (-webkit-touch-callout: none) {
-    body, html {
-        height: -webkit-fill-available;
-    }
-    .main-container {
-        min-height: -webkit-fill-available;
-    }
-}
-
-/* Désactiver le pull-to-refresh sur Android Chrome */
-body {
-    overscroll-behavior-y: contain;
-}
-
-/* Assurer que tous les conteneurs permettent le défilement */
-.container, section, .produits-container, .products-grid {
-    overflow: visible !important;
-    max-height: none !important;
-}
-
-/* Correction pour les appareils avec encoche */
-@supports (padding: max(0px)) {
-    body, .container {
-        padding-left: max(15px, env(safe-area-inset-left));
-        padding-right: max(15px, env(safe-area-inset-right));
-    }
-}
-
-/* ===== CORRECTION DÉFILEMENT ANDROID - AJOUTER DANS LA SECTION <style> ===== */
-@media (max-width: 768px) {
-    /* Correction globale pour mobile */
     html, body {
-        height: auto !important;
-        min-height: 100vh !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
+        overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        position: relative !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+    
+    .main-container {
+        min-height: 100vh;
+        overflow: visible !important;
+    }
+}
+/* ===== CORRECTIONS SCROLL ANDROID ===== */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        height: auto !important;
+        max-height: none !important;
+        touch-action: pan-y !important;
+        overscroll-behavior-y: auto !important;
     }
     
     body {
-        overscroll-behavior-y: none !important;
-        touch-action: pan-y !important;
+        position: static !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
     }
     
     .main-container {
-        overflow-y: visible !important;
-        min-height: 100vh !important;
-        height: auto !important;
+        min-height: 100vh;
+        overflow: visible !important;
+        position: relative;
+        width: 100%;
     }
     
-    /* Correction pour Chrome Android */
+    /* Désactive les restrictions de scroll sur tous les conteneurs */
+    section, .container, .products-grid, .produits-container {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+    
+    /* Correction spécifique pour Android Chrome */
     @supports (-webkit-touch-callout: none) {
-        html, body {
+        body {
             height: -webkit-fill-available !important;
         }
-        .main-container {
-            min-height: -webkit-fill-available !important;
-        }
-    }
-    
-    /* Assurer que tous les conteneurs permettent le défilement */
-    .container, section, .produits-container, .products-grid,
-    .promo-countdown, .faq-container, #timeline {
-        overflow-y: visible !important;
-        max-height: none !important;
-        height: auto !important;
-    }
-    
-    /* Correction spécifique pour les produits */
-    .produits-container, .products-grid {
-        overflow-y: visible !important;
-        max-height: none !important;
-    }
-    
-    /* Correction pour les modales */
-    .quick-view-modal, .delivery-modal-overlay, #lightbox {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* Bloquer le scroll seulement quand une modale est ouverte */
-    body.lightbox-open, body.modal-open {
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
-    
-    /* Réactiver le scroll quand pas de modale */
-    body:not(.lightbox-open):not(.modal-open) {
-        overflow-y: auto !important;
-    }
-    
-    /* Correction pour le panier mobile */
-    .cart-panel, .cart-items-container {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        max-height: 70vh !important;
     }
 }
 
@@ -3948,58 +3736,6 @@ if (window.location.hostname !== 'localhost' &&
 </nav>
 
 <style>
-
-/* ===== VARIABLES POUR MOBILE ===== */
-:root {
-    --vh: 1vh;
-}
-
-/* ===== CORRECTIONS SPÉCIFIQUES ANDROID ===== */
-@media (max-width: 768px) {
-    body, html {
-        height: 100% !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        position: relative !important;
-    }
-    
-    body {
-        overflow-x: hidden !important;
-        touch-action: pan-y !important;
-        overscroll-behavior-y: none !important;
-    }
-    
-    .main-container {
-        min-height: 100vh !important;
-        min-height: calc(var(--vh, 1vh) * 100) !important;
-        height: auto !important;
-        overflow-y: visible !important;
-    }
-    
-    main.container {
-        overflow-y: visible !important;
-        min-height: auto !important;
-    }
-    
-    /* Correction spécifique pour Chrome Android */
-    @supports (-webkit-touch-callout: none) {
-        body, html {
-            height: -webkit-fill-available !important;
-        }
-        
-        .main-container {
-            min-height: -webkit-fill-available !important;
-        }
-    }
-}
-
-/* Correction pour iOS Safari */
-@supports (-webkit-overflow-scrolling: touch) {
-    body {
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
 /* ===== STYLES MENU SUPER COMPACT ===== */
 #main-navigation a:hover {
     background: rgba(255,255,255,0.15);
@@ -5626,7 +5362,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        // ===== BADGE SONINKÉ CORRIGÉ =====
+        // ===== BADGE SONINKÉ =====
         function initSoninkeBadge() {
             const messagesLeft = [
                 "Xa kéé biré waaga Soninko",
@@ -5636,41 +5372,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let indexLeft = 0;
             const textElLeft = document.getElementById('soninke-text-left');
-            const badge = document.getElementById('soninke-badge-left');
-
-            // Réduire la taille du badge pour ne pas couvrir le compteur
-            if (badge) {
-                badge.style.cssText = `
-                    position: fixed;
-                    bottom: 100px;
-                    left: 10px;
-                    background: linear-gradient(135deg, #ff9966, #ff5e62);
-                    color: #fff;
-                    font-weight: bold;
-                    padding: 8px 12px;
-                    border-radius: 20px;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                    cursor: default;
-                    z-index: 100;
-                    font-size: 0.8rem;
-                    max-width: 150px;
-                    text-align: center;
-                    line-height: 1.3;
-                    animation: popupLeft 0.6s forwards;
-                `;
-            }
 
             setInterval(() => {
-                if (textElLeft) {
-                    textElLeft.style.opacity = 0;
-                    setTimeout(() => {
-                        indexLeft = (indexLeft + 1) % messagesLeft.length;
-                        textElLeft.textContent = messagesLeft[indexLeft];
-                        textElLeft.style.opacity = 1;
-                    }, 500);
-                }
+                textElLeft.style.opacity = 0;
+                setTimeout(() => {
+                    indexLeft = (indexLeft + 1) % messagesLeft.length;
+                    textElLeft.textContent = messagesLeft[indexLeft];
+                    textElLeft.style.opacity = 1;
+                }, 500);
             }, 3000);
-        }
+              } 
 
 
         // ===== VARIATIONS PRODUITS =====
@@ -10618,8 +10329,30 @@ function optimizeForMobile() {
         
         // Optimisations spécifiques mobile
         optimizeTouchInteractions();
-        // ✅ preventHorizontalScroll() SUPPRIMÉ - causait des problèmes Android
+        preventHorizontalScroll();
         optimizeImagesForMobile();
+    }
+}
+
+function optimizeTouchInteractions() {
+    // Améliorer les interactions tactiles
+    const touchElements = document.querySelectorAll('button, a, .product-card, .category-btn');
+    touchElements.forEach(element => {
+        element.style.cursor = 'pointer';
+    });
+}
+
+function preventHorizontalScroll() {
+    console.log('📱 Scroll optimisé pour mobile');
+    
+    // NE PAS empêcher le scroll horizontal sur mobile
+    // Autoriser le zoom et défilement normal
+    
+    // Seulement un léger contrôle du bounce sur iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.addEventListener('touchmove', function(e) {
+            // Rien à bloquer - laisser tout passer
+        }, { passive: true });
     }
 }
 
@@ -10837,708 +10570,124 @@ document.addEventListener('DOMContentLoaded', function() {
 <button id="backToTopBtn" title="Retour en haut de la page">
     ↑ Haut de page
 </button>
+
 <script>
-// ===== CORRECTION DÉFILEMENT ANDROID =====
-function fixAndroidScrolling() {
+// ===== CORRECTIONS URGENTES SCROLL ANDROID =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initialisation correctifs Android...');
+    
     // Détection Android
-    const isAndroid = /Android/.test(navigator.userAgent);
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isChromeMobile = /Chrome\/[.0-9]* Mobile/i.test(navigator.userAgent);
     
     if (isAndroid) {
-        console.log('🤖 Correction défilement Android...');
+        console.log('🤖 Appareil Android détecté - Application des correctifs');
         
-        // 1. Forcer le défilement sur le body
-        document.body.style.overflowY = 'scroll';
-        document.body.style.webkitOverflowScrolling = 'touch';
-        
-        // 2. Supprimer tout overflow:hidden sur les conteneurs principaux
-        const containers = document.querySelectorAll('.container, .main-container, section');
-        containers.forEach(container => {
-            container.style.overflow = 'visible';
-            container.style.overflowY = 'auto';
-        });
-        
-        // 3. Correction hauteur viewport
-        function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        
-        setViewportHeight();
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
-        
-        // 4. Empêcher le blocage du défilement par JavaScript
-        document.addEventListener('touchmove', function(e) {
-            // Autoriser tous les événements de défilement
-        }, { passive: true });
-        
-        // 5. Correction pour les éléments position:fixed
-        const fixedElements = document.querySelectorAll('.floating-cart, #soninke-badge-left, .mini-counter');
-        fixedElements.forEach(el => {
-            el.style.position = 'fixed';
-            el.style.zIndex = '9999';
-        });
-        
-        console.log('✅ Corrections Android appliquées');
-    }
-}
-
-// ===== CORRECTION HAUTEUR 100% SUR MOBILE =====
-function fixMobileHeight() {
-    // Définir une hauteur CSS personnalisée pour mobile
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    
-    // Appliquer à tous les éléments nécessaires
-    document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
-}
-
-// ===== INITIALISATION AU CHARGEMENT =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 Correction défilement mobile...');
-    
-    // Appliquer les corrections
-    fixAndroidScrolling();
-    fixMobileHeight();
-    
-    // Réappliquer lors des changements d'orientation
-    window.addEventListener('orientationchange', function() {
+        // Attendre que tout soit chargé
         setTimeout(function() {
-            fixAndroidScrolling();
-            fixMobileHeight();
-        }, 300);
-    });
-    
-    // Réappliquer lors du redimensionnement
-    window.addEventListener('resize', fixMobileHeight);
-});
-
-// ===== FONCTION DE DÉBOGAGE =====
-function debugScrolling() {
-    console.log('🔍 Débogage défilement:');
-    console.log('- window.innerHeight:', window.innerHeight);
-    console.log('- document.body.scrollHeight:', document.body.scrollHeight);
-    console.log('- document.body.style.overflow:', document.body.style.overflow);
-    console.log('- User Agent:', navigator.userAgent);
-    
-    // Forcer le défilement si bloqué
-    document.body.style.overflowY = 'scroll';
-    document.documentElement.style.overflowY = 'scroll';
-    
-    alert('Défilement forcé - Essayez maintenant');
-}
-</script>
-<script>
-// ===== CORRECTION DÉFILEMENT ANDROID =====
-function fixAndroidScrolling() {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isMobile = /Mobile/i.test(navigator.userAgent);
-    
-    if ((isAndroid && isMobile) || /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        console.log('📱 Correction défilement mobile appliquée');
-        
-        // 1. Calculer la hauteur correcte du viewport
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-        
-        // 2. Appliquer les corrections au body
-        document.body.style.overflow = 'auto';
-        document.body.style.overflowX = 'hidden';
-        document.body.style.height = 'auto';
-        document.body.style.minHeight = window.innerHeight + 'px';
-        
-        // 3. Correction pour .main-container
-        const mainContainer = document.querySelector('.main-container');
-        if (mainContainer) {
-            mainContainer.style.overflowY = 'visible';
-            mainContainer.style.height = 'auto';
-            mainContainer.style.minHeight = window.innerHeight + 'px';
-        }
-        
-        // 4. Permettre le défilement tactile
-        document.addEventListener('touchmove', function(e) {
-            // Laisser passer tous les événements de défilement
-        }, { passive: true });
-        
-        console.log('✅ Hauteur viewport:', window.innerHeight, 'px');
-    }
-}
-
-// Appliquer les corrections
-document.addEventListener('DOMContentLoaded', function() {
-    fixAndroidScrolling();
-    
-    // Re-appliquer après le chargement complet
-    window.addEventListener('load', function() {
-        setTimeout(fixAndroidScrolling, 500);
-    });
-    
-    // Re-appliquer lors du redimensionnement
-    window.addEventListener('resize', fixAndroidScrolling);
-    window.addEventListener('orientationchange', function() {
-        setTimeout(fixAndroidScrolling, 300);
-    });
-});
-
-// Corriger après chaque modification du DOM
-if (typeof MutationObserver !== 'undefined') {
-    const observer = new MutationObserver(function() {
-        setTimeout(fixAndroidScrolling, 100);
-    });
-    
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-}
-
-// Test manuel (optionnel - pour debug)
-window.testScrollFix = function() {
-    fixAndroidScrolling();
-    alert('Corrections appliquées manuellement!\nHauteur écran: ' + window.innerHeight + 'px');
-};
-</script>
-<script>
-// ===== CORRECTION DÉFILEMENT ANDROID =====
-function fixAndroidScrolling() {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isMobile = /Mobile/i.test(navigator.userAgent);
-    
-    if ((isAndroid && isMobile) || /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        console.log('📱 Correction défilement mobile appliquée');
-        
-        // 1. Calculer la hauteur correcte du viewport
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-        
-        // 2. Appliquer les corrections au body
-        document.body.style.overflow = 'auto';
-        document.body.style.overflowX = 'hidden';
-        document.body.style.height = 'auto';
-        document.body.style.minHeight = window.innerHeight + 'px';
-        
-        // 3. Correction pour .main-container
-        const mainContainer = document.querySelector('.main-container');
-        if (mainContainer) {
-            mainContainer.style.overflowY = 'visible';
-            mainContainer.style.height = 'auto';
-            mainContainer.style.minHeight = window.innerHeight + 'px';
-        }
-        
-        // 4. Permettre le défilement tactile
-        document.addEventListener('touchmove', function(e) {
-            // Laisser passer tous les événements de défilement
-        }, { passive: true });
-        
-        console.log('✅ Hauteur viewport:', window.innerHeight, 'px');
-    }
-}
-
-// Appliquer les corrections
-document.addEventListener('DOMContentLoaded', function() {
-    fixAndroidScrolling();
-    
-    // Re-appliquer après le chargement complet
-    window.addEventListener('load', function() {
-        setTimeout(fixAndroidScrolling, 500);
-    });
-    
-    // Re-appliquer lors du redimensionnement
-    window.addEventListener('resize', fixAndroidScrolling);
-    window.addEventListener('orientationchange', function() {
-        setTimeout(fixAndroidScrolling, 300);
-    });
-});
-
-// Corriger après chaque modification du DOM
-if (typeof MutationObserver !== 'undefined') {
-    const observer = new MutationObserver(function() {
-        setTimeout(fixAndroidScrolling, 100);
-    });
-    
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-}
-
-// Test manuel (optionnel - pour debug)
-window.testScrollFix = function() {
-    fixAndroidScrolling();
-    alert('Corrections appliquées manuellement!\nHauteur écran: ' + window.innerHeight + 'px');
-};
-</script>
-<script>
-// ===== CORRECTION DÉFILEMENT ANDROID =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 Initialisation correction défilement Android...');
-    
-    // Détection Android
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isChromeAndroid = /Chrome\/[.0-9]* Mobile/i.test(navigator.userAgent);
-    
-    if (isAndroid) {
-        console.log('🤖 Appareil Android détecté - Application des corrections');
-        
-        // 1. Forcer le défilement sur le body
-        document.body.style.overflowY = 'scroll';
-        document.body.style.webkitOverflowScrolling = 'touch';
-        
-        // 2. Correction hauteur viewport
-        function fixViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-            document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
-        }
-        
-        fixViewportHeight();
-        
-        // 3. Recalculer après chargement d'images
-        window.addEventListener('load', fixViewportHeight);
-        
-        // 4. Correction sur redimensionnement et changement d'orientation
-        window.addEventListener('resize', fixViewportHeight);
-        window.addEventListener('orientationchange', function() {
-            setTimeout(fixViewportHeight, 300);
-        });
-        
-        // 5. Autoriser le défilement tactile partout
-        document.addEventListener('touchmove', function(e) {
-            // Ne pas empêcher le défilement par défaut
-        }, { passive: true });
-        
-        // 6. Correction pour Chrome Android spécifiquement
-        if (isChromeAndroid) {
-            document.documentElement.style.overflow = 'auto';
-            document.documentElement.style.height = '100%';
+            // 1. CORRECTION ULTIME DU BODY
+            document.body.style.cssText = `
+                overflow-x: auto !important;
+                overflow-y: auto !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                position: relative !important;
+                width: 100% !important;
+                -webkit-overflow-scrolling: touch !important;
+                touch-action: pan-y !important;
+            `;
             
-            // Désactiver les comportements de défilement gênants
-            document.body.style.overscrollBehaviorY = 'none';
-        }
-    }
-    
-    // Fonction de test pour vérifier le défilement
-    window.testScroll = function() {
-        alert(
-            'Test défilement:\n' +
-            'Height: ' + window.innerHeight + 'px\n' +
-            'ScrollHeight: ' + document.body.scrollHeight + 'px\n' +
-            'UserAgent: ' + navigator.userAgent
-        );
-    };
-});
-</script>
-<script>
-// ===== CORRECTIF SCROLL ANDROID - VERSION FINALE =====
-console.log('🔧 Chargement correctif scroll Android...');
-
-// 1. FONCTION CORRECTE POUR PRÉVENIR LE SCROLL HORIZONTAL
-function preventHorizontalScrollFixed() {
-    console.log('📱 Configuration scroll horizontal...');
-    
-    // Prévenir UNIQUEMENT le scroll horizontal, pas le vertical
-    window.addEventListener('scroll', function() {
-        if (window.scrollX !== 0) {
-            window.scrollTo(0, window.scrollY);
-        }
-    }, { passive: true });
-    
-    // ✅ VERSION CORRIGÉE - Ne bloque que le pinch-zoom
-    let touchCount = 0;
-    
-    document.addEventListener('touchstart', function(e) {
-        touchCount = e.touches.length;
-    }, { passive: true });
-    
-    document.addEventListener('touchmove', function(e) {
-        // Bloquer seulement si 2+ doigts (pinch-zoom)
-        if (e.touches.length > 1) {
-            e.preventDefault();
-        }
-        // Autoriser le scroll avec 1 doigt
-    }, { passive: false });
-    
-    console.log('✅ Scroll horizontal configuré sans bloquer le vertical');
-}
-
-// 2. FORCER L'AUTORISATION DU SCROLL VERTICAL
-function forceEnableScroll() {
-    console.log('📜 Activation forcée du scroll...');
-    
-    // Retirer tous les styles qui bloquent le scroll
-    const bodyStyle = document.body.style;
-    const htmlStyle = document.documentElement.style;
-    
-    bodyStyle.overflow = 'auto';
-    bodyStyle.overflowY = 'auto';
-    bodyStyle.overflowX = 'hidden';
-    bodyStyle.position = 'relative';
-    bodyStyle.height = 'auto';
-    bodyStyle.webkitOverflowScrolling = 'touch';
-    
-    htmlStyle.overflow = 'auto';
-    htmlStyle.overflowY = 'auto';
-    htmlStyle.overflowX = 'hidden';
-    htmlStyle.position = 'relative';
-    htmlStyle.webkitOverflowScrolling = 'touch';
-    
-    // Retirer les classes bloquantes
-    document.body.classList.remove('lightbox-open');
-    document.body.classList.remove('no-scroll');
-    document.body.classList.remove('modal-open');
-    
-    console.log('✅ Scroll activé sur body et html');
-}
-
-// 3. CORRIGER LE MENU MOBILE
-function fixMobileMenu() {
-    console.log('📱 Correction menu mobile...');
-    
-    const menuOverlay = document.querySelector('.menu-overlay');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const menuToggle = document.querySelector('.menu-toggle');
-    
-    if (menuOverlay) {
-        menuOverlay.addEventListener('click', function() {
-            document.body.style.overflow = 'auto';
-            mobileMenu?.classList.remove('active');
-            menuOverlay.classList.remove('active');
-            console.log('✅ Menu fermé via overlay');
-        });
-    }
-    
-    if (mobileMenu) {
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.attributeName === 'class') {
-                    const isActive = mobileMenu.classList.contains('active');
-                    if (!isActive) {
-                        // Menu fermé - restaurer le scroll
-                        setTimeout(() => {
-                            document.body.style.overflow = 'auto';
-                            console.log('✅ Menu inactif - scroll restauré');
-                        }, 100);
-                    }
+            // 2. CORRECTION DU HTML
+            document.documentElement.style.cssText = `
+                overflow: auto !important;
+                height: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            `;
+            
+            // 3. CORRECTION DE TOUS LES CONTENEURS
+            document.querySelectorAll('div, section, main, .container, .main-container').forEach(el => {
+                el.style.overflow = 'visible';
+                el.style.maxHeight = 'none';
+                el.style.touchAction = 'pan-y';
+            });
+            
+            // 4. SUPPRIMER TOUS LES ÉVÉNEMENTS BLOQUANTS
+            const originalAddEventListener = EventTarget.prototype.addEventListener;
+            EventTarget.prototype.addEventListener = function(type, listener, options) {
+                if (type === 'touchmove' || type === 'scroll') {
+                    // Forcer passive: true pour tous les événements de défilement
+                    return originalAddEventListener.call(this, type, listener, 
+                        typeof options === 'object' ? { ...options, passive: true } : { passive: true }
+                    );
                 }
-            });
-        });
-        
-        observer.observe(mobileMenu, { attributes: true });
-    }
-    
-    console.log('✅ Menu mobile corrigé');
-}
-
-// 4. DÉTECTER LES ÉLÉMENTS BLOQUANTS
-function detectBlockingElements() {
-    console.log('🔍 Détection éléments bloquants...');
-    
-    const fixedElements = document.querySelectorAll('*');
-    let blockingCount = 0;
-    
-    fixedElements.forEach((element) => {
-        const style = window.getComputedStyle(element);
-        const rect = element.getBoundingClientRect();
-        
-        // Vérifier si l'élément occupe tout l'écran et est visible
-        if (style.position === 'fixed' &&
-            rect.width >= window.innerWidth * 0.95 &&
-            rect.height >= window.innerHeight * 0.95 &&
-            style.display !== 'none' &&
-            style.visibility !== 'hidden' &&
-            style.opacity !== '0') {
+                return originalAddEventListener.call(this, type, listener, options);
+            };
             
-            blockingCount++;
-            console.warn(`⚠️ Élément bloquant détecté:`, {
-                id: element.id || 'sans-id',
-                class: element.className || 'sans-class',
-                tagName: element.tagName,
-                zIndex: style.zIndex
-            });
-        }
-    });
-    
-    console.log(`📊 Total éléments bloquants: ${blockingCount}`);
-    return blockingCount;
-}
-
-// 5. CORRECTIF ANDROID SPÉCIFIQUE
-function androidScrollFix() {
-    const isAndroid = /Android/.test(navigator.userAgent);
-    
-    if (!isAndroid) {
-        console.log('ℹ️ Pas Android - correctif général uniquement');
-        return;
-    }
-    
-    console.log('🤖 APPLICATION CORRECTIF ANDROID...');
-    
-    // Forcer les propriétés CSS critiques pour Android
-    const style = document.createElement('style');
-    style.id = 'android-scroll-fix';
-    style.textContent = `
-        /* CORRECTIF SCROLL ANDROID */
-        html {
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            -webkit-overflow-scrolling: touch !important;
-            height: auto !important;
-            position: relative !important;
-        }
-        
-        body {
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            -webkit-overflow-scrolling: touch !important;
-            height: auto !important;
-            position: relative !important;
-            overscroll-behavior-y: auto !important;
-        }
-        
-        /* Autoriser le scroll sur les containers principaux */
-        .container,
-        .main-container,
-        main {
-            overflow-y: visible !important;
-            height: auto !important;
-        }
-        
-        /* Empêcher les overlays invisibles de bloquer */
-        .menu-overlay:not(.active) {
-            display: none !important;
-            pointer-events: none !important;
-        }
-    `;
-    
-    document.head.appendChild(style);
-    console.log('✅ CSS Android injecté');
-    
-    // Nettoyer les event listeners problématiques
-    const events = ['touchmove', 'touchstart', 'touchend'];
-    events.forEach(eventType => {
-        const oldListeners = window[`_${eventType}_listeners`] || [];
-        oldListeners.forEach(listener => {
-            document.removeEventListener(eventType, listener);
-        });
-    });
-    
-    console.log('✅ Event listeners nettoyés');
-}
-
-// 6. TEST DE SCROLL
-function testScroll() {
-    console.log('🧪 TEST DE SCROLL...');
-    console.log('═══════════════════════════════════');
-    
-    const results = {
-        'Hauteur document': document.documentElement.scrollHeight + 'px',
-        'Hauteur fenêtre': window.innerHeight + 'px',
-        'Peut scroller': document.documentElement.scrollHeight > window.innerHeight,
-        'Body overflow': window.getComputedStyle(document.body).overflow,
-        'HTML overflow': window.getComputedStyle(document.documentElement).overflow,
-        'Body overflowY': window.getComputedStyle(document.body).overflowY,
-        'HTML overflowY': window.getComputedStyle(document.documentElement).overflowY,
-        'Body position': window.getComputedStyle(document.body).position,
-        'Body height': window.getComputedStyle(document.body).height,
-        'Scroll actuel': window.scrollY + 'px',
-        'Appareil': /Android/.test(navigator.userAgent) ? 'Android' : 
-                    /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iOS' : 'Autre'
-    };
-    
-    console.table(results);
-    
-    // Diagnostic
-    const bodyOverflow = window.getComputedStyle(document.body).overflowY;
-    const htmlOverflow = window.getComputedStyle(document.documentElement).overflowY;
-    const canScroll = document.documentElement.scrollHeight > window.innerHeight;
-    
-    if (!canScroll) {
-        console.warn('⚠️ PROBLÈME: Contenu pas assez grand pour scroller');
-    } else if (bodyOverflow === 'hidden' || htmlOverflow === 'hidden') {
-        console.error('❌ PROBLÈME: overflow:hidden détecté!');
-        console.log('🔧 Application correctif...');
-        forceEnableScroll();
-    } else {
-        console.log('✅ Configuration scroll OK');
-    }
-    
-    // Test des éléments bloquants
-    const blocking = detectBlockingElements();
-    if (blocking > 0) {
-        console.error(`❌ PROBLÈME: ${blocking} élément(s) bloquant(s) détecté(s)`);
-    }
-    
-    console.log('═══════════════════════════════════');
-}
-
-// 7. SURVEILLANCE CONTINUE
-function monitorScroll() {
-    console.log('👁️ Surveillance scroll activée...');
-    
-    let checkCount = 0;
-    const maxChecks = 20; // Surveiller pendant 20 secondes
-    
-    const interval = setInterval(() => {
-        checkCount++;
-        
-        const bodyOverflow = window.getComputedStyle(document.body).overflowY;
-        const htmlOverflow = window.getComputedStyle(document.documentElement).overflowY;
-        
-        // Vérifier si le scroll est bloqué
-        if ((bodyOverflow === 'hidden' || htmlOverflow === 'hidden') &&
-            !document.querySelector('.mobile-menu.active') &&
-            !document.querySelector('.quick-view-modal') &&
-            !document.querySelector('#lightbox[style*="display: flex"]')) {
+            // 5. CORRECTION VIEWPORT DYNAMIQUE
+            const viewportMeta = document.querySelector('meta[name="viewport"]');
+            if (viewportMeta && viewportMeta.content.includes('user-scalable=no')) {
+                viewportMeta.content = viewportMeta.content.replace('user-scalable=no', 'user-scalable=yes');
+            }
             
-            console.warn('⚠️ Scroll bloqué détecté - correction automatique...');
-            forceEnableScroll();
-        }
+            // 6. FORCER UN REFLOW
+            document.body.offsetHeight;
+            
+            console.log('✅ Correctifs Android appliqués avec succès');
+            
+            // Vérification
+            setTimeout(function() {
+                console.log('🔍 Vérification finalisée:');
+                console.log('- Body overflow:', getComputedStyle(document.body).overflow);
+                console.log('- Body height:', document.body.offsetHeight, 'Window:', window.innerHeight);
+                console.log('- Scroll possible:', document.body.scrollHeight > window.innerHeight);
+            }, 500);
+            
+        }, 1000);
         
-        if (checkCount >= maxChecks) {
-            clearInterval(interval);
-            console.log('✅ Surveillance scroll terminée (20s)');
+        // Correction supplémentaire pour Chrome Android
+        if (isChromeMobile) {
+            setTimeout(function() {
+                document.body.style.webkitOverflowScrolling = 'touch';
+                document.documentElement.style.webkitOverflowScrolling = 'touch';
+            }, 1500);
         }
-    }, 1000); // Vérifier chaque seconde
-}
-
-// 8. INITIALISATION PRINCIPALE
-function initScrollFix() {
-    console.log('🚀 INITIALISATION CORRECTIF SCROLL...');
-    console.log('═══════════════════════════════════');
-    
-    // Attendre le DOM
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initScrollFix);
-        return;
     }
-    
-    // Étape 1: Activer le scroll immédiatement
-    forceEnableScroll();
-    console.log('✅ Étape 1: Scroll activé');
-    
-    // Étape 2: Configurer le scroll horizontal
-    preventHorizontalScrollFixed();
-    console.log('✅ Étape 2: Scroll horizontal configuré');
-    
-    // Étape 3: Corriger le menu mobile
-    fixMobileMenu();
-    console.log('✅ Étape 3: Menu mobile corrigé');
-    
-    // Étape 4: Appliquer correctifs Android
-    androidScrollFix();
-    console.log('✅ Étape 4: Correctifs Android appliqués');
-    
-    // Étape 5: Tests après 500ms
-    setTimeout(() => {
-        testScroll();
-        monitorScroll();
-    }, 500);
-    
-    // Étape 6: Re-vérifier après interactions
-    ['click', 'touchstart'].forEach(eventType => {
-        document.addEventListener(eventType, function checkScrollAfterInteraction() {
-            setTimeout(() => {
-                const bodyOverflow = window.getComputedStyle(document.body).overflowY;
-                if (bodyOverflow === 'hidden' && 
-                    !document.querySelector('.mobile-menu.active')) {
-                    console.warn('⚠️ Scroll bloqué après interaction - correction...');
-                    forceEnableScroll();
-                }
-            }, 100);
-        }, { passive: true });
-    });
-    
-    console.log('═══════════════════════════════════');
-    console.log('✅ CORRECTIF SCROLL COMPLÈTEMENT INITIALISÉ');
-    console.log('💡 Tapez testScroll() dans la console pour diagnostics');
-}
-
-// EXÉCUTION IMMÉDIATE
-initScrollFix();
-
-// Re-exécuter après chaque changement d'orientation
-window.addEventListener('orientationchange', function() {
-    console.log('🔄 Changement orientation - réinitialisation...');
-    setTimeout(() => {
-        initScrollFix();
-    }, 300);
 });
 
-// Exposer les fonctions pour debug
-window.debugScroll = {
-    test: testScroll,
-    fix: forceEnableScroll,
-    detect: detectBlockingElements,
-    monitor: monitorScroll
+// Fonction de réparation d'urgence accessible depuis la console
+window.reparerScrollAndroid = function() {
+    console.log('🔧 Réparation manuelle du scroll Android...');
+    
+    // Réinitialisation complète
+    document.body.style.cssText = '';
+    document.documentElement.style.cssText = '';
+    
+    // Nouveaux styles optimisés
+    const newBodyStyles = {
+        'overflow-x': 'auto',
+        'overflow-y': 'auto',
+        'height': 'auto',
+        'min-height': '100vh',
+        'position': 'relative',
+        'width': '100%',
+        '-webkit-overflow-scrolling': 'touch',
+        'touch-action': 'pan-y',
+        'overscroll-behavior': 'auto'
+    };
+    
+    Object.assign(document.body.style, newBodyStyles);
+    
+    // Supprimer tous les overlays fixes problématiques
+    document.querySelectorAll('div[style*="fixed"], div[style*="absolute"]').forEach(el => {
+        const style = el.getAttribute('style') || '';
+        if (style.includes('overflow: hidden') || style.includes('overflow-x: hidden')) {
+            el.style.overflow = 'visible';
+        }
+    });
+    
+    console.log('✅ Réparation manuelle terminée');
+    alert('✅ Scroll Android réparé ! Rechargez la page si nécessaire.');
 };
-
-console.log('🐛 Debug disponible: window.debugScroll.test()');
 </script>
-// ===== CORRECTION DÉFILEMENT ANDROID - AJOUTER DANS <script> =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 Correction défilement Android en cours...');
-    
-    // Détection Android
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isMobile = /Mobile/i.test(navigator.userAgent);
-    
-    if (isAndroid && isMobile) {
-        console.log('🤖 Appareil Android mobile détecté - Application des correctifs');
-        
-        // 1. Forcer le défilement vertical
-        document.body.style.overflowY = 'auto';
-        document.body.style.webkitOverflowScrolling = 'touch';
-        document.documentElement.style.overflowY = 'auto';
-        
-        // 2. Correction hauteur viewport
-        function fixViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-            document.body.style.minHeight = 'calc(var(--vh, 1vh) * 100)';
-        }
-        
-        fixViewportHeight();
-        
-        // 3. Mettre à jour après chargement et redimensionnement
-        window.addEventListener('load', fixViewportHeight);
-        window.addEventListener('resize', fixViewportHeight);
-        window.addEventListener('orientationchange', function() {
-            setTimeout(fixViewportHeight, 300);
-        });
-        
-        // 4. Autoriser le défilement tactile
-        document.addEventListener('touchmove', function(e) {
-            // Ne pas empêcher le défilement par défaut
-        }, { passive: true });
-        
-        // 5. Correction spécifique pour les conteneurs
-        setTimeout(function() {
-            const containers = document.querySelectorAll('.container, section, main');
-            containers.forEach(container => {
-                container.style.overflow = 'visible';
-                container.style.overflowY = 'visible';
-                container.style.maxHeight = 'none';
-            });
-        }, 500);
-        
-        console.log('✅ Correctifs Android appliqués');
-    }
-    
-    // Fonction de test
-    window.testScrollFix = function() {
-        console.log('🧪 Test de défilement:');
-        console.log('- window.innerHeight:', window.innerHeight);
-        console.log('- document.body.scrollHeight:', document.body.scrollHeight);
-        console.log('- Peut scroller:', document.body.scrollHeight > window.innerHeight);
-        console.log('- Body overflow:', window.getComputedStyle(document.body).overflow);
-        
-        alert(
-            'Test défilement:\n' +
-            'Hauteur fenêtre: ' + window.innerHeight + 'px\n' +
-            'Hauteur document: ' + document.body.scrollHeight + 'px\n' +
-            'Scroll activé: ' + (document.body.scrollHeight > window.innerHeight ? 'OUI' : 'NON')
-        );
-    };
-});
 </body>
 </html>
