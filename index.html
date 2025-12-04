@@ -14,7 +14,7 @@
     <meta name="msapplication-TileColor" content="#8B4513">
     <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Andu-Xara • Tradition Africaine, Style Moderne • Collection Authentique</title>
 
@@ -608,7 +608,7 @@ window.PromoSystem = class PromoSystem {
             console.error('❌ Erreur validation promo:', error);
             return this.applyPromoOffline(code);
         }
-    } 
+    } // ✅ CORRECTION : ACCOLADE FERMANTE AJOUTÉE
 
     async checkIfPromoAlreadyUsed(code) {
         const codeUpper = code.toUpperCase();
@@ -974,7 +974,8 @@ Voulez-vous vous connecter maintenant ?`;
             `;
         }
     }
-}
+} // ✅ CORRECTION : FERMETURE CORRECTE DE LA CLASSE
+
 // Fonction séparée - doit être en dehors de la classe PromoSystem
 function markPromoUsedLocally(orderData) {
     console.log('🔄 Marquage local du code promo...');
@@ -1143,70 +1144,14 @@ body {
     background-color: #f5f7fa;
     color: #333;
     line-height: 1.6;
-    overflow-x: hidden; /* ✅ Cache scroll horizontal */
-    overflow-y: visible !important; /* ✅ FORCER visible */
-    -webkit-overflow-scrolling: touch; /* ✅ Scroll fluide */
-    height: 100%;
-    min-height: 100vh;
-    position: relative;
-    touch-action: pan-y; /* ✅ Autorise scroll tactile vertical */
-}
-
-/* Désactiver overscroll sur body seulement pour Android */
-@supports (-webkit-touch-callout: none) and (not (overflow:-webkit-paged-x)) {
-    body {
-        overscroll-behavior-y: none; /* ✅ Permet le scroll naturel */
-    }
-}
-
-/* ===== CORRECTION SCROLL MOBILE URGENTE ===== */
-html {
-    height: 100%;
-    overflow-x: hidden; /* ✅ Cache seulement le scroll horizontal */
-    overflow-y: auto; /* ✅ Autorise le scroll vertical */
-    position: relative;
-    -webkit-overflow-scrolling: touch; /* ✅ Scroll fluide iOS/Android */
-}
-
-/* Permettre le scroll tactile partout */
-html, body {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-}
-
-/* Désactiver le zoom double-tap sur les images */
-img {
-    touch-action: pan-y;
+    overflow-x: hidden;
 }
 
 .main-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 100vh; /* CHANGER 100% en 100vh */
-    position: relative;
-    overflow-y: visible;
-}
-
-/* Désactiver le zoom sur mobile mais permettre le scroll */
-@media screen and (max-width: 768px) {
-    html {
-        touch-action: pan-y;
-        -ms-touch-action: pan-y;
-    }
-    
-    body {
-        position: static !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        height: auto !important;
-        min-height: 100vh !important;
-    }
-    
-    .main-container {
-        min-height: 100vh;
-        overflow-y: visible;
-    }
+    min-height: 100%;
 }
 
 section, .promo-countdown, .faq-container, #timeline {
@@ -1448,8 +1393,8 @@ h1 {
     z-index: 1002;
     padding-top: 70px;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* AJOUT */
 }
+
 .mobile-menu ul {
     list-style: none;
     padding: 0;
@@ -1786,11 +1731,9 @@ h1 {
     }
 }
 
+/* Bloquer le scroll quand la lightbox est ouverte */
 body.lightbox-open {
     overflow: hidden;
-    position: fixed; /* ← AJOUTER position: fixed */
-    width: 100%;
-    height: 100%;
 }
 
 /* ===== TÉMOIGNAGES ===== */
@@ -3564,98 +3507,93 @@ footer {
         font-size: 13px;
     }
 }
-/* ===== CORRECTIONS SCROLL ANDROID SPÉCIFIQUES ===== */
 
-/* Forcer le scroll sur tous les appareils */
+/* ===== CORRECTION SCROLL ANDROID ===== */
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto; /* ✅ Scroll vertical autorisé */
+    -webkit-overflow-scrolling: touch; /* ✅ Scroll fluide iOS/Android */
+    touch-action: pan-y; /* ✅ Scroll vertical autorisé */
+    overscroll-behavior-y: contain; /* ✅ Évite les effets de rebond excessifs */
+    height: 100%;
+    position: relative;
+}
+
+/* ✅ Correction spécifique Android */
+.android-device body,
+.android-device html {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* ✅ Assurer que le contenu peut défiler */
+.main-container {
+    min-height: 100vh;
+    overflow-y: visible;
+}
+
+/* ✅ Correction pour les modales qui bloquent le scroll */
+.quick-view-modal,
+.delivery-modal-overlay,
+#lightbox {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* ✅ Autoriser le scroll dans les conteneurs */
+.cart-items-container,
+#ai-messages,
+#view-history,
+#saved-products,
+#personal-recommendations {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+/* ===== CORRECTIONS PERMANENTES SCROLL ANDROID ===== */
+
+/* CORRECTION GLOBALE */
+html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    min-height: 100vh !important;
+}
+
+/* EMPÊCHER LES overflow: hidden PROBLÉMATIQUES */
+.main-container, .container, main, 
+.produits-container, .products-grid,
+section, .product-card {
+    overflow: visible !important;
+    min-height: auto !important;
+}
+
+/* SPÉCIFIQUE ANDROID */
+.android-device body {
+    overflow-y: scroll !important;
+    touch-action: pan-y !important;
+}
+
+/* S'ASSURER QUE LE CONTENU PEUT DÉPASSER */
+.product-title, .product-description, 
+h1, h2, h3, p, span {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+/* SCROLL FLUIDE */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 @media (max-width: 768px) {
-    html, body {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        height: auto !important;
-        max-height: none !important;
-    }
-    
-    /* Correction viewport variable pour mobile */
-    :root {
-        --vh: 1vh;
-    }
-    
-    body {
-        min-height: calc(var(--vh, 1vh) * 100);
-    }
-    
-    /* Désactiver tout blocage potentiel */
-    .mobile-menu,
-    .menu-overlay,
-    .newsletter-popup {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* S'assurer que le contenu peut dépasser */
-    .container, section, .products-grid {
-        overflow-y: visible !important;
+    /* FORCER LE SCROLL SUR MOBILE */
+    html {
+        overflow-y: scroll !important;
     }
 }
 
-/* Correction spécifique Samsung/Android */
-@supports (-webkit-touch-callout: none) {
-    body {
-        /* Forcer le redémarrage du rendu sur iOS/Android */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-}
-
-/* Désactiver le pull-to-refresh gênant sur mobile */
-@media (max-width: 768px) {
-    body {
-        overscroll-behavior-y: contain;
-    }
-}
-
-/* ===== CORRECTION HAUTEUR VIEWPORT MOBILE ===== */
-/* Ajoutez ce script JavaScript avec le CSS */
-
-/* ===== CORRECTIONS FINALES SCROLL MOBILE ===== */
-
-/* Correction spécifique Android */
-@media screen and (max-width: 768px) {
-    /* Forcer le scroll partout */
-    html, body {
-        overscroll-behavior-y: none;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* Correction pour les appareils Samsung */
-    @media (hover: none) and (pointer: coarse) {
-        body {
-            touch-action: pan-y;
-            -ms-touch-action: pan-y;
-        }
-    }
-    
-    /* Désactiver le scroll horizontal partout */
-    * {
-        max-width: 100vw;
-        overflow-x: hidden;
-    }
-}
-
-/* Correction pour le mode paysage mobile */
-@media (max-width: 768px) and (orientation: landscape) {
-    body {
-        height: auto !important;
-        min-height: 100vh !important;
-    }
-    
-    .mobile-menu {
-        height: 100vh;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-}
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -4311,16 +4249,13 @@ console.log('✅ Compteur instantané prêt à fonctionner !');
         </div>
     </section>
             <!-- Audio de bienvenue -->
-<div class="audio-welcome" style="text-align:center; margin-top:20px;">
-    <h3>🎧 Message de bienvenue</h3>
-    <audio id="welcome-audio" controls preload="none">
-        <source src="audio/bienvenue.mp4" type="audio/mp4">
-        Votre navigateur ne supporte pas la lecture audio.
-    </audio>
-    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-        Cliquez sur le bouton play pour écouter le message
-    </p>
-</div>
+            <div class="audio-welcome" style="text-align:center; margin-top:20px;">
+                <h3>🎧 Message de bienvenue</h3>
+                <audio controls>
+                    <source src="audio/bienvenue.mp4" type="audio/mp4">
+                    Votre navigateur ne supporte pas la lecture audio.
+                </audio>
+            </div>
 
 <!-- Code promo amélioré avec intégration panier -->
 <div class="reduction-section">
@@ -5807,22 +5742,22 @@ function addToCart(productName, oldPrice, promoPrice) {
     }
 
 if (!found) {
-    floatingCart.push({
-        name: productName,
-        category: category,
-        price: numericPrice,
-        quantity: 1,
-        addedAt: new Date().toISOString()
-    });
-}
-
-// Sauvegarder dans le localStorage
-localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
-showNotification('✅ ' + productName + ' ajouté au panier !');
-updateFloatingCart();
-
-if (typeof trackAddToCart === 'function') {
-    trackAddToCart(productName, category, numericPrice);
+        floatingCart.push({
+            name: productName,
+            category: category,
+            price: numericPrice,
+            quantity: 1,
+            addedAt: new Date().toISOString()
+        });
+    }
+        
+    // Sauvegarder dans le localStorage
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    // Afficher une notification
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+    
+    // Mettre à jour l'affichage du panier
 }
 
 // === NOTIFICATION ===
@@ -6258,31 +6193,27 @@ class ClientDashboard {
         this.saveUserData();
     }
 
-    // Track quand un produit est consulté
+// Track quand un produit est consulté
     trackProductView(productName, category, price) {
-        const existingView = this.userData.viewedProducts.find(
-            item => item.name === productName
-        );
+existingView.viewCount += 1;
+existingView.lastViewed = new Date().toISOString();
+} else {
 
-        if (existingView) {
-            existingView.viewCount += 1;
-            existingView.lastViewed = new Date().toISOString();
-        } else {
-            this.userData.viewedProducts.push({
-                name: productName,
-                category: category,
-                price: price,
-                viewCount: 1,
-                firstViewed: new Date().toISOString(),
-                lastViewed: new Date().toISOString()
-            });
-        }
+{
+
+        name: productName,
+        price: promoPrice,
+        quantity: 1,
+        addedAt: new Date().toISOString()
+    }
+});
 
         this.userData.stats.totalViews += 1;
         this.updatePreferences(category, price);
         this.saveUserData();
         this.updateDashboardDisplay();
     }
+
     // Ajouter aux favoris
     addToFavorites(productName, category, price) {
         const existingFavorite = this.userData.favoriteProducts.find(
@@ -10407,7 +10338,7 @@ document.addEventListener('click', function(event) {
 console.log('✅ Fichier corrections-essentielles.js temporairement désactivé');
 </script>
 <script>
-// ===== DÉTECTION ET OPTIMISATION MOBILE =====
+// ===== DÉTECTION ET OPTIMISATION MOBILE CORRIGÉE =====
 function optimizeForMobile() {
     console.log('📱 Optimisation mobile en cours...');
     
@@ -10418,64 +10349,97 @@ function optimizeForMobile() {
     
     if (isMobile) {
         document.body.classList.add('mobile-device');
-        console.log('📱 Appareil mobile détecté');
+        console.log('📱 Appareil mobile détecté - Scroll activé');
         
         if (isIOS) {
             document.body.classList.add('ios-device');
             console.log('🍎 Appareil iOS');
+            // Styles spécifiques iOS
+            document.body.style.webkitOverflowScrolling = 'touch';
         }
         
         if (isAndroid) {
             document.body.classList.add('android-device');
-            console.log('🤖 Appareil Android');
+            console.log('🤖 Appareil Android - Scroll Android activé');
+            
+            // ✅ CORRECTION CRITIQUE : Activer les événements tactiles
+            document.body.style.touchAction = 'pan-y';
+            document.body.style.webkitTapHighlightColor = 'transparent';
+            
+            // ✅ Forcer la détection des événements tactiles
+            document.documentElement.style.cursor = 'pointer';
+            
+            // ✅ Ajouter un écouteur pour les événements tactiles
+            document.addEventListener('touchstart', function() {
+                console.log('✅ Touch event détecté sur Android');
+            }, { passive: true });
         }
         
-        // Optimisations spécifiques mobile
+        // Optimisations sécurisées
         optimizeTouchInteractions();
-        preventHorizontalScroll();
         optimizeImagesForMobile();
+        
+        // ✅ FORCER le scroll sur Android
+        setTimeout(function() {
+            if (isAndroid) {
+                document.body.style.overflowY = 'auto';
+                document.documentElement.style.overflowY = 'auto';
+                console.log('✅ Scroll forcé sur Android');
+            }
+        }, 1000);
     }
 }
 
 function optimizeTouchInteractions() {
-    // Améliorer les interactions tactiles
-    const touchElements = document.querySelectorAll('button, a, .product-card, .category-btn');
+    // ✅ VERSION CORRIGÉE : Améliorer les interactions tactiles
+    console.log('👆 Optimisation des interactions tactiles...');
+    
+    const touchElements = document.querySelectorAll('button, a, .product-card, .category-btn, .add-to-cart, .quick-view');
     touchElements.forEach(element => {
         element.style.cursor = 'pointer';
+        element.style.minHeight = '44px'; // Taille minimale pour les doigts
+        element.style.minWidth = '44px';
+        
+        // ✅ Événements tactiles sécurisés
+        element.addEventListener('touchstart', function() {
+            this.style.opacity = '0.8';
+        }, { passive: true });
+        
+        element.addEventListener('touchend', function() {
+            this.style.opacity = '1';
+        }, { passive: true });
     });
-}
-
-function preventHorizontalScroll() {
-    // Empêcher le défilement horizontal
-    window.addEventListener('scroll', function() {
-        if (window.scrollX !== 0) {
-            window.scrollTo(0, window.scrollY);
-        }
-    });
-    
-    // Empêcher le zoom sur le document
-    document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) {
-            e.preventDefault();
-        }
-    }, { passive: false });
 }
 
 function optimizeImagesForMobile() {
-    // Chargement optimisé des images pour mobile
-    const images = document.querySelectorAll('img[data-src]');
+    // ✅ VERSION CORRIGÉE : Chargement optimisé des images pour mobile
+    console.log('🖼️ Optimisation des images pour mobile...');
+    
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    if (images.length === 0) return;
+    
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.getAttribute('data-src');
-                img.removeAttribute('data-src');
-                imageObserver.unobserve(img);
+                // S'assurer que l'image est chargée
+                if (img.complete) {
+                    observer.unobserve(img);
+                }
             }
         });
+    }, {
+        rootMargin: '50px 0px', // Charger 50px avant d'être visible
+        threshold: 0.1
     });
     
-    images.forEach(img => imageObserver.observe(img));
+    images.forEach(img => {
+        // Donner la priorité aux images au-dessus de la ligne de flottaison
+        if (img.getBoundingClientRect().top < window.innerHeight) {
+            img.loading = 'eager';
+        }
+        imageObserver.observe(img);
+    });
 }
 
 // Initialisation au chargement
@@ -10676,628 +10640,110 @@ document.addEventListener('DOMContentLoaded', function() {
     ↑ Haut de page
 </button>
 <script>
-    console.log('🔧 Application correctifs scroll Android...');
-
-    function fixAndroidScroll() {
-        // 1. Appliquer les styles correctifs
-        document.body.style.overflowY = 'auto';
-        document.body.style.webkitOverflowScrolling = 'touch';
-        document.body.style.height = 'auto';
-        document.body.style.minHeight = '100vh';
-        
-        // 2. Correction hauteur viewport mobile
-        function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-            document.body.style.minHeight = `calc(var(--vh, 1vh) * 100)`;
-        }
-        
-        // 3. Vérifier si le scroll fonctionne
-        function testScroll() {
-            const canScroll = document.documentElement.scrollHeight > window.innerHeight;
-            console.log('🔄 Test scroll:', canScroll ? '✅ OK' : '❌ BLOQUÉ');
-            
-            if (!canScroll) {
-                // Correctif d'urgence
-                document.documentElement.style.overflowY = 'scroll';
-                document.body.style.position = 'static';
-                console.log('🚨 Application correctif d\'urgence');
-            }
-        }
-        
-        // Exécuter les corrections
-        setViewportHeight();
-        setTimeout(testScroll, 100);
-        
-        // Réappliquer au redimensionnement
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', function() {
-            setTimeout(setViewportHeight, 300);
-            setTimeout(testScroll, 500);
-        });
-    }
-
-    // Lancer au chargement
-    document.addEventListener('DOMContentLoaded', fixAndroidScroll);
-    window.addEventListener('load', fixAndroidScroll);
-
-    // Test manuel
-    window.testScrollFix = function() {
-        console.log('🧪 Test manuel du scroll...');
-        console.log('Position:', window.pageYOffset);
-        
-        window.scrollTo({ top: 500, behavior: 'smooth' });
-        
-        setTimeout(() => {
-            console.log('Nouvelle position:', window.pageYOffset);
-            if (window.pageYOffset < 10) {
-                console.log('🚨 SCROLL BLOQUÉ - Forçage...');
-                document.body.style.overflowY = 'scroll';
-                document.documentElement.style.overflowY = 'scroll';
-                window.scrollTo({ top: 1000 });
-            }
-        }, 800);
-    };
-    </script>
-<!-- 🔧 CORRECTION DÉFINITIVE SCROLL TACTILE -->
-<script>
-// Attendre que tout soit chargé
-window.addEventListener('load', function() {
-    console.log('🖐️ Initialisation scroll tactile...');
+// ===== RÉPARATION URGENTE SCROLL ANDROID =====
+(function repairAndroidScroll() {
+    // Détecter Android
+    const isAndroid = /Android/.test(navigator.userAgent);
     
-    // CORRECTION 1: Activer les événements tactiles
-    function enableTouchEvents() {
-        console.log('👆 Activation événements tactiles...');
+    if (isAndroid) {
+        console.log('🔧 Réparation scroll Android en cours...');
         
-        // Forcer l'activation des touch events
-        document.addEventListener('touchstart', function(e) {
-            console.log('🖐️ Touch DÉTECTÉ! Doigts:', e.touches.length);
-            e.preventDefault();
-        }, { passive: false });
+        // 1. RÉACTIVER LES ÉVÉNEMENTS TACTILES
+        document.body.addEventListener('touchstart', function() {}, { passive: true });
+        document.body.addEventListener('touchmove', function() {}, { passive: true });
+        document.body.addEventListener('touchend', function() {}, { passive: true });
         
-        // Permettre le scroll tactile
-        document.addEventListener('touchmove', function(e) {
-            // NE PAS bloquer le scroll
-            // Laisser le navigateur gérer le défilement
-        }, { passive: true });
-        
-        // Marquer comme supporté
-        document.body.dataset.touchEnabled = 'true';
-        console.log('✅ Touch events activés');
-    }
-    
-    // CORRECTION 2: Styles pour le scroll tactile
-    function applyTouchScrollStyles() {
-        console.log('🎨 Application styles scroll tactile...');
-        
-        const touchStyles = `
-            /* Scroll tactile moderne */
-            html, body {
-                overscroll-behavior-y: auto !important;
-                -webkit-overflow-scrolling: touch !important;
-                touch-action: pan-y !important;
-            }
+        // 2. FORCER LES STYLES DE SCROLL
+        const forceScrollStyles = function() {
+            document.documentElement.style.overflowY = 'auto';
+            document.body.style.overflowY = 'auto';
+            document.body.style.touchAction = 'pan-y';
+            document.body.style.webkitOverflowScrolling = 'touch';
             
-            /* Désactiver tout blocage */
-            body {
-                user-select: none !important;
-                -webkit-user-select: none !important;
-                -webkit-touch-callout: none !important;
-            }
-            
-            /* Permettre le scroll partout */
-            * {
-                touch-action: pan-y !important;
-            }
-            
-            /* Correction spécifique Android */
-            @media (hover: none) and (pointer: coarse) {
-                body {
-                    overflow-y: scroll !important;
-                    position: static !important;
-                    height: auto !important;
-                }
-            }
-        `;
-        
-        const style = document.createElement('style');
-        style.id = 'touch-scroll-fix';
-        style.textContent = touchStyles;
-        document.head.appendChild(style);
-    }
-    
-    // CORRECTION 3: Désactiver les bloqueurs de scroll
-    function removeScrollBlockers() {
-        console.log('🗑️ Nettoyage bloqueurs de scroll...');
-        
-        // Trouver et désactiver tout eventListener qui pourrait bloquer
-        const originalAddEventListener = EventTarget.prototype.addEventListener;
-        EventTarget.prototype.addEventListener = function(type, listener, options) {
-            // Ne pas bloquer touchmove
-            if (type === 'touchmove' && listener.toString().includes('preventDefault')) {
-                console.log('⚠️ Bloqueur touchmove détecté et ignoré');
-                return;
-            }
-            originalAddEventListener.call(this, type, listener, options);
+            // Appliquer à tous les conteneurs scrollables
+            document.querySelectorAll('.cart-items-container, #ai-messages, .modal-body').forEach(el => {
+                el.style.overflowY = 'auto';
+                el.style.webkitOverflowScrolling = 'touch';
+            });
         };
         
-        // Supprimer les styles problématiques
-        const problematicStyles = [
-            'overflow: hidden',
-            'touch-action: none',
-            'pointer-events: none'
-        ];
+        // Appliquer immédiatement
+        forceScrollStyles();
         
-        document.querySelectorAll('*').forEach(el => {
-            const style = window.getComputedStyle(el);
-            if (problematicStyles.some(s => style.cssText.includes(s))) {
-                el.style.overflow = '';
-                el.style.touchAction = '';
-                el.style.pointerEvents = '';
+        // Réappliquer après un délai
+        setTimeout(forceScrollStyles, 500);
+        setTimeout(forceScrollStyles, 2000);
+        
+        // 3. LOGS DE DÉTECTION
+        console.log('📱 User Agent:', navigator.userAgent);
+        console.log('✅ Touch events supporté:', 'ontouchstart' in window);
+        console.log('✅ Document height:', document.documentElement.scrollHeight);
+        console.log('✅ Window height:', window.innerHeight);
+        
+        // 4. TEST MANUEL DU SCROLL
+        setTimeout(function() {
+            if (document.documentElement.scrollHeight > window.innerHeight) {
+                console.log('✅ Scroll possible - hauteur suffisante');
+                // Forcer un petit défilement pour activer le scroll
+                window.scrollTo(0, 1);
+            } else {
+                console.log('⚠️ Hauteur insuffisante pour le scroll');
             }
-        });
+        }, 1500);
+        
+        console.log('🔧 Réparation Android terminée');
     }
-    
-    // CORRECTION 4: Test du scroll tactile
-    function testTouchScroll() {
-        console.log('🧪 Test scroll tactile...');
-        
-        // Ajouter un overlay de test
-        const testOverlay = document.createElement('div');
-        testOverlay.innerHTML = `
-            <div style="
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(106, 17, 203, 0.1);
-                z-index: 99999;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 1.2rem;
-                text-align: center;
-                pointer-events: none;
-            ">
-                <div style="
-                    background: rgba(0,0,0,0.8);
-                    padding: 20px;
-                    border-radius: 15px;
-                    max-width: 300px;
-                ">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🖐️</div>
-                    <strong>TEST SCROLL TACTILE</strong>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">
-                        Essayez de glisser votre doigt vers le haut ou le bas
-                    </p>
-                    <div id="touch-feedback" style="
-                        margin-top: 15px;
-                        padding: 10px;
-                        background: #27ae60;
-                        border-radius: 8px;
-                        display: none;
-                    ">
-                        ✅ Scroll détecté !
-                    </div>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(testOverlay);
-        
-        // Détecter le scroll manuel
-        let lastScroll = window.pageYOffset;
-        let scrollDetected = false;
-        
-        const scrollCheck = setInterval(() => {
-            if (window.pageYOffset !== lastScroll && !scrollDetected) {
-                scrollDetected = true;
-                document.getElementById('touch-feedback').style.display = 'block';
-                console.log('🎉 SCROLL MANUEL DÉTECTÉ !');
-                
-                // Supprimer l'overlay après 2 secondes
-                setTimeout(() => {
-                    testOverlay.remove();
-                    clearInterval(scrollCheck);
-                }, 2000);
-            }
-            lastScroll = window.pageYOffset;
-        }, 100);
-        
-        // Supprimer l'overlay après 10 secondes
-        setTimeout(() => {
-            if (!scrollDetected) {
-                testOverlay.remove();
-                clearInterval(scrollCheck);
-                console.log('⚠️ Aucun scroll manuel détecté');
-            }
-        }, 10000);
-    }
-    
-    // EXÉCUTER TOUTES LES CORRECTIONS
-    console.log('🚀 Lancement corrections scroll...');
-    
-    // 1. Désactiver les bloqueurs
-    removeScrollBlockers();
-    
-    // 2. Appliquer les styles
-    setTimeout(applyTouchScrollStyles, 100);
-    
-    // 3. Activer les événements tactiles
-    setTimeout(enableTouchEvents, 200);
-    
-    // 4. Tester
-    setTimeout(testTouchScroll, 1000);
-    
-    // 5. Fonction de test manuel
-    window.testTouchScrollFix = function() {
-        console.log('🔄 Test manuel scroll tactile...');
-        console.log('Touch support:', 'ontouchstart' in window ? '✅ OUI' : '❌ NON');
-        console.log('Position actuelle:', window.pageYOffset);
-        
-        // Essayer de scroller avec JS
-        window.scrollTo({ top: window.pageYOffset + 300, behavior: 'smooth' });
-        
-        // Vérifier
-        setTimeout(() => {
-            console.log('Nouvelle position:', window.pageYOffset);
-            console.log('Différence:', window.pageYOffset - (window.pageYOffset - 300));
-            
-            // Tester le scroll manuel
-            alert('🎯 TEST SCROLL MANUEL\n\n1. Gardez cette alerte ouverte\n2. Essayez de glisser votre doigt sur l\'écran\n3. Le contenu doit défiler derrière l\'alerte\n\nSi ça fonctionne, cliquez OK');
-        }, 800);
-    };
-    
-    console.log('✅ Correctifs appliqués. Tapez testTouchScrollFix() pour tester');
-});
-
-// Correction immédiate au chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Style d'urgence immédiat
-    const urgentStyle = document.createElement('style');
-    urgentStyle.textContent = `
-        /* 🚨 CORRECTION URGENTE SCROLL TACTILE */
-        body {
-            touch-action: pan-y !important;
-            -webkit-touch-callout: none !important;
-            -webkit-user-select: none !important;
-            user-select: none !important;
-            overflow-y: auto !important;
-        }
-        
-        /* Permettre le scroll partout */
-        html, body, .main-container, .container, section {
-            overscroll-behavior-y: auto !important;
-        }
-        
-        /* Désactiver tout blocage tactile */
-        * {
-            touch-action: pan-y !important;
-        }
-    `;
-    document.head.appendChild(urgentStyle);
-});
-</script>
-<!-- ===== SCRIPT DE GESTION AUDIO COMPLET ===== -->
-<script>
-// ===== CORRECTION AUDIOCONTEXT ET GESTION AUDIO =====
-(function() {
-    console.log('🎵 Initialisation gestion audio...');
-    
-    // État de déblocage audio
-    let audioContextUnlocked = false;
-    let mediaElementsUnlocked = false;
-    
-    // 1. FONCTION POUR DÉBLOQUER AUDIOCONTEXT
-    function unlockAudioContext() {
-        if (audioContextUnlocked) return true;
-        
-        try {
-            // Vérifier si AudioContext est supporté
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) {
-                console.log('⚠️ AudioContext non supporté');
-                return false;
-            }
-            
-            // Créer et débloquer l'AudioContext
-            const audioContext = new AudioContext();
-            
-            // Créer un buffer silencieux (1 seconde de silence)
-            const buffer = audioContext.createBuffer(1, audioContext.sampleRate, audioContext.sampleRate);
-            const source = audioContext.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioContext.destination);
-            
-            // Démarrer et arrêter immédiatement
-            source.start(0);
-            source.stop(0.001);
-            
-            // Suspendre pour économiser la batterie
-            setTimeout(() => {
-                if (audioContext.state !== 'closed') {
-                    audioContext.suspend().then(() => {
-                        console.log('✅ AudioContext suspendu (économie batterie)');
-                    });
-                }
-            }, 100);
-            
-            audioContextUnlocked = true;
-            console.log('✅ AudioContext débloqué avec succès');
-            return true;
-            
-        } catch (error) {
-            console.warn('⚠️ Erreur déblocage AudioContext:', error.message);
-            return false;
-        }
-    }
-    
-    // 2. FONCTION POUR DÉBLOQUER TOUS LES ÉLÉMENTS MÉDIA
-    function unlockMediaElements() {
-        if (mediaElementsUnlocked) return;
-        
-        // Désactiver autoplay sur tous les éléments audio/video
-        document.querySelectorAll('audio, video').forEach(media => {
-            // Désactiver la lecture automatique
-            media.autoplay = false;
-            
-            // Économiser les données mobile
-            media.preload = 'none';
-            
-            // Activer les contrôles si nécessaire
-            if (!media.hasAttribute('controls')) {
-                media.setAttribute('controls', 'controls');
-            }
-            
-            // Gérer les erreurs
-            media.addEventListener('error', function(e) {
-                console.warn(`❌ Erreur média ${this.tagName}:`, this.error);
-                
-                // Afficher un message d'erreur convivial
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'media-error';
-                errorDiv.innerHTML = `
-                    <p style="color: #e74c3c; font-size: 0.9rem; margin: 5px 0;">
-                        ⚠️ ${this.tagName === 'AUDIO' ? 'Audio' : 'Vidéo'} non disponible
-                    </p>
-                `;
-                
-                if (!this.parentNode.querySelector('.media-error')) {
-                    this.parentNode.appendChild(errorDiv);
-                }
-            });
-            
-            // Gérer le chargement réussi
-            media.addEventListener('canplay', function() {
-                console.log(`✅ ${this.tagName} prêt à être joué`);
-            });
-        });
-        
-        mediaElementsUnlocked = true;
-        console.log('✅ Tous les éléments média débloqués');
-    }
-    
-    // 3. FONCTION PRINCIPALE DE DÉBLOCAGE
-    function unlockAllAudio() {
-        unlockAudioContext();
-        unlockMediaElements();
-        
-        // Vérifier le fichier audio de bienvenue
-        checkWelcomeAudio();
-    }
-    
-    // 4. VÉRIFIER LE FICHIER AUDIO DE BIENVENUE
-    function checkWelcomeAudio() {
-        const audioElements = document.querySelectorAll('audio[src*="bienvenue"], audio source[src*="bienvenue"]');
-        
-        audioElements.forEach(audio => {
-            const audioUrl = audio.src || audio.getAttribute('src');
-            if (!audioUrl) return;
-            
-            // Vérifier si le fichier existe
-            fetch(audioUrl, { method: 'HEAD', cache: 'no-cache' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Fichier non trouvé');
-                    }
-                    console.log('✅ Fichier audio trouvé:', audioUrl);
-                })
-                .catch(error => {
-                    console.warn('⚠️ Fichier audio manquant:', audioUrl);
-                    
-                    // Afficher un message d'avertissement
-                    const container = audio.closest('.audio-welcome, .audio-container') || 
-                                     audio.parentNode;
-                    
-                    if (container && !container.querySelector('.audio-missing-warning')) {
-                        const warning = document.createElement('div');
-                        warning.className = 'audio-missing-warning';
-                        warning.innerHTML = `
-                            <div style="
-                                background: #fff3cd; 
-                                border: 1px solid #ffeaa7; 
-                                border-radius: 8px; 
-                                padding: 10px; 
-                                margin-top: 10px; 
-                                text-align: center;
-                            ">
-                                <p style="margin: 0; color: #856404; font-size: 0.9rem;">
-                                    <span style="font-size: 1.2em;">🔇</span><br>
-                                    <strong>Message audio temporairement indisponible</strong><br>
-                                    <span style="font-size: 0.8rem;">Retour très prochainement !</span>
-                                </p>
-                            </div>
-                        `;
-                        container.appendChild(warning);
-                    }
-                });
-        });
-    }
-    
-    // 5. DÉCLENCHEURS DE DÉBLOCAGE
-    // Liste des événements qui débloquent l'audio
-    const unlockTriggers = [
-        'click',        // Clic souris
-        'touchstart',   // Touch mobile
-        'touchend',     // Fin de touch
-        'scroll',       // Défilement
-        'keydown',      // Touche clavier
-        'mousedown',    // Pression souris
-        'pointerdown'   // Pression tactile
-    ];
-    
-    // Fonction pour attacher les déclencheurs
-    function setupUnlockTriggers() {
-        let unlocked = false;
-        
-        function triggerUnlock() {
-            if (unlocked) return;
-            unlocked = true;
-            
-            console.log('🎯 Déclenchement audio par:', event ? event.type : 'initial');
-            unlockAllAudio();
-            
-            // Retirer tous les écouteurs après déblocage
-            unlockTriggers.forEach(eventType => {
-                document.removeEventListener(eventType, triggerUnlock);
-            });
-        }
-        
-        // Attacher les écouteurs d'événements
-        unlockTriggers.forEach(eventType => {
-            document.addEventListener(eventType, triggerUnlock, { 
-                passive: true,
-                once: false // Nous gérons nous-même le "once"
-            });
-        });
-        
-        // Débloquer immédiatement si la page est déjà interactive
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            setTimeout(triggerUnlock, 100);
-        }
-    }
-    
-    // 6. GESTION SPÉCIFIQUE DE L'AUDIO DE BIENVENUE
-    function setupWelcomeAudio() {
-        const welcomeAudio = document.querySelector('audio[src*="bienvenue"], audio source[src*="bienvenue"]')?.closest('audio');
-        
-        if (!welcomeAudio) {
-            console.log('ℹ️ Aucun audio de bienvenue trouvé');
-            return;
-        }
-        
-        // Ajouter un ID pour le cibler facilement
-        if (!welcomeAudio.id) {
-            welcomeAudio.id = 'welcome-audio-player';
-        }
-        
-        // S'assurer qu'il a des contrôles
-        welcomeAudio.setAttribute('controls', 'controls');
-        welcomeAudio.removeAttribute('autoplay');
-        welcomeAudio.preload = 'none';
-        
-        // Ajouter un message d'instructions
-        const container = welcomeAudio.parentNode;
-        if (container && !container.querySelector('.audio-instructions')) {
-            const instructions = document.createElement('div');
-            instructions.className = 'audio-instructions';
-            instructions.innerHTML = `
-                <p style="
-                    font-size: 0.8rem; 
-                    color: #666; 
-                    margin-top: 5px; 
-                    text-align: center;
-                ">
-                    <span style="font-size: 1.2em;">👆</span><br>
-                    Cliquez sur le bouton play pour écouter
-                </p>
-            `;
-            container.appendChild(instructions);
-        }
-        
-        console.log('✅ Audio de bienvenue configuré');
-    }
-    
-    // 7. INITIALISATION
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DOM chargé - Configuration audio');
-        
-        // Configurer l'audio de bienvenue
-        setupWelcomeAudio();
-        
-        // Configurer les déclencheurs
-        setupUnlockTriggers();
-        
-        // Vérifier les fichiers audio
-        setTimeout(checkWelcomeAudio, 2000);
-    });
-    
-    // 8. INTERFACE PUBLIQUE (optionnel)
-    window.audioManager = {
-        unlock: unlockAllAudio,
-        isUnlocked: () => audioContextUnlocked && mediaElementsUnlocked,
-        checkAudioFiles: checkWelcomeAudio
-    };
-    
-    console.log('✅ Gestion audio initialisée');
 })();
 </script>
-
-<!-- ===== STYLES POUR LES MESSAGES AUDIO ===== -->
-<style>
-/* Styles pour les messages d'erreur/avertissement audio */
-.media-error, .audio-missing-warning, .audio-instructions {
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Amélioration du lecteur audio */
-audio {
-    border-radius: 10px;
-    background: #f8f9fa;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-audio:hover {
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.2);
-}
-
-/* Style pour les conteneurs audio */
-.audio-welcome, .audio-container {
-    transition: all 0.3s ease;
-}
-
-/* Indicateur audio débloqué */
-.audio-unlocked-indicator {
-    display: none;
-    background: #27ae60;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    margin-left: 10px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-/* Mode mobile */
-@media (max-width: 768px) {
-    audio {
-        width: 100%;
-        max-width: 300px;
+<script>
+// ===== PROTECTION ANTI-RÉGRESSION SCROLL ANDROID =====
+(function protectAndroidScroll() {
+    // Détecter Android
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (isAndroid) {
+        console.log('🛡️ Protection scroll Android activée');
+        
+        // Empêcher toute régression
+        const originalStyle = {
+            htmlOverflow: document.documentElement.style.overflowY,
+            bodyOverflow: document.body.style.overflowY
+        };
+        
+        // Surveillance des changements de style
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && 
+                    mutation.attributeName === 'style') {
+                    
+                    const element = mutation.target;
+                    const style = getComputedStyle(element);
+                    
+                    // Si quelqu'un remet overflow:hidden sur html/body
+                    if ((element === document.documentElement || 
+                         element === document.body) &&
+                        style.overflowY === 'hidden') {
+                        
+                        console.warn('🚫 Tentative de bloquer le scroll détectée - Correction automatique');
+                        element.style.overflowY = 'auto';
+                        element.style.webkitOverflowScrolling = 'touch';
+                    }
+                }
+            });
+        });
+        
+        // Observer html et body
+        observer.observe(document.documentElement, { attributes: true });
+        observer.observe(document.body, { attributes: true });
+        
+        // Protection au chargement
+        window.addEventListener('load', function() {
+            document.documentElement.style.overflowY = 'auto';
+            document.body.style.overflowY = 'auto';
+            document.body.style.touchAction = 'pan-y';
+        });
     }
-}
-</style>
+})();
+</script>
 </body>
 </html> 
