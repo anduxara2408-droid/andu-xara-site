@@ -7819,22 +7819,56 @@ function processWhatsAppPayment(message, orderData) {
         // NUMÉRO DE TÉLÉPHONE CORRECT POUR WHATSAPP
         const phoneNumber = "22234196304"; // Votre numéro WhatsApp sans le +
         
-        // FORMATER LE MESSAGE POUR WHATSAPP
-        const encodedMessage = encodeURIComponent(message);
+        // FORMATER LE MESSAGE POUR WHATSAPP (version corrigée)
+        const cleanMessage = message.replace(/[\r\n]/g, '%0a'); // Utiliser %0a pour les sauts de ligne
+        const encodedMessage = encodeURIComponent(cleanMessage);
         
-        // CRÉER LE LIEN WHATSAPP CORRECT
-        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        // DÉTECTION DU DISPOSITIF POUR CRÉER LE BON LIEN
+        const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        
+        let whatsappLink;
+        
+        if (isMobile) {
+            // Version mobile - utiliser le protocole whatsapp://
+            whatsappLink = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
+        } else {
+            // Version desktop/web - utiliser le site web WhatsApp
+            whatsappLink = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+        }
         
         console.log('📱 Lien WhatsApp:', whatsappLink);
         
-        // OUVRIR WHATSAPP
-        window.open(whatsappLink, '_blank');
+        // STRATÉGIE DE FALBACK POUR L'OUVERTURE
+        const openWhatsApp = function(url) {
+            // Méthode 1: Ouvrir dans une nouvelle fenêtre
+            const newWindow = window.open(url, '_blank');
+            
+            // Vérifier si l'ouverture a réussi
+            setTimeout(function() {
+                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                    // Méthode 2: Rediriger la page actuelle
+                    window.location.href = url;
+                    
+                    // Méthode 3: Fallback final - Lien web standard
+                    setTimeout(function() {
+                        const fallbackLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+                        window.open(fallbackLink, '_blank');
+                        
+                        // Afficher un message d'aide
+                        showNotification('📱 Si WhatsApp ne s\'ouvre pas, copiez ce lien : https://wa.me/' + phoneNumber, 'info');
+                    }, 1000);
+                }
+            }, 500);
+        };
+        
+        // Ouvrir WhatsApp
+        openWhatsApp(whatsappLink);
         
         // Afficher le bon message selon le statut promo
         const hasPromo = orderData.promoStatusBeforeCheckout && orderData.promoStatusBeforeCheckout.hasActivePromo;
         const promoMessage = hasPromo ? 
-            '✅ WhatsApp ouvert ! Notre équipe vous contactera pour votre commande avec réduction.' : 
-            '✅ WhatsApp ouvert ! Notre équipe vous contactera.';
+            '✅ WhatsApp ouvert ! Notre équiture vous contactera pour votre commande avec réduction.' : 
+            '✅ WhatsApp ouvert ! Notre équiture vous contactera.';
             
         showNotification(promoMessage, 'success');
         
