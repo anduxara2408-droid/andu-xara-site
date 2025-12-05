@@ -3653,74 +3653,6 @@ h1, h2, h3, p, span {
 #backToTopArrow.show {
     animation: fadeInUp 0.3s ease forwards;
 }
-/* ===== BOUTON TEXTE DISCRET EN BAS AU MILIEU ===== */
-#backToTopBtn.bottom-center-back {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(102, 126, 234, 0.9);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    z-index: 999;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    max-width: 200px;
-    text-align: center;
-    white-space: nowrap;
-}
-
-#backToTopBtn.bottom-center-back:hover {
-    background: rgba(102, 126, 234, 1);
-    transform: translateX(-50%) translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-#backToTopBtn.bottom-center-back:active {
-    transform: translateX(-50%) scale(0.95);
-}
-
-/* Animation d'apparition */
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-}
-
-#backToTopBtn.bottom-center-back.show {
-    animation: slideUpFade 0.3s ease forwards;
-}
-
-/* Version mobile */
-@media (max-width: 768px) {
-    #backToTopBtn.bottom-center-back {
-        bottom: 15px;
-        padding: 8px 16px;
-        font-size: 13px;
-        max-width: 180px;
-    }
-}
-
-@media (max-width: 480px) {
-    #backToTopBtn.bottom-center-back {
-        bottom: 10px;
-        padding: 7px 14px;
-        font-size: 12px;
-        max-width: 160px;
-    }
-}
 </style>
 <!-- Google Analytics GA4 - Version corrigée et sécurisée -->
 <script>
@@ -10364,16 +10296,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFloatingCart();
 
     // Fermer le panier en cliquant à l'extérieur
-    document.addEventListener('click', function(event) {
-        const cart = document.getElementById('floating-cart');
-        const toggle = document.querySelector('.cart-toggle');
+document.addEventListener('click', function(event) {
+    const cart = document.getElementById('floating-cart');
+    const toggle = document.querySelector('.cart-toggle');
 
-        if (cart && cart.classList.contains('open') &&
-            !cart.contains(event.target) &&
-            !toggle.contains(event.target)) {
-            closeFloatingCart();
-        }
-    });
+    if (cart && cart.classList.contains('open') &&
+        !cart.contains(event.target) &&
+        !toggle.contains(event.target)) {
+        closeFloatingCart();
+    }
+}); 
 
     // ===== INITIALISATION VUE RAPIDE =====
     console.log('👁️ Initialisation de la vue rapide...');
@@ -10454,16 +10386,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('❌ processFloatingCheckout NON DÉFINI');
     }
     
-    // ===== OPTIMISATION MOBILE =====
-    console.log('📱 Optimisation mobile...');
-    optimizeForMobile();
-    
-    // ===== INITIALISATION BOUTON RETOUR EN HAUT =====
-    console.log('⬆️ Initialisation bouton retour en haut...');
-    setTimeout(initBackToTopButton, 500);
-    
     console.log('🎯 Panier chargé avec', floatingCart.length, 'produits');
 });
+
   </script>
 <!-- Corrections permanentes - TEMPORAIREMENT DÉSACTIVÉ -->
 <!-- <script src="corrections-essentielles.js"></script> -->
@@ -10791,92 +10716,6 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 <script>
-// === CODE FINAL À AJOUTER DANS VOTRE FICHIER ===
-function initBackToTopButton() {
-    console.log('⬆️ Initialisation bouton retour en haut...');
-    
-    const btn = document.getElementById('backToTopBtn');
-    if (!btn) {
-        console.error('❌ Bouton non trouvé');
-        return;
-    }
-    
-    // Masquer au départ
-    btn.style.display = 'none';
-    btn.style.opacity = '0';
-    
-    // Fonction pour vérifier si on doit montrer le bouton
-    function shouldShowButton() {
-        // Simple : montrer quand scrollé plus de 300px
-        return window.scrollY > 300;
-    }
-    
-    // Fonction pour mettre à jour la visibilité
-    function updateVisibility() {
-        if (shouldShowButton()) {
-            btn.style.display = 'block';
-            setTimeout(() => {
-                btn.style.opacity = '1';
-                btn.classList.add('show');
-            }, 10);
-        } else {
-            btn.style.opacity = '0';
-            btn.classList.remove('show');
-            setTimeout(() => {
-                btn.style.display = 'none';
-            }, 300);
-        }
-    }
-    
-    // Fonction ULTIME pour retour en haut (garantie)
-    function scrollToTopUltimate() {
-        console.log('⬆️ Début scroll vers le haut...');
-        
-        // Effet visuel
-        btn.style.transform = 'translateX(-50%) scale(0.9)';
-        
-        // Méthode 1 - Standard
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        // Méthode 2 - Alternative
-        document.documentElement.scrollTop = 0;
-        
-        // Méthode 3 - Body
-        document.body.scrollTop = 0;
-        
-        // Réinitialiser l'effet
-        setTimeout(() => {
-            btn.style.transform = 'translateX(-50%) scale(1)';
-            console.log('✅ Scroll terminé');
-        }, 300);
-    }
-    
-    // Événements
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        scrollToTopUltimate();
-    });
-    
-    window.addEventListener('scroll', updateVisibility);
-    window.addEventListener('resize', updateVisibility);
-    
-    // Initialiser
-    updateVisibility();
-    
-    console.log('✅ Bouton retour en haut initialisé avec succès');
-}
-
-// Appeler cette fonction dans votre DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-    // ... votre code existant ...
-    
-    // Initialiser le bouton retour en haut après 500ms
-    setTimeout(initBackToTopButton, 500);
-    
-    // ... suite de votre code ...
-});
-
 // ===== PROTECTION ANTI-RÉGRESSION SCROLL ANDROID =====
 (function protectAndroidScroll() {
     // Détecter Android
@@ -10926,110 +10765,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })();
 
+// ===== BOUTON FLÈCHE RETOUR EN HAUT =====
 function initBackToTopButton() {
-    const backToTopBtn = document.getElementById('backToTopBtn');
+    const backToTopBtn = document.getElementById('backToTopArrow');
     
     if (!backToTopBtn) {
-        console.error('❌ Bouton retour en haut non trouvé - vérifiez le HTML');
+        console.error('❌ Bouton retour en haut non trouvé');
         return;
     }
     
-    console.log('✅ Bouton trouvé:', backToTopBtn);
-    
-    // Masquer le bouton au départ
-    backToTopBtn.style.display = 'none';
-    
-    // Fonction pour vérifier si on est en bas de page
-    function checkIfAtBottom() {
+    // Afficher/cacher le bouton au défilement
+    window.addEventListener('scroll', function() {
+        // Calculer la position de défilement
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        const scrollPosition = scrollTop + windowHeight;
         
-        // Vérifier si on est à moins de 150px du bas
-        const isAtBottom = (documentHeight - scrollPosition) <= 150;
+        // Vérifier si l'utilisateur est presque en bas
+        const isNearBottom = (scrollTop + windowHeight) >= (documentHeight - 100);
         
-        console.log('📏 Scroll position:', {
-            scrollTop: scrollTop,
-            windowHeight: windowHeight,
-            documentHeight: documentHeight,
-            scrollPosition: scrollPosition,
-            isAtBottom: isAtBottom
-        });
-        
-        return isAtBottom;
-    }
-    
-    // Fonction pour afficher/masquer le bouton
-    function updateButtonVisibility() {
-        const isAtBottom = checkIfAtBottom();
-        
-        if (isAtBottom) {
-            // Afficher avec animation
+        // Afficher le bouton uniquement quand on est presque en bas
+        if (isNearBottom) {
             backToTopBtn.style.display = 'block';
-            setTimeout(() => {
-                backToTopBtn.classList.add('show');
-            }, 10);
-            console.log('⬆️ Bouton AFFICHÉ (en bas de page)');
-        } else {
-            // Masquer
-            backToTopBtn.classList.remove('show');
-            setTimeout(() => {
-                backToTopBtn.style.display = 'none';
-            }, 300); // Attendre la fin de l'animation
-            console.log('⬇️ Bouton MASQUÉ');
+        } else if (scrollTop < 100) {
+            // Cacher quand on est tout en haut
+            backToTopBtn.style.display = 'none';
         }
-    }
+    });
     
     // Fonction pour remonter en haut
-    function scrollToTop() {
-        console.log('⬆️ Début scroll vers le haut...');
-        
-        // Animation de clic
-        backToTopBtn.style.transform = 'translateX(-50%) scale(0.9)';
-        
-        // Scroll vers le haut
+    backToTopBtn.addEventListener('click', function() {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
         
-        // Réinitialiser après animation
+        // Animation de clic
+        this.style.transform = 'scale(0.9)';
         setTimeout(() => {
-            backToTopBtn.style.transform = 'translateX(-50%) scale(1)';
-            console.log('✅ Scroll terminé');
-        }, 300);
-    }
-    
-    // Événement de clic SUR LE BOUTON
-    backToTopBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log('🖱️ Bouton cliqué');
-        scrollToTop();
+            this.style.transform = 'scale(1)';
+        }, 150);
     });
     
-    // Événement de scroll SUR LA FENÊTRE
-    window.addEventListener('scroll', function() {
-        updateButtonVisibility();
-    });
-    
-    // Vérifier aussi au redimensionnement
-    window.addEventListener('resize', function() {
-        updateButtonVisibility();
-    });
-    
-    // Initialiser l'état
-    updateButtonVisibility();
-    
-    // Debug: ajouter un test manuel
-    window.testBottom = function() {
-        console.log('🧪 Test manuel - Forcer en bas');
-        window.scrollTo(0, document.documentElement.scrollHeight);
-    };
-    
-    console.log('✅ Bouton retour en haut initialisé avec succès');
-    console.log('💡 Tapez testBottom() dans la console pour tester');
+    console.log('✅ Bouton retour en haut initialisé');
 }
 
 // Initialiser au chargement
@@ -11038,7 +10816,5 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initBackToTopButton, 1000);
 });
 </script>
-<!-- Bouton texte discret retour en haut (apparaît seulement en bas) -->
-<button id="backToTopBtn" class="bottom-center-back">↑ Retour en haut</button>
 </body>
 </html> 
