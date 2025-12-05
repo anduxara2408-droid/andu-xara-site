@@ -7816,65 +7816,78 @@ function processWhatsAppPayment(message, orderData) {
     const whatsappMessage = `💬 CONTACT WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour :\n• Confirmer votre commande\n• Choisir le mode de paiement\n• Organiser la livraison\n\n🕒 Réponse sous 5 minutes !\n\n✅ OK → Ouvrir WhatsApp maintenant\n❌ Annuler → Retour au panier`;
     
     if (confirm(whatsappMessage)) {
-        // NUMÉRO DE TÉLÉPHONE CORRECT POUR WHATSAPP
-        const phoneNumber = "22234196304"; // Votre numéro WhatsApp sans le +
+        const phoneNumber = "22234196304";
         
-        // FORMATER LE MESSAGE POUR WHATSAPP (version corrigée)
-        const cleanMessage = message.replace(/[\r\n]/g, '%0a'); // Utiliser %0a pour les sauts de ligne
-        const encodedMessage = encodeURIComponent(cleanMessage);
+        // ✅ CORRECTION DÉFINITIVE :
+        // 1. Remplacer les sauts de ligne par %0a (pour URL)
+        // 2. Garder les emojis encodés (ils fonctionnent bien)
+        // 3. Utiliser le lien wa.me qui est plus fiable
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
         
-        // DÉTECTION DU DISPOSITIF POUR CRÉER LE BON LIEN
-        const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        console.log('📱 Lien WhatsApp généré:', whatsappLink);
         
-        let whatsappLink;
-        
-        if (isMobile) {
-            // Version mobile - utiliser le protocole whatsapp://
-            whatsappLink = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
-        } else {
-            // Version desktop/web - utiliser le site web WhatsApp
-            whatsappLink = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+        // ✅ STRATÉGIE D'OUVERTURE AMÉLIORÉE
+        try {
+            // Tentative 1: window.open standard
+            const newWindow = window.open(whatsappLink, '_blank');
+            
+            // Vérifier après 1 seconde
+            setTimeout(() => {
+                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                    console.log('⚠️ window.open échoué, tentative location.href...');
+                    
+                    // Tentative 2: Redirection
+                    window.location.href = whatsappLink;
+                    
+                    // Tentative 3: Fallback après 2 secondes
+                    setTimeout(() => {
+                        // Si toujours pas ouvert, afficher aide
+                        if (confirm('WhatsApp ne s\'ouvre pas. Voulez-vous :\n\n1️⃣ Copier le lien pour l\'ouvrir manuellement\n2️⃣ Recevoir un SMS avec le lien\n3️⃣ Annuler')) {
+                            
+                            const choice = prompt('Choisissez 1, 2 ou 3 :');
+                            
+                            if (choice === '1') {
+                                // Copier le lien
+                                navigator.clipboard.writeText(whatsappLink)
+                                    .then(() => showNotification('✅ Lien copié ! Collez-le dans WhatsApp.', 'success'))
+                                    .catch(() => {
+                                        const input = document.createElement('input');
+                                        input.value = whatsappLink;
+                                        document.body.appendChild(input);
+                                        input.select();
+                                        document.execCommand('copy');
+                                        document.body.removeChild(input);
+                                        showNotification('✅ Lien copié !', 'success');
+                                    });
+                            } else if (choice === '2') {
+                                // SMS avec lien
+                                const smsLink = `sms:${phoneNumber}?body=Voici%20votre%20lien%20WhatsApp:%20${encodeURIComponent(whatsappLink)}`;
+                                window.open(smsLink, '_blank');
+                            }
+                        }
+                    }, 2000);
+                }
+            }, 1000);
+            
+        } catch (error) {
+            console.error('❌ Erreur ouverture WhatsApp:', error);
+            
+            // Fallback ultime
+            window.location.href = whatsappLink;
         }
         
-        console.log('📱 Lien WhatsApp:', whatsappLink);
+        // Notification
+        const hasPromo = orderData.promoStatusBeforeCheckout?.hasActivePromo;
+        showNotification(
+            '✅ WhatsApp ouvert ! Notre équipe vous répondra sous 5 minutes.',
+            'success'
+        );
         
-        // STRATÉGIE DE FALBACK POUR L'OUVERTURE
-        const openWhatsApp = function(url) {
-            // Méthode 1: Ouvrir dans une nouvelle fenêtre
-            const newWindow = window.open(url, '_blank');
-            
-            // Vérifier si l'ouverture a réussi
-            setTimeout(function() {
-                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-                    // Méthode 2: Rediriger la page actuelle
-                    window.location.href = url;
-                    
-                    // Méthode 3: Fallback final - Lien web standard
-                    setTimeout(function() {
-                        const fallbackLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-                        window.open(fallbackLink, '_blank');
-                        
-                        // Afficher un message d'aide
-                        showNotification('📱 Si WhatsApp ne s\'ouvre pas, copiez ce lien : https://wa.me/' + phoneNumber, 'info');
-                    }, 1000);
-                }
-            }, 500);
-        };
-        
-        // Ouvrir WhatsApp
-        openWhatsApp(whatsappLink);
-        
-        // Afficher le bon message selon le statut promo
-        const hasPromo = orderData.promoStatusBeforeCheckout && orderData.promoStatusBeforeCheckout.hasActivePromo;
-        const promoMessage = hasPromo ? 
-            '✅ WhatsApp ouvert ! Notre équiture vous contactera pour votre commande avec réduction.' : 
-            '✅ WhatsApp ouvert ! Notre équiture vous contactera.';
-            
-        showNotification(promoMessage, 'success');
-        
+        // Finaliser la commande après délai
         setTimeout(() => {
             finaliserCommande(orderData.total, message, 'WhatsApp', orderData);
-        }, 3000);
+        }, 2000);
         
     } else {
         showNotification('Ouverture WhatsApp annulée', 'info');
