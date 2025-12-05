@@ -7816,7 +7816,19 @@ function processWhatsAppPayment(message, orderData) {
     const whatsappMessage = `💬 CONTACT WHATSAPP\n\n📱 Nous allons ouvrir WhatsApp pour :\n• Confirmer votre commande\n• Choisir le mode de paiement\n• Organiser la livraison\n\n🕒 Réponse sous 5 minutes !\n\n✅ OK → Ouvrir WhatsApp maintenant\n❌ Annuler → Retour au panier`;
     
     if (confirm(whatsappMessage)) {
-        window.open(`https://wa.me/22234196304?text=${encodeURIComponent(message)}`, '_blank');
+        // NUMÉRO DE TÉLÉPHONE CORRECT POUR WHATSAPP
+        const phoneNumber = "22234196304"; // Votre numéro WhatsApp sans le +
+        
+        // FORMATER LE MESSAGE POUR WHATSAPP
+        const encodedMessage = encodeURIComponent(message);
+        
+        // CRÉER LE LIEN WHATSAPP CORRECT
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        
+        console.log('📱 Lien WhatsApp:', whatsappLink);
+        
+        // OUVRIR WHATSAPP
+        window.open(whatsappLink, '_blank');
         
         // Afficher le bon message selon le statut promo
         const hasPromo = orderData.promoStatusBeforeCheckout && orderData.promoStatusBeforeCheckout.hasActivePromo;
