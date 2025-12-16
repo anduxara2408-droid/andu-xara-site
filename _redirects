@@ -1,3 +1,13 @@
+# ============================================
+# REDIRECTIONS CRITIQUES - HTTPS & WWW
+# ============================================
+http://andu-xara.store/* https://andu-xara.store/:splat 301!
+http://www.andu-xara.store/* https://andu-xara.store/:splat 301!
+https://www.andu-xara.store/* https://andu-xara.store/:splat 301!
+
+# ============================================
+# REDIRECTIONS DES PAGES .html
+# ============================================
 /index.html    /    301
 /contact.html   /contact    301
 /blog.html      /blog       301
@@ -8,3 +18,10 @@
 /conditions-generales.html /conditions-generales 301
 /mentions-legales.html /mentions-legales 301
 /politique-confidentialite.html /politique-confidentialite 301
+/suivi-livraison.html /suivi-livraison 301
+
+# ============================================
+# PAGES D'ERREUR
+# ============================================
+/404.html / 404
+/500.html / 500
