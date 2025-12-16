@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script>
+// Redirections automatiques pour GitHub Pages
+(function() {
+    var url = window.location.href;
+    
+    // 1. Rediriger HTTP vers HTTPS
+    if (url.startsWith('http://')) {
+        window.location.href = url.replace('http://', 'https://');
+        return;
+    }
+    
+    // 2. Rediriger www vers sans www
+    if (url.includes('www.andu-xara.store')) {
+        window.location.href = url.replace('www.andu-xara.store', 'andu-xara.store');
+        return;
+    }
+    
+    // 3. Rediriger index.html vers /
+    if (url.endsWith('/index.html') || url.endsWith('index.html')) {
+        window.location.href = 'https://andu-xara.store/';
+        return;
+    }
+})();
+</script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#8B4513">
