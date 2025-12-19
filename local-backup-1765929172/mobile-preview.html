@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Aperçu Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            gap: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .controls input {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 14px;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            background: #fff;
+            color: #667eea;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .controls button:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .device-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .device-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .device-btn.active {
+            background: #fff;
+            color: #667eea;
+            border-color: #667eea;
+        }
+
+        .device-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.3);
+            border-color: #fff;
+        }
+
+        .phone-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: auto;
+        }
+
+        .phone {
+            width: 100%;
+            max-width: 390px;
+            max-height: 844px;
+            aspect-ratio: 9/16;
+            background: #000;
+            border-radius: 50px;
+            border: 14px solid #1a1a1a;
+            box-shadow: 
+                0 0 0 1px #444,
+                0 20px 60px rgba(0,0,0,0.9),
+                inset 0 0 0 1px #333;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Notch iPhone */
+        .phone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 28px 28px;
+            z-index: 10;
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.8);
+        }
+
+        .status-bar {
+            height: 28px;
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 5;
+        }
+
+        .phone-screen {
+            flex: 1;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+        }
+
+        .phone-screen iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .phone-button {
+            position: absolute;
+            right: -10px;
+            top: 120px;
+            width: 4px;
+            height: 50px;
+            background: #555;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .info {
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        @media (max-height: 900px) {
+            .phone {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <input type="text" id="urlInput" placeholder="http://localhost:5500" value="http://localhost:5500">
+        <button onclick="loadURL()">Go</button>
+        <button onclick="reloadFrame()">🔄 Recharger</button>
+    </div>
+
+    <div class="device-selector">
+        <button class="device-btn active" onclick="selectDevice(390, 844, this, 'iPhone 14')">📱 iPhone 14</button>
+        <button class="device-btn" onclick="selectDevice(412, 915, this, 'Pixel 7')">🤖 Pixel 7</button>
+        <button class="device-btn" onclick="selectDevice(600, 800, this, 'iPad')">📲 iPad</button>
+    </div>
+
+    <div class="phone-wrapper">
+        <div class="phone" id="phone">
+            <div class="status-bar">
+                <span id="time">9:41</span>
+                <span>📶 🔋</span>
+            </div>
+            <div class="phone-screen">
+                <iframe id="preview" src="http://localhost:5500"></iframe>
+            </div>
+            <div class="phone-button"></div>
+        </div>
+    </div>
+
+    <div class="info">
+        💡 Astuce : Laissez cette page ouverte à côté de VS Code. Modifiez votre code et sauvegardez (Ctrl+S) pour voir les changements en temps réel !
+    </div>
+
+    <script>
+        // Mettre à jour l'heure
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('time').textContent = 
+                String(now.getHours()).padStart(2, '0') + ':' + 
+                String(now.getMinutes()).padStart(2, '0');
+        }, 1000);
+
+        // Charger l'URL
+        function loadURL() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) return;
+            document.getElementById('preview').src = url;
+        }
+
+        // Recharger la frame
+        function reloadFrame() {
+            document.getElementById('preview').contentWindow.location.reload();
+        }
+
+        // Sélectionner un appareil
+        function selectDevice(width, height, button, name) {
+            const phone = document.getElementById('phone');
+            phone.style.maxWidth = width + 'px';
+            phone.style.aspectRatio = width + '/' + height;
+            
+            document.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        // Recharger automatiquement quand la page revient au focus
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                reloadFrame();
+            }
+        });
+
+        // Charger la page au démarrage
+        window.addEventListener('load', () => {
+            setTimeout(loadURL, 500);
+        });
+    </script>
+</body>
+</html>

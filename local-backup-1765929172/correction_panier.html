@@ -1,0 +1,350 @@
+<!-- ===== PANIER FLOTTANT CORRIGÉ ===== -->
+<div id="floating-cart" class="floating-cart">
+    <div class="cart-toggle" onclick="toggleFloatingCart()">
+        🛒 <span id="cart-badge-floating">0</span>
+    </div>
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-items-container" id="cart-items-floating">
+            <!-- Les produits du panier apparaîtront ici -->
+        </div>
+        <div class="cart-summary">
+            <div class="cart-total-floating">Total: <span id="cart-total-floating">0</span> MRU</div>
+            <button class="buy-btn" onclick="processFloatingCheckout()">Acheter</button>
+            <button class="close-cart-btn" onclick="closeFloatingCart()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== PANIER FLOTTANT CORRIGÉ ===== */
+.floating-cart {
+    position: fixed;
+    bottom: 80px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.cart-toggle {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.cart-toggle:hover {
+    transform: scale(1.1);
+}
+
+.cart-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: none;
+    max-height: 70vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.floating-cart.open .cart-panel {
+    display: flex;
+}
+
+.cart-items-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(70vh - 150px);
+    padding: 12px;
+}
+
+.cart-summary {
+    padding: 12px;
+    border-top: 2px solid #6a11cb;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.cart-item-floating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+}
+
+.cart-item-info h4 {
+    margin: 0;
+    font-size: 0.85rem;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.cart-item-info p {
+    margin: 3px 0;
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1.2;
+}
+
+.cart-item-price {
+    text-align: right;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+}
+
+.remove-item {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 0.65rem;
+    margin-top: 3px;
+}
+
+.remove-item:hover {
+    background: #ff3742;
+}
+
+.cart-total-floating {
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #2c3e50;
+}
+
+.buy-btn, .close-cart-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.buy-btn {
+    background: #25D366;
+    color: white;
+}
+
+.buy-btn:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+}
+
+.close-cart-btn {
+    background: #6a11cb;
+    color: white;
+}
+
+.close-cart-btn:hover {
+    background: #2575fc;
+}
+
+.empty-cart-floating {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+</style>
+
+<script>
+// ===== VARIABLES GLOBALES PANIER =====
+let floatingCart = JSON.parse(localStorage.getItem('anduxara_cart')) || [];
+let activePromoCode = null;
+let promoDiscount = 0;
+
+// ===== FONCTIONS PRINCIPALES PANIER =====
+function ajouterAuPanier(productName, category, price) {
+    console.log('🛒 Ajout au panier:', productName, 'Prix:', price + ' MRU');
+    
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    const existingItem = floatingCart.find(item => item.name === productName);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        floatingCart.push({
+            name: productName,
+            category: category,
+            price: price,
+            promoPrice: price,
+            quantity: 1,
+            addedAt: new Date().toISOString()
+        });
+    }
+    
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    showNotification('✅ ' + productName + ' ajouté au panier !');
+    updateFloatingCart();
+    openFloatingCart();
+}
+
+function openFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.add('open');
+        console.log('📦 Panier OUVERT');
+    }
+}
+
+function closeFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.remove('open');
+        console.log('📦 Panier FERMÉ');
+    }
+}
+
+function toggleFloatingCart() {
+    const cart = document.getElementById('floating-cart');
+    if (cart) {
+        cart.classList.toggle('open');
+        console.log('📦 Panier état:', cart.classList.contains('open') ? 'OUVERT' : 'FERMÉ');
+        
+        if (cart.classList.contains('open')) {
+            updateFloatingCart();
+        }
+    }
+}
+
+function updateFloatingCart() {
+    const cartItemsContainer = document.getElementById('cart-items-floating');
+    const cartTotalElement = document.getElementById('cart-total-floating');
+    const cartBadgeElement = document.getElementById('cart-badge-floating');
+
+    if (!cartItemsContainer || !cartTotalElement || !cartBadgeElement) {
+        console.error('❌ Éléments du panier non trouvés');
+        return;
+    }
+
+    const totalItems = floatingCart.reduce((sum, item) => sum + item.quantity, 0);
+    cartBadgeElement.textContent = totalItems;
+    cartBadgeElement.style.display = totalItems > 0 ? 'inline' : 'none';
+
+    if (floatingCart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart-floating">Votre panier est vide</div>';
+        cartTotalElement.textContent = '0';
+        return;
+    }
+
+    let total = 0;
+    cartItemsContainer.innerHTML = floatingCart.map((item, index) => {
+        const itemPrice = item.promoPrice || item.price;
+        const itemTotal = itemPrice * item.quantity;
+        total += itemTotal;
+        
+        return `
+            <div class="cart-item-floating">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.quantity} x ${itemPrice} MRU</p>
+                </div>
+                <div class="cart-item-price">
+                    <div>${itemTotal} MRU</div>
+                    <button class="remove-item" onclick="removeFromFloatingCart(${index})">🗑️</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    cartTotalElement.textContent = total;
+}
+
+function removeFromFloatingCart(index) {
+    console.log('🗑️ Retrait du produit index:', index);
+    
+    const cart = document.getElementById('floating-cart');
+    const wasOpen = cart ? cart.classList.contains('open') : false;
+    
+    floatingCart.splice(index, 1);
+    localStorage.setItem('anduxara_cart', JSON.stringify(floatingCart));
+    
+    updateFloatingCart();
+    showNotification('🗑️ Produit retiré du panier');
+    
+    if (wasOpen && cart && floatingCart.length > 0) {
+        cart.classList.add('open');
+    }
+}
+
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff4757' : '#25D366'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 350px;
+    `;
+    notification.innerHTML = `
+        <span>${type === 'error' ? '❌' : '✅'}</span>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Fermeture du panier en cliquant à l'extérieur
+document.addEventListener('click', function(event) {
+    const cart = document.getElementById('floating-cart');
+    const toggle = document.querySelector('.cart-toggle');
+    const panel = document.getElementById('cart-panel');
+
+    if (cart && cart.classList.contains('open') &&
+        !cart.contains(event.target) &&
+        !toggle.contains(event.target)) {
+        closeFloatingCart();
+    }
+});
+
+// Initialisation du panier au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🛒 Initialisation du panier...');
+    updateFloatingCart();
+});
+</script>

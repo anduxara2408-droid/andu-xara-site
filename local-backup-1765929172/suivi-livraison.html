@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi de livraison - Andu-Xara</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    header h1 { margin: 0; font-size: 2em; }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 { color: #6a11cb; text-align: center; margin-bottom: 20px; }
+    p { font-size: 1.1em; margin-bottom: 20px; }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 12px 15px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    button:hover { transform: scale(1.05); }
+
+    .tracking-result {
+      background: #f0f4ff;
+      padding: 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-align: center;
+      display: none;
+    }
+
+    .status-step {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: #e1eaff;
+    }
+
+    .status-current {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    a { color: #6a11cb; text-decoration: none; }
+  </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S9CBS21SVR');
+</script>
+
+</head>
+<body>
+  <header>
+    <h1>Suivi de livraison - Andu-Xara</h1>
+  </header>
+
+  <main>
+    <h2>Suivi de votre commande</h2>
+    <p>Entrez votre numéro de commande pour connaître son statut. Si vous rencontrez un problème, <a href="contact.html">contactez-nous</a>.</p>
+    
+    <form id="tracking-form">
+      <input type="text" id="order-number" placeholder="Numéro de commande" required>
+      <button type="submit">Suivre la livraison</button>
+    </form>
+
+    <div class="tracking-result" id="tracking-result">
+      <!-- Les étapes de suivi apparaîtront ici -->
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Andu-Xara. Tous droits réservés.
+  </footer>
+
+  <script>
+    const form = document.getElementById("tracking-form");
+    const resultDiv = document.getElementById("tracking-result");
+
+    const statuses = [
+      "Commande reçue",
+      "Préparation en cours",
+      "Expédition en cours",
+      "Livraison prévue",
+      "Commande livrée"
+    ];
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const orderNumber = document.getElementById("order-number").value.trim();
+      if(!orderNumber) return;
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `<p>📦 Suivi de la commande <strong>${orderNumber}</strong> :</p>`;
+
+      statuses.forEach((status, index) => {
+        const stepDiv = document.createElement("div");
+        stepDiv.className = "status-step";
+        stepDiv.textContent = status;
+        resultDiv.appendChild(stepDiv);
+      });
+
+      // Simulation de progression automatique
+      let current = 0;
+      const steps = resultDiv.querySelectorAll(".status-step");
+      const interval = setInterval(() => {
+        if(current > 0) steps[current-1].classList.remove("status-current");
+        if(current < steps.length) {
+          steps[current].classList.add("status-current");
+          current++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1500); // chaque étape toutes les 1,5 secondes
+    });
+  </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi de livraison - Andu-Xara</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    h1 { color: #333; }
+    p { font-size: 1.1em; }
+  </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S9CBS21SVR');
+</script>
+
+</head>
+<body>
+  <h1>Suivi de livraison</h1>
+  <p>Cette page vous permettra de suivre vos commandes. Nous travaillons encore à l’implémentation du suivi en temps réel.</p>
+  <p>Pour toute question urgente, veuillez <a href="contact.html">nous contacter</a>.</p>
+</body>
+</html>

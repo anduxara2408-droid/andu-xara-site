@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Andu Xara</title>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5a6fd8;
+        }
+        
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #667eea;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">👋 Inscription Andu Xara</h1>
+
+        <div id="parrainInfo" style="background: #e7f3ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; border-left: 4px solid #667eea;">
+            <strong style="color: #2b6cb0;">🎁 Offre spéciale !</strong>
+            <span id="parrainMessage" style="color: #2c5282; display: block; margin-top: 5px;">Votre parrain vous offre 10% de réduction !</span>
+        </div>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label>Nom complet</label>
+                <input type="text" id="name" required placeholder="Votre nom complet">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="votre@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="password" required minlength="6" placeholder="Minimum 6 caractères">
+            </div>
+
+            <button type="submit" id="submitBtn">S'inscrire</button>
+        </form>
+
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i> Création de votre compte...
+        </div>
+
+        <p style="margin-top: 20px; text-align: center;">
+            <a href="reductions.html" style="color: #667eea; text-decoration: none;">← Retour aux codes promo</a>
+        </p>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+
+        // Initialiser Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ===== FONCTION POUR ENREGISTRER LE PARRAINAGE =====
+        async function enregistrerParrainage(userId, parrainCode) {
+            if (!parrainCode) {
+                console.log('ℹ️ Aucun parrain détecté');
+                return;
+            }
+
+            try {
+                console.log('🔍 Recherche du parrain avec code:', parrainCode);
+                
+                // Trouver le parrain par son code
+                const parrainsSnapshot = await db.collection('users')
+                    .where('referralCode', '==', parrainCode)
+                    .get();
+                
+                if (!parrainsSnapshot.empty) {
+                    const parrainDoc = parrainsSnapshot.docs[0];
+                    const parrainData = parrainDoc.data();
+                    
+                    console.log('✅ Parrain trouvé:', parrainData.email);
+                    
+                    // Enregistrer le parrainage
+                    await db.collection('parrainages').add({
+                        parrainId: parrainDoc.id,
+                        parrainCode: parrainCode,
+                        parrainEmail: parrainData.email,
+                        filleulId: userId,
+                        filleulEmail: auth.currentUser.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        statut: 'actif',
+                        recompense: 50 // MRU
+                    });
+                    
+                    // Mettre à jour les stats du parrain
+                    await db.collection('users').doc(parrainDoc.id).update({
+                        'parrainage.referredCount': firebase.firestore.FieldValue.increment(1),
+                        'parrainage.totalEarnings': firebase.firestore.FieldValue.increment(50),
+                        'parrainage.availableEarnings': firebase.firestore.FieldValue.increment(50)
+                    });
+                    
+                    console.log('✅ Parrainage enregistré pour:', parrainCode);
+                    
+                    // Donner 10% de réduction au filleul
+                    localStorage.setItem('anduxara_promo_filleul', JSON.stringify({
+                        code: 'PARRAIN10',
+                        discount: 10,
+                        appliedAt: new Date().toISOString()
+                    }));
+                    
+                } else {
+                    console.log('❌ Parrain non trouvé avec le code:', parrainCode);
+                }
+            } catch (error) {
+                console.error('❌ Erreur enregistrement parrainage:', error);
+            }
+        }
+
+        // ===== GESTIONNAIRE D'AUTHENTIFICATION =====
+        class AuthManagerInscription {
+            async signUp(email, password, displayName) {
+                try {
+                    console.log('🚀 Début inscription:', email);
+                    
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    
+                    // Mettre à jour le profil
+                    await userCredential.user.updateProfile({
+                        displayName: displayName
+                    });
+                    
+                    // Envoyer l'email de vérification
+                    await userCredential.user.sendEmailVerification();
+                    
+                    // Créer le document utilisateur dans Firestore
+                    await this.createUserDocument(userCredential.user, displayName);
+                    
+                    console.log('✅ Inscription réussie pour:', email);
+                    return { success: true, user: userCredential.user };
+                    
+                } catch (error) {
+                    console.error('❌ Erreur inscription:', error);
+                    return { success: false, error: this.getErrorMessage(error) };
+                }
+            }
+
+            async createUserDocument(user, displayName) {
+                const referralCode = this.generateReferralCode();
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: displayName,
+                    role: 'client',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    isActive: true,
+                    referralCode: referralCode,
+                    parrainage: {
+                        referredCount: 0,
+                        totalEarnings: 0,
+                        availableEarnings: 0
+                    },
+                    preferences: {
+                        newsletter: true,
+                        promotions: true
+                    }
+                };
+
+                await db.collection('users').doc(user.uid).set(userData);
+                console.log('📝 Document utilisateur créé avec code:', referralCode);
+            }
+
+            generateReferralCode() {
+                return 'ANDU' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            }
+
+            getErrorMessage(error) {
+                const errorMessages = {
+                    'auth/invalid-email': 'Adresse email invalide',
+                    'auth/user-disabled': 'Ce compte a été désactivé',
+                    'auth/user-not-found': 'Aucun compte trouvé avec cet email',
+                    'auth/wrong-password': 'Mot de passe incorrect',
+                    'auth/email-already-in-use': 'Cette adresse email est déjà utilisée',
+                    'auth/weak-password': 'Le mot de passe est trop faible (minimum 6 caractères)',
+                    'auth/network-request-failed': 'Erreur réseau. Veuillez réessayer.',
+                    'auth/too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.'
+                };
+                return errorMessages[error.code] || error.message;
+            }
+        }
+
+        // ===== DÉTECTION ET GESTION DU PARRAIN =====
+        const authManager = new AuthManagerInscription();
+        const urlParams = new URLSearchParams(window.location.search);
+        const parrainCode = urlParams.get('parrain');
+
+        if (parrainCode) {
+            document.getElementById('parrainInfo').style.display = 'block';
+            document.getElementById('parrainMessage').textContent =
+                `Votre parrain (${parrainCode}) vous offre 10% de réduction sur votre première commande !`;
+            localStorage.setItem('parrain_code', parrainCode);
+            console.log('🎯 Parrain détecté:', parrainCode);
+        }
+
+        // ===== GESTION DU FORMULAIRE =====
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const parrainCode = localStorage.getItem('parrain_code');
+
+            // Désactiver le bouton pendant le traitement
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingDiv = document.getElementById('loading');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Inscription en cours...';
+            loadingDiv.style.display = 'block';
+
+            try {
+                // INSCRIPTION RÉELLE AVEC FIREBASE
+                const result = await authManager.signUp(email, password, name);
+                
+                if (result.success) {
+                    // ENREGISTRER LE PARRAINAGE SI PRÉSENT
+                    await enregistrerParrainage(result.user.uid, parrainCode);
+                    
+                    // Message de succès
+                    const message = document.createElement('div');
+                    message.textContent = '✅ Inscription réussie ! Redirection...';
+                    message.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: #28a745;
+                        color: white;
+                        padding: 15px 20px;
+                        border-radius: 5px;
+                        z-index: 10000;
+                        font-weight: bold;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    `;
+                    document.body.appendChild(message);
+                    
+                    setTimeout(() => {
+                        if (message.parentNode) {
+                            message.parentNode.removeChild(message);
+                        }
+                    }, 3000);
+                    
+                    // Redirection après 2 secondes
+                    setTimeout(() => {
+                        window.location.href = 'reductions.html';
+                    }, 2000);
+                    
+                } else {
+                    alert('❌ Erreur lors de l\'inscription: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Erreur lors de l\'inscription: ' + error.message);
+            } finally {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'S\'inscrire';
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        console.log('🚀 Système d\'inscription avec parrainage initialisé');
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essayez en AR - Andu-Xara</title>
+    <style>
+        .ar-container {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .ar-message {
+            margin: 30px 0;
+            font-size: 1.2em;
+        }
+    </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S9CBS21SVR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S9CBS21SVR');
+</script>
+
+</head>
+<body>
+    <div class="ar-container">
+        <h1>👕 ESSAYEZ EN RÉALITÉ AUGMENTÉE</h1>
+        <div class="ar-message">
+            <p>📱 Utilisez votre caméra pour essayer virtuellement nos vêtements</p>
+            <p>🎯 Pointez votre caméra vers un mur libre et scannez le QR code</p>
+        </div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://andu-xara.github.io/catalogue-andu-xara-2025-final/" 
+             alt="QR Code AR" style="width: 200px;">
+        <p><small>Disponible sur Instagram et Snapchat</small></p>
+    </div>
+</body>
+</html>
