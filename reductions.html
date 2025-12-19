@@ -918,7 +918,7 @@
                     <div style="flex:1;">
                         <strong style="font-size:15px;">📅 Période des codes promos</strong>
                         <div style="font-size:0.85rem; color:#0c4a6e; margin-top:4px;">
-                            Les codes sont actifs du 2 Décembre 2025 au 13 Décembre 2025 (UTC+0 Mauritanie)
+                            Les codes sont actifs du 19 Décembre 2025 11:50:59 au 31 Décembre 2025 23:59:59 (UTC+0 Mauritanie)
                         </div>
                     </div>
                 </div>
@@ -1305,15 +1305,17 @@
                     LAST_USER: 'anduxara_last_user'
                 };
                 
-                // ✅ DATES DE VALIDITÉ POUR MAURITANIE (UTC+0)
+                // ✅ NOUVELLES DATES DE VALIDITÉ POUR MAURITANIE (UTC+0)
+                // MODE10: du 19 décembre 2025 11:50:59 au 31 décembre 2025 23:59:59
                 this.PROMO_DATES = {
-                    start: new Date('2025-12-02T23:59:59Z'),
-                    end: new Date('2025-12-13T23:59:59Z')
+                    start: new Date('2025-12-19T11:50:59Z'),
+                    end: new Date('2025-12-31T23:59:59Z')
                 };
                 
-                console.log('📅 PromoCodeManager initialisé avec les dates:', {
+                console.log('📅 PromoCodeManager initialisé avec les nouvelles dates:', {
                     start: this.PROMO_DATES.start.toISOString(),
-                    end: this.PROMO_DATES.end.toISOString()
+                    end: this.PROMO_DATES.end.toISOString(),
+                    message: 'MODE10: du 19 décembre 2025 11:50:59 au 31 décembre 2025 23:59:59'
                 });
                 
                 this.init();
@@ -1358,7 +1360,7 @@
                             <div style="flex:1;">
                                 <strong style="font-size:15px;">Période des codes promos terminée</strong>
                                 <div style="font-size: 0.85rem; color: #721c24;">
-                                    La période était du 2 au 13 Décembre 2025
+                                    La période était du 19 Décembre 2025 11:50:59 au 31 Décembre 2025 23:59:59
                                 </div>
                             </div>
                         </div>
@@ -1370,17 +1372,20 @@
                     const hoursRemaining = Math.ceil(timeUntilEnd / (1000 * 60 * 60));
                     
                     if (isSameDayAsStart && now < this.PROMO_DATES.start) {
-                        // Même jour, avant 23:59
+                        // Même jour, avant 11:50:59
+                        const timeUntilStart = this.PROMO_DATES.start - now;
+                        const hoursUntilStart = Math.ceil(timeUntilStart / (1000 * 60 * 60));
+                        
                         promoPeriodInfo.innerHTML = `
                             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                <i class="fas fa-bolt" style="color: #28a745; font-size:18px;"></i>
+                                <i class="fas fa-clock" style="color: #e67e22; font-size:18px;"></i>
                                 <div style="flex:1;">
-                                    <strong style="font-size:15px;">🎉 Codes promos actifs dès aujourd'hui !</strong>
-                                    <div style="font-size: 0.85rem; color: #155724;">
-                                        Vous pouvez utiliser les codes maintenant
+                                    <strong style="font-size:15px;">⏳ Codes promos débutent aujourd'hui à 11:50:59</strong>
+                                    <div style="font-size: 0.85rem; color: #7d6608;">
+                                        Début dans ${hoursUntilStart} heure(s)
                                     </div>
-                                    <div style="font-size: 0.8rem; color: #166534;">
-                                        Période jusqu'au 13 Décembre 23h59 UTC (${daysRemaining} jour(s) restant)
+                                    <div style="font-size: 0.8rem; color: #7d6608;">
+                                        Période jusqu'au 31 Décembre 23:59:59 UTC (${daysRemaining} jour(s) restant)
                                     </div>
                                 </div>
                             </div>
@@ -1396,7 +1401,7 @@
                                         Période en cours - ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''}
                                     </div>
                                     <div style="font-size: 0.8rem; color: #166534;">
-                                        Jusqu'au 13 Décembre 2025 à 23h59 UTC (${hoursRemaining} heure(s))
+                                        Jusqu'au 31 Décembre 2025 à 23:59:59 UTC (${hoursRemaining} heure(s))
                                     </div>
                                 </div>
                             </div>
@@ -1416,7 +1421,7 @@
                             <div style="flex:1;">
                                 <strong style="font-size:15px;">Codes promos bientôt disponibles</strong>
                                 <div style="font-size: 0.85rem; color: #7d6608;">
-                                    Activation le 2 Décembre 2025 à 23h59 (UTC+0)
+                                    Activation le 19 Décembre 2025 à 11:50:59 (UTC+0)
                                 </div>
                                 <div style="font-size: 0.8rem; color: #7d6608;">
                                     Dans ${daysUntilStart} jour(s) (${hoursUntilStart} heure(s))
@@ -1432,7 +1437,7 @@
                 const now = new Date();
                 const validFrom = this.PROMO_DATES.start;
                 
-                // Autoriser si nous sommes le même jour que validFrom (2 décembre)
+                // Autoriser si nous sommes le même jour que validFrom (19 décembre)
                 const isSameDayAsStart = now.getUTCFullYear() === validFrom.getUTCFullYear() &&
                                        now.getUTCMonth() === validFrom.getUTCMonth() &&
                                        now.getUTCDate() === validFrom.getUTCDate();
@@ -1597,7 +1602,7 @@
                 try {
                     // Vérifier la période de validité
                     if (!this.isPromoPeriodActive()) {
-                        throw new Error(`Les codes promos sont actifs du 2 au 13 Décembre 2025.`);
+                        throw new Error(`Les codes promos sont actifs du 19 Décembre 2025 11:50:59 au 31 Décembre 2025 23:59:59.`);
                     }
 
                     // Vérifier la validité du code
@@ -1667,11 +1672,11 @@
                         
                         if (!isSameDay && now < validFrom) {
                             const daysLeft = Math.ceil((validFrom - now) / (1000 * 60 * 60 * 24));
-                            throw new Error(`Ce code sera disponible le 2 Décembre 2025`);
+                            throw new Error(`Ce code sera disponible le 19 Décembre 2025 à 11:50:59`);
                         }
                         
                         if (now > validUntil) {
-                            throw new Error('Ce code promo a expiré (période terminée le 13 Décembre 2025)');
+                            throw new Error('Ce code promo a expiré (période terminée le 31 Décembre 2025 à 23:59:59)');
                         }
                         
                         // Vérifier les limites d'utilisation
@@ -1972,8 +1977,8 @@
                             </div>
                             <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">
                                 <strong>Période:</strong><br>
-                                Du ${validFrom.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validFrom.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC<br>
-                                Au ${validUntil.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validUntil.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC
+                                Du ${validFrom.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validFrom.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit' })} UTC<br>
+                                Au ${validUntil.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${validUntil.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit' })} UTC
                             </div>
                         </div>
                         <div class="code-actions">
@@ -2015,7 +2020,7 @@
                 snapshot.docs.forEach(doc => {
                     batch.update(doc.ref, {
                         validFrom: now, // Début immédiat
-                        validUntil: new Date('2025-12-13T23:59:59Z'), // Fin inchangée
+                        validUntil: new Date('2025-12-31T23:59:59Z'), // Fin inchangée
                         updatedAt: new Date()
                     });
                     updatedCount++;
@@ -2402,7 +2407,7 @@
                         const item = document.createElement('div');
                         item.className = 'history-item';
                         const usedDate = new Date(usage.usedAt);
-                        item.innerHTML = `<strong>${usage.promoCode}</strong> - ${usage.discount}%<br><small>Utilisé le ${usedDate.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${usedDate.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })} UTC</small>${usage.description ? `<br><small>${usage.description}</small>` : ''}`;
+                        item.innerHTML = `<strong>${usage.promoCode}</strong> - ${usage.discount}%<br><small>Utilisé le ${usedDate.toLocaleDateString('fr-FR', { timeZone: 'UTC' })} à ${usedDate.toLocaleTimeString('fr-FR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit' })} UTC</small>${usage.description ? `<br><small>${usage.description}</small>` : ''}`;
                         historyList.appendChild(item);
                     });
                     promoHistory.style.display = 'block';
