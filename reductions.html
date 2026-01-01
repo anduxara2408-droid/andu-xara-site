@@ -1346,49 +1346,63 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
-        // ===== FONCTIONS GLOBALES POUR WHATSAPP =====
-        function joinWhatsAppGroup() {
-            const whatsappLink = "https://chat.whatsapp.com/LR0OCDunjlJ5NqHsAkDIyG";
-            
-            // Enregistrer le clic dans Firebase (optionnel)
-            try {
-                const user = firebase.auth().currentUser;
-                if (user) {
-                    firebase.firestore().collection('whatsappClicks').add({
-                        userId: user.uid,
-                        userEmail: user.email,
-                        clickedAt: new Date().toISOString(),
-                        userAgent: navigator.userAgent,
-                        isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-                    });
-                }
-            } catch (error) {
-                console.log('Analytics error (non-critical):', error);
-            }
-            
-            // Animation du bouton
-            const btn = event.target.closest('.whatsapp-btn') || event.target;
-            if (btn) {
-                btn.style.transform = 'scale(0.95)';
-                setTimeout(() => { btn.style.transform = ''; }, 200);
-            }
-            
-            // Détection mobile vs desktop
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // Sur mobile, ouvrir dans l'app WhatsApp
-                window.location.href = `whatsapp://send?text=Bonjour! Je souhaite rejoindre le groupe WhatsApp Andu Xara pour les codes promos.`;
-                setTimeout(() => {
-                    window.open(whatsappLink, '_blank');
-                }, 1000);
-            } else {
-                // Sur desktop, ouvrir dans un nouvel onglet
-                window.open(whatsappLink, '_blank', 'noopener,noreferrer');
-            }
-            
-            showNotification("✅ Redirection vers WhatsApp... Rejoignez notre groupe!", 'success');
+// ===== FONCTIONS GLOBALES POUR WHATSAPP =====
+function joinWhatsAppGroup() {
+    const whatsappGroupLink = "https://chat.whatsapp.com/LR0OCDunjlJ5NqHsAkDIyG";
+    
+    // Enregistrer le clic dans Firebase (optionnel)
+    try {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            firebase.firestore().collection('whatsappClicks').add({
+                userId: user.uid,
+                userEmail: user.email,
+                clickedAt: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+                groupJoined: false // À mettre à jour manuellement si besoin
+            });
         }
+    } catch (error) {
+        console.log('Analytics error (non-critical):', error);
+    }
+    
+    // Animation du bouton
+    const btn = event.target.closest('.whatsapp-btn') || event.target;
+    if (btn) {
+        btn.style.transform = 'scale(0.95)';
+        setTimeout(() => { btn.style.transform = ''; }, 200);
+    }
+    
+    // Détection de l'appareil
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // SUR MOBILE : Tente d'ouvrir l'app WhatsApp
+        // WhatsApp a une URL scheme spécifique pour les groupes
+        const mobileUrl = `whatsapp://chat?code=${'LR0OCDunjlJ5NqHsAkDIyG'}`;
+        
+        // Ouvrir d'abord l'app WhatsApp
+        window.location.href = mobileUrl;
+        
+        // Fallback après 2 secondes si l'app ne s'ouvre pas
+        setTimeout(() => {
+            // Si on est toujours sur la page, ouvrir la version web
+            window.open(whatsappGroupLink, '_blank');
+        }, 2000);
+        
+        showNotification("📱 Ouverture de WhatsApp... Rejoignez le groupe !", 'success');
+    } else {
+        // SUR DESKTOP : Ouvrir directement le lien du groupe
+        window.open(whatsappGroupLink, '_blank', 'noopener,noreferrer');
+        showNotification("✅ Redirection vers le groupe WhatsApp !", 'success');
+    }
+    
+    // Afficher des instructions pour les utilisateurs
+    setTimeout(() => {
+        showNotification("💡 Astuce : Acceptez l'invitation dans WhatsApp pour rejoindre le groupe", 'success');
+    }, 3000);
+}
         
         // ===== FONCTIONS GLOBALES POUR AUTH =====
         function showLoginModal() {
