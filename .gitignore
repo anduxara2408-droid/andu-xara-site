@@ -1,55 +1,27 @@
-# Fichiers temporaires et scripts de développement
-*.py
-*.pyc
-html_parts/
-html_parts_corrected/
-*_complet*.html
-*_corrige*.html
-*_final*.html
-split_*.js
-combine_*.py
-analyze_*.py
-smart_*.py
-template_*.md
-0
+# Fichiers temporaires et logs
+*.log
+*.tmp
+*.txt
 
-# Fichiers système
+# Rapports temporaires
+rapport-*.txt
+test-*.txt
+
+# Scripts temporaires
+envoyer-*.js
+exporter-*.js
+extraire-*.js
+lancer-*.js
+send-*.js
+
+# Emails et données sensibles (optionnel)
+email-templates/
+mes-*-emails*.txt
+
+# Images temporaires (gardez les importantes)
+# mais ignorez les doublons ou temporaires
+
+# Autres
 .DS_Store
 Thumbs.db
-*.log
-
-# Environnements virtuels
-venv/
-env/
-.venv/
-
-# Backup files
-*.backup
-*.bak
-
-# Scripts de correction temporaires
-*.sh
-apply_fix.sh
-clean_duplicates.sh
-correction_urgence.sh
-deploy_fix.sh
-fix-*.sh
-restauration_urgence.sh
-restore_panier.sh
-
-# Fichiers de configuration sensibles
-service-account-key.json
-*.json
-
-# Dossiers de développement
-.devcontainer/
 node_modules/
-preparation-lancement-andu-xara/
-
-# Fichiers CSS temporaires
-css/common.css
-css/style-unified.css
-correctifs-urgents.js
-index.html.save
-js/correctifs-urgents.js
-.env
