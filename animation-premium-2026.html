@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Premium 2026</title>
+    
+    <!-- Police Google Fonts pour un style premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== FOND PREMIUM ===== */
+        body {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, 
+                #0c0c0c 0%,
+                #1a1a2e 25%,
+                #16213e 50%,
+                #0f3460 75%,
+                #1a1a2e 100%
+            );
+            overflow: hidden;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== EFFET DE LUMIÈRE DYNAMIQUE ===== */
+        .light-effect {
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 150, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 150, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 150, 0.1) 0%, transparent 50%);
+            animation: lightsMove 25s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes lightsMove {
+            0% { transform: translate(0%, 0%); }
+            25% { transform: translate(-5%, -5%); }
+            50% { transform: translate(-10%, 0%); }
+            75% { transform: translate(-5%, 5%); }
+            100% { transform: translate(0%, 0%); }
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        .premium-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        /* ===== TITRE PRINCIPAL - ANIMATION D'ENTRÉE ===== */
+        .main-headline {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, 
+                #ff6b6b, #ffd93d, #6bcf7f, #4d96ff, #9d4edd
+            );
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            position: relative;
+            margin-bottom: 15px;
+            animation: 
+                gradientMove 8s ease infinite,
+                headlineEntrance 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+            letter-spacing: 1.5px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes headlineEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ===== SOUS-TITRE - ANIMATION D'APRES ===== */
+        .subtitle {
+            font-size: 1.6rem;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: 
+                subtitleEntrance 0.8s ease-out 0.8s forwards,
+                subtitleFloat 4s ease-in-out 2s infinite;
+            position: relative;
+            padding: 0 40px;
+        }
+
+        @keyframes subtitleEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtitleFloat {
+            0%, 100% { 
+                transform: translateY(0) scale(1);
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            50% { 
+                transform: translateY(-8px) scale(1.02);
+                text-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* ===== EFFET DE PARTICULES AVANCÉ ===== */
+        .particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            animation: particleFloat linear infinite;
+        }
+
+        /* Particules en forme d'étoile */
+        .particle.star {
+            background: transparent;
+            border: 2px solid rgba(255, 215, 0, 0.8);
+            clip-path: polygon(
+                50% 0%, 61% 35%, 98% 35%, 68% 57%,
+                79% 91%, 50% 70%, 21% 91%, 32% 57%,
+                2% 35%, 39% 35%
+            );
+        }
+
+        @keyframes particleFloat {
+            to {
+                transform: 
+                    translateY(180px) 
+                    rotate(360deg) 
+                    scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ===== EFFET DE TRAÎNÉE DE TEXTE ===== */
+        .text-trail {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 4rem;
+            font-weight: 800;
+            z-index: 1;
+            animation: trailMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes trailMove {
+            0% {
+                transform: translateX(-100%) translateY(-50%) rotate(-5deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100%) translateY(-50%) rotate(5deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== EFFET DE PULSATION GLOBALE ===== */
+        .pulse-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                transparent 0%,
+                rgba(255, 255, 255, 0.03) 50%,
+                transparent 100%
+            );
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* ===== BOUTON FERMETURE PREMIUM ===== */
+        .close-btn-premium {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+        }
+
+        .close-btn-premium:hover {
+            background: rgba(255, 50, 50, 0.3);
+            border-color: #ff3232;
+            transform: rotate(180deg) scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 50, 50, 0.5);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            body { height: 160px; }
+            .main-headline { font-size: 3rem; }
+            .subtitle { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 768px) {
+            body { height: 140px; }
+            .main-headline { 
+                font-size: 2.2rem; 
+                letter-spacing: 1px;
+                margin-bottom: 10px;
+            }
+            .subtitle { 
+                font-size: 1.1rem; 
+                padding: 0 20px;
+            }
+            .close-btn-premium {
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { height: 120px; }
+            .main-headline { 
+                font-size: 1.8rem; 
+                margin-bottom: 5px;
+            }
+            .subtitle { 
+                font-size: 0.9rem; 
+                padding: 0 15px;
+            }
+        }
+
+        /* ===== ANIMATION DE CURSEUR DE TEXTE ===== */
+        .text-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 3rem;
+            background: #4d96ff;
+            margin-left: 5px;
+            animation: cursorBlink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Effet de lumière dynamique -->
+    <div class="light-effect"></div>
+    
+    <!-- Effet de pulsation -->
+    <div class="pulse-effect"></div>
+    
+    <!-- Conteneur principal -->
+    <div class="premium-container">
+        <!-- Effets de traînée de texte -->
+        <div class="text-trail">2026</div>
+        <div class="text-trail" style="animation-delay: -10s;">ANNUAL</div>
+        
+        <!-- Titre principal -->
+        <h1 class="main-headline">
+            Andu-xara
+            <span class="text-cursor"></span>
+        </h1>
+        
+        <!-- Sous-titre -->
+        <div class="subtitle">
+            Vous souhaite une année 2026 exceptionnelle
+        </div>
+    </div>
+    
+    <!-- Conteneur de particules -->
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- Bouton fermeture -->
+    <button class="close-btn-premium" id="closeBtn">×</button>
+
+    <script>
+        // ===== INITIALISATION DES PARTICULES =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleTypes = ['normal', 'star'];
+            const colors = [
+                '#ff6b6b', '#ffd93d', '#6bcf7f', '#4d96ff', '#9d4edd',
+                '#00ffea', '#ff4081', '#76ff03'
+            ];
+            
+            // Créer 60 particules
+            for (let i = 0; i < 60; i++) {
+                const particle = document.createElement('div');
+                const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+                
+                particle.className = `particle ${type}`;
+                
+                // Position aléatoire
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * -50 + 'px';
+                
+                // Taille aléatoire
+                const size = Math.random() * 8 + 3;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Pour les particules normales
+                if (type === 'normal') {
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.boxShadow = `0 0 ${size}px currentColor`;
+                }
+                
+                // Animation
+                const duration = Math.random() * 5 + 3;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                particle.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                // Rotation initiale aléatoire
+                particle.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // ===== ANIMATION DE TEXTE DYNAMIQUE =====
+        function animateText() {
+            const headline = document.querySelector('.main-headline');
+            const subtitle = document.querySelector('.subtitle');
+            const cursor = document.querySelector('.text-cursor');
+            
+            // Animation du curseur
+            let cursorVisible = true;
+            setInterval(() => {
+                cursorVisible = !cursorVisible;
+                cursor.style.opacity = cursorVisible ? '1' : '0';
+            }, 500);
+            
+            // Effet d'ondulation sur le titre
+            const text = 'Andu-xara';
+            headline.innerHTML = '';
+            
+            // Créer chaque lettre avec animation individuelle
+            text.split('').forEach((letter, index) => {
+                const span = document.createElement('span');
+                span.textContent = letter;
+                span.style.display = 'inline-block';
+                span.style.animation = `letterWave 2s ease-in-out ${index * 0.1}s infinite alternate`;
+                headline.appendChild(span);
+            });
+            
+            // Ajouter le curseur
+            headline.appendChild(cursor);
+            
+            // Ajouter l'animation CSS pour les lettres
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes letterWave {
+                    0%, 100% { 
+                        transform: translateY(0) rotate(0deg); 
+                    }
+                    50% { 
+                        transform: translateY(-10px) rotate(2deg); 
+                        text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                    }
+                }
+                
+                .main-headline span:nth-child(odd) {
+                    animation-delay: calc(var(--i) * 0.2s);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // ===== GESTION DU BOUTON FERMETURE =====
+        function setupCloseButton() {
+            const closeBtn = document.getElementById('closeBtn');
+            
+            closeBtn.addEventListener('click', function() {
+                // Animation de disparition
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'translateY(-20px) scale(0.95)';
+                document.body.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                
+                // Envoyer message au parent (si dans iframe)
+                if (window.parent !== window) {
+                    setTimeout(() => {
+                        window.parent.postMessage({
+                            type: 'CLOSE_BANNER_2026',
+                            action: 'close'
+                        }, '*');
+                    }, 300);
+                }
+                
+                // Cacher complètement après animation
+                setTimeout(() => {
+                    document.body.style.display = 'none';
+                }, 600);
+            });
+        }
+        
+        // ===== INITIALISATION AU CHARGEMENT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            animateText();
+            setupCloseButton();
+            
+            // Recréer des particules périodiquement
+            setInterval(() => {
+                const particles = document.querySelectorAll('.particle');
+                if (particles.length < 40) {
+                    createParticles();
+                }
+            }, 5000);
+            
+            // Effet de parallaxe léger au survol
+            document.body.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                
+                const container = document.querySelector('.premium-container');
+                container.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+            
+            document.body.addEventListener('mouseleave', () => {
+                const container = document.querySelector('.premium-container');
+                container.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+                container.style.transition = 'transform 0.5s ease';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3776,6 +3776,140 @@ h1, h2, h3, p, span {
 </script>
 </head>
 <body>
+<!-- ========================================== -->
+<!-- INTÉGRATION ANIMATION PREMIUM 2026 -->
+<!-- ========================================== -->
+<div id="animation-2026-container" style="
+    width: 100%;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    z-index: 10000;
+">
+    <!-- L'animation se chargera ici -->
+</div>
+
+<script>
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('animation-2026-container');
+    
+    // 1. Vérifier si déjà fermé
+    const isBannerClosed = localStorage.getItem('premiumAnimation2026Closed');
+    if (isBannerClosed === 'true') {
+        container.style.display = 'none';
+        return;
+    }
+    
+    // 2. Créer l'iframe pour l'animation
+    const iframe = document.createElement('iframe');
+    
+    // IMPORTANT : Chemin ABSOLU vers votre animation
+    iframe.src = 'animation-premium-2026.html';
+    
+    // Configuration de l'iframe
+    iframe.style.cssText = `
+        width: 100%;
+        height: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+        display: block;
+        overflow: hidden;
+        background: transparent;
+        pointer-events: auto;
+    `;
+    
+    iframe.title = "Animation Bonne Année 2026";
+    iframe.loading = "eager";
+    iframe.frameborder = "0";
+    iframe.scrolling = "no";
+    
+    // 3. Ajouter l'iframe au conteneur
+    container.appendChild(iframe);
+    
+    // 4. Gérer la fermeture via messages
+    window.addEventListener('message', function(event) {
+        // Vérifier que le message vient de notre animation
+        if (event.data && event.data.type === 'CLOSE_BANNER_2026') {
+            
+            // Animation de fermeture
+            container.style.opacity = '0';
+            container.style.height = '0';
+            container.style.transform = 'translateY(-20px)';
+            container.style.transition = 'all 0.6s ease-out';
+            
+            // Sauvegarder le choix
+            localStorage.setItem('premiumAnimation2026Closed', 'true');
+            
+            // Supprimer après animation
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 600);
+        }
+    });
+    
+    // 5. Fermeture automatique après 30 secondes (optionnel)
+    setTimeout(() => {
+        if (!localStorage.getItem('premiumAnimation2026Closed')) {
+            // Simuler un clic sur le bouton de fermeture
+            if (iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ action: 'autoClose' }, '*');
+            }
+        }
+    }, 30000);
+    
+    // 6. Gestion des erreurs
+    iframe.addEventListener('error', function() {
+        console.error('Erreur de chargement de l\'animation');
+        
+        // Solution de secours : afficher une bannière simple
+        container.innerHTML = `
+            <div style="
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, #FF416C, #FF4B2B);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.5rem;
+                font-weight: bold;
+                animation: pulse 2s infinite;
+            ">
+                Andu-xara vous souhaite une bonne année 2026
+            </div>
+            <style>
+                @keyframes pulse {
+                    0%, 100% { opacity: 0.9; }
+                    50% { opacity: 1; }
+                }
+            </style>
+        `;
+    });
+});
+
+// 7. Gestion du responsive
+function updateBannerHeight() {
+    const container = document.getElementById('animation-2026-container');
+    const width = window.innerWidth;
+    
+    if (width <= 480) {
+        container.style.height = '120px';
+    } else if (width <= 768) {
+        container.style.height = '140px';
+    } else if (width <= 1200) {
+        container.style.height = '160px';
+    } else {
+        container.style.height = '180px';
+    }
+}
+
+// Appeler au chargement et au redimensionnement
+window.addEventListener('load', updateBannerHeight);
+window.addEventListener('resize', updateBannerHeight);
+</script>
+<!-- ========================================== -->
 <script>
 // Redirection HTTPS seulement en production (pas sur localhost)
 if (window.location.hostname !== 'localhost' && 
