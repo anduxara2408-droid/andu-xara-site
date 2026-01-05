@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Abeille 2026</title>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 140px;
+            background: #0a192f;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        /* ===== ABEILLE RAPIDE ===== */
+        .bee {
+            position: absolute;
+            top: 40%;
+            left: -60px;
+            width: 40px;
+            height: 30px;
+            z-index: 10;
+            animation: 
+                flyInFast 1.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards,
+                leaveText 0.5s 1.5s forwards;
+        }
+
+        /* Corps de l'abeille */
+        .bee-body {
+            position: absolute;
+            width: 25px;
+            height: 15px;
+            background: linear-gradient(90deg, #ffd700, #ff9900);
+            border-radius: 40% 40% 50% 50%;
+            top: 7px;
+            left: 7px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Rayures */
+        .bee-stripe {
+            position: absolute;
+            width: 25px;
+            height: 4px;
+            background: #000;
+            top: 5px;
+        }
+        .stripe-1 { top: 8px; }
+        .stripe-2 { top: 12px; }
+
+        /* Tête */
+        .bee-head {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ff9900;
+            border-radius: 50%;
+            top: 5px;
+            left: 0;
+            z-index: 3;
+        }
+
+        /* Yeux */
+        .bee-eye {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            top: 3px;
+        }
+        .bee-eye.left { left: 2px; }
+        .bee-eye.right { left: 6px; }
+
+        /* Ailes qui battent vite */
+        .bee-wing {
+            position: absolute;
+            width: 18px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50% 50% 0 0;
+            top: 0;
+            animation: wingFlapFast 0.05s infinite alternate;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .bee-wing.left {
+            left: 5px;
+            transform: rotate(-20deg);
+        }
+        .bee-wing.right {
+            left: 17px;
+            transform: rotate(20deg);
+            animation-delay: 0.025s;
+        }
+
+        /* Dard */
+        .bee-stinger {
+            position: absolute;
+            width: 8px;
+            height: 3px;
+            background: #333;
+            border-radius: 0 2px 2px 0;
+            top: 10px;
+            left: 30px;
+            transform: rotate(45deg);
+        }
+
+        /* ===== TRAÎNÉE RAPIDE ===== */
+        .speed-trail {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .speed-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: speedTrail 0.5s linear forwards;
+            box-shadow: 0 0 6px #ffd700;
+        }
+
+        /* ===== TEXTE QUI APPARAÎT DIRECTEMENT ===== */
+        .text-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            opacity: 0;
+            animation: 
+                textFlash 0.3s 1.5s forwards,
+                textVibrate 0.1s 1.8s 3;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .bee-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff9900, #ff6600);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.5),
+                0 0 30px rgba(255, 153, 0, 0.3);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .bee-message {
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 
+                0 2px 10px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* ===== ANIMATIONS RAPIDES ===== */
+
+        /* Abeille qui entre vite */
+        @keyframes flyInFast {
+            0% {
+                left: -60px;
+                top: 40%;
+                transform: translateY(-50%) rotate(0deg);
+                opacity: 1;
+            }
+            20% {
+                top: 30%;
+                transform: translateY(-50%) rotate(10deg);
+            }
+            40% {
+                top: 60%;
+                transform: translateY(-50%) rotate(-15deg);
+            }
+            60% {
+                top: 35%;
+                transform: translateY(-50%) rotate(8deg);
+            }
+            80% {
+                top: 55%;
+                transform: translateY(-50%) rotate(-5deg);
+            }
+            100% {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Abeille qui part en laissant le texte */
+        @keyframes leaveText {
+            0% {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                top: 30%;
+                transform: translate(0, -50%) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Battement d'ailes très rapide */
+        @keyframes wingFlapFast {
+            0% { 
+                transform: scaleY(1) rotate(var(--rot));
+                opacity: 0.9;
+            }
+            100% { 
+                transform: scaleY(0.5) rotate(var(--rot));
+                opacity: 0.6;
+            }
+        }
+
+        /* Traînée de vitesse */
+        @keyframes speedTrail {
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3) translateX(-20px);
+            }
+        }
+
+        /* Texte qui apparaît en flash */
+        @keyframes textFlash {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+                filter: blur(10px) brightness(3);
+            }
+            70% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.05);
+                filter: blur(2px) brightness(1.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(0) brightness(1);
+            }
+        }
+
+        /* Texte qui vibre */
+        @keyframes textVibrate {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -50%) translateX(2px); }
+        }
+
+        /* ===== EFFET D'ÉTINCELLES ===== */
+        .sparkle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #ffd700;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparklePop 0.4s forwards;
+            box-shadow: 0 0 6px #ffd700;
+        }
+
+        @keyframes sparklePop {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(360deg);
+            }
+        }
+
+        /* ===== BOUTON FERMETURE RAPIDE ===== */
+        .bee-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 50%;
+            color: #ffd700;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            animation: fadeInQuick 0.3s 2s forwards;
+        }
+
+        .bee-close:hover {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff4444;
+            color: white;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        @keyframes fadeInQuick {
+            to { opacity: 1; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body { height: 120px; }
+            .bee-title { font-size: 2.2rem; }
+            .bee-message { font-size: 1.1rem; }
+            .bee { width: 35px; height: 25px; }
+        }
+
+        @media (max-width: 480px) {
+            body { height: 100px; }
+            .bee-title { font-size: 1.8rem; }
+            .bee-message { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Traînée de vitesse -->
+    <div class="speed-trail" id="trail"></div>
+    
+    <!-- Abeille -->
+    <div class="bee">
+        <!-- Ailes -->
+        <div class="bee-wing left" style="--rot: -20deg"></div>
+        <div class="bee-wing right" style="--rot: 20deg"></div>
+        
+        <!-- Corps avec rayures -->
+        <div class="bee-body">
+            <div class="bee-stripe stripe-1"></div>
+            <div class="bee-stripe stripe-2"></div>
+        </div>
+        
+        <!-- Tête -->
+        <div class="bee-head">
+            <div class="bee-eye left"></div>
+            <div class="bee-eye right"></div>
+        </div>
+        
+        <!-- Dard -->
+        <div class="bee-stinger"></div>
+    </div>
+    
+    <!-- Texte -->
+    <div class="text-banner">
+        <div class="bee-title">ANDU-XARA</div>
+        <div class="bee-message">vous souhaite une excellente année 2026</div>
+    </div>
+    
+    <!-- Étincelles -->
+    <div id="sparkles"></div>
+    
+    <!-- Bouton fermeture -->
+    <button class="bee-close" id="closeBtn">×</button>
+
+    <script>
+        // ===== CRÉER TRAÎNÉE DE VITESSE =====
+        function createSpeedTrail() {
+            const trail = document.getElementById('trail');
+            const bee = document.querySelector('.bee');
+            
+            // Créer des points de traînée toutes les 50ms (très rapide)
+            const interval = setInterval(() => {
+                const beeRect = bee.getBoundingClientRect();
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'speed-dot';
+                    
+                    // Position légèrement en arrière de l'abeille
+                    dot.style.left = (beeRect.left + 10 - i * 5) + 'px';
+                    dot.style.top = (beeRect.top + 15) + 'px';
+                    
+                    // Taille aléatoire
+                    const size = Math.random() * 4 + 2;
+                    dot.style.width = size + 'px';
+                    dot.style.height = size + 'px';
+                    
+                    // Opacité
+                    dot.style.opacity = Math.random() * 0.6 + 0.3;
+                    
+                    // Animation plus rapide
+                    dot.style.animationDuration = (Math.random() * 0.3 + 0.2) + 's';
+                    
+                    trail.appendChild(dot);
+                    
+                    // Supprimer après animation
+                    setTimeout(() => {
+                        if (dot.parentNode) {
+                            dot.remove();
+                        }
+                    }, 500);
+                }
+                
+            }, 50);
+            
+            // Arrêter après 1.5 secondes
+            setTimeout(() => clearInterval(interval), 1500);
+        }
+        
+        // ===== CRÉER ÉTINCELLES QUAND LE TEXTE APPARAÎT =====
+        function createSparkles() {
+            setTimeout(() => {
+                const sparklesContainer = document.getElementById('sparkles');
+                
+                for (let i = 0; i < 30; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    
+                    // Position autour du texte
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 60 + 20;
+                    const x = 50 + Math.cos(angle) * distance;
+                    const y = 50 + Math.sin(angle) * distance;
+                    
+                    sparkle.style.left = x + '%';
+                    sparkle.style.top = y + '%';
+                    
+                    // Animation
+                    sparkle.style.animationDelay = (Math.random() * 0.2) + 's';
+                    sparkle.style.animationDuration = (Math.random() * 0.2 + 0.3) + 's';
+                    
+                    sparklesContainer.appendChild(sparkle);
+                    
+                    // Supprimer après
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.remove();
+                        }
+                    }, 500);
+                }
+            }, 1500); // Quand le texte apparaît
+        }
+        
+        // ===== SON DE BOURDONNEMENT RAPIDE =====
+        function playBuzzSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Son rapide de bourdonnement
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        // Fréquence qui monte et descend vite
+                        oscillator.frequency.setValueAtTime(320 + Math.random() * 40, audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(280 + Math.random() * 40, audioContext.currentTime + 0.1);
+                        oscillator.type = 'triangle';
+                        
+                        gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
+                        
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.15);
+                    }, i * 100);
+                }
+                
+            } catch (e) {
+                // Pas grave si l'audio ne marche pas
+            }
+        }
+        
+        // ===== FERMETURE =====
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            // Animation de sortie rapide
+            document.body.style.opacity = '0';
+            document.body.style.transform = 'scale(0.9)';
+            document.body.style.transition = 'all 0.3s ease';
+            
+            localStorage.setItem('beeAnimation2026', 'closed');
+            
+            if (window.parent !== window) {
+                setTimeout(() => {
+                    window.parent.postMessage({ 
+                        type: 'CLOSE_BEE_ANIMATION' 
+                    }, '*');
+                }, 150);
+            }
+            
+            setTimeout(() => {
+                document.body.style.display = 'none';
+            }, 300);
+        });
+        
+        // ===== VÉRIFIER SI DÉJÀ FERMÉ =====
+        if (localStorage.getItem('beeAnimation2026') === 'closed') {
+            document.body.style.display = 'none';
+        }
+        
+        // ===== INITIALISER =====
+        document.addEventListener('DOMContentLoaded', function() {
+            createSpeedTrail();
+            createSparkles();
+            playBuzzSound();
+            
+            // Fermeture automatique après 8 secondes
+            setTimeout(() => {
+                if (!localStorage.getItem('beeAnimation2026')) {
+                    document.getElementById('closeBtn').click();
+                }
+            }, 8000);
+        });
+    </script>
+</body>
+</html>
