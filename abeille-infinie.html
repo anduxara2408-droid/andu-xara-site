@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; }
+        body {
+            width: 100%;
+            height: 120px;
+            background: #000;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* CONTAINER PRINCIPAL - INFINI */
+        .animation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        /* ABEILLE QUI REVIENT TOUJOURS */
+        .infinite-bee {
+            position: absolute;
+            top: 40%;
+            left: -60px;
+            width: 40px;
+            height: 30px;
+            animation: infiniteFly 3s linear infinite;
+        }
+        
+        /* Corps abeille */
+        .bee-body {
+            width: 25px;
+            height: 15px;
+            background: linear-gradient(90deg, #ff0, #f90);
+            border-radius: 40%;
+            position: relative;
+            animation: vibrate 0.1s infinite;
+        }
+        
+        /* Ailes qui battent */
+        .bee-wings {
+            position: absolute;
+            top: -5px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .wing {
+            width: 15px;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: flap 0.1s infinite;
+        }
+        
+        /* TEXTE TOUJOURS VISIBLE */
+        .infinite-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            animation: pulseGlow 2s infinite alternate;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff0, #f90, #f00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: colorCycle 3s infinite;
+        }
+        
+        .message {
+            font-size: 14px;
+            color: #fff;
+            margin-top: 5px;
+            text-shadow: 0 0 5px #ff0;
+        }
+        
+        /* TRAÎNÉES CONTINUES */
+        .trail-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        /* ANIMATIONS INFINIES */
+        @keyframes infiniteFly {
+            0% {
+                left: -60px;
+                top: 40%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 20%;
+                transform: rotate(15deg);
+            }
+            50% {
+                left: 50%;
+                top: 60%;
+                transform: rotate(0deg);
+            }
+            75% {
+                top: 30%;
+                transform: rotate(-15deg);
+            }
+            100% {
+                left: 100%;
+                top: 40%;
+                transform: rotate(0deg);
+            }
+        }
+        
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(1px); }
+        }
+        
+        @keyframes flap {
+            0%, 100% { transform: scaleY(1); opacity: 0.8; }
+            50% { transform: scaleY(0.5); opacity: 0.4; }
+        }
+        
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        
+        @keyframes colorCycle {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        /* PLUSIEURS ABEILLES DÉCALÉES */
+        .bee-2 {
+            animation: infiniteFly 3s linear infinite;
+            animation-delay: 1s;
+            top: 60%;
+        }
+        
+        .bee-3 {
+            animation: infiniteFly 3s linear infinite;
+            animation-delay: 2s;
+            top: 20%;
+        }
+        
+        /* BOUTON FERMETURE */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,0,0,0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Plusieurs abeilles qui tournent en boucle -->
+    <div class="infinite-bee">
+        <div class="bee-wings">
+            <div class="wing"></div>
+            <div class="wing"></div>
+        </div>
+        <div class="bee-body"></div>
+    </div>
+    
+    <div class="infinite-bee bee-2">
+        <div class="bee-wings">
+            <div class="wing"></div>
+            <div class="wing"></div>
+        </div>
+        <div class="bee-body"></div>
+    </div>
+    
+    <div class="infinite-bee bee-3">
+        <div class="bee-wings">
+            <div class="wing"></div>
+            <div class="wing"></div>
+        </div>
+        <div class="bee-body"></div>
+    </div>
+    
+    <!-- Texte toujours visible -->
+    <div class="infinite-text">
+        <div class="title">ANDU-XARA</div>
+        <div class="message">vous souhaite une excellente année 2026</div>
+    </div>
+    
+    <!-- Bouton fermeture -->
+    <button class="close-btn" id="closeBtn">×</button>
+
+    <script>
+        // Animation INFINIE - ne s'arrête jamais
+        let isAnimating = true;
+        
+        // Créer des traînées en continu
+        function createInfiniteTrails() {
+            setInterval(() => {
+                if (!isAnimating) return;
+                
+                const bees = document.querySelectorAll('.infinite-bee');
+                
+                bees.forEach(bee => {
+                    const rect = bee.getBoundingClientRect();
+                    
+                    // Créer un élément de traînée
+                    const trail = document.createElement('div');
+                    trail.style.cssText = `
+                        position: absolute;
+                        width: 4px;
+                        height: 4px;
+                        background: yellow;
+                        border-radius: 50%;
+                        left: ${rect.left + 15}px;
+                        top: ${rect.top + 15}px;
+                        opacity: 0.7;
+                        animation: trailFade 0.5s forwards;
+                        z-index: 5;
+                    `;
+                    
+                    document.body.appendChild(trail);
+                    
+                    // Supprimer après animation
+                    setTimeout(() => {
+                        if (trail.parentNode) {
+                            trail.parentNode.removeChild(trail);
+                        }
+                    }, 500);
+                });
+            }, 100);
+        }
+        
+        // CSS pour les traînées
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes trailFade {
+                0% { opacity: 0.7; transform: scale(1); }
+                100% { opacity: 0; transform: scale(0.3); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Fermeture
+        document.getElementById('closeBtn').onclick = function() {
+            isAnimating = false;
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s';
+            
+            localStorage.setItem('infiniteBee2026', 'closed');
+            
+            if (window.parent !== window) {
+                window.parent.postMessage({type: 'CLOSE_INFINITE_BEE'}, '*');
+            }
+            
+            setTimeout(() => {
+                document.body.style.display = 'none';
+            }, 300);
+        };
+        
+        // Vérifier si déjà fermé
+        if (localStorage.getItem('infiniteBee2026') === 'closed') {
+            document.body.style.display = 'none';
+        } else {
+            // Démarrer les animations
+            createInfiniteTrails();
+        }
+    </script>
+</body>
+</html>
