@@ -25,3 +25,12 @@ mes-*-emails*.txt
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Fichiers SITE WEB (NE PAS ignorer)
+
+# ======================================
+# FICHIERS SITE WEB (DOIVENT ÊTRE SERVIS)
+# ======================================
+!ads.txt        # Requis par Google AdSense
+!robots.txt     # Requis pour le SEO
+!sitemap.xml    # Requis pour l'indexation
