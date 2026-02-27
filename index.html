@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andu-Xara • Mode Afro-Urbaine • Culture Urbaine</title>
+    
+    <!-- META SEO -->
+    <meta name="description" content="Andu-Xara - Marque de vêtements afro-urbains et billetterie de concerts. Créez votre compte pour accéder aux réductions exclusives.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="images/logo.png" type="image/png">
+    
+    <!-- POLICES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- STYLES -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-message">
+                ✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne depuis 2020
+            </div>
+            <div class="top-links">
+                <a href="contact.html">Contact</a>
+                <a href="aide.html">Aide</a>
+                <a href="billetterie.html">🎫 Concerts</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <!-- LOGO -->
+                <a href="/" class="logo">
+                    Andu<span>Xara</span>
+                </a>
+
+                <!-- MENU PRINCIPAL -->
+                <nav class="nav-menu">
+                    <a href="#collection" class="nav-link">Collection</a>
+                    <a href="#philosophie" class="nav-link">Notre histoire</a>
+                    <a href="billetterie.html" class="nav-link nav-link-highlight">
+                        🎫 Concerts
+                    </a>
+                    <a href="reductions.html" class="nav-link">
+                        🎁 Promos
+                    </a>
+                </nav>
+
+                <!-- ESPACE CLIENT -->
+                <div class="user-area" id="userArea">
+                    <!-- Vue NON connecté -->
+                    <div class="guest-view" id="guestView">
+                        <button class="btn btn-outline" onclick="showLoginModal()">
+                            Se connecter
+                        </button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">
+                            Créer un compte
+                        </button>
+                    </div>
+                    
+                    <!-- Vue connecté (cachée par défaut) -->
+                    <div class="user-view" id="userView" style="display: none;">
+                        <div class="user-menu">
+                            <button class="user-button">
+                                <span class="user-avatar">👤</span>
+                                <span class="user-name" id="userName"></span>
+                            </button>
+                            <div class="user-dropdown">
+                                <a href="compte.html">Mon profil</a>
+                                <a href="compte.html#reductions">Mes réductions</a>
+                                <a href="compte.html#billets">Mes billets</a>
+                                <a href="#" onclick="logout()">Déconnexion</a>
+                            </div>
+                        </div>
+                        <a href="panier.html" class="cart-icon">
+                            🛒<span class="cart-count" id="cartCount">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BANDEAU PHILOSOPHIE -->
+    <div class="philosophy-banner">
+        <div class="container">
+            <div class="philosophy-text">
+                <div class="philosophy-item">
+                    <span>🌍</span>
+                    <span><strong>Héritage</strong> - Nos racines africaines</span>
+                </div>
+                <div class="philosophy-item">
+                    <span>✨</span>
+                    <span><strong>Authenticité</strong> - Des pièces uniques</span>
+                </div>
+                <div class="philosophy-item">
+                    <span>🤝</span>
+                    <span><strong>Communauté</strong> - <span id="userCount">206</span> familles</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag">Depuis 2020</div>
+                <h1 class="hero-title">
+                    L'Afrique <span>réinventée</span>
+                </h1>
+                <p class="hero-text">
+                    Andu-Xara célèbre la richesse de la culture africaine à travers des créations modernes, authentiques et intemporelles.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="statUsers">206+</div>
+                        <div class="stat-label">Familles</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="statProducts">15+</div>
+                        <div class="stat-label">Créations</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2020</div>
+                        <div class="stat-label">Année zéro</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION CONCERTS À LA UNE -->
+    <section class="concerts-featured">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🎫 Événements</span>
+                <h2 class="section-title">Concerts à venir</h2>
+                <p class="section-text">
+                    Andu-Xara est partenaire des plus grands événements. Réservez vos billets en ligne.
+                </p>
+            </div>
+
+            <div class="concerts-grid" id="concertsContainer">
+                <!-- Concert 1 (sera chargé dynamiquement) -->
+                <div class="concert-card">
+                    <div class="concert-date">
+                        <span class="date-day">15</span>
+                        <span class="date-month">MARS</span>
+                    </div>
+                    <div class="concert-info">
+                        <h3>Festival Guidimakha</h3>
+                        <p class="concert-location">📍 Nouakchott</p>
+                        <p class="concert-artists">Sidaty Diabira, Djelimady Tounkara</p>
+                        <div class="concert-price">À partir de 500 MRU</div>
+                    </div>
+                    <a href="concert/festival-guidimakha" class="btn btn-primary btn-small">
+                        Billets
+                    </a>
+                </div>
+
+                <!-- Concert 2 -->
+                <div class="concert-card">
+                    <div class="concert-date">
+                        <span class="date-day">22</span>
+                        <span class="date-month">MARS</span>
+                    </div>
+                    <div class="concert-info">
+                        <h3>Nuit de la Musique</h3>
+                        <p class="concert-location">📍 Kaédi</p>
+                        <p class="concert-artists">Ousmane Ba, Aminata Fall</p>
+                        <div class="concert-price">À partir de 350 MRU</div>
+                    </div>
+                    <a href="concert/nuit-musique" class="btn btn-primary btn-small">
+                        Billets
+                    </a>
+                </div>
+            </div>
+
+            <div class="section-action">
+                <a href="billetterie.html" class="btn btn-secondary">
+                    Voir tous les concerts →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PHILOSOPHIE -->
+    <section class="philosophy-section" id="philosophie">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Notre vision</div>
+                <h2 class="section-title">La philosophie Andu-Xara</h2>
+                <p class="section-text">
+                    Plus qu'une marque, un mouvement qui célèbre l'identité africaine à travers la mode contemporaine.
+                </p>
+            </div>
+
+            <div class="values-grid" id="valuesContainer">
+                <!-- Les valeurs seront chargées dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section class="collection-section" id="collection">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Nos créations</div>
+                <h2 class="section-title">La collection 2026</h2>
+                <p class="section-text">
+                    Des pièces uniques qui allient tradition et modernité
+                </p>
+            </div>
+
+            <div class="products-grid" id="productsContainer">
+                <!-- Les produits seront chargés dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION HISTOIRE -->
+    <section class="story-section" id="histoire">
+        <div class="container">
+            <div class="story-content">
+                <div class="story-text">
+                    <div class="section-tag">Notre histoire</div>
+                    <h2 class="section-title">L'aventure Andu-Xara</h2>
+                    <p>
+                        Fondée en 2020 par Cheikhou Diabira et Bocar Ba, Andu-Xara est née d'une vision : créer une marque qui célèbre l'identité africaine.
+                    </p>
+                    <div class="story-highlight">
+                        "Nous ne vendons pas juste des vêtements, nous partageons un héritage"
+                    </div>
+                    <p>
+                        Aujourd'hui, ce sont <strong id="storyUserCount">206</strong> familles qui portent nos créations, de la Mauritanie au Sénégal, au Mali et au-delà.
+                    </p>
+                </div>
+                <div class="story-image" id="storyImage">
+                    <!-- Image chargée dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine célébrant nos racines depuis 2020.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="TikTok">🎵</a>
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explorer</h4>
+                    <ul>
+                        <li><a href="#collection">Collection</a></li>
+                        <li><a href="#philosophie">Notre histoire</a></li>
+                        <li><a href="billetterie.html">Concerts</a></li>
+                        <li><a href="reductions.html">Promotions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                        <li>Nouakchott, Mauritanie</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Infos</h4>
+                    <ul>
+                        <li><a href="#">Livraison</a></li>
+                        <li><a href="#">Retours</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Fierté africaine, style moderne</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE CONNEXION -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideLoginModal()">&times;</span>
+            <h2>Connexion</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Se connecter
+                </button>
+            </form>
+            <p class="form-footer">
+                Pas encore de compte ? 
+                <a href="#" onclick="showRegisterModal(); hideLoginModal();">Créer un compte</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL D'INSCRIPTION -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideRegisterModal()">&times;</span>
+            <h2>Créer un compte</h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regName">Nom complet</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Mot de passe</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirm">Confirmer le mot de passe</label>
+                    <input type="password" id="regConfirm" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    S'inscrire
+                </button>
+            </form>
+            <p class="form-footer">
+                Déjà un compte ? 
+                <a href="#" onclick="showLoginModal(); hideRegisterModal();">Se connecter</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

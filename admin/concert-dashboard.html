@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎫 Administration - Concert Pispa Le Roi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .concert-info {
+            display: flex;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Filters */
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #f8f9fa;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #764ba2;
+            color: white;
+        }
+
+        /* Actions Bar */
+        .actions-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .status-inactive {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+
+        .status-waiting {
+            background: #ffe8e8;
+            color: #e74c3c;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn.activate {
+            background: #27ae60;
+            color: white;
+        }
+
+        .action-btn.activate:hover {
+            background: #2ecc71;
+        }
+
+        .action-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .action-btn.view {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .ticket-preview {
+            background: linear-gradient(135deg, #fff3e0, white);
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .ticket-preview img {
+            width: 150px;
+            height: 150px;
+            margin: 10px 0;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 3px solid #e9ecef;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>
+                <span>🎫</span>
+                Administration Concert Pispa Le Roi
+            </h1>
+            <p>Gérez les réservations, activez les billets et suivez les ventes en temps réel</p>
+            <div class="concert-info" id="concertInfo">
+                📅 15 Avril 2026 à 21:00 • 📍 Titanic Couva, Nouakchott
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTickets">0</div>
+                <div class="stat-label">Total billets vendus</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalRevenue">0</div>
+                <div class="stat-label">Revenus (MRU)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeTickets">0</div>
+                <div class="stat-label">Billets actifs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pendingTickets">0</div>
+                <div class="stat-label">En attente</div>
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom, téléphone ou ID..." onkeyup="filterTickets()">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterByStatus('all')">Tous</button>
+                <button class="filter-btn" onclick="filterByStatus('active')">Actifs</button>
+                <button class="filter-btn" onclick="filterByStatus('inactive')">Inactifs</button>
+                <button class="filter-btn" onclick="filterByStatus('waiting')">En attente</button>
+            </div>
+        </div>
+
+        <!-- ACTIONS BAR -->
+        <div class="actions-bar">
+            <div>
+                <span id="selectedCount">0</span> billet(s) sélectionné(s)
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-success" onclick="activateSelected()" id="activateSelectedBtn" disabled>
+                    ✅ Activer sélection
+                </button>
+                <button class="btn btn-outline" onclick="refreshData()">
+                    🔄 Rafraîchir
+                </button>
+                <button class="btn btn-primary" onclick="exportData()">
+                    📥 Exporter CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-container">
+            <table id="ticketsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">
+                            <input type="checkbox" id="selectAll" onclick="toggleAll()">
+                        </th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Téléphone</th>
+                        <th>Type</th>
+                        <th>Qté</th>
+                        <th>Total</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ticketsBody">
+                    <tr>
+                        <td colspan="9" class="loading">Chargement des données...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODAL DÉTAILS BILLET -->
+    <div id="ticketDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎟️ Détail du billet</h2>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="ticketDetailContent">
+                <!-- Contenu dynamique -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ACTIVATION -->
+    <div id="activateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✅ Activer le billet</h2>
+                <span class="close-modal" onclick="closeActivateModal()">&times;</span>
+            </div>
+            <p id="activateMessage">Êtes-vous sûr de vouloir activer ce billet ?</p>
+            <p>Le client pourra télécharger sa carte activée.</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-success" onclick="confirmActivate()">Oui, activer</button>
+                <button class="btn btn-outline" onclick="closeActivateModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a",
+            databaseURL: "https://andu-xara-promo-codes-ff69e-default-rtdb.europe-west1.firebasedatabase.app/"
+        };
+
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Variables globales
+        let allTickets = [];
+        let filteredTickets = [];
+        let selectedTickets = [];
+        let currentFilter = 'all';
+        let currentTicketId = null;
+
+        // ===== AUTHENTIFICATION ADMIN =====
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('✅ Admin connecté:', user.email);
+                loadTickets();
+            } else {
+                // Rediriger vers la page de connexion
+                window.location.href = '/admin/login.html';
+            }
+        });
+
+        // ===== CHARGER LES BILLETS =====
+        async function loadTickets() {
+            try {
+                const snapshot = await db.collection('tickets')
+                    .where('concertId', '==', 'pispa-tabaski-2026')
+                    .orderBy('purchasedAt', 'desc')
+                    .get();
+
+                allTickets = [];
+                snapshot.forEach(doc => {
+                    allTickets.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                console.log(`✅ ${allTickets.length} billets chargés`);
+                applyFilters();
+
+            } catch (error) {
+                console.error('❌ Erreur chargement:', error);
+                document.getElementById('ticketsBody').innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 50px; color: #e74c3c;">
+                            ❌ Erreur de chargement: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // ===== APPLIQUER LES FILTRES =====
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredTickets = allTickets.filter(ticket => {
+                // Filtre par statut
+                if (currentFilter !== 'all') {
+                    if (currentFilter === 'active' && !ticket.active) return false;
+                    if (currentFilter === 'inactive' && ticket.active !== false) return false;
+                    if (currentFilter === 'waiting' && ticket.status !== 'waiting') return false;
+                }
+                
+                // Filtre par recherche
+                if (searchTerm) {
+                    const clientName = (ticket.userName || '').toLowerCase();
+                    const clientPhone = (ticket.userPhone || '').toLowerCase();
+                    const ticketId = (ticket.ticketId || '').toLowerCase();
+                    
+                    return clientName.includes(searchTerm) || 
+                           clientPhone.includes(searchTerm) || 
+                           ticketId.includes(searchTerm);
+                }
+                
+                return true;
+            });
+
+            updateStats();
+            renderTable();
+        }
+
+        // ===== METTRE À JOUR LES STATISTIQUES =====
+        function updateStats() {
+            let totalTickets = 0;
+            let totalRevenue = 0;
+            let activeTickets = 0;
+            let pendingTickets = 0;
+
+            allTickets.forEach(ticket => {
+                totalTickets += ticket.quantity || 1;
+                totalRevenue += (ticket.price || 0) * (ticket.quantity || 1);
+                
+                if (ticket.active) {
+                    activeTickets += ticket.quantity || 1;
+                } else {
+                    pendingTickets += ticket.quantity || 1;
+                }
+            });
+
+            document.getElementById('totalTickets').textContent = totalTickets;
+            document.getElementById('totalRevenue').textContent = totalRevenue;
+            document.getElementById('activeTickets').textContent = activeTickets;
+            document.getElementById('pendingTickets').textContent = pendingTickets;
+        }
+
+        // ===== AFFICHER LE TABLEAU =====
+        function renderTable() {
+            const tbody = document.getElementById('ticketsBody');
+            
+            if (filteredTickets.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 50px; color: #666;">
+                            Aucun billet trouvé
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredTickets.map(ticket => {
+                const date = ticket.purchasedAt?.toDate ? 
+                    ticket.purchasedAt.toDate().toLocaleString() : 
+                    new Date().toLocaleString();
+
+                const statusClass = ticket.active ? 'status-active' : 
+                                   ticket.status === 'waiting' ? 'status-waiting' : 
+                                   'status-inactive';
+                const statusText = ticket.active ? '✅ Actif' : 
+                                  ticket.status === 'waiting' ? '⏳ En attente' : 
+                                  '🔴 Inactif';
+
+                return `
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="ticket-checkbox" value="${ticket.id}" 
+                                   onchange="updateSelection(this)">
+                        </td>
+                        <td>${date}</td>
+                        <td><strong>${ticket.userName || 'N/A'}</strong></td>
+                        <td>${ticket.userPhone || 'N/A'}</td>
+                        <td>${ticket.ticketTypeName || 'Standard'}</td>
+                        <td>${ticket.quantity || 1}</td>
+                        <td>${(ticket.price || 0) * (ticket.quantity || 1)} MRU</td>
+                        <td>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                ${!ticket.active ? `
+                                    <button class="action-btn activate" onclick="activateTicket('${ticket.id}')">
+                                        ✅ Activer
+                                    </button>
+                                ` : ''}
+                                <button class="action-btn whatsapp" onclick="sendWhatsApp('${ticket.id}')">
+                                    💬 WhatsApp
+                                </button>
+                                <button class="action-btn view" onclick="viewTicket('${ticket.id}')">
+                                    👁️ Voir
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ===== FILTRES =====
+        window.filterByStatus = function(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            applyFilters();
+        };
+
+        window.filterTickets = function() {
+            applyFilters();
+        };
+
+        // ===== SÉLECTION =====
+        window.toggleAll = function() {
+            const checkboxes = document.querySelectorAll('.ticket-checkbox');
+            const selectAll = document.getElementById('selectAll');
+            
+            checkboxes.forEach(cb => {
+                cb.checked = selectAll.checked;
+                updateSelection(cb);
+            });
+        };
+
+        window.updateSelection = function(checkbox) {
+            if (checkbox.checked) {
+                selectedTickets.push(checkbox.value);
+            } else {
+                selectedTickets = selectedTickets.filter(id => id !== checkbox.value);
+            }
+            
+            document.getElementById('selectedCount').textContent = selectedTickets.length;
+            document.getElementById('activateSelectedBtn').disabled = selectedTickets.length === 0;
+        };
+
+        // ===== ACTIVER UN BILLET =====
+        let ticketToActivate = null;
+
+        window.activateTicket = function(ticketId) {
+            ticketToActivate = ticketId;
+            document.getElementById('activateModal').style.display = 'flex';
+        };
+
+        window.confirmActivate = async function() {
+            if (!ticketToActivate) return;
+
+            try {
+                await db.collection('tickets').doc(ticketToActivate).update({
+                    active: true,
+                    activatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    activatedBy: auth.currentUser?.email || 'admin'
+                });
+
+                alert('✅ Billet activé avec succès !');
+                closeActivateModal();
+                loadTickets();
+
+            } catch (error) {
+                console.error('Erreur activation:', error);
+                alert('❌ Erreur: ' + error.message);
+            }
+        };
+
+        window.closeActivateModal = function() {
+            document.getElementById('activateModal').style.display = 'none';
+            ticketToActivate = null;
+        };
+
+        // ===== ACTIVER LA SÉLECTION =====
+        window.activateSelected = async function() {
+            if (selectedTickets.length === 0) return;
+
+            if (!confirm(`Activer ${selectedTickets.length} billet(s) ?`)) return;
+
+            try {
+                const batch = db.batch();
+                
+                selectedTickets.forEach(id => {
+                    const ref = db.collection('tickets').doc(id);
+                    batch.update(ref, {
+                        active: true,
+                        activatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        activatedBy: auth.currentUser?.email || 'admin'
+                    });
+                });
+
+                await batch.commit();
+                
+                alert(`✅ ${selectedTickets.length} billet(s) activé(s) !`);
+                selectedTickets = [];
+                document.getElementById('selectedCount').textContent = '0';
+                document.getElementById('activateSelectedBtn').disabled = true;
+                document.getElementById('selectAll').checked = false;
+                loadTickets();
+
+            } catch (error) {
+                console.error('Erreur activation multiple:', error);
+                alert('❌ Erreur: ' + error.message);
+            }
+        };
+
+        // ===== VOIR UN BILLET =====
+        window.viewTicket = async function(ticketId) {
+            try {
+                const doc = await db.collection('tickets').doc(ticketId).get();
+                const ticket = doc.data();
+
+                const modal = document.getElementById('ticketDetailModal');
+                const content = document.getElementById('ticketDetailContent');
+
+                content.innerHTML = `
+                    <div class="ticket-preview">
+                        <h3>${ticket.concertName || 'Pispa Le Roi'}</h3>
+                        <p><strong>Client:</strong> ${ticket.userName}</p>
+                        <p><strong>Type:</strong> ${ticket.ticketTypeName}</p>
+                        <p><strong>ID:</strong> ${ticket.ticketId}</p>
+                        <img src="${ticket.qrCode}" alt="QR Code">
+                        <p><strong>Statut:</strong> ${ticket.active ? '✅ Actif' : '🔴 Inactif'}</p>
+                    </div>
+                `;
+
+                modal.style.display = 'flex';
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('❌ Erreur: ' + error.message);
+            }
+        };
+
+        // ===== ENVOYER WHATSAPP =====
+        window.sendWhatsApp = async function(ticketId) {
+            try {
+                const doc = await db.collection('tickets').doc(ticketId).get();
+                const ticket = doc.data();
+
+                const message = `Bonjour ${ticket.userName} !\n\n`;
+                message += `Votre billet pour Pispa Le Roi est ${ticket.active ? 'ACTIVÉ' : 'EN ATTENTE'}.\n`;
+                message += `Lien: https://andu-xara.store/ticket.html?id=${ticketId}`;
+
+                const phone = ticket.userPhone || '22234196304';
+                const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                
+                window.open(url, '_blank');
+
+            } catch (error) {
+                console.error('Erreur WhatsApp:', error);
+            }
+        };
+
+        // ===== EXPORTER CSV =====
+        window.exportData = function() {
+            const headers = ['Date', 'Client', 'Téléphone', 'Type', 'Quantité', 'Prix', 'Total', 'Statut', 'ID'];
+            const rows = [];
+
+            allTickets.forEach(ticket => {
+                const date = ticket.purchasedAt?.toDate ? 
+                    ticket.purchasedAt.toDate().toLocaleString() : '';
+                const status = ticket.active ? 'Actif' : 'Inactif';
+                const total = (ticket.price || 0) * (ticket.quantity || 1);
+
+                rows.push([
+                    date,
+                    ticket.userName || '',
+                    ticket.userPhone || '',
+                    ticket.ticketTypeName || '',
+                    ticket.quantity || 1,
+                    ticket.price || 0,
+                    total,
+                    status,
+                    ticket.ticketId || ''
+                ]);
+            });
+
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pispa-billets-${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        };
+
+        // ===== RAFRAÎCHIR =====
+        window.refreshData = function() {
+            loadTickets();
+        };
+
+        // ===== FERMER MODAL =====
+        window.closeModal = function() {
+            document.getElementById('ticketDetailModal').style.display = 'none';
+        };
+
+        // ===== INITIALISATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulation pour le test (à retirer après connexion Firebase)
+            setTimeout(() => {
+                if (allTickets.length === 0) {
+                    document.getElementById('ticketsBody').innerHTML = `
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 30px;">
+                                <p style="color: #666;">En attente de connexion Firebase...</p>
+                                <p style="font-size: 0.9rem; color: #999;">Vérifiez que vous êtes connecté</p>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

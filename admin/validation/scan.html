@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scanner • Concert Pispa Le Roi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .event-info {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            font-weight: 600;
+        }
+
+        .agent-badge {
+            background: #e67e22;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-section h3 {
+            margin-bottom: 15px;
+            color: #e67e22;
+        }
+
+        .manual-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .manual-input input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .manual-input input:focus {
+            outline: none;
+            border-color: #e67e22;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #e67e22;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+        }
+
+        .btn-large {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .result {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            display: block;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #e74c3c;
+            display: block;
+        }
+
+        .result.warning {
+            background: #fff3cd;
+            border: 2px solid #f39c12;
+            display: block;
+        }
+
+        .ticket-details {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .ticket-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ticket-field:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .value {
+            font-weight: 600;
+            color: #e67e22;
+        }
+
+        .history {
+            margin-top: 30px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item.valid {
+            border-left: 4px solid #27ae60;
+        }
+
+        .history-item.invalid {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .history-item.used {
+            border-left: 4px solid #f39c12;
+        }
+
+        .history-time {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .mode-btn.active {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+
+        .camera-section {
+            display: none;
+        }
+
+        .camera-section.active {
+            display: block;
+        }
+
+        #video-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #video {
+            width: 100%;
+            height: auto;
+            transform: scaleX(-1);
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .capture-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📱 Scanner Concert Pispa Le Roi</h1>
+    </div>
+
+    <div class="event-info">
+        <span>Agent: <strong>Validation</strong></span>
+        <span class="agent-badge">Pispa Le Roi</span>
+    </div>
+
+    <div class="mode-switch">
+        <button class="mode-btn active" onclick="switchMode('camera')">📷 Caméra</button>
+        <button class="mode-btn" onclick="switchMode('manual')">⌨️ Saisie manuelle</button>
+    </div>
+
+    <!-- Mode Caméra -->
+    <div id="camera-mode" class="camera-section active">
+        <div id="video-container">
+            <video id="video" playsinline></video>
+        </div>
+        <canvas id="canvas"></canvas>
+        <button class="btn btn-primary capture-btn" onclick="captureQR()">📸 Scanner</button>
+        <button class="btn btn-secondary capture-btn" onclick="stopCamera()">⏸ Arrêter</button>
+    </div>
+
+    <!-- Mode Saisie Manuelle -->
+    <div id="manual-mode" class="camera-section">
+        <div class="input-section">
+            <h3>⌨️ Saisir l'ID du billet</h3>
+            <div class="manual-input">
+                <input type="text" id="manualTicketId" placeholder="PISPA-XXXX-XXXX-XXXX">
+                <button class="btn btn-primary" onclick="validateManual()">Valider</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result" id="result">
+        <div id="resultMessage"></div>
+    </div>
+
+    <div class="ticket-details" id="ticketDetails" style="display: none;">
+        <h3 style="margin-bottom: 15px;">🎫 Détails du billet</h3>
+        <div id="ticketInfo"></div>
+    </div>
+
+    <div class="history">
+        <h3 style="margin-bottom: 15px;">📋 Dernières validations</h3>
+        <div id="historyList"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let videoStream = null;
+        let mode = 'camera';
+
+        // ===== CHANGER DE MODE =====
+        function switchMode(newMode) {
+            mode = newMode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.camera-section').forEach(section => section.classList.remove('active'));
+            
+            if (newMode === 'camera') {
+                document.querySelectorAll('.mode-btn')[0].classList.add('active');
+                document.getElementById('camera-mode').classList.add('active');
+                startCamera();
+            } else {
+                document.querySelectorAll('.mode-btn')[1].classList.add('active');
+                document.getElementById('manual-mode').classList.add('active');
+                stopCamera();
+            }
+        }
+
+        // ===== DÉMARRER LA CAMÉRA =====
+        async function startCamera() {
+            try {
+                videoStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: 640,
+                        height: 480
+                    } 
+                });
+                const video = document.getElementById('video');
+                video.srcObject = videoStream;
+            } catch (error) {
+                console.error('Erreur caméra:', error);
+                alert('❌ Impossible d\'accéder à la caméra');
+            }
+        }
+
+        // ===== ARRÊTER LA CAMÉRA =====
+        function stopCamera() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+        }
+
+        // ===== CAPTURER UN QR CODE =====
+        function captureQR() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Ici vous pourriez intégrer une librairie de scan
+            // Pour l'instant, on simule avec une entrée manuelle
+            const simulatedId = prompt('Entrez l\'ID du billet (simulation):', 'PISPA-XXXX-XXXX-XXXX');
+            if (simulatedId) {
+                validateTicket(simulatedId);
+            }
+        }
+
+        // ===== VALIDATION MANUELLE =====
+        function validateManual() {
+            const ticketId = document.getElementById('manualTicketId').value.trim();
+            if (!ticketId) {
+                alert('Veuillez entrer un ID de billet');
+                return;
+            }
+            validateTicket(ticketId);
+        }
+
+        // ===== FONCTION PRINCIPALE DE VALIDATION =====
+        async function validateTicket(ticketId) {
+            try {
+                console.log('🔍 Validation du billet:', ticketId);
+
+                // Récupérer le billet dans Firestore
+                const ticketRef = db.collection('tickets').doc(ticketId);
+                const ticketDoc = await ticketRef.get();
+
+                if (!ticketDoc.exists) {
+                    displayResult({
+                        valid: false,
+                        message: '❌ Billet inexistant',
+                        code: 'NOT_FOUND'
+                    });
+                    addToHistory(ticketId, 'invalid');
+                    return;
+                }
+
+                const ticket = ticketDoc.data();
+                console.log('📦 Billet trouvé:', ticket);
+
+                // VÉRIFICATION 1 : Le billet est-il payé (actif) ?
+                if (!ticket.active) {
+                    displayResult({
+                        valid: false,
+                        message: '❌ Billet NON PAYÉ',
+                        ticket: ticket,
+                        code: 'NOT_PAID'
+                    });
+                    addToHistory(ticketId, 'invalid');
+                    return;
+                }
+
+                // VÉRIFICATION 2 : Le billet a-t-il déjà été utilisé ?
+                if (ticket.used) {
+                    const usedDate = ticket.usedAt ? new Date(ticket.usedAt.seconds * 1000).toLocaleString() : 'Date inconnue';
+                    displayResult({
+                        valid: false,
+                        message: '⚠️ Billet DÉJÀ UTILISÉ',
+                        usedAt: usedDate,
+                        ticket: ticket,
+                        code: 'ALREADY_USED'
+                    });
+                    addToHistory(ticketId, 'used');
+                    return;
+                }
+
+                // ✅ Billet valide et non utilisé → On le marque comme utilisé
+                await ticketRef.update({
+                    used: true,
+                    usedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    validatedBy: 'agent'
+                });
+
+                displayResult({
+                    valid: true,
+                    message: '✅ Entrée autorisée !',
+                    ticket: ticket,
+                    code: 'SUCCESS'
+                });
+                addToHistory(ticketId, 'valid');
+
+            } catch (error) {
+                console.error('❌ Erreur validation:', error);
+                displayResult({
+                    valid: false,
+                    message: '❌ Erreur technique',
+                    code: 'ERROR'
+                });
+                addToHistory(ticketId, 'invalid');
+            }
+        }
+
+        // ===== AFFICHER LE RÉSULTAT =====
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            const resultMsg = document.getElementById('resultMessage');
+            const ticketDetails = document.getElementById('ticketDetails');
+            const ticketInfo = document.getElementById('ticketInfo');
+
+            resultDiv.className = 'result';
+
+            switch(result.code) {
+                case 'SUCCESS':
+                    resultDiv.classList.add('success');
+                    resultMsg.innerHTML = `
+                        <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">✅ ENTRÉE AUTORISÉE</div>
+                    `;
+                    ticketDetails.style.display = 'block';
+                    ticketInfo.innerHTML = `
+                        <div class="ticket-field">
+                            <span class="label">Concert:</span>
+                            <span class="value">${result.ticket.concertName || 'Pispa Le Roi'}</span>
+                        </div>
+                        <div class="ticket-field">
+                            <span class="label">Client:</span>
+                            <span class="value">${result.ticket.userName || 'N/A'}</span>
+                        </div>
+                        <div class="ticket-field">
+                            <span class="label">Type:</span>
+                            <span class="value">${result.ticket.ticketTypeName || 'Standard'}</span>
+                        </div>
+                        <div class="ticket-field">
+                            <span class="label">Billet N°:</span>
+                            <span class="value">${result.ticket.ticketId}</span>
+                        </div>
+                    `;
+                    break;
+
+                case 'NOT_PAID':
+                    resultDiv.classList.add('error');
+                    const amount = (result.ticket.price || 0) * (result.ticket.quantity || 1);
+                    resultMsg.innerHTML = `
+                        <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">❌ BILLET NON PAYÉ</div>
+                        <p>💰 Montant à payer: ${amount} MRU</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Veuillez régler avant d'entrer</p>
+                    `;
+                    ticketDetails.style.display = 'none';
+                    break;
+
+                case 'ALREADY_USED':
+                    resultDiv.classList.add('warning');
+                    resultMsg.innerHTML = `
+                        <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">⚠️ BILLET DÉJÀ UTILISÉ</div>
+                        <p>🕐 Utilisé le: ${result.usedAt || 'Date inconnue'}</p>
+                    `;
+                    ticketDetails.style.display = 'none';
+                    break;
+
+                case 'NOT_FOUND':
+                    resultDiv.classList.add('error');
+                    resultMsg.innerHTML = `
+                        <div style="font-size: 1.5rem; font-weight: bold;">❌ BILLET INEXISTANT</div>
+                    `;
+                    ticketDetails.style.display = 'none';
+                    break;
+
+                default:
+                    resultDiv.classList.add('error');
+                    resultMsg.innerHTML = `
+                        <div style="font-size: 1.5rem; font-weight: bold;">${result.message}</div>
+                    `;
+                    ticketDetails.style.display = 'none';
+            }
+        }
+
+        // ===== AJOUTER À L'HISTORIQUE =====
+        function addToHistory(ticketId, status) {
+            const history = document.getElementById('historyList');
+            const time = new Date().toLocaleTimeString();
+            
+            const statusConfig = {
+                valid: { class: 'valid', text: '✅ Validé' },
+                invalid: { class: 'invalid', text: '❌ Invalide' },
+                used: { class: 'used', text: '⚠️ Déjà utilisé' }
+            };
+
+            const config = statusConfig[status] || statusConfig.invalid;
+
+            const item = document.createElement('div');
+            item.className = `history-item ${config.class}`;
+            item.innerHTML = `
+                <span>${ticketId.substring(0, 12)}...</span>
+                <span>${config.text}</span>
+                <span class="history-time">${time}</span>
+            `;
+            
+            history.prepend(item);
+            
+            // Garder seulement les 10 derniers
+            while (history.children.length > 10) {
+                history.removeChild(history.lastChild);
+            }
+        }
+
+        // ===== INITIALISATION =====
+        window.onload = function() {
+            startCamera();
+        };
+
+        window.onunload = function() {
+            stopCamera();
+        };
+    </script>
+</body>
+</html>

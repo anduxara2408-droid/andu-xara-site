@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Firebase
+service-account-key.json
+
+# Backups
+*.backup
+*.bak
+*.old
+*.save
+
+# Logs
+*.log
+npm-debug.log*

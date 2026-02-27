@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation Andu-Xara - Accès Agent</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .phone-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .phone-list ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        .phone-list li {
+            padding: 5px 0;
+            color: #495057;
+        }
+        .phone-list li:before {
+            content: "📱 ";
+            margin-right: 5px;
+        }
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 5px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .code-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .error {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1976d2;
+        }
+        .info strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔐 Accès Agent de Validation</h1>
+        <p class="subtitle">Andu-Xara • Billetterie officielle</p>
+        
+        <div class="phone-list">
+            <strong>📋 Téléphones autorisés :</strong>
+            <ul id="authorizedPhones"></ul>
+        </div>
+        
+        <input type="text" class="code-input" id="accessCode" placeholder="000000" maxlength="6">
+        <button class="btn" onclick="validateAccess()">Accéder au scanner</button>
+        <div id="errorMessage" class="error"></div>
+        
+        <div class="info">
+            <strong>ℹ️ Comment obtenir le code ?</strong>
+            <p>Le code d'accès vous a été communiqué par l'organisateur. Il est unique pour chaque événement et change toutes les 24h.</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - À MODIFIER SELON VOS BESOINS
+        const CONFIG = {
+            // Codes d'accès valides (changés régulièrement)
+            validCodes: {
+                "241227": { event: "Festival Guidimakha", date: "15/03/2026" },
+                "241228": { event: "Nuit de la Musique", date: "22/03/2026" },
+                "241229": { event: "Concert Sidaty", date: "05/04/2026" }
+            },
+            // Téléphones autorisés (IMEI ou IDs uniques)
+            authorizedPhones: [
+                "+222 34 19 63 04",  // Votre téléphone
+                "+222 31 03 76 97",  // 2ème téléphone
+                "+222 76 282 11 63"  // 3ème téléphone
+            ],
+            // Durée de validité du code (en heures)
+            codeValidity: 24
+        };
+
+        // Afficher les téléphones autorisés
+        document.getElementById('authorizedPhones').innerHTML = CONFIG.authorizedPhones
+            .map(phone => `<li>${phone}</li>`)
+            .join('');
+
+        // Vérifier le code d'accès
+        window.validateAccess = function() {
+            const code = document.getElementById('accessCode').value;
+            const errorEl = document.getElementById('errorMessage');
+            
+            if (!code || code.length !== 6) {
+                errorEl.textContent = '❌ Code invalide (6 chiffres requis)';
+                return;
+            }
+            
+            // Vérifier si le code existe
+            if (CONFIG.validCodes[code]) {
+                // Stocker l'accès dans sessionStorage
+                sessionStorage.setItem('validationAccess', JSON.stringify({
+                    code: code,
+                    event: CONFIG.validCodes[code].event,
+                    date: CONFIG.validCodes[code].date,
+                    timestamp: Date.now()
+                }));
+                
+                // Rediriger vers le scanner
+                window.location.href = 'scan.html';
+            } else {
+                errorEl.textContent = '❌ Code d\'accès invalide. Vérifiez auprès de l\'organisateur.';
+            }
+        };
+
+        // Détection du numéro de téléphone (via un cookie ou localStorage)
+        function detectPhone() {
+            // Simuler la détection - dans la réalité, vous pouvez stocker le numéro dans localStorage
+            const phone = localStorage.getItem('agentPhone');
+            if (phone && CONFIG.authorizedPhones.includes(phone)) {
+                console.log('✅ Téléphone autorisé détecté:', phone);
+            }
+        }
+        
+        detectPhone();
+    </script>
+</body>
+</html>
