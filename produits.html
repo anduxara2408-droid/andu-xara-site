@@ -2,15 +2,20 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Toute la collection - Andu-Xara</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f8f9fa;
+            padding-bottom: 100px; /* Espace pour le panier fixe */
+        }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         
+        /* ===== HEADER ===== */
         .main-header {
             padding: 20px 0;
             background: white;
@@ -41,6 +46,29 @@
         .nav-link:hover { color: #e67e22; }
         .nav-link-highlight { color: #e67e22; font-weight: 700; }
         
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+        .top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-message { color: #ccc; }
+        .top-message strong { color: #e67e22; }
+        .top-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .top-links a:hover { color: white; }
+        
+        /* ===== PAGE TITLE ===== */
         .page-title {
             text-align: center;
             margin: 40px 0;
@@ -49,6 +77,7 @@
         }
         .page-title span { color: #e67e22; }
         
+        /* ===== FILTRES ===== */
         .filters {
             display: flex;
             justify-content: center;
@@ -72,9 +101,10 @@
             color: white;
         }
         
+        /* ===== GRILLE PRODUITS ===== */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-bottom: 60px;
         }
@@ -91,6 +121,7 @@
             box-shadow: 0 15px 30px rgba(230,126,34,0.15);
         }
         
+        /* ===== CARROUSEL ===== */
         .product-carousel {
             position: relative;
             aspect-ratio: 3/4;
@@ -147,6 +178,7 @@
             transform: scale(1.2);
         }
         
+        /* ===== INFOS PRODUIT ===== */
         .product-info {
             padding: 20px;
         }
@@ -176,6 +208,7 @@
             margin: 15px 0;
         }
         
+        /* ===== SÉLECTEUR DE TAILLE ===== */
         .size-selector {
             margin: 15px 0;
         }
@@ -189,7 +222,7 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-        .size-btn {
+        .size-btn, .age-btn {
             width: 45px;
             height: 45px;
             border: 2px solid #e0e0e0;
@@ -199,27 +232,9 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .size-btn:hover,
-        .size-btn.selected {
-            border-color: #e67e22;
-            background: #e67e22;
-            color: white;
-        }
-        
-        /* Tailles enfants (âges) */
-        .age-btn {
-            width: 60px;
-            height: 45px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        .age-btn:hover,
-        .age-btn.selected {
+        .age-btn { width: 60px; }
+        .size-btn:hover, .age-btn:hover,
+        .size-btn.selected, .age-btn.selected {
             border-color: #e67e22;
             background: #e67e22;
             color: white;
@@ -243,6 +258,168 @@
             box-shadow: 0 10px 20px rgba(230,126,34,0.3);
         }
         
+        /* ===== PANIER FLOTTANT FIXE ===== */
+        .floating-cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(230,126,34,0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 9999;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid white;
+            font-weight: 600;
+        }
+        .floating-cart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(230,126,34,0.6);
+        }
+        .floating-cart .cart-icon {
+            font-size: 1.5rem;
+        }
+        .floating-cart .cart-count {
+            background: white;
+            color: #e67e22;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .floating-cart .cart-total {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        /* ===== MODAL PANIER ===== */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .cart-modal.active {
+            display: flex;
+        }
+        .cart-modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .cart-modal-header h2 {
+            color: #e67e22;
+            font-size: 1.5rem;
+        }
+        .close-cart {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+        .close-cart:hover {
+            color: #e67e22;
+        }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .cart-item-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .cart-item-price {
+            font-weight: 700;
+            color: #e67e22;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-item-actions button {
+            background: none;
+            border: 1px solid #e0e0e0;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cart-item-actions button:hover {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+        .cart-total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e67e22;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .checkout-btn:hover {
+            background: #2ecc71;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== NOTIFICATION ===== */
         .notification {
             position: fixed;
             top: 20px;
@@ -259,8 +436,98 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .footer-col h4 {
+            margin-bottom: 15px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover {
+            color: #e67e22;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #ccc;
+        }
+        
+        /* ===== MODALS AUTH ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .products-grid { grid-template-columns: 1fr; }
+            .floating-cart { 
+                bottom: 15px; 
+                right: 15px;
+                padding: 12px 20px;
+            }
+        }
+        @media (max-width: 480px) {
+            .floating-cart {
+                bottom: 10px;
+                right: 10px;
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
@@ -298,13 +565,33 @@
                         <span id="userName"></span>
                         <button onclick="logout()">Déconnexion</button>
                     </div>
-                    <a href="panier.html" class="cart-icon">
-                        🛒<span class="cart-count" id="cartCount">0</span>
-                    </a>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- PANIER FLOTTANT -->
+    <div class="floating-cart" onclick="toggleCartModal()">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-count" id="floatingCartCount">0</span>
+        <span class="cart-total" id="floatingCartTotal">0 MRU</span>
+    </div>
+
+    <!-- MODAL PANIER -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-content">
+            <div class="cart-modal-header">
+                <h2>🛒 Votre panier</h2>
+                <span class="close-cart" onclick="toggleCartModal()">&times;</span>
+            </div>
+            <div id="cart-items-list"></div>
+            <div class="cart-total-section">
+                <span>Total :</span>
+                <span id="cartModalTotal">0 MRU</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Procéder au paiement</button>
+        </div>
+    </div>
 
     <!-- PAGE TITLE -->
     <div class="container">
@@ -350,7 +637,7 @@
         </div>
     </footer>
 
-    <!-- MODALS -->
+    <!-- MODALS AUTH -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideLoginModal()">&times;</span>
@@ -396,153 +683,97 @@
     <script src="js/auth.js"></script>
     
     <script>
-        // ===== DÉFINITION DES PRODUITS AVEC LES BONS NOMS DE FICHIERS =====
+        // ===== PRODUITS (même définition que votre code) =====
         const PRODUCTS = [
-            // === ENSEMBLES EXISTANTS ===
+            // === ENSEMBLES ===
             {
                 id: 'azawad-bleu',
                 nom: 'Azawad Bleu',
                 nomComplet: 'Ensemble Azawad',
-                description: 'Ensemble premium en coton peigné, coupe moderne et décontractée. Idéal pour toutes les occasions.',
+                description: 'Ensemble premium en coton peigné, coupe moderne et décontractée.',
                 prix: 600,
                 categorie: 'ensembles',
-                photos: [
-                    'images/produits/pull-bleu-01.jpg',
-                    'images/produits/pull-bleu-02.jpg',
-                    'images/produits/pull-bleu-03.jpg'
-                ],
+                photos: ['images/produits/pull-bleu-01.jpg', 'images/produits/pull-bleu-02.jpg', 'images/produits/pull-bleu-03.jpg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
             {
                 id: 'sahel-beige',
                 nom: 'Sahel Beige',
                 nomComplet: 'Ensemble Sahel',
-                description: 'Ensemble Sahel, élégance et confort. Tissu de qualité supérieure pour un style affirmé.',
+                description: 'Ensemble Sahel, élégance et confort.',
                 prix: 600,
                 categorie: 'ensembles',
-                photos: [
-                    'images/produits/pull-beige-01.jpg',
-                    'images/produits/pull-beige-02.jpg'
-                ],
+                photos: ['images/produits/pull-beige-01.jpg', 'images/produits/pull-beige-02.jpg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
             {
                 id: 'tagant-gris',
                 nom: 'Tagant Gris',
                 nomComplet: 'Ensemble Tagant',
-                description: 'Ensemble Tagant, inspiration désertique. Coupe moderne, tissu respirant, finitions soignées.',
+                description: 'Ensemble Tagant, inspiration désertique.',
                 prix: 600,
                 categorie: 'ensembles',
-                photos: [
-                    'images/produits/pull-gris-01.jpg',
-                    'images/produits/pull-gris-02.jpg'
-                ],
+                photos: ['images/produits/pull-gris-01.jpg', 'images/produits/pull-gris-02.jpg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
             {
                 id: 'tichitt-noir',
                 nom: 'Tichitt Noir',
                 nomComplet: 'Ensemble Tichitt',
-                description: 'Ensemble Tichitt, noir intemporel. Élégance et sobriété pour un look urbain chic.',
+                description: 'Ensemble Tichitt, noir intemporel.',
                 prix: 600,
                 categorie: 'ensembles',
-                photos: [
-                    'images/produits/pull-noir-01.jpg',
-                    'images/produits/pull-noir-02.jpg'
-                ],
+                photos: ['images/produits/pull-noir-01.jpg', 'images/produits/pull-noir-02.jpg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
-            
-            // === NOUVEAU: Ensemble Tagant Noir (capuche avec logo arabe) ===
-            {
-                id: 'tagant-noir',
-                nom: 'Tagant Noir',
-                nomComplet: 'Ensemble Tagant Noir',
-                description: 'Ensemble capuche avec logo arabe brodé. Style urbain et élégant, confectionné avec soin.',
-                prix: 650,
-                categorie: 'ensembles',
-                photos: [
-                    'images/second/Tagant  noir.jpeg'
-                ],
-                tailles: ['S', 'M', 'L', 'XL']
-            },
-            
-            // === NOUVEAU: Capuchon Blanc (ensemble) ===
-            {
-                id: 'capuchon-blanc',
-                nom: 'Capuchon Blanc',
-                nomComplet: 'Ensemble Capuchon Blanc',
-                description: 'Capuchon blanc élégant, confortable et moderne. Parfait pour un look décontracté et stylé.',
-                prix: 600,
-                categorie: 'ensembles',
-                photos: [
-                    'images/second/capuchon-blanc.jpeg'
-                ],
-                tailles: ['S', 'M', 'L', 'XL']
-            },
-            
             // === T-SHIRTS ===
-            // T-shirt Ouadane Noir (logo arabe sur tissu africain)
             {
                 id: 'ouadane-noir',
                 nom: 'Ouadane Noir',
                 nomComplet: 'T-shirt Ouadane Noir',
-                description: 'T-shirt noir avec superposition de tissu africain culturel. Mélange unique de tradition et modernité.',
+                description: 'T-shirt noir avec superposition de tissu africain culturel.',
                 prix: 400,
                 categorie: 'tshirts',
-                photos: [
-                    'images/second/Ouadane Noir 3.jpeg',
-                    'images/second/Ouadane Noir 2.jpeg'
-                ],
+                photos: ['images/second/Ouadane Noir 3.jpeg', 'images/second/Ouadane Noir 2.jpeg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
-            
-            // T-shirt Beige (superposition)
             {
                 id: 'beige-tshirt',
                 nom: 'Beige Tissu',
                 nomComplet: 'T-shirt Beige',
-                description: 'T-shirt beige avec superposition de tissu africain. Pièce unique qui allie confort et style.',
+                description: 'T-shirt beige avec superposition de tissu africain.',
                 prix: 400,
                 categorie: 'tshirts',
-                photos: [
-                    'images/second/beige-tshirt.jpeg',
-                    'images/second/beige-tshirt.jpeg'
-                ],
+                photos: ['images/second/beige-tshirt.jpeg', 'images/second/beige-tshirt.jpeg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
-            
-            // T-shirt Tichitt Blanc
             {
                 id: 'tichitt-blanc',
                 nom: 'Tichitt Blanc',
                 nomComplet: 'T-shirt Tichitt Blanc',
-                description: 'T-shirt blanc avec superposition de tissu africain. Élégance et authenticité.',
+                description: 'T-shirt blanc avec superposition de tissu africain.',
                 prix: 400,
                 categorie: 'tshirts',
-                photos: [
-                    'images/second/Tichitt blanc.jpeg'
-                ],
+                photos: ['images/second/Tichitt blanc.jpeg'],
                 tailles: ['S', 'M', 'L', 'XL']
             },
-            
             // === ENFANTS ===
             {
                 id: 'tichitt-noir-enfant',
                 nom: 'Tichitt blanc Enfant',
                 nomComplet: 'T-shirt Enfant Tichitt blanc',
-                description: 'T-shirt blanc pour enfant, confortable et stylé. Parfait pour les petits.',
+                description: 'T-shirt blanc pour enfant, confortable et stylé.',
                 prix: 250,
                 categorie: 'enfants',
-                photos: [
-                    'images/second/Tichitt Noir enfant .jpeg'
-                ],
+                photos: ['images/second/Tichitt Noir enfant .jpeg'],
                 ages: ['3-4 ans', '5-6 ans', '7-8 ans', '9-10 ans']
             }
         ];
 
         let selectedOptions = {};
+        let cart = JSON.parse(localStorage.getItem('panier')) || [];
 
+        // ===== AFFICHAGE PRODUITS =====
         function displayProducts(categorie = 'tous') {
             const container = document.getElementById('products-container');
             if (!container) return;
@@ -555,7 +786,6 @@
             }
 
             container.innerHTML = filtres.map(produit => {
-                // Déterminer si c'est un produit enfant (utilise des âges au lieu de tailles)
                 const isEnfant = produit.categorie === 'enfants';
                 const options = isEnfant ? (produit.ages || []) : (produit.tailles || []);
                 const optionType = isEnfant ? 'Âge' : 'Taille';
@@ -595,10 +825,10 @@
                 </div>
             `}).join('');
             
-            // Initialiser les carrousels après l'affichage
             initCarousels();
         }
 
+        // ===== CARROUSELS =====
         function initCarousels() {
             document.querySelectorAll('.product-card').forEach(card => {
                 const productId = card.dataset.id;
@@ -609,10 +839,6 @@
                 
                 if (!track) return;
                 
-                let currentIndex = 0;
-                const totalImages = track.children.length;
-                
-                // Stocker l'index sur l'élément
                 track._currentIndex = 0;
                 
                 function updateCarousel() {
@@ -625,7 +851,7 @@
                 if (leftArrow) {
                     leftArrow.onclick = (e) => {
                         e.stopPropagation();
-                        track._currentIndex = (track._currentIndex - 1 + totalImages) % totalImages;
+                        track._currentIndex = (track._currentIndex - 1 + track.children.length) % track.children.length;
                         updateCarousel();
                     };
                 }
@@ -633,19 +859,21 @@
                 if (rightArrow) {
                     rightArrow.onclick = (e) => {
                         e.stopPropagation();
-                        track._currentIndex = (track._currentIndex + 1) % totalImages;
+                        track._currentIndex = (track._currentIndex + 1) % track.children.length;
                         updateCarousel();
                     };
                 }
             });
         }
 
+        // ===== SÉLECTION OPTION =====
         window.selectOption = function(btn, productId, option) {
             document.querySelectorAll(`.size-buttons[data-product="${productId}"] button`).forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
             selectedOptions[productId] = option;
         };
 
+        // ===== AJOUT AU PANIER =====
         window.addToCartFromProduct = async function(productId) {
             const user = auth?.currentUser;
             if (!user) { 
@@ -663,8 +891,6 @@
                 return; 
             }
             
-            let cart = JSON.parse(localStorage.getItem('panier')) || [];
-            
             const existingItem = cart.find(item => item.id === productId && item.option === selectedOption);
             
             if (existingItem) {
@@ -681,7 +907,7 @@
             }
             
             localStorage.setItem('panier', JSON.stringify(cart));
-            updateCartCount();
+            updateCartDisplay();
             
             const notif = document.createElement('div');
             notif.className = 'notification';
@@ -690,46 +916,105 @@
             setTimeout(() => notif.remove(), 3000);
         };
 
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('panier')) || [];
+        // ===== MISE À JOUR AFFICHAGE PANIER =====
+        function updateCartDisplay() {
+            // Mettre à jour le compteur flottant
             const count = cart.reduce((sum, item) => sum + item.quantite, 0);
-            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+            const total = cart.reduce((sum, item) => sum + (item.prix * item.quantite), 0);
+            
+            document.getElementById('floatingCartCount').textContent = count;
+            document.getElementById('floatingCartTotal').textContent = total + ' MRU';
+            
+            // Mettre à jour le modal
+            const cartItemsList = document.getElementById('cart-items-list');
+            if (cartItemsList) {
+                if (cart.length === 0) {
+                    cartItemsList.innerHTML = '<p style="text-align:center; color:#666;">Votre panier est vide</p>';
+                } else {
+                    cartItemsList.innerHTML = cart.map((item, index) => `
+                        <div class="cart-item">
+                            <img src="${item.image}" alt="${item.nom}" class="cart-item-image">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">${item.nom}</div>
+                                <div class="cart-item-details">${item.option} • Qté: ${item.quantite}</div>
+                                <div class="cart-item-price">${item.prix * item.quantite} MRU</div>
+                            </div>
+                            <div class="cart-item-actions">
+                                <button onclick="updateQuantity(${index}, -1)">-</button>
+                                <span>${item.quantite}</span>
+                                <button onclick="updateQuantity(${index}, 1)">+</button>
+                                <button onclick="removeFromCart(${index})" style="color:red;">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+            document.getElementById('cartModalTotal').textContent = total + ' MRU';
         }
 
+        window.updateQuantity = function(index, delta) {
+            const newQty = cart[index].quantite + delta;
+            if (newQty <= 0) {
+                cart.splice(index, 1);
+            } else {
+                cart[index].quantite = newQty;
+            }
+            localStorage.setItem('panier', JSON.stringify(cart));
+            updateCartDisplay();
+        };
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('panier', JSON.stringify(cart));
+            updateCartDisplay();
+        };
+
+        // ===== GESTION MODAL PANIER =====
+        window.toggleCartModal = function() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('active');
+            updateCartDisplay();
+        };
+
+        window.checkout = function() {
+            alert('Redirection vers le paiement...');
+            // Implémentez votre logique de paiement ici
+        };
+
+        // ===== FILTRES =====
         window.filterProducts = function(categorie) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             displayProducts(categorie);
         };
 
-        // ===== GESTION DES MODALS =====
+        // ===== MODALS AUTH =====
         function showLoginModal() { 
-            const modal = document.getElementById('loginModal');
-            if (modal) modal.style.display = 'flex'; 
+            document.getElementById('loginModal').style.display = 'flex'; 
         }
         function hideLoginModal() { 
-            const modal = document.getElementById('loginModal');
-            if (modal) modal.style.display = 'none'; 
+            document.getElementById('loginModal').style.display = 'none'; 
         }
         function showRegisterModal() { 
-            const modal = document.getElementById('registerModal');
-            if (modal) modal.style.display = 'flex'; 
+            document.getElementById('registerModal').style.display = 'flex'; 
         }
         function hideRegisterModal() { 
-            const modal = document.getElementById('registerModal');
-            if (modal) modal.style.display = 'none'; 
+            document.getElementById('registerModal').style.display = 'none'; 
         }
 
         window.onclick = function(event) {
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
-            if (event.target === loginModal && loginModal) loginModal.style.display = 'none';
-            if (event.target === registerModal && registerModal) registerModal.style.display = 'none';
+            const cartModal = document.getElementById('cartModal');
+            if (event.target === loginModal) loginModal.style.display = 'none';
+            if (event.target === registerModal) registerModal.style.display = 'none';
+            if (event.target === cartModal) cartModal.classList.remove('active');
         };
 
+        // ===== INITIALISATION =====
         document.addEventListener('DOMContentLoaded', () => {
             displayProducts('tous');
-            updateCartCount();
+            updateCartDisplay();
         });
     </script>
 </body>
