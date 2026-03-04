@@ -121,6 +121,7 @@
             cursor: pointer;
             opacity: 0;
             transition: opacity 0.3s;
+            z-index: 5;
         }
         .product-card:hover .carousel-arrow { opacity: 1; }
         .carousel-arrow.left { left: 10px; }
@@ -132,6 +133,7 @@
             transform: translateX(-50%);
             display: flex;
             gap: 6px;
+            z-index: 5;
         }
         .carousel-indicators span {
             width: 8px;
@@ -199,6 +201,25 @@
         }
         .size-btn:hover,
         .size-btn.selected {
+            border-color: #e67e22;
+            background: #e67e22;
+            color: white;
+        }
+        
+        /* Tailles enfants (âges) */
+        .age-btn {
+            width: 60px;
+            height: 45px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .age-btn:hover,
+        .age-btn.selected {
             border-color: #e67e22;
             background: #e67e22;
             color: white;
@@ -292,6 +313,7 @@
             <button class="filter-btn active" onclick="filterProducts('tous')">Tous</button>
             <button class="filter-btn" onclick="filterProducts('ensembles')">Ensembles</button>
             <button class="filter-btn" onclick="filterProducts('tshirts')">T-shirts</button>
+            <button class="filter-btn" onclick="filterProducts('enfants')">Enfants</button>
         </div>
         <div class="products-grid" id="products-container">
             <div class="loading">Chargement des produits...</div>
@@ -374,8 +396,9 @@
     <script src="js/auth.js"></script>
     
     <script>
-        // ===== DÉFINITION DES PRODUITS =====
+        // ===== DÉFINITION DES PRODUITS AVEC LES BONS NOMS DE FICHIERS =====
         const PRODUCTS = [
+            // === ENSEMBLES EXISTANTS ===
             {
                 id: 'azawad-bleu',
                 nom: 'Azawad Bleu',
@@ -429,25 +452,101 @@
                 ],
                 tailles: ['S', 'M', 'L', 'XL']
             },
+            
+            // === NOUVEAU: Ensemble Tagant Noir (capuche avec logo arabe) ===
+            {
+                id: 'tagant-noir',
+                nom: 'Tagant Noir',
+                nomComplet: 'Ensemble Tagant Noir',
+                description: 'Ensemble capuche avec logo arabe brodé. Style urbain et élégant, confectionné avec soin.',
+                prix: 650,
+                categorie: 'ensembles',
+                photos: [
+                    'images/second/Tagant  noir.jpeg'
+                ],
+                tailles: ['S', 'M', 'L', 'XL']
+            },
+            
+            // === NOUVEAU: Capuchon Blanc (ensemble) ===
+            {
+                id: 'capuchon-blanc',
+                nom: 'Capuchon Blanc',
+                nomComplet: 'Ensemble Capuchon Blanc',
+                description: 'Capuchon blanc élégant, confortable et moderne. Parfait pour un look décontracté et stylé.',
+                prix: 600,
+                categorie: 'ensembles',
+                photos: [
+                    'images/second/capuchon-blanc.jpeg'
+                ],
+                tailles: ['S', 'M', 'L', 'XL']
+            },
+            
+            // === T-SHIRTS ===
+            // T-shirt Ouadane Noir (logo arabe sur tissu africain)
             {
                 id: 'ouadane-noir',
                 nom: 'Ouadane Noir',
-                nomComplet: 'T-shirt Ouadane',
-                description: 'T-shirt Ouadane, basique premium. 100% coton, broderie fine, coupe parfaite.',
+                nomComplet: 'T-shirt Ouadane Noir',
+                description: 'T-shirt noir avec superposition de tissu africain culturel. Mélange unique de tradition et modernité.',
                 prix: 400,
                 categorie: 'tshirts',
                 photos: [
-                    'images/produits/tshirt-noir-01.png',
-                    'images/produits/tshirt-noir-02.png'
+                    'images/second/Ouadane Noir 3.jpeg',
+                    'images/second/Ouadane Noir 2.jpeg'
                 ],
                 tailles: ['S', 'M', 'L', 'XL']
+            },
+            
+            // T-shirt Beige (superposition)
+            {
+                id: 'beige-tshirt',
+                nom: 'Beige Tissu',
+                nomComplet: 'T-shirt Beige',
+                description: 'T-shirt beige avec superposition de tissu africain. Pièce unique qui allie confort et style.',
+                prix: 400,
+                categorie: 'tshirts',
+                photos: [
+                    'images/second/beige-tshirt.jpeg',
+                    'images/second/beige-tshirt.jpeg'
+                ],
+                tailles: ['S', 'M', 'L', 'XL']
+            },
+            
+            // T-shirt Tichitt Blanc
+            {
+                id: 'tichitt-blanc',
+                nom: 'Tichitt Blanc',
+                nomComplet: 'T-shirt Tichitt Blanc',
+                description: 'T-shirt blanc avec superposition de tissu africain. Élégance et authenticité.',
+                prix: 400,
+                categorie: 'tshirts',
+                photos: [
+                    'images/second/Tichitt blanc.jpeg'
+                ],
+                tailles: ['S', 'M', 'L', 'XL']
+            },
+            
+            // === ENFANTS ===
+            {
+                id: 'tichitt-noir-enfant',
+                nom: 'Tichitt blanc Enfant',
+                nomComplet: 'T-shirt Enfant Tichitt blanc',
+                description: 'T-shirt blanc pour enfant, confortable et stylé. Parfait pour les petits.',
+                prix: 250,
+                categorie: 'enfants',
+                photos: [
+                    'images/second/Tichitt Noir enfant .jpeg'
+                ],
+                ages: ['3-4 ans', '5-6 ans', '7-8 ans', '9-10 ans']
             }
         ];
 
-        let selectedSizes = {};
+        let selectedOptions = {};
 
         function displayProducts(categorie = 'tous') {
             const container = document.getElementById('products-container');
+            if (!container) return;
+            
             const filtres = categorie === 'tous' ? PRODUCTS : PRODUCTS.filter(p => p.categorie === categorie);
 
             if (filtres.length === 0) {
@@ -455,19 +554,26 @@
                 return;
             }
 
-            container.innerHTML = filtres.map(produit => `
+            container.innerHTML = filtres.map(produit => {
+                // Déterminer si c'est un produit enfant (utilise des âges au lieu de tailles)
+                const isEnfant = produit.categorie === 'enfants';
+                const options = isEnfant ? (produit.ages || []) : (produit.tailles || []);
+                const optionType = isEnfant ? 'Âge' : 'Taille';
+                const btnClass = isEnfant ? 'age-btn' : 'size-btn';
+                
+                return `
                 <div class="product-card" data-id="${produit.id}">
                     <div class="product-carousel">
                         <div class="carousel-container">
-                            <div class="carousel-track">
-                                ${produit.photos.map(photo => `<img src="${photo}" alt="${produit.nom}" loading="lazy">`).join('')}
+                            <div class="carousel-track" data-product="${produit.id}">
+                                ${produit.photos.map(photo => `<img src="${photo}" alt="${produit.nom}" loading="lazy" onerror="this.src='images/logo.png'">`).join('')}
                             </div>
                         </div>
                         ${produit.photos.length > 1 ? `
-                            <div class="carousel-arrow left">←</div>
-                            <div class="carousel-arrow right">→</div>
+                            <div class="carousel-arrow left" data-product="${produit.id}">←</div>
+                            <div class="carousel-arrow right" data-product="${produit.id}">→</div>
                         ` : ''}
-                        <div class="carousel-indicators">
+                        <div class="carousel-indicators" data-product="${produit.id}">
                             ${produit.photos.map((_, i) => `<span class="${i === 0 ? 'active' : ''}"></span>`).join('')}
                         </div>
                     </div>
@@ -477,58 +583,89 @@
                         <p class="product-description">${produit.description}</p>
                         <div class="product-price">${produit.prix} MRU</div>
                         <div class="size-selector">
-                            <div class="size-title">Choisissez votre taille :</div>
+                            <div class="size-title">Choisissez ${optionType} :</div>
                             <div class="size-buttons" data-product="${produit.id}">
-                                ${produit.tailles.map(taille => `<button class="size-btn" onclick="selectSize(this, '${produit.id}', '${taille}')">${taille}</button>`).join('')}
+                                ${options.map(opt => 
+                                    `<button class="${btnClass}" onclick="selectOption(this, '${produit.id}', '${opt}')">${opt}</button>`
+                                ).join('')}
                             </div>
                         </div>
                         <button class="add-to-cart" onclick="addToCartFromProduct('${produit.id}')">🛒 Ajouter au panier</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
+            
+            // Initialiser les carrousels après l'affichage
             initCarousels();
         }
 
         function initCarousels() {
             document.querySelectorAll('.product-card').forEach(card => {
-                const track = card.querySelector('.carousel-track');
-                const leftArrow = card.querySelector('.carousel-arrow.left');
-                const rightArrow = card.querySelector('.carousel-arrow.right');
-                const indicators = card.querySelectorAll('.carousel-indicators span');
+                const productId = card.dataset.id;
+                const track = card.querySelector(`.carousel-track[data-product="${productId}"]`);
+                const leftArrow = card.querySelector(`.carousel-arrow.left[data-product="${productId}"]`);
+                const rightArrow = card.querySelector(`.carousel-arrow.right[data-product="${productId}"]`);
+                const indicators = card.querySelectorAll(`.carousel-indicators[data-product="${productId}"] span`);
                 
                 if (!track) return;
                 
                 let currentIndex = 0;
                 const totalImages = track.children.length;
                 
+                // Stocker l'index sur l'élément
+                track._currentIndex = 0;
+                
                 function updateCarousel() {
-                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-                    indicators.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                    track.style.transform = `translateX(-${track._currentIndex * 100}%)`;
+                    indicators.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === track._currentIndex);
+                    });
                 }
                 
-                if (leftArrow) leftArrow.addEventListener('click', (e) => { e.stopPropagation(); currentIndex = (currentIndex - 1 + totalImages) % totalImages; updateCarousel(); });
-                if (rightArrow) rightArrow.addEventListener('click', (e) => { e.stopPropagation(); currentIndex = (currentIndex + 1) % totalImages; updateCarousel(); });
+                if (leftArrow) {
+                    leftArrow.onclick = (e) => {
+                        e.stopPropagation();
+                        track._currentIndex = (track._currentIndex - 1 + totalImages) % totalImages;
+                        updateCarousel();
+                    };
+                }
+                
+                if (rightArrow) {
+                    rightArrow.onclick = (e) => {
+                        e.stopPropagation();
+                        track._currentIndex = (track._currentIndex + 1) % totalImages;
+                        updateCarousel();
+                    };
+                }
             });
         }
 
-        window.selectSize = function(btn, productId, size) {
-            document.querySelectorAll(`.size-buttons[data-product="${productId}"] .size-btn`).forEach(b => b.classList.remove('selected'));
+        window.selectOption = function(btn, productId, option) {
+            document.querySelectorAll(`.size-buttons[data-product="${productId}"] button`).forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            selectedSizes[productId] = size;
+            selectedOptions[productId] = option;
         };
 
         window.addToCartFromProduct = async function(productId) {
             const user = auth?.currentUser;
-            if (!user) { alert('Veuillez vous connecter'); showLoginModal(); return; }
+            if (!user) { 
+                alert('Veuillez vous connecter'); 
+                showLoginModal(); 
+                return; 
+            }
             
             const produit = PRODUCTS.find(p => p.id === productId);
-            const taille = selectedSizes[productId];
+            const selectedOption = selectedOptions[productId];
             
-            if (!taille) { alert('Veuillez choisir une taille'); return; }
+            if (!selectedOption) { 
+                const isEnfant = produit.categorie === 'enfants';
+                alert(`Veuillez choisir ${isEnfant ? 'un âge' : 'une taille'}`); 
+                return; 
+            }
             
             let cart = JSON.parse(localStorage.getItem('panier')) || [];
             
-            const existingItem = cart.find(item => item.id === productId && item.taille === taille);
+            const existingItem = cart.find(item => item.id === productId && item.option === selectedOption);
             
             if (existingItem) {
                 existingItem.quantite += 1;
@@ -537,7 +674,7 @@
                     id: produit.id,
                     nom: produit.nom,
                     prix: produit.prix,
-                    taille: taille,
+                    option: selectedOption,
                     quantite: 1,
                     image: produit.photos[0]
                 });
@@ -548,7 +685,7 @@
             
             const notif = document.createElement('div');
             notif.className = 'notification';
-            notif.textContent = `✅ ${produit.nom} (${taille}) ajouté !`;
+            notif.textContent = `✅ ${produit.nom} (${selectedOption}) ajouté !`;
             document.body.appendChild(notif);
             setTimeout(() => notif.remove(), 3000);
         };
@@ -565,17 +702,29 @@
             displayProducts(categorie);
         };
 
-        // ===== GESTION DES MODALS (copiée depuis auth.js) =====
-        function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function hideLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-        function showRegisterModal() { document.getElementById('registerModal').style.display = 'flex'; }
-        function hideRegisterModal() { document.getElementById('registerModal').style.display = 'none'; }
+        // ===== GESTION DES MODALS =====
+        function showLoginModal() { 
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.style.display = 'flex'; 
+        }
+        function hideLoginModal() { 
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.style.display = 'none'; 
+        }
+        function showRegisterModal() { 
+            const modal = document.getElementById('registerModal');
+            if (modal) modal.style.display = 'flex'; 
+        }
+        function hideRegisterModal() { 
+            const modal = document.getElementById('registerModal');
+            if (modal) modal.style.display = 'none'; 
+        }
 
         window.onclick = function(event) {
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
-            if (event.target === loginModal) loginModal.style.display = 'none';
-            if (event.target === registerModal) registerModal.style.display = 'none';
+            if (event.target === loginModal && loginModal) loginModal.style.display = 'none';
+            if (event.target === registerModal && registerModal) registerModal.style.display = 'none';
         };
 
         document.addEventListener('DOMContentLoaded', () => {
