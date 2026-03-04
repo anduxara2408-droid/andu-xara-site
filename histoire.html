@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Histoire - Andu-Xara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+        .top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-message strong { color: #e67e22; }
+        .top-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .top-links a:hover { color: #e67e22; }
+        
+        /* ===== HEADER ===== */
+        .main-header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #e67e22; }
+        .nav-link-highlight { color: #e67e22; font-weight: 700; }
+        
+        /* ===== PAGE TITLE ===== */
+        .page-title {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-title h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .page-title p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* ===== TIMELINE ===== */
+        #timeline {
+            max-width: 900px;
+            margin: 50px auto;
+            position: relative;
+            padding: 0 20px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            background: #e67e22;
+            top: 0;
+            bottom: 0;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 30px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+            cursor: pointer;
+        }
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+        }
+        .timeline-item.right {
+            left: 50%;
+        }
+        .timeline-item::before {
+            content: attr(data-icon);
+            position: absolute;
+            top: 20px;
+            font-size: 1.5em;
+            z-index: 1;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .timeline-item.left::before {
+            right: -20px;
+        }
+        .timeline-item.right::before {
+            left: -20px;
+        }
+        .timeline-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(230,126,34,0.2);
+        }
+        .timeline-content h3 {
+            color: #e67e22;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        .timeline-content p {
+            line-height: 1.6;
+            color: #555;
+        }
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Couleurs selon le type */
+        .timeline-item[data-color="blue"] .timeline-content {
+            border-left: 4px solid #667eea;
+        }
+        .timeline-item[data-color="green"] .timeline-content {
+            border-left: 4px solid #10b981;
+        }
+        .timeline-item[data-color="orange"] .timeline-content {
+            border-left: 4px solid #f59e0b;
+        }
+        .timeline-item[data-color="purple"] .timeline-content {
+            border-left: 4px solid #8b5cf6;
+        }
+        .timeline-item[data-color="red"] .timeline-content {
+            border-left: 4px solid #e74c3c;
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
+        .footer-bottom {
+            border-top: 1px solid #4a5568;
+            padding-top: 20px;
+            text-align: center;
+            color: #ccc;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 30px;
+            }
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 70px;
+                text-align: left;
+            }
+            .timeline-item.left::before,
+            .timeline-item.right::before {
+                left: 10px !important;
+                right: auto;
+            }
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-message">
+                ✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne
+            </div>
+            <div class="top-links">
+                <a href="index.html">Accueil</a>
+                <a href="produits.html">Collection</a>
+                <a href="billetterie.html">Concerts</a>
+                <a href="compte.html">Mon compte</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    Andu<span>Xara</span>
+                </a>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link nav-link-highlight">Notre histoire</a>
+                    <a href="billetterie.html" class="nav-link">Concerts</a>
+                </nav>
+                <div class="user-area">
+                    <a href="compte.html" class="cart-icon">
+                        🛒<span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE TITLE -->
+    <div class="page-title">
+        <div class="container">
+            <h1>Notre Histoire</h1>
+            <p>Le chemin parcouru depuis 2020</p>
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <section id="timeline">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item left" data-color="blue" data-icon="📖">
+            <div class="timeline-content">
+                <h3>Les débuts</h3>
+                <p>Avant que le nom Andu-Xara ne voie le jour, plusieurs équipes ont été formées pour concrétiser l'idée. Les trois premières furent dissoutes en deux ans. Ces expériences ont été essentielles pour définir notre vision et notre persévérance.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item right" data-color="green" data-icon="🗓">
+            <div class="timeline-content">
+                <h3>Création officielle</h3>
+                <p>Le <strong>18 octobre 2020</strong>, Andu-Xara a été créée par <strong>Cheikhou Diabira</strong>, originaire de Ajar, Mauritanie. Son nom signifie « se connaître soi-même » : Andu-Xara en soninké, Arav-Raassak en hassanya, Andu-Hoorema en halpular et Xam-Sabopp en wolof, symbolisant la philosophie de la marque.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item left" data-color="orange" data-icon="💪">
+            <div class="timeline-content">
+                <h3>Formation de l'équipe</h3>
+                <p>La troisième équipe formée a réuni <strong>Cheikhou Diabira</strong>, <strong>Bocar Bà</strong>, <strong>Halima Sokhona</strong>, <strong>Fatimetou Soumaré</strong>, <strong>Botkhol Daffa</strong>, <strong>Khadija Diallo</strong>, <strong>Moussa Diekhete</strong> et <strong>Bonco Sokhona</strong>. Cette équipe incarne la détermination et la passion du projet Andu-Xara.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item right" data-color="purple" data-icon="🏆">
+            <div class="timeline-content">
+                <h3>Premier succès</h3>
+                <p>Les <strong>17 et 18 juin</strong>, au Forum International des Compétences à Nouakchott, Andu-Xara a terminé <strong>2e</strong> et remporté son premier prix. Cet événement, organisé par Hawa Drame et Sosso Bal, a marqué la reconnaissance nationale du projet.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item left" data-color="red" data-icon="⚖️">
+            <div class="timeline-content">
+                <h3>Collaboration avec Kenzo Wouro</h3>
+                <p>Le <strong>15 novembre 2024</strong>, Andu-Xara a signé un contrat de collaboration avec l'artiste <strong>Kenzo Wouro</strong>. Malheureusement, le contrat n'a pas été respecté par l'artiste et a dû être annulé. Cette expérience nous a renforcés et nous a permis de mieux définir nos critères de collaboration.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item right" data-color="green" data-icon="🚀">
+            <div class="timeline-content">
+                <h3>Nouveaux projets (2026)</h3>
+                <p>Aujourd'hui, en <strong>2026</strong>, Andu-Xara se tourne vers de nouveaux horizons. Forts de nos expériences passées, nous entamons une nouvelle phase avec des projets innovants et des collaborations prometteuses. La marque continue de grandir et de rayonner, portée par une communauté toujours plus fidèle.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine célébrant nos racines depuis 2020.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Collection</a></li>
+                        <li><a href="histoire.html">Notre histoire</a></li>
+                        <li><a href="billetterie.html">Concerts</a></li>
+                        <li><a href="compte.html">Mon compte</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation au scroll
+        const items = document.querySelectorAll('.timeline-item');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+        items.forEach(item => observer.observe(item));
+
+        // Mettre à jour le compteur du panier
+        function updateCartCount() {
+            const panier = JSON.parse(localStorage.getItem('panier')) || [];
+            const count = panier.reduce((sum, item) => sum + (item.quantite || 1), 0);
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) cartCount.textContent = count;
+        }
+        updateCartCount();
+    </script>
+</body>
+</html>

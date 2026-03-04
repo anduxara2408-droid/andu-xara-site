@@ -3,90 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andu-Xara • Mode Afro-Urbaine • Culture Urbaine</title>
+    <title>Andu-Xara • Mode Afro-Urbaine</title>
     
     <!-- META SEO -->
-    <meta name="description" content="Andu-Xara - Marque de vêtements afro-urbains et billetterie de concerts. Créez votre compte pour accéder aux réductions exclusives.">
-    <meta name="robots" content="index, follow">
-    <link rel="icon" href="images/logo.png" type="image/png">
+    <meta name="description" content="Andu-Xara - Marque de vêtements alliant culture africaine et style urbain">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     
     <!-- POLICES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- STYLES -->
-    <link rel="stylesheet" href="css/style.css">
-    
-    <!-- MANIFEST -->
-    <link rel="manifest" href="manifest.json">
+    <style>
+        /* ===== RESET ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #333; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+        .top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-message strong { color: #e67e22; }
+        .top-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .top-links a:hover { color: #e67e22; }
+        
+        /* ===== HEADER ===== */
+        .main-header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #e67e22; }
+        .nav-link-highlight {
+            color: #e67e22;
+            font-weight: 700;
+        }
+        
+        /* ===== USER AREA ===== */
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #e67e22;
+            color: white;
+        }
+        .btn-primary:hover { background: #d35400; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e67e22;
+            color: #e67e22;
+        }
+        .btn-outline:hover {
+            background: #e67e22;
+            color: white;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.3rem;
+            text-decoration: none;
+            color: #333;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e67e22;
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        /* ===== PHILOSOPHY BANNER ===== */
+        .philosophy-banner {
+            background: #f8f9fa;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .philosophy-text {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 0.9rem;
+        }
+        .philosophy-item strong { color: #e67e22; }
+        
+        /* ===== HERO VIDÉO ===== */
+        .hero-video {
+            position: relative;
+            margin: 20px 0;
+            height: 600px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .video-container {
+            width: 100%;
+            height: 100%;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(3px) brightness(0.7);
+        }
+        .video-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+        .video-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .video-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .video-btn {
+            background: #e67e22;
+            color: white;
+            border: 2px solid white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        /* ===== HERO ANIMATION (PHOTOS FLOUES) ===== */
+        .hero-animation {
+            margin: 20px 0;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+        }
+        .animation-slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+        .slide.active { opacity: 1; }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(4px) brightness(0.8);
+        }
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+        .slide-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .slide-btn {
+            background: #e67e22;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .animation-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        .animation-indicators span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .animation-indicators span.active {
+            background: #e67e22;
+            transform: scale(1.3);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: #1a1a1a;
+            color: white;
+            padding: 60px 0;
+        }
+        .hero-content { max-width: 600px; }
+        .hero-tag {
+            background: #e67e22;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero-title span { color: #e67e22; }
+        .hero-text {
+            color: #ccc;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e67e22;
+        }
+        
+        /* ===== APERÇU PRODUITS (SIMPLES) ===== */
+        .featured-products { padding: 60px 0; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-tag {
+            color: #e67e22;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+        .section-title span { color: #e67e22; }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+        .product-info { padding: 15px; }
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e67e22;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #e67e22;
+            color: white;
+        }
+        .section-action { text-align: center; }
+        
+        /* ===== VALEURS ===== */
+        .values-section {
+            padding: 60px 0;
+            background: white;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .value-card {
+            position: relative;
+            padding: 40px 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+        }
+        .value-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .value-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(5px) brightness(0.6);
+        }
+        .value-content {
+            position: relative;
+            z-index: 2;
+        }
+        .value-icon { font-size: 3rem; margin-bottom: 15px; }
+        .value-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* ===== HISTOIRE ===== */
+        .story-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .story-highlight {
+            font-size: 1.3rem;
+            color: #e67e22;
+            font-style: italic;
+            margin: 20px 0;
+            padding-left: 20px;
+            border-left: 3px solid #e67e22;
+        }
+        .story-image {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(2px);
+            transition: filter 0.3s;
+        }
+        .story-image:hover img {
+            filter: blur(0);
+        }
+        .read-more {
+            color: #e67e22;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        /* ===== BOUTON RETOUR ===== */
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #e67e22;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+        .back-button:hover {
+            background: #d35400;
+            transform: scale(1.1) translateY(-5px);
+        }
+        
+        /* ===== PANIER ===== */
+        .cart-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-panel.open { right: 0; }
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-cart {
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart-item-info { flex: 1; }
+        .cart-item-title { font-weight: 600; }
+        .cart-item-size { font-size: 0.8rem; color: #666; }
+        .cart-item-price { font-weight: 700; color: #e67e22; }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-item-quantity {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .remove-item {
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .cart-buttons { display: flex; flex-direction: column; gap: 10px; }
+        .cart-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .cart-btn-primary {
+            background: #e67e22;
+            color: white;
+        }
+        .cart-btn-outline {
+            background: white;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+        }
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+            display: none;
+        }
+        .cart-overlay.active { display: block; }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
+        .footer-bottom {
+            border-top: 1px solid #4a5568;
+            padding-top: 20px;
+            text-align: center;
+            color: #ccc;
+        }
+        
+        /* ===== MODALS ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn-block { width: 100%; }
+        
+        /* ===== NOTIFICATION ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 9999;
+            animation: slideIn 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .products-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .story-content { grid-template-columns: 1fr; }
+            .story-image { height: 250px; }
+            .hero-title { font-size: 2rem; }
+            .hero-animation { height: 300px; }
+            .hero-video { height: 300px; }
+            .video-content h1 { font-size: 2rem; }
+        }
+    </style>
 </head>
 <body>
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-message">
-                ✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne depuis 2020
+    <!-- PANIER -->
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h2>Votre panier</h2>
+            <span class="close-cart" onclick="closeCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cartTotal">0 MRU</span>
             </div>
-            <div class="top-links">
-                <a href="contact.html">Contact</a>
-                <a href="aide.html">Aide</a>
-                <a href="billetterie.html">🎫 Concerts</a>
+            <div class="cart-buttons">
+                <button class="cart-btn cart-btn-primary" onclick="checkout()">Passer la commande</button>
+                <button class="cart-btn cart-btn-outline" onclick="closeCart()">Continuer</button>
             </div>
         </div>
     </div>
 
-    <!-- HEADER PRINCIPAL -->
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-message">
+                ✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne
+            </div>
+            <div class="top-links">
+                <a href="contact.html">Contact</a>
+                <a href="compte.html">Mon compte</a>
+                <a href="billetterie.html">Concerts</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
-                <!-- LOGO -->
-                <a href="/" class="logo">
-                    Andu<span>Xara</span>
-                </a>
-
-                <!-- MENU PRINCIPAL -->
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
-                    <a href="#collection" class="nav-link">Collection</a>
-                    <a href="#philosophie" class="nav-link">Notre histoire</a>
-                    <a href="billetterie.html" class="nav-link nav-link-highlight">
-                        🎫 Concerts
-                    </a>
-                    <a href="reductions.html" class="nav-link">
-                        🎁 Promos
-                    </a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link nav-link-highlight">Concerts</a>
                 </nav>
-
-                <!-- ESPACE CLIENT -->
-                <div class="user-area" id="userArea">
-                    <!-- Vue NON connecté -->
-                    <div class="guest-view" id="guestView">
-                        <button class="btn btn-outline" onclick="showLoginModal()">
-                            Se connecter
-                        </button>
-                        <button class="btn btn-primary" onclick="showRegisterModal()">
-                            Créer un compte
-                        </button>
+                <div class="user-area">
+                    <div id="guestView">
+                        <button class="btn btn-outline" onclick="showLoginModal()">Se connecter</button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">S'inscrire</button>
                     </div>
-                    
-                    <!-- Vue connecté (cachée par défaut) -->
-                    <div class="user-view" id="userView" style="display: none;">
-                        <div class="user-menu">
-                            <button class="user-button">
-                                <span class="user-avatar">👤</span>
-                                <span class="user-name" id="userName"></span>
-                            </button>
-                            <div class="user-dropdown">
-                                <a href="compte.html">Mon profil</a>
-                                <a href="compte.html#reductions">Mes réductions</a>
-                                <a href="compte.html#billets">Mes billets</a>
-                                <a href="#" onclick="logout()">Déconnexion</a>
-                            </div>
-                        </div>
-                        <a href="panier.html" class="cart-icon">
-                            🛒<span class="cart-count" id="cartCount">0</span>
-                        </a>
+                    <div id="userView" style="display:none">
+                        <span id="userName"></span>
+                        <button onclick="logout()">Déconnexion</button>
                     </div>
+                    <a href="javascript:void(0)" class="cart-icon" onclick="openCart()">
+                        🛒<span class="cart-count" id="cartCount">0</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -96,159 +742,162 @@
     <div class="philosophy-banner">
         <div class="container">
             <div class="philosophy-text">
-                <div class="philosophy-item">
-                    <span>🌍</span>
-                    <span><strong>Héritage</strong> - Nos racines africaines</span>
-                </div>
-                <div class="philosophy-item">
-                    <span>✨</span>
-                    <span><strong>Authenticité</strong> - Des pièces uniques</span>
-                </div>
-                <div class="philosophy-item">
-                    <span>🤝</span>
-                    <span><strong>Communauté</strong> - <span id="userCount">206</span> familles</span>
-                </div>
+                <div class="philosophy-item"><span>🌍</span> <strong>Héritage</strong> - Nos racines</div>
+                <div class="philosophy-item"><span>✨</span> <strong>Authenticité</strong> - Pièces uniques</div>
+                <div class="philosophy-item"><span>🤝</span> <strong>Communauté</strong> - <span id="userCount">206</span> familles</div>
             </div>
         </div>
     </div>
 
-    <!-- SECTION HERO -->
+    <!-- VIDÉO EN PREMIER (FLOUE) -->
+    <section class="hero-video">
+        <div class="video-container">
+            <video autoplay muted loop playsinline>
+                <source src="images/video-couverture.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-content">
+            <h1>Andu-Xara</h1>
+            <p>Racines Africaines, Style Moderne</p>
+            <a href="produits.html" class="video-btn">Découvrir</a>
+        </div>
+    </section>
+
+    <!-- ANIMATION PHOTOS FLOUES (7 PHOTOS) -->
+    <section class="hero-animation">
+        <div class="animation-slides" id="animationSlides">
+            <div class="slide active">
+                <img src="images/accueil/Affiche fond animation.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Bienvenue</h2>
+                    <a href="produits.html" class="slide-btn">Explorer</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Animation Bleue 1.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Collection</h2>
+                    <a href="produits.html" class="slide-btn">Voir</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Animation Bleue 2.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Qualité</h2>
+                    <a href="produits.html" class="slide-btn">Découvrir</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Bleu.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Azawad</h2>
+                    <a href="produits.html" class="slide-btn">Voir</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Bleu broderie.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Broderie</h2>
+                    <a href="produits.html" class="slide-btn">Détails</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Zoom 1.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Texture</h2>
+                    <a href="produits.html" class="slide-btn">Zoom</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/accueil/Zoom 2.JPEG" alt="">
+                <div class="slide-content">
+                    <h2>Détail</h2>
+                    <a href="produits.html" class="slide-btn">Qualité</a>
+                </div>
+            </div>
+        </div>
+        <div class="animation-indicators" id="animationIndicators">
+            <span class="active"></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </section>
+
+    <!-- HERO -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-tag">Depuis 2020</div>
-                <h1 class="hero-title">
-                    L'Afrique <span>réinventée</span>
-                </h1>
-                <p class="hero-text">
-                    Andu-Xara célèbre la richesse de la culture africaine à travers des créations modernes, authentiques et intemporelles.
-                </p>
+                <h1 class="hero-title">L'Afrique <span>réinventée</span></h1>
+                <p class="hero-text">Andu-Xara célèbre la richesse de la culture africaine à travers des créations modernes et authentiques.</p>
                 <div class="hero-stats">
-                    <div class="stat">
-                        <div class="stat-number" id="statUsers">206+</div>
-                        <div class="stat-label">Familles</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" id="statProducts">15+</div>
-                        <div class="stat-label">Créations</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">2020</div>
-                        <div class="stat-label">Année zéro</div>
-                    </div>
+                    <div class="stat"><div class="stat-number">206+</div><div>Familles</div></div>
+                    <div class="stat"><div class="stat-number">5</div><div>Créations</div></div>
+                    <div class="stat"><div class="stat-number">2020</div><div>Année zéro</div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION CONCERTS À LA UNE -->
-    <section class="concerts-featured">
+    <!-- APERÇU COLLECTION (SIMPLE) -->
+    <section class="featured-products" id="collection">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">🎫 Événements</span>
-                <h2 class="section-title">Concerts à venir</h2>
-                <p class="section-text">
-                    Andu-Xara est partenaire des plus grands événements. Réservez vos billets en ligne.
-                </p>
+                <span class="section-tag">Nos créations</span>
+                <h2 class="section-title">Collection <span>2026</span></h2>
+                <p>Des pièces uniques qui allient tradition et modernité</p>
             </div>
-
-            <div class="concerts-grid" id="concertsContainer">
-                <!-- Concert 1 (sera chargé dynamiquement) -->
-                <div class="concert-card">
-                    <div class="concert-date">
-                        <span class="date-day">15</span>
-                        <span class="date-month">MARS</span>
-                    </div>
-                    <div class="concert-info">
-                        <h3>Festival Guidimakha</h3>
-                        <p class="concert-location">📍 Nouakchott</p>
-                        <p class="concert-artists">Sidaty Diabira, Djelimady Tounkara</p>
-                        <div class="concert-price">À partir de 500 MRU</div>
-                    </div>
-                    <a href="concert/festival-guidimakha" class="btn btn-primary btn-small">
-                        Billets
-                    </a>
-                </div>
-
-                <!-- Concert 2 -->
-                <div class="concert-card">
-                    <div class="concert-date">
-                        <span class="date-day">22</span>
-                        <span class="date-month">MARS</span>
-                    </div>
-                    <div class="concert-info">
-                        <h3>Nuit de la Musique</h3>
-                        <p class="concert-location">📍 Kaédi</p>
-                        <p class="concert-artists">Ousmane Ba, Aminata Fall</p>
-                        <div class="concert-price">À partir de 350 MRU</div>
-                    </div>
-                    <a href="concert/nuit-musique" class="btn btn-primary btn-small">
-                        Billets
-                    </a>
-                </div>
-            </div>
-
+            <div class="products-grid" id="products-container"></div>
             <div class="section-action">
-                <a href="billetterie.html" class="btn btn-secondary">
-                    Voir tous les concerts →
-                </a>
+                <a href="produits.html" class="btn-secondary">Voir toute la collection →</a>
             </div>
         </div>
     </section>
 
-    <!-- SECTION PHILOSOPHIE -->
-    <section class="philosophy-section" id="philosophie">
+    <!-- VALEURS -->
+    <section class="values-section">
         <div class="container">
-            <div class="section-header">
-                <div class="section-tag">Notre vision</div>
-                <h2 class="section-title">La philosophie Andu-Xara</h2>
-                <p class="section-text">
-                    Plus qu'une marque, un mouvement qui célèbre l'identité africaine à travers la mode contemporaine.
-                </p>
-            </div>
-
-            <div class="values-grid" id="valuesContainer">
-                <!-- Les valeurs seront chargées dynamiquement -->
-            </div>
-        </div>
-    </section>
-
-    <!-- COLLECTION -->
-    <section class="collection-section" id="collection">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">Nos créations</div>
-                <h2 class="section-title">La collection 2026</h2>
-                <p class="section-text">
-                    Des pièces uniques qui allient tradition et modernité
-                </p>
-            </div>
-
-            <div class="products-grid" id="productsContainer">
-                <!-- Les produits seront chargés dynamiquement -->
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-bg"><img src="images/accueil/Affiche fond animation.JPEG" alt=""></div>
+                    <div class="value-content">
+                        <div class="value-icon">🌱</div>
+                        <h3 class="value-title">Racines</h3>
+                        <p>Chaque création puise son inspiration dans les traditions africaines.</p>
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-bg"><img src="images/accueil/Animation Bleue 1.JPEG" alt=""></div>
+                    <div class="value-content">
+                        <div class="value-icon">✨</div>
+                        <h3 class="value-title">Authenticité</h3>
+                        <p>Des pièces uniques qui racontent une histoire.</p>
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-bg"><img src="images/accueil/Bleu.JPEG" alt=""></div>
+                    <div class="value-content">
+                        <div class="value-icon">🤝</div>
+                        <h3 class="value-title">Communauté</h3>
+                        <p>206 familles nous ont déjà rejoints.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION HISTOIRE -->
+    <!-- HISTOIRE -->
     <section class="story-section" id="histoire">
         <div class="container">
             <div class="story-content">
                 <div class="story-text">
-                    <div class="section-tag">Notre histoire</div>
+                    <span class="section-tag">Notre histoire</span>
                     <h2 class="section-title">L'aventure Andu-Xara</h2>
-                    <p>
-                        Fondée en 2020 par Cheikhou Diabira et Bocar Ba, Andu-Xara est née d'une vision : créer une marque qui célèbre l'identité africaine.
-                    </p>
-                    <div class="story-highlight">
-                        "Nous ne vendons pas juste des vêtements, nous partageons un héritage"
-                    </div>
-                    <p>
-                        Aujourd'hui, ce sont <strong id="storyUserCount">206</strong> familles qui portent nos créations, de la Mauritanie au Sénégal, au Mali et au-delà.
-                    </p>
+                    <p>Fondée en <strong>2020</strong> par <strong>Cheikhou Diabira</strong>, Andu-Xara est née d'une vision : créer une marque qui célèbre l'identité africaine.</p>
+                    <p>En <strong>2022</strong>, <strong>Bocar Ba</strong> rejoint l'aventure et devient co-fondateur.</p>
+                    <div class="story-highlight">"Nous ne vendons pas juste des vêtements, nous partageons un héritage"</div>
+                    <a href="histoire.html" class="read-more">Lire toute notre histoire →</a>
                 </div>
-                <div class="story-image" id="storyImage">
-                    <!-- Image chargée dynamiquement -->
+                <div class="story-image">
+                    <img src="images/equipe/equipe-andu-xara.jpg" alt="Équipe Andu-Xara">
                 </div>
             </div>
         </div>
@@ -260,101 +909,72 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>Andu-Xara</h4>
-                    <p>Mode afro-urbaine célébrant nos racines depuis 2020.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Instagram">📷</a>
-                        <a href="#" aria-label="TikTok">🎵</a>
-                        <a href="#" aria-label="Facebook">📘</a>
-                        <a href="#" aria-label="WhatsApp">💬</a>
-                    </div>
+                    <p>Mode afro-urbaine depuis 2020</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Explorer</h4>
+                    <h4>Liens</h4>
                     <ul>
-                        <li><a href="#collection">Collection</a></li>
-                        <li><a href="#philosophie">Notre histoire</a></li>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Collection</a></li>
+                        <li><a href="histoire.html">Histoire</a></li>
                         <li><a href="billetterie.html">Concerts</a></li>
-                        <li><a href="reductions.html">Promotions</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="compte.html">Compte</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contact</h4>
                     <ul>
-                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
+                        <li><a href="mailto:contact@andu-xara.store">Email</a></li>
                         <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
-                        <li>Nouakchott, Mauritanie</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Infos</h4>
-                    <ul>
-                        <li><a href="#">Livraison</a></li>
-                        <li><a href="#">Retours</a></li>
-                        <li><a href="#">Mentions légales</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Andu-Xara - Fierté africaine, style moderne</p>
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL DE CONNEXION -->
+    <!-- BOUTON RETOUR -->
+    <a href="javascript:history.back()" class="back-button" title="Retour">←</a>
+
+    <!-- MODALS -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideLoginModal()">&times;</span>
             <h2>Connexion</h2>
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
+                    <input type="email" id="loginEmail" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Mot de passe</label>
-                    <input type="password" id="loginPassword" required>
+                    <input type="password" id="loginPassword" placeholder="Mot de passe" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    Se connecter
-                </button>
+                <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
             </form>
-            <p class="form-footer">
-                Pas encore de compte ? 
-                <a href="#" onclick="showRegisterModal(); hideLoginModal();">Créer un compte</a>
-            </p>
         </div>
     </div>
 
-    <!-- MODAL D'INSCRIPTION -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideRegisterModal()">&times;</span>
-            <h2>Créer un compte</h2>
-            <form id="registerForm" onsubmit="handleRegister(event)">
+            <h2>S'inscrire</h2>
+            <form onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label for="regName">Nom complet</label>
-                    <input type="text" id="regName" required>
+                    <input type="text" id="regName" placeholder="Nom complet" required>
                 </div>
                 <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <input type="email" id="regEmail" required>
+                    <input type="email" id="regEmail" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <label for="regPassword">Mot de passe</label>
-                    <input type="password" id="regPassword" required>
+                    <input type="password" id="regPassword" placeholder="Mot de passe" required>
                 </div>
                 <div class="form-group">
-                    <label for="regConfirm">Confirmer le mot de passe</label>
-                    <input type="password" id="regConfirm" required>
+                    <input type="password" id="regConfirm" placeholder="Confirmer" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    S'inscrire
-                </button>
+                <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
             </form>
-            <p class="form-footer">
-                Déjà un compte ? 
-                <a href="#" onclick="showLoginModal(); hideRegisterModal();">Se connecter</a>
-            </p>
         </div>
     </div>
 
@@ -363,8 +983,191 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <script src="js/firebase.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // ===== CONFIGURATION FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ===== PRODUITS POUR L'APERÇU (SIMPLES) =====
+        const featuredProducts = [
+            { id: 'azawad-bleu', nom: 'Azawad Bleu', prix: 600, image: 'images/produits/pull-bleu-01.jpg' },
+            { id: 'sahel-beige', nom: 'Sahel Beige', prix: 600, image: 'images/produits/pull-beige-01.jpg' },
+            { id: 'tagant-gris', nom: 'Tagant Gris', prix: 600, image: 'images/produits/pull-gris-01.jpg' },
+            { id: 'tichitt-noir', nom: 'Tichitt Noir', prix: 600, image: 'images/produits/pull-noir-01.jpg' },
+            { id: 'ouadane-noir', nom: 'Ouadane Noir', prix: 400, image: 'images/produits/tshirt-noir-01.png' }
+        ];
+
+        // ===== AFFICHAGE APERÇU =====
+        function displayFeaturedProducts() {
+            const container = document.getElementById('products-container');
+            if (!container) return;
+            container.innerHTML = featuredProducts.map(p => `
+                <a href="produits.html" class="product-card">
+                    <img src="${p.image}" alt="${p.nom}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">${p.nom}</h3>
+                        <div class="product-price">${p.prix} MRU</div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // ===== PANIER =====
+        let panier = JSON.parse(localStorage.getItem('panier')) || [];
+
+        window.openCart = function() {
+            document.getElementById('cartPanel').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('active');
+            displayCart();
+        };
+        window.closeCart = function() {
+            document.getElementById('cartPanel').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('active');
+        };
+        function displayCart() {
+            const container = document.getElementById('cartItems');
+            const totalSpan = document.getElementById('cartTotal');
+            if (panier.length === 0) {
+                container.innerHTML = '<p style="text-align:center">Panier vide</p>';
+                totalSpan.textContent = '0 MRU';
+                return;
+            }
+            let total = 0;
+            container.innerHTML = panier.map((item, i) => {
+                total += item.prix * item.quantite;
+                return `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.nom}">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${item.nom}</div>
+                            <div class="cart-item-size">Taille: ${item.taille || 'M'}</div>
+                            <div class="cart-item-price">${item.prix} MRU</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <input type="number" class="cart-item-quantity" value="${item.quantite}" min="1" onchange="updateQty(${i}, this.value)">
+                            <span class="remove-item" onclick="removeItem(${i})">&times;</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            totalSpan.textContent = total + ' MRU';
+        }
+        window.updateQty = function(i, q) {
+            panier[i].quantite = parseInt(q);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            displayCart();
+            updateCartCount();
+        };
+        window.removeItem = function(i) {
+            panier.splice(i, 1);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            displayCart();
+            updateCartCount();
+        };
+        function updateCartCount() {
+            const count = panier.reduce((s, i) => s + i.quantite, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // ===== PAIEMENT =====
+        window.checkout = function() {
+            if (panier.length === 0) return alert('Panier vide');
+            const total = panier.reduce((s, i) => s + i.prix * i.quantite, 0);
+            const choix = prompt(
+                `Total: ${total} MRU\n\n1️⃣ Bankily\n2️⃣ Wave\n3️⃣ WhatsApp`,
+                '1'
+            );
+            const msg = panier.map(i => `• ${i.nom} x${i.quantite} - ${i.prix*i.quantite} MRU`).join('\n') + `\nTotal: ${total} MRU`;
+            if (choix === '1') window.open(`https://wa.me/22234196304?text=${encodeURIComponent(msg)}`, '_blank');
+            if (choix === '2') window.open(`https://wa.me/221762821163?text=${encodeURIComponent(msg)}`, '_blank');
+            if (choix === '3') window.open(`https://wa.me/22234196304?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // ===== ANIMATION =====
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.animation-indicators span');
+        function showSlide(i) {
+            slides.forEach(s => s.classList.remove('active'));
+            indicators.forEach(d => d.classList.remove('active'));
+            slides[i].classList.add('active');
+            indicators[i].classList.add('active');
+            currentSlide = i;
+        }
+        setInterval(() => showSlide((currentSlide + 1) % slides.length), 3000);
+        indicators.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+
+        // ===== NOTIFICATION =====
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        // ===== AUTH =====
+        function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function hideLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function showRegisterModal() { document.getElementById('registerModal').style.display = 'flex'; }
+        function hideRegisterModal() { document.getElementById('registerModal').style.display = 'none'; }
+
+        window.handleLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pwd = document.getElementById('loginPassword').value;
+            try {
+                await auth.signInWithEmailAndPassword(email, pwd);
+                hideLoginModal();
+                showNotification('✅ Connexion réussie');
+            } catch (error) { alert(error.message); }
+        };
+
+        window.handleRegister = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pwd = document.getElementById('regPassword').value;
+            const conf = document.getElementById('regConfirm').value;
+            if (pwd !== conf) return alert('Mots de passe différents');
+            try {
+                const res = await auth.createUserWithEmailAndPassword(email, pwd);
+                await db.collection('users').doc(res.user.uid).set({ displayName: name, email, createdAt: new Date() });
+                hideRegisterModal();
+                showNotification('✅ Compte créé !');
+            } catch (error) { alert(error.message); }
+        };
+
+        window.logout = async () => {
+            await auth.signOut();
+            localStorage.removeItem('panier');
+            location.reload();
+        };
+
+        auth.onAuthStateChanged(user => {
+            const guest = document.getElementById('guestView');
+            const userView = document.getElementById('userView');
+            if (guest && userView) {
+                guest.style.display = user ? 'none' : 'flex';
+                userView.style.display = user ? 'block' : 'none';
+                if (user) document.getElementById('userName').textContent = user.email.split('@')[0];
+            }
+        });
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            displayFeaturedProducts();
+            updateCartCount();
+        });
+    </script>
 </body>
 </html>
