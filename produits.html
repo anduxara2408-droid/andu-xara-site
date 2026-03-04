@@ -11,7 +11,7 @@
         body { 
             font-family: 'Inter', sans-serif; 
             background: #f8f9fa;
-            padding-bottom: 100px; /* Espace pour le panier fixe */
+            padding-bottom: 100px;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         
@@ -589,7 +589,7 @@
                 <span>Total :</span>
                 <span id="cartModalTotal">0 MRU</span>
             </div>
-            <button class="checkout-btn" onclick="checkout()">Procéder au paiement</button>
+            <button class="checkout-btn" onclick="processCheckout()">Procéder au paiement</button>
         </div>
     </div>
 
@@ -681,9 +681,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase.js"></script>
     <script src="js/auth.js"></script>
+    <!-- SCRIPT DE PAIEMENT EXTERNE -->
+    <script src="js/modules/payment.js"></script>
     
     <script>
-        // ===== PRODUITS (même définition que votre code) =====
+        // ===== PRODUITS =====
         const PRODUCTS = [
             // === ENSEMBLES ===
             {
@@ -918,14 +920,12 @@
 
         // ===== MISE À JOUR AFFICHAGE PANIER =====
         function updateCartDisplay() {
-            // Mettre à jour le compteur flottant
             const count = cart.reduce((sum, item) => sum + item.quantite, 0);
             const total = cart.reduce((sum, item) => sum + (item.prix * item.quantite), 0);
             
             document.getElementById('floatingCartCount').textContent = count;
             document.getElementById('floatingCartTotal').textContent = total + ' MRU';
             
-            // Mettre à jour le modal
             const cartItemsList = document.getElementById('cart-items-list');
             if (cartItemsList) {
                 if (cart.length === 0) {
@@ -976,9 +976,28 @@
             updateCartDisplay();
         };
 
-        window.checkout = function() {
-            alert('Redirection vers le paiement...');
-            // Implémentez votre logique de paiement ici
+        // ===== PROCESSUS DE PAIEMENT =====
+        window.processCheckout = function() {
+            if (cart.length === 0) {
+                alert('Votre panier est vide');
+                return;
+            }
+            
+            const user = auth?.currentUser;
+            if (!user) {
+                alert('Veuillez vous connecter pour finaliser votre commande');
+                showLoginModal();
+                return;
+            }
+            
+            // Vérifier que le module de paiement est chargé
+            if (typeof window.processFloatingCheckout === 'function') {
+                // Appeler la fonction de paiement existante
+                window.processFloatingCheckout();
+            } else {
+                console.error('Module de paiement non trouvé');
+                alert('Le système de paiement n\'est pas disponible pour le moment');
+            }
         };
 
         // ===== FILTRES =====
