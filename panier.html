@@ -6,11 +6,12 @@
     <title>Mon panier - Andu-Xara</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:"Inter",sans-serif; }
         body { background:#f8f9fa; color:#333; }
         .container { max-width:1000px; margin:0 auto; padding:20px; }
         .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; padding:20px 0; border-bottom:2px solid #e67e22; }
         .logo { font-size:2rem; font-weight:800; color:#e67e22; text-decoration:none; }
+        .back-link { color:#e67e22; text-decoration:none; font-weight:600; }
         .cart-items { background:white; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.05); overflow:hidden; margin-bottom:30px; }
         .cart-header { display:grid; grid-template-columns:3fr 1fr 1fr 1fr 0.5fr; padding:15px; background:#f8f9fa; font-weight:600; border-bottom:2px solid #e67e22; }
         .cart-item { display:grid; grid-template-columns:3fr 1fr 1fr 1fr 0.5fr; padding:15px; align-items:center; border-bottom:1px solid #eee; }
@@ -21,12 +22,15 @@
         .cart-footer { background:white; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.05); text-align:right; }
         .total { font-size:1.5rem; font-weight:700; margin-bottom:20px; }
         .total span { color:#e67e22; }
-        .checkout-btn { background:#e67e22; color:white; border:none; padding:15px 40px; border-radius:5px; font-size:1.1rem; font-weight:700; cursor:pointer; }
-        .empty-cart { text-align:center; padding:60px; color:#999; }
+        .checkout-btn { background:#e67e22; color:white; border:none; padding:15px 40px; border-radius:5px; font-size:1.1rem; font-weight:700; cursor:pointer; transition:background 0.2s; }
+        .checkout-btn:hover { background:#d35400; }
+        .remove-btn { background:none; border:none; cursor:pointer; font-size:1.2rem; }
+        .empty-cart { text-align:center; padding:60px; color:#999; font-size:1.1rem; }
+        .empty-cart a { color:#e67e22; text-decoration:none; font-weight:600; }
         @media (max-width:768px) {
             .cart-header { display:none; }
             .cart-item { grid-template-columns:1fr; gap:10px; padding:20px; }
-            .item-product { justify-content:center; }
+            .item-product { justify-content:flex-start; }
         }
     </style>
 </head>
@@ -36,67 +40,69 @@
             <a href="index.html" class="logo">Andu<span style="color:#333">Xara</span></a>
             <a href="produits.html" class="back-link">← Continuer mes achats</a>
         </div>
-
         <h1 style="margin-bottom:30px;">Mon <span style="color:#e67e22;">panier</span></h1>
-
         <div class="cart-items" id="cart-items"></div>
         <div class="cart-footer" id="cart-footer" style="display:none;">
             <div class="total" id="total"></div>
-            <button class="checkout-btn" onclick="checkout()">Passer la commande</button>
+            <button class="checkout-btn" onclick="checkout()">📱 Commander via WhatsApp</button>
         </div>
     </div>
-
     <script>
+        function getTailleOuOption(item) {
+            return item.taille || item.option || "N/A";
+        }
         function afficherPanier() {
-            let panier = JSON.parse(localStorage.getItem('panier')) || [];
-            const container = document.getElementById('cart-items');
-            const footer = document.getElementById('cart-footer');
-
+            let panier = JSON.parse(localStorage.getItem("panier")) || [];
+            const container = document.getElementById("cart-items");
+            const footer = document.getElementById("cart-footer");
             if (panier.length === 0) {
-                container.innerHTML = '<div class="empty-cart">Votre panier est vide</div>';
-                footer.style.display = 'none';
+                container.innerHTML = "<div class=\"empty-cart\">🛒 Votre panier est vide<br><br><a href=\"produits.html\">Voir la collection →</a></div>";
+                footer.style.display = "none";
                 return;
             }
-
-            footer.style.display = 'block';
-            container.innerHTML = `
-                <div class="cart-header"><div>Produit</div><div>Prix</div><div>Quantité</div><div>Total</div><div></div></div>
-                ${panier.map((item,i)=>`
-                    <div class="cart-item">
-                        <div class="item-product"><img src="${item.image}" alt="${item.nom}"><div><strong>${item.nom}</strong><br><small>Taille: ${item.taille}</small></div></div>
-                        <div>${item.prix} MRU</div>
-                        <div class="item-quantity"><input type="number" value="${item.quantite}" min="1" onchange="changerQuantite(${i}, this.value)"></div>
-                        <div class="item-total">${item.prix*item.quantite} MRU</div>
-                        <div><button class="remove-btn" onclick="supprimerArticle(${i})">🗑️</button></div>
-                    </div>
-                `).join('')
-            }`;
-
-            const total = panier.reduce((s,item)=>s+item.prix*item.quantite,0);
-            document.getElementById('total').innerHTML = `Total: <span>${total} MRU</span>`;
+            footer.style.display = "block";
+            let rows = panier.map(function(item, i) {
+                return "<div class=\"cart-item\">" +
+                    "<div class=\"item-product\">" +
+                        "<img src=\"" + (item.image||"") + "\" alt=\"" + item.nom + "\" onerror=\"this.style.display=\'none\'\"><div>" +
+                        "<strong>" + item.nom + "</strong><br>" +
+                        "<small style=\"color:#888;\">Taille : " + getTailleOuOption(item) + "</small></div></div>" +
+                    "<div>" + item.prix + " MRU</div>" +
+                    "<div class=\"item-quantity\"><input type=\"number\" value=\"" + item.quantite + "\" min=\"1\" onchange=\"changerQuantite(" + i + ", this.value)\"></div>" +
+                    "<div class=\"item-total\">" + (item.prix * item.quantite) + " MRU</div>" +
+                    "<div><button class=\"remove-btn\" onclick=\"supprimerArticle(" + i + ")\">🗑️</button></div>" +
+                "</div>";
+            }).join("");
+            container.innerHTML = "<div class=\"cart-header\"><div>Produit</div><div>Prix</div><div>Quantité</div><div>Total</div><div></div></div>" + rows;
+            const total = panier.reduce(function(s, item) { return s + item.prix * item.quantite; }, 0);
+            document.getElementById("total").innerHTML = "Total : <span>" + total + " MRU</span>";
         }
-
-        window.changerQuantite = function(i,q) {
-            let panier = JSON.parse(localStorage.getItem('panier')) || [];
-            panier[i].quantite = parseInt(q);
-            localStorage.setItem('panier', JSON.stringify(panier));
+        window.changerQuantite = function(i, q) {
+            let panier = JSON.parse(localStorage.getItem("panier")) || [];
+            const quantite = parseInt(q);
+            if (quantite < 1) return;
+            panier[i].quantite = quantite;
+            localStorage.setItem("panier", JSON.stringify(panier));
             afficherPanier();
         };
-
         window.supprimerArticle = function(i) {
-            let panier = JSON.parse(localStorage.getItem('panier')) || [];
-            panier.splice(i,1);
-            localStorage.setItem('panier', JSON.stringify(panier));
+            let panier = JSON.parse(localStorage.getItem("panier")) || [];
+            panier.splice(i, 1);
+            localStorage.setItem("panier", JSON.stringify(panier));
             afficherPanier();
         };
-
         window.checkout = function() {
-            let panier = JSON.parse(localStorage.getItem('panier')) || [];
-            const total = panier.reduce((s,i)=>s+i.prix*i.quantite,0);
-            const msg = panier.map(i=>`• ${i.nom} (${i.taille}) x${i.quantite} - ${i.prix*i.quantite} MRU`).join('\n')+`\nTotal: ${total} MRU`;
-            window.open(`https://wa.me/22234196304?text=${encodeURIComponent(msg)}`,'_blank');
+            let panier = JSON.parse(localStorage.getItem("panier")) || [];
+            if (panier.length === 0) { alert("Votre panier est vide"); return; }
+            const total = panier.reduce(function(s, i) { return s + i.prix * i.quantite; }, 0);
+            const date = new Date().toLocaleDateString("fr-FR");
+            let msg = "🛍️ *NOUVELLE COMMANDE ANDU-XARA*\n━━━━━━━━━━━━━━━━━━━━━━━\n📅 Date : " + date + "\n\n📦 *ARTICLES :*\n";
+            panier.forEach(function(item) {
+                msg += "• " + item.nom + " (" + getTailleOuOption(item) + ") x" + item.quantite + " — " + (item.prix * item.quantite) + " MRU\n";
+            });
+            msg += "\n💰 *TOTAL : " + total + " MRU*\n━━━━━━━━━━━━━━━━━━━━━━━\nMerci de votre confiance ! 🙏\nL équipe Andu-Xara";
+            window.open("https://wa.me/22234196304?text=" + encodeURIComponent(msg), "_blank");
         };
-
         afficherPanier();
     </script>
 </body>

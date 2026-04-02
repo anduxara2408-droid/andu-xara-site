@@ -4,10 +4,10 @@
 const EVENTS = {
     'pispa-tabaski-2026': {
         id: 'pispa-tabaski-2026',
-        name: 'Pispa Le Roi - Concert Tabaski',
+        name: 'Pispa Le Roi - Concert Tabaski - 10e Jour',
         artist: 'Pispa Le Roi',
-        date: '2026-04-15',
-        time: '21:00',
+        date: '2026-06-06',
+        time: '19:00',
         location: 'Titanic Couva, Nouakchott',
         city: 'nouakchott',
         artists: ['Pispa Le Roi', 'Invités surprises'],

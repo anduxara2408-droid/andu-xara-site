@@ -3,75 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notre Histoire - Andu-Xara</title>
+    <title>Concerts & Billets - Andu-Xara</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .page-title { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 60px 0; text-align: center; }
-        #timeline { max-width: 900px; margin: 50px auto; position: relative; padding: 0 20px; }
-        .timeline-line { position: absolute; left: 50%; width: 4px; background: #e67e22; top: 0; bottom: 0; margin-left: -2px; }
-        .timeline-item { position: relative; width: 50%; padding: 20px 30px; box-sizing: border-box; opacity: 0; transform: translateY(30px); transition: all 0.6s; cursor: pointer; }
-        .timeline-item.left { left: 0; text-align: right; }
-        .timeline-item.right { left: 50%; }
-        .timeline-item::before { content: attr(data-icon); position: absolute; top: 20px; font-size: 1.5em; z-index: 1; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .timeline-item.left::before { right: -20px; }
-        .timeline-item.right::before { left: -20px; }
-        .timeline-content { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s; }
-        .timeline-content:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(230,126,34,0.2); }
-        .timeline-content h3 { color: #e67e22; margin-bottom: 10px; }
-        .timeline-item.visible { opacity: 1; transform: translateY(0); }
-        @media (max-width: 768px) {
-            .timeline-line { left: 30px; }
-            .timeline-item { width: 100%; left: 0; padding-left: 70px; text-align: left; }
-            .timeline-item.left::before, .timeline-item.right::before { left: 10px; right: auto; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:"Inter",sans-serif; background:#f8f9fa; color:#333; }
+        .container { max-width:1100px; margin:0 auto; padding:0 20px; }
+        .top-bar { background:#333; color:white; padding:8px 0; font-size:0.85rem; }
+        .top-bar .container { display:flex; justify-content:space-between; align-items:center; }
+        .top-links a { color:#e67e22; text-decoration:none; margin-left:15px; }
+        .main-header { background:white; box-shadow:0 2px 10px rgba(0,0,0,0.08); position:sticky; top:0; z-index:100; padding:15px 0; }
+        .header-content { display:flex; align-items:center; justify-content:space-between; }
+        .logo { font-size:1.8rem; font-weight:800; color:#e67e22; text-decoration:none; }
+        .logo span { color:#333; }
+        .nav-menu { display:flex; gap:25px; }
+        .nav-link { text-decoration:none; color:#333; font-weight:500; transition:color 0.2s; }
+        .nav-link:hover, .nav-link-highlight { color:#e67e22; }
+        .cart-icon { text-decoration:none; font-size:1.4rem; position:relative; }
+        .cart-count { background:#e67e22; color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; position:absolute; top:-8px; right:-8px; }
+        .user-area { display:flex; align-items:center; gap:10px; }
+        .btn { padding:8px 16px; border-radius:6px; border:none; cursor:pointer; font-weight:600; font-size:0.9rem; }
+        .btn-outline { background:transparent; border:2px solid #e67e22; color:#e67e22; }
+        .btn-primary { background:#e67e22; color:white; }
+        .concert-hero { background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color:white; padding:80px 0; text-align:center; position:relative; overflow:hidden; }
+        .concert-hero::before { content:""; position:absolute; top:0; left:0; right:0; bottom:0; background:radial-gradient(circle at 50% 50%, rgba(230,126,34,0.15) 0%, transparent 70%); }
+        .concert-hero-content { position:relative; z-index:1; }
+        .concert-badge { background:#e67e22; color:white; padding:6px 18px; border-radius:20px; font-size:0.85rem; font-weight:700; display:inline-block; margin-bottom:20px; letter-spacing:1px; }
+        .concert-hero h1 { font-size:3rem; font-weight:800; margin-bottom:10px; }
+        .concert-hero h1 span { color:#e67e22; }
+        .concert-artist { font-size:1.3rem; opacity:0.9; margin-bottom:30px; }
+        .concert-meta { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-bottom:40px; }
+        .concert-meta-item { display:flex; flex-direction:column; align-items:center; gap:5px; }
+        .concert-meta-item .icon { font-size:1.8rem; }
+        .concert-meta-item .label { font-size:0.8rem; opacity:0.7; text-transform:uppercase; letter-spacing:1px; }
+        .concert-meta-item .value { font-size:1.1rem; font-weight:700; }
+        .countdown { display:flex; gap:20px; justify-content:center; margin-top:20px; }
+        .countdown-item { background:rgba(255,255,255,0.1); border-radius:10px; padding:15px 20px; min-width:70px; text-align:center; }
+        .countdown-item .num { font-size:2rem; font-weight:800; color:#e67e22; }
+        .countdown-item .lbl { font-size:0.7rem; opacity:0.7; text-transform:uppercase; }
+        .tickets-section { padding:60px 0; }
+        .section-title { text-align:center; font-size:2rem; font-weight:800; margin-bottom:10px; }
+        .section-title span { color:#e67e22; }
+        .section-sub { text-align:center; color:#666; margin-bottom:40px; }
+        .tickets-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:25px; margin-bottom:40px; }
+        .ticket-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 5px 20px rgba(0,0,0,0.08); transition:transform 0.3s, box-shadow 0.3s; position:relative; }
+        .ticket-card:hover { transform:translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.15); }
+        .ticket-card.popular::after { content:"POPULAIRE"; position:absolute; top:15px; right:-28px; background:#e67e22; color:white; font-size:0.65rem; font-weight:700; padding:5px 40px; transform:rotate(45deg); }
+        .ticket-card.vip-card { border:2px solid #f39c12; }
+        .ticket-header { padding:25px; text-align:center; }
+        .ticket-type-icon { font-size:2.5rem; margin-bottom:10px; }
+        .ticket-type-name { font-size:1.3rem; font-weight:800; margin-bottom:5px; }
+        .ticket-price { font-size:2.5rem; font-weight:800; color:#e67e22; }
+        .ticket-price span { font-size:1rem; color:#666; font-weight:400; }
+        .ticket-body { padding:0 25px 25px; }
+        .ticket-features { list-style:none; margin-bottom:25px; }
+        .ticket-features li { padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:0.9rem; color:#555; }
+        .ticket-features li::before { content:"✓ "; color:#27ae60; font-weight:700; }
+        .ticket-qty { display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:15px; }
+        .qty-btn { width:36px; height:36px; border-radius:50%; border:2px solid #e67e22; background:white; color:#e67e22; font-size:1.2rem; cursor:pointer; font-weight:700; transition:all 0.2s; }
+        .qty-btn:hover { background:#e67e22; color:white; }
+        .qty-display { font-size:1.2rem; font-weight:700; min-width:30px; text-align:center; }
+        .buy-btn { width:100%; padding:14px; background:#e67e22; color:white; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s; }
+        .buy-btn:hover { background:#d35400; }
+        .buy-btn.vip-btn { background:linear-gradient(135deg, #f39c12, #e67e22); }
+        .info-section { background:white; padding:50px 0; }
+        .info-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; }
+        .info-card { text-align:center; padding:20px; }
+        .info-card .info-icon { font-size:2.5rem; margin-bottom:15px; }
+        .info-card h3 { font-weight:700; margin-bottom:8px; }
+        .info-card p { color:#666; font-size:0.9rem; }
+        .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-box { background:white; border-radius:16px; padding:40px; max-width:450px; width:90%; position:relative; }
+        .modal-close { position:absolute; top:15px; right:15px; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#666; }
+        .modal-title { font-size:1.5rem; font-weight:800; margin-bottom:20px; }
+        .modal-form input { width:100%; padding:12px; border:2px solid #eee; border-radius:8px; margin-bottom:15px; font-size:1rem; font-family:inherit; }
+        .modal-form input:focus { border-color:#e67e22; outline:none; }
+        .modal-summary { background:#f8f9fa; border-radius:10px; padding:15px; margin-bottom:20px; }
+        .modal-summary .row { display:flex; justify-content:space-between; padding:5px 0; font-size:0.95rem; }
+        .modal-summary .row.total { font-weight:800; font-size:1.1rem; border-top:2px solid #e67e22; margin-top:10px; padding-top:10px; color:#e67e22; }
+        .confirm-btn { width:100%; padding:15px; background:#25D366; color:white; border:none; border-radius:10px; font-size:1.1rem; font-weight:700; cursor:pointer; }
+        .notification { position:fixed; top:20px; right:20px; background:#e67e22; color:white; padding:15px 20px; border-radius:12px; z-index:9999; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+        .auth-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; }
+        .auth-modal.active { display:flex; }
+        .auth-box { background:white; border-radius:16px; padding:40px; max-width:400px; width:90%; }
+        .auth-box h2 { margin-bottom:20px; font-size:1.5rem; }
+        .auth-box input { width:100%; padding:12px; border:2px solid #eee; border-radius:8px; margin-bottom:12px; font-size:1rem; font-family:inherit; }
+        .auth-box input:focus { border-color:#e67e22; outline:none; }
+        .auth-box button[type=submit] { width:100%; padding:14px; background:#e67e22; color:white; border:none; border-radius:8px; font-size:1rem; font-weight:700; cursor:pointer; }
+        @media (max-width:768px) {
+            .concert-hero h1 { font-size:2rem; }
+            .concert-meta { gap:20px; }
+            .nav-menu { display:none; }
+            .countdown { gap:10px; }
+            .countdown-item { padding:10px 12px; min-width:55px; }
         }
     </style>
 </head>
 <body>
-    <!-- TOP BAR -->
-    <div class="top-bar"><div class="container"><div class="top-message">✨ <strong>Andu-Xara</strong> - Notre histoire</div><div class="top-links"><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="billetterie.html">Concerts</a></div></div></div>
 
-    <!-- HEADER -->
-    <header class="main-header"><div class="container"><div class="header-content"><a href="index.html" class="logo">Andu<span>Xara</span></a><nav class="nav-menu"><a href="produits.html" class="nav-link">Collection</a><a href="histoire.html" class="nav-link nav-link-highlight">Histoire</a><a href="billetterie.html" class="nav-link">Concerts</a></nav><div class="user-area"><div id="guestView"><button class="btn btn-outline" onclick="showLoginModal()">Se connecter</button><button class="btn btn-primary" onclick="showRegisterModal()">S'inscrire</button></div><div id="userView" style="display:none"><span id="userName"></span><button onclick="logout()">Déconnexion</button></div><a href="panier.html" class="cart-icon">🛒<span class="cart-count" id="cartCount">0</span></a></div></div></div></header>
+    <div class="top-bar">
+        <div class="container">
+            <div>🎵 <strong>Andu-Xara</strong> - Billets disponibles !</div>
+            <div class="top-links">
+                <a href="contact.html">Contact</a>
+                <a href="compte.html">Mon compte</a>
+                <a href="produits.html">Collection</a>
+            </div>
+        </div>
+    </div>
 
-    <!-- PAGE TITLE -->
-    <div class="page-title"><div class="container"><h1>Notre Histoire</h1><p>Le chemin parcouru depuis 2020</p></div></div>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link nav-link-highlight">Concerts</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="compte.html" class="nav-link">Mon compte</a>
+                </nav>
+                <div class="user-area">
+                    <div id="guestView">
+                        <button class="btn btn-outline" onclick="showLoginModal()">Se connecter</button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">S'inscrire</button>
+                    </div>
+                    <div id="userView" style="display:none;">
+                        <span id="userName" style="font-weight:600; margin-right:10px;"></span>
+                        <button class="btn btn-outline" onclick="logout()">Déconnexion</button>
+                    </div>
+                    <a href="panier.html" class="cart-icon">🛒<span class="cart-count" id="cartCount">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <!-- TIMELINE -->
-    <section id="timeline">
-        <div class="timeline-line"></div>
-        <div class="timeline-item left" data-icon="📖"><div class="timeline-content"><h3>Les débuts</h3><p>Avant Andu-Xara, plusieurs équipes ont été formées. Les trois premières furent dissoutes en deux ans.</p></div></div>
-        <div class="timeline-item right" data-icon="🗓"><div class="timeline-content"><h3>Création officielle</h3><p>Le <strong>18 octobre 2020</strong>, Andu-Xara a été créée par <strong>Cheikhou Diabira</strong>.</p></div></div>
-        <div class="timeline-item left" data-icon="💪"><div class="timeline-content"><h3>Formation de l'équipe</h3><p>Cheikhou, Bocar, Halima, Fatimetou, Botkhol, Khadija, Moussa et Bonco.</p></div></div>
-        <div class="timeline-item right" data-icon="🏆"><div class="timeline-content"><h3>Premier succès</h3><p>2e place au Forum International des Compétences à Nouakchott.</p></div></div>
-        <div class="timeline-item left" data-icon="⚖️"><div class="timeline-content"><h3>Collaboration avec Kenzo Wouro</h3><p>15 novembre 2024 - Contrat signé puis annulé.</p></div></div>
-        <div class="timeline-item right" data-icon="🚀"><div class="timeline-content"><h3>Nouveaux projets (2026)</h3><p>Andu-Xara entame une nouvelle phase avec des projets innovants.</p></div></div>
+    <section class="concert-hero">
+        <div class="concert-hero-content">
+            <div class="concert-badge">🎤 CONCERT EXCEPTIONNEL - TABASKI 2026</div>
+            <h1>Pispa Le Roi<br><span>10e Jour de la Tabaski</span></h1>
+            <p class="concert-artist">Le roi du rap mauritanien + Invités surprises</p>
+            <div class="concert-meta">
+                <div class="concert-meta-item">
+                    <span class="icon">📅</span>
+                    <span class="label">Date</span>
+                    <span class="value">Samedi 6 Juin 2026</span>
+                </div>
+                <div class="concert-meta-item">
+                    <span class="icon">🕖</span>
+                    <span class="label">Heure</span>
+                    <span class="value">À partir de 19h00</span>
+                </div>
+                <div class="concert-meta-item">
+                    <span class="icon">📍</span>
+                    <span class="label">Lieu</span>
+                    <span class="value">Titanic Couva, Nouakchott</span>
+                </div>
+            </div>
+            <div class="countdown">
+                <div class="countdown-item"><div class="num" id="days">--</div><div class="lbl">Jours</div></div>
+                <div class="countdown-item"><div class="num" id="hours">--</div><div class="lbl">Heures</div></div>
+                <div class="countdown-item"><div class="num" id="minutes">--</div><div class="lbl">Min</div></div>
+                <div class="countdown-item"><div class="num" id="seconds">--</div><div class="lbl">Sec</div></div>
+            </div>
+        </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-col"><h4>Andu-Xara</h4><p>Mode afro-urbaine depuis 2020.</p></div><div class="footer-col"><h4>Liens</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="billetterie.html">Concerts</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:contact@andu-xara.store">Email</a></li><li><a href="tel:+22234196304">+222 34 19 63 04</a></li></ul></div></div><div class="footer-bottom"><p>© 2026 Andu-Xara</p></div></div></footer>
+    <section class="tickets-section">
+        <div class="container">
+            <h2 class="section-title">Choisissez votre <span>billet</span></h2>
+            <p class="section-sub">Places limitées — Réservez maintenant pour garantir votre entrée</p>
+            <div class="tickets-grid">
 
-    <!-- MODALS AUTH -->
-    <div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="hideLoginModal()">&times;</span><h2>Connexion</h2><form onsubmit="handleLogin(event)"><div class="form-group"><input type="email" id="loginEmail" placeholder="Email" required></div><div class="form-group"><input type="password" id="loginPassword" placeholder="Mot de passe" required></div><button type="submit" class="btn btn-primary btn-block">Se connecter</button></form></div></div>
-    <div id="registerModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="hideRegisterModal()">&times;</span><h2>S'inscrire</h2><form onsubmit="handleRegister(event)"><div class="form-group"><input type="text" id="regName" placeholder="Nom complet" required></div><div class="form-group"><input type="email" id="regEmail" placeholder="Email" required></div><div class="form-group"><input type="password" id="regPassword" placeholder="Mot de passe" required></div><div class="form-group"><input type="password" id="regConfirm" placeholder="Confirmer" required></div><button type="submit" class="btn btn-primary btn-block">S'inscrire</button></form></div></div>
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <div class="ticket-type-icon">🎫</div>
+                        <div class="ticket-type-name">Prévente</div>
+                        <div class="ticket-price">100 <span>MRU</span></div>
+                    </div>
+                    <div class="ticket-body">
+                        <ul class="ticket-features">
+                            <li>Entrée générale</li>
+                            <li>Tarif réduit prévente</li>
+                            <li>QR code de confirmation</li>
+                            <li>Max 5 billets par achat</li>
+                        </ul>
+                        <div class="ticket-qty">
+                            <button class="qty-btn" onclick="changeQty('prevente', -1)">−</button>
+                            <span class="qty-display" id="qty-prevente">1</span>
+                            <button class="qty-btn" onclick="changeQty('prevente', 1)">+</button>
+                        </div>
+                        <button class="buy-btn" onclick="openCheckout('prevente')">🛒 Réserver</button>
+                    </div>
+                </div>
 
-    <!-- SCRIPTS -->
+                <div class="ticket-card popular">
+                    <div class="ticket-header">
+                        <div class="ticket-type-icon">🎟️</div>
+                        <div class="ticket-type-name">Jour J</div>
+                        <div class="ticket-price">150 <span>MRU</span></div>
+                    </div>
+                    <div class="ticket-body">
+                        <ul class="ticket-features">
+                            <li>Entrée générale</li>
+                            <li>Disponible le soir même</li>
+                            <li>QR code de confirmation</li>
+                            <li>Max 5 billets par achat</li>
+                        </ul>
+                        <div class="ticket-qty">
+                            <button class="qty-btn" onclick="changeQty('jourj', -1)">−</button>
+                            <span class="qty-display" id="qty-jourj">1</span>
+                            <button class="qty-btn" onclick="changeQty('jourj', 1)">+</button>
+                        </div>
+                        <button class="buy-btn" onclick="openCheckout('jourj')">🛒 Réserver</button>
+                    </div>
+                </div>
+
+                <div class="ticket-card vip-card">
+                    <div class="ticket-header">
+                        <div class="ticket-type-icon">👑</div>
+                        <div class="ticket-type-name">VIP</div>
+                        <div class="ticket-price">200 <span>MRU</span></div>
+                    </div>
+                    <div class="ticket-body">
+                        <ul class="ticket-features">
+                            <li>Zone VIP exclusive</li>
+                            <li>Accès prioritaire</li>
+                            <li>QR code de confirmation</li>
+                            <li>Max 5 billets par achat</li>
+                        </ul>
+                        <div class="ticket-qty">
+                            <button class="qty-btn" onclick="changeQty('vip', -1)">−</button>
+                            <span class="qty-display" id="qty-vip">1</span>
+                            <button class="qty-btn" onclick="changeQty('vip', 1)">+</button>
+                        </div>
+                        <button class="buy-btn vip-btn" onclick="openCheckout('vip')">👑 Réserver VIP</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">📱</div>
+                    <h3>Billet numérique</h3>
+                    <p>Recevez votre confirmation après paiement via WhatsApp</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🔒</div>
+                    <h3>Paiement sécurisé</h3>
+                    <p>Via Bankily ou Wave, simple et rapide</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🎵</div>
+                    <h3>Soirée inoubliable</h3>
+                    <p>Pispa Le Roi + invités surprises pour la Tabaski</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <h3>Titanic Couva</h3>
+                    <p>Nouakchott — Ouverture des portes à 19h00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="checkoutModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeCheckout()">✕</button>
+            <h2 class="modal-title">🎫 Confirmer votre réservation</h2>
+            <div class="modal-summary" id="orderSummary"></div>
+            <div class="modal-form">
+                <input type="text" id="clientName" placeholder="Votre nom complet" required>
+                <input type="tel" id="clientPhone" placeholder="Votre numéro (ex: 22234196304)" required>
+            </div>
+            <button class="confirm-btn" onclick="confirmOrder()">📱 Confirmer via WhatsApp</button>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="loginModal">
+        <div class="auth-box">
+            <h2>Se connecter</h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Mot de passe" required>
+                <button type="submit">Se connecter</button>
+            </form>
+            <p style="margin-top:15px; text-align:center;">
+                Pas de compte ? <a href="#" onclick="hideLoginModal(); showRegisterModal();" style="color:#e67e22;">S'inscrire</a>
+            </p>
+            <button onclick="hideLoginModal()" style="margin-top:10px; width:100%; padding:10px; border:none; cursor:pointer; background:#f0f0f0; border-radius:8px;">Fermer</button>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="registerModal">
+        <div class="auth-box">
+            <h2>Créer un compte</h2>
+            <form onsubmit="handleRegister(event)">
+                <input type="text" id="regName" placeholder="Votre prénom" required>
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPassword" placeholder="Mot de passe" required>
+                <input type="password" id="regConfirm" placeholder="Confirmer le mot de passe" required>
+                <button type="submit">Créer mon compte</button>
+            </form>
+            <button onclick="hideRegisterModal()" style="margin-top:10px; width:100%; padding:10px; border:none; cursor:pointer; background:#f0f0f0; border-radius:8px;">Fermer</button>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-    
+    <script src="tickets.js"></script>
+
     <script>
-        // Animation timeline
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.2 });
-        document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
-        
-        // Mise à jour panier
-        if (typeof updateCartCount === 'function') updateCartCount();
+        const quantities = { prevente: 1, jourj: 1, vip: 1 };
+        const prices = { prevente: 100, jourj: 150, vip: 200 };
+        const typeNames = { prevente: "Prevente", jourj: "Jour J", vip: "VIP" };
+        let currentType = null;
+
+        window.changeQty = function(type, delta) {
+            quantities[type] = Math.max(1, Math.min(5, quantities[type] + delta));
+            document.getElementById("qty-" + type).textContent = quantities[type];
+        };
+
+        window.openCheckout = function(type) {
+            currentType = type;
+            const qty = quantities[type];
+            const total = prices[type] * qty;
+            document.getElementById("orderSummary").innerHTML =
+                "<div class=\"row\"><span>Concert</span><span>Pispa Le Roi - Tabaski 2026</span></div>" +
+                "<div class=\"row\"><span>Date</span><span>Samedi 6 Juin 2026 - 19h00</span></div>" +
+                "<div class=\"row\"><span>Type</span><span>" + typeNames[type] + "</span></div>" +
+                "<div class=\"row\"><span>Quantite</span><span>" + qty + " billet(s)</span></div>" +
+                "<div class=\"row\"><span>Prix unitaire</span><span>" + prices[type] + " MRU</span></div>" +
+                "<div class=\"row total\"><span>TOTAL</span><span>" + total + " MRU</span></div>";
+            document.getElementById("checkoutModal").classList.add("active");
+        };
+
+        window.closeCheckout = function() {
+            document.getElementById("checkoutModal").classList.remove("active");
+        };
+
+        window.confirmOrder = function() {
+            const name = document.getElementById("clientName").value.trim();
+            const phone = document.getElementById("clientPhone").value.trim();
+            if (!name || !phone) { alert("Veuillez remplir votre nom et telephone"); return; }
+            const qty = quantities[currentType];
+            const total = prices[currentType] * qty;
+            const ref = "PISPA-" + Date.now().toString(36).toUpperCase();
+            let msg = "RESERVATION CONCERT ANDU-XARA\n";
+            msg += "=======================\n\n";
+            msg += "Pispa Le Roi - 10e Jour Tabaski 2026\n";
+            msg += "Samedi 6 Juin 2026 a partir de 19h00\n";
+            msg += "Titanic Couva, Nouakchott\n\n";
+            msg += "Nom : " + name + "\n";
+            msg += "Tel : " + phone + "\n\n";
+            msg += "Type : " + typeNames[currentType] + "\n";
+            msg += "Quantite : " + qty + " billet(s)\n";
+            msg += "Total : " + total + " MRU\n";
+            msg += "Ref : " + ref + "\n\n";
+            msg += "Merci ! Nous vous confirmerons votre billet apres paiement.";
+            window.open("https://wa.me/22234196304?text=" + encodeURIComponent(msg), "_blank");
+            closeCheckout();
+            const notif = document.createElement("div");
+            notif.className = "notification";
+            notif.textContent = "Reservation envoyee ! On vous contacte bientot.";
+            document.body.appendChild(notif);
+            setTimeout(function() { notif.remove(); }, 4000);
+        };
+
+        function updateCountdown() {
+            const concertDate = new Date("2026-06-06T19:00:00");
+            const now = new Date();
+            const diff = concertDate - now;
+            if (diff <= 0) {
+                document.querySelector(".countdown").innerHTML = "<div style=\"font-size:1.5rem;font-weight:800;color:#e67e22;\">Le concert a lieu ce soir !</div>";
+                return;
+            }
+            const days = Math.floor(diff / (1000*60*60*24));
+            const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const seconds = Math.floor((diff % (1000*60)) / 1000);
+            document.getElementById("days").textContent = String(days).padStart(2,"0");
+            document.getElementById("hours").textContent = String(hours).padStart(2,"0");
+            document.getElementById("minutes").textContent = String(minutes).padStart(2,"0");
+            document.getElementById("seconds").textContent = String(seconds).padStart(2,"0");
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem("panier")) || [];
+            const count = cart.reduce(function(s,i){ return s + i.quantite; }, 0);
+            document.getElementById("cartCount").textContent = count;
+        }
+
+        function showLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+        function hideLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
+        function showRegisterModal() { document.getElementById("registerModal").classList.add("active"); }
+        function hideRegisterModal() { document.getElementById("registerModal").classList.remove("active"); }
+
+        window.onclick = function(e) {
+            if (e.target === document.getElementById("checkoutModal")) closeCheckout();
+            if (e.target === document.getElementById("loginModal")) hideLoginModal();
+            if (e.target === document.getElementById("registerModal")) hideRegisterModal();
+        };
+
+        document.addEventListener("DOMContentLoaded", updateCartCount);
     </script>
 </body>
 </html>
