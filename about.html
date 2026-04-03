@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - Andu-Xara | Mode Afro-Urbaine</title>
+    <meta name="description" content="Découvrez l'histoire d'Andu-Xara, une marque de mode afro-urbaine fondée en 2020, célébrant l'authenticité et l'héritage africain.">
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header & Navigation (identique à index.html) */
+        .top-bar { background: #1a1a1a; color: #ccc; padding: 8px 0; font-size: 0.85rem; }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .top-message strong { color: #e67e22; }
+        .top-links { display: flex; gap: 15px; flex-wrap: wrap; }
+        .top-links a { color: #ccc; text-decoration: none; transition: color 0.3s; }
+        .top-links a:hover { color: #e67e22; }
+
+        .main-header { background: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: #e67e22; text-decoration: none; }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0; }
+        .nav-link { text-decoration: none; color: #333; font-weight: 600; transition: color 0.3s; }
+        .nav-link:hover { color: #e67e22; }
+        .user-area { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .btn { padding: 8px 16px; border-radius: 5px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #e67e22; color: white; }
+        .btn-primary:hover { background: #d35400; }
+        .btn-outline { background: transparent; border: 1px solid #e67e22; color: #e67e22; }
+        .btn-outline:hover { background: #e67e22; color: white; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.3rem; text-decoration: none; color: #333; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #e67e22; color: white; font-size: 0.7rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+        /* Page About */
+        .about-hero {
+            background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        .about-hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .about-hero h1 span { color: #e67e22; }
+        .about-hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
+
+        .about-section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-text h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #e67e22;
+        }
+        .about-text p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .about-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .values-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .value-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .value-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #e67e22;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .team-member {
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+        }
+        .team-member h3 { margin-bottom: 5px; }
+        .team-member p { color: #e67e22; font-weight: 600; margin-bottom: 10px; }
+        .team-member small { color: #777; }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 { margin-bottom: 20px; }
+        .footer-col a { color: #ccc; text-decoration: none; }
+        .footer-col a:hover { color: #e67e22; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #4a5568; }
+
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .values-list { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+        }
+    </style>
+cd ~/Documents/andu-xara-nouveau
+
+# Le code AdSense à ajouter
+ADSENSE_CODE='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8436772283536190" crossorigin="anonymous"></script>'
+
+# Ajouter dans tous les fichiers HTML
+for file in *.html; do
+    if ! grep -q "pagead2.googlesyndication.com" "$file"; then
+        sed -i "s|</head>|${ADSENSE_CODE}\n</head>|" "$file"
+        echo "✅ Ajouté dans $file"
+    else
+        echo "⏩ Déjà présent dans $file"
+    fi
+done
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-message">✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne</div>
+            <div class="top-links">
+                <a href="contact.html">Contact</a>
+                <a href="compte.html">Mon compte</a>
+                <a href="billetterie.html">Concerts</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link">Concerts</a>
+                    <a href="about.html" class="nav-link nav-link-highlight">À propos</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+                <div class="user-area">
+                    <div id="guestView">
+                        <button class="btn btn-outline" onclick="showLoginModal()">Se connecter</button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">S'inscrire</button>
+                    </div>
+                    <div id="userView" style="display:none">
+                        <span id="userName"></span>
+                        <button onclick="logout()">Déconnexion</button>
+                    </div>
+                    <a href="javascript:void(0)" class="cart-icon" onclick="openCart()">
+                        🛒<span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="about-hero">
+        <div class="container">
+            <h1>Notre <span>vision</span></h1>
+            <p>Allier l'héritage africain au style urbain moderne, pour créer une mode authentique et engagée.</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Qui sommes-nous ?</h2>
+                    <p>Fondée en 2020 par <strong>Cheikhou Diabira</strong>, Andu-Xara est bien plus qu'une marque de vêtements. C'est un mouvement qui célèbre l'identité africaine à travers des créations modernes et élégantes.</p>
+                    <p>Notre nom, "Andu-Xara", signifie « se connaître soi-même » en soninké. Cette philosophie guide chacune de nos collections : aider chacun à exprimer sa véritable essence à travers des pièces uniques, confectionnées avec des tissus de qualité et un savoir-faire artisanal.</p>
+                    <p>En 2022, <strong>Bocar Ba</strong> rejoint l'aventure comme co-fondateur, apportant son expertise et sa vision pour développer la marque à l'international.</p>
+                </div>
+                <div class="about-image">
+                    <img src="images/equipe/equipe-andu-xara.jpg" alt="Équipe Andu-Xara" onerror="this.src='https://placehold.co/600x400/2c3e50/white?text=Andu-Xara+Team'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" style="background: white;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2rem; color: #e67e22;">Nos valeurs</h2>
+                <p style="max-width: 700px; margin: 20px auto 0;">Des principes qui guident chacune de nos créations.</p>
+            </div>
+            <div class="values-list">
+                <div class="value-item">
+                    <div class="value-icon">🌍</div>
+                    <h3>Héritage</h3>
+                    <p>Puiser l'inspiration dans les traditions africaines pour les réinventer.</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon">✨</div>
+                    <h3>Authenticité</h3>
+                    <p>Des pièces uniques, conçues avec soin et respect des matières.</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon">🤝</div>
+                    <h3>Communauté</h3>
+                    <p>Fédérer une communauté autour de valeurs partagées et d'un style de vie.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2rem; color: #e67e22;">L'équipe fondatrice</h2>
+                <p>Des talents unis par la même passion.</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="images/equipe/cheikhou.jpg" alt="Cheikhou Diabira" onerror="this.src='https://placehold.co/150x150/e67e22/white?text=CD'">
+                    <h3>Cheikhou Diabira</h3>
+                    <p>Fondateur & CEO</p>
+                    <small>Visionnaire et créatif, il porte l'âme d'Andu-Xara.</small>
+                </div>
+                <div class="team-member">
+                    <img src="images/equipe/bocar.jpg" alt="Bocar Ba" onerror="this.src='https://placehold.co/150x150/e67e22/white?text=BB'">
+                    <h3>Bocar Ba</h3>
+                    <p>Co-fondateur</p>
+                    <small>Expert en développement et stratégie.</small>
+                </div>
+                <div class="team-member">
+                    <img src="images/equipe/halima.jpg" alt="Halima Sokhona" onerror="this.src='https://placehold.co/150x150/e67e22/white?text=HS'">
+                    <h3>Halima Sokhona</h3>
+                    <p>Directrice artistique</p>
+                    <small>Le regard qui transforme les idées en collections.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine depuis 2020.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Collection</a></li>
+                        <li><a href="histoire.html">Histoire</a></li>
+                        <li><a href="about.html">À propos</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals (identiques) -->
+    <div id="loginModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center;"><div class="modal-content" style="background:white; padding:30px; border-radius:10px; max-width:400px; width:90%;"><span class="close-modal" onclick="hideLoginModal()" style="float:right; font-size:28px; cursor:pointer;">&times;</span><h2>Connexion</h2><form onsubmit="handleLogin(event)"><div class="form-group"><input type="email" id="loginEmail" placeholder="Email" required style="width:100%; padding:12px; margin:10px 0;"></div><div class="form-group"><input type="password" id="loginPassword" placeholder="Mot de passe" required style="width:100%; padding:12px; margin:10px 0;"></div><button type="submit" class="btn btn-primary btn-block">Se connecter</button></form></div></div>
+    <div id="registerModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center;"><div class="modal-content" style="background:white; padding:30px; border-radius:10px; max-width:400px; width:90%;"><span class="close-modal" onclick="hideRegisterModal()" style="float:right; font-size:28px; cursor:pointer;">&times;</span><h2>S'inscrire</h2><form onsubmit="handleRegister(event)"><div class="form-group"><input type="text" id="regName" placeholder="Nom complet" required style="width:100%; padding:12px; margin:10px 0;"></div><div class="form-group"><input type="email" id="regEmail" placeholder="Email" required style="width:100%; padding:12px; margin:10px 0;"></div><div class="form-group"><input type="password" id="regPassword" placeholder="Mot de passe" required style="width:100%; padding:12px; margin:10px 0;"></div><div class="form-group"><input type="password" id="regConfirm" placeholder="Confirmer" required style="width:100%; padding:12px; margin:10px 0;"></div><button type="submit" class="btn btn-primary btn-block">S'inscrire</button></form></div></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let panier = JSON.parse(localStorage.getItem('panier')) || [];
+        function updateCartCount() { document.getElementById('cartCount').textContent = panier.reduce((s,i)=>s+i.quantite,0); }
+        window.openCart = function() { alert('Panier ouvert'); };
+        window.showLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; };
+        window.hideLoginModal = function() { document.getElementById('loginModal').style.display = 'none'; };
+        window.showRegisterModal = function() { document.getElementById('registerModal').style.display = 'flex'; };
+        window.hideRegisterModal = function() { document.getElementById('registerModal').style.display = 'none'; };
+        window.handleLogin = async (e) => { e.preventDefault(); alert('Fonction à connecter'); };
+        window.handleRegister = async (e) => { e.preventDefault(); alert('Fonction à connecter'); };
+        window.logout = () => { auth.signOut(); location.reload(); };
+        updateCartCount();
+    </script>
+</body>
+</html>

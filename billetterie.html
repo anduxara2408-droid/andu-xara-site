@@ -100,6 +100,20 @@
             .countdown-item { padding:10px 12px; min-width:55px; }
         }
     </style>
+cd ~/Documents/andu-xara-nouveau
+
+# Le code AdSense à ajouter
+ADSENSE_CODE='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8436772283536190" crossorigin="anonymous"></script>'
+
+# Ajouter dans tous les fichiers HTML
+for file in *.html; do
+    if ! grep -q "pagead2.googlesyndication.com" "$file"; then
+        sed -i "s|</head>|${ADSENSE_CODE}\n</head>|" "$file"
+        echo "✅ Ajouté dans $file"
+    else
+        echo "⏩ Déjà présent dans $file"
+    fi
+done
 </head>
 <body>
 
