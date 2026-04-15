@@ -224,7 +224,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
+            background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
         }
 
         .concert-hero-content {
@@ -997,7 +997,7 @@
     <div class="top-bar">
         <div class="container">
             <div class="top-message">
-                ✨ <strong>Andu-Xara</strong> présente <strong>Pispa Le Roi</strong> • Concert exceptionnel de la Tabaski
+                ✨ <strong>Andu-Xara</strong> présente <strong>Pispa Le Roi</strong> • Concert exceptionnel
             </div>
             <div class="top-links">
                 <a href="contact.html">Contact</a>
@@ -1032,7 +1032,7 @@
     <!-- HERO CONCERT -->
     <div class="container">
         <div class="concert-hero">
-            <img src="images/pispa-concert.jpeg" alt="Pispa Le Roi en concert" class="concert-cover" onerror="this.src='https://via.placeholder.com/1200x500/667eea/ffffff?text=PISPA+LE+ROI+EN+CONCERT'">
+            <img src="images/pispa-concert.jpeg" alt="Pispa Le Roi en concert" class="concert-cover">
             <div class="concert-hero-overlay"></div>
             <div class="concert-hero-content">
                 <span class="concert-badge">ÉVÉNEMENT OFFICIEL</span>
@@ -1040,13 +1040,13 @@
                 <p>Le roi du rap mauritanien en concert exceptionnel</p>
                 <div class="concert-meta">
                     <div class="meta-item">
-                        <span>📅</span> 8ème jour de la Tabaski 2026
+                        <span>📅</span> 10ème jour Tabaski 2026
                     </div>
                     <div class="meta-item">
                         <span>📍</span> Titanic Couva, Nouakchott
                     </div>
                     <div class="meta-item">
-                        <span>⏰</span> 21h00
+                        <span>⏰</span> 19h00
                     </div>
                 </div>
             </div>
@@ -1104,7 +1104,7 @@
                                 <li><span class="check">✓</span> QR code unique</li>
                             </ul>
                             <div class="pricing-availability">
-                                <span class="availability-high">✓ 5 disponibles</span>
+                                <span class="availability-high">✓ 500 disponibles</span>
                             </div>
                         </div>
                     </div>
@@ -1123,7 +1123,7 @@
                                 <li><span class="check">✓</span> QR code unique</li>
                             </ul>
                             <div class="pricing-availability">
-                                <span class="availability-high">✓ 5 disponibles</span>
+                                <span class="availability-high">✓ 1000 disponibles</span>
                             </div>
                         </div>
                     </div>
@@ -1145,7 +1145,7 @@
                                 <li><span class="check">✓</span> Rencontre avec l'artiste</li>
                             </ul>
                             <div class="pricing-availability">
-                                <span class="availability-low">⚡ 3 disponibles</span>
+                                <span class="availability-low">⚡ 100 disponibles</span>
                             </div>
                         </div>
                     </div>
@@ -1389,8 +1389,8 @@
             id: 'pispa-tabaski-2026',
             name: 'Pispa Le Roi - Concert Tabaski',
             artist: 'Pispa Le Roi',
-            date: '2026-04-15',
-            time: '21:00',
+            date: '2026-06-08',
+            time: '19:00',
             location: 'Titanic Couva, Nouakchott',
             prices: {
                 prevente: 100,
@@ -1398,9 +1398,9 @@
                 vip: 200
             },
             available: {
-                prevente: 5,
-                jourj: 5,
-                vip: 3
+                prevente: 500,
+                jourj: 1000,
+                vip: 100
             }
         };
 
@@ -1416,7 +1416,6 @@
             const diff = concertDate - now;
 
             if (diff < 0) {
-                document.getElementById('countdown').innerHTML = '<h3>🎉 Concert en cours !</h3>';
                 return;
             }
 
@@ -1505,8 +1504,6 @@
 
         // ===== CONFIRMER LA RÉSERVATION =====
         window.confirmReservation = async function() {
-            console.log('🚀 Début de la réservation...');
-            
             const user = auth.currentUser;
             if (!user) {
                 alert('Veuillez vous connecter d\'abord');
@@ -1644,13 +1641,11 @@
                         <p><small>Depuis le numéro <strong>49 03 76 97</strong></small></p>
                     `;
                     
-                    // Simuler l'envoi WhatsApp (ouvre un lien si possible)
                     const whatsappUrl = `https://wa.me/${clientPhone.replace(/\s/g,'')}?text=${encodeURIComponent(whatsappMessage)}`;
                     window.open(whatsappUrl, '_blank');
                     
                     document.getElementById('ticketModal').style.display = 'flex';
                     
-                    // Mettre à jour le compteur
                     if (typeof updateCartCount === 'function') updateCartCount();
                     
                 } else {
@@ -1691,7 +1686,7 @@
             document.getElementById('ticketModal').style.display = 'none';
         };
 
-        // ===== METTRE À JOUR LE COMPTEUR DE BILLETS (simulé) =====
+        // ===== METTRE À JOUR LE COMPTEUR DE BILLETS =====
         async function updateCartCount() {
             const user = auth.currentUser;
             if (user) {
@@ -1713,7 +1708,6 @@
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     updateCartCount();
-                    // Pré-remplir avec les infos de l'utilisateur si disponibles
                     db.collection('users').doc(user.uid).get().then(doc => {
                         if (doc.exists) {
                             const data = doc.data();
