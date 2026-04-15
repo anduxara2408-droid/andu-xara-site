@@ -105,6 +105,7 @@
     </style>
 </head>
 <body>
+
     <div class="login-container">
         <div class="logo">
             Andu<span style="color: #333;">Xara</span>
@@ -128,6 +129,13 @@
             ⚠️ Accès réservé aux administrateurs
         </div>
     </div>
+
+<script>
+// Rediriger vers la page de code secret si pas authentifié
+if (localStorage.getItem('adminAuth') !== 'true') {
+    window.location.href = 'access.html';
+}
+</script>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>

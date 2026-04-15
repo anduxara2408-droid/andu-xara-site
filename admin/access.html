@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accès Admin - Andu-Xara</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .admin-box h1 { color: #e67e22; margin-bottom: 10px; }
+        .admin-box p { color: #666; margin-bottom: 30px; }
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 5px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .error { color: #e74c3c; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <h1>🔐 Accès Administrateur</h1>
+        <p>Veuillez saisir votre code d'accès</p>
+        <input type="password" class="code-input" id="adminCode" placeholder="Code secret" maxlength="8">
+        <button class="btn" onclick="checkCode()">Accéder au tableau de bord</button>
+        <div class="error" id="errorMsg">❌ Code incorrect</div>
+    </div>
+
+    <script>
+        const SECRET_CODE = "ANDU2026";
+        
+        function checkCode() {
+            const code = document.getElementById('adminCode').value;
+            if (code === SECRET_CODE) {
+                localStorage.setItem('adminAuth', 'true');
+                localStorage.setItem('agentName', 'Admin Concert');
+                window.location.href = 'dashboard.html';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('errorMsg').style.display = 'none';
+                }, 2000);
+            }
+        }
+        
+        if (localStorage.getItem('adminAuth') === 'true') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
