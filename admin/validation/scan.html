@@ -2,121 +2,79 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Scanner • Concert Pispa Le Roi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Génération massive - Tous les billets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #0a0a0a; min-height: 100vh; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
-        .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
-        .event-info { display: flex; justify-content: space-between; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        .agent-badge { background: #e67e22; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; }
-        
-        #reader {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 20px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #1a1a1a; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card { background: white; border-radius: 15px; padding: 30px; margin-bottom: 20px; }
+        h1 { color: #e67e22; margin-bottom: 10px; }
+        .stats { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .stats h3 { margin-bottom: 15px; }
+        .stats ul { list-style: none; }
+        .stats li { padding: 8px 0; border-bottom: 1px solid #ddd; }
+        .btn { background: #e67e22; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; font-size: 16px; }
+        .btn:hover { background: #d35400; }
+        .btn-success { background: #27ae60; }
+        .btn-success:hover { background: #219a52; }
+        .btn-danger { background: #e74c3c; }
+        .btn-danger:hover { background: #c0392b; }
+        .progress-bar { background: #e0e0e0; border-radius: 10px; height: 30px; margin: 20px 0; overflow: hidden; display: none; }
+        .progress-fill { background: #27ae60; height: 100%; width: 0%; transition: width 0.3s; text-align: center; color: white; line-height: 30px; }
+        .result { display: none; margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 10px; }
+        .error { background: #ffebee; color: #c62828; }
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .no-print { display: none; }
+            .billet-print { break-inside: avoid; page-break-inside: avoid; margin: 5px; }
         }
-        #reader video {
-            border-radius: 20px;
-        }
-        
-        .scan-status {
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .manual-section {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-        .manual-section h3 { color: #e67e22; margin-bottom: 15px; }
-        .manual-input { display: flex; gap: 10px; }
-        .manual-input input { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; }
-        .manual-input input:focus { outline: none; border-color: #e67e22; }
-        
-        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; }
-        .btn-primary { background: #e67e22; color: white; }
-        .btn-primary:hover { background: #d35400; }
-        .btn-success { background: #27ae60; color: white; }
-        .btn-danger { background: #e74c3c; color: white; margin-top: 10px; }
-        
-        .result-card { background: white; border-radius: 15px; padding: 20px; margin-top: 20px; display: none; }
-        .result-card h3 { color: #e67e22; margin-bottom: 15px; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 10px; }
-        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
-        .status-valid { background: #27ae60; color: white; }
-        .status-invalid { background: #e74c3c; color: white; }
-        .status-used { background: #95a5a6; color: white; }
-        
-        .camera-error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: center;
-            display: none;
-        }
-        
-        @media (max-width: 768px) { 
-            .manual-input { flex-direction: column; }
-            .info-row { flex-direction: column; align-items: flex-start; }
-        }
+        .print-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
     </style>
 </head>
 <body>
-
 <script>
 if (localStorage.getItem('adminAuth') !== 'true') {
-    window.location.href = '../access.html';
+    window.location.href = 'access.html';
 }
 </script>
 
 <div class="container">
-    <div class="header">
-        <h1>📷 Scanner de billets</h1>
-        <p>Pispa Le Roi - 10ème jour Tabaski 2026</p>
-    </div>
-
-    <div class="event-info">
-        <span>🎤 Pispa Le Roi</span>
-        <span class="agent-badge" id="agentName">Agent</span>
-    </div>
-
-    <div id="reader" style="width:100%;"></div>
-    
-    <div class="scan-status" id="scanStatus">
-        🔍 Démarrage du scanner...
-    </div>
-
-    <div class="manual-section">
-        <h3>🔍 Saisie manuelle (alternative)</h3>
-        <div class="manual-input">
-            <input type="text" id="ticketId" placeholder="Entrez l'ID du billet">
-            <button class="btn btn-primary" onclick="validateManualTicket()">Vérifier</button>
+    <div class="card no-print">
+        <h1>🎫 GÉNÉRATION MASSIVE DE BILLETS</h1>
+        <p>Concert: 10ème jour Tabaski 2026 - Titanic Couva - 19h00</p>
+        
+        <div class="stats">
+            <h3>📊 Billets à générer :</h3>
+            <ul>
+                <li>🎟️ PRÉVENTE (100 MRU) : <strong>500 billets</strong> (PRE-00001 à PRE-00500)</li>
+                <li>🎟️ STANDARD (150 MRU) : <strong>1000 billets</strong> (JOUR-00001 à JOUR-01000)</li>
+                <li>⭐ VIP (200 MRU) : <strong>100 billets</strong> (VIP-00001 à VIP-00100)</li>
+            </ul>
+            <hr style="margin: 15px 0;">
+            <p><strong>Total : 1600 billets</strong></p>
+            <p><strong>📅 Date : 10ème jour Tabaski 2026</strong></p>
+            <p><strong>⏰ Heure : 19h00</strong></p>
         </div>
+        
+        <button class="btn" onclick="generateAllTickets()">🚀 GÉNÉRER TOUS LES BILLETS</button>
+        <button class="btn btn-success" id="printBtn" onclick="printAllTickets()" style="display: none;">🖨️ IMPRIMER TOUS LES BILLETS</button>
+        <button class="btn" onclick="downloadTicketsZip()" id="downloadBtn" style="display: none;">📥 TÉLÉCHARGER (HTML)</button>
+        <button class="btn btn-danger" id="deleteBtn" onclick="deleteAllTickets()" style="display: none;">🗑️ SUPPRIMER TOUS LES BILLETS</button>
+        
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill">0%</div>
+        </div>
+        
+        <div id="result" class="result"></div>
     </div>
-
-    <div id="resultCard" class="result-card">
-        <h3>🎫 Informations billet</h3>
-        <div id="resultContent"></div>
-        <button id="validateBtn" class="btn btn-success" style="width:100%; margin-top:15px;" onclick="confirmValidation()">✅ Valider l'entrée</button>
-    </div>
+    
+    <div id="printArea" class="print-grid" style="display: none;"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -129,188 +87,307 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    let currentTicket = null;
-    let html5QrCode = null;
-    let isScanning = true;
+    let allTickets = [];
+    let generatedCount = 0;
 
-    const agentName = localStorage.getItem('agentName') || 'Admin';
-    document.getElementById('agentName').textContent = agentName;
-
-    // ===== DÉMARRER LE SCANNER =====
-    async function startScanner() {
-        const scanStatus = document.getElementById('scanStatus');
-        const readerElement = document.getElementById('reader');
-        
-        if (html5QrCode) {
-            try {
-                await html5QrCode.stop();
-            } catch(e) {}
-        }
-        
-        html5QrCode = new Html5Qrcode("reader");
-        
-        const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0,
-            showTorchButtonIfSupported: true
-        };
-        
-        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            console.log("QR Code détecté:", decodedText);
-            
-            if (isScanning) {
-                isScanning = false;
-                scanStatus.innerHTML = "✅ QR code détecté ! Vérification en cours...";
-                scanStatus.style.background = "rgba(39,174,96,0.9)";
-                
-                // Arrêter le scanner temporairement
-                html5QrCode.stop().then(() => {
-                    document.getElementById('ticketId').value = decodedText;
-                    checkTicket(decodedText);
-                }).catch(() => {});
-            }
-        };
-        
-        const qrCodeErrorCallback = (errorMessage) => {
-            // Ignorer les erreurs normales
-            // console.log(errorMessage);
-        };
-        
-        try {
-            await html5QrCode.start(
-                { facingMode: "environment" },
-                config,
-                qrCodeSuccessCallback,
-                qrCodeErrorCallback
-            );
-            scanStatus.innerHTML = "🔍 Scanner actif - Cadrez le QR code";
-            scanStatus.style.background = "rgba(0,0,0,0.7)";
-        } catch (err) {
-            console.error("Erreur démarrage scanner:", err);
-            scanStatus.innerHTML = "❌ Impossible d'accéder à la caméra. Utilisez la saisie manuelle.";
-            scanStatus.style.background = "rgba(231,76,60,0.8)";
-            
-            // Essayer avec la caméra par défaut
-            try {
-                await html5QrCode.start(
-                    { facingMode: "user" },
-                    config,
-                    qrCodeSuccessCallback,
-                    qrCodeErrorCallback
-                );
-                scanStatus.innerHTML = "🔍 Scanner actif (caméra avant)";
-                scanStatus.style.background = "rgba(0,0,0,0.7)";
-            } catch (err2) {
-                console.error("Erreur avec caméra avant:", err2);
-            }
-        }
+    function generateTicketId(prefix, number) {
+        const num = number.toString().padStart(5, '0');
+        return `${prefix}-${num}`;
     }
-    
-    // ===== VÉRIFICATION MANUELLE =====
-    async function validateManualTicket() {
-        const ticketId = document.getElementById('ticketId').value.trim();
-        if (!ticketId) {
-            alert('Veuillez entrer un ID de billet');
-            return;
-        }
-        await checkTicket(ticketId);
+
+    // ===== FONCTION QR CODE - UTILISE UNIQUEMENT L'ID DU BILLET =====
+    function getQRCodeUrl(data) {
+        // Utiliser uniquement l'ID du billet, pas le JSON
+        return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data)}`;
     }
-    
-    async function checkTicket(ticketId) {
-        const doc = await db.collection('tickets').doc(ticketId).get();
-        const resultCard = document.getElementById('resultCard');
-        const resultContent = document.getElementById('resultContent');
-        const validateBtn = document.getElementById('validateBtn');
 
-        if (!doc.exists) {
-            resultContent.innerHTML = `<div class="info-row"><span>Statut:</span><span class="status-badge status-invalid">❌ Billet introuvable</span></div>`;
-            resultCard.style.display = 'block';
-            validateBtn.style.display = 'block';
-            validateBtn.textContent = "❌ Billet invalide";
-            validateBtn.style.background = "#e74c3c";
-            currentTicket = null;
-            return;
-        }
-
-        const ticket = doc.data();
-        currentTicket = { id: ticketId, ...ticket };
-
-        let statusHtml = '';
-        let canValidate = false;
-
-        if (ticket.used) {
-            statusHtml = `<span class="status-badge status-used">❌ Déjà utilisé</span>`;
-            validateBtn.textContent = "❌ Billet déjà utilisé";
-            validateBtn.style.background = "#95a5a6";
-        } else if (!ticket.active) {
-            statusHtml = `<span class="status-badge status-invalid">⏳ En attente de paiement</span>`;
-            validateBtn.textContent = "⏳ En attente de paiement";
-            validateBtn.style.background = "#f39c12";
-        } else {
-            statusHtml = `<span class="status-badge status-valid">✅ Valide - Entrée autorisée</span>`;
-            validateBtn.textContent = "✅ VALIDER L'ENTRÉE";
-            validateBtn.style.background = "#27ae60";
-            canValidate = true;
-        }
-
-        resultContent.innerHTML = `
-            <div class="info-row"><span>ID Billet:</span><span>${ticket.ticketId}</span></div>
-            <div class="info-row"><span>Concert:</span><span>${ticket.concertName || 'Pispa Le Roi'}</span></div>
-            <div class="info-row"><span>Type:</span><span>${ticket.ticketTypeName || ticket.ticketType}</span></div>
-            <div class="info-row"><span>Client:</span><span>${ticket.userName || ticket.userEmail || 'Non renseigné'}</span></div>
-            <div class="info-row"><span>Prix:</span><span>${ticket.price} MRU</span></div>
-            <div class="info-row"><span>Statut:</span>${statusHtml}</div>
+    // Template du billet PRÉVENTE (100 MRU)
+    function getPreventeTemplate(ticketId, qrUrl, index) {
+        return `
+            <div class="billet-print" style="width: 320px; height: 200px; background: linear-gradient(135deg, #1a1a1a, #2c2c2c); border-radius: 12px; overflow: hidden; border: 2px solid #ffa500; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: #ffa500; color: #1a1a1a; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">PRÉVENTE</div>
+                <div style="padding: 12px;">
+                    <h2 style="color: #ffa500; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: white; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #ffa500; color: #1a1a1a; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 100 MRU - Prévente</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #ffa500; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #ffa500;">👤 Invité :</span> _______________</div>
+                </div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #666; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
+            </div>
         `;
+    }
 
-        resultCard.style.display = 'block';
+    // Template du billet STANDARD (150 MRU)
+    function getStandardTemplate(ticketId, qrUrl, index) {
+        return `
+            <div class="billet-print" style="width: 320px; height: 200px; background: linear-gradient(135deg, #0d3b66, #1a4d80); border-radius: 12px; overflow: hidden; border: 2px solid #2196F3; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: #2196F3; color: white; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">STANDARD</div>
+                <div style="padding: 12px;">
+                    <h2 style="color: #fff; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: #ffd700; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #2196F3; color: white; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 150 MRU - Standard</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #2196F3; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #2196F3;">👤 Invité :</span> _______________</div>
+                </div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #aaa; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
+            </div>
+        `;
+    }
+
+    // Template du billet VIP (200 MRU)
+    function getVipTemplate(ticketId, qrUrl, index) {
+        return `
+            <div class="billet-print" style="width: 320px; height: 220px; background: linear-gradient(135deg, #000000, #1a1a1a); border-radius: 12px; overflow: hidden; border: 2px solid #D4AF37; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: linear-gradient(135deg, #D4AF37, #FFD700); color: #000; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">⭐ VIP</div>
+                <div style="padding: 12px;">
+                    <h2 style="color: #D4AF37; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: #FFD700; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel - Accès VIP</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #D4AF37; color: #000; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 200 MRU - VIP</div>
+                    <div style="font-size: 8px; color: #D4AF37; margin: 4px 0;">✅ Accès prioritaire | Zone VIP | Boisson offerte | Rencontre artiste</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #D4AF37; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #D4AF37;">👤 Invité :</span> _______________</div>
+                </div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #D4AF37; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
+            </div>
+        `;
+    }
+
+    async function deleteAllTickets() {
+        if (!confirm('⚠️ SUPPRIMER TOUS LES 1600 BILLETS ?\n\nCette action est irréversible !\n\nContinuer ?')) {
+            return;
+        }
         
-        // Redémarrer le scanner après 3 secondes
-        setTimeout(() => {
-            if (!currentTicket || !currentTicket.active || currentTicket.used) {
-                isScanning = true;
-                startScanner();
-            }
-        }, 3000);
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        progressBar.style.display = 'block';
+        
+        const snapshot = await db.collection('tickets').get();
+        let deleted = 0;
+        const total = snapshot.size;
+        
+        for (const doc of snapshot.docs) {
+            await db.collection('tickets').doc(doc.id).delete();
+            deleted++;
+            const percent = Math.round((deleted / total) * 100);
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+        }
+        
+        progressBar.style.display = 'none';
+        alert(`✅ ${deleted} billets supprimés`);
+        
+        document.getElementById('printBtn').style.display = 'none';
+        document.getElementById('downloadBtn').style.display = 'none';
+        document.getElementById('deleteBtn').style.display = 'none';
+        document.getElementById('result').style.display = 'none';
+    }
+
+    async function generateAllTickets() {
+        const resultDiv = document.getElementById('result');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const printBtn = document.getElementById('printBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+        
+        if (!confirm('⚠️ Générer 1600 billets avec QR codes uniques ?\n\nCette opération peut prendre 1-2 minutes.\n\nContinuer ?')) {
+            return;
+        }
+        
+        progressBar.style.display = 'block';
+        resultDiv.style.display = 'none';
+        resultDiv.className = 'result';
+        allTickets = [];
+        generatedCount = 0;
+        
+        const totalTickets = 1600;
+        
+        // Génération des billets PRÉVENTE (500)
+        for (let i = 1; i <= 500; i++) {
+            const ticketId = generateTicketId('PRE', i);
+            // Utilisation de getQRCodeUrl avec uniquement l'ID
+            const qrUrl = getQRCodeUrl(ticketId);
+            const ticketData = {
+                ticketId: ticketId,
+                type: 'prevente',
+                price: 100,
+                qrCode: qrUrl,
+                concertDate: '10ème jour Tabaski 2026',
+                concertTime: '19h00',
+                concertLocation: 'Titanic Couva, Nouakchott',
+                artist: 'Pispa Le Roi',
+                active: true,
+                used: false,
+                generatedAt: new Date()
+            };
+            
+            try {
+                await db.collection('tickets').doc(ticketId).set(ticketData);
+                allTickets.push({ id: ticketId, type: 'prevente', price: 100, qrUrl, html: getPreventeTemplate(ticketId, qrUrl, i) });
+                generatedCount++;
+            } catch(e) { console.error(e); }
+            
+            const percent = Math.round((generatedCount / totalTickets) * 100);
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+            
+            if (i % 50 === 0) await new Promise(r => setTimeout(r, 10));
+        }
+        
+        // Génération des billets STANDARD (1000)
+        for (let i = 1; i <= 1000; i++) {
+            const ticketId = generateTicketId('JOUR', i);
+            // Utilisation de getQRCodeUrl avec uniquement l'ID
+            const qrUrl = getQRCodeUrl(ticketId);
+            const ticketData = {
+                ticketId: ticketId,
+                type: 'standard',
+                price: 150,
+                qrCode: qrUrl,
+                concertDate: '10ème jour Tabaski 2026',
+                concertTime: '19h00',
+                concertLocation: 'Titanic Couva, Nouakchott',
+                artist: 'Pispa Le Roi',
+                active: true,
+                used: false,
+                generatedAt: new Date()
+            };
+            
+            try {
+                await db.collection('tickets').doc(ticketId).set(ticketData);
+                allTickets.push({ id: ticketId, type: 'standard', price: 150, qrUrl, html: getStandardTemplate(ticketId, qrUrl, i) });
+                generatedCount++;
+            } catch(e) { console.error(e); }
+            
+            const percent = Math.round((generatedCount / totalTickets) * 100);
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+            
+            if (i % 100 === 0) await new Promise(r => setTimeout(r, 10));
+        }
+        
+        // Génération des billets VIP (100)
+        for (let i = 1; i <= 100; i++) {
+            const ticketId = generateTicketId('VIP', i);
+            // Utilisation de getQRCodeUrl avec uniquement l'ID
+            const qrUrl = getQRCodeUrl(ticketId);
+            const ticketData = {
+                ticketId: ticketId,
+                type: 'vip',
+                price: 200,
+                qrCode: qrUrl,
+                concertDate: '10ème jour Tabaski 2026',
+                concertTime: '19h00',
+                concertLocation: 'Titanic Couva, Nouakchott',
+                artist: 'Pispa Le Roi',
+                active: true,
+                used: false,
+                generatedAt: new Date()
+            };
+            
+            try {
+                await db.collection('tickets').doc(ticketId).set(ticketData);
+                allTickets.push({ id: ticketId, type: 'vip', price: 200, qrUrl, html: getVipTemplate(ticketId, qrUrl, i) });
+                generatedCount++;
+            } catch(e) { console.error(e); }
+            
+            const percent = Math.round((generatedCount / totalTickets) * 100);
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+            
+            await new Promise(r => setTimeout(r, 10));
+        }
+        
+        progressBar.style.display = 'none';
+        
+        resultDiv.innerHTML = `
+            <h3>✅ GÉNÉRATION TERMINÉE !</h3>
+            <p>📊 ${generatedCount} billets créés avec succès</p>
+            <ul>
+                <li>🎟️ PRÉVENTE : 500 billets (100 MRU)</li>
+                <li>🎟️ STANDARD : 1000 billets (150 MRU)</li>
+                <li>⭐ VIP : 100 billets (200 MRU)</li>
+            </ul>
+            <p>📅 Date : 10ème jour Tabaski 2026</p>
+            <p>⏰ Heure : 19h00</p>
+            <p>📍 Lieu : Titanic Couva, Nouakchott</p>
+            <p>✅ Tous les billets sont dans Firebase avec leurs QR codes uniques</p>
+            <p>💡 Cliquez sur "IMPRIMER" pour imprimer tous les billets</p>
+        `;
+        resultDiv.style.display = 'block';
+        printBtn.style.display = 'block';
+        downloadBtn.style.display = 'block';
+        deleteBtn.style.display = 'block';
     }
     
-    // ===== VALIDATION CONFIRMATION =====
-    async function confirmValidation() {
-        if (!currentTicket || currentTicket.used) {
-            alert('Ce billet ne peut pas être validé');
-            return;
-        }
+    function printAllTickets() {
+        const printArea = document.getElementById('printArea');
+        printArea.innerHTML = '';
+        printArea.style.display = 'flex';
         
-        if (!currentTicket.active) {
-            alert('Ce billet est en attente de paiement. Il ne peut pas être validé.');
-            return;
-        }
-
-        await db.collection('tickets').doc(currentTicket.id).update({
-            used: true,
-            usedAt: new Date(),
-            validatedBy: agentName
+        allTickets.forEach(ticket => {
+            printArea.innerHTML += ticket.html;
         });
-
-        alert(`✅ Entrée validée pour ${currentTicket.userName || currentTicket.userEmail || 'le client'}`);
         
-        // Réinitialiser
-        document.getElementById('ticketId').value = '';
-        document.getElementById('resultCard').style.display = 'none';
-        currentTicket = null;
+        window.print();
         
-        // Redémarrer le scanner
-        isScanning = true;
-        startScanner();
+        setTimeout(() => {
+            printArea.style.display = 'none';
+        }, 1000);
     }
     
-    // ===== INITIALISATION =====
-    window.validateManualTicket = validateManualTicket;
-    window.confirmValidation = confirmValidation;
+    function downloadTicketsZip() {
+        let allHtml = `<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Tous les billets - Pispa Le Roi</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                h1 { color: #e67e22; }
+                .page { break-after: page; }
+                .billet-print { display: inline-block; margin: 5px; break-inside: avoid; page-break-inside: avoid; }
+                @media print {
+                    body { margin: 0; padding: 0; }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Andu-Xara × Pispa Le Roi - Tous les billets</h1>
+            <p>📅 10ème jour Tabaski 2026 - Titanic Couva, Nouakchott - 19h00</p>
+            <p>📊 Total: ${allTickets.length} billets</p>
+            <hr>
+        `;
+        
+        allTickets.forEach((ticket, index) => {
+            if (index % 9 === 0 && index > 0) allHtml += `<div class="page"></div>`;
+            allHtml += ticket.html;
+        });
+        
+        allHtml += `</body></html>`;
+        
+        const blob = new Blob([allHtml], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tous-les-billets-pispa-${new Date().toISOString().slice(0,10)}.html`;
+        a.click();
+    }
     
-    document.addEventListener('DOMContentLoaded', () => {
-        startScanner();
-    });
+    window.generateAllTickets = generateAllTickets;
+    window.printAllTickets = printAllTickets;
+    window.downloadTicketsZip = downloadTicketsZip;
+    window.deleteAllTickets = deleteAllTickets;
 </script>
 </body>
 </html>
