@@ -104,9 +104,41 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            background: #e67e22;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .quick-link:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+        .quick-link-green {
+            background: #27ae60;
+        }
+        .quick-link-green:hover {
+            background: #219a52;
+        }
+        .quick-link-blue {
+            background: #3498db;
+        }
+        .quick-link-blue:hover {
+            background: #2980b9;
+        }
         @media (max-width: 768px) {
             body { padding: 10px; }
             .header { flex-direction: column; gap: 15px; text-align: center; }
+            .quick-links { flex-direction: column; }
+            .quick-link { text-align: center; }
         }
     </style>
 </head>
@@ -145,25 +177,23 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     </div>
 
     <div class="section">
+        <h2>🔗 Accès rapide</h2>
+        <div class="quick-links">
+            <a href="concert-dashboard.html" class="quick-link">🎤 Concert Pispa</a>
+            <a href="validation/scan.html" class="quick-link quick-link-green">📷 Scanner billets</a>
+            <a href="../billetterie.html" class="quick-link quick-link-blue">🎟️ Page billetterie</a>
+            <a href="generate-all-tickets.html" class="quick-link">🎫 Générer billets</a>
+        </div>
+    </div>
+
+    <div class="section">
         <h2>🎫 Derniers billets</h2>
         <div class="ticket-list" id="ticketList">
             <p style="text-align:center; padding:20px;">Chargement...</p>
         </div>
     </div>
-
-    <div class="section">
-        <h2>🔗 Accès rapide</h2>
-        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-            <a href="concert-dashboard.html" style="background: #e67e22; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">🎤 Concert Pispa</a>
-            <a href="validation/scan.html" style="background: #27ae60; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">📷 Scanner billets</a>
-            <a href="../billetterie.html" style="background: #3498db; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">🎟️ Page billetterie</a>
-        </div>
-    </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -208,7 +238,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
             container.innerHTML += `
                 <div class="ticket-item">
                     <div>
-                        <strong>${t.ticketId?.substring(0, 20)}...</strong><br>
+                        <strong>${t.ticketId?.substring(0, 25)}...</strong><br>
                         <small>${t.concertName || 'Pispa Le Roi'}</small>
                     </div>
                     <div>
