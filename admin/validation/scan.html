@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Scanner • Concert Pispa Le Roi</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -17,12 +17,11 @@
         .manual-input { display: flex; gap: 10px; }
         .manual-input input { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; }
         .manual-input input:focus { outline: none; border-color: #e67e22; }
-        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; margin: 5px 0; }
         .btn-primary { background: #e67e22; color: white; }
         .btn-primary:hover { background: #d35400; }
         .btn-success { background: #27ae60; color: white; }
-        .btn-danger { background: #e74c3c; color: white; margin-top: 10px; }
-        .btn-secondary { background: #6c757d; color: white; margin-top: 10px; }
+        .btn-secondary { background: #6c757d; color: white; }
         .result-card { background: white; border-radius: 10px; padding: 20px; margin-top: 20px; display: none; }
         .result-card h3 { color: #e67e22; margin-bottom: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 10px; }
@@ -30,18 +29,15 @@
         .status-valid { background: #27ae60; color: white; }
         .status-invalid { background: #e74c3c; color: white; }
         .status-used { background: #95a5a6; color: white; }
-        .scanner-section { margin: 20px 0; text-align: center; }
-        .camera-instruction {
-            background: #fff3cd;
-            color: #856404;
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #e67e22;
             padding: 15px;
             border-radius: 10px;
-            margin: 10px 0;
-            text-align: left;
-            font-size: 0.9rem;
-            display: none;
+            margin: 20px 0;
         }
-        .camera-instruction ol { margin-left: 20px; margin-top: 10px; }
+        .info-box h4 { color: #e67e22; margin-bottom: 10px; }
+        .info-box p { margin: 5px 0; color: #333; }
         @media (max-width: 768px) { 
             .manual-input { flex-direction: column; }
             .info-row { flex-direction: column; align-items: flex-start; }
@@ -60,7 +56,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 <div class="container">
     <div class="header">
         <h1>📷 Scanner de billets</h1>
-        <p>Concert Pispa Le Roi - 10ème jour Tabaski 2026</p>
+        <p>Pispa Le Roi - 10ème jour Tabaski 2026</p>
     </div>
 
     <div class="event-info">
@@ -68,26 +64,21 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         <span class="agent-badge" id="agentName">Agent</span>
     </div>
 
-    <div class="input-section">
-        <h3>🔍 Saisie manuelle</h3>
-        <div class="manual-input">
-            <input type="text" id="ticketId" placeholder="Entrez l'ID du billet (ex: PISPA-XXXX-XXXX)">
-            <button class="btn btn-primary" onclick="validateTicket()">Vérifier</button>
-        </div>
+    <!-- Info box pour expliquer le scan -->
+    <div class="info-box">
+        <h4>📱 Comment scanner un billet ?</h4>
+        <p><strong>Méthode 1 (rapide) :</strong> Utilisez l'appareil photo de votre téléphone pour scanner le QR code, copiez l'ID, puis collez-le ci-dessous.</p>
+        <p><strong>Méthode 2 :</strong> Tapez directement l'ID du billet dans le champ ci-dessous.</p>
+        <p><strong>Méthode 3 :</strong> Cliquez sur "Scanner" et prenez une photo du QR code.</p>
     </div>
 
-    <div class="scanner-section">
-        <button class="btn btn-primary" id="scanBtn" onclick="openCameraScanner()">📷 Scanner QR code avec l'appareil photo</button>
-        <div class="camera-instruction" id="cameraInstruction">
-            📱 <strong>Comment scanner un QR code sur iPhone :</strong>
-            <ol>
-                <li>Appuyez sur le bouton ci-dessus</li>
-                <li>L'appareil photo s'ouvre automatiquement</li>
-                <li>Cadrez le QR code du billet</li>
-                <li>Un lien apparaît - appuyez dessus</li>
-                <li>Le billet sera automatiquement vérifié</li>
-            </ol>
+    <div class="input-section">
+        <h3>🔍 ID du billet</h3>
+        <div class="manual-input">
+            <input type="text" id="ticketId" placeholder="Collez ou tapez l'ID du billet (ex: PISPA-XXXX-XXXX)">
+            <button class="btn btn-primary" onclick="validateTicket()">Vérifier</button>
         </div>
+        <button class="btn btn-secondary" onclick="openImagePicker()">📷 Scanner avec l'appareil photo</button>
     </div>
 
     <div id="resultCard" class="result-card">
@@ -99,6 +90,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -112,8 +104,6 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     const db = firebase.firestore();
 
     let currentTicket = null;
-
-    // Afficher le nom de l'agent
     const agentName = localStorage.getItem('agentName') || 'Admin';
     document.getElementById('agentName').textContent = agentName;
 
@@ -176,156 +166,21 @@ if (localStorage.getItem('adminAuth') !== 'true') {
             return;
         }
 
-        const agent = localStorage.getItem('agentName') || 'Admin';
         await db.collection('tickets').doc(currentTicket.id).update({
             used: true,
             usedAt: new Date(),
-            validatedBy: agent
+            validatedBy: agentName
         });
 
         alert(`✅ Entrée validée pour ${currentTicket.userName || currentTicket.userEmail || 'le client'}`);
         
-        // Réinitialiser
         document.getElementById('ticketId').value = '';
         document.getElementById('resultCard').style.display = 'none';
         currentTicket = null;
     }
 
-    // ===== OUVERTURE APPAREIL PHOTO POUR SCANNER (IPHONE COMPATIBLE) =====
-    function openCameraScanner() {
-        // Créer une URL de redirection pour scanner un QR code
-        // Sur iPhone, on utilise une approche différente
-        
-        const instructionDiv = document.getElementById('cameraInstruction');
-        instructionDiv.style.display = 'block';
-        
-        // Méthode 1: Utiliser l'API native de iOS pour scanner
-        if (window.webkit && window.webkit.messageHandlers) {
-            // iOS WebView spécifique
-            alert("Utilisez l'appareil photo native");
-        }
-        
-        // Méthode 2: Expliquer à l'utilisateur comment scanner
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-        
-        if (isIOS) {
-            // Sur iOS, on peut utiliser un input avec capture pour scanner
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.setAttribute('capture', 'environment');
-            input.style.display = 'none';
-            
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                // Lire le QR code depuis l'image
-                const img = new Image();
-                const imgUrl = URL.createObjectURL(file);
-                img.src = imgUrl;
-                
-                img.onload = async () => {
-                    // Utiliser jsQR pour lire le QR code
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, img.width, img.height);
-                    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                    
-                    // Charger jsQR dynamiquement si nécessaire
-                    if (typeof jsQR === 'undefined') {
-                        const script = document.createElement('script');
-                        script.src = 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js';
-                        script.onload = () => {
-                            const code = jsQR(imageData.data, imageData.width, imageData.height);
-                            if (code) {
-                                document.getElementById('ticketId').value = code.data;
-                                validateTicket();
-                            } else {
-                                alert('❌ Aucun QR code trouvé dans l\'image');
-                            }
-                        };
-                        document.head.appendChild(script);
-                    } else {
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
-                        if (code) {
-                            document.getElementById('ticketId').value = code.data;
-                            validateTicket();
-                        } else {
-                            alert('❌ Aucun QR code trouvé dans l\'image');
-                        }
-                    }
-                    
-                    URL.revokeObjectURL(imgUrl);
-                };
-            };
-            
-            document.body.appendChild(input);
-            input.click();
-            document.body.removeChild(input);
-        } else {
-            // Sur Android/PC, utiliser l'appareil photo native
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.setAttribute('capture', 'environment');
-            input.style.display = 'none';
-            
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                const img = new Image();
-                const imgUrl = URL.createObjectURL(file);
-                img.src = imgUrl;
-                
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, img.width, img.height);
-                    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                    
-                    if (typeof jsQR === 'undefined') {
-                        const script = document.createElement('script');
-                        script.src = 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js';
-                        script.onload = () => {
-                            const code = jsQR(imageData.data, imageData.width, imageData.height);
-                            if (code) {
-                                document.getElementById('ticketId').value = code.data;
-                                validateTicket();
-                            } else {
-                                alert('❌ Aucun QR code trouvé dans l\'image');
-                            }
-                        };
-                        document.head.appendChild(script);
-                    } else {
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
-                        if (code) {
-                            document.getElementById('ticketId').value = code.data;
-                            validateTicket();
-                        } else {
-                            alert('❌ Aucun QR code trouvé dans l\'image');
-                        }
-                    }
-                    
-                    URL.revokeObjectURL(imgUrl);
-                };
-            };
-            
-            document.body.appendChild(input);
-            input.click();
-            document.body.removeChild(input);
-        }
-    }
-    
-    // Méthode alternative: utiliser l'URL pour scanner
-    function scanWithCamera() {
-        // Pour iOS, ouvrir l'appareil photo via input
+    // ===== SCANNER AVEC APPAREIL PHOTO =====
+    function openImagePicker() {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
@@ -348,24 +203,16 @@ if (localStorage.getItem('adminAuth') !== 'true') {
                 ctx.drawImage(img, 0, 0, img.width, img.height);
                 const imageData = ctx.getImageData(0, 0, img.width, img.height);
                 
-                // Fonction pour lire le QR code
-                const readQR = () => {
+                if (typeof jsQR !== 'undefined') {
                     const code = jsQR(imageData.data, imageData.width, imageData.height);
                     if (code) {
                         document.getElementById('ticketId').value = code.data;
                         validateTicket();
                     } else {
-                        alert('❌ Aucun QR code détecté. Assurez-vous que le QR code est bien cadré.');
+                        alert('❌ Aucun QR code trouvé. Assurez-vous que le QR code est bien visible.');
                     }
-                };
-                
-                if (typeof jsQR === 'undefined') {
-                    const script = document.createElement('script');
-                    script.src = 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js';
-                    script.onload = readQR;
-                    document.head.appendChild(script);
                 } else {
-                    readQR();
+                    alert('❌ Scanner non disponible. Veuillez utiliser la saisie manuelle.');
                 }
                 
                 URL.revokeObjectURL(imgUrl);
@@ -376,12 +223,26 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         input.click();
         document.body.removeChild(input);
     }
+
+    // ===== POUR IPHONE: RÉCUPÉRER L'ID DEPUIS L'URL =====
+    // Sur iPhone, quand on scanne un QR code avec l'appareil photo natif,
+    // on obtient une URL. On peut la traiter ici.
+    function handleDeepLink() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('id');
+        if (ticketId) {
+            document.getElementById('ticketId').value = ticketId;
+            validateTicket();
+        }
+    }
     
-    // Exposition des fonctions
+    // Exposer les fonctions
     window.validateTicket = validateTicket;
     window.confirmValidation = confirmValidation;
-    window.openCameraScanner = openCameraScanner;
-    window.scanWithCamera = scanWithCamera;
+    window.openImagePicker = openImagePicker;
+    
+    // Vérifier les paramètres URL au chargement
+    handleDeepLink();
 </script>
 </body>
 </html>
