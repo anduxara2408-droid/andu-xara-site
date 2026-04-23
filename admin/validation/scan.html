@@ -6,48 +6,31 @@
     <title>Scanner • Concert Pispa Le Roi</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #0a0a0a; min-height: 100vh; padding: 20px; }
+        body { background: #1a1a1a; min-height: 100vh; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; }
         .header { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
-        .header h1 { font-size: 1.8rem; }
         .event-info { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
         .agent-badge { background: #e67e22; color: white; padding: 5px 15px; border-radius: 20px; }
-        
+        .scanner-container { width: 100%; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
+        #video { width: 100%; height: auto; display: block; }
+        .scan-status { background: #333; color: white; padding: 10px; text-align: center; font-size: 14px; margin-bottom: 20px; border-radius: 10px; }
         .btn { padding: 15px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; width: 100%; margin: 5px 0; }
         .btn-primary { background: #e67e22; color: white; }
         .btn-success { background: #27ae60; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
-        
-        .manual-input { display: flex; gap: 10px; margin: 15px 0; }
-        .manual-input input { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; background: white; }
-        .manual-input input:focus { outline: none; border-color: #e67e22; }
-        
+        .manual-section { background: white; padding: 20px; border-radius: 15px; }
+        .manual-input { display: flex; gap: 10px; margin-top: 15px; }
+        .manual-input input { flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1rem; }
         .result-card { background: white; border-radius: 15px; padding: 20px; margin-top: 20px; display: none; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; flex-wrap: wrap; }
-        .status-valid { background: #27ae60; color: white; padding: 5px 10px; border-radius: 20px; display: inline-block; }
-        .status-invalid { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 20px; display: inline-block; }
-        .status-used { background: #95a5a6; color: white; padding: 5px 10px; border-radius: 20px; display: inline-block; }
-        
-        .scan-instruction {
-            background: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .scan-instruction ol {
-            text-align: left;
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-        
-        @media (max-width: 768px) { 
-            .manual-input { flex-direction: column; }
-            .info-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-        }
+        .result-card h3 { color: #e67e22; margin-bottom: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .status-valid { background: #27ae60; color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; }
+        .status-invalid { background: #e74c3c; color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; }
+        .status-used { background: #95a5a6; color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; }
+        .big-text { font-size: 1.2rem; font-weight: bold; }
+        @media (max-width: 768px) { .manual-input { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -61,7 +44,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 <div class="container">
     <div class="header">
         <h1>📷 Scanner billets</h1>
-        <p>Pispa Le Roi</p>
+        <p>Pispa Le Roi - 10ème jour Tabaski 2026</p>
     </div>
 
     <div class="event-info">
@@ -69,36 +52,30 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         <span class="agent-badge" id="agentName">Agent</span>
     </div>
 
-    <!-- Instructions pour scanner avec l'appareil photo -->
-    <div class="scan-instruction">
-        📱 <strong>Comment scanner un billet :</strong>
-        <ol>
-            <li>Ouvrez l'<strong>appareil photo</strong> de votre iPhone</li>
-            <li>Cadrez le <strong>QR code</strong> du billet</li>
-            <li>Un <strong>lien apparaît</strong> en haut de l'écran</li>
-            <li>Appuyez sur le lien pour copier l'ID</li>
-            <li>Collez l'ID dans le champ ci-dessous</li>
-        </ol>
+    <div class="scanner-container">
+        <video id="video" playsinline autoplay muted></video>
     </div>
 
-    <!-- Zone saisie -->
-    <div style="background: white; padding: 20px; border-radius: 15px; margin-top: 20px;">
-        <h3 style="color:#e67e22; margin-bottom:15px;">🔍 ID du billet</h3>
+    <div class="scan-status" id="scanStatus">
+        🔍 Scanner actif - Cadrez le QR code
+    </div>
+
+    <div class="manual-section">
+        <h3 style="color:#e67e22;">🔍 Saisie manuelle</h3>
         <div class="manual-input">
-            <input type="text" id="ticketId" placeholder="Collez ou tapez l'ID du billet (ex: PRE-00001)">
+            <input type="text" id="ticketId" placeholder="ID du billet (ex: PRE-00001)">
             <button class="btn btn-primary" onclick="checkTicketManually()">Vérifier</button>
         </div>
-        <button class="btn btn-secondary" onclick="scanWithCamera()">📷 Scanner avec l'appareil photo</button>
     </div>
 
-    <!-- Résultat -->
     <div id="resultCard" class="result-card">
-        <h3 style="color:#e67e22;">🎫 Informations billet</h3>
+        <h3>🎫 Informations billet</h3>
         <div id="resultContent"></div>
-        <button id="validateBtn" class="btn btn-success" style="display:none; margin-top:15px;" onclick="validateEntry()">✅ Valider l'entrée</button>
+        <button id="validateBtn" class="btn btn-success" style="display:none;" onclick="validateEntry()">✅ VALIDER L'ENTRÉE</button>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
@@ -114,63 +91,96 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     const db = firebase.firestore();
 
     let currentTicket = null;
+    let scanning = true;
+    let stream = null;
+    let animationId = null;
+
     const agentName = localStorage.getItem('agentName') || 'Agent';
     document.getElementById('agentName').textContent = agentName;
 
-    // Ouvrir l'appareil photo pour scanner
-    window.scanWithCamera = function() {
-        // Créer un input pour prendre une photo
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.setAttribute('capture', 'environment');
-        input.style.display = 'none';
+    // ===== DÉMARRER LA CAMÉRA =====
+    async function startCamera() {
+        const video = document.getElementById('video');
+        const scanStatus = document.getElementById('scanStatus');
         
-        input.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            // Lire le QR code depuis l'image
-            const img = new Image();
-            const imgUrl = URL.createObjectURL(file);
-            img.src = imgUrl;
-            
-            img.onload = () => {
-                // Utiliser jsQR pour lire le QR code
-                const script = document.createElement('script');
-                script.src = 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js';
-                script.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, img.width, img.height);
-                    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                    
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
-                    if (code) {
-                        let ticketId = code.data;
-                        try {
-                            const data = JSON.parse(ticketId);
-                            ticketId = data.tid || data.ticketId || data.id || ticketId;
-                        } catch(e) {}
-                        document.getElementById('ticketId').value = ticketId;
-                        checkTicket(ticketId);
-                    } else {
-                        alert('❌ Aucun QR code trouvé. Assurez-vous que le QR code est bien cadré.');
-                    }
-                    URL.revokeObjectURL(imgUrl);
-                };
-                document.head.appendChild(script);
-            };
-        };
-        
-        document.body.appendChild(input);
-        input.click();
-        document.body.removeChild(input);
-    };
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: { exact: "environment" } } 
+            });
+            video.srcObject = stream;
+            await video.play();
+            scanStatus.textContent = '🔍 Scanner actif - Cadrez le QR code';
+            scanStatus.style.background = '#27ae60';
+            startScanning();
+        } catch (err) {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                await video.play();
+                scanStatus.textContent = '🔍 Scanner actif - Cadrez le QR code';
+                scanStatus.style.background = '#27ae60';
+                startScanning();
+            } catch (err2) {
+                scanStatus.textContent = '❌ Caméra inaccessible - Utilisez la saisie manuelle';
+                scanStatus.style.background = '#e74c3c';
+            }
+        }
+    }
 
-    // Vérification manuelle
+    // ===== SCANNER EN CONTINU =====
+    function startScanning() {
+        const video = document.getElementById('video');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        
+        function scanFrame() {
+            if (!scanning || !video.videoWidth) {
+                animationId = requestAnimationFrame(scanFrame);
+                return;
+            }
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, canvas.width, canvas.height);
+            
+            if (code) {
+                let ticketId = code.data;
+                try {
+                    const json = JSON.parse(ticketId);
+                    ticketId = json.tid || json.ticketId || json.id || ticketId;
+                } catch(e) {}
+                
+                if (ticketId.length > 5) {
+                    scanning = false;
+                    stopCamera();
+                    document.getElementById('scanStatus').textContent = '✅ QR code détecté !';
+                    document.getElementById('ticketId').value = ticketId;
+                    checkTicket(ticketId);
+                    return;
+                }
+            }
+            
+            animationId = requestAnimationFrame(scanFrame);
+        }
+        
+        scanFrame();
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+
+    // ===== VÉRIFIER LE BILLET =====
     window.checkTicketManually = function() {
         const ticketId = document.getElementById('ticketId').value.trim();
         if (!ticketId) { alert("Entrez un ID"); return; }
@@ -184,7 +194,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         const validateBtn = document.getElementById('validateBtn');
 
         if (!doc.exists) {
-            resultContent.innerHTML = `<div class="info-row"><span>❌ Billet introuvable</span></div>`;
+            resultContent.innerHTML = `<div class="info-row"><strong>❌ Billet introuvable</strong></div>`;
             resultCard.style.display = 'block';
             validateBtn.style.display = 'none';
             return;
@@ -197,11 +207,13 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         let canValidate = false;
 
         if (t.used) {
-            statusHtml = `<span class="status-used">❌ Déjà utilisé</span>`;
+            statusHtml = `<span class="status-used">❌ DÉJÀ UTILISÉ - Entrée refusée</span>`;
+            canValidate = false;
         } else if (!t.active) {
-            statusHtml = `<span class="status-invalid">⏳ En attente de paiement</span>`;
+            statusHtml = `<span class="status-invalid">⏳ EN ATTENTE DE PAIEMENT</span>`;
+            canValidate = false;
         } else {
-            statusHtml = `<span class="status-valid">✅ Valide - Entrée autorisée</span>`;
+            statusHtml = `<span class="status-valid">✅ VALIDE - Entrée autorisée</span>`;
             canValidate = true;
         }
 
@@ -218,14 +230,36 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         
         if (canValidate) {
             validateBtn.style.display = 'block';
+            validateBtn.textContent = '✅ VALIDER L\'ENTRÉE';
+            validateBtn.style.background = '#27ae60';
         } else {
-            validateBtn.style.display = 'none';
+            validateBtn.style.display = 'block';
+            if (t.used) {
+                validateBtn.textContent = '❌ BILLET DÉJÀ UTILISÉ';
+                validateBtn.style.background = '#95a5a6';
+                validateBtn.disabled = true;
+            } else if (!t.active) {
+                validateBtn.textContent = '⏳ EN ATTENTE DE PAIEMENT';
+                validateBtn.style.background = '#f39c12';
+                validateBtn.disabled = true;
+            }
         }
     }
 
+    // ===== VALIDER L'ENTRÉE =====
     async function validateEntry() {
-        if (!currentTicket || currentTicket.used || !currentTicket.active) {
-            alert("Ce billet ne peut pas être validé");
+        if (!currentTicket) {
+            alert("Aucun billet à valider");
+            return;
+        }
+        
+        if (currentTicket.used) {
+            alert("❌ Ce billet a déjà été utilisé !");
+            return;
+        }
+        
+        if (!currentTicket.active) {
+            alert("⏳ Ce billet est en attente de paiement !");
             return;
         }
 
@@ -235,12 +269,18 @@ if (localStorage.getItem('adminAuth') !== 'true') {
             validatedBy: agentName
         });
 
-        alert(`✅ Entrée validée !`);
+        alert(`✅ ENTRÉE VALIDÉE !`);
         
         document.getElementById('ticketId').value = '';
         document.getElementById('resultCard').style.display = 'none';
         currentTicket = null;
+        
+        scanning = true;
+        startCamera();
     }
+
+    // ===== INITIALISATION =====
+    startCamera();
 </script>
 </body>
 </html>
