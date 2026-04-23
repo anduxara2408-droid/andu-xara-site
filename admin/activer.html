@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activer un billet - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a1a, #2c3e50); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: white; border-radius: 20px; padding: 30px; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        h1 { color: #e67e22; margin-bottom: 10px; }
+        .input-group { margin: 20px 0; }
+        input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1rem; text-align: center; }
+        input:focus { outline: none; border-color: #e67e22; }
+        .btn { padding: 15px 30px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; width: 100%; margin: 10px 0; }
+        .btn-primary { background: #e67e22; color: white; }
+        .btn-primary:hover { background: #d35400; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #e67e22; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔓 Activer un billet</h1>
+        <p>Saisissez la référence reçue par WhatsApp</p>
+        
+        <div class="input-group">
+            <input type="text" id="ticketId" placeholder="Ex: PISPA-XXXX-XXXX-XXXX" autocomplete="off">
+        </div>
+        
+        <button class="btn btn-primary" onclick="activerBillet()">🔐 Activer le billet</button>
+        <button class="btn btn-secondary" onclick="verifierBillet()">🔍 Vérifier le billet</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        window.activerBillet = async function() {
+            const ticketId = document.getElementById('ticketId').value.trim();
+            if (!ticketId) {
+                alert("Entrez l'ID du billet");
+                return;
+            }
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Activation...';
+            btn.disabled = true;
+            
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const doc = await db.collection('tickets').doc(ticketId).get();
+                
+                if (!doc.exists) {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ Billet introuvable';
+                    resultDiv.style.display = 'block';
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                const ticket = doc.data();
+                
+                if (ticket.used) {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ Ce billet a déjà été utilisé !';
+                    resultDiv.style.display = 'block';
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                if (ticket.active) {
+                    resultDiv.className = 'result info';
+                    resultDiv.innerHTML = 'ℹ️ Ce billet est déjà actif';
+                    resultDiv.style.display = 'block';
+                } else {
+                    await db.collection('tickets').doc(ticketId).update({
+                        active: true,
+                        activatedAt: new Date()
+                    });
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `✅ Billet ACTIVÉ !<br><br>Client: ${ticket.userName || 'Non renseigné'}<br>Type: ${ticket.ticketTypeName || ticket.ticketType}<br>Prix: ${ticket.price} MRU`;
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `❌ Erreur: ${error.message}`;
+                resultDiv.style.display = 'block';
+            }
+            
+            btn.textContent = originalText;
+            btn.disabled = false;
+            document.getElementById('ticketId').value = '';
+        };
+        
+        window.verifierBillet = async function() {
+            const ticketId = document.getElementById('ticketId').value.trim();
+            if (!ticketId) {
+                alert("Entrez l'ID du billet");
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const doc = await db.collection('tickets').doc(ticketId).get();
+                
+                if (!doc.exists) {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ Billet introuvable';
+                    resultDiv.style.display = 'block';
+                    return;
+                }
+                
+                const ticket = doc.data();
+                let status = '';
+                if (ticket.used) status = '❌ DÉJÀ UTILISÉ';
+                else if (!ticket.active) status = '⏳ EN ATTENTE D\'ACTIVATION';
+                else status = '✅ ACTIF - Peut être utilisé';
+                
+                resultDiv.className = 'result info';
+                resultDiv.innerHTML = `
+                    <strong>ID:</strong> ${ticket.ticketId}<br>
+                    <strong>Client:</strong> ${ticket.userName || 'Non renseigné'}<br>
+                    <strong>Type:</strong> ${ticket.ticketTypeName || ticket.ticketType}<br>
+                    <strong>Prix:</strong> ${ticket.price} MRU<br>
+                    <strong>Statut:</strong> ${status}
+                `;
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `❌ Erreur: ${error.message}`;
+                resultDiv.style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
