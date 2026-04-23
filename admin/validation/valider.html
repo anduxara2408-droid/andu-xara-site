@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Validation • Andu-Xara</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #1a1a1a, #2c3e50); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: white; border-radius: 30px; padding: 30px; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .logo { font-size: 3rem; margin-bottom: 10px; }
+        h1 { color: #e67e22; margin-bottom: 10px; font-size: 1.8rem; }
+        .ticket-info { background: #f8f9fa; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: left; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .status-valid { background: #27ae60; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block; font-weight: bold; }
+        .status-invalid { background: #e74c3c; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block; font-weight: bold; }
+        .status-used { background: #95a5a6; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block; font-weight: bold; }
+        .btn { padding: 15px 30px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; font-size: 1.1rem; margin-top: 20px; width: 100%; transition: all 0.3s; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-success:disabled { background: #95a5a6; cursor: not-allowed; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .agent { margin-top: 20px; color: #666; font-size: 0.8rem; padding-top: 15px; border-top: 1px solid #eee; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #e67e22; border-radius: 50%; animation: spin 1s linear infinite; vertical-align: middle; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .big-icon { font-size: 4rem; margin: 15px 0; }
+        .instruction { background: #e3f2fd; border-radius: 15px; padding: 15px; margin-bottom: 20px; font-size: 0.9rem; text-align: left; }
+        .instruction ol { margin-left: 20px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🎫</div>
+        <h1>Validation billet</h1>
+        
+        <div class="instruction">
+            📱 <strong>Comment scanner :</strong>
+            <ol>
+                <li>Ouvrez l'<strong>appareil photo</strong> de votre iPhone</li>
+                <li>Cadrez le <strong>QR code</strong> du billet</li>
+                <li>Appuyez sur le <strong>lien jaune</strong> qui apparaît</li>
+                <li>La validation se fait automatiquement</li>
+            </ol>
+        </div>
+
+        <div id="content">
+            <div class="big-icon" id="statusIcon">🔍</div>
+            <div id="message">Vérification en cours...</div>
+            <div class="ticket-info" id="ticketInfo" style="display: none;"></div>
+            <button class="btn" id="validateBtn" style="display: none;" onclick="validateTicket()">✅ VALIDER L'ENTRÉE</button>
+        </div>
+
+        <div class="agent" id="agentInfo"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
+            authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
+            projectId: "andu-xara-promo-codes-ff69e",
+            storageBucket: "andu-xara-promo-codes-ff69e.firebasestorage.app",
+            messagingSenderId: "653516716143",
+            appId: "1:653516716143:web:08ee1425191b4a1766359a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let currentTicket = null;
+        const agentName = localStorage.getItem('agentName') || localStorage.getItem('userName') || 'Agent';
+        document.getElementById('agentInfo').innerHTML = `👤 Agent: ${agentName}`;
+
+        // Récupérer l'ID depuis l'URL (c'est ce que fait le lien du QR code)
+        function getTicketIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            let id = params.get('id') || params.get('ticket') || params.get('tid');
+            
+            if (!id) {
+                const path = window.location.pathname;
+                const lastPart = path.split('/').pop();
+                if (lastPart && (lastPart.startsWith('PRE-') || lastPart.startsWith('JOUR-') || lastPart.startsWith('VIP-') || lastPart.startsWith('PISPA-'))) {
+                    id = lastPart;
+                }
+            }
+            
+            if (!id && window.location.hash) {
+                id = window.location.hash.substring(1);
+            }
+            
+            return id;
+        }
+
+        async function checkTicket() {
+            let ticketId = getTicketIdFromURL();
+            
+            // Si pas d'ID dans l'URL, afficher les instructions
+            if (!ticketId) {
+                document.getElementById('statusIcon').innerHTML = '📷';
+                document.getElementById('message').innerHTML = 'Scannez le QR code avec l\'appareil photo';
+                document.getElementById('ticketInfo').style.display = 'none';
+                document.getElementById('validateBtn').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('statusIcon').innerHTML = '<span class="loading"></span>';
+            document.getElementById('message').innerHTML = `Vérification du billet ${ticketId}...`;
+            document.getElementById('ticketInfo').style.display = 'none';
+            document.getElementById('validateBtn').style.display = 'none';
+
+            const doc = await db.collection('tickets').doc(ticketId).get();
+            const ticketInfo = document.getElementById('ticketInfo');
+            const validateBtn = document.getElementById('validateBtn');
+            const statusIcon = document.getElementById('statusIcon');
+            const messageDiv = document.getElementById('message');
+
+            if (!doc.exists) {
+                statusIcon.innerHTML = '❌';
+                messageDiv.innerHTML = 'Billet introuvable';
+                ticketInfo.innerHTML = `<div class="info-row"><strong>ID:</strong> ${ticketId}</div>
+                                       <div class="info-row"><strong>Statut:</strong> <span class="status-invalid">❌ Billet invalide</span></div>`;
+                ticketInfo.style.display = 'block';
+                validateBtn.style.display = 'none';
+                return;
+            }
+
+            const t = doc.data();
+            currentTicket = { id: ticketId, ...t };
+
+            let statusHtml = '';
+            let canValidate = false;
+
+            if (t.used) {
+                statusHtml = '<span class="status-used">❌ DÉJÀ UTILISÉ</span>';
+                statusIcon.innerHTML = '❌';
+                messageDiv.innerHTML = 'Billet déjà utilisé';
+                canValidate = false;
+                validateBtn.disabled = true;
+                validateBtn.textContent = '❌ Billet déjà utilisé';
+                validateBtn.style.background = '#95a5a6';
+            } else if (!t.active) {
+                statusHtml = '<span class="status-invalid">⏳ EN ATTENTE DE PAIEMENT</span>';
+                statusIcon.innerHTML = '⏳';
+                messageDiv.innerHTML = 'Billet en attente de paiement';
+                canValidate = false;
+                validateBtn.disabled = true;
+                validateBtn.textContent = '⏳ En attente de paiement';
+                validateBtn.style.background = '#f39c12';
+            } else {
+                statusHtml = '<span class="status-valid">✅ VALIDE - Entrée autorisée</span>';
+                statusIcon.innerHTML = '✅';
+                messageDiv.innerHTML = 'Billet valide !';
+                canValidate = true;
+                validateBtn.disabled = false;
+                validateBtn.textContent = '✅ VALIDER L\'ENTRÉE';
+                validateBtn.style.background = '#27ae60';
+            }
+
+            ticketInfo.innerHTML = `
+                <div class="info-row"><strong>ID:</strong> ${t.ticketId}</div>
+                <div class="info-row"><strong>Concert:</strong> ${t.concertName || 'Pispa Le Roi'}</div>
+                <div class="info-row"><strong>Type:</strong> ${t.ticketTypeName || t.ticketType}</div>
+                <div class="info-row"><strong>Client:</strong> ${t.userName || t.userEmail || 'Non renseigné'}</div>
+                <div class="info-row"><strong>Prix:</strong> ${t.price} MRU</div>
+                <div class="info-row"><strong>Statut:</strong> ${statusHtml}</div>
+            `;
+
+            ticketInfo.style.display = 'block';
+            
+            if (canValidate) {
+                validateBtn.style.display = 'block';
+            } else {
+                validateBtn.style.display = 'block';
+            }
+        }
+
+        async function validateTicket() {
+            if (!currentTicket || currentTicket.used || !currentTicket.active) {
+                alert('Ce billet ne peut pas être validé');
+                return;
+            }
+
+            const validateBtn = document.getElementById('validateBtn');
+            validateBtn.disabled = true;
+            validateBtn.innerHTML = '<span class="loading"></span> Validation...';
+
+            await db.collection('tickets').doc(currentTicket.id).update({
+                used: true,
+                usedAt: new Date(),
+                validatedBy: agentName
+            });
+
+            validateBtn.innerHTML = '✅ ENTRÉE VALIDÉE !';
+            document.getElementById('statusIcon').innerHTML = '✅';
+            document.getElementById('message').innerHTML = 'Entrée validée !';
+            document.getElementById('ticketInfo').innerHTML = `
+                <div class="info-row"><strong>ID:</strong> ${currentTicket.ticketId}</div>
+                <div class="info-row"><strong>Statut:</strong> <span class="status-used">✅ ENTRÉE VALIDÉE</span></div>
+                <div class="info-row"><strong>Validé par:</strong> ${agentName}</div>
+                <div class="info-row"><strong>Heure:</strong> ${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = 'valider.html';
+            }, 3000);
+        }
+
+        window.validateTicket = validateTicket;
+        checkTicket();
+    </script>
+</body>
+</html>
