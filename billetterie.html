@@ -224,7 +224,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
+            background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
         }
 
         .concert-hero-content {
@@ -1225,8 +1225,8 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label for="clientPhone">Numéro WhatsApp</label>
-                    <input type="tel" id="clientPhone" class="form-control" placeholder="49 03 76 97" style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: var(--radius);" required>
-                    <small style="color: var(--gray-500);">Format: 49037697 ou 34196304</small>
+                    <input type="tel" id="clientPhone" class="form-control" value="49 03 76 97" style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: var(--radius);">
+                    <small style="color: var(--gray-500);">Le numéro du concert pour recevoir votre billet</small>
                 </div>
             </div>
 
@@ -1511,10 +1511,17 @@
             }
 
             const clientName = document.getElementById('clientName').value;
-            const clientPhone = document.getElementById('clientPhone').value;
+            let clientPhone = document.getElementById('clientPhone').value;
+            
+            // Si le client n'a pas entré de numéro, utiliser le numéro par défaut
+            if (!clientPhone || clientPhone === "") {
+                clientPhone = "49037697";
+            } else {
+                clientPhone = clientPhone.replace(/\s/g, '');
+            }
 
-            if (!clientName || !clientPhone) {
-                alert('Veuillez remplir vos informations');
+            if (!clientName) {
+                alert('Veuillez remplir votre nom');
                 return;
             }
 
@@ -1576,7 +1583,7 @@
                     
                     document.getElementById('guestCards').innerHTML = guestCardsHtml;
                     
-                    // Message de confirmation
+                    // Message de confirmation amélioré avec référence visible
                     let instructionsHtml = '';
                     let whatsappMessage = '';
 
@@ -1595,7 +1602,7 @@
                         whatsappMessage += `🎟️ ${quantity} billet(s) - ${selectedType === 'prevente' ? 'Prévente' : selectedType === 'jourj' ? 'Standard' : 'VIP'}\n`;
                         whatsappMessage += `💰 Montant total: ${result.totalAmount} MRU\n\n`;
                         whatsappMessage += `📱 Votre numéro: ${clientPhone}\n`;
-                        whatsappMessage += `🆔 Référence: ${result.tickets[0].ticketId}\n\n`;
+                        whatsappMessage += `🆔 RÉFÉRENCE À DONNER POUR ACTIVATION: ${result.tickets[0].ticketId}\n\n`;
                         whatsappMessage += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
                         whatsappMessage += `🔴 VOTRE CARTE EST INACTIVE\n`;
                         whatsappMessage += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
@@ -1610,8 +1617,8 @@
                             <h4 style="color: var(--warning);">⏳ En attente de paiement</h4>
                             <p><strong>Votre carte est INACTIVE</strong></p>
                             <p>💰 Effectuez le paiement de <strong>${result.totalAmount} MRU</strong> au <strong>49 03 76 97</strong></p>
-                            <p>📝 Référence: <strong>${document.getElementById(paymentMethod + 'Ref').textContent}</strong></p>
-                            <p>✅ Après paiement, votre carte sera activée manuellement.</p>
+                            <p>📝 Référence: <strong>${result.tickets[0].ticketId}</strong></p>
+                            <p>✅ Après paiement, envoyez cette référence par WhatsApp pour activer votre carte.</p>
                         `;
                         whatsappMessage = `Bonjour ${clientName} ! 👋\n\n`;
                         whatsappMessage += `🎫 RÉSERVATION CONCERT PISPA LE ROI\n`;
@@ -1621,14 +1628,13 @@
                         whatsappMessage += `🎟️ ${quantity} billet(s) - ${selectedType === 'prevente' ? 'Prévente' : selectedType === 'jourj' ? 'Standard' : 'VIP'}\n`;
                         whatsappMessage += `💰 Montant total: ${result.totalAmount} MRU\n\n`;
                         whatsappMessage += `📱 Numéro de paiement: 49 03 76 97\n`;
-                        whatsappMessage += `📝 Référence: ${document.getElementById(paymentMethod + 'Ref').textContent}\n`;
-                        whatsappMessage += `🆔 Votre ID: ${result.tickets[0].ticketId}\n\n`;
+                        whatsappMessage += `🆔 RÉFÉRENCE À DONNER APRÈS PAIEMENT: ${result.tickets[0].ticketId}\n\n`;
                         whatsappMessage += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
                         whatsappMessage += `🔴 VOTRE CARTE EST INACTIVE\n`;
                         whatsappMessage += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
                         whatsappMessage += `💰 Effectuez le paiement de ${result.totalAmount} MRU au 49 03 76 97\n`;
-                        whatsappMessage += `✅ Après réception du paiement, nous activerons votre carte.\n`;
-                        whatsappMessage += `📱 Vous recevrez une confirmation WhatsApp dès activation.\n\n`;
+                        whatsappMessage += `📝 Envoyez cette RÉFÉRENCE après paiement: ${result.tickets[0].ticketId}\n`;
+                        whatsappMessage += `✅ Nous activerons votre carte dans la minute\n\n`;
                         whatsappMessage += `📱 Vous pouvez déjà voir votre carte dans votre espace client.\n\n`;
                         whatsappMessage += `Merci de votre confiance ! 🙏\n`;
                         whatsappMessage += `L'équipe Andu-Xara × Pispa Le Roi\n`;
@@ -1638,10 +1644,11 @@
                     document.getElementById('postPaymentInstructions').innerHTML = instructionsHtml;
                     document.getElementById('confirmationMessage').innerHTML = `
                         <p>✅ Un message WhatsApp a été envoyé au <strong>${clientPhone}</strong></p>
-                        <p><small>Depuis le numéro <strong>49 03 76 97</strong></small></p>
+                        <p><strong>📝 RÉFÉRENCE À CONSERVER: ${result.tickets[0].ticketId}</strong></p>
+                        <p><small>Après paiement, envoyez cette référence pour activer votre billet</small></p>
                     `;
                     
-                    const whatsappUrl = `https://wa.me/${clientPhone.replace(/\s/g,'')}?text=${encodeURIComponent(whatsappMessage)}`;
+                    const whatsappUrl = `https://wa.me/${clientPhone}?text=${encodeURIComponent(whatsappMessage)}`;
                     window.open(whatsappUrl, '_blank');
                     
                     document.getElementById('ticketModal').style.display = 'flex';
