@@ -6,38 +6,68 @@
     <title>Scanner • Concert Pispa Le Roi</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #1a1a1a; min-height: 100vh; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; }
+        body { background: #0a0a0a; min-height: 100vh; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         .header { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
         .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
         .event-info { display: flex; justify-content: space-between; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         .agent-badge { background: #e67e22; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; }
-        .input-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .input-section h3 { margin-bottom: 15px; color: #e67e22; }
+        
+        #reader {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        #reader video {
+            border-radius: 20px;
+        }
+        
+        .scan-status {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .manual-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .manual-section h3 { color: #e67e22; margin-bottom: 15px; }
         .manual-input { display: flex; gap: 10px; }
         .manual-input input { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; }
         .manual-input input:focus { outline: none; border-color: #e67e22; }
-        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; margin: 5px 0; }
+        
+        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; }
         .btn-primary { background: #e67e22; color: white; }
         .btn-primary:hover { background: #d35400; }
         .btn-success { background: #27ae60; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .result-card { background: white; border-radius: 10px; padding: 20px; margin-top: 20px; display: none; }
+        .btn-danger { background: #e74c3c; color: white; margin-top: 10px; }
+        
+        .result-card { background: white; border-radius: 15px; padding: 20px; margin-top: 20px; display: none; }
         .result-card h3 { color: #e67e22; margin-bottom: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 10px; }
         .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
         .status-valid { background: #27ae60; color: white; }
         .status-invalid { background: #e74c3c; color: white; }
         .status-used { background: #95a5a6; color: white; }
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #e67e22;
+        
+        .camera-error {
+            background: #ffebee;
+            color: #c62828;
             padding: 15px;
             border-radius: 10px;
-            margin: 20px 0;
+            margin: 10px 0;
+            text-align: center;
+            display: none;
         }
-        .info-box h4 { color: #e67e22; margin-bottom: 10px; }
-        .info-box p { margin: 5px 0; color: #333; }
+        
         @media (max-width: 768px) { 
             .manual-input { flex-direction: column; }
             .info-row { flex-direction: column; align-items: flex-start; }
@@ -47,7 +77,6 @@
 <body>
 
 <script>
-// ===== PROTECTION ADMIN =====
 if (localStorage.getItem('adminAuth') !== 'true') {
     window.location.href = '../access.html';
 }
@@ -64,33 +93,30 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         <span class="agent-badge" id="agentName">Agent</span>
     </div>
 
-    <!-- Info box pour expliquer le scan -->
-    <div class="info-box">
-        <h4>📱 Comment scanner un billet ?</h4>
-        <p><strong>Méthode 1 (rapide) :</strong> Utilisez l'appareil photo de votre téléphone pour scanner le QR code, copiez l'ID, puis collez-le ci-dessous.</p>
-        <p><strong>Méthode 2 :</strong> Tapez directement l'ID du billet dans le champ ci-dessous.</p>
-        <p><strong>Méthode 3 :</strong> Cliquez sur "Scanner" et prenez une photo du QR code.</p>
+    <div id="reader" style="width:100%;"></div>
+    
+    <div class="scan-status" id="scanStatus">
+        🔍 Démarrage du scanner...
     </div>
 
-    <div class="input-section">
-        <h3>🔍 ID du billet</h3>
+    <div class="manual-section">
+        <h3>🔍 Saisie manuelle (alternative)</h3>
         <div class="manual-input">
-            <input type="text" id="ticketId" placeholder="Collez ou tapez l'ID du billet (ex: PISPA-XXXX-XXXX)">
-            <button class="btn btn-primary" onclick="validateTicket()">Vérifier</button>
+            <input type="text" id="ticketId" placeholder="Entrez l'ID du billet">
+            <button class="btn btn-primary" onclick="validateManualTicket()">Vérifier</button>
         </div>
-        <button class="btn btn-secondary" onclick="openImagePicker()">📷 Scanner avec l'appareil photo</button>
     </div>
 
     <div id="resultCard" class="result-card">
         <h3>🎫 Informations billet</h3>
         <div id="resultContent"></div>
-        <button id="validateBtn" class="btn btn-success" style="width:100%; margin-top:15px; display:none;" onclick="confirmValidation()">✅ Valider l'entrée</button>
+        <button id="validateBtn" class="btn btn-success" style="width:100%; margin-top:15px;" onclick="confirmValidation()">✅ Valider l'entrée</button>
     </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -104,11 +130,85 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     const db = firebase.firestore();
 
     let currentTicket = null;
+    let html5QrCode = null;
+    let isScanning = true;
+
     const agentName = localStorage.getItem('agentName') || 'Admin';
     document.getElementById('agentName').textContent = agentName;
 
-    // ===== VALIDATION MANUELLE =====
-    async function validateTicket() {
+    // ===== DÉMARRER LE SCANNER =====
+    async function startScanner() {
+        const scanStatus = document.getElementById('scanStatus');
+        const readerElement = document.getElementById('reader');
+        
+        if (html5QrCode) {
+            try {
+                await html5QrCode.stop();
+            } catch(e) {}
+        }
+        
+        html5QrCode = new Html5Qrcode("reader");
+        
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0,
+            showTorchButtonIfSupported: true
+        };
+        
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            console.log("QR Code détecté:", decodedText);
+            
+            if (isScanning) {
+                isScanning = false;
+                scanStatus.innerHTML = "✅ QR code détecté ! Vérification en cours...";
+                scanStatus.style.background = "rgba(39,174,96,0.9)";
+                
+                // Arrêter le scanner temporairement
+                html5QrCode.stop().then(() => {
+                    document.getElementById('ticketId').value = decodedText;
+                    checkTicket(decodedText);
+                }).catch(() => {});
+            }
+        };
+        
+        const qrCodeErrorCallback = (errorMessage) => {
+            // Ignorer les erreurs normales
+            // console.log(errorMessage);
+        };
+        
+        try {
+            await html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                qrCodeSuccessCallback,
+                qrCodeErrorCallback
+            );
+            scanStatus.innerHTML = "🔍 Scanner actif - Cadrez le QR code";
+            scanStatus.style.background = "rgba(0,0,0,0.7)";
+        } catch (err) {
+            console.error("Erreur démarrage scanner:", err);
+            scanStatus.innerHTML = "❌ Impossible d'accéder à la caméra. Utilisez la saisie manuelle.";
+            scanStatus.style.background = "rgba(231,76,60,0.8)";
+            
+            // Essayer avec la caméra par défaut
+            try {
+                await html5QrCode.start(
+                    { facingMode: "user" },
+                    config,
+                    qrCodeSuccessCallback,
+                    qrCodeErrorCallback
+                );
+                scanStatus.innerHTML = "🔍 Scanner actif (caméra avant)";
+                scanStatus.style.background = "rgba(0,0,0,0.7)";
+            } catch (err2) {
+                console.error("Erreur avec caméra avant:", err2);
+            }
+        }
+    }
+    
+    // ===== VÉRIFICATION MANUELLE =====
+    async function validateManualTicket() {
         const ticketId = document.getElementById('ticketId').value.trim();
         if (!ticketId) {
             alert('Veuillez entrer un ID de billet');
@@ -116,7 +216,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         }
         await checkTicket(ticketId);
     }
-
+    
     async function checkTicket(ticketId) {
         const doc = await db.collection('tickets').doc(ticketId).get();
         const resultCard = document.getElementById('resultCard');
@@ -126,7 +226,9 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         if (!doc.exists) {
             resultContent.innerHTML = `<div class="info-row"><span>Statut:</span><span class="status-badge status-invalid">❌ Billet introuvable</span></div>`;
             resultCard.style.display = 'block';
-            validateBtn.style.display = 'none';
+            validateBtn.style.display = 'block';
+            validateBtn.textContent = "❌ Billet invalide";
+            validateBtn.style.background = "#e74c3c";
             currentTicket = null;
             return;
         }
@@ -139,10 +241,16 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 
         if (ticket.used) {
             statusHtml = `<span class="status-badge status-used">❌ Déjà utilisé</span>`;
+            validateBtn.textContent = "❌ Billet déjà utilisé";
+            validateBtn.style.background = "#95a5a6";
         } else if (!ticket.active) {
             statusHtml = `<span class="status-badge status-invalid">⏳ En attente de paiement</span>`;
+            validateBtn.textContent = "⏳ En attente de paiement";
+            validateBtn.style.background = "#f39c12";
         } else {
             statusHtml = `<span class="status-badge status-valid">✅ Valide - Entrée autorisée</span>`;
+            validateBtn.textContent = "✅ VALIDER L'ENTRÉE";
+            validateBtn.style.background = "#27ae60";
             canValidate = true;
         }
 
@@ -156,13 +264,25 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         `;
 
         resultCard.style.display = 'block';
-        validateBtn.style.display = canValidate ? 'block' : 'none';
+        
+        // Redémarrer le scanner après 3 secondes
+        setTimeout(() => {
+            if (!currentTicket || !currentTicket.active || currentTicket.used) {
+                isScanning = true;
+                startScanner();
+            }
+        }, 3000);
     }
-
+    
     // ===== VALIDATION CONFIRMATION =====
     async function confirmValidation() {
-        if (!currentTicket || currentTicket.used || !currentTicket.active) {
+        if (!currentTicket || currentTicket.used) {
             alert('Ce billet ne peut pas être validé');
+            return;
+        }
+        
+        if (!currentTicket.active) {
+            alert('Ce billet est en attente de paiement. Il ne peut pas être validé.');
             return;
         }
 
@@ -174,75 +294,23 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 
         alert(`✅ Entrée validée pour ${currentTicket.userName || currentTicket.userEmail || 'le client'}`);
         
+        // Réinitialiser
         document.getElementById('ticketId').value = '';
         document.getElementById('resultCard').style.display = 'none';
         currentTicket = null;
-    }
-
-    // ===== SCANNER AVEC APPAREIL PHOTO =====
-    function openImagePicker() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.setAttribute('capture', 'environment');
-        input.style.display = 'none';
         
-        input.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const img = new Image();
-            const imgUrl = URL.createObjectURL(file);
-            img.src = imgUrl;
-            
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-                const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                
-                if (typeof jsQR !== 'undefined') {
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
-                    if (code) {
-                        document.getElementById('ticketId').value = code.data;
-                        validateTicket();
-                    } else {
-                        alert('❌ Aucun QR code trouvé. Assurez-vous que le QR code est bien visible.');
-                    }
-                } else {
-                    alert('❌ Scanner non disponible. Veuillez utiliser la saisie manuelle.');
-                }
-                
-                URL.revokeObjectURL(imgUrl);
-            };
-        };
-        
-        document.body.appendChild(input);
-        input.click();
-        document.body.removeChild(input);
-    }
-
-    // ===== POUR IPHONE: RÉCUPÉRER L'ID DEPUIS L'URL =====
-    // Sur iPhone, quand on scanne un QR code avec l'appareil photo natif,
-    // on obtient une URL. On peut la traiter ici.
-    function handleDeepLink() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const ticketId = urlParams.get('id');
-        if (ticketId) {
-            document.getElementById('ticketId').value = ticketId;
-            validateTicket();
-        }
+        // Redémarrer le scanner
+        isScanning = true;
+        startScanner();
     }
     
-    // Exposer les fonctions
-    window.validateTicket = validateTicket;
+    // ===== INITIALISATION =====
+    window.validateManualTicket = validateManualTicket;
     window.confirmValidation = confirmValidation;
-    window.openImagePicker = openImagePicker;
     
-    // Vérifier les paramètres URL au chargement
-    handleDeepLink();
+    document.addEventListener('DOMContentLoaded', () => {
+        startScanner();
+    });
 </script>
 </body>
 </html>
