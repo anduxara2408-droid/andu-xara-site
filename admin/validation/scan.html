@@ -7,7 +7,9 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: #f8f9fa; min-height: 100vh; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
         .header { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+        .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
         .event-info { display: flex; justify-content: space-between; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-weight: 600; }
         .agent-badge { background: #e67e22; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; }
         .input-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
@@ -15,35 +17,93 @@
         .manual-input { display: flex; gap: 10px; }
         .manual-input input { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; }
         .manual-input input:focus { outline: none; border-color: #e67e22; }
-        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; }
         .btn-primary { background: #e67e22; color: white; }
         .btn-primary:hover { background: #d35400; }
         .btn-success { background: #27ae60; color: white; }
+        .btn-danger { background: #e74c3c; color: white; margin-top: 10px; }
         .result-card { background: white; border-radius: 10px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; }
         .result-card h3 { color: #e67e22; margin-bottom: 15px; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 10px; }
         .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
         .status-valid { background: #27ae60; color: white; }
         .status-invalid { background: #e74c3c; color: white; }
         .status-used { background: #95a5a6; color: white; }
         .qr-scanner { text-align: center; margin: 20px 0; }
-        #video { width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; display: none; }
-        @media (max-width: 768px) { .manual-input { flex-direction: column; } }
+        .scanner-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 400px; 
+            margin: 0 auto; 
+            border-radius: 15px; 
+            overflow: hidden;
+            background: #000;
+            display: none;
+        }
+        #video { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+            transform: scaleX(-1);
+        }
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #e67e22;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        .scanner-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: #e67e22;
+            transform: translateY(-50%);
+            animation: scan 2s linear infinite;
+            box-shadow: 0 0 10px #e67e22;
+        }
+        @keyframes scan {
+            0% { top: 20%; }
+            50% { top: 80%; }
+            100% { top: 20%; }
+        }
+        .stop-scanner {
+            margin-top: 10px;
+            background: #e74c3c;
+        }
+        .camera-error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            display: none;
+        }
+        @media (max-width: 768px) { 
+            .manual-input { flex-direction: column; }
+            .info-row { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body>
 
 <script>
-// ===== PROTECTION ADMIN - Vérifier l'authentification =====
+// ===== PROTECTION ADMIN =====
 if (localStorage.getItem('adminAuth') !== 'true') {
     window.location.href = '../access.html';
 }
 </script>
 
-<div class="container" style="max-width: 600px; margin: 0 auto;">
+<div class="container">
     <div class="header">
         <h1>📷 Scanner de billets</h1>
-        <p>Concert Pispa Le Roi</p>
+        <p>Concert Pispa Le Roi - 10ème jour Tabaski 2026</p>
     </div>
 
     <div class="event-info">
@@ -60,8 +120,17 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     </div>
 
     <div class="qr-scanner">
-        <button class="btn btn-primary" onclick="startScanner()">📷 Scanner QR code</button>
-        <video id="video" playsinline autoplay></video>
+        <button class="btn btn-primary" id="startScannerBtn" onclick="startScanner()">📷 Scanner QR code</button>
+        <div class="scanner-container" id="scannerContainer">
+            <video id="video" playsinline autoplay muted></video>
+            <div class="scanner-overlay"></div>
+            <div class="scanner-line"></div>
+        </div>
+        <button class="btn btn-danger stop-scanner" id="stopScannerBtn" onclick="stopScanner()" style="display: none;">⏹️ Arrêter le scanner</button>
+        <div class="camera-error" id="cameraError">
+            ⚠️ Impossible d'accéder à la caméra.<br>
+            Vérifiez les permissions ou utilisez la saisie manuelle.
+        </div>
     </div>
 
     <div id="resultCard" class="result-card">
@@ -73,6 +142,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
@@ -86,11 +156,14 @@ if (localStorage.getItem('adminAuth') !== 'true') {
     const db = firebase.firestore();
 
     let currentTicket = null;
+    let html5QrCode = null;
+    let isScanning = false;
 
     // Afficher le nom de l'agent
     const agentName = localStorage.getItem('agentName') || 'Admin';
     document.getElementById('agentName').textContent = agentName;
 
+    // ===== VALIDATION MANUELLE =====
     async function validateTicket() {
         const ticketId = document.getElementById('ticketId').value.trim();
         if (!ticketId) {
@@ -121,7 +194,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         let canValidate = false;
 
         if (ticket.used) {
-            statusHtml = `<span class="status-badge status-used">❌ Déjà utilisé le ${new Date(ticket.usedAt?.seconds * 1000).toLocaleDateString()}</span>`;
+            statusHtml = `<span class="status-badge status-used">❌ Déjà utilisé</span>`;
         } else if (!ticket.active) {
             statusHtml = `<span class="status-badge status-invalid">⏳ En attente de paiement</span>`;
         } else {
@@ -133,7 +206,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
             <div class="info-row"><span>ID Billet:</span><span>${ticket.ticketId}</span></div>
             <div class="info-row"><span>Concert:</span><span>${ticket.concertName || 'Pispa Le Roi'}</span></div>
             <div class="info-row"><span>Type:</span><span>${ticket.ticketTypeName || ticket.ticketType}</span></div>
-            <div class="info-row"><span>Client:</span><span>${ticket.userName || ticket.userEmail}</span></div>
+            <div class="info-row"><span>Client:</span><span>${ticket.userName || ticket.userEmail || 'Non renseigné'}</span></div>
             <div class="info-row"><span>Prix:</span><span>${ticket.price} MRU</span></div>
             <div class="info-row"><span>Statut:</span>${statusHtml}</div>
         `;
@@ -142,6 +215,7 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         validateBtn.style.display = canValidate ? 'block' : 'none';
     }
 
+    // ===== VALIDATION CONFIRMATION =====
     async function confirmValidation() {
         if (!currentTicket || currentTicket.used || !currentTicket.active) {
             alert('Ce billet ne peut pas être validé');
@@ -155,21 +229,102 @@ if (localStorage.getItem('adminAuth') !== 'true') {
             validatedBy: agent
         });
 
-        alert(`✅ Entrée validée pour ${currentTicket.userName || currentTicket.userEmail}`);
+        alert(`✅ Entrée validée pour ${currentTicket.userName || currentTicket.userEmail || 'le client'}`);
+        
+        // Réinitialiser
         document.getElementById('ticketId').value = '';
         document.getElementById('resultCard').style.display = 'none';
+        document.getElementById('scannerContainer').style.display = 'none';
+        if (html5QrCode && isScanning) {
+            await html5QrCode.stop();
+            isScanning = false;
+        }
         currentTicket = null;
+        document.getElementById('startScannerBtn').style.display = 'block';
+        document.getElementById('stopScannerBtn').style.display = 'none';
     }
 
-    // Scanner QR code (simulé pour iPhone - saisie manuelle recommandée)
-    function startScanner() {
-        alert("📱 Sur iPhone, utilisez la saisie manuelle\n\nEntrez l'ID du billet affiché dans le QR code");
-        document.getElementById('ticketId').focus();
+    // ===== SCANNEUR QR CODE =====
+    async function startScanner() {
+        const scannerContainer = document.getElementById('scannerContainer');
+        const cameraError = document.getElementById('cameraError');
+        const startBtn = document.getElementById('startScannerBtn');
+        const stopBtn = document.getElementById('stopScannerBtn');
+        
+        cameraError.style.display = 'none';
+        scannerContainer.style.display = 'block';
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        
+        // Fonction de callback quand un QR code est détecté
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            console.log(`QR Code détecté: ${decodedText}`);
+            // Vérifier si c'est un ID de billet (format PISPA-XXXX-XXXX)
+            const ticketId = decodedText.trim();
+            
+            // Détecter le format de l'ID
+            if (ticketId.match(/^PISPA-|^PRE-|^JOUR-|^VIP-/) || ticketId.length > 10) {
+                stopScanner();
+                document.getElementById('ticketId').value = ticketId;
+                checkTicket(ticketId);
+            } else {
+                // Afficher un message d'erreur temporaire
+                const resultContent = document.getElementById('resultContent');
+                const resultCard = document.getElementById('resultCard');
+                resultContent.innerHTML = `<div class="info-row"><span>Statut:</span><span class="status-badge status-invalid">❌ QR Code invalide - Ce n'est pas un billet Andu-Xara</span></div>`;
+                resultCard.style.display = 'block';
+                setTimeout(() => {
+                    resultCard.style.display = 'none';
+                }, 3000);
+            }
+        };
+        
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+        
+        html5QrCode = new Html5Qrcode("video");
+        
+        try {
+            await html5QrCode.start(
+                { facingMode: "environment" },  // Utiliser la caméra arrière
+                config,
+                qrCodeSuccessCallback,
+                (errorMessage) => {
+                    // Ignorer les erreurs de scan normales
+                    // console.log(errorMessage);
+                }
+            );
+            isScanning = true;
+        } catch (err) {
+            console.error("Erreur caméra:", err);
+            cameraError.style.display = 'block';
+            scannerContainer.style.display = 'none';
+            startBtn.style.display = 'block';
+            stopBtn.style.display = 'none';
+            alert("❌ Impossible d'accéder à la caméra.\n\nVérifiez que vous avez autorisé l'accès à la caméra.\n\nSur iPhone: Réglages > Safari > Caméra > Autoriser");
+        }
     }
-
+    
+    async function stopScanner() {
+        if (html5QrCode && isScanning) {
+            try {
+                await html5QrCode.stop();
+            } catch(e) { console.log(e); }
+            isScanning = false;
+        }
+        document.getElementById('scannerContainer').style.display = 'none';
+        document.getElementById('startScannerBtn').style.display = 'block';
+        document.getElementById('stopScannerBtn').style.display = 'none';
+    }
+    
+    // ===== EXPOSER LES FONCTIONS GLOBALEMENT =====
     window.validateTicket = validateTicket;
     window.confirmValidation = confirmValidation;
     window.startScanner = startScanner;
+    window.stopScanner = stopScanner;
 </script>
 </body>
 </html>
