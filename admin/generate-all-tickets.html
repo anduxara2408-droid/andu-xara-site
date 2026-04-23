@@ -24,6 +24,7 @@
         .progress-bar { background: #e0e0e0; border-radius: 10px; height: 30px; margin: 20px 0; overflow: hidden; display: none; }
         .progress-fill { background: #27ae60; height: 100%; width: 0%; transition: width 0.3s; text-align: center; color: white; line-height: 30px; }
         .result { display: none; margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 10px; }
+        .error { background: #ffebee; color: #c62828; }
         @media print {
             body { background: white; padding: 0; margin: 0; }
             .no-print { display: none; }
@@ -94,112 +95,70 @@ if (localStorage.getItem('adminAuth') !== 'true') {
         return `${prefix}-${num}`;
     }
 
-    function getQRCodeUrl(data) {
-        return `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(data)}`;
+    // ===== FONCTION QR CODE - UTILISE UNIQUEMENT L'ID DU BILLET =====
+    // IMPORTANT: Le QR code contient UNIQUEMENT l'ID (ex: PRE-00001)
+    // Pas de JSON, pas d'URL, juste l'ID pour un scan facile
+    function getQRCodeUrl(ticketId) {
+        return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ticketId)}`;
     }
 
-    // ===== BILLET PRÉVENTE (100 MRU) - DESIGN IDENTIQUE À LA PHOTO =====
+    // Template du billet PRÉVENTE (100 MRU)
     function getPreventeTemplate(ticketId, qrUrl, index) {
         return `
-            <div class="billet-print" style="width: 340px; height: 200px; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; margin: 5px; display: inline-block; position: relative; font-family: 'Inter', Arial, sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="billet-print" style="width: 320px; height: 200px; background: linear-gradient(135deg, #1a1a1a, #2c2c2c); border-radius: 12px; overflow: hidden; border: 2px solid #ffa500; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: #ffa500; color: #1a1a1a; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">PRÉVENTE</div>
                 <div style="padding: 12px;">
-                    <div style="font-size: 11px; color: #e67e22; font-weight: bold;">CONCERT :</div>
-                    <div style="font-size: 18px; font-weight: bold; color: #000;">PISPA LE ROI</div>
-                    <div style="margin-top: 6px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">DATE :</div>
-                        <div style="font-size: 11px; font-weight: bold;">10ème jour Tabaski 2026</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">LIEU :</div>
-                        <div style="font-size: 10px;">Titanic Couva, Nouakchott</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">HEURE :</div>
-                        <div style="font-size: 10px;">19H00</div>
-                    </div>
-                    <div style="margin-top: 6px;">
-                        <div style="font-size: 13px; font-weight: bold; color: #000;">PRIX : 100 MRU</div>
-                    </div>
-                    <div style="margin-top: 5px; border-bottom: 1px solid #000; width: fit-content;">
-                        <span style="font-size: 9px;">Invité :</span> <span style="font-size: 9px;">_______________</span>
-                    </div>
-                    <div style="margin-top: 5px; font-size: 7px; color: #e67e22;">CONSCIENTISATION DE LA JEUNESSE</div>
-                    <div style="margin-top: 2px; font-size: 9px; font-weight: bold;">Andu-Xara</div>
-                    <div style="font-size: 7px;">100 Filtre</div>
+                    <h2 style="color: #ffa500; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: white; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #ffa500; color: #1a1a1a; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 100 MRU - Prévente</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #ffa500; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #ffa500;">👤 Invité :</span> _______________</div>
                 </div>
-                <div style="position: absolute; bottom: 6px; right: 6px; width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div style="position: absolute; bottom: 8px; left: 12px; font-size: 8px; font-family: monospace; color: #666;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #666; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
             </div>
         `;
     }
 
-    // ===== BILLET STANDARD (150 MRU) - DESIGN IDENTIQUE À LA PHOTO =====
+    // Template du billet STANDARD (150 MRU)
     function getStandardTemplate(ticketId, qrUrl, index) {
         return `
-            <div class="billet-print" style="width: 340px; height: 200px; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; margin: 5px; display: inline-block; position: relative; font-family: 'Inter', Arial, sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="billet-print" style="width: 320px; height: 200px; background: linear-gradient(135deg, #0d3b66, #1a4d80); border-radius: 12px; overflow: hidden; border: 2px solid #2196F3; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: #2196F3; color: white; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">STANDARD</div>
                 <div style="padding: 12px;">
-                    <div style="font-size: 11px; color: #2196F3; font-weight: bold;">STANDARD - 150 MRU</div>
-                    <div style="font-size: 11px; color: #e67e22; font-weight: bold; margin-top: 4px;">CONCERT :</div>
-                    <div style="font-size: 18px; font-weight: bold; color: #000;">PISPA LE ROI</div>
-                    <div style="margin-top: 6px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">DATE :</div>
-                        <div style="font-size: 11px; font-weight: bold;">10ème jour Tabaski 2026</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">LIEU :</div>
-                        <div style="font-size: 10px;">Titanic Couva, Nouakchott</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">HEURE :</div>
-                        <div style="font-size: 10px;">19H00</div>
-                    </div>
-                    <div style="margin-top: 5px; font-size: 7px; color: #e67e22;">CONSCIENTISATION DE LA JEUNESSE</div>
-                    <div style="margin-top: 2px; font-size: 9px; font-weight: bold;">Andu-Xara</div>
-                    <div style="font-size: 7px;">100 Filtre</div>
+                    <h2 style="color: #fff; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: #ffd700; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #2196F3; color: white; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 150 MRU - Standard</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #2196F3; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #2196F3;">👤 Invité :</span> _______________</div>
                 </div>
-                <div style="position: absolute; bottom: 6px; right: 6px; width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div style="position: absolute; bottom: 8px; left: 12px; font-size: 8px; font-family: monospace; color: #666;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #aaa; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
             </div>
         `;
     }
 
-    // ===== BILLET VIP (200 MRU) - DESIGN IDENTIQUE À LA PHOTO =====
+    // Template du billet VIP (200 MRU)
     function getVipTemplate(ticketId, qrUrl, index) {
         return `
-            <div class="billet-print" style="width: 340px; height: 210px; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; margin: 5px; display: inline-block; position: relative; font-family: 'Inter', Arial, sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="billet-print" style="width: 320px; height: 220px; background: linear-gradient(135deg, #000000, #1a1a1a); border-radius: 12px; overflow: hidden; border: 2px solid #D4AF37; margin: 5px; display: inline-block; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: linear-gradient(135deg, #D4AF37, #FFD700); color: #000; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 10px;">⭐ VIP</div>
                 <div style="padding: 12px;">
-                    <div style="font-size: 9px; color: #888;">A Présente</div>
-                    <div style="font-size: 15px; font-weight: bold; color: #D4AF37;">VIP - 200 MRU</div>
-                    <div style="font-size: 11px; color: #e67e22; font-weight: bold; margin-top: 4px;">CONCERT :</div>
-                    <div style="font-size: 18px; font-weight: bold; color: #000;">PISPA LE ROI</div>
-                    <div style="margin-top: 6px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">DATE :</div>
-                        <div style="font-size: 11px; font-weight: bold;">10ème jour Tabaski 2026</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">LIEU :</div>
-                        <div style="font-size: 10px;">Titanic Couva, Nouakchott</div>
-                    </div>
-                    <div style="margin-top: 4px;">
-                        <div style="font-size: 10px; color: #e67e22; font-weight: bold;">HEURE :</div>
-                        <div style="font-size: 10px;">19H00</div>
-                    </div>
-                    <div style="margin-top: 5px; border-bottom: 1px solid #000; width: fit-content;">
-                        <span style="font-size: 9px;">Invité :</span> <span style="font-size: 9px;">_______________</span>
-                    </div>
-                    <div style="margin-top: 5px; background: #D4AF37; color: #000; padding: 3px; font-size: 8px; font-weight: bold; text-align: center; border-radius: 3px;">VIP - ACCÈS PRIORITAIRE</div>
-                    <div style="margin-top: 4px; font-size: 7px;">
-                        ✅ Accès prioritaire | Zone VIP | Boisson offerte | Rencontre artiste
-                    </div>
+                    <h2 style="color: #D4AF37; font-size: 16px; margin-bottom: 4px;">PISPA LE ROI</h2>
+                    <div style="color: #FFD700; font-size: 11px; font-weight: 600;">⭐ Concert exceptionnel - Accès VIP</div>
+                    <div style="color: #ccc; font-size: 9px; margin: 3px 0;">📅 10ème jour Tabaski 2026</div>
+                    <div style="color: #ccc; font-size: 9px;">📍 Titanic Couva, Nouakchott</div>
+                    <div style="color: #ccc; font-size: 9px;">⏰ 19h00</div>
+                    <div style="background: #D4AF37; color: #000; display: inline-block; padding: 3px 10px; border-radius: 15px; font-weight: 800; font-size: 11px; margin: 8px 0;">💰 200 MRU - VIP</div>
+                    <div style="font-size: 8px; color: #D4AF37; margin: 4px 0;">✅ Accès prioritaire | Zone VIP | Boisson offerte | Rencontre artiste</div>
+                    <div style="margin-top: 6px; border-bottom: 1px dashed #D4AF37; width: fit-content; color: #ccc; font-size: 9px;"><span style="color: #D4AF37;">👤 Invité :</span> _______________</div>
                 </div>
-                <div style="position: absolute; bottom: 6px; right: 6px; width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div style="position: absolute; bottom: 8px; left: 12px; font-size: 8px; font-family: monospace; color: #666;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; left: 12px; color: #D4AF37; font-size: 7px; font-family: monospace;">${ticketId}</div>
+                <div style="position: absolute; bottom: 6px; right: 12px; width: 45px; height: 45px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="${qrUrl}" style="width: 100%; height: 100%; object-fit: contain;"></div>
             </div>
         `;
     }
