@@ -3,210 +3,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Mode - Andu-Xara</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Blog & Podcast Andu-Xara • Mode Africaine, Culture & Entrepreneuriat</title>
+    <meta name="description" content="Découvrez le blog officiel d'Andu-Xara : podcasts exclusifs, articles sur la mode africaine, culture soninké et entrepreneuriat jeune.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blog & Podcast Andu-Xara • Mode Africaine, Culture & Entrepreneuriat">
+    <meta property="og:description" content="Podcasts exclusifs et articles sur la mode africaine moderne, la culture soninké et l'entrepreneuriat jeune">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://andu-xara.store/blog.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.png" type="image/png">
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-        
-        .main-header {
-            padding: 20px 0;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        /* ===== RESET ET BASES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .blog-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
+
         .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #e67e22;
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
             text-decoration: none;
-        }
-        .logo span { color: #333; font-weight: 300; }
-        .nav-menu { display: flex; gap: 30px; }
-        .nav-link {
-            text-decoration: none;
-            color: #333;
+            padding: 12px 25px;
+            border-radius: 25px;
             font-weight: 600;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-        .nav-link:hover { color: #e67e22; }
-        .nav-link-highlight { color: #e67e22; }
-        
-        .page-title {
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .header-title {
             text-align: center;
-            margin: 40px 0;
-            font-size: 2.5rem;
-            color: #333;
+            flex: 1;
         }
-        .page-title span { color: #e67e22; }
-        
-        .blog-grid {
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header-title .subtitle {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* ===== HERO BANNER ===== */
+        .hero-banner {
+            position: relative;
+            max-width: 1200px;
+            margin: 40px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            height: 400px;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+        }
+
+        .banner-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .banner-text h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .banner-text p {
+            font-size: 1.4rem;
+            font-weight: 300;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            opacity: 0.9;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* ===== ARTICLES GRID ===== */
+        .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
             margin-bottom: 60px;
         }
-        
+
         .article-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
         }
+
         .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(230,126,34,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
-        .article-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-        .article-content {
-            padding: 25px;
-        }
-        .article-date {
-            color: #e67e22;
+
+        .article-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
-            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .article-content {
+            padding: 30px;
+        }
+
+        .article-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .article-card h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .article-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* ===== AUDIO PLAYER ===== */
+        .audio-player {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .audio-player::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .audio-player::-webkit-media-controls-current-time-display,
+        .audio-player::-webkit-media-controls-time-remaining-display {
+            color: white;
+        }
+
+        .podcast-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .podcast-icon {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .podcast-duration {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* ===== CATEGORIES ===== */
+        .categories-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter-section {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .newsletter-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .newsletter-section p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            border-color: #667eea;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* ===== FOOTER ===== */
+        .blog-footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-content p {
+            color: #666;
             margin-bottom: 10px;
         }
-        .article-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        .article-excerpt {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .read-more {
-            color: #e67e22;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        .read-more:hover {
-            color: #d35400;
-        }
-        
-        .footer {
-            background: #2c3e50;
-            color: white;
-            padding: 40px 0 20px;
-            margin-top: 60px;
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #4a5568;
-            color: #ccc;
-        }
-        
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .blog-grid { grid-template-columns: 1fr; }
-            .page-title { font-size: 1.8rem; }
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .banner-text h1 {
+                font-size: 2rem;
+            }
+
+            .banner-text p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                min-width: auto;
+            }
+
+            .hero-banner {
+                height: 300px;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-content {
+                padding: 20px;
+            }
+
+            .banner-text h1 {
+                font-size: 1.6rem;
+            }
+
+            .category-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">Andu<span>Xara</span></a>
-                <nav class="nav-menu">
-                    <a href="produits.html" class="nav-link">Collection</a>
-                    <a href="histoire.html" class="nav-link">Histoire</a>
-                    <a href="billetterie.html" class="nav-link">Concerts</a>
-                    <a href="blog.html" class="nav-link nav-link-highlight">Blog</a>
-                </nav>
+    <!-- Header -->
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="index.html" class="back-button">
+                ← Accueil
+            </a>
+            <div class="header-title">
+                <h1>Andu-Xara Blog</h1>
+                <p class="subtitle">Mode Africaine • Culture • Entrepreneuriat</p>
             </div>
+            <div style="width: 140px;"></div> <!-- Spacer -->
         </div>
     </header>
 
-    <div class="container">
-        <h1 class="page-title">Le <span>Blog</span> Mode Afro-Urbaine</h1>
-        
-        <div class="blog-grid">
-            <!-- Article 1 -->
-            <div class="article-card">
-                <div class="article-image">👕</div>
-                <div class="article-content">
-                    <div class="article-date">12 Avril 2026</div>
-                    <h2 class="article-title">Comment porter un ensemble afro-urbain au quotidien ?</h2>
-                    <p class="article-excerpt">Découvrez nos conseils pour adopter le style Andu-Xara au bureau, en soirée ou en week-end. Mélangez tradition et modernité avec élégance...</p>
-                    <a href="#" class="read-more">Lire la suite →</a>
-                </div>
-            </div>
-
-            <!-- Article 2 -->
-            <div class="article-card">
-                <div class="article-image">🧥</div>
-                <div class="article-content">
-                    <div class="article-date">5 Avril 2026</div>
-                    <h2 class="article-title">Les tendances mode pour l'hiver 2026 en Mauritanie</h2>
-                    <p class="article-excerpt">Quelles couleurs, quelles matières, quels looks ? Notre équipe vous guide pour rester stylé tout en restant au chaud avec nos ensembles premium...</p>
-                    <a href="#" class="read-more">Lire la suite →</a>
-                </div>
-            </div>
-
-            <!-- Article 3 -->
-            <div class="article-card">
-                <div class="article-image">🌍</div>
-                <div class="article-content">
-                    <div class="article-date">28 Mars 2026</div>
-                    <h2 class="article-title">L'inspiration africaine au cœur de nos créations</h2>
-                    <p class="article-excerpt">Découvrez comment les motifs, les couleurs et les traditions africaines inspirent chaque pièce Andu-Xara. Un héritage culturel à porter fièrement...</p>
-                    <a href="#" class="read-more">Lire la suite →</a>
-                </div>
-            </div>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="overlay"></div>
+        <img src="images/soninke.jpg" alt="Journée internationale de la langue Soninké" class="banner-img" onerror="this.style.display='none'">
+        <div class="banner-text">
+            <h1>🌍 Journée Internationale de la Langue Soninké</h1>
+            <p>Célébrons ensemble notre culture, notre identité et nos racines ancestrales</p>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Andu-Xara</h4>
-                    <p>Mode afro-urbaine depuis 2020</p>
+    <!-- Main Content -->
+    <div class="blog-container">
+        <h2 class="section-title">🎙️ Podcasts Exclusifs</h2>
+
+        <!-- Categories Navigation -->
+        <div class="categories-nav">
+            <button class="category-btn active" data-category="all">Tous</button>
+            <button class="category-btn" data-category="culture">Culture</button>
+            <button class="category-btn" data-category="mode">Mode</button>
+            <button class="category-btn" data-category="entrepreneuriat">Entrepreneuriat</button>
+            <button class="category-btn" data-category="interview">Interview</button>
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="articles-grid" id="articlesGrid">
+            <!-- Article 1 - Journée Soninké -->
+            <article class="article-card" data-category="culture">
+                <div class="article-badge">Nouveau</div>
+                <div class="article-content">
+                    <span class="article-category">🎉 Événement Culturel</span>
+                    <h2>Journée Internationale de la Langue Soninké</h2>
+                    <p>À l'occasion du 25 septembre, Andu-Xara vous propose un podcast dédié à la célébration et à la valorisation de la langue Soninké. Découvrez l'importance de préserver notre héritage linguistique.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/journée.mp3" type="audio/mpeg">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Épisode spécial • 25 Septembre</span>
+                    </div>
                 </div>
-                <div class="footer-col">
-                    <h4>Liens</h4>
-                    <ul>
-                        <li><a href="mentions-legales.html">Mentions légales</a></li>
-                        <li><a href="cgv.html">CGV</a></li>
-                        <li><a href="confidentialite.html">Confidentialité</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
+            </article>
+
+            <!-- Article 2 - Mode Africaine avec voix_fouley -->
+            <article class="article-card" data-category="mode">
+                <div class="article-content">
+                    <span class="article-category">👗 Mode Africaine</span>
+                    <h2>Mode Africaine : Héritage et Modernité</h2>
+                    <p>La mode africaine inspire le monde entier. Andu-Xara célèbre l'héritage tout en innovant. Découvrez comment nous fusionnons traditions et design contemporain.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/voix_fouley.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Voix de Fouley • 12:34 min</span>
+                    </div>
                 </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 Andu-Xara - Tous droits réservés</p>
-            </div>
+            </article>
+
+            <!-- Article 3 - Entrepreneuriat avec voix_cheikh -->
+            <article class="article-card" data-category="entrepreneuriat">
+                <div class="article-content">
+                    <span class="article-category">🚀 Entrepreneuriat</span>
+                    <h2>Entrepreneuriat Jeune en Afrique</h2>
+                    <p>Nos jeunes entrepreneurs africains réinventent le commerce et créent de nouvelles opportunités. Témoignages et conseils pour se lancer.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/voix_cheikh.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Voix de Cheikh • 15:23 min</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 4 - Podcast Entrepreneur -->
+            <article class="article-card" data-category="entrepreneuriat">
+                <div class="article-content">
+                    <span class="article-category">🎧 Podcast</span>
+                    <h2>Parcours d'Entrepreneurs Mauritaniens</h2>
+                    <p>Découvrez le parcours inspirant de jeunes entrepreneurs mauritaniens qui ont réussi à créer leur propre marque.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/entrepreneur.mp3" type="audio/mpeg">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Cast • 08:45 min</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 5 - Bienvenue -->
+            <article class="article-card" data-category="culture">
+                <div class="article-content">
+                    <span class="article-category">🎙️ Introduction</span>
+                    <h2>Bienvenue sur le Podcast Andu-Xara</h2>
+                    <p>Découvrez notre tout premier épisode présentant la vision et les valeurs de la marque Andu-Xara.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/bienvenue.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Présentation • 05:15 min</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 6 - Message Bienvenue -->
+            <article class="article-card" data-category="interview">
+                <div class="article-content">
+                    <span class="article-category">💬 Interview</span>
+                    <h2>Message de Bienvenue - L'Équipe Andu-Xara</h2>
+                    <p>L'équipe Andu-Xara vous souhaite la bienvenue et partage sa vision pour l'avenir de la mode africaine.</p>
+                    
+                    <audio controls class="audio-player" preload="metadata">
+                        <source src="audio/bienvenue.mp4" type="audio/mp4">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>
+                    
+                    <div class="podcast-info">
+                        <span class="podcast-icon">🎙️</span>
+                        <span class="podcast-duration">Message • 03:30 min</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Newsletter -->
+        <section class="newsletter-section">
+            <h3>📧 Restez Informé</h3>
+            <p>Recevez les nouveaux podcasts et articles directement dans votre boîte mail. Ne manquez aucun contenu exclusif Andu-Xara !</p>
+            <form class="newsletter-form" id="newsletterForm" onsubmit="return false;">
+                <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Votre adresse email" required>
+                <button type="button" class="newsletter-btn" onclick="handleNewsletter()">S'abonner</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="blog-footer">
+        <div class="footer-content">
+            <p><strong>Blog & Podcast Andu-Xara</strong></p>
+            <p>Votre source d'inspiration mode, culture et entrepreneuriat</p>
+            <p>📍 Mauritanie, Nouakchott • 📞 +222 49 03 76 97</p>
         </div>
     </footer>
+
+    <script>
+        // ===== FILTRAGE DES CATÉGORIES =====
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Retirer la classe active de tous les boutons
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                // Ajouter la classe active au bouton cliqué
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                
+                // Filtrer les articles
+                document.querySelectorAll('.article-card').forEach(article => {
+                    if (category === 'all' || article.getAttribute('data-category') === category) {
+                        article.style.display = 'block';
+                    } else {
+                        article.style.display = 'none';
+                    }
+                });
+                
+                console.log('🎯 Filtre activé:', category);
+            });
+        });
+
+        // ===== GESTION DE LA NEWSLETTER =====
+        function handleNewsletter() {
+            console.log('🎯 Newsletter - Bouton cliqué !');
+            
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput ? emailInput.value.trim() : '';
+            
+            console.log('Email saisi:', email);
+            
+            if (email && email.includes('@') && email.includes('.')) {
+                alert('🎉 Merci pour votre inscription !\nVous recevrez nos prochains contenus à: ' + email);
+                emailInput.value = '';
+                emailInput.focus();
+                
+                // Optionnel: Sauvegarder l'email dans Firebase
+                // if (typeof db !== 'undefined') {
+                //     db.collection('newsletter').add({ email: email, date: new Date() });
+                // }
+            } else {
+                alert('❌ Veuillez entrer une adresse email valide.');
+                if (emailInput) emailInput.focus();
+            }
+        }
+
+        // ===== ANIMATION DES CARTES AU SCROLL =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Appliquer l'animation à toutes les cartes
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // ===== GESTION DES ERREURS D'IMAGES =====
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+            });
+        });
+
+        // ===== LECTURE AUDIO =====
+        document.querySelectorAll('.audio-player').forEach(player => {
+            player.addEventListener('play', function() {
+                // Arrêter tous les autres players
+                document.querySelectorAll('.audio-player').forEach(other => {
+                    if (other !== player && !other.paused) {
+                        other.pause();
+                    }
+                });
+            });
+        });
+
+        // ===== INITIALISATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Blog Andu-Xara initialisé avec succès');
+            console.log('🎙️ Podcasts disponibles:', document.querySelectorAll('.audio-player').length);
+            console.log('📧 Newsletter prête - Testez en cliquant sur "S\'abonner"');
+        });
+    </script>
 </body>
 </html>
