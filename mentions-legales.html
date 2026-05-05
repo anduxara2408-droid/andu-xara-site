@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions légales - Andu-Xara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        
+        .main-header {
+            padding: 20px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #e67e22; }
+        
+        .legal-content {
+            max-width: 900px;
+            margin: 60px auto;
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .legal-content h1 {
+            font-size: 2rem;
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+        .legal-content h2 {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 30px 0 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e67e22;
+        }
+        .legal-content h3 {
+            font-size: 1.1rem;
+            color: #e67e22;
+            margin: 20px 0 10px;
+        }
+        .legal-content p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        .legal-content ul {
+            margin: 15px 0 15px 30px;
+            color: #555;
+            line-height: 1.7;
+        }
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #ccc;
+        }
+        @media (max-width: 768px) {
+            .legal-content { padding: 30px 20px; margin: 30px 20px; }
+            .legal-content h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link">Concerts</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="legal-content">
+            <h1>📜 Mentions légales</h1>
+            <p>Dernière mise à jour : 5 mai 2026</p>
+
+            <h2>1. Éditeur du site</h2>
+            <p><strong>Andu-Xara</strong><br>
+            Marque de vêtements afro-urbains<br>
+            Siège social : Nouakchott, Mauritanie<br>
+            Email : contact@andu-xara.store<br>
+            Téléphone : +222 34 19 63 04</p>
+
+            <h2>2. Directeur de publication</h2>
+            <p>Cheikhou Diabira, Président et Fondateur d'Andu-Xara</p>
+
+            <h2>3. Hébergement</h2>
+            <p>Le site andu-xara.store est hébergé par GitHub Pages.<br>
+            GitHub Inc.<br>
+            88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis</p>
+
+            <h2>4. Propriété intellectuelle</h2>
+            <p>L'ensemble des éléments composant le site andu-xara.store (textes, images, logos, créations) sont la propriété exclusive de la marque Andu-Xara. Toute reproduction, représentation, modification ou adaptation est interdite sans autorisation préalable.</p>
+
+            <h2>5. Protection des données personnelles</h2>
+            <p>Conformément à la loi mauritanienne et au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ce droit, contactez-nous à contact@andu-xara.store.</p>
+
+            <h2>6. Cookies</h2>
+            <p>Le site utilise des cookies pour améliorer l'expérience de navigation. Vous pouvez paramétrer votre navigateur pour refuser les cookies.</p>
+
+            <h2>7. Contact</h2>
+            <p>Pour toute question relative aux mentions légales :<br>
+            📧 contact@andu-xara.store<br>
+            📞 +222 34 19 63 04</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine depuis 2020</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="confidentialite.html">Confidentialité</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

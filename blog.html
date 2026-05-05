@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Mode - Andu-Xara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        
+        .main-header {
+            padding: 20px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #e67e22; }
+        .nav-link-highlight { color: #e67e22; }
+        
+        .page-title {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .page-title span { color: #e67e22; }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(230,126,34,0.15);
+        }
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .article-content {
+            padding: 25px;
+        }
+        .article-date {
+            color: #e67e22;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .article-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .article-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .read-more {
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .read-more:hover {
+            color: #d35400;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid { grid-template-columns: 1fr; }
+            .page-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link">Concerts</a>
+                    <a href="blog.html" class="nav-link nav-link-highlight">Blog</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Le <span>Blog</span> Mode Afro-Urbaine</h1>
+        
+        <div class="blog-grid">
+            <!-- Article 1 -->
+            <div class="article-card">
+                <div class="article-image">👕</div>
+                <div class="article-content">
+                    <div class="article-date">12 Avril 2026</div>
+                    <h2 class="article-title">Comment porter un ensemble afro-urbain au quotidien ?</h2>
+                    <p class="article-excerpt">Découvrez nos conseils pour adopter le style Andu-Xara au bureau, en soirée ou en week-end. Mélangez tradition et modernité avec élégance...</p>
+                    <a href="#" class="read-more">Lire la suite →</a>
+                </div>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="article-card">
+                <div class="article-image">🧥</div>
+                <div class="article-content">
+                    <div class="article-date">5 Avril 2026</div>
+                    <h2 class="article-title">Les tendances mode pour l'hiver 2026 en Mauritanie</h2>
+                    <p class="article-excerpt">Quelles couleurs, quelles matières, quels looks ? Notre équipe vous guide pour rester stylé tout en restant au chaud avec nos ensembles premium...</p>
+                    <a href="#" class="read-more">Lire la suite →</a>
+                </div>
+            </div>
+
+            <!-- Article 3 -->
+            <div class="article-card">
+                <div class="article-image">🌍</div>
+                <div class="article-content">
+                    <div class="article-date">28 Mars 2026</div>
+                    <h2 class="article-title">L'inspiration africaine au cœur de nos créations</h2>
+                    <p class="article-excerpt">Découvrez comment les motifs, les couleurs et les traditions africaines inspirent chaque pièce Andu-Xara. Un héritage culturel à porter fièrement...</p>
+                    <a href="#" class="read-more">Lire la suite →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine depuis 2020</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="confidentialite.html">Confidentialité</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
