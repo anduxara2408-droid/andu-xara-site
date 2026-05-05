@@ -800,6 +800,7 @@
         <button class="close-btn" onclick="closeMenu()">&times;</button>
         <a href="index.html" onclick="closeMenu()">🏠 Accueil</a>
         <a href="produits.html" onclick="closeMenu()">👕 Collection</a>
+        <a href="blog.html" onclick="closeMenu()">📝 Blog</a>
         <a href="histoire.html" onclick="closeMenu()">📖 Histoire</a>
         <a href="billetterie.html" onclick="closeMenu()">🎫 Concerts</a>
         <a href="contact.html" onclick="closeMenu()">📞 Contact</a>
@@ -834,6 +835,7 @@
                 ✨ <strong>Andu-Xara</strong> - Racines Africaines, Style Moderne
             </div>
             <div class="top-links">
+                <a href="blog.html">Blog</a>
                 <a href="contact.html">Contact</a>
                 <a href="compte.html">Mon compte</a>
                 <a href="billetterie.html">Concerts</a>
@@ -850,6 +852,7 @@
                 <nav class="nav-menu">
                     <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
                     <a href="histoire.html" class="nav-link">Histoire</a>
                     <a href="billetterie.html" class="nav-link">Concerts</a>
                     <a href="contact.html" class="nav-link">Contact</a>
@@ -964,7 +967,7 @@
                 <p class="hero-text">Andu-Xara célèbre la richesse de la culture africaine à travers des créations modernes et authentiques.</p>
                 <div class="hero-stats">
                     <div class="stat"><div class="stat-number">100+</div><div>clients</div></div>
-                    <div class="stat"><div class="stat-number">5</div><div>Créations</div></div>
+                    <div class="stat"><div class="stat-number">6</div><div>Créations</div></div>
                     <div class="stat"><div class="stat-number">2020</div><div>Année zéro</div></div>
                 </div>
             </div>
@@ -982,6 +985,23 @@
             <div class="products-grid" id="products-container"></div>
             <div class="section-action">
                 <a href="produits.html" class="btn-secondary">Voir toute la collection →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DERNIERS ARTICLES DU BLOG -->
+    <section class="blog-preview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Blog</span>
+                <h2 class="section-title">Derniers <span>articles</span></h2>
+                <p>Actualités, conseils et inspirations</p>
+            </div>
+            <div class="blog-grid" id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                <!-- Les articles seront chargés ici -->
+            </div>
+            <div class="section-action">
+                <a href="blog.html" class="btn-secondary">Voir tous les articles →</a>
             </div>
         </div>
     </section>
@@ -1011,7 +1031,7 @@
                     <div class="value-content">
                         <div class="value-icon">🤝</div>
                         <h3 class="value-title">Communauté</h3>
-                        <p>205 clients nous ont déjà fait confiance.</p>
+                        <p>100+ clients nous ont déjà fait confiance.</p>
                     </div>
                 </div>
             </div>
@@ -1050,6 +1070,7 @@
                     <ul>
                         <li><a href="index.html">Accueil</a></li>
                         <li><a href="produits.html">Collection</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                         <li><a href="histoire.html">Histoire</a></li>
                         <li><a href="billetterie.html">Concerts</a></li>
                         <li><a href="contact.html">Contact</a></li>
@@ -1181,7 +1202,8 @@ document.addEventListener("DOMContentLoaded", function() {
             { id: 'sahel-beige', nom: 'Sahel Beige', prix: 600, image: 'images/produits/pull-beige-01.jpg' },
             { id: 'tagant-gris', nom: 'Tagant Gris', prix: 600, image: 'images/produits/pull-gris-01.jpg' },
             { id: 'tichitt-noir', nom: 'Tichitt Noir', prix: 600, image: 'images/produits/pull-noir-01.jpg' },
-            { id: 'ouadane-noir', nom: 'Ouadane Noir', prix: 400, image: 'images/produits/tshirt-noir-01.png' }
+            { id: 'ouadane-noir', nom: 'Ouadane Noir', prix: 400, image: 'images/produits/tshirt-noir-01.png' },
+            { id: 'babs-premium', nom: 'Babs Premium', prix: 1049, image: 'images/produits/babs.jpg' }
         ];
 
         function displayFeaturedProducts() {
@@ -1196,6 +1218,48 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </a>
             `).join('');
+        }
+
+        // Blog - Récupération des articles depuis Firestore
+        async function loadBlogPosts() {
+            const container = document.getElementById('blog-container');
+            if (!container) return;
+            
+            try {
+                const snapshot = await db.collection('blog').orderBy('date', 'desc').limit(3).get();
+                if (!snapshot.empty) {
+                    container.innerHTML = snapshot.docs.map(doc => {
+                        const post = doc.data();
+                        const date = post.date?.toDate ? post.date.toDate().toLocaleDateString() : 'Date inconnue';
+                        return `
+                            <a href="blog-post.html?id=${doc.id}" class="blog-card" style="background: white; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: transform 0.3s; display: block;">
+                                <div style="height: 200px; overflow: hidden;">
+                                    <img src="${post.image || 'images/logo.png'}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="padding: 15px;">
+                                    <div style="font-size: 0.8rem; color: #e67e22; margin-bottom: 8px;">${date}</div>
+                                    <h3 style="font-size: 1.1rem; margin-bottom: 10px;">${post.title}</h3>
+                                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">${post.excerpt || post.content?.substring(0, 100) + '...'}</p>
+                                </div>
+                            </a>
+                        `;
+                    }).join('');
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: white; border-radius: 10px;">
+                            <p>Aucun article pour le moment</p>
+                            <p style="font-size: 0.8rem; color: #999;">Revenez bientôt pour découvrir nos actualités</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erreur chargement blog:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: white; border-radius: 10px;">
+                        <p>Blog en construction</p>
+                    </div>
+                `;
+            }
         }
 
         // Panier
@@ -1337,6 +1401,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // INIT
         document.addEventListener('DOMContentLoaded', () => {
             displayFeaturedProducts();
+            loadBlogPosts();
             updateCartCount();
         });
     </script>
