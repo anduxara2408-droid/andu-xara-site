@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Andu-Xara • Mode Afro-Urbaine</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .main-header {
+            padding: 20px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #e67e22; }
+        
+        .faq-header {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+        .faq-header h1 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .faq-header h1 span { color: #e67e22; }
+        .faq-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        .faq-category {
+            margin-bottom: 40px;
+        }
+        .faq-category h2 {
+            font-size: 1.8rem;
+            color: #e67e22;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e67e22;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+        .faq-question .icon {
+            font-size: 1.3rem;
+            color: #e67e22;
+            transition: transform 0.3s;
+        }
+        .faq-question.active .icon {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: #666;
+            line-height: 1.6;
+        }
+        .faq-answer.active {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .faq-header h1 { font-size: 2rem; }
+            .faq-category h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="faq-complete.html" class="nav-link nav-link-highlight">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="faq-header">
+            <h1>Foire Aux <span>Questions</span></h1>
+            <p>Tout ce que vous devez savoir sur Andu-Xara</p>
+        </div>
+
+        <div class="faq-section">
+            <!-- CATÉGORIE : COMMANDES -->
+            <div class="faq-category">
+                <h2>📦 Commandes</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Comment passer commande sur Andu-Xara ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Pour passer commande, rien de plus simple :<br>
+                        1. Parcourez notre collection<br>
+                        2. Choisissez votre produit et votre taille<br>
+                        3. Ajoutez-le au panier<br>
+                        4. Créez un compte ou connectez-vous<br>
+                        5. Finalisez votre commande et choisissez votre mode de paiement<br>
+                        6. Validez ! Vous recevrez une confirmation par email.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Puis-je modifier ou annuler ma commande ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, vous pouvez modifier ou annuler votre commande dans les 2 heures suivant sa validation. Contactez-nous directement par WhatsApp au +222 34 19 63 04 avec votre numéro de commande.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Comment suivre ma commande ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Dès que votre commande est expédiée, vous recevez un numéro de suivi par SMS et email. Vous pouvez également suivre votre commande dans votre espace client rubrique "Mes commandes".
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÉGORIE : LIVRAISON -->
+            <div class="faq-category">
+                <h2>🚚 Livraison</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Quels sont les délais de livraison ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        • Nouakchott : 24-48h (livraison gratuite)<br>
+                        • Nouadhibou : 48-72h<br>
+                        • Autres wilayas : 3-5 jours ouvrés<br>
+                        • International : 7-14 jours (frais selon destination)
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        La livraison est-elle gratuite ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, la livraison est GRATUITE pour toute commande en Mauritanie. Pour les livraisons internationales (Sénégal, Mali, France, etc.), les frais sont calculés selon la destination et le poids.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Livrez-vous à l'international ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, nous livrons dans toute l'Afrique de l'Ouest (Sénégal, Mali, Gambie, Guinée) et en France. Les frais de livraison sont calculés lors du passage en caisse. Pour toute autre destination, contactez-nous.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÉGORIE : PAIEMENT -->
+            <div class="faq-category">
+                <h2>💳 Paiements</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Quels modes de paiement acceptez-vous ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Nous acceptons plusieurs modes de paiement :<br>
+                        • Bankily (Mauritanie)<br>
+                        • Wave (Sénégal et Mauritanie)<br>
+                        • Paiement à la livraison (espèces)<br>
+                        • Virement bancaire<br>
+                        • Paiement par carte bancaire (via paiement sécurisé)
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Le paiement sur votre site est-il sécurisé ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolument ! Tous les paiements sont sécurisés et cryptés. Nous ne stockons aucune information bancaire sur nos serveurs. La transaction est directement gérée par notre partenaire de paiement agréé.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÉGORIE : RETOURS ET ÉCHANGES -->
+            <div class="faq-category">
+                <h2>🔄 Retours et échanges</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Puis-je retourner un produit ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, vous disposez de 7 jours après réception pour retourner un produit. Le produit doit être neuf, non porté, avec ses étiquettes. Les frais de retour sont à votre charge sauf en cas de produit défectueux.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Comment procéder à un échange ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Contactez notre service client par WhatsApp (+222 34 19 63 04) avec votre numéro de commande et le produit souhaité. Nous vous guiderons pour l'échange.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Que faire si je reçois un produit défectueux ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Nous sommes désolés pour la gêne. Contactez-nous immédiatement avec des photos du défaut. Nous procéderons à un échange ou un remboursement dans les plus brefs délais.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÉGORIE : PRODUITS -->
+            <div class="faq-category">
+                <h2>👕 Produits</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Que signifie "Andu-Xara" ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        "Andu-Xara" est une expression soninké qui évoque l'élégance et la fierté culturelle. Notre marque célèbre les racines africaines à travers une mode moderne et authentique.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Où sont fabriqués vos vêtements ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Tous nos vêtements sont conçus et fabriqués en Mauritanie, avec des tissus de qualité. Nous travaillons avec des artisans locaux pour garantir un savoir-faire authentique.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Comment bien choisir ma taille ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Consultez notre guide des tailles disponible sur chaque fiche produit. Si vous hésitez entre deux tailles, prenez la taille au-dessus pour un confort optimal. Notre service client peut aussi vous conseiller.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Comment entretenir mes vêtements Andu-Xara ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Lavez à 30°C maximum, cycle délicat. Ne pas utiliser d'eau de Javel. Sécher à l'ombre (évitez le sèche-linge). Repasser à température moyenne sur l'envers pour préserver le logo.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÉGORIE : COMPTE CLIENT -->
+            <div class="faq-category">
+                <h2>🔐 Compte client</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Pourquoi créer un compte ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        En créant un compte, vous bénéficiez :<br>
+                        • Suivi de vos commandes<br>
+                        • Historique d'achats<br>
+                        • Codes promo exclusifs<br>
+                        • Programme de fidélité (points)<br>
+                        • Accès anticipé aux soldes
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        J'ai oublié mon mot de passe, que faire ?
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Cliquez sur "Mot de passe oublié" sur la page de connexion. Vous recevrez un email avec un lien pour réinitialiser votre mot de passe.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine depuis 2020.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Collection</a></li>
+                        <li><a href="compte.html">Mon compte</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@andu-xara.store">Email</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            element.classList.toggle('active');
+            answer.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
