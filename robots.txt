@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /qrcodes/
+Disallow: /images/accueil/
+Disallow: /images/produits/
+
+Sitemap: https://anduxara2408-droid.github.io/andu-xara-site/sitemap.xml
