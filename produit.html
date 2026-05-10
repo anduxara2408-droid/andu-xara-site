@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail produit - Andu-Xara</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        body { background:#f8f9fa; }
+        .container { max-width:1200px; margin:0 auto; padding:20px; }
+        .product-detail { display:grid; grid-template-columns:1fr 1fr; gap:40px; background:white; border-radius:20px; padding:30px; margin-top:20px; box-shadow:0 5px 20px rgba(0,0,0,0.05); }
+        .main-image img { width:100%; border-radius:10px; }
+        .thumbnails { display:flex; gap:10px; margin-top:15px; }
+        .thumbnails img { width:70px; cursor:pointer; border-radius:5px; opacity:0.6; transition:0.2s; }
+        .thumbnails img:hover, .thumbnails img.active { opacity:1; border:2px solid #e67e22; }
+        .product-info h1 { font-size:2rem; margin-bottom:10px; color:#333; }
+        .price { font-size:2rem; color:#e67e22; font-weight:800; margin:15px 0; }
+        .price small { font-size:0.9rem; color:#666; }
+        .description { color:#666; line-height:1.6; margin:20px 0; }
+        .size-selector { margin:20px 0; }
+        .size-selector h3 { margin-bottom:10px; }
+        .size-buttons { display:flex; gap:10px; flex-wrap:wrap; }
+        .size-btn { width:50px; padding:10px; border:2px solid #ddd; background:white; border-radius:8px; cursor:pointer; font-weight:600; transition:0.2s; }
+        .size-btn:hover { border-color:#e67e22; }
+        .size-btn.selected { border-color:#e67e22; background:#e67e22; color:white; }
+        .quantity { margin:20px 0; display:flex; align-items:center; gap:15px; }
+        .quantity label { font-weight:600; }
+        .quantity input { width:80px; padding:10px; border:1px solid #ddd; border-radius:8px; text-align:center; font-size:1rem; }
+        .add-to-cart { background:#e67e22; color:white; border:none; padding:15px 30px; border-radius:8px; font-size:1rem; font-weight:700; cursor:pointer; width:100%; transition:0.2s; margin-top:10px; }
+        .add-to-cart:hover { background:#d35400; }
+        .back-link { display:inline-block; margin:20px 0; color:#e67e22; text-decoration:none; font-weight:600; }
+        .notification { position:fixed; bottom:20px; right:20px; background:#27ae60; color:white; padding:12px 24px; border-radius:8px; display:none; z-index:1000; animation:fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @media (max-width:768px) { .product-detail { grid-template-columns:1fr; } }
+        .loader { text-align:center; padding:50px; font-size:1.2rem; color:#666; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="produits.html" class="back-link">← Retour aux produits</a>
+    <div id="product-container" class="loader">Chargement du produit...</div>
+</div>
+<div id="notification" class="notification">✓ Ajouté au panier</div>
+
+<script type="module">
+    // Importer le panier
+    import { addToCart } from './js/cart.js';
+    
+    // Catalogue des produits (identique à produits.js)
+    const produits = [
+        { id: 'azawad-bleu', nom: 'Azawad Bleu', description: 'Ensemble premium en coton peigné. Inspiration touareg, confort moderne. Idéal pour un look élégant au quotidien.', prix: 600, photos: ['images/produits/pull-bleu-01.jpg', 'images/produits/pull-bleu-02.jpg', 'images/produits/pull-bleu-03.jpg'], tailles: ['S','M','L','XL'] },
+        { id: 'sahel-beige', nom: 'Sahel Beige', description: 'Ensemble Sahel, élégance et confort. Inspiré des paysages du Sahel, une teinte naturelle et apaisante.', prix: 600, photos: ['images/produits/pull-beige-01.jpg', 'images/produits/pull-beige-02.jpg'], tailles: ['S','M','L','XL'] },
+        { id: 'tagant-gris', nom: 'Tagant Gris', description: 'Ensemble Tagant, inspiration désertique. Gris élégant, parfait pour toutes les occasions.', prix: 600, photos: ['images/produits/pull-gris-01.jpg', 'images/produits/pull-gris-02.jpg'], tailles: ['S','M','L','XL'] },
+        { id: 'tichitt-noir', nom: 'Tichitt Noir', description: 'Ensemble Tichitt, noir intemporel. Le classique revisité avec une touche africaine.', prix: 600, photos: ['images/produits/pull-noir-01.jpg', 'images/produits/pull-noir-02.jpg', 'images/produits/pull-noir-03.jpg'], tailles: ['S','M','L','XL'] }
+    ];
+    
+    // Récupérer l'ID du produit dans l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    
+    const product = produits.find(p => p.id === productId);
+    
+    if (!product) {
+        document.getElementById('product-container').innerHTML = '<div class="loader" style="color:#c0392b;">❌ Produit non trouvé</div>';
+    } else {
+        let selectedSize = product.tailles[0];
+        
+        function showNotification(msg) {
+            const notif = document.getElementById('notification');
+            notif.textContent = msg;
+            notif.style.display = 'block';
+            setTimeout(() => notif.style.display = 'none', 2500);
+        }
+        
+        function renderProduct() {
+            const thumbsHtml = product.photos.map((photo, i) => 
+                `<img src="${photo}" data-index="${i}" class="thumbnail ${i === 0 ? 'active' : ''}">`
+            ).join('');
+            
+            const sizesHtml = product.tailles.map(t => 
+                `<div class="size-btn ${t === selectedSize ? 'selected' : ''}" data-size="${t}">${t}</div>`
+            ).join('');
+            
+            document.getElementById('product-container').innerHTML = `
+                <div class="product-detail">
+                    <div class="product-images">
+                        <div class="main-image"><img id="main-image" src="${product.photos[0]}"></div>
+                        <div class="thumbnails" id="thumbnails">${thumbsHtml}</div>
+                    </div>
+                    <div class="product-info">
+                        <h1>${product.nom}</h1>
+                        <div class="price">${product.prix.toLocaleString()} FCFA <small>TVA incluse</small></div>
+                        <div class="description">${product.description}</div>
+                        <div class="size-selector">
+                            <h3>Taille</h3>
+                            <div class="size-buttons" id="size-buttons">${sizesHtml}</div>
+                        </div>
+                        <div class="quantity">
+                            <label>Quantité</label>
+                            <input type="number" id="quantity" value="1" min="1" max="10">
+                        </div>
+                        <button class="add-to-cart" id="add-to-cart-btn">🛒 Ajouter au panier</button>
+                    </div>
+                </div>
+            `;
+            
+            // Gestion des images
+            document.querySelectorAll('.thumbnail').forEach(img => {
+                img.onclick = () => {
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                    document.getElementById('main-image').src = img.src;
+                };
+            });
+            
+            // Gestion des tailles
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedSize = btn.dataset.size;
+                };
+            });
+            
+            // Ajout au panier
+            document.getElementById('add-to-cart-btn').onclick = async () => {
+                const quantity = parseInt(document.getElementById('quantity').value);
+                
+                // Vérifier si l'utilisateur est connecté
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showNotification('❌ Veuillez vous connecter d\'abord');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+                
+                const cartItem = {
+                    id: product.id,
+                    nom: product.nom,
+                    prix: product.prix,
+                    taille: selectedSize,
+                    quantite: quantity,
+                    image: product.photos[0]
+                };
+                
+                try {
+                    // Importer dynamiquement addToCart
+                    const { addToCart: addToCartFn } = await import('./js/cart.js');
+                    addToCartFn(cartItem, selectedSize, quantity);
+                    showNotification(`✓ ${product.nom} (${selectedSize}) ajouté au panier`);
+                } catch(err) {
+                    // Fallback si l'import échoue
+                    let cart = JSON.parse(localStorage.getItem('panier') || '[]');
+                    const existing = cart.find(i => i.id === product.id && i.taille === selectedSize);
+                    if (existing) existing.quantite += quantity;
+                    else cart.push(cartItem);
+                    localStorage.setItem('panier', JSON.stringify(cart));
+                    showNotification(`✓ ${product.nom} ajouté au panier`);
+                }
+            };
+        }
+        
+        renderProduct();
+    }
+</script>
+</body>
+</html>

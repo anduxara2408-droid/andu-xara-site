@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation commande - Andu-Xara</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        body { background:#f8f9fa; padding:20px; }
+        .container { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1.2fr; gap:30px; }
+        .cart-summary, .checkout-form { background:white; border-radius:20px; padding:25px; box-shadow:0 5px 20px rgba(0,0,0,0.05); }
+        h2 { color:#333; margin-bottom:20px; border-left:4px solid #e67e22; padding-left:15px; }
+        .cart-item { display:flex; gap:15px; padding:15px 0; border-bottom:1px solid #eee; }
+        .cart-item img { width:70px; height:70px; object-fit:cover; border-radius:10px; }
+        .cart-item-details { flex:1; }
+        .cart-item-title { font-weight:700; }
+        .cart-item-price { color:#e67e22; font-weight:600; }
+        .total { text-align:right; padding-top:20px; font-size:1.3rem; font-weight:800; border-top:2px solid #e67e22; margin-top:15px; }
+        .form-group { margin-bottom:20px; }
+        label { display:block; margin-bottom:8px; font-weight:600; color:#555; }
+        input, select, textarea { width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; font-size:1rem; }
+        input:focus { outline:none; border-color:#e67e22; }
+        .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .btn-submit { width:100%; padding:15px; background:#27ae60; color:white; border:none; border-radius:8px; font-size:1rem; font-weight:800; cursor:pointer; margin-top:10px; }
+        .btn-submit:hover { background:#219a52; }
+        .back-link { display:block; margin-bottom:20px; color:#e67e22; text-decoration:none; }
+        @media (max-width:768px) { .container { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="cart-summary">
+        <a href="panier.html" class="back-link">← Retour au panier</a>
+        <h2>Récapitulatif</h2>
+        <div id="cart-items"></div>
+        <div class="total" id="total"></div>
+    </div>
+    <div class="checkout-form">
+        <h2>Informations de livraison</h2>
+        <form id="checkout-form">
+            <div class="form-group">
+                <label>Nom complet</label>
+                <input type="text" id="fullname" required>
+            </div>
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input type="tel" id="phone" required placeholder="+221 77 123 45 67">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label>Adresse de livraison</label>
+                <textarea id="address" rows="3" required></textarea>
+            </div>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Ville</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                    <label>Mode de paiement</label>
+                    <select id="payment-method" required>
+                        <option value="wave">Wave (Mobile Money)</option>
+                        <option value="orange-money">Orange Money</option>
+                        <option value="free-money">Free Money</option>
+                        <option value="whatsapp">WhatsApp (Paiement à la livraison)</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">✅ Confirmer ma commande</button>
+        </form>
+    </div>
+</div>
+
+<script type="module">
+    import { loadCart, saveCart } from './js/cart.js';
+    
+    function loadCartFromStorage() { return JSON.parse(localStorage.getItem('panier')) || []; }
+    function displayCart() { /* Code d'affichage simplifié */ window.location.href = 'merci.html'; }
+    
+    document.getElementById('checkout-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const cart = loadCartFromStorage();
+        if (cart.length === 0) { alert('Votre panier est vide'); window.location.href = 'produits.html'; return; }
+        
+        const order = {
+            items: cart,
+            total: cart.reduce((sum, i) => sum + (i.prix * i.quantite), 0),
+            customer: {
+                fullname: document.getElementById('fullname').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value
+            },
+            paymentMethod: document.getElementById('payment-method').value,
+            date: new Date().toISOString(),
+            status: 'en_attente'
+        };
+        
+        try {
+            if (firebase.auth().currentUser) {
+                await db.collection('commandes').add(order);
+            }
+            localStorage.removeItem('panier');
+            alert('✅ Commande enregistrée !');
+            window.location.href = 'merci.html';
+        } catch(err) { alert('Erreur: ' + err.message); }
+    };
+</script>
+</body>
+</html>
