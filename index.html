@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Andu-Xara • Mode Afro-Urbaine</title>
     
-    <meta name="description" content="Andu-Xara - Marque de vêtements alliant culture africaine et style urbain">
+    <meta name="description" content="Andu-Xara - Marque de vêtements alliant culture africaine et style urbain. Ensembles Azawad, Sahel, Tagant et Tichitt en coton peigné.">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8436772283536190" crossorigin="anonymous"></script>   
- 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8436772283536190" crossorigin="anonymous"></script>
+    
+    <!-- Meta pour Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -93,7 +98,7 @@
             justify-content: center;
         }
         
-        /* MENU MOBILE - Version ultra simple */
+        /* MENU MOBILE */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -213,7 +218,7 @@
         .hero-video {
             position: relative;
             margin: 20px 0;
-            height: 600px;
+            height: 500px;
             overflow: hidden;
             border-radius: 10px;
         }
@@ -330,42 +335,6 @@
             transform: scale(1.3);
         }
         
-        /* HERO SECTION */
-        .hero {
-            background: #1a1a1a;
-            color: white;
-            padding: 60px 0;
-        }
-        .hero-content { max-width: 600px; }
-        .hero-tag {
-            background: #e67e22;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            margin-bottom: 20px;
-        }
-        .hero-title {
-            font-size: clamp(2rem, 6vw, 3rem);
-            margin-bottom: 20px;
-        }
-        .hero-title span { color: #e67e22; }
-        .hero-text {
-            color: #ccc;
-            margin-bottom: 30px;
-            line-height: 1.8;
-        }
-        .hero-stats {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .stat-number {
-            font-size: clamp(1.5rem, 4vw, 1.8rem);
-            font-weight: 700;
-            color: #e67e22;
-        }
-        
         /* PRODUITS */
         .featured-products { padding: 60px 0; }
         .section-header { text-align: center; margin-bottom: 40px; }
@@ -430,6 +399,50 @@
             color: white;
         }
         .section-action { text-align: center; }
+        
+        /* BLOG */
+        .blog-preview { padding: 60px 0; background: white; }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .blog-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            display: block;
+        }
+        .blog-card:hover { transform: translateY(-5px); }
+        .blog-card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        .blog-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .blog-card-content { padding: 15px; }
+        .blog-card-date {
+            font-size: 0.8rem;
+            color: #e67e22;
+            margin-bottom: 8px;
+        }
+        .blog-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .blog-card-excerpt {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
         
         /* VALEURS */
         .values-section {
@@ -503,11 +516,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: blur(2px);
-            transition: filter 0.3s;
+            transition: transform 0.3s;
         }
         .story-image:hover img {
-            filter: blur(0);
+            transform: scale(1.05);
         }
         .read-more {
             color: #e67e22;
@@ -515,31 +527,6 @@
             text-decoration: none;
             display: inline-block;
             margin: 10px 0;
-        }
-        
-        /* BOUTON RETOUR */
-        .back-button {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #e67e22;
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transition: all 0.3s;
-            border: 2px solid white;
-        }
-        .back-button:hover {
-            background: #d35400;
-            transform: scale(1.1) translateY(-5px);
         }
         
         /* PANIER */
@@ -647,33 +634,29 @@
         }
         .cart-overlay.active { display: block; }
         
-        /* FOOTER */
-        .footer {
-            background: #2c3e50;
+        /* BOUTON RETOUR */
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #e67e22;
             color: white;
-            padding: 60px 0 30px;
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        .footer-col h4 {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        .footer-col a {
-            color: #ccc;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             text-decoration: none;
-            transition: color 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+            border: 2px solid white;
         }
-        .footer-col a:hover { color: #e67e22; }
-        .footer-bottom {
-            border-top: 1px solid #4a5568;
-            padding-top: 20px;
-            text-align: center;
-            color: #ccc;
+        .back-button:hover {
+            background: #d35400;
+            transform: scale(1.1) translateY(-5px);
         }
         
         /* MODALS */
@@ -732,6 +715,37 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
+        /* FOOTER */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
+        .footer-bottom {
+            border-top: 1px solid #4a5568;
+            padding-top: 20px;
+            text-align: center;
+            color: #ccc;
+        }
+        
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .products-grid { grid-template-columns: repeat(2, 1fr); }
@@ -745,24 +759,12 @@
             .nav-menu {
                 display: none;
             }
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            .values-grid {
-                grid-template-columns: 1fr;
-            }
-            .story-content {
-                grid-template-columns: 1fr;
-            }
-            .story-image {
-                height: 250px;
-            }
-            .hero-video {
-                height: 300px;
-            }
-            .hero-animation {
-                height: 300px;
-            }
+            .hero-video { height: 300px; }
+            .hero-animation { height: 300px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .story-content { grid-template-columns: 1fr; }
+            .story-image { height: 250px; }
             .philosophy-text {
                 flex-direction: column;
                 align-items: center;
@@ -778,10 +780,6 @@
         }
         
         @media (max-width: 480px) {
-            .hero-stats {
-                flex-direction: column;
-                gap: 15px;
-            }
             .btn {
                 padding: 6px 12px;
                 font-size: 0.8rem;
@@ -794,7 +792,7 @@
 </head>
 <body>
 
-    <!-- MENU MOBILE - Version ultra simple -->
+    <!-- MENU MOBILE -->
     <div class="mobile-menu" id="mobileMenu">
         <button class="close-btn" onclick="closeMenu()">&times;</button>
         <a href="index.html" onclick="closeMenu()">🏠 Accueil</a>
@@ -821,8 +819,8 @@
                 <span id="cartTotal">0 MRU</span>
             </div>
             <div class="cart-buttons">
-                <button class="cart-btn cart-btn-primary" onclick="checkout()">Passer la commande</button>
-                <button class="cart-btn cart-btn-outline" onclick="closeCart()">Continuer</button>
+                <button class="cart-btn cart-btn-primary" onclick="checkout()">📱 Commander via WhatsApp</button>
+                <button class="cart-btn cart-btn-outline" onclick="closeCart()">Continuer mes achats</button>
             </div>
         </div>
     </div>
@@ -864,7 +862,7 @@
                     </div>
                     <div id="userView" style="display:none">
                         <span id="userName"></span>
-                        <button onclick="logout()">Déconnexion</button>
+                        <button class="btn btn-outline" onclick="logout()" style="margin-left:10px;">Déconnexion</button>
                     </div>
                     <a href="javascript:void(0)" class="cart-icon" onclick="openCart()">
                         🛒<span class="cart-count" id="cartCount">0</span>
@@ -957,22 +955,6 @@
         </div>
     </section>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-tag">Depuis 2020</div>
-                <h1 class="hero-title">L'Afrique <span>réinventée</span></h1>
-                <p class="hero-text">Andu-Xara célèbre la richesse de la culture africaine à travers des créations modernes et authentiques.</p>
-                <div class="hero-stats">
-                    <div class="stat"><div class="stat-number">100+</div><div>clients</div></div>
-                    <div class="stat"><div class="stat-number">6</div><div>Créations</div></div>
-                    <div class="stat"><div class="stat-number">2020</div><div>Année zéro</div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- APERÇU COLLECTION -->
     <section class="featured-products" id="collection">
         <div class="container">
@@ -996,9 +978,7 @@
                 <h2 class="section-title">Derniers <span>articles</span></h2>
                 <p>Actualités, conseils et inspirations</p>
             </div>
-            <div class="blog-grid" id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                <!-- Les articles seront chargés ici -->
-            </div>
+            <div class="blog-grid" id="blog-container"></div>
             <div class="section-action">
                 <a href="blog.html" class="btn-secondary">Voir tous les articles →</a>
             </div>
@@ -1056,80 +1036,49 @@
         </div>
     </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>Andu-Xara</h4>
-                <p>Mode afro-urbaine depuis 2020</p>
-                <p>Vêtements culturels authentiques</p>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Andu-Xara</h4>
+                    <p>Mode afro-urbaine depuis 2020</p>
+                    <p>Vêtements culturels authentiques</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Collection</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="histoire.html">Histoire</a></li>
+                        <li><a href="billetterie.html">Concerts</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="compte.html">Mon compte</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Informations légales</h4>
+                    <ul>
+                        <li><a href="mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+                        <li><a href="cgv.html">Conditions générales</a></li>
+                        <li><a href="faq-complete.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                        <li>Nouakchott, Mauritanie</li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>Liens</h4>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="produits.html">Collection</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="histoire.html">Histoire</a></li>
-                    <li><a href="billetterie.html">Concerts</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="compte.html">Mon compte</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Informations légales</h4>
-                <ul>
-                    <li><a href="mentions-legales.html">Mentions légales</a></li>
-                    <li><a href="confidentialite.html">Politique de confidentialité</a></li>
-                    <li><a href="cgv.html">Conditions générales</a></li>
-                    <li><a href="faq-complete.html">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <ul>
-                    <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
-                    <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
-                    <li>Nouakchott, Mauritanie</li>
-                </ul>
+            <div class="footer-bottom">
+                <p>© 2026 Andu-Xara - Tous droits réservés</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 Andu-Xara - Tous droits réservés</p>
-        </div>
-    </div>
-
-<!-- LIEN ADMIN CACHÉ (appuyer 5 fois sur le logo) -->
-<div style="display: none;" id="adminSecretZone"></div>
-<script>
-// Double-clic sur le logo pour admin
-let adminClickCount = 0;
-let adminTimer = null;
-
-document.addEventListener("DOMContentLoaded", function() {
-    const logo = document.querySelector('.logo');
-    if (logo) {
-        logo.style.cursor = "pointer";
-        logo.addEventListener("click", function(e) {
-            e.preventDefault();
-            adminClickCount++;
-            clearTimeout(adminTimer);
-            adminTimer = setTimeout(() => { adminClickCount = 0; }, 1000);
-            if (adminClickCount >= 5) {
-                adminClickCount = 0;
-                const code = prompt("🔐 Code administrateur :");
-                if (code === "ANDU2026") {
-                    localStorage.setItem("adminAuth", "true");
-                    window.location.href = "admin/dashboard.html";
-                } else if (code !== null) {
-                    alert("❌ Code incorrect");
-                }
-            }
-        });
-    }
-});
-</script>
     </footer>
 
     <!-- BOUTON RETOUR -->
@@ -1164,36 +1113,19 @@ document.addEventListener("DOMContentLoaded", function() {
                     <input type="email" id="regEmail" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="regPassword" placeholder="Mot de passe" required>
+                    <input type="password" id="regPassword" placeholder="Mot de passe (min. 6 caractères)" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="regConfirm" placeholder="Confirmer" required>
+                    <input type="password" id="regConfirm" placeholder="Confirmer le mot de passe" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
             </form>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
+    <!-- SCRIPT PRINCIPAL -->
     <script>
-        // FONCTIONS MENU MOBILE - Les plus simples possibles
-        function openMenu() {
-            document.getElementById('mobileMenu').classList.add('show');
-            document.getElementById('mobileMenuOverlay').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeMenu() {
-            document.getElementById('mobileMenu').classList.remove('show');
-            document.getElementById('mobileMenuOverlay').classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Firebase Config
+        // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyC-OHtqpgOZI9AIb_WotYbiUS2L-Ac5vII",
             authDomain: "andu-xara-promo-codes-ff69e.firebaseapp.com",
@@ -1202,35 +1134,39 @@ document.addEventListener("DOMContentLoaded", function() {
             messagingSenderId: "653516716143",
             appId: "1:653516716143:web:08ee1425191b4a1766359a"
         };
-        firebase.initializeApp(firebaseConfig);
+        
+        // Initialiser Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Produits
+        // ==================== PRODUITS (sans Babs Premium ni Ouadane Noir) ====================
         const featuredProducts = [
-            { id: 'azawad-bleu', nom: 'Azawad Bleu', prix: 600, image: 'images/produits/pull-bleu-01.jpg' },
-            { id: 'sahel-beige', nom: 'Sahel Beige', prix: 600, image: 'images/produits/pull-beige-01.jpg' },
-            { id: 'tagant-gris', nom: 'Tagant Gris', prix: 600, image: 'images/produits/pull-gris-01.jpg' },
-            { id: 'tichitt-noir', nom: 'Tichitt Noir', prix: 600, image: 'images/produits/pull-noir-01.jpg' },
-            { id: 'ouadane-noir', nom: 'Ouadane Noir', prix: 400, image: 'images/produits/tshirt-noir-01.png' },
-            { id: 'babs-premium', nom: 'Babs Premium', prix: 1049, image: 'images/produits/babs.jpg' }
+            { id: 'azawad-bleu', nom: 'Azawad Bleu', prix: 600, image: 'images/produits/pull-bleu-01.jpg', description: 'Ensemble premium en coton peigné' },
+            { id: 'sahel-beige', nom: 'Sahel Beige', prix: 600, image: 'images/produits/pull-beige-01.jpg', description: 'Ensemble Sahel, élégance et confort' },
+            { id: 'tagant-gris', nom: 'Tagant Gris', prix: 600, image: 'images/produits/pull-gris-01.jpg', description: 'Ensemble Tagant, inspiration désertique' },
+            { id: 'tichitt-noir', nom: 'Tichitt Noir', prix: 600, image: 'images/produits/pull-noir-01.jpg', description: 'Ensemble Tichitt, noir intemporel' }
         ];
 
+        // Afficher les produits en page d'accueil
         function displayFeaturedProducts() {
             const container = document.getElementById('products-container');
             if (!container) return;
-            container.innerHTML = featuredProducts.map(p => `
-                <a href="produits.html" class="product-card">
-                    <img src="${p.image}" alt="${p.nom}" class="product-image" loading="lazy">
+            
+            container.innerHTML = featuredProducts.map(product => `
+                <a href="produit.html?id=${product.id}" class="product-card">
+                    <img src="${product.image}" alt="${product.nom}" class="product-image" loading="lazy" onerror="this.src='images/logo.png'">
                     <div class="product-info">
-                        <h3 class="product-title">${p.nom}</h3>
-                        <div class="product-price">${p.prix} MRU</div>
+                        <h3 class="product-title">${product.nom}</h3>
+                        <div class="product-price">${product.prix.toLocaleString()} MRU</div>
                     </div>
                 </a>
             `).join('');
         }
 
-        // Blog - Récupération des articles depuis Firestore
+        // ==================== BLOG ====================
         async function loadBlogPosts() {
             const container = document.getElementById('blog-container');
             if (!container) return;
@@ -1240,16 +1176,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (!snapshot.empty) {
                     container.innerHTML = snapshot.docs.map(doc => {
                         const post = doc.data();
-                        const date = post.date?.toDate ? post.date.toDate().toLocaleDateString() : 'Date inconnue';
+                        const date = post.date?.toDate ? post.date.toDate().toLocaleDateString('fr-FR') : 'Date inconnue';
                         return `
-                            <a href="blog-post.html?id=${doc.id}" class="blog-card" style="background: white; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: transform 0.3s; display: block;">
-                                <div style="height: 200px; overflow: hidden;">
-                                    <img src="${post.image || 'images/logo.png'}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <a href="blog-post.html?id=${doc.id}" class="blog-card">
+                                <div class="blog-card-image">
+                                    <img src="${post.image || 'images/logo.png'}" alt="${post.title}" loading="lazy" onerror="this.src='images/logo.png'">
                                 </div>
-                                <div style="padding: 15px;">
-                                    <div style="font-size: 0.8rem; color: #e67e22; margin-bottom: 8px;">${date}</div>
-                                    <h3 style="font-size: 1.1rem; margin-bottom: 10px;">${post.title}</h3>
-                                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">${post.excerpt || post.content?.substring(0, 100) + '...'}</p>
+                                <div class="blog-card-content">
+                                    <div class="blog-card-date">📅 ${date}</div>
+                                    <h3 class="blog-card-title">${post.title}</h3>
+                                    <p class="blog-card-excerpt">${post.excerpt || (post.content ? post.content.substring(0, 100) + '...' : 'Lire la suite')}</p>
                                 </div>
                             </a>
                         `;
@@ -1257,7 +1193,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     container.innerHTML = `
                         <div style="text-align: center; padding: 40px; background: white; border-radius: 10px;">
-                            <p>Aucun article pour le moment</p>
+                            <p>📝 Aucun article pour le moment</p>
                             <p style="font-size: 0.8rem; color: #999;">Revenez bientôt pour découvrir nos actualités</p>
                         </div>
                     `;
@@ -1266,101 +1202,145 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Erreur chargement blog:', error);
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; background: white; border-radius: 10px;">
-                        <p>Blog en construction</p>
+                        <p>📝 Blog en construction</p>
+                        <p style="font-size: 0.8rem; color: #999;">Bientôt des articles sur la mode et la culture</p>
                     </div>
                 `;
             }
         }
 
-        // Panier
+        // ==================== PANIER ====================
         let panier = JSON.parse(localStorage.getItem('panier')) || [];
 
-        window.openCart = function() {
-            document.getElementById('cartPanel').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('active');
-            displayCart();
-        };
-        window.closeCart = function() {
-            document.getElementById('cartPanel').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('active');
-        };
+        function updateCartCount() {
+            const count = panier.reduce((sum, item) => sum + item.quantite, 0);
+            const cartCountElem = document.getElementById('cartCount');
+            if (cartCountElem) cartCountElem.textContent = count;
+        }
+
+        function saveCart() {
+            localStorage.setItem('panier', JSON.stringify(panier));
+            updateCartCount();
+        }
+
         function displayCart() {
             const container = document.getElementById('cartItems');
             const totalSpan = document.getElementById('cartTotal');
+            if (!container) return;
+            
             if (panier.length === 0) {
-                container.innerHTML = '<p style="text-align:center">Panier vide</p>';
-                totalSpan.textContent = '0 MRU';
+                container.innerHTML = '<p style="text-align:center; padding:20px;">🛒 Votre panier est vide</p>';
+                if (totalSpan) totalSpan.textContent = '0 MRU';
                 return;
             }
+            
             let total = 0;
-            container.innerHTML = panier.map((item, i) => {
+            container.innerHTML = panier.map((item, index) => {
                 total += item.prix * item.quantite;
                 return `
                     <div class="cart-item">
-                        <img src="${item.image}" alt="${item.nom}">
+                        <img src="${item.image}" alt="${item.nom}" onerror="this.src='images/logo.png'">
                         <div class="cart-item-info">
                             <div class="cart-item-title">${item.nom}</div>
-                            <div class="cart-item-size">Taille: ${item.taille || 'M'}</div>
-                            <div class="cart-item-price">${item.prix} MRU</div>
+                            <div class="cart-item-size">Taille: ${item.taille || 'M/L'}</div>
+                            <div class="cart-item-price">${item.prix.toLocaleString()} MRU</div>
                         </div>
                         <div class="cart-item-actions">
-                            <input type="number" class="cart-item-quantity" value="${item.quantite}" min="1" onchange="updateQty(${i}, this.value)">
-                            <span class="remove-item" onclick="removeItem(${i})">&times;</span>
+                            <input type="number" class="cart-item-quantity" value="${item.quantite}" min="1" max="10" onchange="updateQuantity(${index}, this.value)">
+                            <span class="remove-item" onclick="removeFromCart(${index})">&times;</span>
                         </div>
                     </div>
                 `;
             }).join('');
-            totalSpan.textContent = total + ' MRU';
+            
+            if (totalSpan) totalSpan.textContent = total.toLocaleString() + ' MRU';
         }
-        window.updateQty = function(i, q) {
-            panier[i].quantite = parseInt(q);
-            localStorage.setItem('panier', JSON.stringify(panier));
-            displayCart();
-            updateCartCount();
+
+        window.updateQuantity = function(index, qty) {
+            qty = parseInt(qty);
+            if (qty > 0 && qty <= 10) {
+                panier[index].quantite = qty;
+                saveCart();
+                displayCart();
+            }
         };
-        window.removeItem = function(i) {
-            panier.splice(i, 1);
-            localStorage.setItem('panier', JSON.stringify(panier));
+
+        window.removeFromCart = function(index) {
+            panier.splice(index, 1);
+            saveCart();
             displayCart();
-            updateCartCount();
         };
-        function updateCartCount() {
-            const count = panier.reduce((s, i) => s + i.quantite, 0);
-            document.getElementById('cartCount').textContent = count;
-        }
+
+        window.openCart = function() {
+            displayCart();
+            document.getElementById('cartPanel').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('active');
+        };
+
+        window.closeCart = function() {
+            document.getElementById('cartPanel').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('active');
+        };
 
         window.checkout = function() {
-            if (panier.length === 0) return alert('Panier vide');
-            const total = panier.reduce((s, i) => s + i.prix * i.quantite, 0);
-            const msg = panier.map(i => `• ${i.nom} x${i.quantite} - ${i.prix*i.quantite} MRU`).join('\n') + `\nTotal: ${total} MRU`;
-            window.open(`https://wa.me/22234196304?text=${encodeURIComponent(msg)}`, '_blank');
+            if (panier.length === 0) {
+                alert('🛒 Votre panier est vide');
+                return;
+            }
+            
+            const total = panier.reduce((sum, item) => sum + (item.prix * item.quantite), 0);
+            let message = "🛍️ *Nouvelle commande Andu-Xara*%0A%0A";
+            message += "*Mes articles :*%0A";
+            panier.forEach(item => {
+                message += `• ${item.nom} x${item.quantite} = ${(item.prix * item.quantite).toLocaleString()} MRU%0A`;
+            });
+            message += `%0A📦 *Total : ${total.toLocaleString()} MRU*%0A%0A`;
+            message += "📝 *Informations livraison :*%0A";
+            message += "Nom : %0A";
+            message += "Téléphone : %0A";
+            message += "Adresse : %0A%0A";
+            message += "Merci de confirmer ma commande ! 🙏";
+            
+            window.open(`https://wa.me/22234196304?text=${message}`, '_blank');
         };
 
-        // Animation
+        // ==================== ANIMATION SLIDES ====================
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const indicators = document.querySelectorAll('.animation-indicators span');
-        function showSlide(i) {
+        
+        function showSlide(index) {
+            if (!slides.length) return;
             slides.forEach(s => s.classList.remove('active'));
             indicators.forEach(d => d.classList.remove('active'));
-            slides[i].classList.add('active');
-            indicators[i].classList.add('active');
-            currentSlide = i;
+            slides[index].classList.add('active');
+            if (indicators[index]) indicators[index].classList.add('active');
+            currentSlide = index;
         }
-        setInterval(() => showSlide((currentSlide + 1) % slides.length), 3000);
-        if (indicators.length) {
-            indicators.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+        
+        if (slides.length) {
+            setInterval(() => {
+                showSlide((currentSlide + 1) % slides.length);
+            }, 4000);
+            
+            if (indicators.length) {
+                indicators.forEach((dot, i) => {
+                    dot.addEventListener('click', () => showSlide(i));
+                });
+            }
         }
 
-        function showNotification(message) {
+        // ==================== NOTIFICATION ====================
+        function showNotification(message, isError = false) {
             const notif = document.createElement('div');
             notif.className = 'notification';
+            notif.style.background = isError ? '#e74c3c' : '#27ae60';
             notif.textContent = message;
             document.body.appendChild(notif);
             setTimeout(() => notif.remove(), 3000);
         }
 
-        // Auth
+        // ==================== AUTHENTIFICATION ====================
         function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function hideLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
         function showRegisterModal() { document.getElementById('registerModal').style.display = 'flex'; }
@@ -1369,50 +1349,133 @@ document.addEventListener("DOMContentLoaded", function() {
         window.handleLogin = async (e) => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
-            const pwd = document.getElementById('loginPassword').value;
+            const password = document.getElementById('loginPassword').value;
+            
             try {
-                await auth.signInWithEmailAndPassword(email, pwd);
+                await auth.signInWithEmailAndPassword(email, password);
                 hideLoginModal();
-                showNotification('✅ Connexion réussie');
-            } catch (error) { alert(error.message); }
+                showNotification('✅ Connexion réussie !');
+            } catch (error) {
+                let msg = 'Erreur de connexion';
+                if (error.code === 'auth/user-not-found') msg = '❌ Email non trouvé';
+                if (error.code === 'auth/wrong-password') msg = '❌ Mot de passe incorrect';
+                if (error.code === 'auth/invalid-email') msg = '❌ Email invalide';
+                showNotification(msg, true);
+            }
         };
 
         window.handleRegister = async (e) => {
             e.preventDefault();
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
-            const pwd = document.getElementById('regPassword').value;
-            const conf = document.getElementById('regConfirm').value;
-            if (pwd !== conf) return alert('Mots de passe différents');
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+            
+            if (password !== confirm) {
+                showNotification('❌ Les mots de passe ne correspondent pas', true);
+                return;
+            }
+            if (password.length < 6) {
+                showNotification('❌ Le mot de passe doit faire au moins 6 caractères', true);
+                return;
+            }
+            
             try {
-                const res = await auth.createUserWithEmailAndPassword(email, pwd);
-                await db.collection('users').doc(res.user.uid).set({ displayName: name, email, createdAt: new Date() });
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    displayName: name,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
                 hideRegisterModal();
-                showNotification('✅ Compte créé !');
-            } catch (error) { alert(error.message); }
+                showNotification('✅ Inscription réussie ! Bienvenue chez Andu-Xara');
+            } catch (error) {
+                let msg = 'Erreur d\'inscription';
+                if (error.code === 'auth/email-already-in-use') msg = '❌ Cet email est déjà utilisé';
+                if (error.code === 'auth/invalid-email') msg = '❌ Email invalide';
+                showNotification(msg, true);
+            }
         };
 
         window.logout = async () => {
             await auth.signOut();
-            localStorage.removeItem('panier');
-            location.reload();
+            panier = [];
+            saveCart();
+            showNotification('🔓 Déconnexion réussie');
+            setTimeout(() => location.reload(), 1000);
         };
 
-        auth.onAuthStateChanged(user => {
-            const guest = document.getElementById('guestView');
+        // ==================== MENU MOBILE ====================
+        window.openMenu = function() {
+            document.getElementById('mobileMenu').classList.add('show');
+            document.getElementById('mobileMenuOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
+        
+        window.closeMenu = function() {
+            document.getElementById('mobileMenu').classList.remove('show');
+            document.getElementById('mobileMenuOverlay').classList.remove('show');
+            document.body.style.overflow = '';
+        };
+
+        // ==================== ÉTAT AUTH ====================
+        auth.onAuthStateChanged((user) => {
+            const guestView = document.getElementById('guestView');
             const userView = document.getElementById('userView');
-            if (guest && userView) {
-                guest.style.display = user ? 'none' : 'flex';
-                userView.style.display = user ? 'block' : 'none';
-                if (user) document.getElementById('userName').textContent = user.email.split('@')[0];
+            const userNameSpan = document.getElementById('userName');
+            
+            if (guestView && userView) {
+                if (user) {
+                    guestView.style.display = 'none';
+                    userView.style.display = 'block';
+                    if (userNameSpan) {
+                        userNameSpan.textContent = user.email ? user.email.split('@')[0] : 'Client';
+                    }
+                } else {
+                    guestView.style.display = 'flex';
+                    userView.style.display = 'none';
+                }
             }
         });
 
-        // INIT
+        // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             displayFeaturedProducts();
             loadBlogPosts();
             updateCartCount();
+            
+            // Fermer modals en cliquant en dehors
+            window.onclick = (event) => {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            };
+        });
+
+        // Admin secret (5 clics sur le logo)
+        let adminClickCount = 0;
+        let adminTimer = null;
+        document.addEventListener("DOMContentLoaded", function() {
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.style.cursor = "pointer";
+                logo.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    adminClickCount++;
+                    clearTimeout(adminTimer);
+                    adminTimer = setTimeout(() => { adminClickCount = 0; }, 1000);
+                    if (adminClickCount >= 5) {
+                        adminClickCount = 0;
+                        const code = prompt("🔐 Code administrateur :");
+                        if (code === "ANDU2026") {
+                            localStorage.setItem("adminAuth", "true");
+                            window.location.href = "admin/dashboard.html";
+                        } else if (code !== null) {
+                            alert("❌ Code incorrect");
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
