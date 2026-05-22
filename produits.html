@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Toute la collection - Andu-Xara</title>
+    <title>Collection Andu-Xara • Ensembles et T-shirts Afro-Urbains</title>
+    <meta name="description" content="Découvrez la collection complète Andu-Xara : ensembles Azawad, Sahel, Tagant, Tichitt et t-shirts en coton peigné. Mode afro-urbaine de qualité.">
+    <meta name="keywords" content="vêtements africains, mode urbaine, ensemble africain, t-shirt africain, Andu-Xara">
+    <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -513,6 +516,24 @@
             width: 100%;
         }
         
+        /* ===== SEO SECTION ===== */
+        .seo-collection-text {
+            padding: 60px 0;
+            background: #f8f9fa;
+            margin-top: 40px;
+        }
+        .seo-collection-text .rich-text {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            color: #555;
+            line-height: 1.8;
+        }
+        .seo-collection-text h2 {
+            color: #e67e22;
+            margin-bottom: 20px;
+        }
+        
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .products-grid { grid-template-columns: 1fr; }
@@ -553,9 +574,12 @@
             <div class="header-content">
                 <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link nav-link-highlight">Collection</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
                     <a href="histoire.html" class="nav-link">Histoire</a>
                     <a href="billetterie.html" class="nav-link">Concerts</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
                 <div class="user-area" id="userArea">
                     <div id="guestView">
@@ -608,6 +632,21 @@
         </div>
     </div>
 
+    <!-- SECTION SEO ENRICHIE (corrigée selon vos instructions) -->
+    <div class="seo-collection-text">
+        <div class="container">
+            <div class="rich-text">
+                <h2>🌍 Des vêtements qui racontent l’Afrique et la Mauritanie</h2>
+                <p>Chaque pièce de la collection Andu-Xara est inspirée des paysages et des traditions de la Mauritanie et de l’Afrique. Les noms <strong>Azawad, Sahel, Tagant, Tichitt</strong> évoquent des régions chargées d’histoire. Nos ensembles sont confectionnés dans un coton peigné respirant, idéal pour les climats africains. Les coupes sont modernes, les finitions soignées.</p>
+                <p>Nous confectionnons des vêtements personnalisés qui reflètent notre culture : chaque pièce est unique et peut être adaptée selon vos envies (broderies, motifs, coupes). Que ce soit pour un événement familial, une cérémonie ou le quotidien, Andu-Xara vous propose une mode authentique et sur mesure.</p>
+                <p>Choisir Andu-Xara, c’est soutenir une marque locale engagée dans une mode durable, éthique et respectueuse des savoir-faire artisanaux. Tous nos produits sont fabriqués localement, dans le respect des traditions.</p>
+                <p>📏 <strong>Guide des tailles :</strong> Nos vêtements taillent normalement. Si vous hésitez, contactez-nous directement pour des conseils personnalisés.</p>
+                <p>✨ <strong>Paiement sécurisé :</strong> Bankily, Wave, ou paiement à la livraison.</p>
+                <p>📞 <strong>Contact :</strong> Mauritanie <a href="tel:+22234196304">+222 34 19 63 04</a> | Sénégal <a href="tel:+221762821163">+221 76 28 21 163</a> (WhatsApp également).</p>
+            </div>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
@@ -620,6 +659,7 @@
                     <h4>Liens</h4>
                     <ul>
                         <li><a href="index.html">Accueil</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                         <li><a href="compte.html">Mon compte</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
@@ -627,13 +667,14 @@
                 <div class="footer-col">
                     <h4>Contact</h4>
                     <ul>
-                        <li><a href="mailto:contact@andu-xara.store">Email</a></li>
+                        <li><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></li>
                         <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                        <li><a href="tel:+221762821163">+221 76 28 21 163</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Andu-Xara</p>
+                <p>© 2026 Andu-Xara - Tous droits réservés | Site édité par Andu-Xara SARL</p>
             </div>
         </div>
     </footer>
@@ -666,7 +707,7 @@
                     <input type="email" id="regEmail" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="regPassword" placeholder="Mot de passe" required>
+                    <input type="password" id="regPassword" placeholder="Mot de passe (min. 6 caractères)" required>
                 </div>
                 <div class="form-group">
                     <input type="password" id="regConfirm" placeholder="Confirmer" required>
@@ -676,24 +717,22 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase.js"></script>
     <script src="js/auth.js"></script>
-    <!-- SCRIPT DE PAIEMENT EXTERNE -->
     <script src="js/modules/payment.js"></script>
     
     <script>
-        // ===== PRODUITS =====
+        // ===== PRODUITS (descriptions enrichies, inchangées) =====
         const PRODUCTS = [
             // === ENSEMBLES ===
             {
                 id: 'azawad-bleu',
                 nom: 'Azawad Bleu',
                 nomComplet: 'Ensemble Azawad',
-                description: 'Ensemble premium en coton peigné, coupe moderne et décontractée.',
+                description: 'Ensemble premium en coton peigné, coupe moderne et décontractée. Le bleu azur évoque les cieux du nord mauritanien.',
                 prix: 600,
                 categorie: 'ensembles',
                 photos: ['images/produits/pull-bleu-01.jpg', 'images/produits/pull-bleu-02.jpg', 'images/produits/pull-bleu-03.jpg'],
@@ -703,7 +742,7 @@
                 id: 'sahel-beige',
                 nom: 'Sahel Beige',
                 nomComplet: 'Ensemble Sahel',
-                description: 'Ensemble Sahel, élégance et confort.',
+                description: 'Inspiré par les dunes du Sahel, ce beige chaud apporte élégance et confort au quotidien. Parfait pour les journées ensoleillées.',
                 prix: 600,
                 categorie: 'ensembles',
                 photos: ['images/produits/pull-beige-01.jpg', 'images/produits/pull-beige-02.jpg'],
@@ -713,7 +752,7 @@
                 id: 'tagant-gris',
                 nom: 'Tagant Gris',
                 nomComplet: 'Ensemble Tagant',
-                description: 'Ensemble Tagant, inspiration désertique.',
+                description: 'Le gris Tagant, sobre et raffiné, s’inspire des plateaux rocheux de la région. Tissu doux et résistant.',
                 prix: 600,
                 categorie: 'ensembles',
                 photos: ['images/produits/pull-gris-01.jpg', 'images/produits/pull-gris-02.jpg'],
@@ -723,7 +762,7 @@
                 id: 'tichitt-noir',
                 nom: 'Tichitt Noir',
                 nomComplet: 'Ensemble Tichitt',
-                description: 'Ensemble Tichitt, noir intemporel.',
+                description: 'Le noir absolu, symbole d’élégance. Cet ensemble polyvalent convient aussi bien aux soirées qu’aux réunions professionnelles.',
                 prix: 600,
                 categorie: 'ensembles',
                 photos: ['images/produits/pull-noir-01.jpg', 'images/produits/pull-noir-02.jpg'],
@@ -734,7 +773,7 @@
                 id: 'ouadane-noir',
                 nom: 'Ouadane Noir',
                 nomComplet: 'T-shirt Ouadane Noir',
-                description: 'T-shirt noir avec superposition de tissu africain culturel.',
+                description: 'T-shirt noir en coton bio avec superposition de tissu africain culturel. Idéal pour un look urbain et original.',
                 prix: 400,
                 categorie: 'tshirts',
                 photos: ['images/second/Ouadane-Noir-3.jpeg', 'images/second/Ouadane-Noir-2.jpeg'],
@@ -744,7 +783,7 @@
                 id: 'beige-tshirt',
                 nom: 'Beige Tissu',
                 nomComplet: 'T-shirt Beige',
-                description: 'T-shirt beige avec superposition de tissu africain.',
+                description: 'T-shirt beige aux reflets naturels, agrémenté d’une superposition de tissu africain pour une touche authentique.',
                 prix: 400,
                 categorie: 'tshirts',
                 photos: ['images/second/beige-tshirt.jpeg', 'images/second/beige-tshirt.jpeg'],
@@ -754,7 +793,7 @@
                 id: 'tichitt-blanc',
                 nom: 'Tichitt Blanc',
                 nomComplet: 'T-shirt Tichitt Blanc',
-                description: 'T-shirt blanc avec superposition de tissu africain.',
+                description: 'T-shirt blanc frais et lumineux, rehaussé d’un motif tissé traditionnel. Parfait pour les journées chaudes.',
                 prix: 400,
                 categorie: 'tshirts',
                 photos: ['images/second/Tichitt-blanc.jpeg'],
@@ -765,7 +804,7 @@
                 id: 'tichitt-noir-enfant',
                 nom: 'Tichitt blanc Enfant',
                 nomComplet: 'T-shirt Enfant Tichitt blanc',
-                description: 'T-shirt blanc pour enfant, confortable et stylé.',
+                description: 'T-shirt blanc pour enfant, en coton doux, avec détails africains. Résistant et facile à laver.',
                 prix: 250,
                 categorie: 'enfants',
                 photos: ['images/second/Tichitt-Noir-enfant-.jpeg'],
@@ -991,9 +1030,7 @@
                 return;
             }
             
-            // Vérifier que le module de paiement est chargé
             if (typeof window.processFloatingCheckout === 'function') {
-                // Appeler la fonction de paiement existante
                 window.processFloatingCheckout();
             } else {
                 console.error('Module de paiement non trouvé');
@@ -1009,18 +1046,10 @@
         };
 
         // ===== MODALS AUTH =====
-        function showLoginModal() { 
-            document.getElementById('loginModal').style.display = 'flex'; 
-        }
-        function hideLoginModal() { 
-            document.getElementById('loginModal').style.display = 'none'; 
-        }
-        function showRegisterModal() { 
-            document.getElementById('registerModal').style.display = 'flex'; 
-        }
-        function hideRegisterModal() { 
-            document.getElementById('registerModal').style.display = 'none'; 
-        }
+        function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function hideLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function showRegisterModal() { document.getElementById('registerModal').style.display = 'flex'; }
+        function hideRegisterModal() { document.getElementById('registerModal').style.display = 'none'; }
 
         window.onclick = function(event) {
             const loginModal = document.getElementById('loginModal');

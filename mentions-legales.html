@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentions légales - Andu-Xara</title>
+    <meta name="description" content="Mentions légales du site Andu-Xara : éditeur, hébergement, propriété intellectuelle, données personnelles et cookies.">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -11,6 +13,7 @@
         body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         
+        /* HEADER */
         .main-header {
             padding: 20px 0;
             background: white;
@@ -40,18 +43,24 @@
         }
         .nav-link:hover { color: #e67e22; }
         
+        /* CONTENU LEGAL */
         .legal-content {
             max-width: 900px;
             margin: 60px auto;
             background: white;
             padding: 50px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
         .legal-content h1 {
             font-size: 2rem;
             color: #e67e22;
             margin-bottom: 10px;
+        }
+        .legal-content .date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
         }
         .legal-content h2 {
             font-size: 1.3rem;
@@ -79,6 +88,7 @@
             margin-bottom: 8px;
         }
         
+        /* FOOTER */
         .footer {
             background: #2c3e50;
             color: white;
@@ -91,12 +101,23 @@
             gap: 30px;
             margin-bottom: 30px;
         }
+        .footer-col h4 {
+            margin-bottom: 15px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
         .footer-bottom {
             text-align: center;
             padding-top: 20px;
             border-top: 1px solid #4a5568;
             color: #ccc;
         }
+        
         @media (max-width: 768px) {
             .legal-content { padding: 30px 20px; margin: 30px 20px; }
             .legal-content h1 { font-size: 1.5rem; }
@@ -104,77 +125,110 @@
     </style>
 </head>
 <body>
+
+    <!-- HEADER -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
                 <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
                     <a href="histoire.html" class="nav-link">Histoire</a>
                     <a href="billetterie.html" class="nav-link">Concerts</a>
-                    <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- CONTENU MENTIONS LÉGALES -->
     <div class="container">
         <div class="legal-content">
             <h1>📜 Mentions légales</h1>
-            <p>Dernière mise à jour : 5 mai 2026</p>
+            <div class="date">Dernière mise à jour : 22 mai 2026</div>
 
             <h2>1. Éditeur du site</h2>
             <p><strong>Andu-Xara</strong><br>
-            Marque de vêtements afro-urbains<br>
+            Marque de vêtements afro-urbains et d’organisation d’événements culturels.<br>
             Siège social : Nouakchott, Mauritanie<br>
-            Email : contact@andu-xara.store<br>
-            Téléphone : +222 34 19 63 04</p>
+            Email : <a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a><br>
+            Téléphone Mauritanie : <a href="tel:+22234196304">+222 34 19 63 04</a><br>
+            Téléphone Sénégal : <a href="tel:+221762821163">+221 76 28 21 163</a></p>
 
             <h2>2. Directeur de publication</h2>
-            <p>Cheikhou Diabira, Président et Fondateur d'Andu-Xara</p>
+            <p><strong>Cheikhou Diabira</strong>, Président et fondateur d'Andu-Xara.<br>
+            <strong>Bocar Ba</strong>, co-fondateur.</p>
 
             <h2>3. Hébergement</h2>
-            <p>Le site andu-xara.store est hébergé par GitHub Pages.<br>
-            GitHub Inc.<br>
-            88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis</p>
+            <p>Le site <strong>andu-xara.store</strong> est hébergé par <strong>GitHub Pages</strong>, une société de GitHub Inc.<br>
+            Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.<br>
+            GitHub n’est pas responsable du contenu du site.</p>
 
             <h2>4. Propriété intellectuelle</h2>
-            <p>L'ensemble des éléments composant le site andu-xara.store (textes, images, logos, créations) sont la propriété exclusive de la marque Andu-Xara. Toute reproduction, représentation, modification ou adaptation est interdite sans autorisation préalable.</p>
+            <p>L’ensemble des éléments composant le site (textes, images, logos, créations de vêtements, dénominations « Azawad », « Sahel », « Tagant », « Tichitt », etc.) sont la propriété exclusive d’Andu-Xara ou utilisés avec autorisation. Toute reproduction, modification ou diffusion sans accord préalable est interdite.</p>
 
-            <h2>5. Protection des données personnelles</h2>
-            <p>Conformément à la loi mauritanienne et au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ce droit, contactez-nous à contact@andu-xara.store.</p>
+            <h2>5. Protection des données personnelles (RGPD)</h2>
+            <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la législation mauritanienne, vous disposez des droits suivants :</p>
+            <ul>
+                <li><strong>Droit d’accès</strong> : consulter vos données.</li>
+                <li><strong>Droit de rectification</strong> : modifier vos informations.</li>
+                <li><strong>Droit à l’effacement</strong> : supprimer votre compte et vos données.</li>
+                <li><strong>Droit d’opposition</strong> : refuser l’utilisation de vos données pour le marketing.</li>
+            </ul>
+            <p>Pour exercer ces droits, contactez-nous par email à <strong>contact@andu-xara.store</strong>. Vos données ne sont jamais cédées à des tiers.</p>
 
             <h2>6. Cookies</h2>
-            <p>Le site utilise des cookies pour améliorer l'expérience de navigation. Vous pouvez paramétrer votre navigateur pour refuser les cookies.</p>
+            <p>Le site utilise des cookies techniques (session, panier, authentification) ainsi que des cookies de mesure d’audience (Google Analytics, si activé). Vous pouvez paramétrer votre navigateur pour refuser les cookies. En continuant à naviguer, vous acceptez leur utilisation.</p>
 
-            <h2>7. Contact</h2>
-            <p>Pour toute question relative aux mentions légales :<br>
-            📧 contact@andu-xara.store<br>
-            📞 +222 34 19 63 04</p>
+            <h2>7. Liens externes</h2>
+            <p>Le site peut contenir des liens vers des partenaires (Wave, Bankily, GitHub). Nous ne sommes pas responsables du contenu ou des pratiques de confidentialité de ces sites tiers.</p>
+
+            <h2>8. Responsabilité</h2>
+            <p>Andu-Xara s’efforce de fournir des informations exactes et à jour. Cependant, des erreurs ou omissions peuvent survenir. Notre responsabilité ne peut être engagée en cas d’indisponibilité temporaire du site.</p>
+
+            <h2>9. Loi applicable</h2>
+            <p>Les présentes mentions légales sont soumises au droit mauritanien. Tout litige sera porté devant les tribunaux de Nouakchott.</p>
+
+            <h2>10. Contact</h2>
+            <p>
+                📧 <a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a><br>
+                📞 Mauritanie : <a href="tel:+22234196304">+222 34 19 63 04</a><br>
+                📞 Sénégal : <a href="tel:+221762821163">+221 76 28 21 163</a><br>
+                📍 Nouakchott, Mauritanie
+            </p>
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>Andu-Xara</h4>
-                    <p>Mode afro-urbaine depuis 2020</p>
+                    <p>Mode afro-urbaine et événements culturels depuis 2020. Vêtements personnalisés, concerts, artisanat local.</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Liens</h4>
+                    <h4>Liens utiles</h4>
                     <ul>
                         <li><a href="mentions-legales.html">Mentions légales</a></li>
-                        <li><a href="cgv.html">CGV</a></li>
-                        <li><a href="confidentialite.html">Confidentialité</a></li>
+                        <li><a href="cgv.html">Conditions générales</a></li>
+                        <li><a href="confidentialite.html">Politique de confidentialité</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Recevez nos actualités et offres.</p>
+                    <p><a href="contact.html">S'abonner →</a></p>
+                </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+                <p>© 2026 Andu-Xara - Tous droits réservés | Site édité par Andu-Xara SARL</p>
             </div>
         </div>
     </footer>
 </body>
 </html>
+```

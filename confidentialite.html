@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Politique de confidentialité - Andu-Xara</title>
+    <meta name="description" content="Politique de confidentialité d'Andu-Xara : collecte des données, utilisation, sécurité, cookies et vos droits.">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -11,6 +12,7 @@
         body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         
+        /* HEADER */
         .main-header {
             padding: 20px 0;
             background: white;
@@ -40,18 +42,24 @@
         }
         .nav-link:hover { color: #e67e22; }
         
+        /* CONTENU LEGAL */
         .legal-content {
             max-width: 900px;
             margin: 60px auto;
             background: white;
             padding: 50px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
         .legal-content h1 {
             font-size: 2rem;
             color: #e67e22;
             margin-bottom: 10px;
+        }
+        .legal-content .date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
         }
         .legal-content h2 {
             font-size: 1.3rem;
@@ -74,6 +82,7 @@
             margin-bottom: 8px;
         }
         
+        /* FOOTER */
         .footer {
             background: #2c3e50;
             color: white;
@@ -86,12 +95,23 @@
             gap: 30px;
             margin-bottom: 30px;
         }
+        .footer-col h4 {
+            margin-bottom: 15px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: #e67e22; }
         .footer-bottom {
             text-align: center;
             padding-top: 20px;
             border-top: 1px solid #4a5568;
             color: #ccc;
         }
+        
         @media (max-width: 768px) {
             .legal-content { padding: 30px 20px; margin: 30px 20px; }
             .legal-content h1 { font-size: 1.5rem; }
@@ -99,88 +119,117 @@
     </style>
 </head>
 <body>
+
+    <!-- HEADER -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
                 <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
                     <a href="histoire.html" class="nav-link">Histoire</a>
                     <a href="billetterie.html" class="nav-link">Concerts</a>
-                    <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- CONTENU POLITIQUE DE CONFIDENTIALITÉ -->
     <div class="container">
         <div class="legal-content">
             <h1>🔒 Politique de confidentialité</h1>
-            <p>Dernière mise à jour : 5 mai 2026</p>
+            <div class="date">Dernière mise à jour : 22 mai 2026</div>
 
-            <h2>1. Collecte des données</h2>
-            <p>Nous collectons les informations que vous nous fournissez lors de :</p>
+            <h2>1. Collecte des données personnelles</h2>
+            <p>Nous collectons les informations que vous nous fournissez directement lorsque vous :</p>
             <ul>
-                <li>Création de compte (nom, email, téléphone)</li>
-                <li>Passation de commande (adresse de livraison)</li>
-                <li>Achat de billets de concert</li>
-                <li>Inscription à la newsletter</li>
+                <li>Créez un compte client (nom, adresse email, numéro de téléphone)</li>
+                <li>Passez une commande (adresse de livraison, historique d’achats)</li>
+                <li>Achetez des billets de concert</li>
+                <li>Nous contactez via le formulaire de contact ou par email</li>
+                <li>Vous inscrivez à notre newsletter (avec votre consentement explicite)</li>
             </ul>
 
             <h2>2. Utilisation des données</h2>
             <p>Vos données sont utilisées pour :</p>
             <ul>
-                <li>Traiter vos commandes</li>
+                <li>Traiter et livrer vos commandes</li>
                 <li>Gérer votre compte client</li>
-                <li>Vous envoyer des informations sur vos commandes</li>
-                <li>Améliorer notre service client</li>
-                <li>Vous envoyer des offres promotionnelles (avec votre consentement)</li>
+                <li>Communiquer avec vous (confirmation de commande, livraison, relances)</li>
+                <li>Améliorer notre service client et la qualité du site</li>
+                <li>Vous envoyer, si vous l’acceptez, des offres promotionnelles et actualités</li>
             </ul>
 
-            <h2>3. Partage des données</h2>
-            <p>Nous ne vendons ni ne partageons vos données personnelles avec des tiers, sauf :</p>
+            <h2>3. Partage des données avec des tiers</h2>
+            <p>Nous ne vendons ni ne louons vos données personnelles. Elles peuvent être transmises uniquement :</p>
             <ul>
-                <li>Pour le traitement des paiements (Bankily, Wave)</li>
-                <li>Pour la livraison des commandes</li>
-                <li>Si la loi nous y oblige</li>
+                <li>Aux prestataires de paiement (Bankily, Wave) pour le traitement des transactions</li>
+                <li>Aux services de livraison pour l’acheminement de vos colis</li>
+                <li>Si la loi nous y oblige (réquisition judiciaire, obligations légales)</li>
             </ul>
+            <p>Dans tous les cas, ces tiers s’engagent à ne pas utiliser vos données à d’autres fins.</p>
 
-            <h2>4. Sécurité</h2>
-            <p>Nous mettons en œuvre des mesures de sécurité pour protéger vos données contre tout accès non autorisé. Toutes les transactions sont sécurisées via Firebase et nos partenaires de paiement.</p>
+            <h2>4. Sécurité et conservation des données</h2>
+            <p>Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données (chiffrement, accès restreint). Vos informations sont conservées aussi longtemps que votre compte est actif. Après suppression de votre compte, elles sont anonymisées ou supprimées dans un délai raisonnable (sauf obligation légale de conservation).</p>
 
             <h2>5. Vos droits</h2>
-            <p>Conformément à la législation, vous disposez des droits suivants : accès, rectification, opposition, suppression et portabilité de vos données. Pour les exercer, contactez-nous à contact@andu-xara.store.</p>
+            <p>Conformément au RGPD et à la législation mauritanienne, vous disposez des droits suivants :</p>
+            <ul>
+                <li><strong>Droit d’accès</strong> : consulter vos données personnelles.</li>
+                <li><strong>Droit de rectification</strong> : modifier vos informations inexactes.</li>
+                <li><strong>Droit à l’effacement</strong> : demander la suppression de votre compte et de vos données.</li>
+                <li><strong>Droit d’opposition</strong> : refuser l’utilisation de vos données pour le marketing.</li>
+                <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré.</li>
+            </ul>
+            <p>Pour exercer ces droits, contactez-nous à <strong>contact@andu-xara.store</strong>. Nous répondrons dans les meilleurs délais.</p>
 
-            <h2>6. Conservation des données</h2>
-            <p>Vos données sont conservées pendant la durée de votre compte client. En cas d'inactivité prolongée, votre compte peut être désactivé et vos données anonymisées.</p>
+            <h2>6. Cookies</h2>
+            <p>Le site utilise des cookies techniques (session, panier, authentification) et des cookies de mesure d’audience (Google Analytics, si activé). Vous pouvez paramétrer votre navigateur pour refuser les cookies. La poursuite de la navigation vaut acceptation de leur usage.</p>
 
-            <h2>7. Cookies</h2>
-            <p>Nous utilisons des cookies pour faciliter votre navigation, mémoriser votre panier et analyser le trafic. Vous pouvez configurer votre navigateur pour refuser les cookies.</p>
+            <h2>7. Liens externes</h2>
+            <p>Notre site peut contenir des liens vers des services tiers (paiement, réseaux sociaux). Nous ne contrôlons pas ces sites et déclinons toute responsabilité quant à leurs pratiques de confidentialité.</p>
 
-            <h2>8. Contact</h2>
-            <p>📧 contact@andu-xara.store<br>📞 +222 34 19 63 04</p>
+            <h2>8. Modifications de la politique</h2>
+            <p>Nous pouvons mettre à jour cette politique de confidentialité. Toute modification sera publiée sur cette page avec la date de la dernière mise à jour. Nous vous encourageons à consulter régulièrement cette page.</p>
+
+            <h2>9. Contact</h2>
+            <p>
+                📧 <a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a><br>
+                📞 Mauritanie : <a href="tel:+22234196304">+222 34 19 63 04</a><br>
+                📞 Sénégal : <a href="tel:+221762821163">+221 76 28 21 163</a><br>
+                📍 Nouakchott, Mauritanie
+            </p>
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>Andu-Xara</h4>
-                    <p>Mode afro-urbaine depuis 2020</p>
+                    <p>Mode afro-urbaine et événements culturels depuis 2020.<br>Vêtements personnalisés, artisanat local, concerts.</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Liens</h4>
+                    <h4>Liens utiles</h4>
                     <ul>
                         <li><a href="mentions-legales.html">Mentions légales</a></li>
-                        <li><a href="cgv.html">CGV</a></li>
-                        <li><a href="confidentialite.html">Confidentialité</a></li>
+                        <li><a href="cgv.html">Conditions générales</a></li>
+                        <li><a href="confidentialite.html">Politique de confidentialité</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Recevez nos actualités et offres spéciales.</p>
+                    <p><a href="contact.html">S'abonner →</a></p>
+                </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Andu-Xara - Tous droits réservés</p>
+                <p>© 2026 Andu-Xara - Tous droits réservés | Site édité par Andu-Xara SARL</p>
             </div>
         </div>
     </footer>

@@ -4,26 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon compte - Andu-Xara</title>
+    <meta name="description" content="Espace client Andu-Xara : gérez votre profil, suivez vos commandes, consultez vos billets de concert et vos points fidélité.">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .profile-section { padding: 60px 0; min-height: 60vh; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--gray-200); padding-bottom: 10px; }
-        .tab { padding: 10px 20px; cursor: pointer; border-radius: var(--radius); transition: all 0.3s; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--gray-200); padding-bottom: 10px; flex-wrap: wrap; }
+        .tab { padding: 10px 20px; cursor: pointer; border-radius: var(--radius); transition: all 0.3s; font-weight: 500; }
         .tab:hover { background: var(--gray-100); }
         .tab.active { background: #e67e22; color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .profile-card { background: #f8f9fa; padding: 30px; border-radius: 10px; }
+        .profile-card { background: #f8f9fa; padding: 30px; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .profile-card.highlight { background: linear-gradient(135deg, #fff3e0, white); border: 2px solid #e67e22; }
         .rewards-number { font-size: 3rem; font-weight: 700; color: #e67e22; text-align: center; }
-        .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .ticket-card { background: white; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #e0e0e0; }
-        .ticket-qr { width: 150px; height: 150px; margin: 15px auto; display: block; }
+        .tickets-grid, .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .ticket-card, .order-card { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #e0e0e0; transition: transform 0.2s; }
+        .ticket-card:hover, .order-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .ticket-qr { width: 120px; height: 120px; margin: 10px auto; display: block; }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 15px; border-radius: 10px; text-align: center; }
-        @media (max-width:768px) { .profile-grid { grid-template-columns:1fr; } .stats-grid { grid-template-columns:1fr; } }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #e67e22; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .btn-edit { background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; font-weight: 600; }
+        .btn-edit:hover { background: #d35400; }
+        .empty-state { text-align: center; padding: 40px; color: #999; background: #f9f9f9; border-radius: 12px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; }
+        .btn-block { width: 100%; }
+        .welcome-banner { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 20px; border-radius: 15px; margin-bottom: 30px; text-align: center; }
+        .recent-activity-item { display: flex; align-items: center; gap: 15px; padding: 12px; border-bottom: 1px solid #eee; }
+        .activity-icon { font-size: 1.5rem; }
+        @media (max-width:768px) { 
+            .profile-grid { grid-template-columns:1fr; } 
+            .stats-grid { grid-template-columns:1fr; }
+            .tabs { justify-content: center; }
+        }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8436772283536190" crossorigin="anonymous"></script>
 </head>
@@ -37,54 +58,117 @@
     <!-- SECTION COMPTE -->
     <section class="profile-section">
         <div class="container">
-            <h1 style="margin-bottom:30px;">👤 Mon espace personnel</h1>
+            <div class="welcome-banner" id="welcomeBanner">
+                <h2>Bonjour, <span id="welcomeName">Client</span> ! 👋</h2>
+                <p>Bienvenue dans votre espace personnel Andu-Xara</p>
+            </div>
+
             <div class="tabs">
                 <div class="tab active" onclick="showTab('profil')">👤 Profil</div>
-                <div class="tab" onclick="showTab('reductions')">🎁 Réductions</div>
+                <div class="tab" onclick="showTab('commandes')">📦 Mes commandes</div>
                 <div class="tab" onclick="showTab('billets')">🎫 Mes billets</div>
+                <div class="tab" onclick="showTab('reductions')">🎁 Réductions</div>
                 <div class="tab" onclick="showTab('stats')">📊 Statistiques</div>
             </div>
 
             <!-- Tab Profil -->
             <div id="tab-profil" class="tab-content active">
                 <div class="profile-grid">
-                    <div class="profile-card"><h2>👤 Mes informations</h2><div class="profile-info"><p><strong>Nom :</strong> <span id="profileName">-</span></p><p><strong>Email :</strong> <span id="profileEmail">-</span></p><p><strong>Téléphone :</strong> <span id="profilePhone">-</span></p><p><strong>Membre depuis :</strong> <span id="profileSince">-</span></p></div></div>
-                    <div class="profile-card"><h2>📊 En bref</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;"><div style="text-align:center;"><div style="font-size:2rem;color:#e67e22;" id="quickTickets">0</div><div>Billets</div></div><div style="text-align:center;"><div style="font-size:2rem;color:#e67e22;" id="quickPoints">0</div><div>Points</div></div></div></div>
+                    <div class="profile-card">
+                        <h2>👤 Mes informations</h2>
+                        <div class="profile-info">
+                            <div class="info-row"><strong>Nom :</strong> <span id="profileName">-</span></div>
+                            <div class="info-row"><strong>Email :</strong> <span id="profileEmail">-</span></div>
+                            <div class="info-row"><strong>Téléphone :</strong> <span id="profilePhone">-</span></div>
+                            <div class="info-row"><strong>Membre depuis :</strong> <span id="profileSince">-</span></div>
+                        </div>
+                        <button class="btn-edit" onclick="openEditModal()">✏️ Modifier mon profil</button>
+                    </div>
+                    <div class="profile-card">
+                        <h2>📊 En bref</h2>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;text-align:center;">
+                            <div><div style="font-size:2rem;color:#e67e22;" id="quickTickets">0</div><div>Billets</div></div>
+                            <div><div style="font-size:2rem;color:#e67e22;" id="quickPoints">0</div><div>Points</div></div>
+                        </div>
+                        <div style="margin-top:20px;">
+                            <div class="info-row"><strong>Commandes :</strong> <span id="orderCount">0</span></div>
+                            <div class="info-row"><strong>Total dépensé :</strong> <span id="totalSpent">0 MRU</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Commandes (nouveau) -->
+            <div id="tab-commandes" class="tab-content">
+                <div class="profile-card full-width">
+                    <h2>📦 Historique des commandes</h2>
+                    <div id="ordersList" class="orders-grid"></div>
+                </div>
+            </div>
+
+            <!-- Tab Billets -->
+            <div id="tab-billets" class="tab-content">
+                <div class="profile-card full-width">
+                    <h2>🎫 Mes billets de concert</h2>
+                    <div id="ticketsList" class="tickets-grid"></div>
                 </div>
             </div>
 
             <!-- Tab Réductions -->
             <div id="tab-reductions" class="tab-content">
                 <div class="profile-grid">
-                    <div class="profile-card highlight"><h2>🎁 Mes récompenses</h2><div class="rewards-box"><div class="rewards-number" id="rewardsPoints">0</div><div>Points fidélité</div></div></div>
-                    <div class="profile-card"><h2>📜 Historique</h2><div id="promoHistory">Aucun code utilisé</div></div>
+                    <div class="profile-card highlight">
+                        <h2>🎁 Mes récompenses</h2>
+                        <div class="rewards-box">
+                            <div class="rewards-number" id="rewardsPoints">0</div>
+                            <div>Points fidélité</div>
+                            <small style="color:#666;">100 points = 10 MRU de réduction</small>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <h2>📜 Codes promo utilisés</h2>
+                        <div id="promoHistory" style="max-height:300px; overflow-y:auto;"></div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Tab Billets -->
-            <div id="tab-billets" class="tab-content">
-                <div class="profile-card full-width"><h2>🎫 Mes billets</h2><div class="tickets-grid" id="ticketsList"><div class="empty-state">Aucun billet pour le moment</div></div></div>
             </div>
 
             <!-- Tab Stats -->
             <div id="tab-stats" class="tab-content">
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-value" id="statTickets">0</div><div>Billets</div></div>
-                    <div class="stat-card"><div class="stat-value" id="statSpent">0 MRU</div><div>Dépensé</div></div>
-                    <div class="stat-card"><div class="stat-value" id="statPoints">0</div><div>Points</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statTickets">0</div><div>Billets achetés</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statSpent">0 MRU</div><div>Total dépensé</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statPoints">0</div><div>Points gagnés</div></div>
                 </div>
-                <div class="profile-card"><h2>📈 Activité récente</h2><div id="recentActivity"></div></div>
+                <div class="profile-card">
+                    <h2>📈 Activité récente</h2>
+                    <div id="recentActivity"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-col"><h4>Andu-Xara</h4><p>Votre espace personnel</p></div><div class="footer-col"><h4>Liens</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="billetterie.html">Concerts</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:contact@andu-xara.store">Email</a></li><li><a href="tel:+22234196304">+222 34 19 63 04</a></li></ul></div></div><div class="footer-bottom"><p>© 2026 Andu-Xara</p></div></div></footer>
-
     <!-- MODAL ÉDITION PROFIL -->
-    <div id="editProfileModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeEditModal()">&times;</span><h2>Modifier mon profil</h2><form id="editProfileForm" onsubmit="saveProfile(event)"><div class="form-group"><input type="text" id="editName" placeholder="Nom complet" required></div><div class="form-group"><input type="tel" id="editPhone" placeholder="Téléphone"></div><button type="submit" class="btn btn-primary btn-block">Enregistrer</button></form></div></div>
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2>✏️ Modifier mon profil</h2>
+            <form id="editProfileForm" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label for="editName">Nom complet</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Téléphone</label>
+                    <input type="tel" id="editPhone" placeholder="+222 XX XX XX XX">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+            </form>
+        </div>
+    </div>
 
-    <!-- SCRIPTS -->
+    <!-- FOOTER -->
+    <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-col"><h4>Andu-Xara</h4><p>Votre espace personnel</p></div><div class="footer-col"><h4>Liens</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="billetterie.html">Concerts</a></li><li><a href="blog.html">Blog</a></li></ul></div><div class="footer-col"><h4>Besoin d'aide ?</h4><ul><li><a href="faq-complete.html">FAQ</a></li><li><a href="contact.html">Contactez-nous</a></li><li><a href="cgv.html">Conditions générales</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:contact@andu-xara.store">Email</a></li><li><a href="tel:+22234196304">+222 34 19 63 04</a></li><li><a href="tel:+221762821163">+221 76 28 21 163</a></li></ul></div></div><div class="footer-bottom"><p>© 2026 Andu-Xara - Tous droits réservés</p></div></div></footer>
+
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -94,48 +178,204 @@
     <script src="js/tickets.js"></script>
     
     <script>
+        // Gestion des onglets
         window.showTab = function(tab) {
-            document.querySelectorAll('.tab-content, .tab').forEach(el=>el.classList.remove('active'));
+            document.querySelectorAll('.tab-content, .tab').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
             event.target.classList.add('active');
         };
 
+        // Charger toutes les données du compte
         async function loadAccountData() {
             const user = auth?.currentUser;
-            if (!user) { window.location.href='/'; return; }
-            const doc = await db.collection('users').doc(user.uid).get();
-            const data = doc.data() || {};
-            document.getElementById('profileName').textContent = data.displayName || '-';
+            if (!user) {
+                window.location.href = '/';
+                return;
+            }
+
+            // Récupérer les données utilisateur
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data() || {};
+
+            // Informations personnelles
+            document.getElementById('profileName').textContent = userData.displayName || user.email.split('@')[0];
             document.getElementById('profileEmail').textContent = user.email;
-            document.getElementById('profilePhone').textContent = data.phone || '-';
-            document.getElementById('profileSince').textContent = data.createdAt ? new Date(data.createdAt.seconds*1000).toLocaleDateString() : '-';
-            
-            const rewards = data.rewards || 0;
+            document.getElementById('profilePhone').textContent = userData.phone || 'Non renseigné';
+            document.getElementById('profileSince').textContent = userData.createdAt ? new Date(userData.createdAt.seconds * 1000).toLocaleDateString('fr-FR') : 'Nouveau membre';
+            document.getElementById('welcomeName').textContent = userData.displayName || user.email.split('@')[0];
+
+            // Points fidélité
+            const rewards = userData.rewards || 0;
             document.getElementById('rewardsPoints').textContent = rewards;
             document.getElementById('quickPoints').textContent = rewards;
             document.getElementById('statPoints').textContent = rewards;
-            
-            const tickets = data.tickets || [];
+
+            // Billets
+            const tickets = userData.tickets || [];
             document.getElementById('quickTickets').textContent = tickets.length;
             document.getElementById('statTickets').textContent = tickets.length;
             document.getElementById('cartCount').textContent = tickets.length;
+
+            // Commandes (simulé à partir des tickets et achats)
+            // Ici on suppose que les commandes sont stockées dans une sous-collection "orders"
+            let orders = [];
+            try {
+                const ordersSnapshot = await db.collection('users').doc(user.uid).collection('orders').orderBy('date', 'desc').get();
+                orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch(e) { console.warn("Pas de sous-collection orders", e); }
             
-            const total = tickets.reduce((s,t)=>s+(t.price||0),0);
-            document.getElementById('statSpent').textContent = total + ' MRU';
-            
-            if(tickets.length) {
-                document.getElementById('ticketsList').innerHTML = tickets.map(t=>`
-                    <div class="ticket-card">
-                        <h4>${t.concertName}</h4>
-                        <img src="${t.qrCode}" class="ticket-qr">
-                        <div style="font-size:0.7rem;">${t.ticketId}</div>
+            // Si pas de commandes dédiées, on reconstruit à partir des tickets groupés par date d'achat
+            if (orders.length === 0 && tickets.length > 0) {
+                const grouped = {};
+                tickets.forEach(t => {
+                    const dateKey = t.purchasedAt ? new Date(t.purchasedAt).toDateString() : 'Ancienne commande';
+                    if (!grouped[dateKey]) grouped[dateKey] = { items: [], total: 0, date: t.purchasedAt };
+                    grouped[dateKey].items.push(t);
+                    grouped[dateKey].total += (t.price || 0);
+                });
+                orders = Object.values(grouped).map((g, idx) => ({
+                    id: `CMD-${Date.now()}-${idx}`,
+                    date: g.date,
+                    total: g.total,
+                    items: g.items,
+                    status: 'livrée'
+                }));
+            }
+
+            document.getElementById('orderCount').textContent = orders.length;
+            const totalSpent = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+            document.getElementById('totalSpent').textContent = totalSpent + ' MRU';
+            document.getElementById('statSpent').textContent = totalSpent + ' MRU';
+
+            // Affichage des commandes
+            const ordersContainer = document.getElementById('ordersList');
+            if (orders.length) {
+                ordersContainer.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <div style="font-size:1.2rem; margin-bottom:5px;">📦 ${order.id}</div>
+                        <div style="color:#e67e22; font-weight:600;">${order.total} MRU</div>
+                        <div style="font-size:0.8rem; color:#666;">${order.date ? new Date(order.date).toLocaleDateString('fr-FR') : 'Date inconnue'}</div>
+                        <div style="margin-top:10px; font-size:0.8rem;">${order.items ? order.items.length : 0} article(s)</div>
+                        <div style="margin-top:8px;"><span style="background:#27ae60; color:white; padding:2px 8px; border-radius:12px; font-size:0.7rem;">${order.status || 'livrée'}</span></div>
                     </div>
                 `).join('');
+            } else {
+                ordersContainer.innerHTML = '<div class="empty-state">Aucune commande pour le moment</div>';
+            }
+
+            // Affichage des billets
+            const ticketsContainer = document.getElementById('ticketsList');
+            if (tickets.length) {
+                ticketsContainer.innerHTML = tickets.map(t => `
+                    <div class="ticket-card">
+                        <h4>${t.concertName || 'Pispa Le Roi'}</h4>
+                        <img src="${t.qrCode}" class="ticket-qr" onerror="this.src='images/logo.png'">
+                        <div style="font-size:0.7rem; word-break:break-all;">${t.ticketId}</div>
+                        <div style="margin-top:8px; font-size:0.8rem;">${t.ticketTypeName || t.ticketType || 'Standard'}</div>
+                        <button class="btn-edit" style="margin-top:10px; background:#3498db;" onclick="window.open('${t.qrCode}', '_blank')">📥 Voir QR code</button>
+                    </div>
+                `).join('');
+            } else {
+                ticketsContainer.innerHTML = '<div class="empty-state">Aucun billet pour le moment</div>';
+            }
+
+            // Historique des codes promo
+            const promoHistory = userData.promoHistory || [];
+            const promoContainer = document.getElementById('promoHistory');
+            if (promoHistory.length) {
+                promoContainer.innerHTML = promoHistory.map(p => `
+                    <div class="recent-activity-item">
+                        <div class="activity-icon">🎟️</div>
+                        <div><strong>${p.code}</strong> - ${p.discount}% de réduction<br><small>Utilisé le ${new Date(p.usedAt).toLocaleDateString()}</small></div>
+                    </div>
+                `).join('');
+            } else {
+                promoContainer.innerHTML = '<div class="empty-state">Aucun code utilisé</div>';
+            }
+
+            // Activité récente (mélange commandes et achats de billets)
+            const activities = [];
+            if (orders.length) {
+                orders.slice(0, 5).forEach(order => {
+                    activities.push({
+                        type: 'order',
+                        date: order.date,
+                        text: `Commande ${order.id} de ${order.total} MRU`,
+                        icon: '🛍️'
+                    });
+                });
+            }
+            if (tickets.length) {
+                tickets.slice(0, 5).forEach(ticket => {
+                    activities.push({
+                        type: 'ticket',
+                        date: ticket.purchasedAt,
+                        text: `Achat de billet ${ticket.ticketTypeName || 'concert'} - ${ticket.price} MRU`,
+                        icon: '🎫'
+                    });
+                });
+            }
+            activities.sort((a,b) => new Date(b.date) - new Date(a.date));
+            const recentContainer = document.getElementById('recentActivity');
+            if (activities.length) {
+                recentContainer.innerHTML = activities.slice(0, 10).map(act => `
+                    <div class="recent-activity-item">
+                        <div class="activity-icon">${act.icon}</div>
+                        <div>${act.text}<br><small>${act.date ? new Date(act.date).toLocaleDateString('fr-FR') : 'Date récente'}</small></div>
+                    </div>
+                `).join('');
+            } else {
+                recentContainer.innerHTML = '<div class="empty-state">Aucune activité récente</div>';
             }
         }
 
-        auth.onAuthStateChanged(user => { if(user) loadAccountData(); else window.location.href='/'; });
-        if (typeof updateCartCount === 'function') updateCartCount();
+        // Édition du profil
+        window.openEditModal = function() {
+            document.getElementById('editName').value = document.getElementById('profileName').textContent;
+            document.getElementById('editPhone').value = document.getElementById('profilePhone').textContent === '-' ? '' : document.getElementById('profilePhone').textContent;
+            document.getElementById('editProfileModal').style.display = 'flex';
+        };
+        window.closeEditModal = function() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        };
+        window.saveProfile = async function(event) {
+            event.preventDefault();
+            const user = auth.currentUser;
+            if (!user) return;
+            const name = document.getElementById('editName').value;
+            const phone = document.getElementById('editPhone').value;
+            try {
+                await db.collection('users').doc(user.uid).update({
+                    displayName: name,
+                    phone: phone,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert('✅ Profil mis à jour !');
+                closeEditModal();
+                loadAccountData();
+            } catch (error) {
+                console.error(error);
+                alert('❌ Erreur lors de la mise à jour');
+            }
+        };
+
+        // Mettre à jour le compteur du panier
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('panier')) || [];
+            const count = cart.reduce((s,i) => s + i.quantite, 0);
+            const cartElem = document.getElementById('cartCount');
+            if (cartElem) cartElem.textContent = count;
+        }
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadAccountData();
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        updateCartCount();
     </script>
 </body>
 </html>

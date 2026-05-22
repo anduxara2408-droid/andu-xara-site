@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Andu-Xara • Mode Afro-Urbaine</title>
+    <meta name="description" content="Foire aux questions sur Andu-Xara : commandes, livraison, paiements, retours, produits. Tout ce que vous devez savoir sur notre marque et nos vêtements afro-urbains.">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -23,6 +24,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         .logo {
             font-size: 1.8rem;
@@ -31,7 +33,7 @@
             text-decoration: none;
         }
         .logo span { color: #333; font-weight: 300; }
-        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu { display: flex; gap: 30px; flex-wrap: wrap; }
         .nav-link {
             text-decoration: none;
             color: #333;
@@ -39,6 +41,69 @@
             transition: color 0.3s;
         }
         .nav-link:hover { color: #e67e22; }
+        .nav-link-highlight { color: #e67e22; font-weight: 700; }
+        
+        /* MENU MOBILE */
+        .menu-btn {
+            display: none;
+            background: #e67e22;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+        }
+        .mobile-menu.show {
+            display: block;
+        }
+        .mobile-menu .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 32px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+        }
+        .mobile-menu a {
+            display: block;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .mobile-menu-overlay.show {
+            display: block;
+        }
         
         .faq-header {
             text-align: center;
@@ -120,13 +185,16 @@
         }
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 40px;
             margin-bottom: 40px;
         }
         .footer-col h4 {
             margin-bottom: 20px;
             font-size: 1.1rem;
+        }
+        .footer-col ul {
+            list-style: none;
         }
         .footer-col a {
             color: #ccc;
@@ -142,20 +210,45 @@
         }
         
         @media (max-width: 768px) {
+            .menu-btn {
+                display: flex;
+            }
+            .nav-menu {
+                display: none;
+            }
             .faq-header h1 { font-size: 2rem; }
             .faq-category h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
+
+    <!-- MENU MOBILE -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-btn" onclick="closeMenu()">&times;</button>
+        <a href="index.html">Accueil</a>
+        <a href="produits.html">Collection</a>
+        <a href="blog.html">Blog</a>
+        <a href="histoire.html">Histoire</a>
+        <a href="billetterie.html">Concerts</a>
+        <a href="contact.html">Contact</a>
+        <a href="compte.html">Mon compte</a>
+        <a href="faq-complete.html">FAQ</a>
+    </div>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMenu()"></div>
+
     <header class="main-header">
         <div class="container">
             <div class="header-content">
+                <button class="menu-btn" onclick="openMenu()">☰</button>
                 <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
-                    <a href="histoire.html" class="nav-link">Histoire</a>
                     <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="histoire.html" class="nav-link">Histoire</a>
+                    <a href="billetterie.html" class="nav-link">Concerts</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                     <a href="faq-complete.html" class="nav-link nav-link-highlight">FAQ</a>
                 </nav>
             </div>
@@ -179,13 +272,13 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Pour passer commande, rien de plus simple :<br>
-                        1. Parcourez notre collection<br>
+                        Rien de plus simple :<br>
+                        1. Parcourez notre <a href="produits.html">collection</a><br>
                         2. Choisissez votre produit et votre taille<br>
                         3. Ajoutez-le au panier<br>
                         4. Créez un compte ou connectez-vous<br>
-                        5. Finalisez votre commande et choisissez votre mode de paiement<br>
-                        6. Validez ! Vous recevrez une confirmation par email.
+                        5. Finalisez votre commande et choisissez votre mode de paiement (Bankily, Wave, livraison).<br>
+                        6. Vous recevrez une confirmation par WhatsApp et email.
                     </div>
                 </div>
 
@@ -195,7 +288,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Oui, vous pouvez modifier ou annuler votre commande dans les 2 heures suivant sa validation. Contactez-nous directement par WhatsApp au +222 34 19 63 04 avec votre numéro de commande.
+                        Oui, dans les 2 heures suivant la validation. Contactez-nous par WhatsApp au <strong>+222 34 19 63 04</strong> (Mauritanie) ou <strong>+221 76 28 21 163</strong> (Sénégal) avec votre numéro de commande.
                     </div>
                 </div>
 
@@ -205,7 +298,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Dès que votre commande est expédiée, vous recevez un numéro de suivi par SMS et email. Vous pouvez également suivre votre commande dans votre espace client rubrique "Mes commandes".
+                        Une fois expédiée, vous recevez un numéro de suivi par SMS et email. Vous pouvez également suivre votre commande dans votre <a href="compte.html">espace client</a> rubrique "Mes commandes".
                     </div>
                 </div>
             </div>
@@ -220,9 +313,10 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        • Nouakchott : 24-48h (livraison gratuite)<br>
+                        • Nouakchott : 24-48h (gratuit)<br>
                         • Nouadhibou : 48-72h<br>
                         • Autres wilayas : 3-5 jours ouvrés<br>
+                        • Sénégal (Dakar) : 3-5 jours<br>
                         • International : 7-14 jours (frais selon destination)
                     </div>
                 </div>
@@ -233,7 +327,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Oui, la livraison est GRATUITE pour toute commande en Mauritanie. Pour les livraisons internationales (Sénégal, Mali, France, etc.), les frais sont calculés selon la destination et le poids.
+                        Oui, la livraison est <strong>gratuite</strong> pour toute commande en Mauritanie. Pour le Sénégal et l’international, les frais sont calculés à la caisse.
                     </div>
                 </div>
 
@@ -243,7 +337,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Oui, nous livrons dans toute l'Afrique de l'Ouest (Sénégal, Mali, Gambie, Guinée) et en France. Les frais de livraison sont calculés lors du passage en caisse. Pour toute autre destination, contactez-nous.
+                        Oui, nous livrons en Afrique de l’Ouest (Sénégal, Mali, Gambie, Guinée) et en France. Contactez-nous pour d’autres destinations.
                     </div>
                 </div>
             </div>
@@ -258,12 +352,11 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Nous acceptons plusieurs modes de paiement :<br>
-                        • Bankily (Mauritanie)<br>
-                        • Wave (Sénégal et Mauritanie)<br>
+                        • <strong>Bankily</strong> (Mauritanie)<br>
+                        • <strong>Wave</strong> (Sénégal et Mauritanie)<br>
                         • Paiement à la livraison (espèces)<br>
                         • Virement bancaire<br>
-                        • Paiement par carte bancaire (via paiement sécurisé)
+                        • Carte bancaire (via paiement sécurisé)
                     </div>
                 </div>
 
@@ -273,7 +366,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Absolument ! Tous les paiements sont sécurisés et cryptés. Nous ne stockons aucune information bancaire sur nos serveurs. La transaction est directement gérée par notre partenaire de paiement agréé.
+                        Oui, toutes les transactions sont cryptées et sécurisées. Nous ne stockons aucune information bancaire.
                     </div>
                 </div>
             </div>
@@ -288,7 +381,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Oui, vous disposez de 7 jours après réception pour retourner un produit. Le produit doit être neuf, non porté, avec ses étiquettes. Les frais de retour sont à votre charge sauf en cas de produit défectueux.
+                        Vous disposez de <strong>7 jours</strong> après réception pour retourner un produit. Il doit être neuf, non porté, avec ses étiquettes. Les frais de retour sont à votre charge (sauf produit défectueux).
                     </div>
                 </div>
 
@@ -298,7 +391,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Contactez notre service client par WhatsApp (+222 34 19 63 04) avec votre numéro de commande et le produit souhaité. Nous vous guiderons pour l'échange.
+                        Contactez notre service client par WhatsApp (+222 34 19 63 04) avec votre numéro de commande et la taille souhaitée. Nous vous guiderons.
                     </div>
                 </div>
 
@@ -308,7 +401,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Nous sommes désolés pour la gêne. Contactez-nous immédiatement avec des photos du défaut. Nous procéderons à un échange ou un remboursement dans les plus brefs délais.
+                        Nous sommes désolés pour la gêne. Envoyez-nous des photos du défaut par WhatsApp. Nous procéderons à un échange ou un remboursement rapide.
                     </div>
                 </div>
             </div>
@@ -323,7 +416,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        "Andu-Xara" est une expression soninké qui évoque l'élégance et la fierté culturelle. Notre marque célèbre les racines africaines à travers une mode moderne et authentique.
+                        "Andu-Xara" est une expression soninké qui évoque l’élégance et la fierté culturelle. Notre marque célèbre les racines africaines à travers une mode moderne et authentique.
                     </div>
                 </div>
 
@@ -333,7 +426,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Tous nos vêtements sont conçus et fabriqués en Mauritanie, avec des tissus de qualité. Nous travaillons avec des artisans locaux pour garantir un savoir-faire authentique.
+                        Tous nos vêtements sont conçus et fabriqués en Mauritanie, avec des tissus de qualité. Nous travaillons avec des artisans locaux pour un savoir-faire unique.
                     </div>
                 </div>
 
@@ -343,7 +436,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Consultez notre guide des tailles disponible sur chaque fiche produit. Si vous hésitez entre deux tailles, prenez la taille au-dessus pour un confort optimal. Notre service client peut aussi vous conseiller.
+                        Un guide des tailles est disponible sur chaque fiche produit. Si vous hésitez, prenez la taille au-dessus pour plus de confort. Vous pouvez aussi nous contacter pour des conseils personnalisés.
                     </div>
                 </div>
 
@@ -353,7 +446,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Lavez à 30°C maximum, cycle délicat. Ne pas utiliser d'eau de Javel. Sécher à l'ombre (évitez le sèche-linge). Repasser à température moyenne sur l'envers pour préserver le logo.
+                        Lavez à 30°C maximum, cycle délicat. Pas d’eau de Javel. Séchez à l’ombre (évitez le sèche-linge). Repassez à température moyenne sur l’envers.
                     </div>
                 </div>
             </div>
@@ -368,9 +461,8 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        En créant un compte, vous bénéficiez :<br>
                         • Suivi de vos commandes<br>
-                        • Historique d'achats<br>
+                        • Historique d’achats<br>
                         • Codes promo exclusifs<br>
                         • Programme de fidélité (points)<br>
                         • Accès anticipé aux soldes
@@ -383,7 +475,7 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Cliquez sur "Mot de passe oublié" sur la page de connexion. Vous recevrez un email avec un lien pour réinitialiser votre mot de passe.
+                        Cliquez sur "Mot de passe oublié" sur la page de connexion. Vous recevrez un email avec un lien de réinitialisation.
                     </div>
                 </div>
             </div>
@@ -402,15 +494,18 @@
                     <ul>
                         <li><a href="index.html">Accueil</a></li>
                         <li><a href="produits.html">Collection</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                         <li><a href="compte.html">Mon compte</a></li>
                         <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq-complete.html">FAQ</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contact</h4>
                     <ul>
                         <li><a href="mailto:contact@andu-xara.store">Email</a></li>
-                        <li><a href="tel:+22234196304">+222 34 19 63 04</a></li>
+                        <li><a href="tel:+22234196304">+222 34 19 63 04</a> (Mauritanie)</li>
+                        <li><a href="tel:+221762821163">+221 76 28 21 163</a> (Sénégal)</li>
                     </ul>
                 </div>
             </div>
@@ -425,6 +520,17 @@
             const answer = element.nextElementSibling;
             element.classList.toggle('active');
             answer.classList.toggle('active');
+        }
+        
+        function openMenu() {
+            document.getElementById('mobileMenu').classList.add('show');
+            document.getElementById('mobileMenuOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            document.getElementById('mobileMenu').classList.remove('show');
+            document.getElementById('mobileMenuOverlay').classList.remove('show');
+            document.body.style.overflow = '';
         }
     </script>
 </body>

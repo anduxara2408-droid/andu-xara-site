@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Andu-Xara · Recherche soninké</title>
+    <style>body { font-family: Arial; padding: 2rem; background: #f4f0e6; } .chat { max-width: 600px; margin: auto; background: white; border-radius: 2rem; padding: 1rem; } </style>
+</head>
+<body>
+<div class="chat"><h2>🔍 Chercheur soninké</h2><div id="log"></div><input id="q" style="width:80%"><button onclick="chercher()">Demander</button></div>
+<script>
+async function chercher() {
+    let q = document.getElementById('q').value;
+    document.getElementById('log').innerHTML += `<p><b>Vous:</b> ${q}</p>`;
+    // Utilise Soninkara.com (site de référence)
+    let url = `https://www.soninkara.com/?s=${encodeURIComponent(q)}`;
+    try {
+        let rep = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+        let data = await rep.json();
+        // extraction simplifiée
+        let extrait = data.contents.substring(0, 800);
+        document.getElementById('log').innerHTML += `<p><b>IA (recherche):</b> ${extrait.replace(/</g, '&lt;')}... <br><a href="${url}" target="_blank">Voir source sur Soninkara.com</a></p>`;
+    } catch(e) {
+        document.getElementById('log').innerHTML += `<p><b>IA:</b> Pas de résultat. Essaie sur Google: <a href="https://www.google.com/search?q=${encodeURIComponent(q)}+soninké" target="_blank">Lien</a></p>`;
+    }
+}
+</script>
+</body>
+</html>
