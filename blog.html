@@ -12,7 +12,7 @@
         body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #333; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         
-        /* Header (identique au site) */
+        /* Header */
         .main-header {
             background: white;
             padding: 15px 0;
@@ -71,7 +71,6 @@
             padding-left: 15px;
         }
         
-        /* Grille générale pour articles et podcasts */
         .articles-grid, .featured-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -110,10 +109,10 @@
             font-size: 0.9rem;
             margin-top: 10px;
             display: inline-block;
+            text-decoration: none;
         }
         .read-more-btn:hover { text-decoration: underline; }
         
-        /* Histoires */
         .stories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -158,7 +157,6 @@
             font-size: 0.9rem;
         }
         
-        /* Newsletter */
         .newsletter-section {
             background: white;
             border-radius: 15px;
@@ -192,7 +190,6 @@
             font-weight: 600;
         }
         
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -225,7 +222,6 @@
             color: #888;
         }
         
-        /* Footer */
         .footer {
             background: #2c3e50;
             color: white;
@@ -254,7 +250,6 @@
 </head>
 <body>
 
-    <!-- HEADER -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
@@ -278,7 +273,7 @@
             <p>Mode, culture soninkée, entrepreneuriat – nos histoires et conseils</p>
         </div>
 
-        <!-- SECTION PODCASTS (inchangée) -->
+        <!-- SECTION PODCASTS -->
         <h2 class="section-title">🎙️ Podcasts exclusifs</h2>
         <div class="articles-grid">
             <div class="article-card">
@@ -316,21 +311,36 @@
             </div>
         </div>
 
-        <!-- SECTION ARTICLES DE FOND (NOUVEAU) -->
+        <!-- SECTION ARTICLES DE FOND (3 articles avec liens corrigés) -->
         <h2 class="section-title">📝 Articles de fond</h2>
         <div class="featured-grid">
             <div class="article-card">
                 <div class="article-content">
                     <span class="article-category">🛍️ Consommation responsable</span>
-                    <h2>Pourquoi acheter local ? L’engagement d’Andu-Xara</h2>
+                    <h2>Pourquoi acheter local ? Andu-Xara et l’artisanat mauritanien</h2>
                     <p>Découvrez pourquoi soutenir la mode locale est un acte fort pour l’économie, l’environnement et la préservation des savoir-faire mauritaniens.</p>
                     <a href="blog/pourquoi-acheter-local.html" class="read-more-btn">Lire l'article →</a>
                 </div>
             </div>
-            <!-- Tu peux ajouter d’autres articles ici -->
+            <div class="article-card">
+                <div class="article-content">
+                    <span class="article-category">📏 Mode & confort</span>
+                    <h2>Comment choisir la bonne taille ? Guide Andu-Xara</h2>
+                    <p>Nos ensembles et t-shirts taillent normalement. Découvrez notre guide pour prendre les bonnes mensurations et éviter les erreurs.</p>
+                    <a href="blog/guide-tailles.html" class="read-more-btn">Lire l'article →</a>
+                </div>
+            </div>
+            <div class="article-card">
+                <div class="article-content">
+                    <span class="article-category">🎶 Concert & culture</span>
+                    <h2>Pispa Le Roi : l’artiste qui électrise Nouakchott</h2>
+                    <p>Présentation du rappeur, son parcours, ses influences et les temps forts de son concert à venir.</p>
+                    <a href="blog/pispa-le-roi-artiste.html" class="read-more-btn">Lire l'article →</a>
+                </div>
+            </div>
         </div>
 
-        <!-- SECTION HISTOIRES SONINKÉES (inchangée) -->
+        <!-- SECTION HISTOIRES SONINKÉES -->
         <h2 class="section-title">📖 Histoires & légendes soninkées</h2>
         <div class="stories-grid" id="storiesGrid">
             <div class="story-card" data-story="ousman">
@@ -382,7 +392,6 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -415,7 +424,7 @@
     </footer>
 
     <script>
-        // Contenu des histoires (textes courts et authentiques)
+        // Contenu des histoires
         const stories = {
             ousman: {
                 title: "ousman, le chasseur sacré",
@@ -435,7 +444,6 @@
             }
         };
 
-        // Gestion du modal
         const modal = document.getElementById('storyModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');

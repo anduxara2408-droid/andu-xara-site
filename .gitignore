@@ -21,3 +21,4 @@ service-account-key.json
 # Logs
 *.log
 npm-debug.log*
+*.report.html
