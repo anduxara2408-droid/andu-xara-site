@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog & Histoires • Andu-Xara • Mode, Culture Soninké et Entrepreneuriat</title>
+    <title>Blog & Histoires • Andu-Xara • Mode, Culture Soninkée et Entrepreneuriat</title>
     <meta name="description" content="Blog officiel d'Andu-Xara : podcasts exclusifs, histoires soninkées et articles sur la mode africaine et l'entrepreneuriat.">
     <link rel="icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -41,6 +41,7 @@
             transition: color 0.3s;
         }
         .nav-link:hover { color: #e67e22; }
+        .nav-link-highlight { color: #e67e22; font-weight: 700; }
         .back-button {
             display: inline-block;
             margin: 20px 0;
@@ -70,7 +71,8 @@
             padding-left: 15px;
         }
         
-        .articles-grid {
+        /* Grille générale pour articles et podcasts */
+        .articles-grid, .featured-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
@@ -98,7 +100,20 @@
         .article-card p { color: #666; line-height: 1.5; margin-bottom: 15px; }
         .audio-player { width: 100%; margin: 15px 0; border-radius: 10px; }
         .podcast-info { font-size: 0.8rem; color: #888; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #e67e22;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .read-more-btn:hover { text-decoration: underline; }
         
+        /* Histoires */
         .stories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -263,10 +278,9 @@
             <p>Mode, culture soninkée, entrepreneuriat – nos histoires et conseils</p>
         </div>
 
-        <!-- SECTION PODCASTS -->
+        <!-- SECTION PODCASTS (inchangée) -->
         <h2 class="section-title">🎙️ Podcasts exclusifs</h2>
         <div class="articles-grid">
-            <!-- Podcast 1 -->
             <div class="article-card">
                 <div class="article-content">
                     <span class="article-category">🎉 Culture soninkée</span>
@@ -278,7 +292,6 @@
                     <div class="podcast-info">🎙️ Épisode spécial – 25 septembre</div>
                 </div>
             </div>
-            <!-- Podcast 2 -->
             <div class="article-card">
                 <div class="article-content">
                     <span class="article-category">👗 Mode africaine</span>
@@ -290,7 +303,6 @@
                     <div class="podcast-info">🎙️ Podcast – 40 secondes</div>
                 </div>
             </div>
-            <!-- Podcast 3 -->
             <div class="article-card">
                 <div class="article-content">
                     <span class="article-category">🚀 Entrepreneuriat</span>
@@ -304,7 +316,21 @@
             </div>
         </div>
 
-        <!-- SECTION HISTOIRES SONINKÉES -->
+        <!-- SECTION ARTICLES DE FOND (NOUVEAU) -->
+        <h2 class="section-title">📝 Articles de fond</h2>
+        <div class="featured-grid">
+            <div class="article-card">
+                <div class="article-content">
+                    <span class="article-category">🛍️ Consommation responsable</span>
+                    <h2>Pourquoi acheter local ? L’engagement d’Andu-Xara</h2>
+                    <p>Découvrez pourquoi soutenir la mode locale est un acte fort pour l’économie, l’environnement et la préservation des savoir-faire mauritaniens.</p>
+                    <a href="blog/pourquoi-acheter-local.html" class="read-more-btn">Lire l'article →</a>
+                </div>
+            </div>
+            <!-- Tu peux ajouter d’autres articles ici -->
+        </div>
+
+        <!-- SECTION HISTOIRES SONINKÉES (inchangée) -->
         <h2 class="section-title">📖 Histoires & légendes soninkées</h2>
         <div class="stories-grid" id="storiesGrid">
             <div class="story-card" data-story="ousman">
