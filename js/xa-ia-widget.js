@@ -1,62 +1,98 @@
-// XA IA - Widget Chatbot intelligent pour Andu-Xara
-// Utilise Groq API via Cloudflare Worker (sécurisé)
+// XA IA - Widget avec mémoire conversationnelle soninké
+(function(){
+    const styleId = 'xa-ia-style';
+    if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+            .xa-ia-widget{position:fixed;bottom:20px;right:20px;z-index:10000;font-family:'Inter',sans-serif}
+            .xa-ia-button{width:60px;height:60px;border-radius:50%;background:#e67e22;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.2);transition:transform 0.3s;display:flex;align-items:center;justify-content:center;overflow:hidden}
+            .xa-ia-button img{width:100%;height:100%;object-fit:cover}
+            .xa-ia-button:hover{transform:scale(1.05)}
+            .xa-ia-chat{position:absolute;bottom:80px;right:0;width:350px;height:500px;background:white;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:flex;flex-direction:column;overflow:hidden}
+            .xa-ia-chat.hidden{display:none}
+            .xa-ia-header{background:#e67e22;color:white;padding:15px;display:flex;align-items:center;gap:10px}
+            .xa-ia-avatar{width:40px;height:40px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;overflow:hidden}
+            .xa-ia-avatar img{width:100%;height:100%;object-fit:cover}
+            .xa-ia-title{flex:1}
+            .xa-ia-title h3{margin:0;font-size:16px}
+            .xa-ia-title p{margin:0;font-size:11px;opacity:0.9}
+            .xa-ia-close{background:none;border:none;color:white;font-size:24px;cursor:pointer}
+            .xa-ia-messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;background:#f8f9fa}
+            .xa-ia-message{max-width:85%;padding:10px 12px;border-radius:15px;font-size:14px;line-height:1.4}
+            .xa-ia-message.user{background:#e67e22;color:white;align-self:flex-end;border-bottom-right-radius:5px}
+            .xa-ia-message.bot{background:white;color:#333;align-self:flex-start;border-bottom-left-radius:5px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+            .xa-ia-typing{display:flex;gap:5px;padding:10px 12px;background:white;border-radius:15px;align-self:flex-start}
+            .xa-ia-typing span{width:8px;height:8px;background:#ccc;border-radius:50%;animation:xaTyping 1.4s infinite}
+            .xa-ia-typing span:nth-child(2){animation-delay:0.2s}
+            .xa-ia-typing span:nth-child(3){animation-delay:0.4s}
+            @keyframes xaTyping{0%,60%,100%{transform:translateY(0);opacity:0.5}30%{transform:translateY(-8px);opacity:1}}
+            .xa-ia-input-area{display:flex;padding:15px;border-top:1px solid #eee;background:white;gap:10px}
+            .xa-ia-input{flex:1;padding:10px 12px;border:1px solid #ddd;border-radius:25px;font-family:inherit;font-size:14px;outline:none}
+            .xa-ia-input:focus{border-color:#e67e22}
+            .xa-ia-send{background:#e67e22;border:none;color:white;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px}
+            @media (max-width:480px){.xa-ia-chat{width:calc(100vw - 40px);height:70vh}}
+        `;
+        document.head.appendChild(style);
+    }
 
-// Configuration
-const XA_IA_CONFIG_WIDGET = {
-    apiEndpoint: "https://xa-ia-worker.microsansfiltre2408.workers.dev",
-    isOpen: false,
-    isLoading: false
-};
-
-// Éléments DOM
-let xaWidget = null;
-let xaMessages = null;
-let xaInput = null;
-
-// Initialisation
-function initXAIA() {
-    // Injecter les styles
-    const stylesLink = document.createElement('link');
-    stylesLink.rel = 'stylesheet';
-    stylesLink.href = '/css/xa-ia.css';
-    document.head.appendChild(stylesLink);
-    
-    // Injecter la configuration
-    const configScript = document.createElement('script');
-    configScript.src = '/js/xa-ia-config.js';
-    configScript.onload = () => {
-        // Après chargement de la config, créer le widget
-        createWidget();
+    // DICTIONNAIRE LOCAL DE CONVERSATION SONINKÉ
+    const localResponses = {
+        "an moxo": "Ma jam. Nawaari! Et toi, comment ça va?",
+        "ammoxo": "Ma jam. Nawaari! Et toi?",
+        "ma jam": "Ma jam nawaari! C'est l'essentiel. Ta journée se passe bien?",
+        "nawaari": "Bisimilla! (De rien) C'est un plaisir.",
+        "bisimilla": "Je t'en prie! N'hésite pas si tu as besoin d'aide.",
+        "beeta": "Beeta! Bonjour! Comment se passe ta matinée?",
+        "lella": "Lella! Bon après-midi! Je te souhaite une excellente journée.",
+        "sunka": "Sunka! Bonsoir! Comment s'est passée ta journée?",
+        "salaamu aleykum": "Aleykum salaam! Paix et sérénité sur toi.",
+        "xori an wa jam": "Jam baane. Paix seulement. Et toi, tu es en paix?",
+        "ka-dunko n moxo": "I wa jam, bisimilla. Merci de demander pour la famille!",
+        "j'aimerais acheter": "Avec plaisir! Nos ensembles sont à 600 MRU. Lequel te plaît?",
+        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva.",
+        "pispa": "Pispa Le Roi en concert exceptionnel! Billetterie sur notre site.",
+        "prix": "Tous nos ensembles sont à 600 MRU.",
+        "azawad": "Azawad Bleu, 600 MRU. Coton peigné. Excellent choix!",
+        "sahel": "Sahel Beige, 600 MRU. Élégance et confort.",
+        "tagant": "Tagant Gris, 600 MRU. Moderne et racé.",
+        "tichitt": "Tichitt Noir, 600 MRU. Intemporel.",
+        "whatsapp": "Notre WhatsApp: +222 34 19 63 04",
+        "contact": "Contact: +222 34 19 63 04 / contact@andu-xara.store"
     };
-    document.head.appendChild(configScript);
-}
 
-// Créer le widget HTML
-function createWidget() {
+    // Fonction pour trouver la meilleure réponse locale
+    function getLocalResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        for (const [key, response] of Object.entries(localResponses)) {
+            if (message.includes(key)) {
+                return response;
+            }
+        }
+        return null;
+    }
+
+    let isOpen = false, isLoading = false;
+    const apiEndpoint = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
+    const avatarImg = '/images/xa-ia-avatar.jpeg';
+
     const widgetHTML = `
         <div class="xa-ia-widget">
             <button class="xa-ia-button" id="xaIaToggle">
-                <img src="/images/xa-ia-avatar.jpeg" alt="XA IA" onerror="this.style.display='none'; this.nextSibling.style.display='flex';">
-                <span class="default-icon" style="display: none;">💬</span>
+                <img src="${avatarImg}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:32px; color:white;\\'>🧡</span>';">
+                <span style="font-size:32px; color:white; display:none;">🧡</span>
             </button>
             <div class="xa-ia-chat hidden" id="xaIaChat">
                 <div class="xa-ia-header">
                     <div class="xa-ia-avatar">
-                        <img src="/images/xa-ia-avatar.jpeg" alt="XA IA" onerror="this.style.display='none'; this.nextSibling.style.display='flex';">
-                        <span class="default-avatar" style="display: none;">🧡</span>
+                        <img src="${avatarImg}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:24px;\\'>🧡</span>';">
+                        <span style="font-size:24px; display:none;">🧡</span>
                     </div>
-                    <div class="xa-ia-title">
-                        <h3>XA IA</h3>
-                        <p>Assistante mode & culture</p>
-                    </div>
+                    <div class="xa-ia-title"><h3>XA IA</h3><p>Assistante mode & culture soninké</p></div>
                     <button class="xa-ia-close" id="xaIaClose">×</button>
                 </div>
                 <div class="xa-ia-messages" id="xaIaMessages">
-                    <div class="xa-ia-message bot">
-                        <strong>I ni ce !</strong><br>
-                        Bienvenue chez Andu-Xara. Je suis XA IA, ton assistante fière et moderne. 💬<br>
-                        <em style="font-size: 12px;">Pose-moi des questions sur nos produits, le concert, ou même apprends le soninké avec moi !</em>
-                    </div>
+                    <div class="xa-ia-message bot"><strong>Beeta !</strong><br>Bienvenue chez Andu-Xara. Je parle le soninké. 🧡<br><em style="font-size:12px;">Dis "An moxo?" (ça va?) ou parle-moi des produits.</em></div>
                 </div>
                 <div class="xa-ia-input-area">
                     <input type="text" class="xa-ia-input" id="xaIaInput" placeholder="Écris ton message...">
@@ -65,130 +101,71 @@ function createWidget() {
             </div>
         </div>
     `;
-    
     document.body.insertAdjacentHTML('beforeend', widgetHTML);
-    
-    // Attacher les événements
-    document.getElementById('xaIaToggle').addEventListener('click', toggleChat);
-    document.getElementById('xaIaClose').addEventListener('click', closeChat);
-    document.getElementById('xaIaSend').addEventListener('click', sendMessage);
-    xaInput = document.getElementById('xaIaInput');
-    xaInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
-    
-    xaMessages = document.getElementById('xaIaMessages');
-}
 
-// Toggle chat
-function toggleChat() {
     const chat = document.getElementById('xaIaChat');
-    XA_IA_CONFIG_WIDGET.isOpen = !XA_IA_CONFIG_WIDGET.isOpen;
-    chat.classList.toggle('hidden', !XA_IA_CONFIG_WIDGET.isOpen);
-    if (XA_IA_CONFIG_WIDGET.isOpen) {
-        xaInput.focus();
+    const toggleBtn = document.getElementById('xaIaToggle');
+    const closeBtn = document.getElementById('xaIaClose');
+    const sendBtn = document.getElementById('xaIaSend');
+    const inputField = document.getElementById('xaIaInput');
+    const messagesDiv = document.getElementById('xaIaMessages');
+
+    function addMessage(text, isUser) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `xa-ia-message ${isUser ? 'user' : 'bot'}`;
+        msgDiv.innerHTML = isUser ? text : text.replace(/\n/g, '<br>');
+        messagesDiv.appendChild(msgDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-}
 
-function closeChat() {
-    const chat = document.getElementById('xaIaChat');
-    XA_IA_CONFIG_WIDGET.isOpen = false;
-    chat.classList.add('hidden');
-}
-
-// Ajouter un message
-function addMessage(text, isUser = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `xa-ia-message ${isUser ? 'user' : 'bot'}`;
-    messageDiv.innerHTML = isUser ? text : text.replace(/\n/g, '<br>');
-    xaMessages.appendChild(messageDiv);
-    xaMessages.scrollTop = xaMessages.scrollHeight;
-    return messageDiv;
-}
-
-// Afficher l'indicateur de frappe
-function showTyping() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'xa-ia-typing';
-    typingDiv.id = 'xaIaTyping';
-    typingDiv.innerHTML = '<span></span><span></span><span></span>';
-    xaMessages.appendChild(typingDiv);
-    xaMessages.scrollTop = xaMessages.scrollHeight;
-}
-
-function hideTyping() {
-    const typing = document.getElementById('xaIaTyping');
-    if (typing) typing.remove();
-}
-
-// Envoyer un message
-async function sendMessage() {
-    const message = xaInput.value.trim();
-    if (!message || XA_IA_CONFIG_WIDGET.isLoading) return;
-    
-    // Afficher le message de l'utilisateur
-    addMessage(message, true);
-    xaInput.value = '';
-    xaInput.style.height = 'auto';
-    
-    // Marquer comme chargement
-    XA_IA_CONFIG_WIDGET.isLoading = true;
-    
-    // Vérifier les réponses rapides locales
-    const quickResponse = typeof findQuickResponse !== 'undefined' ? findQuickResponse(message) : null;
-    
-    if (quickResponse) {
-        // Réponse locale immédiate
-        setTimeout(() => {
-            addMessage(quickResponse, false);
-            XA_IA_CONFIG_WIDGET.isLoading = false;
-        }, 500);
-        return;
+    function showTyping() {
+        const typing = document.createElement('div');
+        typing.className = 'xa-ia-typing';
+        typing.id = 'xaIaTyping';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        messagesDiv.appendChild(typing);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-    
-    // Vérifier si c'est une demande de traduction soninké
-    const soninkeMatch = message.match(/traduis? (.*?) en (soninké|soninke|soninké)/i);
-    if (soninkeMatch) {
-        const word = soninkeMatch[1];
-        const translation = typeof getSoninkeWord !== 'undefined' ? getSoninkeWord(word) : null;
-        if (translation) {
-            addMessage(`🔤 *${word}* en soninké se dit : **${translation}**\n\nI ni wali d'avoir appris ce mot ! 🧡`, false);
-            XA_IA_CONFIG_WIDGET.isLoading = false;
-            return;
-        } else {
-            addMessage("Je n'ai pas encore ce mot dans mon dictionnaire soninké, mais je peux le chercher ! Je vais m'améliorer avec toi. 🧡", false);
-            XA_IA_CONFIG_WIDGET.isLoading = false;
+
+    function hideTyping() {
+        const typing = document.getElementById('xaIaTyping');
+        if (typing) typing.remove();
+    }
+
+    async function sendMessage() {
+        const msg = inputField.value.trim();
+        if (!msg || isLoading) return;
+        addMessage(msg, true);
+        inputField.value = '';
+        isLoading = true;
+
+        // 1. Priorité à la réponse locale
+        const localReply = getLocalResponse(msg);
+        if (localReply) {
+            setTimeout(() => {
+                addMessage(localReply, false);
+                isLoading = false;
+            }, 300);
             return;
         }
-    }
-    
-    // Appeler l'API IA via Cloudflare Worker
-    showTyping();
-    
-    try {
-        const response = await fetch(XA_IA_CONFIG_WIDGET.apiEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: message })
-        });
-        
-        if (!response.ok) throw new Error('Erreur API');
-        
-        const data = await response.json();
-        hideTyping();
-        addMessage(data.response || "Je n'ai pas pu traiter ta demande. Réessaie !", false);
-    } catch (error) {
-        console.error('Erreur XA IA:', error);
-        hideTyping();
-        addMessage("🔌 Désolé, je rencontre un problème technique. Réessaie dans quelques instants. En attendant, tu peux consulter notre site ! 🧡", false);
-    }
-    
-    XA_IA_CONFIG_WIDGET.isLoading = false;
-}
 
-// Démarrer au chargement
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initXAIA);
-} else {
-    initXAIA();
-}
+        // 2. Si aucune réponse locale, on ne fait rien pour éviter les erreurs.
+        // On pourrait ici ajouter une réponse par défaut.
+        setTimeout(() => {
+            addMessage("Je n'ai pas encore appris cette expression. Essaie 'An moxo?', 'Beeta', ou parle des produits.", false);
+            isLoading = false;
+        }, 300);
+    }
+
+    toggleBtn.onclick = () => {
+        isOpen = !isOpen;
+        chat.classList.toggle('hidden', !isOpen);
+        if (isOpen) inputField.focus();
+    };
+    closeBtn.onclick = () => {
+        chat.classList.add('hidden');
+        isOpen = false;
+    };
+    sendBtn.onclick = sendMessage;
+    inputField.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+})();
