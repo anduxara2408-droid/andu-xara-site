@@ -1,5 +1,5 @@
-// XA IA - Widget avec API Groq (soninké authentique) et fallback local
-(function(){
+// XA IA – Assistant intelligent avec recherche externe (soninké / français)
+(function() {
     const styleId = 'xa-ia-style';
     if (!document.getElementById(styleId)) {
         const style = document.createElement('style');
@@ -36,13 +36,9 @@
         document.head.appendChild(style);
     }
 
-    // Configuration
-    const apiEndpoint = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
-    const avatarImg = '/images/xa-ia-avatar.jpeg';
-    let isOpen = false, isLoading = false;
-
-    // Dictionnaire local de secours (fallback)
-    const localFallbackMap = {
+    // --------------------- 1. CONNAISSANCES LOCALES (français / soninké) ---------------------
+    const localKnowledge = {
+        // Soninké – salutations et politesse
         "an moxo": "Ma jam. Nawaari! Et toi, comment ça va?",
         "ammoxo": "Ma jam. Nawaari! Et toi?",
         "ma jam": "Ma jam nawaari! C'est l'essentiel. Ta journée se passe bien?",
@@ -52,33 +48,85 @@
         "an toxo": "N to XA IA. I toxo? (Je m'appelle XA IA, et toi?)",
         "i toxo": "N to XA IA. Ravi de te connaître!",
         "xa kan moxo": "Ma jam. Nawaari! I ya? (Et toi?)",
+        "xori an wa jam": "Jam baane. Paix seulement. Et toi, tu es en paix?",
+        "ka-dunko n moxo": "I wa jam, nawaari! Merci de demander pour la famille.",
         "nawaari": "Bisimilla! (De rien) C'est un plaisir.",
-        "bisimilla": "Je t'en prie! N'hésite pas si tu as besoin.",
+        "bisimilla": "Je t'en prie! N'hésite pas.",
         "hari na o koyi me": "Hari na o koyi me! Reviens vite nous voir.",
-        "xiricé": "Xiricé = grand(e). Andu-Xara, une grande famille 🧡",
-        "leminé": "Leminé = petit(e). Chaque détail compte.",
-        "aaxi": "Aaxi = cher. Nos ensembles valent chaque ouguiya.",
-        "ka ndi": "Ka ndi = ma maison. Andu-Xara, ta maison.",
-        "azawad": "Azawad Bleu, 600 MRU. Coton peigné. Excellent choix!",
-        "sahel": "Sahel Beige, 600 MRU. Élégance et confort.",
+        "o wa katti kaane": "À plus tard! Prends soin de toi.",
+        
+        // Français – questions courantes
+        "tu parles soninké": "Iyo! (Oui) Je parle le soninké authentique. Demande-moi 'an moxo' (comment ça va) ou 'an toxo' (ton nom). 🧡",
+        "comment tu t'appelles": "N to XA IA. Et toi, i toxo?",
+        "je veux quelque chose": "Avec plaisir! Que désires-tu ? Des vêtements, des infos sur le concert, ou autre chose ?",
+        "aide moi": "Bien sûr! Je peux te renseigner sur nos produits (Azawad, Sahel, Tagant, Tichitt), le concert de Pispa Le Roi, ou te parler de la culture soninké. Que souhaites-tu ?",
+        "quels sont vos produits": "Nos ensembles : Azawad Bleu, Sahel Beige, Tagant Gris, Tichitt Noir. 600 MRU chacun. Tu veux des détails sur un modèle ?",
+        "prix": "Tous nos ensembles sont à 600 MRU.",
+        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva, Nouakchott. 🎤",
+        "contact": "WhatsApp: +222 34 19 63 04, Email: contact@andu-xara.store",
+        "merci": "Nawaari! Bisimilla. C'est un plaisir de t'aider.",
+        "whatsapp": "Notre WhatsApp: +222 34 19 63 04",
+        "telephone": "+222 34 19 63 04 (Mauritanie) / +221 76 28 21 163 (Sénégal)",
+        "livraison": "Nous livrons à Nouakchott et bientôt dans toute la Mauritanie.",
+        
+        // Produits
+        "azawad": "Azawad Bleu, 600 MRU. Coton peigné, bleu profond. Excellent choix!",
+        "sahel": "Sahel Beige, 600 MRU. Élégance beige sable.",
         "tagant": "Tagant Gris, 600 MRU. Moderne et racé.",
         "tichitt": "Tichitt Noir, 600 MRU. Intemporel.",
-        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva.",
-        "pispa": "Pispa Le Roi en concert exceptionnel! Billetterie sur notre site.",
-        "prix": "Tous nos ensembles sont à 600 MRU.",
-        "whatsapp": "Notre WhatsApp: +222 34 19 63 04",
-        "contact": "Contact: +222 34 19 63 04 / contact@andu-xara.store"
+        
+        // Mots soninkés simples (culture)
+        "xiricé": "Xiricé signifie 'grand(e)'. Andu-Xara, une grande famille 🧡",
+        "leminé": "Leminé = 'petit(e)'. Chaque détail compte.",
+        "aaxi": "Aaxi = 'cher/coûteux'. Nos ensembles valent chaque ouguiya.",
+        "ka ndi": "Ka ndi = 'ma maison'. Andu-Xara, ta maison.",
+        "iyo": "Iyo! (Oui) Je suis d'accord.",
+        "ayi": "Ayi (Non). Dis-moi ce que tu souhaites.",
+        "n nta a tu": "Je ne sais pas encore. Peux-tu m'apprendre ce mot ? Je l'enregistrerai."
     };
 
-    function getLocalFallback(msg) {
-        const lower = msg.toLowerCase();
-        for (const [key, response] of Object.entries(localFallbackMap)) {
-            if (lower.includes(key)) return response;
+    // --------------------- 2. MOTEUR DE RECHERCHE EXTERNE ---------------------
+    const searchEngines = {
+        glosbe: (query) => `https://fr.glosbe.com/snk/fr/${encodeURIComponent(query)}`,
+        lexilogos: (query) => `https://www.lexilogos.com/soninke_dictionnaire.htm?q=${encodeURIComponent(query)}`,
+        peacecorps: () => `https://files.peacecorps.gov/multimedia/audio/languagelessons/mauritania/MR_Soninke_Language_Lessons.pdf`
+    };
+
+    function detectLanguage(text) {
+        const soninkeIndicators = ['an moxo', 'ammoxo', 'beeta', 'sunka', 'na waari', 'an toxo', 'xa kan moxo', 'iyo', 'ayi', 'xiricé', 'leminé'];
+        if (soninkeIndicators.some(indicator => text.toLowerCase().includes(indicator))) {
+            return 'soninke';
         }
-        return null;
+        return 'french';
     }
 
-    // Construction du DOM
+    async function searchOnline(query, language) {
+        const url = searchEngines.glosbe(query);
+        console.log(`Recherche externe: ${url}`);
+        // Pour l'instant, on propose un lien cliquable.
+        // Dans une version future, on pourrait analyser la page retournée (nécessite un backend).
+        if (language === 'soninke') {
+            return `Je cherche la signification de "${query}" pour toi. Pour être sûr de bien comprendre, je t'ouvre un dictionnaire : [Ouvrir Glosbe](${url})`;
+        } else {
+            return `Pour te répondre précisément, je te propose de consulter cette ressource sur la langue soninké : [Dictionnaire Glosbe](${url})`;
+        }
+    }
+
+    async function getResponse(userMessage) {
+        const lowerMsg = userMessage.toLowerCase();
+        const lang = detectLanguage(userMessage);
+        // Recherche locale
+        for (const [key, response] of Object.entries(localKnowledge)) {
+            if (lowerMsg.includes(key)) {
+                return response;
+            }
+        }
+        // Pas trouvé en local → recherche externe
+        return await searchOnline(userMessage, lang);
+    }
+
+    // --------------------- 3. INTERFACE UTILISATEUR (WIDGET) ---------------------
+    const avatarImg = '/images/xa-ia-avatar.jpeg';
     const widgetHTML = `
         <div class="xa-ia-widget">
             <button class="xa-ia-button" id="xaIaToggle">
@@ -95,7 +143,7 @@
                     <button class="xa-ia-close" id="xaIaClose">×</button>
                 </div>
                 <div class="xa-ia-messages" id="xaIaMessages">
-                    <div class="xa-ia-message bot"><strong>Beeta !</strong><br>Bienvenue chez Andu-Xara. Je parle le soninké. 🧡<br><em style="font-size:12px;">Dis "An moxo?" (ça va?) ou "An toxo?" (ton nom?)</em></div>
+                    <div class="xa-ia-message bot"><strong>Beeta !</strong><br>Bienvenue chez Andu-Xara. Je parle le soninké. 🧡<br><em style="font-size:12px;">Dis "An moxo?" (ça va?) ou "An toxo?" (ton nom?) ou "aide moi".</em></div>
                 </div>
                 <div class="xa-ia-input-area">
                     <input type="text" class="xa-ia-input" id="xaIaInput" placeholder="Écris ton message...">
@@ -113,10 +161,15 @@
     const inputField = document.getElementById('xaIaInput');
     const messagesDiv = document.getElementById('xaIaMessages');
 
+    let isOpen = false;
+    let isLoading = false;
+
     function addMessage(text, isUser) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `xa-ia-message ${isUser ? 'user' : 'bot'}`;
-        msgDiv.innerHTML = isUser ? text : text.replace(/\n/g, '<br>');
+        // Convertir les liens markdown [texte](url) en HTML
+        const withLinks = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+        msgDiv.innerHTML = isUser ? text : withLinks.replace(/\n/g, '<br>');
         messagesDiv.appendChild(msgDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
@@ -141,31 +194,16 @@
         addMessage(msg, true);
         inputField.value = '';
         isLoading = true;
-
-        // Appel à l'API Groq via worker
         showTyping();
+
         try {
-            const res = await fetch(apiEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: msg })
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
+            const reply = await getResponse(msg);
             hideTyping();
-            let reply = data.response || "Désolé, je n'ai pas de réponse pour le moment.";
-            // Supprimer toute trace de bambara
-            reply = reply.replace(/I ni ce|I ni tile|I ni wali|Kanbe/gi, "❌");
             addMessage(reply, false);
-        } catch (error) {
-            console.error("Worker error:", error);
+        } catch (err) {
+            console.error(err);
             hideTyping();
-            const fallback = getLocalFallback(msg);
-            if (fallback) {
-                addMessage(fallback, false);
-            } else {
-                addMessage("N nta a tu (je ne sais pas). Peux-tu reformuler? Tu peux me parler des produits, du concert, ou me dire 'an moxo' pour demander comment ça va. 🧡", false);
-            }
+            addMessage("Je rencontre un problème technique. Réessaie plus tard ou contacte-nous sur WhatsApp : +222 34 19 63 04. 🧡", false);
         }
         isLoading = false;
     }
