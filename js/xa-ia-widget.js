@@ -1,4 +1,4 @@
-// XA IA - Widget avec mémoire conversationnelle soninké
+// XA IA - Widget avec API Groq (soninké authentique) et fallback local
 (function(){
     const styleId = 'xa-ia-style';
     if (!document.getElementById(styleId)) {
@@ -36,46 +36,49 @@
         document.head.appendChild(style);
     }
 
-    // DICTIONNAIRE LOCAL DE CONVERSATION SONINKÉ
-    const localResponses = {
+    // Configuration
+    const apiEndpoint = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
+    const avatarImg = '/images/xa-ia-avatar.jpeg';
+    let isOpen = false, isLoading = false;
+
+    // Dictionnaire local de secours (fallback)
+    const localFallbackMap = {
         "an moxo": "Ma jam. Nawaari! Et toi, comment ça va?",
         "ammoxo": "Ma jam. Nawaari! Et toi?",
         "ma jam": "Ma jam nawaari! C'est l'essentiel. Ta journée se passe bien?",
-        "nawaari": "Bisimilla! (De rien) C'est un plaisir.",
-        "bisimilla": "Je t'en prie! N'hésite pas si tu as besoin d'aide.",
         "beeta": "Beeta! Bonjour! Comment se passe ta matinée?",
         "lella": "Lella! Bon après-midi! Je te souhaite une excellente journée.",
         "sunka": "Sunka! Bonsoir! Comment s'est passée ta journée?",
-        "salaamu aleykum": "Aleykum salaam! Paix et sérénité sur toi.",
-        "xori an wa jam": "Jam baane. Paix seulement. Et toi, tu es en paix?",
-        "ka-dunko n moxo": "I wa jam, bisimilla. Merci de demander pour la famille!",
-        "j'aimerais acheter": "Avec plaisir! Nos ensembles sont à 600 MRU. Lequel te plaît?",
-        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva.",
-        "pispa": "Pispa Le Roi en concert exceptionnel! Billetterie sur notre site.",
-        "prix": "Tous nos ensembles sont à 600 MRU.",
+        "an toxo": "N to XA IA. I toxo? (Je m'appelle XA IA, et toi?)",
+        "i toxo": "N to XA IA. Ravi de te connaître!",
+        "xa kan moxo": "Ma jam. Nawaari! I ya? (Et toi?)",
+        "nawaari": "Bisimilla! (De rien) C'est un plaisir.",
+        "bisimilla": "Je t'en prie! N'hésite pas si tu as besoin.",
+        "hari na o koyi me": "Hari na o koyi me! Reviens vite nous voir.",
+        "xiricé": "Xiricé = grand(e). Andu-Xara, une grande famille 🧡",
+        "leminé": "Leminé = petit(e). Chaque détail compte.",
+        "aaxi": "Aaxi = cher. Nos ensembles valent chaque ouguiya.",
+        "ka ndi": "Ka ndi = ma maison. Andu-Xara, ta maison.",
         "azawad": "Azawad Bleu, 600 MRU. Coton peigné. Excellent choix!",
         "sahel": "Sahel Beige, 600 MRU. Élégance et confort.",
         "tagant": "Tagant Gris, 600 MRU. Moderne et racé.",
         "tichitt": "Tichitt Noir, 600 MRU. Intemporel.",
+        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva.",
+        "pispa": "Pispa Le Roi en concert exceptionnel! Billetterie sur notre site.",
+        "prix": "Tous nos ensembles sont à 600 MRU.",
         "whatsapp": "Notre WhatsApp: +222 34 19 63 04",
         "contact": "Contact: +222 34 19 63 04 / contact@andu-xara.store"
     };
 
-    // Fonction pour trouver la meilleure réponse locale
-    function getLocalResponse(userMessage) {
-        const message = userMessage.toLowerCase();
-        for (const [key, response] of Object.entries(localResponses)) {
-            if (message.includes(key)) {
-                return response;
-            }
+    function getLocalFallback(msg) {
+        const lower = msg.toLowerCase();
+        for (const [key, response] of Object.entries(localFallbackMap)) {
+            if (lower.includes(key)) return response;
         }
         return null;
     }
 
-    let isOpen = false, isLoading = false;
-    const apiEndpoint = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
-    const avatarImg = '/images/xa-ia-avatar.jpeg';
-
+    // Construction du DOM
     const widgetHTML = `
         <div class="xa-ia-widget">
             <button class="xa-ia-button" id="xaIaToggle">
@@ -92,7 +95,7 @@
                     <button class="xa-ia-close" id="xaIaClose">×</button>
                 </div>
                 <div class="xa-ia-messages" id="xaIaMessages">
-                    <div class="xa-ia-message bot"><strong>Beeta !</strong><br>Bienvenue chez Andu-Xara. Je parle le soninké. 🧡<br><em style="font-size:12px;">Dis "An moxo?" (ça va?) ou parle-moi des produits.</em></div>
+                    <div class="xa-ia-message bot"><strong>Beeta !</strong><br>Bienvenue chez Andu-Xara. Je parle le soninké. 🧡<br><em style="font-size:12px;">Dis "An moxo?" (ça va?) ou "An toxo?" (ton nom?)</em></div>
                 </div>
                 <div class="xa-ia-input-area">
                     <input type="text" class="xa-ia-input" id="xaIaInput" placeholder="Écris ton message...">
@@ -139,22 +142,32 @@
         inputField.value = '';
         isLoading = true;
 
-        // 1. Priorité à la réponse locale
-        const localReply = getLocalResponse(msg);
-        if (localReply) {
-            setTimeout(() => {
-                addMessage(localReply, false);
-                isLoading = false;
-            }, 300);
-            return;
+        // Appel à l'API Groq via worker
+        showTyping();
+        try {
+            const res = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            hideTyping();
+            let reply = data.response || "Désolé, je n'ai pas de réponse pour le moment.";
+            // Supprimer toute trace de bambara
+            reply = reply.replace(/I ni ce|I ni tile|I ni wali|Kanbe/gi, "❌");
+            addMessage(reply, false);
+        } catch (error) {
+            console.error("Worker error:", error);
+            hideTyping();
+            const fallback = getLocalFallback(msg);
+            if (fallback) {
+                addMessage(fallback, false);
+            } else {
+                addMessage("N nta a tu (je ne sais pas). Peux-tu reformuler? Tu peux me parler des produits, du concert, ou me dire 'an moxo' pour demander comment ça va. 🧡", false);
+            }
         }
-
-        // 2. Si aucune réponse locale, on ne fait rien pour éviter les erreurs.
-        // On pourrait ici ajouter une réponse par défaut.
-        setTimeout(() => {
-            addMessage("Je n'ai pas encore appris cette expression. Essaie 'An moxo?', 'Beeta', ou parle des produits.", false);
-            isLoading = false;
-        }, 300);
+        isLoading = false;
     }
 
     toggleBtn.onclick = () => {
