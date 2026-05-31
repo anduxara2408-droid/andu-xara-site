@@ -1,4 +1,4 @@
-// XA IA – Assistant intelligent avec recherche externe (soninké / français)
+// XA IA – Widget connecté au worker Cloudflare (dictionnaire de 591 mots)
 (function() {
     const styleId = 'xa-ia-style';
     if (!document.getElementById(styleId)) {
@@ -36,107 +36,20 @@
         document.head.appendChild(style);
     }
 
-    // --------------------- 1. CONNAISSANCES LOCALES (français / soninké) ---------------------
-    const localKnowledge = {
-        // Soninké – salutations et politesse
-        "an moxo": "Ma jam. Nawaari! Et toi, comment ça va?",
-        "ammoxo": "Ma jam. Nawaari! Et toi?",
-        "ma jam": "Ma jam nawaari! C'est l'essentiel. Ta journée se passe bien?",
-        "beeta": "Beeta! Bonjour! Comment se passe ta matinée?",
-        "lella": "Lella! Bon après-midi! Je te souhaite une excellente journée.",
-        "sunka": "Sunka! Bonsoir! Comment s'est passée ta journée?",
-        "an toxo": "N to XA IA. I toxo? (Je m'appelle XA IA, et toi?)",
-        "i toxo": "N to XA IA. Ravi de te connaître!",
-        "xa kan moxo": "Ma jam. Nawaari! I ya? (Et toi?)",
-        "xori an wa jam": "Jam baane. Paix seulement. Et toi, tu es en paix?",
-        "ka-dunko n moxo": "I wa jam, nawaari! Merci de demander pour la famille.",
-        "nawaari": "Bisimilla! (De rien) C'est un plaisir.",
-        "bisimilla": "Je t'en prie! N'hésite pas.",
-        "hari na o koyi me": "Hari na o koyi me! Reviens vite nous voir.",
-        "o wa katti kaane": "À plus tard! Prends soin de toi.",
-        
-        // Français – questions courantes
-        "tu parles soninké": "Iyo! (Oui) Je parle le soninké authentique. Demande-moi 'an moxo' (comment ça va) ou 'an toxo' (ton nom). 🧡",
-        "comment tu t'appelles": "N to XA IA. Et toi, i toxo?",
-        "je veux quelque chose": "Avec plaisir! Que désires-tu ? Des vêtements, des infos sur le concert, ou autre chose ?",
-        "aide moi": "Bien sûr! Je peux te renseigner sur nos produits (Azawad, Sahel, Tagant, Tichitt), le concert de Pispa Le Roi, ou te parler de la culture soninké. Que souhaites-tu ?",
-        "quels sont vos produits": "Nos ensembles : Azawad Bleu, Sahel Beige, Tagant Gris, Tichitt Noir. 600 MRU chacun. Tu veux des détails sur un modèle ?",
-        "prix": "Tous nos ensembles sont à 600 MRU.",
-        "concert": "Pispa Le Roi le 10ème jour Tabaski 2026 à 19h au Titanic Couva, Nouakchott. 🎤",
-        "contact": "WhatsApp: +222 34 19 63 04, Email: contact@andu-xara.store",
-        "merci": "Nawaari! Bisimilla. C'est un plaisir de t'aider.",
-        "whatsapp": "Notre WhatsApp: +222 34 19 63 04",
-        "telephone": "+222 34 19 63 04 (Mauritanie) / +221 76 28 21 163 (Sénégal)",
-        "livraison": "Nous livrons à Nouakchott et bientôt dans toute la Mauritanie.",
-        
-        // Produits
-        "azawad": "Azawad Bleu, 600 MRU. Coton peigné, bleu profond. Excellent choix!",
-        "sahel": "Sahel Beige, 600 MRU. Élégance beige sable.",
-        "tagant": "Tagant Gris, 600 MRU. Moderne et racé.",
-        "tichitt": "Tichitt Noir, 600 MRU. Intemporel.",
-        
-        // Mots soninkés simples (culture)
-        "xiricé": "Xiricé signifie 'grand(e)'. Andu-Xara, une grande famille 🧡",
-        "leminé": "Leminé = 'petit(e)'. Chaque détail compte.",
-        "aaxi": "Aaxi = 'cher/coûteux'. Nos ensembles valent chaque ouguiya.",
-        "ka ndi": "Ka ndi = 'ma maison'. Andu-Xara, ta maison.",
-        "iyo": "Iyo! (Oui) Je suis d'accord.",
-        "ayi": "Ayi (Non). Dis-moi ce que tu souhaites.",
-        "n nta a tu": "Je ne sais pas encore. Peux-tu m'apprendre ce mot ? Je l'enregistrerai."
-    };
+    // Configuration
+    const API_URL = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
+    const AVATAR_IMG = '/images/xa-ia-avatar.jpeg';
 
-    // --------------------- 2. MOTEUR DE RECHERCHE EXTERNE ---------------------
-    const searchEngines = {
-        glosbe: (query) => `https://fr.glosbe.com/snk/fr/${encodeURIComponent(query)}`,
-        lexilogos: (query) => `https://www.lexilogos.com/soninke_dictionnaire.htm?q=${encodeURIComponent(query)}`,
-        peacecorps: () => `https://files.peacecorps.gov/multimedia/audio/languagelessons/mauritania/MR_Soninke_Language_Lessons.pdf`
-    };
-
-    function detectLanguage(text) {
-        const soninkeIndicators = ['an moxo', 'ammoxo', 'beeta', 'sunka', 'na waari', 'an toxo', 'xa kan moxo', 'iyo', 'ayi', 'xiricé', 'leminé'];
-        if (soninkeIndicators.some(indicator => text.toLowerCase().includes(indicator))) {
-            return 'soninke';
-        }
-        return 'french';
-    }
-
-    async function searchOnline(query, language) {
-        const url = searchEngines.glosbe(query);
-        console.log(`Recherche externe: ${url}`);
-        // Pour l'instant, on propose un lien cliquable.
-        // Dans une version future, on pourrait analyser la page retournée (nécessite un backend).
-        if (language === 'soninke') {
-            return `Je cherche la signification de "${query}" pour toi. Pour être sûr de bien comprendre, je t'ouvre un dictionnaire : [Ouvrir Glosbe](${url})`;
-        } else {
-            return `Pour te répondre précisément, je te propose de consulter cette ressource sur la langue soninké : [Dictionnaire Glosbe](${url})`;
-        }
-    }
-
-    async function getResponse(userMessage) {
-        const lowerMsg = userMessage.toLowerCase();
-        const lang = detectLanguage(userMessage);
-        // Recherche locale
-        for (const [key, response] of Object.entries(localKnowledge)) {
-            if (lowerMsg.includes(key)) {
-                return response;
-            }
-        }
-        // Pas trouvé en local → recherche externe
-        return await searchOnline(userMessage, lang);
-    }
-
-    // --------------------- 3. INTERFACE UTILISATEUR (WIDGET) ---------------------
-    const avatarImg = '/images/xa-ia-avatar.jpeg';
     const widgetHTML = `
         <div class="xa-ia-widget">
             <button class="xa-ia-button" id="xaIaToggle">
-                <img src="${avatarImg}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:32px; color:white;\\'>🧡</span>';">
+                <img src="${AVATAR_IMG}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:32px; color:white;\\'>🧡</span>';">
                 <span style="font-size:32px; color:white; display:none;">🧡</span>
             </button>
             <div class="xa-ia-chat hidden" id="xaIaChat">
                 <div class="xa-ia-header">
                     <div class="xa-ia-avatar">
-                        <img src="${avatarImg}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:24px;\\'>🧡</span>';">
+                        <img src="${AVATAR_IMG}" alt="XA IA" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\\'font-size:24px;\\'>🧡</span>';">
                         <span style="font-size:24px; display:none;">🧡</span>
                     </div>
                     <div class="xa-ia-title"><h3>XA IA</h3><p>Assistante mode & culture soninké</p></div>
@@ -167,9 +80,7 @@
     function addMessage(text, isUser) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `xa-ia-message ${isUser ? 'user' : 'bot'}`;
-        // Convertir les liens markdown [texte](url) en HTML
-        const withLinks = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-        msgDiv.innerHTML = isUser ? text : withLinks.replace(/\n/g, '<br>');
+        msgDiv.innerHTML = isUser ? text : text.replace(/\n/g, '<br>');
         messagesDiv.appendChild(msgDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
@@ -197,13 +108,19 @@
         showTyping();
 
         try {
-            const reply = await getResponse(msg);
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
             hideTyping();
-            addMessage(reply, false);
-        } catch (err) {
-            console.error(err);
+            addMessage(data.response || "Je n'ai pas de réponse pour le moment.", false);
+        } catch (error) {
+            console.error("Worker error:", error);
             hideTyping();
-            addMessage("Je rencontre un problème technique. Réessaie plus tard ou contacte-nous sur WhatsApp : +222 34 19 63 04. 🧡", false);
+            addMessage("Désolé, je n'arrive pas à contacter mon serveur. Mais je peux répondre aux questions sur les produits, les prix et le concert. Que veux-tu savoir ? 🧡", false);
         }
         isLoading = false;
     }
