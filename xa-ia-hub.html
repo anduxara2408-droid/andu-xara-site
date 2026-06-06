@@ -1,267 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Espace XA IA — Andu-Xara</title>
-    <meta name="description" content="Bienvenue dans votre espace XA IA. Discutez avec l'assistant, explorez le dictionnaire soninké, apprenez la culture et plus encore.">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #e67e22;
-            --primary-dark: #d35400;
-            --primary-light: #f39c12;
-            --earth: #2c1a0f;
-            --earth-light: #4a2e1c;
-            --cream: #fff6e8;
-            --gold: #e6b17e;
-            --border: #e2e8f0;
-            --background: #fefaf5;
-            --muted: #4b5563;
-            --card-bg: #ffffff;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--background);
-            color: #1e1e2a;
-            line-height: 1.5;
-        }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        
-        /* Header */
-        .site-header {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(4px);
-            background: rgba(255,255,255,0.95);
-        }
-        .header-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 800;
-            font-size: 1.2rem;
-        }
-        .logo-text {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--earth);
-        }
-        .logo-text span { color: var(--primary); }
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            color: var(--muted);
-            text-decoration: none;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 40px;
-            transition: 0.2s;
-        }
-        .back-link:hover { background: #e2e8f0; color: var(--primary); }
-        
-        /* Hero hub */
-        .hub-hero {
-            padding: 40px 0 20px;
-            text-align: center;
-        }
-        .hub-badge {
-            display: inline-block;
-            background: rgba(230,126,34,0.12);
-            color: var(--primary);
-            border-radius: 40px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-        .hub-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--earth);
-            margin-bottom: 12px;
-        }
-        .hub-sub {
-            color: var(--muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Grille des outils */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin: 48px 0 60px;
-        }
-        .tool-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            padding: 28px;
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .tool-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
-        }
-        .tool-icon {
-            width: 56px;
-            height: 56px;
-            background: #fef2e8;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        .tool-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--earth);
-        }
-        .tool-desc {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .tool-arrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
-        
-        /* Footer */
-        .footer {
-            background: var(--earth);
-            color: #ccc;
-            padding: 40px 0 24px;
-            margin-top: 40px;
-        }
-        .footer a { color: #ccc; text-decoration: none; transition: 0.2s; }
-        .footer a:hover { color: var(--gold); }
-        
-        @media (max-width: 700px) {
-            .tools-grid { grid-template-columns: 1fr; }
-            .hub-title { font-size: 1.8rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace XA IA – Andu-Xara</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #fefaf5; color: #1e1e2a; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    header { background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 0; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 36px; height: 36px; background: #e67e22; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; }
+    .logo-text { font-weight: 700; }
+    .logo-text span { color: #e67e22; }
+    .hero { text-align: center; padding: 48px 0 32px; }
+    .hero h1 { font-size: 2rem; margin-top: 16px; }
+    .hero p { color: #4b5563; max-width: 600px; margin: 12px auto 0; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin: 48px 0 60px; }
+    .tool-card { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 28px; transition: all 0.2s; text-decoration: none; color: inherit; display: block; }
+    .tool-card:hover { transform: translateY(-4px); border-color: #e67e22; box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1); }
+    .tool-icon { font-size: 2rem; margin-bottom: 16px; }
+    .tool-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+    .tool-desc { color: #4b5563; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+    .tool-arrow { color: #e67e22; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+    footer { background: #2c1a0f; color: #ccc; padding: 40px 0; text-align: center; font-size: 0.85rem; }
+  </style>
 </head>
 <body>
-
-<header class="site-header">
-    <div class="container">
-        <div class="header-inner">
-            <div class="logo-area">
-                <div class="logo-icon">X</div>
-                <div class="logo-text">XA <span>IA</span></div>
-            </div>
-            <a href="index.html" class="back-link">← Retour au site</a>
-        </div>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo"><div class="logo-icon">X</div><div class="logo-text">XA <span>IA</span></div></div>
+      <a href="index.html" style="color:#4b5563; text-decoration:none;">← Retour au site</a>
     </div>
+  </div>
 </header>
-
-<main>
-    <div class="container">
-        <div class="hub-hero">
-            <div class="hub-badge">🧡 Ton espace intelligent</div>
-            <h1 class="hub-title">Bienvenue, <span style="color: var(--primary);">Cheikhou</span></h1>
-            <p class="hub-sub">Choisis l'outil que tu veux utiliser. Tous tes outils XA IA en un seul endroit.</p>
-        </div>
-
-        <div class="tools-grid">
-            <a href="xa-ia-chat.html" class="tool-card">
-                <div class="tool-icon">💬</div>
-                <h2 class="tool-title">Assistant IA</h2>
-                <p class="tool-desc">Discute en soninké, français, anglais avec l'IA spécialisée Andu-Xara. Réponses intelligentes, mémoire de la conversation.</p>
-                <span class="tool-arrow">Ouvrir →</span>
-            </a>
-
-            <a href="#" class="tool-card" id="comingSoonDict">
-                <div class="tool-icon">📖</div>
-                <h2 class="tool-title">Dictionnaire Soninké</h2>
-                <p class="tool-desc">Cherche un mot Soninké ↔ Français ↔ Anglais, écoute la prononciation, sauvegarde tes favoris.</p>
-                <span class="tool-arrow">Bientôt disponible →</span>
-            </a>
-
-            <a href="#" class="tool-card" id="comingSoonLearn">
-                <div class="tool-icon">🎓</div>
-                <h2 class="tool-title">Apprentissage</h2>
-                <p class="tool-desc">Leçons thématiques, quiz et flashcards pour progresser à ton rythme.</p>
-                <span class="tool-arrow">Bientôt disponible →</span>
-            </a>
-
-            <a href="#" class="tool-card" id="comingSoonCulture">
-                <div class="tool-icon">🏛️</div>
-                <h2 class="tool-title">Bibliothèque culturelle</h2>
-                <p class="tool-desc">Proverbes, contes, traditions, musique et histoire du peuple Soninké.</p>
-                <span class="tool-arrow">Bientôt disponible →</span>
-            </a>
-
-            <a href="#" class="tool-card" id="comingSoonTranslate">
-                <div class="tool-icon">🌍</div>
-                <h2 class="tool-title">Traduction multi-dialectes</h2>
-                <p class="tool-desc">Compare les variantes dialectales du soninké (Massina, Kayes, etc.)</p>
-                <span class="tool-arrow">Bientôt disponible →</span>
-            </a>
-        </div>
-    </div>
-</main>
-
-<footer class="footer">
-    <div class="container">
-        <div style="text-align: center; font-size: 0.85rem;">
-            <p>© 2026 Andu-Xara — XA IA, l'intelligence au service du Soninké</p>
-        </div>
-    </div>
+<div class="container">
+  <div class="hero">
+    <div style="background:#e67e2210; display:inline-block; padding:4px 12px; border-radius:40px; color:#e67e22; font-size:0.75rem;">🧡 Ton espace intelligent</div>
+    <h1>Bienvenue, <span style="color:#e67e22;">Cheikhou</span></h1>
+    <p>Choisis l'outil que tu veux utiliser. Tous tes outils XA IA en un seul endroit.</p>
+  </div>
+  <div class="tools-grid">
+    <a href="xa-ia-chat.html" class="tool-card">
+      <div class="tool-icon">💬</div>
+      <div class="tool-title">Assistant IA</div>
+      <div class="tool-desc">Discute en soninké, français, anglais avec l'IA spécialisée Andu-Xara.</div>
+      <span class="tool-arrow">Ouvrir →</span>
+    </a>
+    <a href="#" class="tool-card" id="comingSoonDict">
+      <div class="tool-icon">📖</div>
+      <div class="tool-title">Dictionnaire Soninké</div>
+      <div class="tool-desc">Recherche de mots, traduction, favoris.</div>
+      <span class="tool-arrow">Bientôt →</span>
+    </a>
+    <a href="#" class="tool-card" id="comingSoonLearn">
+      <div class="tool-icon">🎓</div>
+      <div class="tool-title">Apprentissage</div>
+      <div class="tool-desc">Leçons, quiz, progression.</div>
+      <span class="tool-arrow">Bientôt →</span>
+    </a>
+    <a href="#" class="tool-card" id="comingSoonCulture">
+      <div class="tool-icon">🏛️</div>
+      <div class="tool-title">Bibliothèque culturelle</div>
+      <div class="tool-desc">Proverbes, contes, traditions soninkés.</div>
+      <span class="tool-arrow">Bientôt →</span>
+    </a>
+  </div>
+</div>
+<footer>
+  <div class="container">© 2026 Andu-Xara — XA IA, l'intelligence au service du Soninké</div>
 </footer>
-
 <script>
-    // Alert pour les fonctionnalités à venir
-    const comingLinks = ['comingSoonDict', 'comingSoonLearn', 'comingSoonCulture', 'comingSoonTranslate'];
-    comingLinks.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('click', (e) => {
-                e.preventDefault();
-                alert("🚧 Cette fonctionnalité arrive très bientôt ! En attendant, utilisez l'Assistant IA ou consultez notre page Histoire Soninké.");
-            });
-        }
-    });
+  ['comingSoonDict', 'comingSoonLearn', 'comingSoonCulture'].forEach(id => {
+    document.getElementById(id)?.addEventListener('click', (e) => { e.preventDefault(); alert("🚧 Fonctionnalité à venir très bientôt !"); });
+  });
 </script>
 </body>
 </html>
