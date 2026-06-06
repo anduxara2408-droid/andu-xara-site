@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Soninké — Histoire, Culture & Diaspora | Andu-Xara</title>
+    <meta name="description" content="Plongez dans l'histoire millénaire du peuple Soninké, berceau de l'empire du Ghana (Wagadou). Découvrez leur langue, leurs valeurs (Terimè, Nawaari…), leur diaspora et l'engagement d'Andu-Xara.">
+    <meta property="og:title" content="Soninké — Histoire, Culture & Diaspora">
+    <meta property="og:description" content="L'empire de Wagadou, la langue sooninkanxanne, les valeurs soninkés et une diaspora présente sur tous les continents.">
+    <meta property="og:image" content="https://andu-xara.store/images/og-soninke.jpg">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #e67e22;
+            --primary-dark: #d35400;
+            --earth: #2c1a0f;
+            --earth-light: #4a2e1c;
+            --cream: #fff6e8;
+            --gold: #e6b17e;
+            --border: #e2e8f0;
+            --background: #fefaf5;
+            --muted: #4b5563;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: #1e1e2a;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* HEADER */
+        .main-header {
+            background: white;
+            padding: 16px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 32px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        
+        /* HERO SECTION */
+        .hero-soninke {
+            position: relative;
+            background: linear-gradient(135deg, #1a0f0a 0%, #3a2518 100%);
+            color: white;
+            padding: 90px 0;
+            overflow: hidden;
+        }
+        .hero-soninke::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" opacity="0.08"><path fill="none" stroke="%23e67e22" stroke-width="2" d="M0,400 Q300,200 600,400 T1200,400"/><path fill="none" stroke="%23e67e22" stroke-width="1.5" d="M0,500 Q400,300 800,500 T1200,500"/><circle cx="200" cy="300" r="80" fill="none" stroke="%23e67e22" stroke-width="1"/><circle cx="900" cy="500" r="120" fill="none" stroke="%23e67e22" stroke-width="1"/></svg>');
+            background-repeat: repeat;
+            background-size: 400px;
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .hero-tag {
+            display: inline-block;
+            background: rgba(230,126,34,0.2);
+            border: 1px solid var(--gold);
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+        .hero-title span { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+        .hero-stats .stat {
+            text-align: center;
+        }
+        .hero-stats .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+        .hero-stats .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .btn-primary, .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: rgba(230,126,34,0.15);
+            transform: translateY(-2px);
+        }
+        
+        /* SECTIONS */
+        .section {
+            padding: 80px 0;
+        }
+        .section-light { background: white; }
+        .section-dark { background: #fef7ed; }
+        .section-title {
+            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .section-title span { color: var(--primary); }
+        .section-desc {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 48px;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+        
+        /* CARDS GRID */
+        .grid-2, .grid-3, .grid-4 {
+            display: grid;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+        }
+        .card-content { padding: 28px; }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--earth);
+        }
+        .card-title span { color: var(--primary); }
+        .card-text { color: var(--muted); line-height: 1.6; }
+        .value-icon { font-size: 2.5rem; margin-bottom: 16px; display: inline-block; }
+        
+        /* LANGUAGE SECTION */
+        .language-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .lang-card {
+            background: white;
+            border-radius: 60px;
+            padding: 12px 24px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        .phrase-block {
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 28px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .phrase-soninke {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Fraunces', serif;
+        }
+        
+        /* RESOURCES */
+        .resources-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 30px;
+        }
+        .resource-link {
+            background: white;
+            border-radius: 60px;
+            padding: 10px 24px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .resource-link:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: var(--earth);
+            color: #ccc;
+            padding: 60px 0 30px;
+        }
+        .footer a { color: #ccc; text-decoration: none; transition: color 0.3s; }
+        .footer a:hover { color: var(--gold); }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .hero-soninke { padding: 60px 0; }
+            .section { padding: 60px 0; }
+            .grid-2, .grid-3, .grid-4 { gap: 20px; }
+        }
+    </style>
+    <!-- Intégration du widget XA IA (chatbot) -->
+    <link rel="stylesheet" href="/css/xa-ia.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire-soninke.html" class="nav-link active">Histoire Soninké</a>
+                    <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="billetterie.html" class="nav-link">Concert</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-soninke">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag">Premier peuple à avoir fondé un empire en Afrique de l'Ouest</div>
+                <h1 class="hero-title">Soninké — <span>l'héritage de Wagadou</span></h1>
+                <p class="hero-sub">Des commerçants de l'or aux bâtisseurs de l'empire du Ghana, découvrez une culture millénaire toujours vivante entre tradition et diaspora.</p>
+                <div class="hero-stats">
+                    <div class="stat"><div class="stat-number">+3M</div><div class="stat-label">locuteurs</div></div>
+                    <div class="stat"><div class="stat-number">7</div><div class="stat-label">pays principaux</div></div>
+                    <div class="stat"><div class="stat-number">IVe s.</div><div class="stat-label">apogée de Wagadou</div></div>
+                </div>
+                <div class="btn-group">
+                    <a href="xa-ia-hub.html" class="btn-primary">🧡 Discuter avec XA IA</a>
+                    <a href="#culture" class="btn-outline">📖 Explorer la culture</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION INTRO : HISTOIRE ET EMPIRE -->
+    <section class="section section-light" id="histoire">
+        <div class="container">
+            <h2 class="section-title">L'empire de <span>Wagadou</span> (Ghana) — le premier empire noir</h2>
+            <div class="section-desc">Dès le IIIe siècle, les Soninkés fondent un État sophistiqué, maîtrisant le fer et le commerce transsaharien.</div>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>🎖️</span> Wagadou, l'empire de l'or</h3>
+                        <p class="card-text">Fondé par le peuple Soninké, l'empire du Ghana (Wagadou) s'étendait sur le Mali, la Mauritanie et le Sénégal actuels. Sa capitale Koumbi Saleh était un carrefour commercial où l'or, le sel et les échanges transsahariens alimentaient sa prospérité <strong>([reference:0])</strong>. Les souverains soninkés portaient le titre de « Ghana » — maître de l'or.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>⚔️</span> Une organisation avancée</h3>
+                        <p class="card-text">L'empire disposait d'une administration centralisée, d'une armée redoutable (cavalerie) et d'un système fiscal élaboré. La cour impériale contrôlait les royaumes vassaux tout en respectant leur autonomie <strong>([reference:1])</strong>. Les Soninké étaient également réputés pour leur maîtrise de la métallurgie du fer.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>📜</span> Dinga Cissé, l'ancêtre fondateur</h3>
+                        <p class="card-text">Selon la tradition orale, Dinga Cissé, figure mythique venue d'Égypte (Assouan), est l'ancêtre fondateur de la dynastie régnante et l'instigateur de la puissance soninké <strong>([reference:2])</strong>. Son nom reste intimement lié à la naissance de Wagadou.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>🏛️</span> Koumbi Saleh, capitale mythique</h3>
+                        <p class="card-text">Capitale de l'empire à partir du IVe siècle, Koumbi Saleh comptait jusqu'à 30 000 habitants. Les fouilles archéologiques y ont révélé deux villes distinctes : une pour les musulmans commerçants, l'autre pour le roi soninké <strong>([reference:3])</strong>. Elle tomba au XIIIe siècle sous les coups de Soundiata Keïta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION CULTURE ET VALEURS -->
+    <section class="section section-dark" id="culture">
+        <div class="container">
+            <h2 class="section-title">Les valeurs qui traversent <span>les générations</span></h2>
+            <div class="section-desc">Au-delà de l'histoire, la société soninké repose sur des piliers intemporels.</div>
+            <div class="grid-4">
+                <div class="card"><div class="card-content"><div class="value-icon">🤝</div><h3 class="card-title"><span>Terimè</span></h3><p class="card-text">Amitié, solidarité clanique et respect des liens familiaux. L'entraide est une valeur sacrée.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">⚖️</div><h3 class="card-title"><span>Nawaari</span></h3><p class="card-text">Reconnaissance et gratitude. Remercier et honorer la parole donnée sont des marques de dignité.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🌍</div><h3 class="card-title"><span>Diaspora dynamique</span></h3><p class="card-text">Esprit d'entreprise et mobilité. Les Soninké ont toujours su maintenir des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
+            </div>
+            <div class="phrase-block">
+                <p class="phrase-soninke">« N’oublie jamais ta famille, c’est ton bouclier. »</p>
+                <p class="card-text" style="margin-top: 12px;">— Proverbe soninké</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION LANGUE SONINKÉ -->
+    <section class="section section-light" id="langue">
+        <div class="container">
+            <h2 class="section-title">La langue soninké (Sooninkanxanne)</h2>
+            <div class="section-desc">Une langue mandée parlée par plus de 3 millions de personnes, reconnue comme langue nationale au Mali, au Sénégal et en Mauritanie.</div>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>🗣️</span> Quelques mots essentiels</h3>
+                        <ul style="margin-top: 16px; list-style: none;">
+                            <li style="margin-bottom: 12px;"><strong>An moxo ?</strong> — Comment ça va ?</li>
+                            <li style="margin-bottom: 12px;"><strong>Ma jam !</strong> — Je vais bien !</li>
+                            <li style="margin-bottom: 12px;"><strong>Nawaari</strong> — Merci</li>
+                            <li style="margin-bottom: 12px;"><strong>Hari na o koyi me !</strong> — Au revoir</li>
+                            <li style="margin-bottom: 12px;"><strong>Beeta !</strong> — Bonjour (le matin)</li>
+                            <li><strong>Sunka !</strong> — Bonsoir</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>📚</span> Apprendre le soninké</h3>
+                        <p class="card-text">Plusieurs ressources gratuites existent pour découvrir la langue :</p>
+                        <div class="resources-list">
+                            <a href="https://www.livelingua.com/course/all/Soninke_Language_Lessons" target="_blank" rel="noopener" class="resource-link">Peace Corps</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.soninke.learn" target="_blank" rel="noopener" class="resource-link">Appli Sooninke</a>
+                            <a href="https://fr.glosbe.com/snk/fr" target="_blank" rel="noopener" class="resource-link">Glosbe</a>
+                            <a href="https://www.asawan.org/" target="_blank" rel="noopener" class="resource-link">Lexique Asawan</a>
+                        </div>
+                        <p class="card-text" style="margin-top: 20px;"><small>Sources : Peace Corps Mauritanie, Live Lingua, Glosbe.</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="phrase-block">
+                <p class="phrase-soninke">I ni ce — Merci pour votre intérêt, et que la mémoire de nos ancêtres guide votre route. 🧡</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIASPORA -->
+    <section class="section section-dark" id="diaspora">
+        <div class="container">
+            <h2 class="section-title">Une diaspora <span>active</span> sur tous les continents</h2>
+            <div class="section-desc">Présente en France, en Italie, aux États‑Unis, au Canada, en Espagne… la diaspora soninké préserve sa langue et sa culture tout en participant à la vitalité économique.</div>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>🌍</span> Présence mondiale</h3>
+                        <p class="card-text">Outre les pays ouest‑africains (Mali, Sénégal, Mauritanie, Gambie, Guinée), d'importantes communautés soninkés vivent en <strong>France</strong>, <strong>Italie</strong>, <strong>Espagne</strong>, <strong>États‑Unis</strong> et au <strong>Canada</strong> <strong>([reference:4])</strong>. Cette dispersion s'est accentuée à partir du XXe siècle avec les migrations de travail.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title"><span>📖</span> Mémoire et transmission</h3>
+                        <p class="card-text">Les associations culturelles, les cours de langue et les festivals (comme le FISO à Dakar) permettent aux jeunes générations de rester connectées à leurs racines. L'engagement d’Andu‑Xara s’inscrit dans ce mouvement.</p>
+                        <p class="card-text" style="margin-top: 16px;">✊🏿 <em>« Quand les Américains ont marché sur la Lune, un Soninké était déjà là‑bas. »</em> — dicton ouest‑africain <strong>([reference:5])</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION RESSOURCES + BOUTON XA IA -->
+    <section class="section section-light" id="discuter">
+        <div class="container">
+            <div class="phrase-block" style="background: var(--earth); color: white;">
+                <h2 class="section-title" style="color: white;">Discuter avec <span style="color: var(--gold);">XA IA</span></h2>
+                <p style="max-width: 600px; margin: 0 auto 24px;">Posez vos questions sur l'histoire, la langue ou la culture soninké à notre intelligence artificielle. XA IA répond en soninké et en français.</p>
+                <a href="#" id="openChatBtn" class="btn-primary" style="background: var(--gold); color: var(--earth);">🧡 Ouvrir XA IA</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div><h4>Andu-Xara</h4><p>Mode afro-urbaine depuis 2020</p><p>🌍 Livraison à Nouakchott et Sénégal</p></div>
+                <div><h4>Liens</h4><ul style="list-style: none;"><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="histoire-soninke.html">Histoire Soninké</a></li><li><a href="billetterie.html">Concert</a></li></ul></div>
+                <div><h4>Contact</h4><p><a href="tel:+22234196304">+222 34 19 63 04</a></p><p><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></p></div>
+            </div>
+            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #4a5568; padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p></div>
+        </div>
+    </footer>
+
+    <!-- Scripts XA IA (widget) -->
+    <script src="/js/xa-ia-config.js"></script>
+    <script src="/js/xa-ia-widget.js"></script>
+    <script>
+        // Attendre le chargement du widget puis ouvrir automatiquement le chat si l'utilisateur clique sur le bouton
+        document.addEventListener('DOMContentLoaded', function() {
+            const openChatBtn = document.getElementById('openChatBtn');
+            if (openChatBtn) {
+                openChatBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Tenter d'ouvrir le widget XA IA (icône existante)
+                    const toggleBtn = document.getElementById('xaIaToggle');
+                    if (toggleBtn) {
+                        toggleBtn.click();
+                    } else {
+                        alert("Le chat XA IA sera bientôt disponible. En attendant, vous pouvez nous envoyer un message sur WhatsApp.");
+                    }
+                });
+            }
+            const discuterBtn = document.getElementById('discuterBtn');
+            if (discuterBtn) {
+                discuterBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const toggleBtn = document.getElementById('xaIaToggle');
+                    if (toggleBtn) toggleBtn.click();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
