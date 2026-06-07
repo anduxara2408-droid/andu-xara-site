@@ -204,6 +204,29 @@
         .card-text { color: var(--muted); line-height: 1.6; }
         .value-icon { font-size: 2.5rem; margin-bottom: 16px; display: inline-block; }
         
+        /* PROVERBE STYLISÉ */
+        .proverb-block {
+            background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%);
+            border-radius: 30px;
+            padding: 40px 30px;
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            border-left: 5px solid var(--gold);
+        }
+        .proverb-text {
+            font-size: 1.4rem;
+            font-weight: 500;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .proverb-meaning {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
         /* SECTION LANGUE */
         .phrase-block {
             background: var(--cream);
@@ -260,6 +283,7 @@
             .hero-soninke { height: 60vh; min-height: 400px; }
             .section { padding: 60px 0; }
             .grid-2, .grid-3, .grid-4 { gap: 20px; }
+            .proverb-text { font-size: 1.1rem; }
         }
     </style>
     <link rel="stylesheet" href="/css/xa-ia.css">
@@ -342,6 +366,19 @@
                 <div class="card"><div class="card-content"><div class="value-icon">🌍</div><h3 class="card-title"><span>Diaspora dynamique</span></h3><p class="card-text">Esprit d'entreprise et mobilité. Les Soninké ont toujours su maintenir des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
                 <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
             </div>
+            
+            <!-- Proverbe soninké stylisé -->
+            <div class="proverb-block">
+                <div class="proverb-text">
+                    « A défaut de pouvoir téter ta mère, tu tèteras ta grand‑mère. »
+                </div>
+                <div class="proverb-meaning">
+                    <em>« Faute de grives, on mange des merles. »</em><br>
+                    Se dit lorsque l’on n’a pas ce que l’on a escompté, pour que l’on se contente de ce que l’on a. 
+                    Une leçon de résilience et de sagesse transmise par les anciens.
+                </div>
+            </div>
+            
             <div class="phrase-block">
                 <p class="phrase-soninke">« N’oublie jamais ta famille, c’est ton bouclier. »</p>
                 <p class="card-text" style="margin-top: 12px;">— Proverbe soninké</p>
@@ -383,7 +420,8 @@
                 </div>
             </div>
             <div class="phrase-block">
-                <p class="phrase-soninke">I ni ce — Merci pour votre intérêt, et que la mémoire de nos ancêtres guide votre route. 🧡</p>
+                <p class="phrase-soninke">Angha na kori an maa ya an na an maama ya sugunu.</p>
+                <p class="card-text" style="margin-top: 8px;"><em>« Merci pour votre intérêt, et que la mémoire de nos ancêtres guide votre route. »</em></p>
             </div>
         </div>
     </section>
