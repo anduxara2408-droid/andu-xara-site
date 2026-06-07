@@ -204,7 +204,7 @@
         .card-text { color: var(--muted); line-height: 1.6; }
         .value-icon { font-size: 2.5rem; margin-bottom: 16px; display: inline-block; }
         
-        /* PROVERBE STYLISÉ */
+        /* PROVERBE STYLISÉ (section valeurs) */
         .proverb-block {
             background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%);
             border-radius: 30px;
@@ -214,25 +214,20 @@
             color: white;
             border-left: 5px solid var(--gold);
         }
-        .proverb-soninke {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
         .proverb-text {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 500;
-            margin-bottom: 15px;
+            font-style: italic;
+            margin-bottom: 20px;
         }
         .proverb-meaning {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            max-width: 600px;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
             margin: 0 auto;
         }
         .proverb-equivalent {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--gold);
             margin-top: 15px;
             font-weight: 500;
@@ -242,20 +237,21 @@
         .phrase-block {
             background: var(--cream);
             border-radius: 20px;
-            padding: 28px;
+            padding: 32px 28px;
             margin-top: 30px;
             text-align: center;
         }
         .phrase-soninke {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
             line-height: 1.3;
+            font-family: 'Inter', monospace;
         }
         .phrase-meaning {
             font-size: 1rem;
             color: var(--muted);
-            margin-top: 12px;
+            margin-top: 15px;
             font-style: italic;
         }
         .resources-list {
@@ -302,6 +298,7 @@
             .section { padding: 60px 0; }
             .grid-2, .grid-3, .grid-4 { gap: 20px; }
             .proverb-text { font-size: 1.1rem; }
+            .phrase-soninke { font-size: 1.3rem; }
         }
     </style>
     <link rel="stylesheet" href="/css/xa-ia.css">
@@ -385,12 +382,13 @@
                 <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
             </div>
             
-            <!-- Proverbe soninké avec sa définition -->
+            <!-- Proverbe avec explication -->
             <div class="proverb-block">
-                <div class="proverb-soninke">« A défaut de pouvoir téter ta mère, tu tèteras ta grand‑mère. »</div>
-                <div class="proverb-text">Se dit lorsque l’on n’a pas ce que l’on a escompté, pour que l’on se contente de ce que l’on a.</div>
+                <div class="proverb-text">« À défaut de pouvoir téter ta mère, tu tèteras ta grand‑mère. »</div>
+                <div class="proverb-meaning">
+                    Ce dicton est employé lorsque l’on ne parvient pas à obtenir ce que l’on espérait. Il nous invite à faire preuve de souplesse et à nous satisfaire de ce qui est accessible, plutôt que de regretter ce qui nous échappe.
+                </div>
                 <div class="proverb-equivalent">« Faute de grives, on mange des merles. »</div>
-                <div class="proverb-meaning">Une leçon de résilience et de sagesse transmise par les anciens : savoir s’adapter et tirer le meilleur parti de ce que la vie nous offre.</div>
             </div>
             
             <div class="phrase-block">
@@ -434,7 +432,7 @@
                 </div>
             </div>
             
-            <!-- Expression soninké avec sa définition reformulée -->
+            <!-- Proverbe soninké Angha na kori... -->
             <div class="phrase-block">
                 <div class="phrase-soninke">Angha na kori an maa ya an na an maama ya sugunu.</div>
                 <div class="phrase-meaning">
