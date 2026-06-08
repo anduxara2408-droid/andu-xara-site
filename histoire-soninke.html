@@ -6,7 +6,7 @@
     <title>Andu-Xara • Histoire & Culture Soninké</title>
     <meta name="description" content="Plongez dans l'histoire millénaire du peuple Soninké, berceau de l'empire du Ghana (Wagadou). Découvrez leur langue, leurs valeurs et leur diaspora.">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -27,8 +27,20 @@
             background: var(--background);
             color: #1e1e2a;
             line-height: 1.5;
+            overflow-x: hidden;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* ANIMATIONS AU DÉFILEMENT */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         
         /* HEADER */
         .main-header {
@@ -114,6 +126,27 @@
             max-width: 600px;
             margin: 0 auto;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+        .hero-stats .stat {
+            text-align: center;
+        }
+        .hero-stats .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+        .hero-stats .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
         }
         .btn-group {
             display: flex;
@@ -204,7 +237,39 @@
         .card-text { color: var(--muted); line-height: 1.6; }
         .value-icon { font-size: 2.5rem; margin-bottom: 16px; display: inline-block; }
         
-        /* PROVERBE STYLISÉ (section valeurs) */
+        /* SECTION LANGUE AVEC IMAGE À DROITE */
+        .langue-container {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .langue-text {
+            flex: 2;
+            min-width: 250px;
+        }
+        .langue-image {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        .langue-image img {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 3px solid var(--gold);
+        }
+        .langue-philosophy {
+            margin-top: 25px;
+            font-style: italic;
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+            padding-left: 20px;
+        }
+        
+        /* PROVERBE STYLISÉ */
         .proverb-block {
             background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%);
             border-radius: 30px;
@@ -233,7 +298,6 @@
             font-weight: 500;
         }
         
-        /* SECTION LANGUE */
         .phrase-block {
             background: var(--cream);
             border-radius: 20px;
@@ -246,7 +310,6 @@
             font-weight: 700;
             color: var(--primary);
             line-height: 1.3;
-            font-family: 'Inter', monospace;
         }
         .phrase-meaning {
             font-size: 1rem;
@@ -277,6 +340,32 @@
             border-color: var(--primary);
         }
         
+        /* FEUILLE DE ROUTE */
+        .roadmap-list {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .roadmap-item {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+        .roadmap-item:hover {
+            transform: translateX(8px);
+            border-color: var(--primary);
+        }
+        .roadmap-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+        
         /* FOOTER */
         .footer {
             background: var(--earth);
@@ -297,8 +386,11 @@
             .hero-soninke { height: 60vh; min-height: 400px; }
             .section { padding: 60px 0; }
             .grid-2, .grid-3, .grid-4 { gap: 20px; }
+            .langue-container { flex-direction: column; text-align: center; }
+            .langue-philosophy { text-align: left; }
             .proverb-text { font-size: 1.1rem; }
             .phrase-soninke { font-size: 1.3rem; }
+            .hero-stats { gap: 24px; }
         }
     </style>
     <link rel="stylesheet" href="/css/xa-ia.css">
@@ -314,7 +406,7 @@
                     <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
                     <a href="histoire-soninke.html" class="nav-link active">Histoire Soninké</a>
-                    <a href="blog.html" class="nav-link">Blog</a>
+                    <a href="xa-ia-chat.html" class="nav-link">XA IA</a>
                     <a href="billetterie.html" class="nav-link">Concert</a>
                     <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
@@ -322,139 +414,175 @@
         </div>
     </header>
 
-    <!-- HERO AVEC IMAGE SAGE.JPEG -->
+    <!-- HERO -->
     <section class="hero-soninke">
         <img src="images/sage.jpeg" alt="Sage Soninké" class="hero-bg" onerror="this.src='https://via.placeholder.com/1920x1080?text=Image+Soninké'">
-        <div class="hero-content">
-            <div class="hero-tag">Mémoire & transmission</div>
-            <h1 class="hero-title">L’histoire millénaire du peuple <span>Soninké</span></h1>
-            <p class="hero-sub">Berbères, commerçants de l’or, bâtisseurs de l’empire du Wagadou. Une culture fière, une langue préservée et une diaspora aux quatre coins du monde.</p>
+        <div class="hero-content fade-up">
+            <div class="hero-tag">Premier assistant IA dédié à la culture Soninké</div>
+            <h1 class="hero-title">L'intelligence artificielle au service du <span>Soninké</span></h1>
+            <p class="hero-sub">XA IA préserve, transmet et valorise la langue sooninkanxanne et la culture Soninké. Un griot du XXIᵉ siècle, accessible à tous, partout.</p>
+            <div class="hero-stats">
+                <div class="stat"><div class="stat-number">+3M</div><div class="stat-label">locuteurs</div></div>
+                <div class="stat"><div class="stat-number">7</div><div class="stat-label">pays</div></div>
+                <div class="stat"><div class="stat-number">IVe s.</div><div class="stat-label">apogée de Wagadou</div></div>
+            </div>
             <div class="btn-group">
                 <a href="xa-ia-chat.html" class="btn-primary">🧡 Discuter avec XA IA</a>
-                <a href="#culture" class="btn-outline">📖 Explorer la culture</a>
+                <a href="#constat" class="btn-outline">📖 Découvrir le projet</a>
             </div>
         </div>
     </section>
 
-    <!-- SECTION HISTOIRE : WAGADOU -->
-    <section class="section section-light" id="histoire">
-        <div class="container">
-            <h2 class="section-title">L'empire de <span>Wagadou</span> (Ghana)</h2>
-            <div class="section-desc">Dès le IIIe siècle, les Soninkés fondent un État sophistiqué, maîtrisant le fer et le commerce transsaharien.</div>
+    <!-- SECTION CONSTAT -->
+    <section class="section section-dark" id="constat">
+        <div class="container fade-up">
+            <h2 class="section-title">Le <span>constat</span></h2>
+            <div class="section-desc">Une culture immense, une langue riche, encore trop discrète sur internet. Un patrimoine précieux à transmettre.</div>
             <div class="grid-2">
                 <div class="card">
                     <div class="card-content">
-                        <h3 class="card-title"><span>🏛️</span> Koumbi Saleh, capitale mythique</h3>
-                        <p class="card-text">Capitale de l'empire à partir du IVe siècle, Koumbi Saleh comptait jusqu'à 30 000 habitants. Les fouilles archéologiques y ont révélé deux villes distinctes : une pour les musulmans commerçants, l'autre pour le roi soninké. Elle tomba au XIIIe siècle sous les coups de Soundiata Keïta.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>📜</span> Dinga Cissé, l'ancêtre fondateur</h3>
-                        <p class="card-text">Selon la tradition orale, Dinga Cissé, figure mythique venue d'Égypte (Assouan), est l'ancêtre fondateur de la dynastie régnante et l'instigateur de la puissance soninké. Son nom reste intimement lié à la naissance de Wagadou.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>🎖️</span> L'empire de l'or</h3>
-                        <p class="card-text">Fondé par le peuple Soninké, l'empire du Ghana (Wagadou) s'étendait sur le Mali, la Mauritanie et le Sénégal actuels. Sa capitale Koumbi Saleh était un carrefour commercial où l'or, le sel et les échanges transsahariens alimentaient sa prospérité.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>⚔️</span> Une organisation avancée</h3>
-                        <p class="card-text">L'empire disposait d'une administration centralisée, d'une armée redoutable (cavalerie) et d'un système fiscal élaboré. La cour impériale contrôlait les royaumes vassaux tout en respectant leur autonomie.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION VALEURS -->
-    <section class="section section-dark" id="culture">
-        <div class="container">
-            <h2 class="section-title">Les valeurs qui traversent <span>les générations</span></h2>
-            <div class="section-desc">Au-delà de l'histoire, la société soninké repose sur des piliers intemporels.</div>
-            <div class="grid-4">
-                <div class="card"><div class="card-content"><div class="value-icon">🤝</div><h3 class="card-title"><span>Terimè</span></h3><p class="card-text">Amitié, solidarité clanique et respect des liens familiaux. L'entraide est une valeur sacrée.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">⚖️</div><h3 class="card-title"><span>Nawaari</span></h3><p class="card-text">Reconnaissance et gratitude. Remercier et honorer la parole donnée sont des marques de dignité.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">🌍</div><h3 class="card-title"><span>Diaspora dynamique</span></h3><p class="card-text">Esprit d'entreprise et mobilité. Les Soninké ont toujours su maintenir des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
-            </div>
-            
-            <div class="phrase-block">
-                <p class="phrase-soninke">« Angha na kori an maa ya an na an maama ya sugunu.»</p>
-                <p class="card-text" style="margin-top: 12px;">—  Si le sein maternel te manque, la sagesse de ta grand‑mère saura te nourrir</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION LANGUE SONINKÉ -->
-    <section class="section section-light" id="langue">
-        <div class="container">
-            <h2 class="section-title">La langue soninké (Sooninkanxanne)</h2>
-            <div class="section-desc">Une langue mandée parlée par plus de 3 millions de personnes, reconnue comme langue nationale au Mali, au Sénégal et en Mauritanie.</div>
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>🗣️</span> Quelques mots essentiels</h3>
-                        <ul style="margin-top: 16px; list-style: none;">
-                            <li style="margin-bottom: 12px;"><strong>An moxo ?</strong> — Comment ça va ?</li>
-                            <li style="margin-bottom: 12px;"><strong>Ma jam !</strong> — Je vais bien !</li>
-                            <li style="margin-bottom: 12px;"><strong>Nawaari</strong> — Merci</li>
-                            <li style="margin-bottom: 12px;"><strong>Hari na o koyi me !</strong> — Au revoir</li>
-                            <li style="margin-bottom: 12px;"><strong>Beeta !</strong> — Bonjour (le matin)</li>
-                            <li><strong>Sunka !</strong> — Bonsoir</li>
+                        <h3 class="card-title"><span>🏛️</span> Pour d'autres cultures</h3>
+                        <ul class="card-text" style="list-style: none;">
+                            <li>✓ Duolingo — 40+ langues</li>
+                            <li>✓ Google Translate — 130+ langues</li>
+                            <li>✓ Wikipedia en 300+ langues</li>
+                            <li>✓ Assistants IA multilingues</li>
                         </ul>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-content">
-                        <h3 class="card-title"><span>📚</span> Apprendre le soninké</h3>
-                        <p class="card-text">Plusieurs ressources gratuites existent pour découvrir la langue :</p>
-                        <div class="resources-list">
-                            <a href="https://www.livelingua.com/course/all/Soninke_Language_Lessons" target="_blank" class="resource-link">Peace Corps</a>
-                            <a href="https://play.google.com/store/apps/details?id=com.soninke.learn" target="_blank" class="resource-link">Appli Sooninke</a>
-                            <a href="https://fr.glosbe.com/snk/fr" target="_blank" class="resource-link">Glosbe</a>
-                            <a href="https://www.asawan.org/" target="_blank" class="resource-link">Lexique Asawan</a>
-                        </div>
-                        <p class="card-text" style="margin-top: 20px;"><small>Sources : Peace Corps Mauritanie, Live Lingua, Glosbe.</small></p>
+                        <h3 class="card-title"><span>📖</span> Pour le Soninké</h3>
+                        <ul class="card-text" style="list-style: none;">
+                            <li>✗ Peu d'applications d'apprentissage dédiées</li>
+                            <li>✗ Support encore limité</li>
+                            <li>✗ Contenu numérique peu développé</li>
+                            <li>✗ Faible présence dans les grands modèles d'IA</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            
+            <div class="phrase-block">
+                <p class="card-text" style="font-size: 1.1rem;">Des enfants de la diaspora qui aimeraient mieux parler à leurs grands-parents. Une culture immense, encore trop discrète sur internet. Un patrimoine précieux à transmettre.</p>
+            </div>
+        </div>
     </section>
 
-    <!-- SECTION DIASPORA -->
-    <section class="section section-dark" id="diaspora">
-        <div class="container">
-            <h2 class="section-title">Une diaspora <span>active</span> sur tous les continents</h2>
-            <div class="section-desc">Présente en France, en Italie, aux États‑Unis, au Canada, en Espagne… la diaspora soninké préserve sa langue et sa culture tout en participant à la vitalité économique.</div>
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>🌍</span> Présence mondiale</h3>
-                        <p class="card-text">Outre les pays ouest‑africains (Mali, Sénégal, Mauritanie, Gambie, Guinée), d'importantes communautés soninkés vivent en France, Italie, Espagne, États‑Unis et au Canada. Cette dispersion s'est accentuée à partir du XXe siècle avec les migrations de travail.</p>
+    <!-- SECTION NOTRE RÉPONSE -->
+    <section class="section section-light" id="reponse">
+        <div class="container fade-up">
+            <h2 class="section-title">Notre <span>réponse</span></h2>
+            <div class="section-desc">XA IA — un pont entre héritage et modernité.</div>
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <p class="card-text" style="font-size: 1.1rem;"><strong>XA IA</strong> = XA (Andu-Xara) + IA. Le premier assistant intelligent entièrement dédié à la langue soninké et à la culture Soninké, pour les locuteurs natifs comme pour les curieux du monde entier.</p>
+                    <div class="proverb-block" style="margin-top: 20px; background: var(--earth);">
+                        <p style="font-size: 1.2rem;"><strong>XA IA n'est pas</strong></p>
+                        <p>Un simple dictionnaire, ni un outil réservé aux Soninkés.</p>
+                        <p style="margin-top: 20px;"><strong>XA IA est</strong></p>
+                        <p>Un compagnon intelligent 24h/24, un espace de préservation culturelle, un outil ouvert à tous — le griot du XXIᵉ siècle.</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h3 class="card-title"><span>📖</span> Mémoire et transmission</h3>
-                        <p class="card-text">Les associations culturelles, les cours de langue et les festivals (comme le FISO à Dakar) permettent aux jeunes générations de rester connectées à leurs racines. L'engagement d’Andu‑Xara s’inscrit dans ce mouvement.</p>
-                        <p class="card-text" style="margin-top: 16px;">✊🏿 <em>« Quand les Américains ont marché sur la Lune, un Soninké était déjà là‑bas. »</em> — dicton ouest‑africain.</p>
-                    </div>
+                <div class="langue-image">
+                    <img src="images/homme.jpeg" alt="Jeune leader soninké" onerror="this.src='https://via.placeholder.com/400x500?text=Portrait'">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION RESSOURCES + XA IA -->
-    <section class="section section-light" id="discuter">
-        <div class="container">
+    <!-- SECTION VALEURS SONINKÉES -->
+    <section class="section section-dark" id="valeurs">
+        <div class="container fade-up">
+            <h2 class="section-title">Le <span>Soninké</span> — le code moral</h2>
+            <div class="section-desc">Le fondement identitaire du peuple Soninké. Quatre valeurs cardinales que XA IA cherche à préserver et transmettre.</div>
+            <div class="grid-4">
+                <div class="card"><div class="card-content"><div class="value-icon">🤝</div><h3 class="card-title"><span>Terimè</span></h3><p class="card-text">Amitié, solidarité clanique, respect des liens familiaux. L'entraide est une valeur sacrée.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">⚖️</div><h3 class="card-title"><span>Nawaari</span></h3><p class="card-text">Reconnaissance et gratitude. Remercier et honorer la parole donnée sont des marques de dignité.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🌍</div><h3 class="card-title"><span>Diaspora dynamique</span></h3><p class="card-text">Esprit d'entreprise et mobilité. Les Soninkés ont toujours su maintenir des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
+            </div>
+            <div class="proverb-block">
+                <div class="proverb-text">« À défaut de pouvoir téter ta mère, tu tèteras ta grand‑mère. »</div>
+                <div class="proverb-meaning">Ce dicton est employé lorsque l’on ne parvient pas à obtenir ce que l’on espérait. Il nous invite à faire preuve de souplesse et à nous satisfaire de ce qui est accessible.</div>
+                <div class="proverb-equivalent">« Faute de grives, on mange des merles. »</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION LANGUE -->
+    <section class="section section-light" id="langue">
+        <div class="container fade-up">
+            <h2 class="section-title">La langue <span>soninké</span> (Sooninkanxanne)</h2>
+            <div class="section-desc">Une langue mandée parlée par plus de 3 millions de personnes, reconnue au Mali, Sénégal et Mauritanie.</div>
+            <div class="langue-container">
+                <div class="langue-text">
+                    <p class="card-text">Le soninké, appelé Sooninkanxanne par ses locuteurs, est bien plus qu’un moyen de communication : c’est un marqueur d’identité, un lien avec les ancêtres, un vecteur de valeurs. Transmis oralement de génération en génération, il résiste au temps et à la dispersion.</p>
+                    <p class="card-text" style="margin-top: 16px;">Chez Andu-Xara, nous croyons que la langue est le vêtement de l’âme. C’est pourquoi nous avons conçu XA IA, un assistant intelligent capable de dialoguer en soninké et de vous aider à redécouvrir vos racines.</p>
+                    <div class="langue-philosophy">« La langue qu’on ne transmet pas, c’est une flamme qu’on laisse s’éteindre. Avec XA IA, rallumons‑la ensemble. »</div>
+                </div>
+                <div class="langue-image"><img src="images/homme.jpeg" alt="Jeune leader soninké"></div>
+            </div>
+            <div class="grid-2">
+                <div class="card"><div class="card-content"><h3 class="card-title"><span>🗣️</span> Mots essentiels</h3><ul style="list-style: none;"><li><strong>An moxo ?</strong> — Comment ça va ?</li><li><strong>Ma jam !</strong> — Je vais bien</li><li><strong>Nawaari</strong> — Merci</li><li><strong>Beeta !</strong> — Bonjour</li><li><strong>Sunka !</strong> — Bonsoir</li></ul></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title"><span>📚</span> Apprendre</h3><div class="resources-list"><a href="https://www.livelingua.com/course/all/Soninke_Language_Lessons" class="resource-link">Peace Corps</a><a href="https://fr.glosbe.com/snk/fr" class="resource-link">Glosbe</a><a href="https://www.asawan.org/" class="resource-link">Asawan</a></div></div></div>
+            </div>
+            <div class="phrase-block"><div class="phrase-soninke">Angha na kori an maa ya an na an maama ya sugunu.</div><div class="phrase-meaning">« Puisse la voie tracée par nos pères et la lumière de nos aïeux éclairer chacun de tes pas. »</div></div>
+        </div>
+    </section>
+
+    <!-- SECTION DIASPORA -->
+    <section class="section section-dark" id="diaspora">
+        <div class="container fade-up">
+            <h2 class="section-title">Une diaspora <span>active</span> sur tous les continents</h2>
+            <div class="section-desc">Présente en France, Italie, États-Unis, Canada, Espagne…</div>
+            <div class="grid-2">
+                <div class="card"><div class="card-content"><h3 class="card-title"><span>🌍</span> Présence mondiale</h3><p class="card-text">Outre l’Afrique de l’Ouest, d’importantes communautés soninkés vivent en Europe, Amérique du Nord et Moyen-Orient. Cette dispersion s’est accentuée au XXe siècle.</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title"><span>📖</span> Mémoire et transmission</h3><p class="card-text">Associations culturelles, cours de langue, festivals permettent aux jeunes générations de rester connectées. L’engagement d’Andu‑Xara s’inscrit dans ce mouvement.</p><p class="card-text" style="margin-top: 16px;">✊🏿 <em>« Quand les Américains ont marché sur la Lune, un Soninké était déjà là‑bas. »</em></p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PLATEFORME / PILIERS -->
+    <section class="section section-light" id="plateforme">
+        <div class="container fade-up">
+            <h2 class="section-title">La <span>plateforme</span></h2>
+            <div class="section-desc">Cinq piliers, un écosystème complet. XA IA pensée comme une plateforme intégrée, accessible sur mobile et ordinateur.</div>
+            <div class="grid-3">
+                <div class="card"><div class="card-content"><div class="value-icon">💬</div><h3 class="card-title">Assistant IA</h3><p class="card-text">Réponses 24h/24 en soninké, français, anglais. Mémoire conversationnelle, réponses sourcées.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">📖</div><h3 class="card-title">Dictionnaire interactif</h3><p class="card-text">Multilingue Soninké ↔ Français ↔ Anglais. Prononciation audio, proverbes, expressions.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🎓</div><h3 class="card-title">Apprentissage</h3><p class="card-text">Évaluation initiale, parcours personnalisé, exercices interactifs et suivi de progression.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🎤</div><h3 class="card-title">Voix & Audio</h3><p class="card-text">Reconnaissance vocale adaptée, synthèse vocale et correction temps réel.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🏛️</div><h3 class="card-title">Bibliothèque culturelle</h3><p class="card-text">Histoire de Wagadou, biographies, arts, rites, organisation sociale.</p></div></div>
+            </div>
+            <div class="phrase-block" style="background: var(--earth); color: white;"><h2 class="section-title" style="color: white;">Essayer <span style="color: var(--gold);">maintenant</span></h2><p>L’assistant IA est en ligne. Posez votre première question.</p><a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--earth); margin-top: 20px; display: inline-block;">🧡 Ouvrir le chat</a></div>
+        </div>
+    </section>
+
+    <!-- FEUILLE DE ROUTE -->
+    <section class="section section-dark" id="feuille-de-route">
+        <div class="container fade-up">
+            <h2 class="section-title">Feuille de <span>route</span></h2>
+            <div class="roadmap-list">
+                <div class="roadmap-item"><div class="roadmap-number">1</div><h3>Phase 1 — Lancement</h3><p>Assistant IA conversationnel, dictionnaire de base, site web vitrine.</p></div>
+                <div class="roadmap-item"><div class="roadmap-number">2</div><h3>Phase 2 — Développement</h3><p>Système d’apprentissage par niveaux, reconnaissance vocale, contenu enrichi.</p></div>
+                <div class="roadmap-item"><div class="roadmap-number">3</div><h3>Phase 3 — Expansion</h3><p>Application mobile iOS & Android, partenariats institutionnels, version multilingue complète.</p></div>
+                <div class="roadmap-item"><div class="roadmap-number">4</div><h3>Phase 4 — Croissance</h3><p>Modèle IA entraîné spécifiquement sur le soninké, communauté de contributeurs.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section section-light" id="contact">
+        <div class="container fade-up">
             <div class="phrase-block" style="background: var(--earth); color: white;">
-                <h2 class="section-title" style="color: white;">Discuter avec <span style="color: var(--gold);">XA IA</span></h2>
-                <p style="max-width: 600px; margin: 0 auto 24px;">Posez vos questions sur l'histoire, la langue ou la culture soninké à notre intelligence artificielle. XA IA répond en soninké et en français.</p>
-                <a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--earth);">🧡 Ouvrir XA IA</a>
+                <h2 class="section-title" style="color: white;">Appel à <span style="color: var(--gold);">collaboration</span></h2>
+                <p>Rejoignez l’aventure Andu‑Xara. Nous cherchons développeurs, linguistes, collecteurs de données, partenaires institutionnels, ambassadeurs culturels et soutiens financiers.</p>
+                <div style="margin-top: 30px;">
+                    <p>📧 <strong><a href="mailto:contact@andu-xara.store" style="color: var(--gold);">contact@andu-xara.store</a></strong></p>
+                    <p>📞 <strong><a href="tel:+22234196304" style="color: var(--gold);">+222 34 19 63 04</a></strong></p>
+                    <p>📍 Nouakchott, Mauritanie</p>
+                </div>
+                <a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--earth); margin-top: 30px; display: inline-block;">🧡 Essayer l'assistant IA</a>
             </div>
         </div>
     </section>
@@ -464,14 +592,25 @@
         <div class="container">
             <div class="footer-grid">
                 <div><h4>Andu-Xara</h4><p>Mode afro-urbaine depuis 2020</p><p>🌍 Livraison à Nouakchott et Sénégal</p></div>
-                <div><h4>Liens</h4><ul style="list-style: none;"><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="histoire-soninke.html">Histoire Soninké</a></li><li><a href="billetterie.html">Concert</a></li></ul></div>
+                <div><h4>Liens</h4><ul style="list-style: none;"><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="histoire-soninke.html">Histoire Soninké</a></li><li><a href="xa-ia-chat.html">XA IA</a></li><li><a href="billetterie.html">Concert</a></li></ul></div>
                 <div><h4>Contact</h4><p><a href="tel:+22234196304">+222 34 19 63 04</a></p><p><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></p></div>
             </div>
-            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #4a5568; padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p></div>
+            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #4a5568; padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p><p class="font-italic" style="margin-top: 8px;">Notre culture, notre force. L'intelligence, notre avenir.</p></div>
         </div>
     </footer>
 
-    <!-- Scripts XA IA (widget) -->
+    <!-- Script pour les animations au défilement -->
+    <script>
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        fadeElements.forEach(el => observer.observe(el));
+    </script>
     <script src="/js/xa-ia-config.js"></script>
     <script src="/js/xa-ia-widget.js"></script>
 </body>
