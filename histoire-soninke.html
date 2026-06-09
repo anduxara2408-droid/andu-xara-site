@@ -10,32 +10,43 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #e67e22;
-            --primary-dark: #d35400;
-            --primary-light: #f39c12;
-            --earth: #2c1a0f;
-            --earth-light: #4a2e1c;
-            --cream: #fff6e8;
-            --gold: #e6b17e;
-            --border: #e2e8f0;
-            --background: #fefaf5;
-            --muted: #4b5563;
+            --primary: #c96f0d;
+            --primary-dark: #a85a0a;
+            --primary-light: #e08e3a;
+            --deep-blue: #1a3a4f;
+            --sand-light: #f2eadc;
+            --sand-dark: #e0d3be;
+            --gold: #d4af37;
+            --border: #d1c5b0;
+            --background: #fef9f0;
+            --muted: #4a5b66;
             --card-bg: #ffffff;
         }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--background);
-            color: #1e1e2a;
+            color: #1e2a36;
             line-height: 1.5;
             overflow-x: hidden;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         
-        /* ANIMATIONS AU DÉFILEMENT */
+        /* MOTIFS CULTURELS SUBTILS */
+        .pattern-waves {
+            background-image: repeating-linear-gradient(90deg, rgba(212,175,55,0.08) 0px, rgba(212,175,55,0.08) 1px, transparent 1px, transparent 40px);
+        }
+        .pattern-diamonds {
+            background-image: repeating-linear-gradient(45deg, rgba(212,175,55,0.06) 0px, rgba(212,175,55,0.06) 2px, transparent 2px, transparent 16px);
+        }
+        .pattern-lines {
+            background-image: repeating-linear-gradient(0deg, rgba(26,58,79,0.04) 0px, rgba(26,58,79,0.04) 1px, transparent 1px, transparent 24px);
+        }
+        
+        /* ANIMATIONS */
         .fade-up {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.9s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         .fade-up.visible {
             opacity: 1;
@@ -72,11 +83,11 @@
         }
         .nav-link:hover, .nav-link.active { color: var(--primary); }
         
-        /* HERO AVEC IMAGE SAGE.JPEG */
+        /* HERO */
         .hero-soninke {
             position: relative;
-            height: 70vh;
-            min-height: 500px;
+            height: 80vh;
+            min-height: 600px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -91,8 +102,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.55);
+            filter: brightness(0.45) contrast(1.1);
             z-index: 0;
+            transition: transform 0.5s ease;
+        }
+        .hero-soninke:hover .hero-bg {
+            transform: scale(1.02);
         }
         .hero-content {
             position: relative;
@@ -102,10 +117,11 @@
         }
         .hero-tag {
             display: inline-block;
-            background: rgba(230,126,34,0.2);
+            background: rgba(201,111,13,0.2);
+            backdrop-filter: blur(4px);
             border: 1px solid var(--gold);
             border-radius: 40px;
-            padding: 6px 16px;
+            padding: 8px 20px;
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -113,11 +129,11 @@
             margin-bottom: 24px;
         }
         .hero-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 24px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
         }
         .hero-title span { color: var(--gold); }
         .hero-sub {
@@ -125,7 +141,7 @@
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
         }
         .hero-stats {
             display: flex;
@@ -136,6 +152,10 @@
         }
         .hero-stats .stat {
             text-align: center;
+            backdrop-filter: blur(4px);
+            padding: 8px 16px;
+            border-radius: 60px;
+            background: rgba(0,0,0,0.3);
         }
         .hero-stats .stat-number {
             font-size: 2rem;
@@ -146,57 +166,65 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.8;
+            opacity: 0.9;
         }
         .btn-group {
             display: flex;
-            gap: 16px;
+            gap: 20px;
             justify-content: center;
-            margin-top: 32px;
+            margin-top: 40px;
             flex-wrap: wrap;
         }
         .btn-primary, .btn-outline {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 28px;
-            border-radius: 40px;
+            padding: 14px 32px;
+            border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s;
             text-decoration: none;
+            font-size: 0.95rem;
         }
         .btn-primary {
             background: var(--primary);
             color: white;
             border: none;
+            box-shadow: 0 4px 15px rgba(201,111,13,0.3);
         }
         .btn-primary:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(201,111,13,0.4);
         }
         .btn-outline {
-            border: 1px solid white;
+            border: 1.5px solid white;
             color: white;
             background: transparent;
+            backdrop-filter: blur(4px);
         }
         .btn-outline:hover {
             background: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
         
-        /* SECTIONS GÉNÉRALES */
+        /* SECTIONS */
         .section {
-            padding: 80px 0;
+            padding: 100px 0;
+            position: relative;
         }
         .section-light { background: white; }
-        .section-dark { background: #fef7ed; }
+        .section-sand { background: var(--sand-light); }
+        .section-deep { background: var(--deep-blue); color: white; }
         .section-title {
-            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            font-size: clamp(2rem, 5vw, 2.8rem);
             font-weight: 700;
             text-align: center;
             margin-bottom: 16px;
+            font-family: 'Fraunces', serif;
         }
         .section-title span { color: var(--primary); }
+        .section-deep .section-title span { color: var(--gold); }
         .section-desc {
             text-align: center;
             max-width: 800px;
@@ -204,6 +232,7 @@
             color: var(--muted);
             font-size: 1.1rem;
         }
+        .section-deep .section-desc { color: rgba(255,255,255,0.85); }
         
         /* GRILLES */
         .grid-2, .grid-3, .grid-4 {
@@ -218,72 +247,88 @@
             background: var(--card-bg);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+            transition: all 0.4s;
             border: 1px solid var(--border);
         }
         .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 36px -16px rgba(0,0,0,0.15);
+            border-color: var(--primary-light);
         }
-        .card-content { padding: 28px; }
+        .card-content { padding: 32px; }
         .card-title {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 12px;
-            color: var(--earth);
+            color: var(--deep-blue);
         }
         .card-title span { color: var(--primary); }
         .card-text { color: var(--muted); line-height: 1.6; }
-        .value-icon { font-size: 2.5rem; margin-bottom: 16px; display: inline-block; }
         
-        /* SECTION LANGUE AVEC IMAGE À DROITE */
+        /* IMAGE STYLISÉE */
+        .heroic-image {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+            transition: all 0.4s;
+            border: 3px solid var(--gold);
+        }
+        .heroic-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        .heroic-image:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.25);
+        }
+        .heroic-image:hover img {
+            transform: scale(1.02);
+        }
+        
         .langue-container {
             display: flex;
             align-items: center;
-            gap: 48px;
-            margin-top: 40px;
+            gap: 60px;
+            margin-top: 50px;
             flex-wrap: wrap;
         }
         .langue-text {
             flex: 2;
-            min-width: 250px;
+            min-width: 280px;
         }
         .langue-image {
             flex: 1;
-            min-width: 200px;
+            min-width: 260px;
             text-align: center;
-        }
-        .langue-image img {
-            width: 100%;
-            max-width: 280px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 3px solid var(--gold);
         }
         .langue-philosophy {
-            margin-top: 25px;
+            margin-top: 30px;
             font-style: italic;
             color: var(--primary);
-            border-left: 3px solid var(--primary);
-            padding-left: 20px;
+            border-left: 4px solid var(--primary);
+            padding-left: 24px;
+            font-size: 1.05rem;
         }
         
-        /* PROVERBE STYLISÉ */
+        /* PROVERBE */
         .proverb-block {
-            background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%);
-            border-radius: 30px;
-            padding: 40px 30px;
-            margin-top: 40px;
+            background: var(--deep-blue);
+            border-radius: 40px;
+            padding: 48px 36px;
+            margin-top: 50px;
             text-align: center;
             color: white;
-            border-left: 5px solid var(--gold);
+            border-left: 6px solid var(--gold);
         }
         .proverb-text {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 500;
             font-style: italic;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         .proverb-meaning {
             font-size: 1rem;
@@ -294,27 +339,29 @@
         .proverb-equivalent {
             font-size: 1.1rem;
             color: var(--gold);
-            margin-top: 15px;
+            margin-top: 20px;
             font-weight: 500;
         }
         
         .phrase-block {
-            background: var(--cream);
-            border-radius: 20px;
-            padding: 32px 28px;
-            margin-top: 30px;
+            background: white;
+            border-radius: 28px;
+            padding: 40px 32px;
+            margin-top: 40px;
             text-align: center;
+            border: 1px solid var(--border);
         }
         .phrase-soninke {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 700;
             color: var(--primary);
             line-height: 1.3;
+            font-family: 'Fraunces', serif;
         }
         .phrase-meaning {
             font-size: 1rem;
             color: var(--muted);
-            margin-top: 15px;
+            margin-top: 16px;
             font-style: italic;
         }
         .resources-list {
@@ -322,12 +369,12 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 16px;
-            margin-top: 20px;
+            margin-top: 24px;
         }
         .resource-link {
             background: white;
-            border-radius: 40px;
-            padding: 8px 20px;
+            border-radius: 60px;
+            padding: 8px 24px;
             text-decoration: none;
             color: var(--primary);
             font-weight: 500;
@@ -338,6 +385,7 @@
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-2px);
         }
         
         /* FEUILLE DE ROUTE */
@@ -345,30 +393,31 @@
             margin-top: 40px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
         .roadmap-item {
             background: white;
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 28px;
+            padding: 28px 32px;
             border: 1px solid var(--border);
-            transition: 0.3s;
+            transition: all 0.3s;
         }
         .roadmap-item:hover {
-            transform: translateX(8px);
+            transform: translateX(12px);
             border-color: var(--primary);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1);
         }
         .roadmap-number {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: var(--primary);
-            opacity: 0.6;
+            opacity: 0.5;
             margin-bottom: 8px;
         }
         
         /* FOOTER */
         .footer {
-            background: var(--earth);
+            background: var(--deep-blue);
             color: #ccc;
             padding: 60px 0 30px;
         }
@@ -383,26 +432,27 @@
         
         @media (max-width: 768px) {
             .nav-menu { display: none; }
-            .hero-soninke { height: 60vh; min-height: 400px; }
+            .hero-soninke { height: 70vh; min-height: 500px; }
             .section { padding: 60px 0; }
             .grid-2, .grid-3, .grid-4 { gap: 20px; }
             .langue-container { flex-direction: column; text-align: center; }
             .langue-philosophy { text-align: left; }
-            .proverb-text { font-size: 1.1rem; }
-            .phrase-soninke { font-size: 1.3rem; }
-            .hero-stats { gap: 24px; }
+            .proverb-text { font-size: 1.2rem; }
+            .phrase-soninke { font-size: 1.4rem; }
+            .hero-stats { gap: 16px; }
+            .hero-stats .stat { padding: 4px 12px; }
         }
     </style>
     <link rel="stylesheet" href="/css/xa-ia.css">
 </head>
 <body>
 
-    <!-- HEADER -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
                 <a href="index.html" class="logo">Andu<span>Xara</span></a>
                 <nav class="nav-menu">
+                    <a href="dictionnaire-soninke.html" class="nav-link">📖 Dictionnaire</a>
                     <a href="index.html" class="nav-link">Accueil</a>
                     <a href="produits.html" class="nav-link">Collection</a>
                     <a href="histoire-soninke.html" class="nav-link active">Histoire Soninké</a>
@@ -416,7 +466,7 @@
 
     <!-- HERO -->
     <section class="hero-soninke">
-        <img src="images/sage.jpeg" alt="Sage Soninké" class="hero-bg" onerror="this.src='https://via.placeholder.com/1920x1080?text=Image+Soninké'">
+        <img src="images/sage.jpeg" alt="Sage Soninké" class="hero-bg">
         <div class="hero-content fade-up">
             <div class="hero-tag">Premier assistant IA dédié à la culture Soninké</div>
             <h1 class="hero-title">L'intelligence artificielle au service du <span>Soninké</span></h1>
@@ -434,36 +484,36 @@
     </section>
 
     <!-- SECTION CONSTAT -->
-    <section class="section section-dark" id="constat">
+    <section class="section section-sand pattern-waves" id="constat">
         <div class="container fade-up">
-            <h2 class="section-title">Le <span>constat</span></h2>
-            <div class="section-desc">Une culture immense, une langue riche, encore trop discrète sur internet. Un patrimoine précieux à transmettre.</div>
+            <h2 class="section-title">Partout, des <span>outils</span> pour les grandes langues…</h2>
+            <div class="section-desc">Pourtant, le soninké reste trop souvent absent du paysage numérique.</div>
             <div class="grid-2">
                 <div class="card">
                     <div class="card-content">
-                        <h3 class="card-title"><span>🏛️</span> Pour d'autres cultures</h3>
+                        <h3 class="card-title"><span>🌐</span> Des ressources existent</h3>
                         <ul class="card-text" style="list-style: none;">
-                            <li>✓ Duolingo — 40+ langues</li>
-                            <li>✓ Google Translate — 130+ langues</li>
-                            <li>✓ Wikipedia en 300+ langues</li>
-                            <li>✓ Assistants IA multilingues</li>
+                            <li>✓ Applications mobiles pour des dizaines de langues</li>
+                            <li>✓ Traducteurs automatiques couvrant plus de 100 idiomes</li>
+                            <li>✓ Encyclopédies et contenus culturels en ligne</li>
+                            <li>✓ Modèles d’IA entraînés pour les grandes aires linguistiques</li>
                         </ul>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-content">
-                        <h3 class="card-title"><span>📖</span> Pour le Soninké</h3>
+                        <h3 class="card-title"><span>📖</span> Ce qui manque au soninké</h3>
                         <ul class="card-text" style="list-style: none;">
-                            <li>✗ Peu d'applications d'apprentissage dédiées</li>
-                            <li>✗ Support encore limité</li>
-                            <li>✗ Contenu numérique peu développé</li>
-                            <li>✗ Faible présence dans les grands modèles d'IA</li>
+                            <li>✗ Très peu d’applications dédiées à l’apprentissage</li>
+                            <li>✗ Absence de traducteurs automatiques fiables</li>
+                            <li>✗ Une présence numérique encore très limitée</li>
+                            <li>✗ Les intelligences artificielles ne le maîtrisent pas</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="phrase-block">
-                <p class="card-text" style="font-size: 1.1rem;">Des enfants de la diaspora qui aimeraient mieux parler à leurs grands-parents. Une culture immense, encore trop discrète sur internet. Un patrimoine précieux à transmettre.</p>
+                <p class="card-text" style="font-size: 1.1rem;">Des enfants de la diaspora qui aimeraient échanger avec leurs grands‑parents. Une culture immensément riche, encore trop discrète sur le web. Un héritage précieux à transmettre, avant qu’il ne se perde.</p>
             </div>
         </div>
     </section>
@@ -472,38 +522,38 @@
     <section class="section section-light" id="reponse">
         <div class="container fade-up">
             <h2 class="section-title">Notre <span>réponse</span></h2>
-            <div class="section-desc">XA IA — un pont entre héritage et modernité.</div>
+            <div class="section-desc">XA IA — là où les racines rencontrent l’intelligence.</div>
             <div class="grid-2" style="align-items: center;">
                 <div>
-                    <p class="card-text" style="font-size: 1.1rem;"><strong>XA IA</strong> = XA (Andu-Xara) + IA. Le premier assistant intelligent entièrement dédié à la langue soninké et à la culture Soninké, pour les locuteurs natifs comme pour les curieux du monde entier.</p>
-                    <div class="proverb-block" style="margin-top: 20px; background: var(--earth);">
-                        <p style="font-size: 1.2rem;"><strong>XA IA n'est pas</strong></p>
-                        <p>Un simple dictionnaire, ni un outil réservé aux Soninkés.</p>
-                        <p style="margin-top: 20px;"><strong>XA IA est</strong></p>
-                        <p>Un compagnon intelligent 24h/24, un espace de préservation culturelle, un outil ouvert à tous — le griot du XXIᵉ siècle.</p>
+                    <p class="card-text" style="font-size: 1.1rem;"><strong>XA IA</strong> (X pour Andu‑Xara, A pour intelligence artificielle) est le premier compagnon interactif pensé pour la langue soninké et l’univers Soninké. Il s’adresse aussi bien aux natifs qu’aux curieux du monde entier.</p>
+                    <div class="proverb-block" style="margin-top: 30px;">
+                        <p style="font-size: 1.2rem;"><strong>Ce que XA IA n’est pas</strong></p>
+                        <p>Un simple lexique figé. Un outil fermé sur lui‑même. Une technologie réservée à une élite.</p>
+                        <p style="margin-top: 20px;"><strong>Ce que XA IA est vraiment</strong></p>
+                        <p>Un guide accessible 24h/24, un gardien de la mémoire, un passeur de culture ouvert à toutes et à tous. Le griot numérique du XXIᵉ siècle.</p>
                     </div>
                 </div>
-                <div class="langue-image">
-                    <img src="images/homme.jpeg" alt="Jeune leader soninké" onerror="this.src='https://via.placeholder.com/400x500?text=Portrait'">
+                <div class="heroic-image">
+                    <img src="images/homme.jpeg" alt="Jeune leader soninké">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION VALEURS SONINKÉES -->
-    <section class="section section-dark" id="valeurs">
+    <!-- SECTION VALEURS -->
+    <section class="section section-deep pattern-diamonds" id="valeurs">
         <div class="container fade-up">
-            <h2 class="section-title">Le <span>Soninké</span> — le code moral</h2>
-            <div class="section-desc">Le fondement identitaire du peuple Soninké. Quatre valeurs cardinales que XA IA cherche à préserver et transmettre.</div>
+            <h2 class="section-title">Le <span>Soninké</span> — un code moral toujours vivant</h2>
+            <div class="section-desc">Quatre valeurs cardinales que XA IA s’engage à préserver et à transmettre aux générations futures.</div>
             <div class="grid-4">
-                <div class="card"><div class="card-content"><div class="value-icon">🤝</div><h3 class="card-title"><span>Terimè</span></h3><p class="card-text">Amitié, solidarité clanique, respect des liens familiaux. L'entraide est une valeur sacrée.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">⚖️</div><h3 class="card-title"><span>Nawaari</span></h3><p class="card-text">Reconnaissance et gratitude. Remercier et honorer la parole donnée sont des marques de dignité.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">🌍</div><h3 class="card-title"><span>Diaspora dynamique</span></h3><p class="card-text">Esprit d'entreprise et mobilité. Les Soninkés ont toujours su maintenir des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">📿</div><h3 class="card-title"><span>Savoir et transmission</span></h3><p class="card-text">Fierté de préserver la langue sooninkanxanne et d'enseigner l'islam (les « modibo »).</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Terimè</h3><p class="card-text">L’amitié, la solidarité clanique, le respect des liens familiaux. Chez les Soninkés, on ne se serre pas les coudes par hasard : c’est un devoir sacré.</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Nawaari</h3><p class="card-text">La gratitude, la reconnaissance. Remercier et honorer la parole donnée est une marque de fierté et de dignité.</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Diaspora active</h3><p class="card-text">L’esprit d’entreprise, la mobilité. Les Soninkés ont toujours su tisser des réseaux commerciaux et familiaux à travers le monde.</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Savoir et transmission</h3><p class="card-text">La fierté de préserver la langue sooninkanxanne et de partager la connaissance, à l’image des « modibo » (lettrés).</p></div></div>
             </div>
-            <div class="proverb-block">
+            <div class="proverb-block" style="background: rgba(0,0,0,0.3);">
                 <div class="proverb-text">« À défaut de pouvoir téter ta mère, tu tèteras ta grand‑mère. »</div>
-                <div class="proverb-meaning">Ce dicton est employé lorsque l’on ne parvient pas à obtenir ce que l’on espérait. Il nous invite à faire preuve de souplesse et à nous satisfaire de ce qui est accessible.</div>
+                <div class="proverb-meaning">Ce dicton nous rappelle l’importance de la résilience : quand on n’obtient pas ce que l’on espérait, on fait avec ce que l’on a. Une leçon de souplesse et de sagesse.</div>
                 <div class="proverb-equivalent">« Faute de grives, on mange des merles. »</div>
             </div>
         </div>
@@ -513,53 +563,55 @@
     <section class="section section-light" id="langue">
         <div class="container fade-up">
             <h2 class="section-title">La langue <span>soninké</span> (Sooninkanxanne)</h2>
-            <div class="section-desc">Une langue mandée parlée par plus de 3 millions de personnes, reconnue au Mali, Sénégal et Mauritanie.</div>
+            <div class="section-desc">Une langue mandée parlée par plus de 3 millions de personnes, reconnue au Mali, au Sénégal et en Mauritanie.</div>
             <div class="langue-container">
                 <div class="langue-text">
-                    <p class="card-text">Le soninké, appelé Sooninkanxanne par ses locuteurs, est bien plus qu’un moyen de communication : c’est un marqueur d’identité, un lien avec les ancêtres, un vecteur de valeurs. Transmis oralement de génération en génération, il résiste au temps et à la dispersion.</p>
-                    <p class="card-text" style="margin-top: 16px;">Chez Andu-Xara, nous croyons que la langue est le vêtement de l’âme. C’est pourquoi nous avons conçu XA IA, un assistant intelligent capable de dialoguer en soninké et de vous aider à redécouvrir vos racines.</p>
+                    <p class="card-text">Le soninké, appelé <em>Sooninkanxanne</em> par ses locuteurs, est bien plus qu’un moyen de communication : c’est un marqueur d’identité, un lien avec les ancêtres, un vecteur de valeurs. Transmis oralement de génération en génération, il résiste au temps et à la dispersion.</p>
+                    <p class="card-text" style="margin-top: 20px;">Chez Andu‑Xara, nous croyons que la langue est le vêtement de l’âme. C’est pourquoi nous avons conçu XA IA, un assistant capable de dialoguer en soninké et de vous aider à redécouvrir vos racines.</p>
                     <div class="langue-philosophy">« La langue qu’on ne transmet pas, c’est une flamme qu’on laisse s’éteindre. Avec XA IA, rallumons‑la ensemble. »</div>
                 </div>
-                <div class="langue-image"><img src="images/homme.jpeg" alt="Jeune leader soninké"></div>
+                <div class="heroic-image">
+                    <img src="images/homme.jpeg" alt="Jeune leader soninké">
+                </div>
             </div>
             <div class="grid-2">
-                <div class="card"><div class="card-content"><h3 class="card-title"><span>🗣️</span> Mots essentiels</h3><ul style="list-style: none;"><li><strong>An moxo ?</strong> — Comment ça va ?</li><li><strong>Ma jam !</strong> — Je vais bien</li><li><strong>Nawaari</strong> — Merci</li><li><strong>Beeta !</strong> — Bonjour</li><li><strong>Sunka !</strong> — Bonsoir</li></ul></div></div>
-                <div class="card"><div class="card-content"><h3 class="card-title"><span>📚</span> Apprendre</h3><div class="resources-list"><a href="https://www.livelingua.com/course/all/Soninke_Language_Lessons" class="resource-link">Peace Corps</a><a href="https://fr.glosbe.com/snk/fr" class="resource-link">Glosbe</a><a href="https://www.asawan.org/" class="resource-link">Asawan</a></div></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Mots essentiels</h3><ul style="list-style: none;"><li><strong>An moxo ?</strong> — Comment ça va ?</li><li><strong>Ma jam !</strong> — Je vais bien</li><li><strong>Nawaari</strong> — Merci</li><li><strong>Beeta !</strong> — Bonjour</li><li><strong>Sunka !</strong> — Bonsoir</li></ul></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Apprendre</h3><div class="resources-list"><a href="https://www.livelingua.com/course/all/Soninke_Language_Lessons" class="resource-link">Peace Corps</a><a href="https://fr.glosbe.com/snk/fr" class="resource-link">Glosbe</a><a href="https://www.asawan.org/" class="resource-link">Asawan</a></div></div></div>
             </div>
             <div class="phrase-block"><div class="phrase-soninke">Angha na kori an maa ya an na an maama ya sugunu.</div><div class="phrase-meaning">« Puisse la voie tracée par nos pères et la lumière de nos aïeux éclairer chacun de tes pas. »</div></div>
         </div>
     </section>
 
     <!-- SECTION DIASPORA -->
-    <section class="section section-dark" id="diaspora">
+    <section class="section section-sand pattern-lines" id="diaspora">
         <div class="container fade-up">
             <h2 class="section-title">Une diaspora <span>active</span> sur tous les continents</h2>
-            <div class="section-desc">Présente en France, Italie, États-Unis, Canada, Espagne…</div>
+            <div class="section-desc">Présente en France, Italie, États‑Unis, Canada, Espagne…</div>
             <div class="grid-2">
-                <div class="card"><div class="card-content"><h3 class="card-title"><span>🌍</span> Présence mondiale</h3><p class="card-text">Outre l’Afrique de l’Ouest, d’importantes communautés soninkés vivent en Europe, Amérique du Nord et Moyen-Orient. Cette dispersion s’est accentuée au XXe siècle.</p></div></div>
-                <div class="card"><div class="card-content"><h3 class="card-title"><span>📖</span> Mémoire et transmission</h3><p class="card-text">Associations culturelles, cours de langue, festivals permettent aux jeunes générations de rester connectées. L’engagement d’Andu‑Xara s’inscrit dans ce mouvement.</p><p class="card-text" style="margin-top: 16px;">✊🏿 <em>« Quand les Américains ont marché sur la Lune, un Soninké était déjà là‑bas. »</em></p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Présence mondiale</h3><p class="card-text">Outre l’Afrique de l’Ouest (Mali, Sénégal, Mauritanie, Gambie, Guinée), d’importantes communautés soninkés vivent en Europe, en Amérique du Nord et au Moyen‑Orient. Une dispersion qui a commencé au XXe siècle avec les migrations de travail.</p></div></div>
+                <div class="card"><div class="card-content"><h3 class="card-title">Mémoire et transmission</h3><p class="card-text">Associations culturelles, cours de langue, festivals (comme le FISO à Dakar) permettent aux jeunes générations de rester connectées à leurs racines. L’engagement d’Andu‑Xara s’inscrit pleinement dans ce mouvement.</p><p class="card-text" style="margin-top: 16px;"><em>« Quand les Américains ont marché sur la Lune, un Soninké était déjà là‑bas. »</em></p></div></div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION PLATEFORME / PILIERS -->
+    <!-- SECTION PLATEFORME -->
     <section class="section section-light" id="plateforme">
         <div class="container fade-up">
             <h2 class="section-title">La <span>plateforme</span></h2>
-            <div class="section-desc">Cinq piliers, un écosystème complet. XA IA pensée comme une plateforme intégrée, accessible sur mobile et ordinateur.</div>
+            <div class="section-desc">Cinq piliers, un écosystème complet. XA IA pensée comme un espace accessible sur mobile et sur ordinateur.</div>
             <div class="grid-3">
                 <div class="card"><div class="card-content"><div class="value-icon">💬</div><h3 class="card-title">Assistant IA</h3><p class="card-text">Réponses 24h/24 en soninké, français, anglais. Mémoire conversationnelle, réponses sourcées.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">📖</div><h3 class="card-title">Dictionnaire interactif</h3><p class="card-text">Multilingue Soninké ↔ Français ↔ Anglais. Prononciation audio, proverbes, expressions.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">📖</div><h3 class="card-title">Dictionnaire interactif</h3><p class="card-text">Multilingue Soninké ↔ Français ↔ Anglais. Prononciation audio, proverbes, expressions idiomatiques.</p></div></div>
                 <div class="card"><div class="card-content"><div class="value-icon">🎓</div><h3 class="card-title">Apprentissage</h3><p class="card-text">Évaluation initiale, parcours personnalisé, exercices interactifs et suivi de progression.</p></div></div>
-                <div class="card"><div class="card-content"><div class="value-icon">🎤</div><h3 class="card-title">Voix & Audio</h3><p class="card-text">Reconnaissance vocale adaptée, synthèse vocale et correction temps réel.</p></div></div>
+                <div class="card"><div class="card-content"><div class="value-icon">🎤</div><h3 class="card-title">Voix & Audio</h3><p class="card-text">Reconnaissance vocale adaptée, synthèse vocale et correction en temps réel.</p></div></div>
                 <div class="card"><div class="card-content"><div class="value-icon">🏛️</div><h3 class="card-title">Bibliothèque culturelle</h3><p class="card-text">Histoire de Wagadou, biographies, arts, rites, organisation sociale.</p></div></div>
             </div>
-            <div class="phrase-block" style="background: var(--earth); color: white;"><h2 class="section-title" style="color: white;">Essayer <span style="color: var(--gold);">maintenant</span></h2><p>L’assistant IA est en ligne. Posez votre première question.</p><a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--earth); margin-top: 20px; display: inline-block;">🧡 Ouvrir le chat</a></div>
+            <div class="phrase-block" style="background: var(--deep-blue); color: white;"><h2 class="section-title" style="color: white;">Essayer <span style="color: var(--gold);">maintenant</span></h2><p>L’assistant IA est en ligne. Posez votre première question.</p><a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--deep-blue); margin-top: 20px; display: inline-block;">🧡 Ouvrir le chat</a></div>
         </div>
     </section>
 
     <!-- FEUILLE DE ROUTE -->
-    <section class="section section-dark" id="feuille-de-route">
+    <section class="section section-sand pattern-waves" id="feuille-de-route">
         <div class="container fade-up">
             <h2 class="section-title">Feuille de <span>route</span></h2>
             <div class="roadmap-list">
@@ -574,7 +626,7 @@
     <!-- CONTACT -->
     <section class="section section-light" id="contact">
         <div class="container fade-up">
-            <div class="phrase-block" style="background: var(--earth); color: white;">
+            <div class="phrase-block" style="background: var(--deep-blue); color: white;">
                 <h2 class="section-title" style="color: white;">Appel à <span style="color: var(--gold);">collaboration</span></h2>
                 <p>Rejoignez l’aventure Andu‑Xara. Nous cherchons développeurs, linguistes, collecteurs de données, partenaires institutionnels, ambassadeurs culturels et soutiens financiers.</p>
                 <div style="margin-top: 30px;">
@@ -582,12 +634,11 @@
                     <p>📞 <strong><a href="tel:+22234196304" style="color: var(--gold);">+222 34 19 63 04</a></strong></p>
                     <p>📍 Nouakchott, Mauritanie</p>
                 </div>
-                <a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--earth); margin-top: 30px; display: inline-block;">🧡 Essayer l'assistant IA</a>
+                <a href="xa-ia-chat.html" class="btn-primary" style="background: var(--gold); color: var(--deep-blue); margin-top: 30px; display: inline-block;">🧡 Essayer l'assistant IA</a>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -595,11 +646,10 @@
                 <div><h4>Liens</h4><ul style="list-style: none;"><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="histoire-soninke.html">Histoire Soninké</a></li><li><a href="xa-ia-chat.html">XA IA</a></li><li><a href="billetterie.html">Concert</a></li></ul></div>
                 <div><h4>Contact</h4><p><a href="tel:+22234196304">+222 34 19 63 04</a></p><p><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></p></div>
             </div>
-            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #4a5568; padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p><p class="font-italic" style="margin-top: 8px;">Notre culture, notre force. L'intelligence, notre avenir.</p></div>
+            <div class="footer-bottom" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p><p style="margin-top: 8px;">Notre culture, notre force. L'intelligence, notre avenir.</p></div>
         </div>
     </footer>
 
-    <!-- Script pour les animations au défilement -->
     <script>
         const fadeElements = document.querySelectorAll('.fade-up');
         const observer = new IntersectionObserver((entries) => {
@@ -608,7 +658,7 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
         fadeElements.forEach(el => observer.observe(el));
     </script>
     <script src="/js/xa-ia-config.js"></script>
