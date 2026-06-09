@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Andu-Xara • Dictionnaire Soninké-Français enrichi</title>
+    <meta name="description" content="Dictionnaire soninké-français complet : vocabulaire quotidien, étymologie, expressions. Plus de 2000 entrées issues des sources Asawan, Peace Corps et travaux d'Adama Daraame.">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #e67e22;
+            --primary-dark: #d35400;
+            --primary-light: #f39c12;
+            --deep-blue: #1a3a4f;
+            --sand-light: #f2eadc;
+            --sand-dark: #e0d3be;
+            --gold: #d4af37;
+            --border: #d1c5b0;
+            --background: #fef9f0;
+            --muted: #4a5b66;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: #1e2a36;
+            line-height: 1.5;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* HEADER */
+        .main-header {
+            background: white;
+            padding: 16px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .logo span { color: #333; font-weight: 300; }
+        .nav-menu { display: flex; gap: 32px; }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        
+        /* HERO */
+        .hero-dict {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, #0f2c3a 100%);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            font-family: 'Fraunces', serif;
+            margin-bottom: 16px;
+        }
+        .hero-title span { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        /* RECHERCHE */
+        .search-section {
+            background: white;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border);
+            border-radius: 60px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            background: white;
+        }
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.2);
+        }
+        .search-box button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .search-box button:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* ALPHABET */
+        .alphabet-nav {
+            background: var(--sand-light);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .alphabet {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        .alpha-btn {
+            background: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-weight: 600;
+            color: var(--deep-blue);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .alpha-btn:hover, .alpha-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* CATÉGORIES */
+        .categories-nav {
+            background: white;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .cat-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--deep-blue);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        /* DICTIONNAIRE */
+        .dict-section {
+            padding: 60px 0;
+        }
+        .dict-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .dict-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .dict-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1);
+            border-color: var(--primary-light);
+        }
+        .dict-soninke {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-family: 'Fraunces', serif;
+        }
+        .dict-french {
+            font-size: 1rem;
+            color: var(--deep-blue);
+            margin-bottom: 12px;
+        }
+        .dict-category {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .no-result {
+            text-align: center;
+            padding: 60px;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: var(--deep-blue);
+            color: #ccc;
+            padding: 60px 0 30px;
+        }
+        .footer a { color: #ccc; text-decoration: none; transition: 0.2s; }
+        .footer a:hover { color: var(--gold); }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .dict-grid { grid-template-columns: 1fr; }
+            .alpha-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+            .hero-stats { gap: 16px; }
+            .stat-number { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Andu<span>Xara</span></a>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="produits.html" class="nav-link">Collection</a>
+                    <a href="histoire-soninke.html" class="nav-link">Histoire Soninké</a>
+                    <a href="xa-ia-chat.html" class="nav-link">XA IA</a>
+                    <a href="billetterie.html" class="nav-link">Concert</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-dict">
+        <div class="container">
+            <h1 class="hero-title">Dictionnaire <span>Soninké</span> enrichi</h1>
+            <p class="hero-sub">Sooninkanxanne – Français. Plus de 2000 entrées incluant racines étymologiques, grammaire, et vocabulaire quotidien.</p>
+            <div class="hero-stats">
+                <div class="stat"><div class="stat-number">2000+</div><div class="stat-label">Entrées</div></div>
+                <div class="stat"><div class="stat-number">20+</div><div class="stat-label">Catégories</div></div>
+                <div class="stat"><div class="stat-number">Complet</div><div class="stat-label">A→Z</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Rechercher un mot en soninké ou en français...">
+                <button id="searchBtn">Rechercher</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="alphabet-nav">
+        <div class="container">
+            <div class="alphabet" id="alphabetNav"></div>
+        </div>
+    </section>
+
+    <section class="categories-nav">
+        <div class="container">
+            <div class="categories" id="categoriesNav">
+                <button class="cat-btn active" data-cat="">Toutes</button>
+                <button class="cat-btn" data-cat="Salutation">Salutations</button>
+                <button class="cat-btn" data-cat="Politesse">Politesse</button>
+                <button class="cat-btn" data-cat="Nombre">Nombres</button>
+                <button class="cat-btn" data-cat="Temps">Temps</button>
+                <button class="cat-btn" data-cat="Famille">Famille</button>
+                <button class="cat-btn" data-cat="Nature">Nature</button>
+                <button class="cat-btn" data-cat="Corps">Corps</button>
+                <button class="cat-btn" data-cat="Nourriture">Nourriture</button>
+                <button class="cat-btn" data-cat="Boisson">Boisson</button>
+                <button class="cat-btn" data-cat="Verbe">Verbes</button>
+                <button class="cat-btn" data-cat="Adjectif">Adjectifs</button>
+                <button class="cat-btn" data-cat="Étymologie">Étymologie</button>
+                <button class="cat-btn" data-cat="Animal">Animaux</button>
+                <button class="cat-btn" data-cat="Mode">Mode</button>
+                <button class="cat-btn" data-cat="Transport">Transport</button>
+                <button class="cat-btn" data-cat="Religion">Religion</button>
+                <button class="cat-btn" data-cat="Histoire">Histoire</button>
+                <button class="cat-btn" data-cat="Lieu">Lieux</button>
+                <button class="cat-btn" data-cat="Affirmation">Affirmation</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="dict-section">
+        <div class="container">
+            <div id="dictContent" class="dict-grid">
+                <div class="no-result">Chargement du dictionnaire...</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div><h4>Andu-Xara</h4><p>Mode afro-urbaine depuis 2020</p><p>🌍 Livraison à Nouakchott et Sénégal</p></div>
+                <div><h4>Liens</h4><ul style="list-style: none;"><li><a href="index.html">Accueil</a></li><li><a href="produits.html">Collection</a></li><li><a href="histoire-soninke.html">Histoire Soninké</a></li><li><a href="xa-ia-chat.html">XA IA</a></li></ul></div>
+                <div><h4>Contact</h4><p><a href="tel:+22234196304">+222 34 19 63 04</a></p><p><a href="mailto:contact@andu-xara.store">contact@andu-xara.store</a></p></div>
+            </div>
+            <div class="footer-bottom" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;"><p>© 2026 Andu-Xara — Fier de nos racines soninkés</p></div>
+        </div>
+    </footer>
+
+    <script>
+        // DICTIONNAIRE SONINKÉ ENRICHI - Version complète fusionnée
+        // Inclut les entrées de base + les nouvelles entrées lexicales
+        
+        const dictionary = [
+            // ========== PRONOMS ET PARTICULES DE BASE ==========
+            { soninke: "a", french: "il, elle, le, la, lui, son, sa, ses (pronom 3e sg)", category: "Pronom" },
+            { soninke: "an", french: "tu, toi, ton, ta, tes (pronom 2e sg)", category: "Pronom" },
+            { soninke: "axa", french: "vous, votre, vos (pronom 2e pl)", category: "Pronom" },
+            { soninke: "i", french: "ils, elles, les, leur (pronom 3e pl)", category: "Pronom" },
+            { soninke: "n", french: "je, me, mon, ma, mes (pronom 1re sg)", category: "Pronom" },
+            { soninke: "o", french: "nous, notre, nos (pronom 1re pl)", category: "Pronom" },
+            { soninke: "ga", french: "quand, si, marque de subordination", category: "Grammaire" },
+            { soninke: "ba", french: "est-ce que ? (marqueur de question)", category: "Grammaire" },
+            { soninke: "feti", french: "négation copule (ce n'est pas)", category: "Grammaire" },
+            { soninke: "ni", french: "est (copule équative)", category: "Grammaire" },
+            { soninke: "nta", french: "ne...pas (négation imperfective)", category: "Grammaire" },
+            { soninke: "wa", french: "est en train de (aspect progressif)", category: "Grammaire" },
+            { soninke: "yi", french: "postposition : à, de, pour, avec, dans", category: "Grammaire" },
+            
+            // ========== SALUTATIONS ET POLITESSE ==========
+            { soninke: "An moxo", french: "Comment ça va ?", category: "Salutation" },
+            { soninke: "Ma jam", french: "Je vais bien", category: "Salutation" },
+            { soninke: "Beeta", french: "Bonjour (le matin)", category: "Salutation" },
+            { soninke: "Sunka", french: "Bonsoir", category: "Salutation" },
+            { soninke: "Lella", french: "Bon après-midi", category: "Salutation" },
+            { soninke: "Lelle", french: "Après-midi", category: "Salutation" },
+            { soninke: "Suxuba", french: "Matin", category: "Salutation" },
+            { soninke: "Kinsiga", french: "Midi", category: "Salutation" },
+            { soninke: "Wuro", french: "Nuit", category: "Salutation" },
+            { soninke: "Nawaari", french: "Merci", category: "Politesse" },
+            { soninke: "Bisimilla", french: "De rien / Bienvenue", category: "Politesse" },
+            { soninke: "Hari na o koyi me", french: "Au revoir", category: "Salutation" },
+            { soninke: "An toxo", french: "Comment t'appelles-tu ?", category: "Conversation" },
+            { soninke: "N toxo", french: "Je m'appelle", category: "Conversation" },
+            { soninke: "Salaamu aleykum", french: "Paix sur vous", category: "Politesse" },
+            { soninke: "Aleykum salaam", french: "Et sur vous la paix", category: "Politesse" },
+            { soninke: "Xori an wa jam", french: "Es-tu en paix ?", category: "Politesse" },
+            { soninke: "Jam baane", french: "Paix seulement", category: "Politesse" },
+            { soninke: "Ka-dunko n moxo", french: "Comment va la famille ?", category: "Conversation" },
+            { soninke: "Asalamaleku", french: "Que la paix de Dieu soit avec vous", category: "Religion" },
+            { soninke: "Abadajamu", french: "Adieu", category: "Salutation" },
+            
+            // ========== NOMBRES ==========
+            { soninke: "Baane", french: "Un", category: "Nombre" },
+            { soninke: "Fillo", french: "Deux", category: "Nombre" },
+            { soninke: "Sikko", french: "Trois", category: "Nombre" },
+            { soninke: "Naxato", french: "Quatre", category: "Nombre" },
+            { soninke: "Karago", french: "Cinq", category: "Nombre" },
+            { soninke: "Tumu", french: "Six", category: "Nombre" },
+            { soninke: "Ñeru", french: "Sept", category: "Nombre" },
+            { soninke: "Segu", french: "Huit", category: "Nombre" },
+            { soninke: "Kabu", french: "Neuf", category: "Nombre" },
+            { soninke: "Tanmu", french: "Dix", category: "Nombre" },
+            { soninke: "Tanfille", french: "Vingt", category: "Nombre" },
+            { soninke: "Tanjikke", french: "Trente", category: "Nombre" },
+            { soninke: "Tannaxate", french: "Quarante", category: "Nombre" },
+            { soninke: "Tankarage", french: "Cinquante", category: "Nombre" },
+            { soninke: "Tandume", french: "Soixante", category: "Nombre" },
+            { soninke: "Tanñere", french: "Soixante-dix", category: "Nombre" },
+            { soninke: "Tansege", french: "Quatre-vingts", category: "Nombre" },
+            { soninke: "Tankabe", french: "Quatre-vingt-dix", category: "Nombre" },
+            { soninke: "Kame", french: "Cent", category: "Nombre" },
+            { soninke: "Kamo filli", french: "Deux cents", category: "Nombre" },
+            { soninke: "Wujjuune", french: "Mille", category: "Nombre" },
+            { soninke: "Miliyo", french: "Million", category: "Nombre" },
+            { soninke: "Miliyaari", french: "Milliard", category: "Nombre" },
+            
+            // ========== JOURS ET MOIS ==========
+            { soninke: "Tangikoota", french: "Samedi", category: "Temps" },
+            { soninke: "Tunkakoota", french: "Dimanche", category: "Temps" },
+            { soninke: "Tuumakoota", french: "Lundi", category: "Temps" },
+            { soninke: "Gangonkoota", french: "Mardi", category: "Temps" },
+            { soninke: "Wandekoota", french: "Mercredi", category: "Temps" },
+            { soninke: "Xañakoota", french: "Jeudi", category: "Temps" },
+            { soninke: "Harinakoota", french: "Vendredi", category: "Temps" },
+            { soninke: "Alahadi", french: "Dimanche", category: "Temps" },
+            { soninke: "Alijuma", french: "Vendredi", category: "Temps" },
+            { soninke: "Araba", french: "Mercredi", category: "Temps" },
+            { soninke: "Alaxamisa", french: "Jeudi", category: "Temps" },
+            { soninke: "Sooma", french: "Janvier", category: "Temps" },
+            { soninke: "Joona", french: "Février", category: "Temps" },
+            { soninke: "Maari", french: "Mars", category: "Temps" },
+            { soninke: "Birelli", french: "Avril", category: "Temps" },
+            { soninke: "Birero", french: "Mai", category: "Temps" },
+            { soninke: "Jowoye", french: "Juin", category: "Temps" },
+            { soninke: "Jowoyelli", french: "Juillet", category: "Temps" },
+            { soninke: "Juxa", french: "Août", category: "Temps" },
+            { soninke: "Wura", french: "Septembre", category: "Temps" },
+            { soninke: "Kankuti", french: "Octobre", category: "Temps" },
+            { soninke: "Nafabire", french: "Novembre", category: "Temps" },
+            { soninke: "Dagabire", french: "Décembre", category: "Temps" },
+            
+            // ========== FAMILLE ==========
+            { soninke: "Yugo", french: "Homme", category: "Famille" },
+            { soninke: "Yaxare", french: "Femme", category: "Famille" },
+            { soninke: "Lemine", french: "Enfant", category: "Famille" },
+            { soninke: "Faabe", french: "Père", category: "Famille" },
+            { soninke: "Saaxe", french: "Mère", category: "Famille" },
+            { soninke: "Yaqe", french: "Épouse", category: "Famille" },
+            { soninke: "Kiine", french: "Mari", category: "Famille" },
+            { soninke: "Ka-dunko", french: "Famille", category: "Famille" },
+            { soninke: "Gidan-yaxare", french: "Sœur", category: "Famille" },
+            { soninke: "Gidan-yugo", french: "Frère", category: "Famille" },
+            { soninke: "Xirise", french: "Grand-parent", category: "Famille" },
+            { soninke: "Denba", french: "Oncle", category: "Famille" },
+            { soninke: "Kisa", french: "Tante", category: "Famille" },
+            { soninke: "Baaye", french: "Tante (sœur du père)", category: "Famille" },
+            { soninke: "Kaawu", french: "Oncle maternel", category: "Famille" },
+            { soninke: "Neega", french: "Oncle maternel", category: "Famille" },
+            { soninke: "Xoxone", french: "Jeune frère/soeur", category: "Famille" },
+            { soninke: "Gida", french: "Grand frère/soeur", category: "Famille" },
+            { soninke: "Kisima", french: "Grand-père", category: "Famille" },
+            { soninke: "Maama", french: "Grand-mère", category: "Famille" },
+            
+            // ========== LIEUX ET GÉOGRAPHIE ==========
+            { soninke: "Ka", french: "Maison", category: "Lieu" },
+            { soninke: "Koumbi Saleh", french: "Ancienne capitale du Wagadou", category: "Histoire" },
+            { soninke: "Wagadou", french: "Empire du Ghana", category: "Histoire" },
+            { soninke: "Dinga Cissé", french: "Ancêtre fondateur", category: "Histoire" },
+            { soninke: "Xaran-ra", french: "École", category: "Lieu" },
+            { soninke: "Misiide", french: "Mosquée", category: "Lieu" },
+            { soninke: "Saxa", french: "Marché", category: "Lieu" },
+            { soninke: "Biire", french: "Hangar", category: "Lieu" },
+            { soninke: "Konpe", french: "Chambre", category: "Lieu" },
+            { soninke: "Jooxe", french: "Toilette", category: "Lieu" },
+            { soninke: "Waaño", french: "Cuisine", category: "Lieu" },
+            { soninke: "Kalaasi", french: "Classe", category: "Lieu" },
+            { soninke: "Saxu-raxe", french: "Lit", category: "Lieu" },
+            { soninke: "Gede", french: "Puits", category: "Lieu" },
+            { soninke: "Faara", french: "Jardin", category: "Lieu" },
+            { soninke: "Te", french: "Champ", category: "Lieu" },
+            { soninke: "Banke", french: "Banque", category: "Lieu" },
+            { soninke: "Garaasi", french: "Gare routière", category: "Lieu" },
+            { soninke: "Kanda", french: "Aéroport", category: "Lieu" },
+            
+            // ========== NATURE ==========
+            { soninke: "Ji", french: "Eau", category: "Nature" },
+            { soninke: "Kanme", french: "Pluie / Ciel", category: "Nature" },
+            { soninke: "Kame", french: "Pluie", category: "Nature" },
+            { soninke: "Yitte", french: "Arbre", category: "Nature" },
+            { soninke: "Diga", french: "Forêt", category: "Nature" },
+            { soninke: "Gunne", french: "Brousse", category: "Nature" },
+            { soninke: "Gide", french: "Pierre / Montagne", category: "Nature" },
+            { soninke: "Kille", french: "Route", category: "Nature" },
+            { soninke: "Daaba", french: "Animal domestique", category: "Animal" },
+            { soninke: "Ñexe", french: "Poisson", category: "Animal" },
+            { soninke: "Wulle", french: "Chien", category: "Animal" },
+            { soninke: "Samaqe", french: "Serpent", category: "Animal" },
+            { soninke: "Jarinte", french: "Lion", category: "Animal" },
+            { soninke: "Turunŋe", french: "Hyène", category: "Animal" },
+            { soninke: "Kanjaane", french: "Lièvre", category: "Animal" },
+            { soninke: "Muusine", french: "Chat", category: "Animal" },
+            { soninke: "Sugo", french: "Chèvre", category: "Animal" },
+            { soninke: "Jaxe", french: "Mouton", category: "Animal" },
+            { soninke: "Naanu", french: "Vache", category: "Animal" },
+            { soninke: "Si", french: "Cheval", category: "Animal" },
+            { soninke: "Fare", french: "Âne", category: "Animal" },
+            { soninke: "Tuure", french: "Éléphant", category: "Animal" },
+            { soninke: "Yelinŋe", french: "Oiseau", category: "Animal" },
+            { soninke: "Selinŋe", french: "Poule", category: "Animal" },
+            
+            // ========== CORPS HUMAIN ==========
+            { soninke: "Yaaxe", french: "Œil", category: "Corps" },
+            { soninke: "Nuxunne", french: "Nez", category: "Corps" },
+            { soninke: "Laqe", french: "Bouche", category: "Corps" },
+            { soninke: "Kanbe", french: "Dent", category: "Corps" },
+            { soninke: "Ta", french: "Pied / Jambe", category: "Corps" },
+            { soninke: "Kitte", french: "Main", category: "Corps" },
+            { soninke: "Yinme", french: "Tête", category: "Corps" },
+            { soninke: "Sondonme", french: "Cœur", category: "Corps" },
+            { soninke: "Gonme", french: "Estomac", category: "Corps" },
+            { soninke: "Toro", french: "Oreille", category: "Corps" },
+            { soninke: "Fate", french: "Peau, corps", category: "Corps" },
+            { soninke: "Xotte", french: "Os", category: "Corps" },
+            
+            // ========== NOURRITURE ==========
+            { soninke: "Tiye", french: "Viande", category: "Nourriture" },
+            { soninke: "Maaro", french: "Riz", category: "Nourriture" },
+            { soninke: "Sape", french: "Sel", category: "Nourriture" },
+            { soninke: "Kefe", french: "Café", category: "Boisson" },
+            { soninke: "Attaaye", french: "Thé", category: "Boisson" },
+            { soninke: "Xatti", french: "Lait", category: "Boisson" },
+            { soninke: "Sukkara", french: "Sucre", category: "Nourriture" },
+            { soninke: "Xolle", french: "Bouillie", category: "Nourriture" },
+            { soninke: "Futo", french: "Couscous", category: "Nourriture" },
+            { soninke: "Buuru", french: "Pain", category: "Nourriture" },
+            { soninke: "Tiga", french: "Arachide", category: "Nourriture" },
+            { soninke: "Mentenenŋe", french: "Tomate", category: "Nourriture" },
+            { soninke: "Basalle", french: "Oignon", category: "Nourriture" },
+            
+            // ========== VERBES COURANTS ==========
+            { soninke: "Yige", french: "Manger", category: "Verbe" },
+            { soninke: "Xenqene", french: "Dormir", category: "Verbe" },
+            { soninke: "Golli", french: "Travailler", category: "Verbe" },
+            { soninke: "Xara", french: "Étudier, lire", category: "Verbe" },
+            { soninke: "Mukku", french: "Parler", category: "Verbe" },
+            { soninke: "Telle", french: "Aller", category: "Verbe" },
+            { soninke: "Daga", french: "Venir, partir", category: "Verbe" },
+            { soninke: "Wari", french: "Voir", category: "Verbe" },
+            { soninke: "Mulla", french: "Vouloir, aimer", category: "Verbe" },
+            { soninke: "Mugu", french: "Entendre, comprendre", category: "Verbe" },
+            { soninke: "Faamu", french: "Comprendre", category: "Verbe" },
+            { soninke: "Ti", french: "Dire", category: "Verbe" },
+            { soninke: "Kari", french: "Tuer", category: "Verbe" },
+            { soninke: "Kutu", french: "Couper, traverser, acheter", category: "Verbe" },
+            { soninke: "Xobo", french: "Acheter", category: "Verbe" },
+            { soninke: "Gaaga", french: "Vendre", category: "Verbe" },
+            { soninke: "Mini", french: "Boire", category: "Verbe" },
+            { soninke: "Soxo", french: "Cultiver, creuser", category: "Verbe" },
+            { soninke: "Dabari", french: "Faire, préparer, créer", category: "Verbe" },
+            { soninke: "Kita", french: "Obtenir, trouver, gagner", category: "Verbe" },
+            { soninke: "Bogu", french: "Sortir, partir", category: "Verbe" },
+            { soninke: "Ro", french: "Mettre, entrer", category: "Verbe" },
+            { soninke: "Yanqa", french: "Descendre", category: "Verbe" },
+            { soninke: "Sege", french: "Monter", category: "Verbe" },
+            { soninke: "Wuru", french: "Courir", category: "Verbe" },
+            
+            // ========== ADJECTIFS ==========
+            { soninke: "Xirice", french: "Grand(e)", category: "Adjectif" },
+            { soninke: "Lemine", french: "Petit(e)", category: "Adjectif" },
+            { soninke: "Aaxi", french: "Cher / coûteux", category: "Adjectif" },
+            { soninke: "Tewe", french: "Chaud", category: "Adjectif" },
+            { soninke: "Mulle", french: "Froid", category: "Adjectif" },
+            { soninke: "Tanpi", french: "Fatigué", category: "Adjectif" },
+            { soninke: "Dulle", french: "Avoir faim", category: "Adjectif" },
+            { soninke: "Daqqu", french: "Avoir soif", category: "Adjectif" },
+            { soninke: "Sire", french: "Bon, bien", category: "Adjectif" },
+            { soninke: "Bure", french: "Mauvais, méchant", category: "Adjectif" },
+            { soninke: "Xulle", french: "Blanc, clair, pur", category: "Adjectif" },
+            { soninke: "Binne", french: "Noir, foncé", category: "Adjectif" },
+            { soninke: "Dunbe", french: "Rouge", category: "Adjectif" },
+            { soninke: "Xalle", french: "Vert", category: "Adjectif" },
+            { soninke: "Xote", french: "Dur, difficile, cher", category: "Adjectif" },
+            { soninke: "Neye", french: "Facile, léger", category: "Adjectif" },
+            
+            // ========== AFFIRMATION ET NÉGATION ==========
+            { soninke: "Iyo", french: "Oui", category: "Affirmation" },
+            { soninke: "Ayi", french: "Non", category: "Affirmation" },
+            { soninke: "Yobo", french: "Oui", category: "Affirmation" },
+            { soninke: "Abada", french: "Jamais", category: "Affirmation" },
+            
+            // ========== MODE ==========
+            { soninke: "Yiraamu", french: "Vêtements", category: "Mode" },
+            { soninke: "Simisi", french: "Chemise", category: "Mode" },
+            { soninke: "Wuno", french: "Pantalon", category: "Mode" },
+            { soninke: "Teppuni", french: "Chaussures", category: "Mode" },
+            { soninke: "Mexensi", french: "Vélo", category: "Transport" },
+            { soninke: "Tugi", french: "Boubou", category: "Mode" },
+            { soninke: "Dondi", french: "Pagne", category: "Mode" },
+            { soninke: "Doroke", french: "Robe, boubou", category: "Mode" },
+            { soninke: "Kufune", french: "Bonnet, chapeau", category: "Mode" },
+            { soninke: "Bisooro", french: "Foulard", category: "Mode" },
+            
+            // ========== TRANSPORT ==========
+            { soninke: "Mobili", french: "Voiture", category: "Transport" },
+            { soninke: "Moto", french: "Moto", category: "Transport" },
+            { soninke: "Fuure", french: "Pirogue, bateau, train", category: "Transport" },
+            { soninke: "Fuurakanpinte", french: "Avion", category: "Transport" },
+            
+            // ========== RELIGION ==========
+            { soninke: "Alla", french: "Dieu", category: "Religion" },
+            { soninke: "Alisilaami", french: "Musulman", category: "Religion" },
+            { soninke: "Alixuraane", french: "Coran", category: "Religion" },
+            { soninke: "Salle", french: "Prière", category: "Religion" },
+            { soninke: "Silaami", french: "Musulman", category: "Religion" },
+            { soninke: "Alijanna", french: "Paradis", category: "Religion" },
+            { soninke: "Jahannaba", french: "Enfer", category: "Religion" },
+            { soninke: "Seyitaane", french: "Diable", category: "Religion" },
+            { soninke: "Annabi", french: "Prophète", category: "Religion" },
+            
+            // ========== ÉTYMOLOGIE (racines) ==========
+            { soninke: "ra", french: "Lieu, local (racine bilitère)", category: "Étymologie" },
+            { soninke: "roa", french: "Mettre, poser", category: "Étymologie" },
+            { soninke: "wuni", french: "Ouvrir", category: "Étymologie" },
+            { soninke: "bana", french: "Sortir, surgir, pousser", category: "Étymologie" },
+            { soninke: "bono", french: "Gâter, abîmer", category: "Étymologie" },
+            { soninke: "buba", french: "Collecter, ramasser", category: "Étymologie" },
+            { soninke: "sa3", french: "Éclair, éclairer", category: "Étymologie" },
+            { soninke: "ba3", french: "Faire sortir", category: "Étymologie" },
+            { soninke: "nafa", french: "Utilité, bénéfice", category: "Étymologie" },
+            { soninke: "sapi", french: "Enduire, recouvrir", category: "Étymologie" },
+            { soninke: "xara", french: "Lire, apprendre", category: "Étymologie" },
+            { soninke: "kini", french: "Offrir, donner", category: "Étymologie" },
+            { soninke: "naha", french: "Dépense, provision", category: "Étymologie" },
+            { soninke: "sondomun", french: "Cœur, pensée", category: "Étymologie" },
+            { soninke: "xanne", french: "Langue, parole", category: "Étymologie" },
+            { soninke: "aaxu", french: "Suffixe nominal abstrait", category: "Étymologie" },
+            { soninke: "aana", french: "Suffixe agentival", category: "Étymologie" },
+            { soninke: "ndi", french: "Suffixe causatif", category: "Étymologie" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE A-B ==========
+            { soninke: "a me w'a di", french: "peut-être", category: "Adverbe" },
+            { soninke: "aade", french: "instrument utilisé pour une action", category: "Étymologie" },
+            { soninke: "aaye", french: "verset du Coran / eau bénite", category: "Religion" },
+            { soninke: "abada", french: "jamais / toujours", category: "Adverbe" },
+            { soninke: "alihaala", french: "situation, condition", category: "Nom" },
+            { soninke: "alimaami", french: "imam", category: "Religion" },
+            { soninke: "anniya", french: "désirer, souhaiter", category: "Verbe" },
+            { soninke: "arayi", french: "suggérer, conseiller, proposer", category: "Verbe" },
+            { soninke: "arayinde", french: "conseil, suggestion", category: "Nom" },
+            { soninke: "baana", french: "être unifié, ressembler", category: "Verbe" },
+            { soninke: "baane", french: "un, seul, même, l'autre", category: "Nombre" },
+            { soninke: "baasi", french: "mal, dommage, tort", category: "Nom" },
+            { soninke: "baati", french: "déjà", category: "Adverbe" },
+            { soninke: "baawo", french: "parce que", category: "Conjonction" },
+            { soninke: "banna", french: "riche", category: "Adjectif" },
+            { soninke: "bara", french: "refuser, se révolter", category: "Verbe" },
+            { soninke: "barake", french: "bénédiction, prospérité", category: "Religion" },
+            { soninke: "bataaxe", french: "lettre, message", category: "Nom" },
+            { soninke: "batu", french: "suivre, obéir, adorer", category: "Verbe" },
+            { soninke: "baxu", french: "provoquer, agresser", category: "Verbe" },
+            { soninke: "be", french: "particule de relativisation", category: "Grammaire" },
+            { soninke: "beeri", french: "donner, passer", category: "Verbe" },
+            { soninke: "bisimilla", french: "bienvenue, accueillir", category: "Politesse" },
+            { soninke: "bita", french: "jour", category: "Temps" },
+            { soninke: "biyi", french: "brûler, griller", category: "Verbe" },
+            { soninke: "bogura", french: "sortie", category: "Nom" },
+            { soninke: "bono", french: "mourir, se gâter", category: "Verbe" },
+            { soninke: "bonta", french: "sauter", category: "Verbe" },
+            { soninke: "boole", french: "se déchirer", category: "Verbe" },
+            { soninke: "boroke", french: "stérile", category: "Adjectif" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE C-D ==========
+            { soninke: "caka", french: "prostituée", category: "Nom" },
+            { soninke: "cakka", french: "collier", category: "Mode" },
+            { soninke: "ceexu", french: "déchirer, fendre", category: "Verbe" },
+            { soninke: "daabu", french: "enduire, masser", category: "Verbe" },
+            { soninke: "daari", french: "mourir (honorifique)", category: "Verbe" },
+            { soninke: "daaru", french: "hier", category: "Temps" },
+            { soninke: "dabari", french: "fabriquer, créer, ensorceler", category: "Verbe" },
+            { soninke: "daga", french: "aller, partir, avoir raison", category: "Verbe" },
+            { soninke: "dalle", french: "force, puissance", category: "Nom" },
+            { soninke: "danbe", french: "race, culture, habitude", category: "Nom" },
+            { soninke: "danma", french: "ensemble, entier", category: "Adverbe" },
+            { soninke: "danmaɲeme", french: "être extrêmement surpris", category: "Verbe" },
+            { soninke: "danpu", french: "piétiner, marcher sur", category: "Verbe" },
+            { soninke: "daqu", french: "avoir soif", category: "Verbe" },
+            { soninke: "daro", french: "respecter, être gros", category: "Verbe" },
+            { soninke: "debe", french: "ville, village", category: "Lieu" },
+            { soninke: "deema", french: "aider", category: "Verbe" },
+            { soninke: "deeni", french: "glisser", category: "Verbe" },
+            { soninke: "denme", french: "adaptation, habitude", category: "Nom" },
+            { soninke: "depe", french: "court, petit", category: "Adjectif" },
+            { soninke: "depu", french: "plein (après avoir mangé)", category: "Adjectif" },
+            { soninke: "diinanta", french: "plus que, plutôt que", category: "Adverbe" },
+            { soninke: "dilli", french: "bouger, remuer", category: "Verbe" },
+            { soninke: "diminna", french: "amertume, rancoeur", category: "Nom" },
+            { soninke: "dinko", french: "grossir, grandir", category: "Verbe" },
+            { soninke: "diriɲaɲa", french: "lutter dans une mêlée", category: "Verbe" },
+            { soninke: "diyo", french: "femme divorcée", category: "Famille" },
+            { soninke: "do", french: "et, avec, vers, environ", category: "Conjonction" },
+            { soninke: "dokotoro", french: "médecin", category: "Profession" },
+            { soninke: "dolo", french: "vin, bière", category: "Boisson" },
+            { soninke: "doxo", french: "se disputer, réprimander", category: "Verbe" },
+            { soninke: "du", french: "pronom réfléchi: moi-même, etc.", category: "Pronom" },
+            { soninke: "dubuga", french: "se vanter", category: "Verbe" },
+            { soninke: "dudoxoto", french: "persévérer, prendre courage", category: "Verbe" },
+            { soninke: "duguta", french: "finir, terminer", category: "Verbe" },
+            { soninke: "dulle", french: "faim", category: "Nom" },
+            { soninke: "duna", french: "monde, vie", category: "Nom" },
+            { soninke: "dundere", french: "orgueilleux, vantard", category: "Adjectif" },
+            { soninke: "duŋe", french: "accepter, obéir", category: "Verbe" },
+            { soninke: "duuraaxu", french: "être nu, vide, seul", category: "Verbe" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE E-H ==========
+            { soninke: "ebola", french: "maladie Ebola", category: "Santé" },
+            { soninke: "faaba", french: "père / aider, secourir", category: "Famille" },
+            { soninke: "faamu", french: "comprendre", category: "Verbe" },
+            { soninke: "faara", french: "jardin", category: "Lieu" },
+            { soninke: "faasidi", french: "égoïste", category: "Adjectif" },
+            { soninke: "faatata", french: "patate douce", category: "Nourriture" },
+            { soninke: "faayi", french: "regarder, être en train de", category: "Verbe" },
+            { soninke: "facari", french: "expliquer, prêcher, traduire", category: "Verbe" },
+            { soninke: "fadume", french: "espérer", category: "Verbe" },
+            { soninke: "fagu", french: "être plein, rassasié", category: "Verbe" },
+            { soninke: "falla", french: "offrir, escorter la mariée", category: "Verbe" },
+            { soninke: "falle", french: "dos, derrière, suite", category: "Nom" },
+            { soninke: "fana", french: "enrouler / premier", category: "Verbe" },
+            { soninke: "fanka", french: "force, puissance", category: "Nom" },
+            { soninke: "fanke", french: "vent, enflure", category: "Nom" },
+            { soninke: "fanqa", french: "terrasser, lutter", category: "Verbe" },
+            { soninke: "faraati", french: "négliger", category: "Verbe" },
+            { soninke: "faranso", french: "France", category: "Lieu" },
+            { soninke: "faranfare", french: "beau, magnifique", category: "Adjectif" },
+            { soninke: "faraxu", french: "échanger, troquer", category: "Verbe" },
+            { soninke: "fare", french: "sang", category: "Corps" },
+            { soninke: "farila", french: "obligation religieuse", category: "Religion" },
+            { soninke: "fasa", french: "être mieux, être meilleur", category: "Verbe" },
+            { soninke: "fasari", french: "interpréter", category: "Verbe" },
+            { soninke: "fata", french: "couper, moissonner, sevrer", category: "Verbe" },
+            { soninke: "fate", french: "peau, corps", category: "Corps" },
+            { soninke: "fayi", french: "voler, dérober", category: "Verbe" },
+            { soninke: "fe", french: "il n'y a pas (négation existentielle)", category: "Grammaire" },
+            { soninke: "fedde", french: "association, groupe d'âge", category: "Nom" },
+            { soninke: "feera", french: "idée, solution", category: "Nom" },
+            { soninke: "fese", french: "être libre, joyeux", category: "Verbe" },
+            { soninke: "fetti", french: "négation copule", category: "Grammaire" },
+            { soninke: "fi", french: "chose, affaire", category: "Nom" },
+            { soninke: "fica", french: "vomir", category: "Verbe" },
+            { soninke: "fillo", french: "deux", category: "Nombre" },
+            { soninke: "fina", french: "noircir / déjà, pas encore", category: "Verbe" },
+            { soninke: "finku", french: "cécité", category: "Santé" },
+            { soninke: "firi", french: "devancer", category: "Verbe" },
+            { soninke: "fisirinwara", french: "être ingrat", category: "Verbe" },
+            { soninke: "fo", french: "chose", category: "Nom" },
+            { soninke: "fonnanqaye", french: "jeune", category: "Adjectif" },
+            { soninke: "fonnansire", french: "généreux", category: "Adjectif" },
+            { soninke: "fu", french: "souffler / longtemps / faux", category: "Verbe" },
+            { soninke: "fubbe", french: "tremper, plonger", category: "Verbe" },
+            { soninke: "fulaane", french: "Peul / un tel", category: "Ethnie" },
+            { soninke: "fune", french: "singe / jumeau", category: "Animal" },
+            { soninke: "fuŋu", french: "mieux, plus", category: "Adverbe" },
+            { soninke: "fuura", french: "auge / tilapia", category: "Animal" },
+            { soninke: "fuute", french: "souffler", category: "Verbe" },
+            { soninke: "fuutu", french: "tirer, étirer", category: "Verbe" },
+            { soninke: "fuxu", french: "se cacher", category: "Verbe" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE G-J ==========
+            { soninke: "gaara", french: "mentir", category: "Verbe" },
+            { soninke: "gaata", french: "tenter, éprouver", category: "Verbe" },
+            { soninke: "gaba", french: "beaucoup, fréquemment", category: "Adverbe" },
+            { soninke: "gabo", french: "augmenter, abonder", category: "Verbe" },
+            { soninke: "gaja", french: "combattre, attaquer", category: "Verbe" },
+            { soninke: "gallo", french: "être long, grand", category: "Verbe" },
+            { soninke: "gana", french: "transporter", category: "Verbe" },
+            { soninke: "ganfi", french: "si (conditionnel)", category: "Conjonction" },
+            { soninke: "gansu", french: "annoncer, informer", category: "Verbe" },
+            { soninke: "garanke", french: "cordonnier (caste)", category: "Profession" },
+            { soninke: "gede", french: "puits", category: "Lieu" },
+            { soninke: "geeji", french: "mer, océan", category: "Nature" },
+            { soninke: "geese", french: "fil de chaîne", category: "Mode" },
+            { soninke: "gelli", french: "depuis, si", category: "Conjonction" },
+            { soninke: "gemu", french: "rencontrer, accueillir", category: "Verbe" },
+            { soninke: "genme", french: "entente, compréhension", category: "Nom" },
+            { soninke: "gesere", french: "griot", category: "Profession" },
+            { soninke: "gida", french: "grand frère/soeur", category: "Famille" },
+            { soninke: "gide", french: "rocher, montagne", category: "Nature" },
+            { soninke: "gigire", french: "orphelin", category: "Famille" },
+            { soninke: "gine", french: "marmite en terre", category: "Ustensile" },
+            { soninke: "ginge", french: "branche / frontière", category: "Nom" },
+            { soninke: "giri", french: "partir, se lever", category: "Verbe" },
+            { soninke: "golle", french: "travail", category: "Nom" },
+            { soninke: "golli", french: "travailler", category: "Verbe" },
+            { soninke: "gongo", french: "conseiller", category: "Verbe" },
+            { soninke: "gonme", french: "estomac", category: "Corps" },
+            { soninke: "gooli", french: "tanner, débroussailler", category: "Verbe" },
+            { soninke: "goore", french: "parc à bestiaux", category: "Lieu" },
+            { soninke: "goori", french: "contourner, dévier", category: "Verbe" },
+            { soninke: "goro", french: "piler / cola", category: "Verbe" },
+            { soninke: "goto", french: "tromper, être rusé", category: "Verbe" },
+            { soninke: "goxu", french: "vomir", category: "Verbe" },
+            { soninke: "gundu", french: "secret", category: "Nom" },
+            { soninke: "gunne", french: "brousse, pays étranger", category: "Lieu" },
+            { soninke: "guruja", french: "détruire, démolir", category: "Verbe" },
+            { soninke: "guuji", french: "verser", category: "Verbe" },
+            { soninke: "haaju", french: "besoin, occupation", category: "Nom" },
+            { soninke: "hadaamarenme", french: "être humain", category: "Nom" },
+            { soninke: "halaale", french: "légitime / permis", category: "Adjectif" },
+            { soninke: "hanmi", french: "souci, inquiétude", category: "Nom" },
+            { soninke: "hanniya", french: "espérer, désirer", category: "Verbe" },
+            { soninke: "haqe", french: "péché / mesure, droit", category: "Nom" },
+            { soninke: "haqile", french: "intelligence, mémoire", category: "Nom" },
+            { soninke: "haraame", french: "interdit (religieux)", category: "Religion" },
+            { soninke: "hari", french: "même, aucun / Dieu", category: "Adverbe" },
+            { soninke: "harisa", french: "jusqu'à maintenant", category: "Adverbe" },
+            { soninke: "hataye", french: "thé", category: "Boisson" },
+            { soninke: "hayiba", french: "honte, exposer", category: "Nom" },
+            { soninke: "hiiji", french: "pèlerinage à la Mecque", category: "Religion" },
+            { soninke: "hinne", french: "avoir pitié", category: "Verbe" },
+            { soninke: "hoore", french: "noble, homme libre", category: "Nom" },
+            { soninke: "horonma", french: "paix, fraîcheur", category: "Nom" },
+            { soninke: "Interneti", french: "Internet", category: "Technologie" },
+            { soninke: "Isa", french: "Jésus", category: "Religion" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE K-O ==========
+            { soninke: "kaa", french: "maison, concession", category: "Lieu" },
+            { soninke: "kaara", french: "côté, pays", category: "Nom" },
+            { soninke: "kaati", french: "quelqu'un, un tel", category: "Pronom" },
+            { soninke: "kaawa", french: "sécher, être sec / s'étonner", category: "Verbe" },
+            { soninke: "kaba", french: "empêcher / pierre à aiguiser", category: "Verbe" },
+            { soninke: "kabu", french: "neuf", category: "Nombre" },
+            { soninke: "kace", french: "corde", category: "Objet" },
+            { soninke: "kafi", french: "être ensemble / avoir des relations", category: "Verbe" },
+            { soninke: "kafu", french: "rassembler, ajouter", category: "Verbe" },
+            { soninke: "kalaanŋe", french: "piège à animaux", category: "Objet" },
+            { soninke: "kalle", french: "mort", category: "Nom" },
+            { soninke: "kamaane", french: "maître, propriétaire", category: "Nom" },
+            { soninke: "kame", french: "cent", category: "Nombre" },
+            { soninke: "kan", french: "quel, lequel", category: "Pronom" },
+            { soninke: "kanbe", french: "dent", category: "Corps" },
+            { soninke: "kanbu", french: "croquer, mâcher", category: "Verbe" },
+            { soninke: "kanda", french: "orienter, diriger, pouvoir", category: "Verbe" },
+            { soninke: "kanjaane", french: "lièvre", category: "Animal" },
+            { soninke: "kanme", french: "pluie", category: "Nature" },
+            { soninke: "kanmu", french: "ciel", category: "Nature" },
+            { soninke: "kanne", french: "peur", category: "Nom" },
+            { soninke: "kanŋe", french: "or", category: "Métal" },
+            { soninke: "kanu", french: "craindre, avoir peur", category: "Verbe" },
+            { soninke: "kapalenma", french: "ami", category: "Famille" },
+            { soninke: "kara", french: "traverser, casser", category: "Verbe" },
+            { soninke: "karago", french: "cinq", category: "Nombre" },
+            { soninke: "kari", french: "tuer", category: "Verbe" },
+            { soninke: "kasafo", french: "être excessif", category: "Verbe" },
+            { soninke: "kaso", french: "prison", category: "Lieu" },
+            { soninke: "kata", french: "frapper, toucher", category: "Verbe" },
+            { soninke: "kati", french: "pouvoir, réussir", category: "Verbe" },
+            { soninke: "kato", french: "être gras, insolent", category: "Verbe" },
+            { soninke: "katu", french: "frapper, tirer, citer", category: "Verbe" },
+            { soninke: "kayinde", french: "insulte", category: "Nom" },
+            { soninke: "ke", french: "ce, ceci, le (démonstratif)", category: "Démonstratif" },
+            { soninke: "kende", french: "être fort, solide", category: "Verbe" },
+            { soninke: "ken", french: "cela, celui-là", category: "Démonstratif" },
+            { soninke: "kengele", french: "pintade", category: "Animal" },
+            { soninke: "kerefuune", french: "chauve-souris", category: "Animal" },
+            { soninke: "kesente", french: "courageux, travailleur", category: "Adjectif" },
+            { soninke: "kette", french: "morceau, valve", category: "Nom" },
+            { soninke: "kiide", french: "baobab", category: "Arbre" },
+            { soninke: "kiile", french: "esprit, intelligence", category: "Nom" },
+            { soninke: "kiina", french: "mari / passer la saison sèche", category: "Famille" },
+            { soninke: "kiinaye", french: "saison sèche", category: "Temps" },
+            { soninke: "kiiso", french: "mûrir", category: "Verbe" },
+            { soninke: "kiiti", french: "juger", category: "Verbe" },
+            { soninke: "kille", french: "route, fois", category: "Nom" },
+            { soninke: "kilo", french: "kilogramme", category: "Mesure" },
+            { soninke: "kine", french: "crocodile", category: "Animal" },
+            { soninke: "kinsiga", french: "midi", category: "Temps" },
+            { soninke: "kiɲe", french: "arriver", category: "Verbe" },
+            { soninke: "kisima", french: "grand-père", category: "Famille" },
+            { soninke: "kisi", french: "être sauvé, sauver", category: "Verbe" },
+            { soninke: "kita", french: "obtenir, trouver, gagner", category: "Verbe" },
+            { soninke: "kitaabe", french: "livre", category: "Objet" },
+            { soninke: "kitte", french: "main, bras", category: "Corps" },
+            { soninke: "kiye", french: "soleil, jour", category: "Nature" },
+            { soninke: "ko", french: "qui, que (interrogatif)", category: "Pronom" },
+            { soninke: "ko2", french: "dire", category: "Verbe" },
+            { soninke: "kome", french: "esclave", category: "Histoire" },
+            { soninke: "konbe", french: "sein, mamelle", category: "Corps" },
+            { soninke: "konko", french: "secouer, frapper", category: "Verbe" },
+            { soninke: "konpe", french: "chambre", category: "Lieu" },
+            { soninke: "konto", french: "ne pas pouvoir, manquer", category: "Verbe" },
+            { soninke: "koore", french: "être sec / faire signe de se taire", category: "Verbe" },
+            { soninke: "koori", french: "encercler, entourer", category: "Verbe" },
+            { soninke: "koota", french: "jour, tour", category: "Temps" },
+            { soninke: "kori", french: "tamiser / ne pas pouvoir, échouer", category: "Verbe" },
+            { soninke: "koroosi", french: "observer, surveiller", category: "Verbe" },
+            { soninke: "korote", french: "fétiche, sortilège", category: "Religion" },
+            { soninke: "kotolle", french: "coton", category: "Mode" },
+            { soninke: "koye", french: "semaine", category: "Temps" },
+            { soninke: "koyi", french: "montrer", category: "Verbe" },
+            { soninke: "ku", french: "donner / ces, ceux", category: "Verbe" },
+            { soninke: "kude", french: "être calme, se taire", category: "Verbe" },
+            { soninke: "kuguli", french: "se décrépir", category: "Verbe" },
+            { soninke: "kuma", french: "priver / flamme", category: "Verbe" },
+            { soninke: "kumu", french: "allumer", category: "Verbe" },
+            { soninke: "kunda", french: "quartier", category: "Lieu" },
+            { soninke: "kunme", french: "trou", category: "Nom" },
+            { soninke: "kunpa", french: "s'inquiéter, incertitude", category: "Verbe" },
+            { soninke: "kuuɲi", french: "saluer", category: "Verbe" },
+            { soninke: "kuuru", french: "se taire", category: "Verbe" },
+            { soninke: "kuyi", french: "donner, offrir / rêver", category: "Verbe" },
+            { soninke: "laada", french: "coutume, tradition / règles", category: "Nom" },
+            { soninke: "laate", french: "loin", category: "Adjectif" },
+            { soninke: "laato", french: "s'éloigner, être loin", category: "Verbe" },
+            { soninke: "laayidu", french: "pacte, promesse", category: "Nom" },
+            { soninke: "lafi", french: "vouloir, désirer", category: "Verbe" },
+            { soninke: "lagare", french: "dernier, cadet", category: "Adjectif" },
+            { soninke: "lakki", french: "charger, remplir", category: "Verbe" },
+            { soninke: "lalle", french: "canari, jarre", category: "Ustensile" },
+            { soninke: "lanbe", french: "cours d'eau", category: "Nature" },
+            { soninke: "langa", french: "maudire", category: "Verbe" },
+            { soninke: "laqata", french: "aiguiser", category: "Verbe" },
+            { soninke: "lasama", french: "préoccuper, surprendre", category: "Verbe" },
+            { soninke: "laxabure", french: "hyène", category: "Animal" },
+            { soninke: "laxami", french: "raconter, confesser", category: "Verbe" },
+            { soninke: "lebu", french: "bégayer", category: "Verbe" },
+            { soninke: "leegi", french: "être escortée (mariée)", category: "Verbe" },
+            { soninke: "leela", french: "ralentir, retarder", category: "Verbe" },
+            { soninke: "leele", french: "être en retard", category: "Verbe" },
+            { soninke: "lemu", french: "malaxer, pétrir", category: "Verbe" },
+            { soninke: "lenki", french: "aujourd'hui", category: "Temps" },
+            { soninke: "lepa", french: "coton cardé", category: "Mode" },
+            { soninke: "leqi", french: "toucher", category: "Verbe" },
+            { soninke: "lexu", french: "négliger", category: "Verbe" },
+            { soninke: "lifi", french: "coudre", category: "Verbe" },
+            { soninke: "liixi", french: "gêner, coincer", category: "Verbe" },
+            { soninke: "likke", french: "charge, fardeau", category: "Nom" },
+            { soninke: "limo", french: "citron", category: "Fruit" },
+            { soninke: "loli", french: "planter, transplanter", category: "Verbe" },
+            { soninke: "lonjuru", french: "problème / règles / handicap", category: "Nom" },
+            { soninke: "lowa", french: "charger (fusil)", category: "Verbe" },
+            { soninke: "loxo", french: "prêter, emprunter", category: "Verbe" },
+            { soninke: "lufu", french: "s'enfoncer", category: "Verbe" },
+            { soninke: "lulla", french: "cerveau", category: "Corps" },
+            { soninke: "lungu", french: "être sourd", category: "Verbe" },
+            { soninke: "lupe", french: "échouer, perdre", category: "Verbe" },
+            { soninke: "luuti", french: "cacher", category: "Verbe" },
+            { soninke: "ma", french: "négation perfective / ou, jusqu'à", category: "Grammaire" },
+            { soninke: "maama", french: "remercier / grand-mère", category: "Verbe" },
+            { soninke: "maana", french: "raison, sens / légende", category: "Nom" },
+            { soninke: "maaɲo", french: "nouvellement marié", category: "Famille" },
+            { soninke: "maaro", french: "riz", category: "Nourriture" },
+            { soninke: "maasa", french: "masser, exorciser", category: "Verbe" },
+            { soninke: "makka", french: "maïs", category: "Nourriture" },
+            { soninke: "mali", french: "coller, insister", category: "Verbe" },
+            { soninke: "maliika", french: "ange", category: "Religion" },
+            { soninke: "malle", french: "bouton, furoncle", category: "Santé" },
+            { soninke: "mande", french: "s'enivrer", category: "Verbe" },
+            { soninke: "mango", french: "mangue", category: "Fruit" },
+            { soninke: "mani", french: "quel, quoi", category: "Pronom" },
+            { soninke: "manime", french: "combien", category: "Pronom" },
+            { soninke: "mara", french: "garder, élever / grenier", category: "Verbe" },
+            { soninke: "masala", french: "causer, bavarder", category: "Verbe" },
+            { soninke: "maxa", french: "négation subjonctive / à cause de", category: "Grammaire" },
+            { soninke: "maxafo", french: "sauce", category: "Nourriture" },
+            { soninke: "maxanbaane", french: "jeune homme", category: "Famille" },
+            { soninke: "me", french: "pronom réciproque / ensemble", category: "Pronom" },
+            { soninke: "meene", french: "situation, sort", category: "Nom" },
+            { soninke: "meje", french: "balance", category: "Objet" },
+            { soninke: "menjanŋe", french: "ami", category: "Famille" },
+            { soninke: "menteŋe", french: "tomate", category: "Nourriture" },
+            { soninke: "menwalle", french: "réunion", category: "Nom" },
+            { soninke: "mexe", french: "être sale / fer, métal", category: "Adjectif" },
+            { soninke: "mexensi", french: "vélo", category: "Transport" },
+            { soninke: "miiri", french: "penser", category: "Verbe" },
+            { soninke: "mini", french: "boire", category: "Verbe" },
+            { soninke: "minna", french: "où", category: "Pronom" },
+            { soninke: "miri", french: "tisser, tresser", category: "Verbe" },
+            { soninke: "misa", french: "être maigre / être mesquin", category: "Verbe" },
+            { soninke: "misiide", french: "mosquée", category: "Lieu" },
+            { soninke: "misikiina", french: "pauvre", category: "Adjectif" },
+            { soninke: "miso", french: "devenir maigre", category: "Verbe" },
+            { soninke: "mobili", french: "voiture", category: "Transport" },
+            { soninke: "moodi", french: "marabout", category: "Religion" },
+            { soninke: "moosi", french: "tanner", category: "Verbe" },
+            { soninke: "moti", french: "pourrir", category: "Verbe" },
+            { soninke: "moxo", french: "manière, façon", category: "Nom" },
+            { soninke: "moyi", french: "mûrir, être cuit", category: "Verbe" },
+            { soninke: "mugu", french: "entendre, sentir", category: "Verbe" },
+            { soninke: "mukke", french: "visiteur, étranger", category: "Nom" },
+            { soninke: "mula", french: "rhume / frais", category: "Santé" },
+            { soninke: "mulla", french: "vouloir, aimer", category: "Verbe" },
+            { soninke: "mulle", french: "froid", category: "Nature" },
+            { soninke: "mulo", french: "être froid, calme", category: "Verbe" },
+            { soninke: "mundu", french: "chercher", category: "Verbe" },
+            { soninke: "mungu", french: "oublier", category: "Verbe" },
+            { soninke: "munu", french: "idole, fétiche", category: "Religion" },
+            { soninke: "muɲi", french: "patienter, endurer", category: "Verbe" },
+            { soninke: "mura", french: "satisfaire", category: "Verbe" },
+            { soninke: "mure", french: "être froid", category: "Verbe" },
+            { soninke: "muru", french: "prépuce", category: "Corps" },
+            { soninke: "muruxu", french: "être boiteux", category: "Verbe" },
+            { soninke: "muso", french: "cadeau, salaire", category: "Nom" },
+            { soninke: "muude", french: "mesure de grain", category: "Mesure" },
+            { soninke: "muumu", french: "être muet", category: "Verbe" },
+            { soninke: "muuri", french: "chercher", category: "Verbe" },
+            { soninke: "muusine", french: "chat", category: "Animal" },
+            { soninke: "muuti", french: "courbaturé / fatigue", category: "Adjectif" },
+            { soninke: "na", french: "auxiliaire imperfectif focalisé", category: "Grammaire" },
+            { soninke: "naafe", french: "être paresseux", category: "Verbe" },
+            { soninke: "naabure", french: "richesse, bétail", category: "Nom" },
+            { soninke: "nafa", french: "servir, bénéficier", category: "Verbe" },
+            { soninke: "nagaana", french: "berger", category: "Profession" },
+            { soninke: "nagga", french: "être en bonne santé", category: "Verbe" },
+            { soninke: "nama", french: "blesser, frapper", category: "Verbe" },
+            { soninke: "namasa", french: "banane", category: "Fruit" },
+            { soninke: "nase", french: "être déçu, trompé", category: "Verbe" },
+            { soninke: "nata", french: "avidité, convoitise", category: "Nom" },
+            { soninke: "natali", french: "dessiner", category: "Verbe" },
+            { soninke: "nawaari", french: "merci, remercier", category: "Politesse" },
+            { soninke: "naxa", french: "entre, au milieu", category: "Postposition" },
+            { soninke: "naxato", french: "quatre", category: "Nombre" },
+            { soninke: "nda", french: "si (conditionnel)", category: "Conjonction" },
+            { soninke: "ne", french: "chez, vers", category: "Postposition" },
+            { soninke: "neegu", french: "respirer", category: "Verbe" },
+            { soninke: "neema", french: "paix, grâce", category: "Nom" },
+            { soninke: "neene", french: "consoler / langue", category: "Verbe" },
+            { soninke: "neera", french: "compter, viser", category: "Verbe" },
+            { soninke: "nelle", french: "après-midi", category: "Temps" },
+            { soninke: "newo", french: "être facile, léger", category: "Verbe" },
+            { soninke: "nexu", french: "mépriser", category: "Verbe" },
+            { soninke: "neye", french: "facile, léger", category: "Adjectif" },
+            { soninke: "ni", french: "est (copule) / il y a (existentiel)", category: "Copule" },
+            { soninke: "nigife", french: "quart de muude", category: "Mesure" },
+            { soninke: "nimisi", french: "regretter", category: "Verbe" },
+            { soninke: "niri", french: "reverdir, prospérer", category: "Verbe" },
+            { soninke: "niyi", french: "vaincre, convaincre", category: "Verbe" },
+            { soninke: "nke", french: "moi (emphatique)", category: "Pronom" },
+            { soninke: "no", french: "là (adverbe de lieu)", category: "Adverbe" },
+            { soninke: "noogi", french: "aller à gauche", category: "Verbe" },
+            { soninke: "noono", french: "tracer, dessiner", category: "Verbe" },
+            { soninke: "nooro", french: "gloire, éclat", category: "Nom" },
+            { soninke: "nooxe", french: "humble, simple", category: "Adjectif" },
+            { soninke: "noqu", french: "lieu", category: "Nom" },
+            { soninke: "noxo", french: "ventre, intérieur", category: "Corps" },
+            { soninke: "nta", french: "négation imperfective / ne pas", category: "Grammaire" },
+            { soninke: "ntaxa", french: "ne plus, jamais", category: "Adverbe" },
+            { soninke: "nu", french: "pluriel", category: "Grammaire" },
+            { soninke: "nuxu", french: "ventre", category: "Corps" },
+            { soninke: "nuxunte", french: "enceinte (femme)", category: "Adjectif" },
+            { soninke: "nxa", french: "mais", category: "Conjonction" },
+            
+            // ========== NOUVEAUX MOTS DE LA LISTE P-S ==========
+            { soninke: "pala", french: "seau", category: "Ustensile" },
+            { soninke: "palanteeri", french: "fenêtre", category: "Lieu" },
+            { soninke: "pande", french: "petite houe", category: "Outil" },
+            { soninke: "papakaye", french: "papaye", category: "Fruit" },
+            { soninke: "parala", french: "parapluie", category: "Objet" },
+            { soninke: "pasipooro", french: "passeport", category: "Objet" },
+            { soninke: "pata", french: "variété d'oiseau", category: "Animal" },
+            { soninke: "pawulu", french: "Paul", category: "Nom propre" },
+            { soninke: "payi", french: "voile de la mariée", category: "Mode" },
+            { soninke: "pepe", french: "gronder", category: "Verbe" },
+            { soninke: "peti", french: "variété de rougeole", category: "Santé" },
+            { soninke: "petti", french: "sandale", category: "Mode" },
+            { soninke: "piite", french: "ruer / jeter", category: "Verbe" },
+            { soninke: "pikini", french: "ancienne pièce de 25 centimes", category: "Argent" },
+            { soninke: "pilinpilaane", french: "chauve-souris", category: "Animal" },
+            { soninke: "pini", french: "punir", category: "Verbe" },
+            { soninke: "piripiri", french: "vrai, pur", category: "Adjectif" },
+            { soninke: "polise", french: "policier", category: "Profession" },
+            { soninke: "ponŋe", french: "pont", category: "Lieu" },
+            { soninke: "ponti", french: "clou", category: "Objet" },
+            { soninke: "poole", french: "caoutchouc", category: "Matière" },
+            { soninke: "poore", french: "lacet, fronde", category: "Objet" },
+            { soninke: "posine", french: "poison", category: "Nom" },
+            { soninke: "puri", french: "jaune", category: "Adjectif" },
+            { soninke: "puuru", french: "jaune", category: "Adjectif" },
+            { soninke: "ra", french: "pouvoir (épistémique)", category: "Auxiliaire" },
+            { soninke: "rabatasi", french: "pleine lune", category: "Nature" },
+            { soninke: "rabatu", french: "suivre, respecter", category: "Verbe" },
+            { soninke: "raga", french: "attraper, prendre / penser", category: "Verbe" },
+            { soninke: "rakutu", french: "bénir, juger / prédestination", category: "Verbe" },
+            { soninke: "raqe", french: "bouche, entrée", category: "Corps" },
+            { soninke: "rege", french: "danser", category: "Verbe" },
+            { soninke: "renme", french: "enfant / fruit", category: "Famille" },
+            { soninke: "renmu", french: "avoir des fruits", category: "Verbe" },
+            { soninke: "ri", french: "venir / futur imperfectif", category: "Verbe" },
+            { soninke: "riti", french: "apporter", category: "Verbe" },
+            { soninke: "ro", french: "mettre, entrer", category: "Verbe" },
+            { soninke: "rondi", french: "faire entrer", category: "Verbe" },
+            { soninke: "roxe", french: "petit, faible", category: "Adjectif" },
+            { soninke: "sa", french: "merci (réponse à bisimilla)", category: "Politesse" },
+            { soninke: "saabu", french: "magie", category: "Religion" },
+            { soninke: "saabune", french: "savon", category: "Objet" },
+            { soninke: "saada", french: "répartir / tas, part", category: "Verbe" },
+            { soninke: "saado", french: "avant que", category: "Conjonction" },
+            { soninke: "saafi", french: "être lépreux", category: "Verbe" },
+            { soninke: "saafo", french: "crinière", category: "Animal" },
+            { soninke: "saaga", french: "rendre, remplacer", category: "Verbe" },
+            { soninke: "saage", french: "revenir / courageux", category: "Verbe" },
+            { soninke: "saago", french: "être courageux", category: "Verbe" },
+            { soninke: "saahu", french: "courage", category: "Nom" },
+            { soninke: "saaku", french: "être brave, digne", category: "Verbe" },
+            { soninke: "saame", french: "précéder", category: "Verbe" },
+            { soninke: "saane", french: "étoile", category: "Nature" },
+            { soninke: "saara", french: "enfanter", category: "Verbe" },
+            { soninke: "saarana", french: "parent", category: "Famille" },
+            { soninke: "saare", french: "enfanter, naître / tombeau", category: "Verbe" },
+            { soninke: "saasa", french: "maintenant", category: "Adverbe" },
+            { soninke: "saase", french: "épine", category: "Nature" },
+            { soninke: "saata", french: "planifier", category: "Verbe" },
+            { soninke: "saate", french: "cause de mort", category: "Nom" },
+            { soninke: "saaxe", french: "mère biologique", category: "Famille" },
+            { soninke: "saaxo", french: "flamant, héron", category: "Animal" },
+            { soninke: "sabaabu", french: "cause, raison", category: "Nom" },
+            { soninke: "sabari", french: "attendre, patienter", category: "Verbe" },
+            { soninke: "sabati", french: "être sérieux, stable", category: "Verbe" },
+            { soninke: "sadaxa", french: "sacrifice, aumône", category: "Religion" },
+            { soninke: "sadaxi", french: "sacrifier", category: "Verbe" },
+            { soninke: "safa", french: "écrire", category: "Verbe" },
+            { soninke: "safaare", french: "médicament", category: "Santé" },
+            { soninke: "safaye", french: "amulette", category: "Religion" },
+            { soninke: "saga", french: "défricher / plaire", category: "Verbe" },
+            { soninke: "sagalle", french: "taxe, impôt", category: "Nom" },
+            { soninke: "sagara", french: "ramasser, cueillir", category: "Verbe" },
+            { soninke: "sagata", french: "rejoindre / jeune adulte", category: "Verbe" },
+            { soninke: "sago", french: "désir, volonté", category: "Nom" },
+            { soninke: "saha", french: "guérir / santé / merci", category: "Verbe" },
+            { soninke: "sahaba", french: "succès, solution", category: "Nom" },
+            { soninke: "sakkat", french: "surtout que / haie", category: "Conjonction" },
+            { soninke: "sakke", french: "sculpteur", category: "Profession" },
+            { soninke: "salaqe", french: "glissant", category: "Adjectif" },
+            { soninke: "salle", french: "prière musulmane", category: "Religion" },
+            { soninke: "salli", french: "prier", category: "Verbe" },
+            { soninke: "sallumaana", french: "mendiant", category: "Nom" },
+            { soninke: "samaama", french: "paludisme", category: "Santé" },
+            { soninke: "samaqe", french: "serpent", category: "Animal" },
+            { soninke: "same", french: "lit", category: "Lieu" },
+            { soninke: "samu", french: "se tromper, s'égarer", category: "Verbe" },
+            { soninke: "sanda", french: "mode, époque", category: "Nom" },
+            { soninke: "sane", french: "châtrer / animal castré", category: "Verbe" },
+            { soninke: "sanga", french: "jouer / commettre l'adultère", category: "Verbe" },
+            { soninke: "sangalle", french: "enclos, haie", category: "Lieu" },
+            { soninke: "sange", french: "jeu / adultère", category: "Nom" },
+            { soninke: "sanke", french: "moustiquaire", category: "Objet" },
+            { soninke: "sanku", french: "être perdu", category: "Verbe" },
+            { soninke: "sanma", french: "paître / se tromper", category: "Verbe" },
+            { soninke: "sanme", french: "gros mil", category: "Nourriture" },
+            { soninke: "sanpa", french: "frapper, gifler", category: "Verbe" },
+            { soninke: "sanqi", french: "disperser", category: "Verbe" },
+            { soninke: "santi", french: "sauter", category: "Verbe" },
+            { soninke: "sanu", french: "vent de pluie", category: "Nature" },
+            { soninke: "sape", french: "sel", category: "Nourriture" },
+            { soninke: "sapi", french: "crépir, embrasser", category: "Verbe" },
+            { soninke: "sari", french: "charrues / labourer", category: "Outil" },
+            { soninke: "sariya", french: "loi", category: "Nom" },
+            { soninke: "sawu", french: "garder, conserver", category: "Verbe" },
+            { soninke: "sawura", french: "forme", category: "Nom" },
+            { soninke: "saxa", french: "lit / marché", category: "Lieu" },
+            { soninke: "saxamo", french: "hésiter", category: "Verbe" },
+            { soninke: "saxu", french: "croire", category: "Verbe" },
+            { soninke: "saye", french: "acacia / sable", category: "Arbre" },
+            { soninke: "sedi", french: "jeter, abandonner", category: "Verbe" },
+            { soninke: "seeda", french: "témoin", category: "Nom" },
+            { soninke: "seega", french: "ambassadeur", category: "Profession" },
+            { soninke: "seenu", french: "germer", category: "Verbe" },
+            { soninke: "seera", french: "apprendre, imiter", category: "Verbe" },
+            { soninke: "sefa", french: "franc CFA", category: "Argent" },
+            { soninke: "sefe", french: "parler", category: "Verbe" },
+            { soninke: "sefeta", french: "mot", category: "Nom" },
+            { soninke: "sefi", french: "être trempé, imbibé", category: "Verbe" },
+            { soninke: "sege", french: "monter", category: "Verbe" },
+            { soninke: "segenantonbe", french: "coude", category: "Corps" },
+            { soninke: "segeɲe", french: "ongle", category: "Corps" },
+            { soninke: "segutaade", french: "ciseau à bois", category: "Outil" },
+            { soninke: "selinŋe", french: "poule, poulet", category: "Animal" },
+            { soninke: "sella", french: "balayer", category: "Verbe" },
+            { soninke: "selli", french: "si", category: "Conjonction" },
+            { soninke: "senbe", french: "force / s'adosser", category: "Nom" },
+            { soninke: "sendi", french: "charger (fusil)", category: "Verbe" },
+            { soninke: "senge", french: "tôle ondulée", category: "Matière" },
+            { soninke: "senne", french: "pur, propre", category: "Adjectif" },
+            { soninke: "seno", french: "être propre", category: "Verbe" },
+            { soninke: "senta", french: "peigner", category: "Verbe" },
+            { soninke: "seqe", french: "pousse, bourgeon", category: "Plante" },
+            { soninke: "sequ", french: "bourgeonner", category: "Verbe" },
+            { soninke: "sere", french: "personne", category: "Nom" },
+            { soninke: "sesi", french: "chaise", category: "Meuble" },
+            { soninke: "setu", french: "monter, grimper", category: "Verbe" },
+            { soninke: "sewo", french: "se réjouir", category: "Verbe" },
+            { soninke: "sewu", french: "haut fourneau", category: "Outil" },
+            { soninke: "seyitaane", french: "diable", category: "Religion" },
+            { soninke: "si", french: "cheval / raser", category: "Animal" },
+            { soninke: "siba", french: "clan Keita / chien de chasse", category: "Animal" },
+            { soninke: "sigi", french: "s'arrêter, se lever", category: "Verbe" },
+            { soninke: "sigire", french: "lettre, alphabet", category: "Nom" },
+            { soninke: "siine", french: "année / gazelle", category: "Temps" },
+            { soninke: "siiti", french: "attacher", category: "Verbe" },
+            { soninke: "sikka", french: "douter", category: "Verbe" },
+            { soninke: "sikko", french: "trois", category: "Nombre" },
+            { soninke: "silaami", french: "musulman", category: "Religion" },
+            { soninke: "silifanda", french: "provisions", category: "Nom" },
+            { soninke: "singiti", french: "pâteux, dense", category: "Adjectif" },
+            { soninke: "sinma", french: "penser", category: "Verbe" },
+            { soninke: "sinme", french: "tabac / penser", category: "Verbe" },
+            { soninke: "sinqe", french: "barbe, menton", category: "Corps" },
+            { soninke: "siŋa", french: "rive", category: "Nature" },
+            { soninke: "sipa", french: "acheter du lait", category: "Verbe" },
+            { soninke: "sira", french: "fille aînée", category: "Famille" },
+            { soninke: "sirawu", french: "ombre", category: "Nature" },
+            { soninke: "sire", french: "bon, bien", category: "Adjectif" },
+            { soninke: "siri", french: "bien / devoir (modalité)", category: "Adverbe" },
+            { soninke: "siro", french: "être bon, s'améliorer", category: "Verbe" },
+            { soninke: "siye", french: "rasage", category: "Nom" },
+            { soninke: "sobi", french: "se méfier, être averti", category: "Verbe" },
+            { soninke: "sokke", french: "herbe, paille", category: "Nature" },
+            { soninke: "soli", french: "remplir, enfiler", category: "Verbe" },
+            { soninke: "solle", french: "bois, morceau de bois", category: "Matière" },
+            { soninke: "sonbi", french: "bouillie", category: "Nourriture" },
+            { soninke: "sondonme", french: "cœur", category: "Corps" },
+            { soninke: "song", french: "disputer / crier", category: "Verbe" },
+            { soninke: "sonka", french: "nid", category: "Animal" },
+            { soninke: "sonsolo", french: "espionner", category: "Verbe" },
+            { soninke: "soobe", french: "se hâter / sérieux", category: "Verbe" },
+            { soninke: "sooninke", french: "Soninké", category: "Ethnie" },
+            { soninke: "sooxi", french: "désobéir / être absent", category: "Verbe" },
+            { soninke: "sopi", french: "couper, mordre", category: "Verbe" },
+            { soninke: "soro", french: "cuire / déféquer", category: "Verbe" },
+            { soninke: "sorodasi", french: "soldat", category: "Profession" },
+            { soninke: "sorogo", french: "prendre soin", category: "Verbe" },
+            { soninke: "soxo", french: "cultiver / fermer", category: "Verbe" },
+            { soninke: "soxu", french: "se coucher, aller au lit", category: "Verbe" },
+            { soninke: "soxuba", french: "matin", category: "Temps" },
+            { soninke: "soyi", french: "rire", category: "Verbe" },
+            { soninke: "su", french: "tout, chaque, aucun", category: "Quantificateur" },
+            { soninke: "sugu", french: "téter", category: "Verbe" },
+            { soninke: "sugo", french: "chèvre", category: "Animal" },
+            { soninke: "sukara", french: "sucre", category: "Nourriture" },
+            { soninke: "sukke", french: "suivre", category: "Verbe" },
+            { soninke: "sumu", french: "prêter, emprunter", category: "Verbe" },
+            { soninke: "suno", french: "être triste", category: "Verbe" },
+            { soninke: "sunpo", french: "nombril", category: "Corps" },
+            { soninke: "sunxaso", french: "Ramadan", category: "Religion" },
+            { soninke: "suraqe", french: "Maure, Arabe", category: "Ethnie" },
+            { soninke: "suturi", french: "protéger, cacher, enterrer", category: "Verbe" },
+            { soninke: "suugu", french: "chanter", category: "Verbe" },
+            { soninke: "suumu", french: "jeûner", category: "Verbe" },
+            { soninke: "suura", french: "nettoyer, essuyer", category: "Verbe" },
+            { soninke: "suusa", french: "nettoyer", category: "Verbe" },
+            { soninke: "suute", french: "abandonner le domicile", category: "Verbe" },
+            { soninke: "suuxe", french: "être jaloux", category: "Verbe" },
+            { soninke: "suwa", french: "bois de chauffage", category: "Nature" },
+            { soninke: "suxula", french: "déranger, gêner", category: "Verbe" },
+            { soninke: "ta", french: "pied, jambe / fois", category: "Corps" },
+            { soninke: "taagumanse", french: "symbole, signe", category: "Nom" },
+            { soninke: "taali", french: "proverbe", category: "Nom" },
+            { soninke: "taanu", french: "souvent", category: "Adverbe" },
+            { soninke: "taarixu", french: "histoire, légende", category: "Nom" },
+            { soninke: "taaxu", french: "s'asseoir, exister", category: "Verbe" },
+            { soninke: "tabali", french: "table", category: "Meuble" },
+            { soninke: "taballe", french: "tambour de guerre", category: "Musique" },
+            { soninke: "tabulle", french: "nuage", category: "Nature" },
+            { soninke: "tafe", french: "chigomier", category: "Arbre" },
+            { soninke: "tafu", french: "attacher, nouer", category: "Verbe" },
+            { soninke: "taga", french: "construire, fabriquer", category: "Verbe" },
+            { soninke: "tagaye", french: "mur", category: "Lieu" },
+            { soninke: "tage", french: "forgeron", category: "Profession" },
+            { soninke: "takki", french: "jurer, promettre", category: "Verbe" },
+            { soninke: "talaqe", french: "silure", category: "Animal" },
+            { soninke: "talibe", french: "élève coranique", category: "Religion" },
+            { soninke: "talla", french: "coussin", category: "Objet" },
+            { soninke: "tamare", french: "datte", category: "Fruit" },
+            { soninke: "tame", french: "tamis", category: "Ustensile" },
+            { soninke: "tana", french: "autre", category: "Déterminant" },
+            { soninke: "tanbo", french: "dette", category: "Nom" },
+            { soninke: "tanga", french: "garder, protéger", category: "Verbe" },
+            { soninke: "tangandi", french: "mémoriser", category: "Verbe" },
+            { soninke: "tangi", french: "pêcher", category: "Verbe" },
+            { soninke: "tanji", french: "urine / uriner", category: "Nom" },
+            { soninke: "tanni", french: "seulement", category: "Adverbe" },
+            { soninke: "tanpi", french: "être fatigué", category: "Verbe" },
+            { soninke: "tapa", french: "camarade de classe", category: "Nom" },
+            { soninke: "taqe", french: "part, partage", category: "Nom" },
+            { soninke: "tara", french: "lécher / voyager", category: "Verbe" },
+            { soninke: "taraxasu", french: "être agité", category: "Verbe" },
+            { soninke: "tatte", french: "côté", category: "Nom" },
+            { soninke: "tawe", french: "être présent", category: "Verbe" },
+            { soninke: "taxasi", french: "examiner, analyser", category: "Verbe" },
+            { soninke: "te", french: "huile / champ", category: "Nourriture" },
+            { soninke: "teeri", french: "porter un enfant", category: "Verbe" },
+            { soninke: "teero", french: "louche", category: "Ustensile" },
+            { soninke: "tefu", french: "chaussure", category: "Mode" },
+            { soninke: "tegeru", french: "provoquer", category: "Verbe" },
+            { soninke: "teleŋo", french: "être droit, correct", category: "Verbe" },
+            { soninke: "telle", french: "aller", category: "Verbe" },
+            { soninke: "temu", french: "goûter", category: "Verbe" },
+            { soninke: "tenbe", french: "natte", category: "Objet" },
+            { soninke: "tenteme", french: "s'approcher", category: "Verbe" },
+            { soninke: "teŋe", french: "front", category: "Corps" },
+            { soninke: "tepu", french: "chaussure", category: "Mode" },
+            { soninke: "tera", french: "marcher, voyager", category: "Verbe" },
+            { soninke: "tere", french: "marcher", category: "Verbe" },
+            { soninke: "terinka", french: "écouter", category: "Verbe" },
+            { soninke: "tetu", french: "filtrer", category: "Verbe" },
+            { soninke: "tewo", french: "avoir chaud", category: "Verbe" },
+            { soninke: "tewuye", french: "exprès", category: "Adverbe" },
+            { soninke: "texe", french: "pleuvoir / fermer", category: "Verbe" },
+            { soninke: "texoone", french: "coqueluche", category: "Santé" },
+            { soninke: "texu", french: "tousser", category: "Verbe" },
+            { soninke: "teye", french: "droite (direction)", category: "Nom" },
+            { soninke: "ti", french: "dire", category: "Verbe" },
+            { soninke: "tiba", french: "toit de paille", category: "Lieu" },
+            { soninke: "tifi", french: "semer", category: "Verbe" },
+            { soninke: "tiga", french: "arachide", category: "Nourriture" },
+            { soninke: "tigiti", french: "prendre, garder", category: "Verbe" },
+            { soninke: "tiidi", french: "fumer", category: "Verbe" },
+            { soninke: "tiiga", french: "louer, adorer", category: "Verbe" },
+            { soninke: "tiigi", french: "s'appuyer", category: "Verbe" },
+            { soninke: "tiiri", french: "avoir le vertige", category: "Verbe" },
+            { soninke: "tila", french: "finir", category: "Verbe" },
+            { soninke: "tilliqe", french: "vague", category: "Nature" },
+            { soninke: "timi", french: "sentir / jouer", category: "Verbe" },
+            { soninke: "tinburuti", french: "soufre", category: "Matière" },
+            { soninke: "tinme", french: "être fini", category: "Verbe" },
+            { soninke: "tinto", french: "s'approcher", category: "Verbe" },
+            { soninke: "tiŋa", french: "porter sur la tête", category: "Verbe" },
+            { soninke: "tiŋe", french: "base, tronc", category: "Nom" },
+            { soninke: "tipe", french: "semis", category: "Nom" },
+            { soninke: "tirinba", french: "tourner", category: "Verbe" },
+            { soninke: "tirindi", french: "demander, exiger", category: "Verbe" },
+            { soninke: "tixiri", french: "sangle en cuir", category: "Mode" },
+            { soninke: "tiye", french: "viande", category: "Nourriture" },
+            { soninke: "to", french: "péter", category: "Verbe" },
+            { soninke: "toge", french: "cuisse", category: "Corps" },
+            { soninke: "togi", french: "chasser", category: "Verbe" },
+            { soninke: "tokki", french: "raccommoder", category: "Verbe" },
+            { soninke: "tolla", french: "petit d'animal", category: "Animal" },
+            { soninke: "tolli", french: "suinter", category: "Verbe" },
+            { soninke: "tolomi", french: "tordre", category: "Verbe" },
+            { soninke: "tonbe", french: "sommet", category: "Nom" },
+            { soninke: "tonge", french: "houe", category: "Outil" },
+            { soninke: "toni", french: "avaler", category: "Verbe" },
+            { soninke: "tonŋu", french: "vérité", category: "Nom" },
+            { soninke: "tono", french: "profit, bénéfice", category: "Nom" },
+            { soninke: "tonto", french: "clouer", category: "Verbe" },
+            { soninke: "toŋo", french: "contenir / enseigner", category: "Verbe" },
+            { soninke: "toole", french: "bouffon", category: "Nom" },
+            { soninke: "tooli", french: "semer", category: "Verbe" },
+            { soninke: "toolo", french: "aller loin", category: "Verbe" },
+            { soninke: "tooɲi", french: "écraser", category: "Verbe" },
+            { soninke: "toora", french: "mal, souffrance", category: "Nom" },
+            { soninke: "tooro", french: "faire souffrir", category: "Verbe" },
+            { soninke: "tooxe", french: "venin, poison", category: "Nom" },
+            { soninke: "tooxi", french: "se fâcher", category: "Verbe" },
+            { soninke: "topa", french: "tissu indigo / point", category: "Mode" },
+            { soninke: "toroma", french: "prendre en gage", category: "Verbe" },
+            { soninke: "toro", french: "oreille", category: "Corps" },
+            { soninke: "towi", french: "être gras, huileux", category: "Verbe" },
+            { soninke: "toxo", french: "rester / nom / laisser", category: "Verbe" },
+            { soninke: "toxora", french: "nommer", category: "Verbe" },
+            { soninke: "tu", french: "savoir, connaître", category: "Verbe" },
+            { soninke: "tubaabu", french: "Européen, blanc", category: "Nom" },
+            { soninke: "tubogu", french: "en avoir marre", category: "Verbe" },
+            { soninke: "tufa", french: "brique / cracher", category: "Matière" },
+            { soninke: "tufuma", french: "accuser", category: "Verbe" },
+            { soninke: "tuga", french: "payer", category: "Verbe" },
+            { soninke: "tugo", french: "plaie, blessure", category: "Santé" },
+            { soninke: "tugu", french: "préparer / se poser", category: "Verbe" },
+            { soninke: "tugu", french: "préparer, disposer", category: "Verbe" },
+            { soninke: "tuli", french: "tresser", category: "Verbe" },
+            { soninke: "tulle", french: "abeille", category: "Animal" },
+            { soninke: "tulu", french: "tresser", category: "Verbe" },
+            { soninke: "tuma", french: "tamiser", category: "Verbe" },
+            { soninke: "tunka", french: "roi", category: "Histoire" },
+            { soninke: "tunmi", french: "plonger", category: "Verbe" },
+            { soninke: "tuntu", french: "soufflet de forge", category: "Outil" },
+            { soninke: "tuŋa", french: "pays étranger", category: "Lieu" },
+            { soninke: "tupu", french: "bourre de fusil", category: "Objet" },
+            { soninke: "turo", french: "figuier", category: "Arbre" },
+            { soninke: "turunŋe", french: "hyène", category: "Animal" },
+            { soninke: "tusi", french: "s'agenouiller", category: "Verbe" },
+            { soninke: "tutu", french: "enfoncer, planter", category: "Verbe" },
+            { soninke: "tuubi", french: "se repentir", category: "Verbe" },
+            { soninke: "tuudo", french: "caïlcédrat", category: "Arbre" },
+            { soninke: "tuuma", french: "se reposer", category: "Verbe" },
+            { soninke: "tuune", french: "chacal", category: "Animal" },
+            { soninke: "tuure", french: "éléphant", category: "Animal" },
+            { soninke: "tuuri", french: "être fou", category: "Verbe" },
+            { soninke: "tuwaaxu", french: "connaissance", category: "Nom" },
+            { soninke: "wa", french: "auxiliaire imperfectif", category: "Grammaire" },
+            { soninke: "waaga", french: "l'année prochaine", category: "Temps" },
+            { soninke: "waajibi", french: "être obligatoire / devoir", category: "Verbe" },
+            { soninke: "waaju", french: "prêcher", category: "Verbe" },
+            { soninke: "waale", french: "victoire", category: "Nom" },
+            { soninke: "waalo", french: "terre de décrue", category: "Nature" },
+            { soninke: "waaxi", french: "frère (cousin)", category: "Famille" },
+            { soninke: "waye", french: "s'évanouir / orgueil", category: "Verbe" },
+            { soninke: "wakili", french: "représentant", category: "Profession" },
+            { soninke: "walaxa", french: "ou", category: "Conjonction" },
+            { soninke: "walle", french: "chasse collective", category: "Nom" },
+            { soninke: "wanasaara", french: "Européen", category: "Nom" },
+            { soninke: "wandalle", french: "canard", category: "Animal" },
+            { soninke: "wanqi", french: "laver", category: "Verbe" },
+            { soninke: "waqe", french: "saut", category: "Nom" },
+            { soninke: "wara", french: "laisser, abandonner", category: "Verbe" },
+            { soninke: "ware", french: "être laissé", category: "Verbe" },
+            { soninke: "wari", french: "voir", category: "Verbe" },
+            { soninke: "wariji", french: "avoir de la chance", category: "Verbe" },
+            { soninke: "wasa", french: "détacher / satisfaire", category: "Verbe" },
+            { soninke: "wase", french: "suffire", category: "Verbe" },
+            { soninke: "waso", french: "se vanter / testament", category: "Verbe" },
+            { soninke: "watte", french: "maladie", category: "Santé" },
+            { soninke: "waxa", french: "escalader", category: "Verbe" },
+            { soninke: "waxati", french: "moment, temps", category: "Nom" },
+            { soninke: "wayi", french: "vanner", category: "Verbe" },
+            { soninke: "wece", french: "monnaie", category: "Nom" },
+            { soninke: "woci", french: "changer (monnaie)", category: "Verbe" },
+            { soninke: "woli", french: "jeu de planchette / saint, mystique", category: "Nom" },
+            { soninke: "wolo", french: "jaune foncé", category: "Adjectif" },
+            { soninke: "woloma", french: "fouiller", category: "Verbe" },
+            { soninke: "woore", french: "paître", category: "Verbe" },
+            { soninke: "wori", french: "bouillir / voir", category: "Verbe" },
+            { soninke: "woroke", french: "thé", category: "Boisson" },
+            { soninke: "wote", french: "voter / élection", category: "Verbe" },
+            { soninke: "wottoro", french: "charrette", category: "Transport" },
+            { soninke: "woye", french: "courant", category: "Nature" },
+            { soninke: "wu", french: "pleurer", category: "Verbe" },
+            { soninke: "wuce", french: "temps, période", category: "Nom" },
+            { soninke: "wucu", french: "durer", category: "Verbe" },
+            { soninke: "wujune", french: "mille", category: "Nombre" },
+            { soninke: "wulla", french: "verser", category: "Verbe" },
+            { soninke: "wulle", french: "chien", category: "Animal" },
+            { soninke: "wulli", french: "réveiller", category: "Verbe" },
+            { soninke: "wunaliŋe", french: "chanceux", category: "Adjectif" },
+            { soninke: "wundunbaare", french: "veuve", category: "Famille" },
+            { soninke: "wungaame", french: "hippopotame", category: "Animal" },
+            { soninke: "wuɲi", french: "ouvrir", category: "Verbe" },
+            { soninke: "wura", french: "parcourir", category: "Verbe" },
+            { soninke: "wuraxe", french: "jaunisse", category: "Santé" },
+            { soninke: "wure", french: "sens / dessous", category: "Nom" },
+            { soninke: "wuri", french: "hier soir", category: "Temps" },
+            { soninke: "wuro", french: "nuit", category: "Temps" },
+            { soninke: "wuru", french: "courir, fuir", category: "Verbe" },
+            { soninke: "wurudi", french: "égrener un chapelet", category: "Verbe" },
+            { soninke: "wuruge", french: "crier", category: "Verbe" },
+            { soninke: "wurugi", french: "prospérer", category: "Verbe" },
+            { soninke: "wurundi", french: "conduire, piloter / filer", category: "Verbe" },
+            { soninke: "wurunfinku", french: "cécité nocturne", category: "Santé" },
+            { soninke: "wusuru", french: "dîme, taxe", category: "Nom" },
+            { soninke: "wutaade", french: "anse, manche", category: "Nom" },
+            { soninke: "wutu", french: "prendre, saisir", category: "Verbe" },
+            { soninke: "wuuse", french: "dissoudre", category: "Verbe" },
+            { soninke: "wuyi", french: "passer la nuit", category: "Verbe" },
+            
+            // ========== NOUVEAUX MOTS X-Z ==========
+            { soninke: "xa", french: "vous (impératif) / aussi", category: "Pronom" },
+            { soninke: "xaabiila", french: "famille, clan, ethnie", category: "Nom" },
+            { soninke: "xaalisi", french: "argent", category: "Nom" },
+            { soninke: "xaami", french: "variété de plante médicinale", category: "Plante" },
+            { soninke: "xanba", french: "variété d'arbre", category: "Arbre" },
+            { soninke: "xande", french: "kinkeliba", category: "Plante" },
+            { soninke: "xanjo", french: "supplier, prier", category: "Verbe" },
+            { soninke: "xanne", french: "cou / voix / bord", category: "Corps" },
+            { soninke: "xanpa", french: "tenaille, pince", category: "Outil" },
+            { soninke: "xansi", french: "même jour dans une semaine", category: "Adverbe" },
+            { soninke: "xanta", french: "se souvenir", category: "Verbe" },
+            { soninke: "xantu", french: "grossir", category: "Verbe" },
+            { soninke: "xanu", french: "aimer, souhaiter", category: "Verbe" },
+            { soninke: "xaɲa", french: "chasser", category: "Verbe" },
+            { soninke: "xara", french: "étudier, lire", category: "Verbe" },
+            { soninke: "xaraxa", french: "lit en bambou", category: "Meuble" },
+            { soninke: "xasanne", french: "premier mois lunaire", category: "Temps" },
+            { soninke: "xase", french: "vieux", category: "Adjectif" },
+            { soninke: "xaso", french: "vieillir / lune, mois", category: "Verbe" },
+            { soninke: "xata", french: "chasser / être maudit", category: "Verbe" },
+            { soninke: "xati", french: "lait", category: "Boisson" },
+            { soninke: "xawa", french: "devoir / mériter", category: "Auxiliaire" },
+            { soninke: "xawara", french: "chose semblable", category: "Nom" },
+            { soninke: "xaye", french: "héritage", category: "Nom" },
+            { soninke: "xayi", french: "envoyer / frais, cru", category: "Verbe" },
+            { soninke: "xebu", french: "se réaliser", category: "Verbe" },
+            { soninke: "xedor", french: "faucille", category: "Outil" },
+            { soninke: "xeeri", french: "bonheur", category: "Nom" },
+            { soninke: "xeetu", french: "provoquer", category: "Verbe" },
+            { soninke: "xeexe", french: "écorcher", category: "Verbe" },
+            { soninke: "xeexene", french: "cram-cram", category: "Plante" },
+            { soninke: "xenpe", french: "terminer / tenter", category: "Verbe" },
+            { soninke: "xenqe", french: "dormir", category: "Verbe" },
+            { soninke: "xenqu", french: "aiguiser", category: "Verbe" },
+            { soninke: "xense", french: "mesurer, peser", category: "Verbe" },
+            { soninke: "xenu", french: "tomber / commencer", category: "Verbe" },
+            { soninke: "xepe", french: "traverse", category: "Nom" },
+            { soninke: "xesu", french: "puiser / couper", category: "Verbe" },
+            { soninke: "xeyi", french: "envoyer", category: "Verbe" },
+            { soninke: "xibaare", french: "nouvelle", category: "Nom" },
+            { soninke: "xidimi", french: "servir", category: "Verbe" },
+            { soninke: "xiidi", french: "être seul, isolé", category: "Verbe" },
+            { soninke: "xiine", french: "cram-cram", category: "Plante" },
+            { soninke: "xiiri", french: "tirer, traîner", category: "Verbe" },
+            { soninke: "xiisa", french: "histoire", category: "Nom" },
+            { soninke: "xiiti", french: "brûler / tenir rancune", category: "Verbe" },
+            { soninke: "xini", french: "nager", category: "Verbe" },
+            { soninke: "xinta", french: "cru, vert / idiot", category: "Adjectif" },
+            { soninke: "xiɲi", french: "mordre", category: "Verbe" },
+            { soninke: "xiri", french: "appeler", category: "Verbe" },
+            { soninke: "xirise", french: "aîné, vieux", category: "Famille" },
+            { soninke: "xirixe", french: "selle", category: "Objet" },
+            { soninke: "xiti", french: "s'évanouir", category: "Verbe" },
+            { soninke: "xitu", french: "épilepsie", category: "Santé" },
+            { soninke: "xiye", french: "buffle", category: "Animal" },
+            { soninke: "xobo", french: "acheter", category: "Verbe" },
+            { soninke: "xoda", french: "ballon", category: "Objet" },
+            { soninke: "xodoro", french: "bagarre", category: "Nom" },
+            { soninke: "xoje", french: "résidence / famille (respect)", category: "Nom" },
+            { soninke: "xojo", french: "tomate", category: "Nourriture" },
+            { soninke: "xolle", french: "calebasse", category: "Ustensile" },
+            { soninke: "xolo", french: "intense", category: "Adjectif" },
+            { soninke: "xoloba", french: "poutre", category: "Bâtiment" },
+            { soninke: "xolonte", french: "intense", category: "Adjectif" },
+            { soninke: "xomi", french: "arroser", category: "Verbe" },
+            { soninke: "xonbo", french: "être difficile / tissu", category: "Verbe" },
+            { soninke: "xoni", french: "hair, détester", category: "Verbe" },
+            { soninke: "xonji", french: "alcool", category: "Boisson" },
+            { soninke: "xonne", french: "ennemi", category: "Nom" },
+            { soninke: "xonto", french: "pénis", category: "Corps" },
+            { soninke: "xoodo", french: "bas du dos", category: "Corps" },
+            { soninke: "xoole", french: "rivière temporaire", category: "Nature" },
+            { soninke: "xooni", french: "quand même", category: "Adverbe" },
+            { soninke: "xoore", french: "grand, important", category: "Adjectif" },
+            { soninke: "xooro", french: "grandir / ramasser", category: "Verbe" },
+            { soninke: "xooti", french: "pétrir", category: "Verbe" },
+            { soninke: "xoqe", french: "queue", category: "Corps" },
+            { soninke: "xore", french: "charbon", category: "Matière" },
+            { soninke: "xori", french: "question / chaparder", category: "Particule" },
+            { soninke: "xoro", french: "carboniser", category: "Verbe" },
+            { soninke: "xoroti", french: "être pressé", category: "Verbe" },
+            { soninke: "xose", french: "totem, tabou", category: "Religion" },
+            { soninke: "xosi", french: "soudainement", category: "Adverbe" },
+            { soninke: "xoso", french: "battre, vaincre / casser", category: "Verbe" },
+            { soninke: "xote", french: "difficile, cher", category: "Adjectif" },
+            { soninke: "xoto", french: "devenir difficile", category: "Verbe" },
+            { soninke: "xotoone", french: "coqueluche", category: "Santé" },
+            { soninke: "xotte", french: "os", category: "Corps" },
+            { soninke: "xoxone", french: "cadet / placenta", category: "Famille" },
+            { soninke: "xubaare", french: "nouvelle", category: "Nom" },
+            { soninke: "xube", french: "chambre", category: "Lieu" },
+            { soninke: "xubulu", french: "étui, fourreau", category: "Objet" },
+            { soninke: "xubulle", french: "cadenas", category: "Objet" },
+            { soninke: "xude", french: "cuisse", category: "Corps" },
+            { soninke: "xuduxudu", french: "tourterelle", category: "Animal" },
+            { soninke: "xufa", french: "voile, drap", category: "Mode" },
+            { soninke: "xufu", french: "couvrir", category: "Verbe" },
+            { soninke: "xuli", french: "avant-bras", category: "Corps" },
+            { soninke: "xulle", french: "blanc", category: "Adjectif" },
+            { soninke: "xullu", french: "déféquer", category: "Verbe" },
+            { soninke: "xumaare", french: "grue couronnée", category: "Animal" },
+            { soninke: "xumaari", french: "arroser", category: "Verbe" },
+            { soninke: "xume", french: "joue", category: "Corps" },
+            { soninke: "xuna", french: "plaine", category: "Nature" },
+            { soninke: "xunbane", french: "demain", category: "Temps" },
+            { soninke: "xungo", french: "bois de chauffage", category: "Nature" },
+            { soninke: "xunjeli", french: "sauce arachide", category: "Nourriture" },
+            { soninke: "xuntura", french: "sphère", category: "Nom" },
+            { soninke: "xura", french: "être blanc / innocent", category: "Verbe" },
+            { soninke: "xureye", french: "clarté", category: "Nom" },
+            { soninke: "xuro", french: "excrément", category: "Nom" },
+            { soninke: "xuruba", french: "remuer", category: "Verbe" },
+            { soninke: "xurufu", french: "s'agenouiller", category: "Verbe" },
+            { soninke: "xurungo", french: "genou", category: "Corps" },
+            { soninke: "xurusi", french: "égorger", category: "Verbe" },
+            { soninke: "xuso", french: "jeune fille", category: "Famille" },
+            { soninke: "xutungaana", french: "avare", category: "Adjectif" },
+            { soninke: "xuuba", french: "marcher dans l'eau", category: "Verbe" },
+            { soninke: "xuude", french: "ver", category: "Animal" },
+            { soninke: "xuufi", french: "botte", category: "Mode" },
+            { soninke: "xuuma", french: "maigrir", category: "Verbe" },
+            { soninke: "xuumu", french: "murmurer", category: "Verbe" },
+            { soninke: "xuuɲu", french: "cri de femme", category: "Nom" },
+            { soninke: "xuuru", french: "être brumeux", category: "Verbe" },
+            { soninke: "xuuse", french: "source / virer", category: "Nom" },
+            { soninke: "xuusu", french: "récolter l'arachide", category: "Verbe" },
+            { soninke: "xuutu", french: "garder rancune", category: "Verbe" },
+            { soninke: "ya", french: "marque de focalisation", category: "Grammaire" },
+            { soninke: "yaagu", french: "avoir honte", category: "Verbe" },
+            { soninke: "yaala", french: "se promener", category: "Verbe" },
+            { soninke: "yaara", french: "glaner", category: "Verbe" },
+            { soninke: "yaaxa", french: "imiter", category: "Verbe" },
+            { soninke: "yaaxe", french: "œil", category: "Corps" },
+            { soninke: "yaaxido", french: "cadet", category: "Famille" },
+            { soninke: "yafo", french: "pardonner", category: "Verbe" },
+            { soninke: "yalo", french: "salive", category: "Corps" },
+            { soninke: "yanba", french: "décorer", category: "Verbe" },
+            { soninke: "yanga", french: "ne pas souffrir", category: "Verbe" },
+            { soninke: "yango", french: "punition divine", category: "Religion" },
+            { soninke: "yanpa", french: "pardonner", category: "Verbe" },
+            { soninke: "yanqa", french: "descendre", category: "Verbe" },
+            { soninke: "yanqi", french: "laver", category: "Verbe" },
+            { soninke: "yaqe", french: "femme, épouse", category: "Famille" },
+            { soninke: "yaraxata", french: "déjeuner", category: "Verbe" },
+            { soninke: "yaxanbaane", french: "jeune homme", category: "Famille" },
+            { soninke: "yaxanne", french: "jeune fille", category: "Famille" },
+            { soninke: "yaxare", french: "femme", category: "Famille" },
+            { soninke: "yaxi", french: "se marier", category: "Verbe" },
+            { soninke: "yaxu", french: "mariage", category: "Nom" },
+            { soninke: "yayi", french: "éventer", category: "Verbe" },
+            { soninke: "yebure", french: "négliger", category: "Verbe" },
+            { soninke: "yeeso", french: "visage", category: "Corps" },
+            { soninke: "yekka", french: "égal", category: "Adjectif" },
+            { soninke: "yelinŋe", french: "oiseau", category: "Animal" },
+            { soninke: "yelle", french: "œuf", category: "Nourriture" },
+            { soninke: "yelli", french: "depuis, si / que", category: "Conjonction" },
+            { soninke: "yere", french: "tomber / ici", category: "Verbe" },
+            { soninke: "yeru", french: "l'année dernière", category: "Temps" },
+            { soninke: "yeti", french: "attacher", category: "Verbe" },
+            { soninke: "yetu", french: "attacher", category: "Verbe" },
+            { soninke: "yexi", french: "se marier", category: "Verbe" },
+            { soninke: "yida", french: "aider", category: "Verbe" },
+            { soninke: "yide", french: "hache", category: "Outil" },
+            { soninke: "yiga", french: "manger", category: "Verbe" },
+            { soninke: "yigi-yigi", french: "secouer", category: "Verbe" },
+            { soninke: "yilayila", french: "hésiter", category: "Verbe" },
+            { soninke: "yilla", french: "changer", category: "Verbe" },
+            { soninke: "yillakara", french: "lendemain", category: "Temps" },
+            { soninke: "yillaye", french: "changement", category: "Nom" },
+            { soninke: "yille", french: "revenir / mil", category: "Verbe" },
+            { soninke: "yillekare", french: "ce matin", category: "Temps" },
+            { soninke: "yinbe", french: "feu", category: "Nature" },
+            { soninke: "yindi", french: "porter sur la tête", category: "Verbe" },
+            { soninke: "yingaame", french: "hippopotame", category: "Animal" },
+            { soninke: "yingi", french: "apparaître", category: "Verbe" },
+            { soninke: "yinmanke", french: "chef, président", category: "Profession" },
+            { soninke: "yinme", french: "tête / même", category: "Corps" },
+            { soninke: "yinsi", french: "moudre", category: "Verbe" },
+            { soninke: "yinti", french: "poil, plume", category: "Corps" },
+            { soninke: "yiraame", french: "tissu", category: "Mode" },
+            { soninke: "yiriga", french: "compter", category: "Verbe" },
+            { soninke: "yirigi", french: "cette année", category: "Temps" },
+            { soninke: "yirija", french: "troisième fils", category: "Famille" },
+            { soninke: "yiti", french: "enfler", category: "Verbe" },
+            { soninke: "yitte", french: "arbre / médicament", category: "Nature" },
+            { soninke: "yittine", french: "moringa", category: "Arbre" },
+            { soninke: "yogo", french: "un, certain (indéfini)", category: "Déterminant" },
+            { soninke: "yokke", french: "bagage, trousseau", category: "Nom" },
+            { soninke: "yonki", french: "âme", category: "Religion" },
+            { soninke: "yonko", french: "remuer", category: "Verbe" },
+            { soninke: "yonta", french: "tour, rotation", category: "Nom" },
+            { soninke: "yonto", french: "pousser", category: "Verbe" },
+            { soninke: "yoori", french: "encercler", category: "Verbe" },
+            { soninke: "yoro", french: "mettre bas", category: "Verbe" },
+            { soninke: "yuba", french: "siffler", category: "Verbe" },
+            { soninke: "yugo", french: "homme", category: "Famille" },
+            { soninke: "yugu", french: "mâle", category: "Adjectif" },
+            { soninke: "yuruwa", french: "prospérer", category: "Verbe" },
+            { soninke: "yuure", french: "perdre l'équilibre", category: "Verbe" },
+            { soninke: "yuusufu", french: "Joseph", category: "Nom propre" },
+        ];
+
+        // État actuel
+        let currentFilter = '';
+        let currentLetter = '';
+        let currentCategory = '';
+
+        // Fonction pour obtenir les catégories uniques
+        function getUniqueCategories() {
+            const cats = new Set();
+            dictionary.forEach(item => {
+                if (item.category) cats.add(item.category);
+            });
+            return Array.from(cats).sort();
+        }
+
+        // Fonction pour afficher le dictionnaire
+        function renderDictionary(filter = '', letter = '', category = '') {
+            const container = document.getElementById('dictContent');
+            let filtered = [...dictionary];
+            
+            // Filtre par recherche
+            if (filter) {
+                const f = filter.toLowerCase();
+                filtered = filtered.filter(item => 
+                    item.soninke.toLowerCase().includes(f) || 
+                    item.french.toLowerCase().includes(f)
+                );
+            }
+            
+            // Filtre par lettre
+            if (letter) {
+                filtered = filtered.filter(item => item.soninke.toLowerCase().startsWith(letter.toLowerCase()));
+            }
+            
+            // Filtre par catégorie
+            if (category) {
+                filtered = filtered.filter(item => item.category === category);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-result">Aucun résultat trouvé.<br>Essayez un autre mot, une autre lettre ou une autre catégorie.</div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(item => `
+                <div class="dict-card">
+                    <div class="dict-soninke">${escapeHtml(item.soninke)}</div>
+                    <div class="dict-french">${escapeHtml(item.french)}</div>
+                    <div class="dict-category">${escapeHtml(item.category)}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Échapper les caractères HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Construire l'alphabet
+        function buildAlphabet() {
+            const letters = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split(' ');
+            const container = document.getElementById('alphabetNav');
+            container.innerHTML = '<button class="alpha-btn" data-letter="">Tous</button>';
+            letters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.textContent = letter;
+                btn.className = 'alpha-btn';
+                btn.setAttribute('data-letter', letter);
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentLetter = letter;
+                    currentFilter = document.getElementById('searchInput').value;
+                    renderDictionary(currentFilter, currentLetter, currentCategory);
+                });
+                container.appendChild(btn);
+            });
+            const allBtn = document.querySelector('.alpha-btn[data-letter=""]');
+            if (allBtn) {
+                allBtn.classList.add('active');
+                allBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+                    allBtn.classList.add('active');
+                    currentLetter = '';
+                    currentFilter = document.getElementById('searchInput').value;
+                    renderDictionary(currentFilter, currentLetter, currentCategory);
+                });
+            }
+        }
+        
+        // Initialiser les catégories
+        function initCategories() {
+            const categories = getUniqueCategories();
+            const container = document.getElementById('categoriesNav');
+            // Garder le bouton "Toutes"
+            container.innerHTML = '<button class="cat-btn active" data-cat="">Toutes</button>';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.textContent = cat;
+                btn.className = 'cat-btn';
+                btn.setAttribute('data-cat', cat);
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = cat;
+                    currentFilter = document.getElementById('searchInput').value;
+                    renderDictionary(currentFilter, currentLetter, currentCategory);
+                });
+                container.appendChild(btn);
+            });
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            buildAlphabet();
+            initCategories();
+            renderDictionary('', '', '');
+            
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchInput');
+            
+            searchBtn.addEventListener('click', () => {
+                currentFilter = searchInput.value;
+                renderDictionary(currentFilter, currentLetter, currentCategory);
+            });
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    currentFilter = searchInput.value;
+                    renderDictionary(currentFilter, currentLetter, currentCategory);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
