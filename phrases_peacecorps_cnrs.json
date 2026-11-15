@@ -1,0 +1,302 @@
+[
+  {
+    "soninke": "Salaamu aleykum",
+    "french": "Paix sur toi"
+  },
+  {
+    "soninke": "Aleykum salaam",
+    "french": "Et sur toi, paix (réponse)"
+  },
+  {
+    "soninke": "An wuyi jam",
+    "french": "Bonjour (littéralement : ta nuit est-elle paisible ?)"
+  },
+  {
+    "soninke": "Lella",
+    "french": "Bon après-midi"
+  },
+  {
+    "soninke": "Sunka",
+    "french": "Bonsoir"
+  },
+  {
+    "soninke": "Xori an wa jam?",
+    "french": "Es-tu en paix ?"
+  },
+  {
+    "soninke": "Jam baane",
+    "french": "Paix seulement"
+  },
+  {
+    "soninke": "An moxo?",
+    "french": "Comment vas-tu ? (à une personne)"
+  },
+  {
+    "soninke": "Ma jam",
+    "french": "Je vais bien"
+  },
+  {
+    "soninke": "Ka-dunko n moxo?",
+    "french": "Comment va la famille ?"
+  },
+  {
+    "soninke": "I wa jam",
+    "french": "Ils vont bien"
+  },
+  {
+    "soninke": "Golle n moxo?",
+    "french": "Comment va le travail ?"
+  },
+  {
+    "soninke": "Jam duuro",
+    "french": "Il va bien"
+  },
+  {
+    "soninke": "Nawaari",
+    "french": "Merci"
+  },
+  {
+    "soninke": "Bisimilla",
+    "french": "Bienvenue / De rien"
+  },
+  {
+    "soninke": "N",
+    "french": "Je"
+  },
+  {
+    "soninke": "An",
+    "french": "Tu"
+  },
+  {
+    "soninke": "A",
+    "french": "Il / Elle"
+  },
+  {
+    "soninke": "O",
+    "french": "Nous"
+  },
+  {
+    "soninke": "Xa",
+    "french": "Vous (pluriel)"
+  },
+  {
+    "soninke": "I",
+    "french": "Ils / Elles"
+  },
+  {
+    "soninke": "Yaxare",
+    "french": "Femme"
+  },
+  {
+    "soninke": "Yaxaru",
+    "french": "Femmes"
+  },
+  {
+    "soninke": "Yugo",
+    "french": "Homme"
+  },
+  {
+    "soninke": "Yugu",
+    "french": "Hommes"
+  },
+  {
+    "soninke": "Xuso",
+    "french": "Fille"
+  },
+  {
+    "soninke": "Xusu",
+    "french": "Filles"
+  },
+  {
+    "soninke": "Murunte",
+    "french": "Garçon"
+  },
+  {
+    "soninke": "Murunto",
+    "french": "Garçons"
+  },
+  {
+    "soninke": "Lemine",
+    "french": "Enfant"
+  },
+  {
+    "soninke": "Laminu",
+    "french": "Enfants"
+  },
+  {
+    "soninke": "Ka-dunko",
+    "french": "Famille"
+  },
+  {
+    "soninke": "Saaxe",
+    "french": "Mère"
+  },
+  {
+    "soninke": "Faabe",
+    "french": "Père"
+  },
+  {
+    "soninke": "Yaqqe",
+    "french": "Épouse"
+  },
+  {
+    "soninke": "Kiine",
+    "french": "Mari"
+  },
+  {
+    "soninke": "Gidan-yaxare",
+    "french": "Sœur"
+  },
+  {
+    "soninke": "Gidan-yugo",
+    "french": "Frère"
+  },
+  {
+    "soninke": "Suxuba",
+    "french": "Matin"
+  },
+  {
+    "soninke": "Kinsiga",
+    "french": "Midi"
+  },
+  {
+    "soninke": "Lelle",
+    "french": "Après-midi"
+  },
+  {
+    "soninke": "Wuro",
+    "french": "Nuit / Soir"
+  },
+  {
+    "soninke": "Baane",
+    "french": "Un"
+  },
+  {
+    "soninke": "Fillo",
+    "french": "Deux"
+  },
+  {
+    "soninke": "Sikko",
+    "french": "Trois"
+  },
+  {
+    "soninke": "Naxato",
+    "french": "Quatre"
+  },
+  {
+    "soninke": "Karago",
+    "french": "Cinq"
+  },
+  {
+    "soninke": "Tumu",
+    "french": "Six"
+  },
+  {
+    "soninke": "Ñeru",
+    "french": "Sept"
+  },
+  {
+    "soninke": "Segu",
+    "french": "Huit"
+  },
+  {
+    "soninke": "Kabu",
+    "french": "Neuf"
+  },
+  {
+    "soninke": "Tanmu",
+    "french": "Dix"
+  },
+  {
+    "soninke": "Tabeli",
+    "french": "Table"
+  },
+  {
+    "soninke": "Siisi",
+    "french": "Chaise"
+  },
+  {
+    "soninke": "Follaqqe",
+    "french": "Porte"
+  },
+  {
+    "soninke": "Palanteeri",
+    "french": "Fenêtre"
+  },
+  {
+    "soninke": "Safandi fo",
+    "french": "Stylo"
+  },
+  {
+    "soninke": "Kereyon",
+    "french": "Crayon"
+  },
+  {
+    "soninke": "Kaye",
+    "french": "Cahier"
+  },
+  {
+    "soninke": "Kitabe",
+    "french": "Livre"
+  },
+  {
+    "soninke": "Sakkoosi",
+    "french": "Sac"
+  },
+  {
+    "soninke": "An wa Soninke n mukku?",
+    "french": "Parles-tu soninké ?"
+  },
+  {
+    "soninke": "Iyo, n wa Soninke n mukku fonne",
+    "french": "Oui, je parle un peu soninké"
+  },
+  {
+    "soninke": "John nta Soninke n mukku",
+    "french": "John ne parle pas soninké"
+  },
+  {
+    "soninke": "Án tòxô ?",
+    "french": "Quel est ton prénom ?"
+  },
+  {
+    "soninke": "N tòxô Múusá",
+    "french": "Mon prénom est Moussa"
+  },
+  {
+    "soninke": "Án jànmû ?",
+    "french": "Quel est ton nom de famille ?"
+  },
+  {
+    "soninke": "N jànmû Jágáná",
+    "french": "Mon nom de famille est Diagana"
+  },
+  {
+    "soninke": "Bísímíllà",
+    "french": "Je t'en prie / De rien (formule empruntée à l'arabe)"
+  },
+  {
+    "soninke": "Án pùún nì mànímè yí ?",
+    "french": "Quel âge as-tu ?"
+  },
+  {
+    "soninke": "Án lí Hàráncì kân cíinè yí ?",
+    "french": "En quelle année es-tu arrivé en France ?"
+  },
+  {
+    "soninke": "Án là wá sòonìnkanqánnèn cáhàná bà ?",
+    "french": "Sais-tu écrire le soninké ?"
+  },
+  {
+    "soninke": "Án kàyén kòyí ín ŋà !",
+    "french": "Montre-moi ton cahier !"
+  },
+  {
+    "soninke": "Án kìtàabén qà ?",
+    "french": "Où est ton livre ?"
+  },
+  {
+    "soninke": "Án kìtàabên ŋá án màxá bà ?",
+    "french": "As-tu ton livre avec toi ?"
+  }
+]

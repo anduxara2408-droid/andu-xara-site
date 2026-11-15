@@ -2,239 +2,420 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XA IA – Chat Soninké</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>XA IA – Assistant Soninké</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', sans-serif;
-      background: #f8fafc;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #fff;
+      color: #0f172a;
       height: 100vh;
       display: flex;
       flex-direction: column;
     }
     .chat-header {
-      background: white;
       border-bottom: 1px solid #e2e8f0;
-      padding: 12px 20px;
+      padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
     }
-    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-area { display: flex; align-items: center; gap: 0.75rem; }
     .logo-icon {
-      width: 36px; height: 36px;
-      background: #e67e22;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      font-size: 1.2rem;
+      width: 2rem; height: 2rem; background: #e67e22; border-radius: 0.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: white; cursor: pointer;
     }
-    .logo-text { font-weight: 700; color: #2c1a0f; }
+    .logo-text { font-weight: 700; }
     .logo-text span { color: #e67e22; }
     .back-link {
-      background: #f1f5f9;
-      padding: 6px 12px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      text-decoration: none;
-      color: #475569;
+      background: #f1f5f9; padding: 0.25rem 0.75rem; border-radius: 2rem;
+      font-size: 0.75rem; text-decoration: none; color: #64748b;
     }
-    .lang-selector {
-      display: flex;
-      gap: 8px;
-      background: #f1f5f9;
-      padding: 4px 12px;
-      border-radius: 40px;
+    .main-content { flex: 1; overflow-y: auto; padding: 1rem; }
+    .container { max-width: 56rem; margin: 0 auto; }
+    .welcome-section { text-align: center; padding: 2rem 1rem; }
+    .welcome-title { font-size: 2rem; font-weight: 700; margin: 1rem 0; }
+    .welcome-description { color: #64748b; margin-bottom: 2rem; }
+    .questions-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+      margin-bottom: 2rem;
     }
-    .lang-btn {
-      background: none;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 30px;
-      font-weight: 500;
-      cursor: pointer;
-      color: #475569;
+    .question-btn {
+      background: white; border: 1px solid #e2e8f0; border-radius: 1rem;
+      padding: 0.75rem; text-align: left; cursor: pointer; transition: 0.2s;
     }
-    .lang-btn.active { background: #e67e22; color: white; }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    .question-btn:hover { border-color: #e67e22; background: rgba(230,126,34,0.05); }
+    .teach-panel {
+      background: #fef9e6; border: 1px solid #f1c40f; border-radius: 1rem;
+      padding: 0.75rem; margin: 1rem 0; display: none; gap: 0.5rem; flex-wrap: wrap;
     }
-    .message { display: flex; gap: 12px; max-width: 85%; }
+    .teach-panel.show { display: flex; }
+    .teach-panel input { flex: 1; padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 2rem; outline: none; }
+    .teach-panel button { background: #e67e22; color: white; border: none; border-radius: 2rem; padding: 0.5rem 1rem; cursor: pointer; }
+    .plus-menu {
+      position: absolute; bottom: 70px; left: 20px; background: white; border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;
+      padding: 0.5rem 0; z-index: 200; display: none; flex-direction: column; min-width: 200px;
+    }
+    .plus-menu button {
+      background: none; border: none; padding: 0.6rem 1rem; text-align: left;
+      width: 100%; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .plus-menu button:hover { background: #f1f5f9; }
+    .plus-menu hr { margin: 0.25rem 0; border-color: #e2e8f0; }
+    .admin-dialog {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: white; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 1.5rem; z-index: 1000; text-align: center; display: none;
+      flex-direction: column; gap: 1rem; min-width: 280px; border: 1px solid #e2e8f0;
+    }
+    .admin-dialog.show { display: flex; }
+    .admin-dialog input { padding: 0.5rem; border-radius: 2rem; border: 1px solid #ccc; text-align: center; }
+    .admin-dialog button { background: #e67e22; color: white; border: none; border-radius: 2rem; padding: 0.5rem; cursor: pointer; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
+    .overlay.show { display: block; }
+    .chat-messages { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+    .message { display: flex; gap: 0.75rem; max-width: 85%; }
     .message.user { align-self: flex-end; flex-direction: row-reverse; }
-    .message-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .message.user .message-avatar { background: #e67e22; color: white; }
-    .message-content {
-      background: white;
-      padding: 12px 16px;
-      border-radius: 20px;
-      border: 1px solid #e2e8f0;
-      line-height: 1.5;
-    }
-    .message.user .message-content {
-      background: #e67e22;
-      color: white;
-      border: none;
-    }
-    .chat-input-area {
-      background: white;
-      border-top: 1px solid #e2e8f0;
-      padding: 16px 20px;
-    }
-    .input-container {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      gap: 12px;
-    }
-    textarea {
-      flex: 1;
-      border: 1px solid #e2e8f0;
-      border-radius: 28px;
-      padding: 12px 18px;
-      font-family: inherit;
-      resize: none;
-      outline: none;
-    }
-    textarea:focus { border-color: #e67e22; }
-    button {
-      background: #e67e22;
-      border: none;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .typing-indicator { display: flex; gap: 4px; padding: 8px 0; }
-    .typing-indicator span {
-      width: 8px; height: 8px;
-      background: #94a3b8;
-      border-radius: 50%;
-      animation: bounce 1.4s infinite;
-    }
-    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
-    @media (max-width: 640px) { .message { max-width: 95%; } .chat-header { flex-direction: column; gap: 8px; } }
+    .avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .bubble { background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 0.75rem 1rem; line-height: 1.5; }
+    .message.user .bubble { background: #e67e22; color: white; border: none; }
+    .system-message { text-align: center; color: #64748b; font-size: 0.8rem; margin: 0.5rem 0; }
+    .typing-indicator { display: flex; gap: 4px; padding: 0.5rem 0; }
+    .typing-indicator span { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; animation: bounce 1.2s infinite; }
+    @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    .input-area { border-top: 1px solid #e2e8f0; background: white; padding: 0.75rem 1rem; position: relative; }
+    .input-wrapper { max-width: 56rem; margin: 0 auto; display: flex; gap: 0.75rem; align-items: flex-end; }
+    textarea { flex: 1; border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 0.75rem; font-family: inherit; resize: none; outline: none; min-height: 2.75rem; }
+    textarea:focus { border-color: #e67e22; box-shadow: 0 0 0 2px rgba(230,126,34,0.2); }
+    .plus-btn { background: #f1f5f9; border: none; width: 2.75rem; height: 2.75rem; border-radius: 1rem; font-size: 1.4rem; font-weight: bold; color: #e67e22; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .plus-btn:hover { background: #e2e8f0; }
+    .send-btn { background: #e67e22; border: none; width: 2.75rem; height: 2.75rem; border-radius: 1rem; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 640px) { .questions-grid { grid-template-columns: 1fr; } .message { max-width: 95%; } }
   </style>
 </head>
 <body>
-<div class="chat-header">
-  <div class="logo-area">
-    <div class="logo-icon">X</div>
-    <div class="logo-text">XA <span>IA</span></div>
-    <a href="xa-ia-hub.html" class="back-link">← Retour à l'espace</a>
-  </div>
-  <div class="lang-selector">
-    <button class="lang-btn active" data-lang="fr">FR</button>
-    <button class="lang-btn" data-lang="snk">Soninké</button>
-    <button class="lang-btn" data-lang="en">EN</button>
-  </div>
-</div>
-<div class="chat-messages" id="chatMessages">
-  <div class="message bot">
-    <div class="message-avatar">🤖</div>
-    <div class="message-content"><strong>Beeta ! 👋</strong><br>Je suis XA IA, l'assistant d'Andu-Xara. Je parle soninké, français et anglais.<br>Pose-moi une question sur l'histoire soninké, la langue, nos produits ou le concert de Pispa Le Roi.</div>
-  </div>
-</div>
-<div class="chat-input-area">
-  <div class="input-container">
-    <textarea id="chatInput" rows="1" placeholder="Écrivez votre message... (Entrée pour envoyer)"></textarea>
-    <button id="sendBtn">➤</button>
-  </div>
-</div>
+  <header class="chat-header">
+    <div class="logo-area">
+      <div class="logo-icon" id="adminSecretBtn">X</div>
+      <div class="logo-text">XA <span>IA</span></div>
+      <a href="index.html" class="back-link">← Accueil</a>
+    </div>
+  </header>
 
-<script>
-  const API_URL = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
-  let currentLang = "fr";
-  let isLoading = false;
-  const messagesDiv = document.getElementById('chatMessages');
-  const input = document.getElementById('chatInput');
-  const sendBtn = document.getElementById('sendBtn');
+  <div id="overlay" class="overlay"></div>
+  <div id="adminDialog" class="admin-dialog">
+    <strong>🔐 Accès administrateur</strong>
+    <input type="password" id="adminPassword" placeholder="Mot de passe" autocomplete="off">
+    <button id="validateAdminBtn">Valider</button>
+  </div>
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentLang = btn.dataset.lang;
-      addSystemMessage(`🧡 Langue changée : ${currentLang === 'fr' ? 'français' : currentLang === 'snk' ? 'soninké' : 'anglais'}.`);
+  <div class="main-content">
+    <div class="container">
+      <div id="welcomeSection" class="welcome-section">
+        <div class="welcome-title">NAWAARI AAXI 🌟</div>
+        <p class="welcome-description">Posez-moi vos questions sur la langue Soninké, la culture Soninké, l'histoire des Soninkés.</p>
+        <div class="questions-grid">
+          <button class="question-btn" data-question="Comment dit-on « bonjour » en Soninké ?">Comment dit-on « bonjour » en Soninké ?</button>
+          <button class="question-btn" data-question="Quel est l'empire fondé par les Soninkés ?">Quel est l'empire fondé par les Soninkés ?</button>
+          <button class="question-btn" data-question="Qui est l'ancêtre légendaire des Soninkés ?">Qui est l'ancêtre légendaire des Soninkés ?</button>
+          <button class="question-btn" data-question="Donne-moi un proverbe soninké.">Donne-moi un proverbe soninké.</button>
+        </div>
+        <div class="teach-panel" id="teachPanel">
+          <input type="text" id="soninkeWord" placeholder="Mot / phrase en Soninké (ex: taaxu)" autocomplete="off">
+          <input type="text" id="frenchMeaning" placeholder="Signification en français (ex: assieds-toi)">
+          <button id="teachBtn">📚 Enseigner</button>
+        </div>
+      </div>
+      <div id="chatMessages" class="chat-messages" style="display: none;"></div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-wrapper">
+      <button class="plus-btn" id="plusBtn">+</button>
+      <textarea id="chatInput" rows="1" placeholder="Écrivez votre message... (Entrée pour envoyer)"></textarea>
+      <button class="send-btn" id="sendBtn">➤</button>
+    </div>
+  </div>
+
+  <div id="plusMenu" class="plus-menu">
+    <button id="menuSearchWeb">🌐 Recherche web</button>
+    <button id="menuDeepSearch">🔍 Recherche approfondie</button>
+    <hr>
+    <button id="menuUploadFile">📁 Importer une image ou un texte</button>
+    <button id="menuAnalyze">🧠 Analyser</button>
+  </div>
+
+  <script>
+    const API_URL = "https://xa-ia-worker.microsansfiltre2408.workers.dev";
+    const ADMIN_PASSWORD = "andu2026";
+    let adminMode = false;
+    let conversationStarted = false;
+    let searchMode = false;
+    let deepSearchMode = false;
+
+    const welcome = document.getElementById('welcomeSection');
+    const chatDiv = document.getElementById('chatMessages');
+    const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const soninkeWordInput = document.getElementById('soninkeWord');
+    const frenchMeaningInput = document.getElementById('frenchMeaning');
+    const teachBtn = document.getElementById('teachBtn');
+    const teachPanel = document.getElementById('teachPanel');
+    const adminSecretBtn = document.getElementById('adminSecretBtn');
+    const overlay = document.getElementById('overlay');
+    const adminDialog = document.getElementById('adminDialog');
+    const adminPasswordInput = document.getElementById('adminPassword');
+    const validateAdminBtn = document.getElementById('validateAdminBtn');
+    const plusBtn = document.getElementById('plusBtn');
+    const plusMenu = document.getElementById('plusMenu');
+    const menuSearchWeb = document.getElementById('menuSearchWeb');
+    const menuDeepSearch = document.getElementById('menuDeepSearch');
+    const menuUploadFile = document.getElementById('menuUploadFile');
+    const menuAnalyze = document.getElementById('menuAnalyze');
+
+    let menuVisible = false;
+    plusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menuVisible = !menuVisible;
+      plusMenu.style.display = menuVisible ? 'flex' : 'none';
     });
-  });
+    document.addEventListener('click', () => {
+      plusMenu.style.display = 'none';
+      menuVisible = false;
+    });
+    plusMenu.addEventListener('click', (e) => e.stopPropagation());
 
-  function addSystemMessage(text) {
-    const div = document.createElement('div');
-    div.className = 'message bot';
-    div.innerHTML = `<div class="message-avatar">ℹ️</div><div class="message-content"><em>${text}</em></div>`;
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
+    menuSearchWeb.addEventListener('click', () => {
+      searchMode = !searchMode;
+      deepSearchMode = false;
+      addSystemMessage(searchMode ? "🌐 Mode recherche web ACTIVÉ." : "🌐 Mode recherche web DÉSACTIVÉ.");
+      plusMenu.style.display = 'none';
+    });
+    menuDeepSearch.addEventListener('click', () => {
+      deepSearchMode = !deepSearchMode;
+      searchMode = false;
+      addSystemMessage(deepSearchMode ? "🔍 Mode recherche approfondie ACTIVÉ." : "🔍 Mode recherche approfondie DÉSACTIVÉ.");
+      plusMenu.style.display = 'none';
+    });
+    menuAnalyze.addEventListener('click', () => {
+      const msg = input.value.trim();
+      if (!msg) addSystemMessage("🧠 Tapez d'abord un message à analyser.");
+      else callAPI(msg);
+      plusMenu.style.display = 'none';
+    });
 
-  function addMessage(text, isUser = false) {
-    const div = document.createElement('div');
-    div.className = `message ${isUser ? 'user' : 'bot'}`;
-    div.innerHTML = `<div class="message-avatar">${isUser ? '👤' : '🤖'}</div><div class="message-content">${text.replace(/\n/g, '<br>')}</div>`;
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
+    menuUploadFile.addEventListener('click', () => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*,text/plain';
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        // Vérification supplémentaire : si l'extension est .pdf ou le type MIME application/pdf, on refuse
+        const isPdf = file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf';
+        if (isPdf) {
+          addSystemMessage("❌ Les fichiers PDF ne sont pas supportés. Veuillez importer une image (JPEG, PNG) ou un fichier texte (.txt).");
+          return;
+        }
+        if (!file.type.startsWith('image/') && file.type !== 'text/plain') {
+          addSystemMessage(`⚠️ Type de fichier non supporté (${file.type}). Seules les images et les fichiers .txt sont acceptés.`);
+          return;
+        }
+        addSystemMessage(`📄 Fichier "${file.name}" importé. Analyse en cours...`);
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = async (ev) => {
+            const base64 = ev.target.result.split(',')[1];
+            await sendImageAnalysis(base64, file.type);
+          };
+          reader.readAsDataURL(file);
+        } else if (file.type === 'text/plain') {
+          const text = await file.text();
+          await callAPI(`Analyse ce fichier texte :\n${text.substring(0, 2000)}`);
+        }
+      };
+      fileInput.click();
+      plusMenu.style.display = 'none';
+    });
 
-  function showTyping() {
-    const typing = document.createElement('div');
-    typing.className = 'message bot';
-    typing.id = 'typingIndicator';
-    typing.innerHTML = `<div class="message-avatar">🤖</div><div class="message-content"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
-    messagesDiv.appendChild(typing);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-  function hideTyping() { document.getElementById('typingIndicator')?.remove(); }
-
-  async function sendMessage() {
-    const msg = input.value.trim();
-    if (!msg || isLoading) return;
-    addMessage(msg, true);
-    input.value = '';
-    isLoading = true;
-    showTyping();
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg })
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      hideTyping();
-      addMessage(data.response || "Je n'ai pas de réponse.", false);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      hideTyping();
-      addMessage("🔌 Je n'arrive pas à contacter mon serveur. Vérifiez votre connexion. 🧡", false);
+    async function sendImageAnalysis(base64, mimeType) {
+      showTyping();
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageData: base64, imageMimeType: mimeType })
+        });
+        const data = await res.json();
+        hideTyping();
+        addMessage(data.response || data.error || "Pas d'analyse disponible.", false);
+      } catch (err) {
+        console.error(err);
+        hideTyping();
+        addMessage("🔌 Erreur lors de l'analyse de l'image.", false);
+      }
     }
-    isLoading = false;
-  }
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  });
-  sendBtn.addEventListener('click', sendMessage);
-</script>
+    // Admin
+    function checkAdminSession() {
+      if (localStorage.getItem('xa_admin_mode') === 'true') {
+        adminMode = true;
+        teachPanel.classList.add('show');
+      }
+    }
+    function enableAdminMode() {
+      adminMode = true;
+      localStorage.setItem('xa_admin_mode', 'true');
+      teachPanel.classList.add('show');
+      addSystemMessage("👑 Mode administrateur activé.");
+      closeAdminDialog();
+    }
+    function disableAdminMode() {
+      adminMode = false;
+      localStorage.removeItem('xa_admin_mode');
+      teachPanel.classList.remove('show');
+    }
+    function showAdminDialog() {
+      overlay.classList.add('show');
+      adminDialog.classList.add('show');
+      adminPasswordInput.value = '';
+      adminPasswordInput.focus();
+    }
+    function closeAdminDialog() {
+      overlay.classList.remove('show');
+      adminDialog.classList.remove('show');
+    }
+    validateAdminBtn.addEventListener('click', () => {
+      if (adminPasswordInput.value.trim() === ADMIN_PASSWORD) enableAdminMode();
+      else {
+        addSystemMessage("❌ Mot de passe incorrect.");
+        closeAdminDialog();
+      }
+    });
+    let clickCount = 0, clickTimer = null;
+    adminSecretBtn.addEventListener('click', () => {
+      if (adminMode) { disableAdminMode(); return; }
+      clickCount++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => {
+        if (clickCount >= 5) showAdminDialog();
+        clickCount = 0;
+      }, 300);
+    });
+
+    // Affichage
+    function ensureChatVisible() {
+      if (!conversationStarted) {
+        welcome.style.display = 'none';
+        chatDiv.style.display = 'flex';
+        conversationStarted = true;
+      }
+    }
+    function addSystemMessage(text) {
+      ensureChatVisible();
+      const div = document.createElement('div');
+      div.className = 'system-message';
+      div.innerText = text;
+      chatDiv.appendChild(div);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+    function addMessage(text, isUser = false) {
+      ensureChatVisible();
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+      const avatar = isUser ? '👤' : `<img src="images/xa-ia-avatar.jpeg" alt="XA IA" onerror="this.src='https://via.placeholder.com/40?text=XA'">`;
+      msgDiv.innerHTML = `<div class="avatar">${avatar}</div><div class="bubble">${escapeHtml(text)}</div>`;
+      chatDiv.appendChild(msgDiv);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m)).replace(/\n/g, '<br>');
+    }
+    function showTyping() {
+      const typing = document.createElement('div');
+      typing.className = 'message bot';
+      typing.id = 'typingIndicator';
+      typing.innerHTML = `<div class="avatar"><img src="images/xa-ia-avatar.jpeg" onerror="this.src='https://via.placeholder.com/40?text=XA'"></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+      chatDiv.appendChild(typing);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+    function hideTyping() { document.getElementById('typingIndicator')?.remove(); }
+
+    async function callAPI(msg, isLearning = false, soninkeWord = '', frenchMeaning = '') {
+      if (!isLearning && !msg.trim()) return;
+      if (!isLearning) addMessage(msg, true);
+      showTyping();
+      try {
+        let payload;
+        if (isLearning) {
+          payload = { addWord: true, soninkeWord, frenchMeaning, adminKey: ADMIN_PASSWORD };
+        } else {
+          payload = { message: msg };
+          if (searchMode) payload.searchMode = true;
+          if (deepSearchMode) payload.deepSearch = true;
+        }
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        hideTyping();
+        addMessage(data.response || data.error || "Pas de réponse.", false);
+      } catch (err) {
+        console.error(err);
+        hideTyping();
+        addMessage("🔌 Erreur de connexion.", false);
+      }
+    }
+
+    async function sendNormalMessage() {
+      const msg = input.value.trim();
+      if (!msg) return;
+      input.value = '';
+      await callAPI(msg);
+    }
+
+    async function teachWord() {
+      if (!adminMode) {
+        addSystemMessage("⚠️ Mode administrateur non activé (5 clics sur le logo).");
+        return;
+      }
+      const soninke = soninkeWordInput.value.trim().toLowerCase();
+      const french = frenchMeaningInput.value.trim();
+      if (!soninke || !french) {
+        addSystemMessage("⚠️ Veuillez remplir les deux champs.");
+        return;
+      }
+      await callAPI('', true, soninke, french);
+      soninkeWordInput.value = '';
+      frenchMeaningInput.value = '';
+    }
+
+    teachBtn.addEventListener('click', teachWord);
+    document.querySelectorAll('.question-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-question');
+        if (q) { input.value = q; sendNormalMessage(); }
+      });
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendNormalMessage(); }
+    });
+    sendBtn.addEventListener('click', sendNormalMessage);
+    input.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    checkAdminSession();
+  </script>
 </body>
 </html>

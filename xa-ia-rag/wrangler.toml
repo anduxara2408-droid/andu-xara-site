@@ -1,0 +1,10 @@
+name = "xa-ia-rag"
+main = "src/index.js"
+compatibility_date = "2025-02-15"
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "xa-ia-index"
+
+[ai]
+binding = "AI"
