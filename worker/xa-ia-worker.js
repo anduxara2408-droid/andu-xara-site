@@ -1387,28 +1387,8 @@ const VERIFIED = [
 "Salut à vous tous !"
 ],
 [
-"Nawaari.",
-"Bonjour (salutation de rencontre)."
-],
-[
-"An xubaare.",
-"Salutation en retour."
-],
-[
-"An wuyi jamu ?",
-"As-tu passé une bonne nuit ?"
-],
-[
-"Wuyijamu sire.",
-"Oui, j’ai bien dormi."
-],
-[
 "Xori toora ma wuyi ?",
 "As-tu bien dormi ?"
-],
-[
-"Ma jamu baane.",
-"Je vais très bien."
 ],
 [
 "Ma jamu.",
@@ -1445,14 +1425,6 @@ const VERIFIED = [
 [
 "Xa sunka",
 "Bonsoir"
-],
-[
-"Anba. Bisimilla !",
-"Merci. Au nom de Dieu !"
-],
-[
-"Sa",
-"Allez-y, je vous en prie (formule d’accueil)"
 ],
 [
 "Lenki nan faso.",

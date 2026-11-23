@@ -2933,49 +2933,9 @@
    "src": "asawan"
   },
   {
-   "id": "asaw-035",
-   "son": "Nawaari.",
-   "fr": "Bonjour (salutation de rencontre).",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-036",
-   "son": "An xubaare.",
-   "fr": "Salutation en retour.",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-037",
-   "son": "An wuyi jamu ?",
-   "fr": "As-tu passé une bonne nuit ?",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-038",
-   "son": "Wuyijamu sire.",
-   "fr": "Oui, j’ai bien dormi.",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
    "id": "asaw-039",
    "son": "Xori toora ma wuyi ?",
    "fr": "As-tu bien dormi ?",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-040",
-   "son": "Ma jamu baane.",
-   "fr": "Je vais très bien.",
    "cat": "salutations",
    "kind": "phrase",
    "src": "asawan"
@@ -3048,22 +3008,6 @@
    "id": "asaw-049",
    "son": "Xa sunka",
    "fr": "Bonsoir",
-   "cat": "salutations",
-   "kind": "mot",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-050",
-   "son": "Anba. Bisimilla !",
-   "fr": "Merci. Au nom de Dieu !",
-   "cat": "salutations",
-   "kind": "phrase",
-   "src": "asawan"
-  },
-  {
-   "id": "asaw-051",
-   "son": "Sa",
-   "fr": "Allez-y, je vous en prie (formule d’accueil)",
    "cat": "salutations",
    "kind": "mot",
    "src": "asawan"

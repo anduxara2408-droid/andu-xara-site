@@ -220,8 +220,8 @@
 
       // Merci
       if (/^(merci|merci beaucoup|un grand merci|je te remercie)$/.test(qn)) {
-        var it = pick('Nawaari');
-        return { type: 'thanks', text: 'Avec plaisir. En soninké, on dit :', items: it ? [it] : [], chips: defaultChips() };
+        var its = [pick('Nawaari'), pick('Anba'), pick('Yawuri')].filter(Boolean);
+        return { type: 'thanks', text: 'Avec plaisir. En soninké, on dit :', items: its, chips: defaultChips() };
       }
       // Salutations en français
       if (/^(bonjour|bonsoir|salut|salam|coucou|hello|hey|bonne journee)( .*)?$/.test(qn) && qt.length <= 4) {
