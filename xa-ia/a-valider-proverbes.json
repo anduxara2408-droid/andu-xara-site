@@ -1,0 +1,11 @@
+{
+  "_note": "Proverbes trouvés dans l'ancien fichier proverbes_contes_diagne.json. Aucune source vérifiable pour ces formes : à faire relire par un locuteur soninké avant de les ajouter à citations.json.",
+  "a_valider": [
+    { "son": "Fare ga na an danpu, an'xa ga na a danpu", "fr": "Ne réponds pas à la bêtise par la bêtise." },
+    { "son": "Ñogome suguu naxa", "fr": "Un dromadaire parmi les chèvres (quelqu'un qui se démarque)." },
+    { "son": "Koora man na a ñaanu", "fr": "La sagesse vient avec l'âge." },
+    { "son": "Sago saari, a soone", "fr": "Le temps efface les douleurs." },
+    { "son": "Dennu xarandu la tago", "fr": "L'enfant apprend en écoutant." },
+    { "son": "Jine gana, wura jine", "fr": "Le destin est inéluctable." }
+  ]
+}

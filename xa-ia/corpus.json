@@ -1,0 +1,4256 @@
+{
+ "version": "2026-11-22",
+ "sources": {
+  "pdot": {
+   "nom": "Leçons de soninké, Peace Corps Mauritanie (P.DOT)",
+   "court": "Peace Corps Mauritanie"
+  },
+  "cnrs": {
+   "nom": "Lexique et phrases CNRS",
+   "court": "CNRS"
+  },
+  "asawan": {
+   "nom": "Livret bilingue Asawan (soninké-français)",
+   "court": "Asawan"
+  }
+ },
+ "categories": {
+  "pronoms": "Pronoms",
+  "famille": "Famille et personnes",
+  "moments": "Moments et temps",
+  "salutations": "Salutations",
+  "nombres": "Nombres",
+  "objets": "Objets",
+  "nourriture": "Nourriture et boisson",
+  "lieux": "Lieux",
+  "jours": "Jours de la semaine",
+  "presentation": "Se présenter",
+  "adieux": "Au revoir",
+  "expressions": "Expressions utiles",
+  "corps": "Le corps",
+  "nature": "Nature et animaux",
+  "phrases_cnrs": "Phrases du quotidien",
+  "mois": "Les mois",
+  "questions": "Poser des questions"
+ },
+ "entries": [
+  {
+   "id": "pdot-001",
+   "son": "N",
+   "fr": "Je",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-002",
+   "son": "An",
+   "fr": "Tu",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-003",
+   "son": "A",
+   "fr": "Il / Elle",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-004",
+   "son": "O",
+   "fr": "Nous",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-005",
+   "son": "Xa",
+   "fr": "Vous (pluriel)",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-006",
+   "son": "I",
+   "fr": "Ils / Elles",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-007",
+   "son": "Yaxare",
+   "fr": "Une femme",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-008",
+   "son": "Yaxaru",
+   "fr": "Des femmes",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-009",
+   "son": "Yugo",
+   "fr": "Un homme",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-010",
+   "son": "Yugu",
+   "fr": "Des hommes",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-011",
+   "son": "Xuso",
+   "fr": "Une fille",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-012",
+   "son": "Xusu",
+   "fr": "Des filles",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-013",
+   "son": "Murunte",
+   "fr": "Un garçon",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-014",
+   "son": "Murunto",
+   "fr": "Des garçons",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-015",
+   "son": "Lemine",
+   "fr": "Un enfant",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-016",
+   "son": "Leminu",
+   "fr": "Des enfants",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-017",
+   "son": "Ka-dunko",
+   "fr": "Une famille",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-018",
+   "son": "Saaxe",
+   "fr": "Mère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-019",
+   "son": "Faabe",
+   "fr": "Père",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-020",
+   "son": "Yaqqe",
+   "fr": "Épouse",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-021",
+   "son": "Kiine",
+   "fr": "Mari",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-022",
+   "son": "Gidan-yaxare",
+   "fr": "Sœur",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-023",
+   "son": "Gidan-yugo",
+   "fr": "Frère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-024",
+   "son": "Suxuba",
+   "fr": "Matin",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-025",
+   "son": "Kinsiga",
+   "fr": "Midi",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-026",
+   "son": "Lelle",
+   "fr": "Après-midi",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-027",
+   "son": "Wuro",
+   "fr": "Nuit",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-028",
+   "son": "Suxuban-fo",
+   "fr": "Petit-déjeuner",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-029",
+   "son": "Yaraxate",
+   "fr": "Déjeuner",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-030",
+   "son": "Ñaxame",
+   "fr": "Dîner",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-031",
+   "son": "Kiye",
+   "fr": "Jour",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-032",
+   "son": "Koye",
+   "fr": "Semaine",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-033",
+   "son": "Xaso",
+   "fr": "Mois",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-034",
+   "son": "Siine",
+   "fr": "Année",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-035",
+   "son": "Salaamu aleykum",
+   "fr": "Que la paix soit sur toi (à toute heure de la journée)",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-036",
+   "son": "Aleykum salaam",
+   "fr": "Et sur toi aussi (réponse à la salutation)",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-037",
+   "son": "An wuyi jam",
+   "fr": "Bonjour (le matin)",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-038",
+   "son": "Lella",
+   "fr": "Bon après-midi",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-039",
+   "son": "Sunka",
+   "fr": "Bonsoir",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-040",
+   "son": "Xori an wa jam?",
+   "fr": "Es-tu en paix ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-041",
+   "son": "Jam baane",
+   "fr": "Paix seulement",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-042",
+   "son": "An moxo?",
+   "fr": "Comment vas-tu ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-043",
+   "son": "Ma jam",
+   "fr": "Je vais bien",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-044",
+   "son": "Ka-dunko n moxo?",
+   "fr": "Comment va la famille ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-045",
+   "son": "I wa jam",
+   "fr": "Ils vont bien",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-046",
+   "son": "Golle n moxo?",
+   "fr": "Comment va le travail ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-047",
+   "son": "Jam duuro",
+   "fr": "Ça va bien",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-048",
+   "son": "An do tanpiye n moxo?",
+   "fr": "Comment vas-tu avec la fatigue ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-049",
+   "son": "Leminu n moxo?",
+   "fr": "Comment vont tes enfants ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-050",
+   "son": "Bisimilla!",
+   "fr": "Bienvenue !",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-051",
+   "son": "Nawaari",
+   "fr": "Merci !",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-052",
+   "son": "Baane",
+   "fr": "Un (1)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-053",
+   "son": "Fillo",
+   "fr": "Deux (2)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-054",
+   "son": "Sikko",
+   "fr": "Trois (3)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-055",
+   "son": "Naxato",
+   "fr": "Quatre (4)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-056",
+   "son": "Karago",
+   "fr": "Cinq (5)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-057",
+   "son": "Tumu",
+   "fr": "Six (6)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-058",
+   "son": "Ñeru",
+   "fr": "Sept (7)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-059",
+   "son": "Segu",
+   "fr": "Huit (8)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-060",
+   "son": "Kabu",
+   "fr": "Neuf (9)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-061",
+   "son": "Tanmu",
+   "fr": "Dix (10)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-062",
+   "son": "Tanmu do baane",
+   "fr": "Onze (11)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-063",
+   "son": "Tanmu do fillo",
+   "fr": "Douze (12)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-064",
+   "son": "Tanmu do sikko",
+   "fr": "Treize (13)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-065",
+   "son": "Tanmu do naxato",
+   "fr": "Quatorze (14)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-066",
+   "son": "Tanmu do karago",
+   "fr": "Quinze (15)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-067",
+   "son": "Tanmu do tumu",
+   "fr": "Seize (16)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-068",
+   "son": "Tanmu do ñeru",
+   "fr": "Dix-sept (17)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-069",
+   "son": "Tanmu do segu",
+   "fr": "Dix-huit (18)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-070",
+   "son": "Tanmu do kabu",
+   "fr": "Dix-neuf (19)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-071",
+   "son": "Tanfille",
+   "fr": "Vingt (20)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-072",
+   "son": "Tabeli",
+   "fr": "Une table",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-073",
+   "son": "Siisi",
+   "fr": "Une chaise",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-074",
+   "son": "Follaqqe",
+   "fr": "Une porte",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-075",
+   "son": "Palanteeri",
+   "fr": "Une fenêtre",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-076",
+   "son": "Safandi fo",
+   "fr": "Un stylo",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-077",
+   "son": "Kereyon",
+   "fr": "Un crayon",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-078",
+   "son": "Kaye",
+   "fr": "Un cahier",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-079",
+   "son": "Kitabe",
+   "fr": "Un livre",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-080",
+   "son": "Sakkoosi",
+   "fr": "Un sac",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-081",
+   "son": "Kere",
+   "fr": "De la craie",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-082",
+   "son": "Tablo",
+   "fr": "Un tableau",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-083",
+   "son": "Palaati",
+   "fr": "Une assiette",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-084",
+   "son": "Kuddu",
+   "fr": "Une cuillère",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-085",
+   "son": "Labo",
+   "fr": "Un couteau",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-086",
+   "son": "Sellaade",
+   "fr": "Un balai",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-087",
+   "son": "Saxu-raxe",
+   "fr": "Un lit",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-088",
+   "son": "Bajjo",
+   "fr": "Une couverture",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-089",
+   "son": "Derebu",
+   "fr": "Un drap",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-090",
+   "son": "Leeso",
+   "fr": "Une natte",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-091",
+   "son": "Yiraamu",
+   "fr": "Des vêtements",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-092",
+   "son": "Simisi",
+   "fr": "Une chemise",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-093",
+   "son": "Wuno",
+   "fr": "Un pantalon",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-094",
+   "son": "Teppuni",
+   "fr": "Des chaussures",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-095",
+   "son": "Mexensi",
+   "fr": "Un vélo",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-096",
+   "son": "Yaaxan-duqqeru",
+   "fr": "Des lunettes",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-097",
+   "son": "Ji",
+   "fr": "Eau",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-098",
+   "son": "Attaaye",
+   "fr": "Thé",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-099",
+   "son": "Kefe",
+   "fr": "Café",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-100",
+   "son": "Xatti",
+   "fr": "Lait",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-101",
+   "son": "Sukkara",
+   "fr": "Sucre",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-102",
+   "son": "Sappe",
+   "fr": "Sel",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-103",
+   "son": "Maaro",
+   "fr": "Riz",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-104",
+   "son": "Ñexe",
+   "fr": "Poisson",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-105",
+   "son": "Tiye",
+   "fr": "Viande",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-106",
+   "son": "Xaran-ra",
+   "fr": "École",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-107",
+   "son": "Kalaasi",
+   "fr": "Salle de classe",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-108",
+   "son": "Jooxe",
+   "fr": "Toilettes",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-109",
+   "son": "Waaño",
+   "fr": "Cuisine",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-110",
+   "son": "Biire",
+   "fr": "Hangar (toit de paille sous lequel on s'assoit)",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-111",
+   "son": "Ka",
+   "fr": "Maison",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-112",
+   "son": "Konpe",
+   "fr": "Chambre",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-113",
+   "son": "Tilliise",
+   "fr": "Tente",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-114",
+   "son": "Dispenseeri",
+   "fr": "Dispensaire",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-115",
+   "son": "Saxa",
+   "fr": "Marché",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-116",
+   "son": "Butiki",
+   "fr": "Boutique",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-117",
+   "son": "Biro",
+   "fr": "Bureau",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-118",
+   "son": "Fanqqe",
+   "fr": "Rivière",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-119",
+   "son": "Gede",
+   "fr": "Un puits",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-120",
+   "son": "Ponpe",
+   "fr": "Pompe",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-121",
+   "son": "Faara",
+   "fr": "Jardin",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-122",
+   "son": "Te",
+   "fr": "Champ",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-123",
+   "son": "Golliñan-raxe",
+   "fr": "Lieu de travail",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-124",
+   "son": "Misiide",
+   "fr": "Mosquée",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-125",
+   "son": "Banke",
+   "fr": "Banque",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-126",
+   "son": "Garaasi",
+   "fr": "Gare routière",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-127",
+   "son": "Kanda",
+   "fr": "Aéroport",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-128",
+   "son": "Tineeni",
+   "fr": "Lundi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-129",
+   "son": "Talaata",
+   "fr": "Mardi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-130",
+   "son": "Araba",
+   "fr": "Mercredi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-131",
+   "son": "Alaxamisa",
+   "fr": "Jeudi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-132",
+   "son": "Al juma",
+   "fr": "Vendredi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-133",
+   "son": "Sibiti",
+   "fr": "Samedi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-134",
+   "son": "Alahadi",
+   "fr": "Dimanche",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-135",
+   "son": "Koota su",
+   "fr": "Tous les jours",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-136",
+   "son": "Suxuba su",
+   "fr": "Tous les matins",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-137",
+   "son": "Lelle su",
+   "fr": "Tous les après-midi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-138",
+   "son": "Wuro su",
+   "fr": "Toutes les nuits",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-139",
+   "son": "Tineeni su",
+   "fr": "Tous les lundis",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-140",
+   "son": "Al juma su",
+   "fr": "Tous les vendredis",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-141",
+   "son": "Koye su",
+   "fr": "Toutes les semaines",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-142",
+   "son": "Xaso su",
+   "fr": "Tous les mois",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-143",
+   "son": "Siine su",
+   "fr": "Toutes les années",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-144",
+   "son": "N toxo n ni Souleymane",
+   "fr": "Je m'appelle Souleymane",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-145",
+   "son": "N janmu n ni Sall",
+   "fr": "Mon nom de famille est Sall",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-146",
+   "son": "An toxo?",
+   "fr": "Comment t'appelles-tu ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-147",
+   "son": "An janmu?",
+   "fr": "Quel est ton nom de famille ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-148",
+   "son": "N bakka Moritani n ya",
+   "fr": "Je viens de Mauritanie",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-149",
+   "son": "N yaqqe n bakka Moritani n ya",
+   "fr": "Mon épouse vient de Mauritanie",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-150",
+   "son": "An bakka minna?",
+   "fr": "D'où viens-tu ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-151",
+   "son": "An yaqqe n bakka minna?",
+   "fr": "D'où vient ton épouse ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-152",
+   "son": "A toxo n ni John",
+   "fr": "Il s'appelle John",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-153",
+   "son": "A janmu n ni Hogan",
+   "fr": "Son nom de famille est Hogan",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-154",
+   "son": "John feti Moritaninke",
+   "fr": "John n'est pas mauritanien",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-155",
+   "son": "Amerikinke n ya ni",
+   "fr": "Il est d'Amérique",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-156",
+   "son": "Amerikinke n ya ni an qa?",
+   "fr": "Es-tu d'Amérique ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-157",
+   "son": "Ayi, Amerikinke feti in qa",
+   "fr": "Non, je ne suis pas d'Amérique",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-158",
+   "son": "Moritaninke n ya ni an qa?",
+   "fr": "Es-tu de Mauritanie ?",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-159",
+   "son": "Iyo, Moritaninke n ya ni in qa",
+   "fr": "Oui, je suis de Mauritanie",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-160",
+   "son": "Xaranmoxe n ya ni in qa",
+   "fr": "Je suis enseignant(e)",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-161",
+   "son": "N yaqqe n feti xaranmoxe",
+   "fr": "Mon épouse n'est pas enseignante",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-162",
+   "son": "John ni wolonteeri n ya",
+   "fr": "John est volontaire",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-163",
+   "son": "A yaqqe n feti wolonteeri",
+   "fr": "Son épouse n'est pas volontaire",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-164",
+   "son": "John yaqqe n ni doktooru n ya",
+   "fr": "L'épouse de John est médecin",
+   "cat": "presentation",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-165",
+   "son": "Hari na o koyi me!",
+   "fr": "Au revoir !",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-166",
+   "son": "O na me wari jam!",
+   "fr": "À la prochaine !",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-167",
+   "son": "Jam na kira",
+   "fr": "Bonne journée",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-168",
+   "son": "Jam na wuyi",
+   "fr": "Bonne nuit",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-169",
+   "son": "Hari na xeeri ro wuro n qa",
+   "fr": "Que nous passions une bonne nuit",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-170",
+   "son": "Na jam dallandi",
+   "fr": "Reste en paix",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-171",
+   "son": "Anmiina!",
+   "fr": "Amen !",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-172",
+   "son": "O wa suxuba qa",
+   "fr": "On se voit le matin",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-173",
+   "son": "O wa lelle qa",
+   "fr": "On se voit l'après-midi",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-174",
+   "son": "O wa kinsiga qa",
+   "fr": "On se voit vers midi",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-175",
+   "son": "O wa wuro qa",
+   "fr": "On se voit le soir",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-176",
+   "son": "O wa xunbane",
+   "fr": "À demain",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-177",
+   "son": "O n katta kaane",
+   "fr": "À bientôt / À plus tard",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-178",
+   "son": "N tanpi",
+   "fr": "Je suis fatigué(e)",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-179",
+   "son": "Xenqo n wa in qa",
+   "fr": "J'ai sommeil",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-180",
+   "son": "Dulle n wa in qa",
+   "fr": "J'ai faim",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-181",
+   "son": "Dulle nta in qa",
+   "fr": "Je n'ai pas faim",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-182",
+   "son": "Daqqu n wa in qa",
+   "fr": "J'ai soif",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-183",
+   "son": "Daqqu nta in qa",
+   "fr": "Je n'ai pas soif",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-184",
+   "son": "A tewe n ya ni",
+   "fr": "Il fait chaud",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-185",
+   "son": "A tewe fe",
+   "fr": "Il ne fait pas chaud",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-186",
+   "son": "A mulle n ya ni",
+   "fr": "Il fait froid",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-187",
+   "son": "A mulle fe",
+   "fr": "Il ne fait pas froid",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-188",
+   "son": "Haqqe toxo",
+   "fr": "Excusez-moi",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-189",
+   "son": "Haqqe nta an qa",
+   "fr": "Tu es excusé(e)",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-190",
+   "son": "An telle minna?",
+   "fr": "Où vas-tu ?",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-191",
+   "son": "N telle o ka n ya",
+   "fr": "Je rentre à la maison",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-192",
+   "son": "N telle xaran-ra n ya",
+   "fr": "Je vais à l'école",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-193",
+   "son": "John wa telle saxa",
+   "fr": "John va au marché",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-194",
+   "son": "John wa telle butiki",
+   "fr": "Il va à la boutique",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-195",
+   "son": "An wa Soninke n mukku?",
+   "fr": "Parles-tu soninké ?",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-196",
+   "son": "Iyo, n wa Soninke n mukku fonne",
+   "fr": "Oui, je parle un peu soninké",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-197",
+   "son": "John nta Soninke n mukku",
+   "fr": "John ne parle pas soninké",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-198",
+   "son": "N nta Faranse n mulla",
+   "fr": "Je n'aime pas le français",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-199",
+   "son": "N nta kefe mulla",
+   "fr": "Je n'aime pas le café",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-200",
+   "son": "Jennifer wa Soninke n mulla",
+   "fr": "Jennifer aime le soninké",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-201",
+   "son": "N xarana ya",
+   "fr": "J'étudie",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-202",
+   "son": "N yigene ya",
+   "fr": "Je mange",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-203",
+   "son": "N golliñana ya",
+   "fr": "Je travaille",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-204",
+   "son": "A nta xarana",
+   "fr": "Il n'étudie pas",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-205",
+   "son": "A nta yigene",
+   "fr": "Elle ne mange pas",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-206",
+   "son": "I nta golliñana",
+   "fr": "Ils ne travaillent pas",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-207",
+   "son": "N wa xenqene fonne",
+   "fr": "Je dors un peu",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-208",
+   "son": "N nta golliñana saasa",
+   "fr": "Je ne travaille pas maintenant",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "pdot-209",
+   "son": "N wa a mulla in nan tuuma",
+   "fr": "Je veux me reposer",
+   "cat": "expressions",
+   "kind": "phrase",
+   "src": "pdot"
+  },
+  {
+   "id": "cnrs-210",
+   "son": "toxo",
+   "fr": "Nom individuel",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tóxò"
+  },
+  {
+   "id": "cnrs-211",
+   "son": "janmu",
+   "fr": "Nom de famille",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "jànmû"
+  },
+  {
+   "id": "cnrs-212",
+   "son": "yaxare",
+   "fr": "Femme",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yàxàrê"
+  },
+  {
+   "id": "cnrs-213",
+   "son": "yugo",
+   "fr": "Homme (vir)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yúgò"
+  },
+  {
+   "id": "cnrs-214",
+   "son": "sere",
+   "fr": "Homme (homo)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sèrê"
+  },
+  {
+   "id": "cnrs-215",
+   "son": "lemine",
+   "fr": "Enfant",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "lémínè"
+  },
+  {
+   "id": "cnrs-216",
+   "son": "yaqqe",
+   "fr": "Épouse",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yàqqê"
+  },
+  {
+   "id": "cnrs-217",
+   "son": "kiine",
+   "fr": "Mari",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kìinê"
+  },
+  {
+   "id": "cnrs-218",
+   "son": "saaxe",
+   "fr": "Mère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sàaxê"
+  },
+  {
+   "id": "cnrs-219",
+   "son": "haabe",
+   "fr": "Père",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hàabê"
+  },
+  {
+   "id": "cnrs-220",
+   "son": "daaba",
+   "fr": "Animal",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "dáabà"
+  },
+  {
+   "id": "cnrs-221",
+   "son": "gunduho",
+   "fr": "Animal sauvage",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gùndùhô"
+  },
+  {
+   "id": "cnrs-222",
+   "son": "ñexe",
+   "fr": "Poisson",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "ñéxè"
+  },
+  {
+   "id": "cnrs-223",
+   "son": "yelinŋe",
+   "fr": "Oiseau",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yèlínŋè"
+  },
+  {
+   "id": "cnrs-224",
+   "son": "wulle",
+   "fr": "Chien",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "wùllê"
+  },
+  {
+   "id": "cnrs-225",
+   "son": "duuñe",
+   "fr": "Pou",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "dúuñè"
+  },
+  {
+   "id": "cnrs-226",
+   "son": "samaqqe",
+   "fr": "Serpent",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sámáqqè"
+  },
+  {
+   "id": "cnrs-227",
+   "son": "quudo",
+   "fr": "Ver",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qúudò"
+  },
+  {
+   "id": "cnrs-228",
+   "son": "yitte",
+   "fr": "Arbre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yíttè"
+  },
+  {
+   "id": "cnrs-229",
+   "son": "diga",
+   "fr": "Forêt",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "dígà"
+  },
+  {
+   "id": "cnrs-230",
+   "son": "gunne",
+   "fr": "Brousse",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gùnnê"
+  },
+  {
+   "id": "cnrs-231",
+   "son": "guma",
+   "fr": "Bâton",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gùmâ"
+  },
+  {
+   "id": "cnrs-232",
+   "son": "yittirenme",
+   "fr": "Fruit",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yíttírénmè"
+  },
+  {
+   "id": "cnrs-233",
+   "son": "hunce",
+   "fr": "Graine",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "húncè"
+  },
+  {
+   "id": "cnrs-234",
+   "son": "dare",
+   "fr": "Feuille",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "dárè"
+  },
+  {
+   "id": "cnrs-235",
+   "son": "ñiime",
+   "fr": "Racine",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "ñìimê"
+  },
+  {
+   "id": "cnrs-236",
+   "son": "korome",
+   "fr": "Écorce",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kórómè"
+  },
+  {
+   "id": "cnrs-237",
+   "son": "huuge",
+   "fr": "Fleur",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hùugê"
+  },
+  {
+   "id": "cnrs-238",
+   "son": "sokke",
+   "fr": "Herbe",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sókkè"
+  },
+  {
+   "id": "cnrs-239",
+   "son": "kacce",
+   "fr": "Corde",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "káccè"
+  },
+  {
+   "id": "cnrs-240",
+   "son": "hate",
+   "fr": "Peau",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hàtê"
+  },
+  {
+   "id": "cnrs-241",
+   "son": "tiye",
+   "fr": "Viande",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tíyè"
+  },
+  {
+   "id": "cnrs-242",
+   "son": "hore",
+   "fr": "Sang",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hòrê"
+  },
+  {
+   "id": "cnrs-243",
+   "son": "qotte",
+   "fr": "Os",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qóttè"
+  },
+  {
+   "id": "cnrs-244",
+   "son": "katoye",
+   "fr": "Graisse",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kátóyè"
+  },
+  {
+   "id": "cnrs-245",
+   "son": "yelle",
+   "fr": "Œuf",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yèllê"
+  },
+  {
+   "id": "cnrs-246",
+   "son": "benne",
+   "fr": "Corne",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "bénnè"
+  },
+  {
+   "id": "cnrs-247",
+   "son": "qoqqe",
+   "fr": "Queue",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qóqqè"
+  },
+  {
+   "id": "cnrs-248",
+   "son": "yinte",
+   "fr": "Plume",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yìntê"
+  },
+  {
+   "id": "cnrs-249",
+   "son": "yinte",
+   "fr": "Cheveu, poil",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yìntê"
+  },
+  {
+   "id": "cnrs-250",
+   "son": "yinme",
+   "fr": "Tête",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yínmè"
+  },
+  {
+   "id": "cnrs-251",
+   "son": "taro",
+   "fr": "Oreille",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tárò"
+  },
+  {
+   "id": "cnrs-252",
+   "son": "yaaxe",
+   "fr": "Œil",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yáaxè"
+  },
+  {
+   "id": "cnrs-253",
+   "son": "nuxunne",
+   "fr": "Nez",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "núxúnnè"
+  },
+  {
+   "id": "cnrs-254",
+   "son": "laqqe",
+   "fr": "Bouche",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "láqqè"
+  },
+  {
+   "id": "cnrs-255",
+   "son": "kanbe",
+   "fr": "Dent",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kànbê"
+  },
+  {
+   "id": "cnrs-256",
+   "son": "neene",
+   "fr": "Langue (organe)",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "néenè"
+  },
+  {
+   "id": "cnrs-257",
+   "son": "segeñe",
+   "fr": "Ongle",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "ségéñè"
+  },
+  {
+   "id": "cnrs-258",
+   "son": "ta",
+   "fr": "Pied",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tâ"
+  },
+  {
+   "id": "cnrs-259",
+   "son": "ta",
+   "fr": "Jambe",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tâ"
+  },
+  {
+   "id": "cnrs-260",
+   "son": "qurungo",
+   "fr": "Genou",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qúrúngò"
+  },
+  {
+   "id": "cnrs-261",
+   "son": "kitte",
+   "fr": "Main",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kíttè"
+  },
+  {
+   "id": "cnrs-262",
+   "son": "kanpe",
+   "fr": "Aile",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kánpè"
+  },
+  {
+   "id": "cnrs-263",
+   "son": "noxo",
+   "fr": "Ventre",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "nòxô"
+  },
+  {
+   "id": "cnrs-264",
+   "son": "nuxullenme",
+   "fr": "Intestins",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "nùxùllénmè"
+  },
+  {
+   "id": "cnrs-265",
+   "son": "qanne",
+   "fr": "Cou",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qánnè"
+  },
+  {
+   "id": "cnrs-266",
+   "son": "qoodo",
+   "fr": "Dos",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qóodò"
+  },
+  {
+   "id": "cnrs-267",
+   "son": "gijinme",
+   "fr": "Poitrine",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gíjínmè"
+  },
+  {
+   "id": "cnrs-268",
+   "son": "sondonme",
+   "fr": "Cœur",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sòndònmê"
+  },
+  {
+   "id": "cnrs-269",
+   "son": "butte",
+   "fr": "Foie",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "búttè"
+  },
+  {
+   "id": "cnrs-270",
+   "son": "kiye",
+   "fr": "Soleil",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kìyê"
+  },
+  {
+   "id": "cnrs-271",
+   "son": "qaso",
+   "fr": "Lune",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qásò"
+  },
+  {
+   "id": "cnrs-272",
+   "son": "saane",
+   "fr": "Étoile",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sàanê"
+  },
+  {
+   "id": "cnrs-273",
+   "son": "ji",
+   "fr": "Eau",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "jî"
+  },
+  {
+   "id": "cnrs-274",
+   "son": "kanme",
+   "fr": "Pluie",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kànmê"
+  },
+  {
+   "id": "cnrs-275",
+   "son": "lanbe",
+   "fr": "Rivière",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "lànbê"
+  },
+  {
+   "id": "cnrs-276",
+   "son": "hanŋe",
+   "fr": "Fleuve",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hànŋê"
+  },
+  {
+   "id": "cnrs-277",
+   "son": "dala",
+   "fr": "Lac",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "dálà"
+  },
+  {
+   "id": "cnrs-278",
+   "son": "geeji",
+   "fr": "Mer",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gèejî"
+  },
+  {
+   "id": "cnrs-279",
+   "son": "gide",
+   "fr": "Pierre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gídè"
+  },
+  {
+   "id": "cnrs-280",
+   "son": "sappe",
+   "fr": "Sel",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sáppè"
+  },
+  {
+   "id": "cnrs-281",
+   "son": "seyenŋe",
+   "fr": "Sable",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "sèyénŋè"
+  },
+  {
+   "id": "cnrs-282",
+   "son": "qobe",
+   "fr": "Poussière",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qòbê"
+  },
+  {
+   "id": "cnrs-283",
+   "son": "ŋuñe",
+   "fr": "Terre (sol)",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "ŋùñê"
+  },
+  {
+   "id": "cnrs-284",
+   "son": "qaba, tabulle",
+   "fr": "Nuage",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qàbâ, tábúllè"
+  },
+  {
+   "id": "cnrs-285",
+   "son": "minaaxe",
+   "fr": "Brouillard",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "mínáaxè"
+  },
+  {
+   "id": "cnrs-286",
+   "son": "kanme",
+   "fr": "Ciel",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kànmê"
+  },
+  {
+   "id": "cnrs-287",
+   "son": "hanke",
+   "fr": "Vent",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "hànkê"
+  },
+  {
+   "id": "cnrs-288",
+   "son": "tiide",
+   "fr": "Fumée",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "tìidê"
+  },
+  {
+   "id": "cnrs-289",
+   "son": "yinbe",
+   "fr": "Feu",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "yìnbê"
+  },
+  {
+   "id": "cnrs-290",
+   "son": "qame",
+   "fr": "Cendre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "qàmê"
+  },
+  {
+   "id": "cnrs-291",
+   "son": "kille",
+   "fr": "Route",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "kìllê"
+  },
+  {
+   "id": "cnrs-292",
+   "son": "gide",
+   "fr": "Montagne",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "cnrs",
+   "ton": "gídè"
+  },
+  {
+   "id": "cnrs-293",
+   "son": "An moxo ?",
+   "fr": "Bonjour, comment ça va ? (à une personne)",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án mòxô ?"
+  },
+  {
+   "id": "cnrs-294",
+   "son": "Qa moxo ?",
+   "fr": "Bonjour, comment ça va ? (à plusieurs personnes)",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Qá mòxô ?"
+  },
+  {
+   "id": "cnrs-295",
+   "son": "An toxo ?",
+   "fr": "Quel est ton prénom ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án tòxô ?"
+  },
+  {
+   "id": "cnrs-296",
+   "son": "N toxo Muusa",
+   "fr": "Mon prénom est Moussa",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Ń tòxô Múusá"
+  },
+  {
+   "id": "cnrs-297",
+   "son": "An janmu ?",
+   "fr": "Quel est ton nom de famille ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án jànmû ?"
+  },
+  {
+   "id": "cnrs-298",
+   "son": "N janmu Jagana",
+   "fr": "Mon nom de famille est Diagana",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Ń jànmû Jágáná"
+  },
+  {
+   "id": "cnrs-299",
+   "son": "An puun ni kan ña ?",
+   "fr": "Quel âge as-tu ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án pùún nì kán ñà ?"
+  },
+  {
+   "id": "cnrs-300",
+   "son": "An puun ni manime yi ?",
+   "fr": "Tu as combien d'années ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án pùún nì mànímè yí ?"
+  },
+  {
+   "id": "cnrs-301",
+   "son": "An li Haranci kan ciine yi ?",
+   "fr": "En quelle année es-tu arrivé en France ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án lí Hàráncì kân cìinè yí ?"
+  },
+  {
+   "id": "cnrs-302",
+   "son": "Axa kundan nan laato yere yi ba ?",
+   "fr": "Tu habites loin d'ici ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Áxá kùndán nàn láató yèré yì bá ?"
+  },
+  {
+   "id": "cnrs-303",
+   "son": "An la wa sooninkanqannen cahana ba ?",
+   "fr": "Est-ce que tu sais écrire le soninké ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án là wá sòonìnkanqánnèn cáhàná bà ?"
+  },
+  {
+   "id": "cnrs-304",
+   "son": "An la wa an toxon cahana ba ?",
+   "fr": "Est-ce que tu sais écrire ton nom ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án là wá án tòxôn cáhàná bà ?"
+  },
+  {
+   "id": "cnrs-305",
+   "son": "An kayen koyi in ŋa !",
+   "fr": "Montre-moi ton cahier !",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án kàyén kòyí ín ŋà !"
+  },
+  {
+   "id": "cnrs-306",
+   "son": "An kitaaben qa ?",
+   "fr": "Où est ton livre ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án kìtàabén qà ?"
+  },
+  {
+   "id": "cnrs-307",
+   "son": "An kitaaben ŋa an maxa ba ?",
+   "fr": "Est-ce que tu as ton livre avec toi ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Án kìtàabên ŋá án màxá bà ?"
+  },
+  {
+   "id": "cnrs-308",
+   "son": "Haranci linŋo an da ba ?",
+   "fr": "Es-tu content d'être en France ?",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Hàráncì línŋó án dà bá ?"
+  },
+  {
+   "id": "cnrs-309",
+   "son": "Kanme texe",
+   "fr": "Il a plu",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Kanme texe"
+  },
+  {
+   "id": "cnrs-310",
+   "son": "Dundo giri",
+   "fr": "La tempête a commencé",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Dundo giri"
+  },
+  {
+   "id": "cnrs-311",
+   "son": "Mulle ŋa’di buru",
+   "fr": "Il fait très froid",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Mulle ŋa’di buru"
+  },
+  {
+   "id": "cnrs-312",
+   "son": "O wa tele gunne xunbene",
+   "fr": "Demain, nous irons aux champs",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "O wa tele gunne xunbene"
+  },
+  {
+   "id": "cnrs-313",
+   "son": "Bakeri ta golle munda",
+   "fr": "Bakeri n'aime pas travailler",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Bakeri ta golle munda"
+  },
+  {
+   "id": "cnrs-314",
+   "son": "Muusa wa goridini",
+   "fr": "Moussa pêche à la ligne",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "Muusa wa goridini"
+  },
+  {
+   "id": "cnrs-315",
+   "son": "N nta a tu",
+   "fr": "Je ne sais pas",
+   "cat": "phrases_cnrs",
+   "kind": "phrase",
+   "src": "cnrs",
+   "ton": "N nta a tu"
+  },
+  {
+   "id": "asaw-001",
+   "son": "Kaagume",
+   "fr": "Chef de famille",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-002",
+   "son": "N faaba",
+   "fr": "Mon père",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-003",
+   "son": "N ma",
+   "fr": "Ma mère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-004",
+   "son": "Renme",
+   "fr": "Enfant (de quelqu’un)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-005",
+   "son": "Renyugo",
+   "fr": "Fils",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-006",
+   "son": "Renyaxare",
+   "fr": "Fille (enfant)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-007",
+   "son": "Gidanyugo",
+   "fr": "Grand frère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-008",
+   "son": "Gidanyaxare",
+   "fr": "Grande sœur",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-009",
+   "son": "Xoxone",
+   "fr": "Petit frère, petite sœur",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-010",
+   "son": "Kisima",
+   "fr": "Grand-père",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-011",
+   "son": "Maama",
+   "fr": "Grand-mère",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-012",
+   "son": "Neega",
+   "fr": "Oncle (côté de la mère)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-013",
+   "son": "Kaawu",
+   "fr": "Oncle (côté de la mère)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-014",
+   "son": "Baayi",
+   "fr": "Tante (sœur du père)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-015",
+   "son": "Maaxoore",
+   "fr": "Tante (grande sœur de la mère)",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-016",
+   "son": "Maarenme",
+   "fr": "Parent",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-017",
+   "son": "Kallungoora",
+   "fr": "Cousin à plaisanterie",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-018",
+   "son": "Menjanŋe",
+   "fr": "Ami, amie",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-019",
+   "son": "Lemine",
+   "fr": "Petit enfant",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-020",
+   "son": "Kaagunyaxare",
+   "fr": "Épouse",
+   "cat": "famille",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-021",
+   "son": "In",
+   "fr": "Je",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-022",
+   "son": "Axa",
+   "fr": "Vous (pluriel)",
+   "cat": "pronoms",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-023",
+   "son": "N daga.",
+   "fr": "Je suis allé.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-024",
+   "son": "An ri.",
+   "fr": "Tu es venu.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-025",
+   "son": "A bagu.",
+   "fr": "Il est sorti.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-026",
+   "son": "O daga.",
+   "fr": "Nous sommes allés.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-027",
+   "son": "Axa ri.",
+   "fr": "Vous êtes venus.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-028",
+   "son": "I bagu.",
+   "fr": "Ils sont sortis.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-029",
+   "son": "An yaqe.",
+   "fr": "Ta femme.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-030",
+   "son": "A renme.",
+   "fr": "Son enfant.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-031",
+   "son": "O faaba.",
+   "fr": "Notre père.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-032",
+   "son": "Axa ma.",
+   "fr": "Votre mère.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-033",
+   "son": "I renme.",
+   "fr": "Leur enfant.",
+   "cat": "pronoms",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-034",
+   "son": "Xa nawari !",
+   "fr": "Salut à vous tous !",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-035",
+   "son": "Nawaari.",
+   "fr": "Bonjour (salutation de rencontre).",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-036",
+   "son": "An xubaare.",
+   "fr": "Salutation en retour.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-037",
+   "son": "An wuyi jamu ?",
+   "fr": "As-tu passé une bonne nuit ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-038",
+   "son": "Wuyijamu sire.",
+   "fr": "Oui, j’ai bien dormi.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-039",
+   "son": "Xori toora ma wuyi ?",
+   "fr": "As-tu bien dormi ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-040",
+   "son": "Ma jamu baane.",
+   "fr": "Je vais très bien.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-041",
+   "son": "Ma jamu.",
+   "fr": "Je vais bien.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-042",
+   "son": "An faten moxo ?",
+   "fr": "Comment va ta santé ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-043",
+   "son": "Anba",
+   "fr": "Merci (dit à un homme)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-044",
+   "son": "Nba",
+   "fr": "Merci (dit à un homme)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-045",
+   "son": "Marahaba",
+   "fr": "Merci (dit à un homme)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-046",
+   "son": "Yawuri",
+   "fr": "Merci (dit à une femme)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-047",
+   "son": "Beeta",
+   "fr": "Bonjour (le matin, vers 10 h)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-048",
+   "son": "Xa lella",
+   "fr": "Bon après-midi",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-049",
+   "son": "Xa sunka",
+   "fr": "Bonsoir",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-050",
+   "son": "Anba. Bisimilla !",
+   "fr": "Merci. Au nom de Dieu !",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-051",
+   "son": "Sa",
+   "fr": "Allez-y, je vous en prie (formule d’accueil)",
+   "cat": "salutations",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-052",
+   "son": "Lenki nan faso.",
+   "fr": "Aujourd’hui ça va mieux.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-053",
+   "son": "An faaba do an ma xa ?",
+   "fr": "Et ton père et ta mère ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-054",
+   "son": "Toora su nt’i ya.",
+   "fr": "Ils vont bien.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-055",
+   "son": "Kaadunkon moxo ?",
+   "fr": "Comment va ta famille ?",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-056",
+   "son": "Ma jamu. Alla nan nawaari.",
+   "fr": "Ils vont bien. Dieu merci.",
+   "cat": "salutations",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-057",
+   "son": "N daga.",
+   "fr": "Je m’en vais.",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-058",
+   "son": "Katta kaane.",
+   "fr": "À bientôt.",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-059",
+   "son": "Katti kaane.",
+   "fr": "À bientôt.",
+   "cat": "adieux",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-060",
+   "son": "Tenenŋe",
+   "fr": "Lundi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-061",
+   "son": "Tarata",
+   "fr": "Mardi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-062",
+   "son": "Arijuma",
+   "fr": "Vendredi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-063",
+   "son": "Juma",
+   "fr": "Vendredi",
+   "cat": "jours",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-064",
+   "son": "Bita",
+   "fr": "Jour",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-065",
+   "son": "Koota",
+   "fr": "Jour",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-066",
+   "son": "Soxuba",
+   "fr": "Matin",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-067",
+   "son": "Beetaye",
+   "fr": "Matin (entre 9 h et 11 h)",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-068",
+   "son": "Kiye",
+   "fr": "Midi",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-069",
+   "son": "Kira",
+   "fr": "Midi",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-070",
+   "son": "Nelle",
+   "fr": "Après-midi",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-071",
+   "son": "Futuro",
+   "fr": "Crépuscule",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-072",
+   "son": "Huturo",
+   "fr": "Crépuscule",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-073",
+   "son": "Wuro",
+   "fr": "Soir, nuit",
+   "cat": "moments",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-074",
+   "son": "Sanwiyenxaso",
+   "fr": "Janvier",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-075",
+   "son": "Fewiriyenxaso",
+   "fr": "Février",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-076",
+   "son": "Marisinxaso",
+   "fr": "Mars",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-077",
+   "son": "Awirilinxaso",
+   "fr": "Avril",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-078",
+   "son": "Menxaso",
+   "fr": "Mai",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-079",
+   "son": "Suwenxaso",
+   "fr": "Juin",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-080",
+   "son": "Suluyenxaso",
+   "fr": "Juillet",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-081",
+   "son": "Utunxaso",
+   "fr": "Août",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-082",
+   "son": "Seputanburunxaso",
+   "fr": "Septembre",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-083",
+   "son": "Okutoburunxaso",
+   "fr": "Octobre",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-084",
+   "son": "Nowanburunxaso",
+   "fr": "Novembre",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-085",
+   "son": "Desanburunxaso",
+   "fr": "Décembre",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-086",
+   "son": "Sunxaso",
+   "fr": "Ramadan",
+   "cat": "mois",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-087",
+   "son": "Yinkolla",
+   "fr": "Tête",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-088",
+   "son": "Yinte",
+   "fr": "Cheveux",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-089",
+   "son": "Teŋe",
+   "fr": "Front",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-090",
+   "son": "Yaaxe",
+   "fr": "Œil, yeux",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-091",
+   "son": "Yaaxo",
+   "fr": "Œil, yeux",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-092",
+   "son": "Toro",
+   "fr": "Oreille",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-093",
+   "son": "Toru",
+   "fr": "Oreille",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-094",
+   "son": "Xume",
+   "fr": "Joue",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-095",
+   "son": "Fentelle",
+   "fr": "Joue",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-096",
+   "son": "Raqe",
+   "fr": "Bouche",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-097",
+   "son": "Laqe",
+   "fr": "Bouche",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-098",
+   "son": "Kanbe",
+   "fr": "Dent, dents",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-099",
+   "son": "Kanbo",
+   "fr": "Dent, dents",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-100",
+   "son": "Kanbu",
+   "fr": "Dent, dents",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-101",
+   "son": "Gonme",
+   "fr": "Estomac",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-102",
+   "son": "Sondome",
+   "fr": "Cœur",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-103",
+   "son": "Furutu",
+   "fr": "Poumon",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-104",
+   "son": "Faradinlenme",
+   "fr": "Rein",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-105",
+   "son": "Tinkanbe",
+   "fr": "Fesses",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-106",
+   "son": "Toge",
+   "fr": "Cuisse",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-107",
+   "son": "Ta",
+   "fr": "Jambe, pied",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-108",
+   "son": "Tandoronme",
+   "fr": "Orteil",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-109",
+   "son": "Neene",
+   "fr": "Langue",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-110",
+   "son": "Sinqe",
+   "fr": "Menton",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-111",
+   "son": "Kunke",
+   "fr": "Épaule",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-112",
+   "son": "Kitte",
+   "fr": "Main, bras",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-113",
+   "son": "Kitti nooge",
+   "fr": "Main gauche",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-114",
+   "son": "Kitti teye",
+   "fr": "Main droite",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-115",
+   "son": "Doronme",
+   "fr": "Doigt",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-116",
+   "son": "Konbo",
+   "fr": "Sein",
+   "cat": "corps",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-117",
+   "son": "Yille",
+   "fr": "Mil",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-118",
+   "son": "Tiga",
+   "fr": "Arachide",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-119",
+   "son": "Molle",
+   "fr": "Haricot",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-120",
+   "son": "Mollo",
+   "fr": "Haricot",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-121",
+   "son": "Makka",
+   "fr": "Maïs",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-122",
+   "son": "Jaxatanŋe",
+   "fr": "Gombo",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-123",
+   "son": "Sangunme",
+   "fr": "Oseille",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-124",
+   "son": "Sangume",
+   "fr": "Oseille",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-125",
+   "son": "Saabali",
+   "fr": "Moringa",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-126",
+   "son": "Sahe",
+   "fr": "Moringa",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-127",
+   "son": "Saayisaayi",
+   "fr": "Moringa",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-128",
+   "son": "Basalle",
+   "fr": "Oignon",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-129",
+   "son": "Jaba",
+   "fr": "Oignon",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-130",
+   "son": "Yigande",
+   "fr": "Nourriture",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-131",
+   "son": "Maxafonji",
+   "fr": "Sauce",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-132",
+   "son": "Moxonji",
+   "fr": "Sauce",
+   "cat": "nourriture",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-133",
+   "son": "Na",
+   "fr": "Vache",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-134",
+   "son": "Sugo",
+   "fr": "Chèvre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-135",
+   "son": "Jaxe",
+   "fr": "Mouton",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-136",
+   "son": "Si",
+   "fr": "Cheval",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-137",
+   "son": "Fare",
+   "fr": "Âne",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-138",
+   "son": "Hare",
+   "fr": "Âne",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-139",
+   "son": "Ɲogome",
+   "fr": "Chameau",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-140",
+   "son": "Muusine",
+   "fr": "Chat",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-141",
+   "son": "Seliŋe",
+   "fr": "Poule",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-142",
+   "son": "Wottoro",
+   "fr": "Charrette",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-143",
+   "son": "Sareti",
+   "fr": "Charrette",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-144",
+   "son": "Labo",
+   "fr": "Couteau",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-145",
+   "son": "Tefu",
+   "fr": "Chaussure",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-146",
+   "son": "Teppu",
+   "fr": "Chaussure",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-147",
+   "son": "Doroke",
+   "fr": "Vêtement",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-148",
+   "son": "Xaalisi",
+   "fr": "Argent",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-149",
+   "son": "Gode",
+   "fr": "Argent",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-150",
+   "son": "Xureye",
+   "fr": "Lumière",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-151",
+   "son": "Xuraye",
+   "fr": "Lumière",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-152",
+   "son": "Bite",
+   "fr": "Obscurité",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-153",
+   "son": "Mara",
+   "fr": "Grenier",
+   "cat": "objets",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-154",
+   "son": "Kanme",
+   "fr": "Ciel, pluie",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-155",
+   "son": "Ɲiiɲe",
+   "fr": "Terre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-156",
+   "son": "Ŋuɲe",
+   "fr": "Terre",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-157",
+   "son": "Fanŋe",
+   "fr": "Fleuve",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-158",
+   "son": "Fore",
+   "fr": "Sang",
+   "cat": "nature",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-159",
+   "son": "Kinŋu",
+   "fr": "Cuisine",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-160",
+   "son": "Debe",
+   "fr": "Village",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-161",
+   "son": "Kaara",
+   "fr": "Village",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-162",
+   "son": "Jamaane",
+   "fr": "Pays",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-163",
+   "son": "Gede",
+   "fr": "Puits",
+   "cat": "lieux",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-164",
+   "son": "An toxo ?",
+   "fr": "Quel est ton nom ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-165",
+   "son": "Ko ni ?",
+   "fr": "C’est qui ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-166",
+   "son": "Mani ni ?",
+   "fr": "C’est quoi ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-167",
+   "son": "Manime ni ?",
+   "fr": "C’est combien ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-168",
+   "son": "An wa telle minna ?",
+   "fr": "Où vas-tu ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-169",
+   "son": "Saxan na minna ?",
+   "fr": "Où est le marché ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-170",
+   "son": "An w’in tu ba ?",
+   "fr": "Tu me connais ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-171",
+   "son": "Yaqen w’an maxa ba ?",
+   "fr": "As-tu une femme ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-172",
+   "son": "Kan bire ?",
+   "fr": "Quand ?",
+   "cat": "questions",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-173",
+   "son": "Xafu",
+   "fr": "Zéro (0)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-174",
+   "son": "Tunmu",
+   "fr": "Six (6)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-175",
+   "son": "Tanpille",
+   "fr": "Vingt (20)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-176",
+   "son": "Tanfille do baane",
+   "fr": "Vingt et un (21)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-177",
+   "son": "Tanfille do fillo",
+   "fr": "Vingt-deux (22)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-178",
+   "son": "Tanfille do sikko",
+   "fr": "Vingt-trois (23)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-179",
+   "son": "Tanjikke",
+   "fr": "Trente (30)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-180",
+   "son": "Tannaxate",
+   "fr": "Quarante (40)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-181",
+   "son": "Tankarage",
+   "fr": "Cinquante (50)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-182",
+   "son": "Tandunme",
+   "fr": "Soixante (60)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-183",
+   "son": "Tanɲere",
+   "fr": "Soixante-dix (70)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-184",
+   "son": "Tansege",
+   "fr": "Quatre-vingts (80)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-185",
+   "son": "Tankabe",
+   "fr": "Quatre-vingt-dix (90)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-186",
+   "son": "Kame",
+   "fr": "Cent (100)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-187",
+   "son": "Kamo filli",
+   "fr": "Deux cents (200)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-188",
+   "son": "Kamo sikki",
+   "fr": "Trois cents (300)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-189",
+   "son": "Kamo naxati",
+   "fr": "Quatre cents (400)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-190",
+   "son": "Kamo karagi",
+   "fr": "Cinq cents (500)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-191",
+   "son": "Wujune",
+   "fr": "Mille (1000)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-192",
+   "son": "Wujunu filli",
+   "fr": "Deux mille (2000)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-193",
+   "son": "Wujunu tanmi",
+   "fr": "Dix mille (10 000)",
+   "cat": "nombres",
+   "kind": "mot",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-194",
+   "son": "Godo baane",
+   "fr": "Cinq francs (CFA)",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-195",
+   "son": "Godo tanmi",
+   "fr": "Cinquante francs",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-196",
+   "son": "Tanfille gode",
+   "fr": "Cent francs",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-197",
+   "son": "Kame gode",
+   "fr": "Cinq cents francs",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-198",
+   "son": "Kamo filli gode",
+   "fr": "Mille francs",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  },
+  {
+   "id": "asaw-199",
+   "son": "Wujune gode",
+   "fr": "Cinq mille francs",
+   "cat": "nombres",
+   "kind": "phrase",
+   "src": "asawan"
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+  "quotes": [
+    {
+      "id": "paix",
+      "theme": "Salutations",
+      "lines": [
+        { "son": "Xori an wa jam ?", "fr": "Es-tu en paix ?" },
+        { "son": "Jam baane.", "fr": "Paix seulement." }
+      ]
+    },
+    {
+      "id": "enfants",
+      "theme": "Transmission",
+      "lines": [
+        { "son": "Leminu n moxo ?", "fr": "Comment vont tes enfants ?" },
+        { "son": "I wa jam.", "fr": "Ils vont bien." }
+      ]
+    },
+    {
+      "id": "famille",
+      "theme": "Famille",
+      "lines": [
+        { "son": "Ka-dunko n moxo ?", "fr": "Comment va la famille ?" },
+        { "son": "I wa jam.", "fr": "Ils vont bien." }
+      ]
+    },
+    {
+      "id": "langue",
+      "theme": "Langue",
+      "lines": [
+        { "son": "An wa Soninke n mukku ?", "fr": "Parles-tu soninké ?" },
+        { "son": "Iyo, n wa Soninke n mukku fonne.", "fr": "Oui, je parle un peu soninké." }
+      ]
+    },
+    {
+      "id": "champs",
+      "theme": "Vie au village",
+      "lines": [
+        { "son": "O wa tele gunne xunbene.", "fr": "Demain, nous irons aux champs." }
+      ]
+    },
+    {
+      "id": "travail",
+      "theme": "Travail",
+      "lines": [
+        { "son": "Golle n moxo ?", "fr": "Comment va le travail ?" },
+        { "son": "Jam duuro.", "fr": "Ça va bien." }
+      ]
+    },
+    {
+      "id": "salam",
+      "theme": "Salutations",
+      "lines": [
+        { "son": "Salaamu aleykum.", "fr": "Que la paix soit sur toi." },
+        { "son": "Aleykum salaam.", "fr": "Et sur toi aussi." }
+      ]
+    },
+    {
+      "id": "adieu",
+      "theme": "Au revoir",
+      "lines": [
+        { "son": "Hari na o koyi me !", "fr": "Au revoir !" },
+        { "son": "Na jam dallandi.", "fr": "Reste en paix." }
+      ]
+    },
+    {
+      "id": "nuit",
+      "theme": "Au revoir",
+      "lines": [
+        { "son": "Jam na wuyi.", "fr": "Bonne nuit." },
+        { "son": "O wa xunbane.", "fr": "À demain." }
+      ]
+    }
+  ]
+}

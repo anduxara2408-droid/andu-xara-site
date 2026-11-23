@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XA IA — Dictionnaire, apprentissage et traduction</title>
+<meta name="description" content="Le dictionnaire soninké-français de XA IA, des cours par thème, l'alphabet, des cartes de révision, des quiz et un traducteur.">
+<meta name="theme-color" content="#142a4f">
+<link rel="icon" href="xa-ia/img/xa-ia-visage.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xa-ia/app.css">
+<link rel="stylesheet" href="xa-ia/site.css">
+</head>
+<body data-page="dico">
+<div id="xa-top"></div>
+
+<header class="page-head pattern">
+  <div class="wrap">
+    <p class="eyebrow">Langue soninké</p>
+    <h1>Savoir</h1>
+    <p>Cherche un mot, apprends par thème, révise avec des cartes et traduis tes phrases.</p>
+    <div class="tabs" role="tablist" aria-label="Outils">
+      <button type="button" role="tab" id="tab-dico" aria-controls="p-dico" aria-selected="true" data-tab="dico">Dictionnaire</button>
+      <button type="button" role="tab" id="tab-apprendre" aria-controls="p-apprendre" aria-selected="false" data-tab="apprendre">Apprentissage</button>
+      <button type="button" role="tab" id="tab-traduire" aria-controls="p-traduire" aria-selected="false" data-tab="traduire">Traduction</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="p-dico" role="tabpanel" aria-labelledby="tab-dico">
+    <div class="wrap">
+      <div class="searchbar">
+        <input id="q" type="search" placeholder="Un mot en soninké ou en français" aria-label="Chercher un mot" autocomplete="off">
+        <select id="cat" aria-label="Thème"></select>
+      </div>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="dict" id="dict"></div>
+      <p style="text-align:center;margin-top:18px"><button type="button" class="btn line" id="more" hidden>Afficher la suite</button></p>
+      <p class="note-box" id="ask" hidden></p>
+    </div>
+  </section>
+
+  <section class="panel" id="p-apprendre" role="tabpanel" aria-labelledby="tab-apprendre" hidden>
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Réviser</p><h2>Cartes et quiz</h2></div>
+      <div class="flash">
+        <div class="cardf" id="card" aria-live="polite"></div>
+        <div class="row">
+          <button type="button" class="btn night" id="flip">Voir la réponse</button>
+          <button type="button" class="btn line" id="nextc">Carte suivante</button>
+        </div>
+      </div>
+      <div class="sec-head" style="margin-top:40px"><p class="eyebrow">S’entraîner</p><h2>Un petit quiz</h2></div>
+      <div class="flash" id="quizbox"></div>
+
+      <div class="sec-head" style="margin-top:44px"><p class="eyebrow">Linguistique</p><h2>Les bases de la langue</h2></div>
+      <div class="course" id="ling"></div>
+
+      <div class="sec-head" style="margin-top:44px"><p class="eyebrow">Cours préparés</p><h2>Les mots, thème par thème</h2></div>
+      <div class="course" id="themes"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-traduire" role="tabpanel" aria-labelledby="tab-traduire" hidden>
+    <div class="wrap">
+      <div class="swap">
+        <div>
+          <label for="tin">Ton texte (français ou soninké)</label>
+          <textarea id="tin" placeholder="Une ligne par mot ou par phrase. Exemple : bonjour" maxlength="1500"></textarea>
+          <p style="margin:10px 0 0"><button type="button" class="btn night" id="go">Traduire</button></p>
+        </div>
+        <div>
+          <label>Traduction</label>
+          <div class="out" id="tout" aria-live="polite"><p class="count">La traduction apparaît ici.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="xa-foot"></div>
+
+<script src="xa-ia/config.js"></script>
+<script src="xa-ia/engine.js"></script>
+<script src="xa-ia/data.js"></script>
+<script src="xa-ia/shell.js"></script>
+<script src="xa-ia/savoir.js"></script>
+</body>
+</html>

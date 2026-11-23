@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>XA IA — Validation des mots</title>
+<meta name="theme-color" content="#142a4f">
+<link rel="icon" href="xa-ia/img/xa-ia-visage.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xa-ia/app.css">
+<link rel="stylesheet" href="xa-ia/site.css">
+</head>
+<body data-page="admin">
+<div id="xa-top"></div>
+<header class="page-head pattern"><div class="wrap"><p class="eyebrow">Réservé à l’équipe</p><h1>Validation des mots</h1><p>Relis chaque proposition. Quand tu valides un mot, XA IA l’utilise tout de suite.</p></div></header>
+<main class="panel"><div class="wrap adm">
+  <form class="login" id="login"><label for="tok" class="count">Mot de passe d’administration</label><input id="tok" type="password" autocomplete="current-password"><button class="btn night" type="submit">Entrer</button><p class="count" id="lmsg" role="status"></p></form>
+  <div id="board" hidden>
+    <p class="count" id="stat"></p>
+    <h2 style="font-family:var(--serif);font-size:1.9rem;color:var(--night);margin:6px 0 12px">À valider</h2>
+    <div id="pending"></div>
+    <h2 style="font-family:var(--serif);font-size:1.9rem;color:var(--night);margin:28px 0 12px">Déjà validés</h2>
+    <div id="approved"></div>
+  </div>
+</div></main>
+<script src="xa-ia/config.js"></script>
+<script src="xa-ia/shell.js"></script>
+<script>
+(function () {
+  'use strict';
+  var EP = String(window.XA_IA_ENDPOINT || '').trim().replace(/\/+$/, ''), tok = '';
+  function $(id) { return document.getElementById(id); }
+  function h(t, c, x) { var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
+  function api(path, method, body) {
+    return fetch(EP + path, { method: method || 'GET', headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) { var e = new Error(j.error || 'http'); e.status = r.status; throw e; } return j; }); });
+  }
+  function load() {
+    return Promise.all([api('/admin/pending'), api('/admin/approved')]).then(function (r) {
+      $('login').hidden = true; $('board').hidden = false;
+      $('stat').textContent = r[0].items.length + ' à valider · ' + r[1].items.length + ' déjà validés';
+      var box = $('pending'); box.textContent = '';
+      if (!r[0].items.length) box.appendChild(h('p', 'count', 'Aucune proposition en attente.'));
+      r[0].items.forEach(function (it) {
+        var d = h('div', 'item');
+        var top = h('div'); top.appendChild(h('span', 'badge' + (it.count >= 3 ? ' hot' : ''), it.count + (it.count > 1 ? ' personnes' : ' personne'))); d.appendChild(top);
+        var ed = h('div', 'edit'), son = h('input'), fr = h('input'); son.value = it.son; fr.value = it.fr; son.setAttribute('aria-label', 'Soninké'); fr.setAttribute('aria-label', 'Français');
+        ed.appendChild(son); ed.appendChild(fr); d.appendChild(ed);
+        if (it.note) d.appendChild(h('p', 'count', 'Précision : ' + it.note + (it.by ? ' (' + it.by + ')' : '')));
+        var acts = h('div', 'acts'), ok = h('button', 'btn night', 'Valider'), no = h('button', 'btn line', 'Refuser'); ok.type = no.type = 'button';
+        ok.addEventListener('click', function () { api('/admin/decide', 'POST', { id: it.id, action: 'approve', son: son.value, fr: fr.value }).then(load, fail); });
+        no.addEventListener('click', function () { api('/admin/decide', 'POST', { id: it.id, action: 'reject' }).then(load, fail); });
+        acts.appendChild(ok); acts.appendChild(no); d.appendChild(acts); box.appendChild(d);
+      });
+      var ab = $('approved'); ab.textContent = '';
+      r[1].items.slice().reverse().forEach(function (it) {
+        var d = h('div', 'item'); d.appendChild(h('b', '', it.son)); d.appendChild(h('span', '', it.fr));
+        var rm = h('button', 'btn line', 'Retirer'); rm.type = 'button';
+        rm.addEventListener('click', function () { if (confirm('Retirer ce mot de XA IA ?')) api('/admin/decide', 'POST', { id: it.id, action: 'remove' }).then(load, fail); });
+        d.appendChild(rm); ab.appendChild(d);
+      });
+    });
+  }
+  function fail(e) {
+    var m = e.status === 401 ? 'Mot de passe incorrect.' : e.status === 503 ? 'Le stockage ou le mot de passe n’est pas encore configuré sur le serveur.' : 'Le serveur ne répond pas. Réessaie.';
+    $('lmsg').textContent = m; if (e.status === 401) { try { sessionStorage.removeItem('xa-adm'); } catch (x) {} $('login').hidden = false; $('board').hidden = true; }
+  }
+  $('login').addEventListener('submit', function (e) {
+    e.preventDefault(); tok = $('tok').value.trim(); if (!tok) return;
+    if (!EP) { $('lmsg').textContent = 'Le serveur n’est pas configuré.'; return; }
+    load().then(function () { try { sessionStorage.setItem('xa-adm', tok); } catch (x) {} }, fail);
+  });
+  try { var t = sessionStorage.getItem('xa-adm'); if (t && EP) { tok = t; load().catch(fail); } } catch (x) {}
+})();
+</script>
+</body>
+</html>

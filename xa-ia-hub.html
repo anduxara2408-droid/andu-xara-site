@@ -1,82 +1,170 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espace XA IA – Andu-Xara</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #fefaf5; color: #1e1e2a; }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    header { background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 0; }
-    .header-inner { display: flex; justify-content: space-between; align-items: center; }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo-icon { width: 36px; height: 36px; background: #e67e22; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; }
-    .logo-text { font-weight: 700; }
-    .logo-text span { color: #e67e22; }
-    .hero { text-align: center; padding: 48px 0 32px; }
-    .hero h1 { font-size: 2rem; margin-top: 16px; }
-    .hero p { color: #4b5563; max-width: 600px; margin: 12px auto 0; }
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin: 48px 0 60px; }
-    .tool-card { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 28px; transition: all 0.2s; text-decoration: none; color: inherit; display: block; }
-    .tool-card:hover { transform: translateY(-4px); border-color: #e67e22; box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1); }
-    .tool-icon { font-size: 2rem; margin-bottom: 16px; }
-    .tool-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
-    .tool-desc { color: #4b5563; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
-    .tool-arrow { color: #e67e22; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
-    footer { background: #2c1a0f; color: #ccc; padding: 40px 0; text-align: center; font-size: 0.85rem; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XA IA — Mon espace soninké</title>
+<meta name="description" content="XA IA, l'intelligence artificielle d'Andu-Xara pour parler, écrire et enseigner le soninké : assistant, dictionnaire, apprentissage et traduction.">
+<meta name="theme-color" content="#142a4f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="XA IA — Mon espace soninké">
+<meta property="og:description" content="Parler, apprendre et transmettre le soninké avec l'IA d'Andu-Xara.">
+<meta property="og:image" content="https://andu-xara.com/xa-ia/img/xa-ia-affiche.jpg">
+<link rel="icon" href="xa-ia/img/xa-ia-visage.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xa-ia/app.css">
+<link rel="stylesheet" href="xa-ia/site.css">
 </head>
-<body>
-<header>
-  <div class="container">
-    <div class="header-inner">
-      <div class="logo"><div class="logo-icon">X</div><div class="logo-text">XA <span>IA</span></div></div>
-      <a href="index.html" style="color:#4b5563; text-decoration:none;">← Retour au site</a>
+<body data-page="hub">
+<a class="skip" href="#espace">Aller aux outils</a>
+<div id="xa-top"></div>
+
+<main>
+  <section class="hub-hero pattern">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Mon espace · Langue soninké</p>
+        <h1>Salaamu aleykum</h1>
+        <p class="fr">Que la paix soit sur toi.</p>
+        <p class="lead">Je suis XA IA, une intelligence artificielle conçue pour parler, écrire et enseigner le soninké. Dis-moi bonjour, pose-moi une question, ou ouvre le dictionnaire.</p>
+        <div class="cta">
+          <a class="btn gold" href="xa-ia-chat.html">Parler à XA IA</a>
+          <a class="btn ghost" href="xa-ia-savoir.html#apprendre">Apprendre le soninké</a>
+        </div>
+      </div>
+      <figure class="mascot">
+        <img src="xa-ia/img/xa-ia-affiche.jpg" width="900" height="900" alt="XA IA, le caméléon explorateur d'Andu-Xara, pouces levés à côté du logo">
+        <figcaption><span class="s">Xori an wa jam ?</span><span class="f">Es-tu en paix ?</span></figcaption>
+      </figure>
     </div>
-  </div>
-</header>
-<div class="container">
-  <div class="hero">
-    <div style="background:#e67e2210; display:inline-block; padding:4px 12px; border-radius:40px; color:#e67e22; font-size:0.75rem;">🧡 Ton espace intelligent</div>
-    <h1>Bienvenue, <span style="color:#e67e22;">Cheikhou</span></h1>
-    <p>Choisis l'outil que tu veux utiliser. Tous tes outils XA IA en un seul endroit.</p>
-  </div>
-  <div class="tools-grid">
-    <a href="xa-ia-chat.html" class="tool-card">
-      <div class="tool-icon">💬</div>
-      <div class="tool-title">Assistant IA</div>
-      <div class="tool-desc">Discute en soninké, français, anglais avec l'IA spécialisée Andu-Xara.</div>
-      <span class="tool-arrow">Ouvrir →</span>
-    </a>
-    <a href="#" class="tool-card" id="comingSoonDict">
-      <div class="tool-icon">📖</div>
-      <div class="tool-title">Dictionnaire Soninké</div>
-      <div class="tool-desc">Recherche de mots, traduction, favoris.</div>
-      <span class="tool-arrow">Bientôt →</span>
-    </a>
-    <a href="#" class="tool-card" id="comingSoonLearn">
-      <div class="tool-icon">🎓</div>
-      <div class="tool-title">Apprentissage</div>
-      <div class="tool-desc">Leçons, quiz, progression.</div>
-      <span class="tool-arrow">Bientôt →</span>
-    </a>
-    <a href="#" class="tool-card" id="comingSoonCulture">
-      <div class="tool-icon">🏛️</div>
-      <div class="tool-title">Bibliothèque culturelle</div>
-      <div class="tool-desc">Proverbes, contes, traditions soninkés.</div>
-      <span class="tool-arrow">Bientôt →</span>
-    </a>
-  </div>
-</div>
-<footer>
-  <div class="container">© 2026 Andu-Xara — XA IA, l'intelligence au service du Soninké</div>
-</footer>
-<script>
-  ['comingSoonDict', 'comingSoonLearn', 'comingSoonCulture'].forEach(id => {
-    document.getElementById(id)?.addEventListener('click', (e) => { e.preventDefault(); alert("🚧 Fonctionnalité à venir très bientôt !"); });
-  });
-</script>
+  </section>
+
+  <section class="ticker" aria-label="Dictionnaires">
+    <h2>Dictionnaires</h2>
+    <div class="track" id="t-dico"></div>
+  </section>
+  <section class="ticker rev" aria-label="Cours préparés et linguistique">
+    <h2>Cours préparés et linguistique</h2>
+    <div class="track" id="t-cours"></div>
+  </section>
+  <section class="ticker dark" aria-label="Mots et phrases du jour">
+    <h2>Mots et phrases</h2>
+    <div class="track" id="t-mots"></div>
+  </section>
+
+  <section id="espace" class="block" aria-labelledby="esp-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Mon espace</p>
+        <h2 id="esp-title">Tout le soninké au même endroit</h2>
+        <p>Choisis ce que tu veux faire.</p>
+      </div>
+      <div class="cards">
+        <a class="card" href="xa-ia-chat.html">
+          <span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>
+          <h3>Assistant</h3><p>Discute avec XA IA. Elle répond en soninké, avec la traduction française, sur tous les sujets.</p><span class="go">Ouvrir →</span>
+        </a>
+        <a class="card" href="xa-ia-savoir.html#dico">
+          <span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.500-5-2-8-1.500v13c3-.5 6 0 8 1.500 2-1.500 5-2 8-1.500v-13C17 4 14 4.500 12 6Z"/><path d="M12 6v13"/></svg></span>
+          <h3>Dictionnaire</h3><p>Cherche un mot soninké ou français, parcours les thèmes, écoute-le prononcer.</p><span class="go">Ouvrir →</span>
+        </a>
+        <a class="card" href="xa-ia-savoir.html#apprendre">
+          <span class="ic c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-5 9 5-9 5z"/><path d="M7 11.500V16c2.500 2 7.500 2 10 0v-4.500"/></svg></span>
+          <h3>Apprentissage</h3><p>Cours par thème, alphabet, règles d’écriture, cartes de révision et quiz.</p><span class="go">Ouvrir →</span>
+        </a>
+        <a class="card" href="xa-ia-savoir.html#traduire">
+          <span class="ic c4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M8.500 4v2M6 6c.5 4 3 7 6 8M12 6c-.5 3-3 6-7 8"/><path d="m13 20 4-9 4 9M14.500 17h5"/></svg></span>
+          <h3>Traduction</h3><p>Du français au soninké et du soninké au français, mot à mot ou phrase par phrase.</p><span class="go">Ouvrir →</span>
+        </a>
+        <a class="card" href="xa-ia-soutenir.html#mots">
+          <span class="ic c5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.800 2.800 0 0 0-4-4L4 16z"/><path d="m13.500 6.500 4 4"/></svg></span>
+          <h3>Proposer un mot</h3><p>Tu connais un mot ou une phrase que XA IA doit connaître ? Écris-le avec sa traduction.</p><span class="go">Ouvrir →</span>
+        </a>
+        <a class="card" href="xa-ia-soutenir.html">
+          <span class="ic c6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.300-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.700-7 10-7 10Z"/></svg></span>
+          <h3>Soutenir XA IA</h3><p>Aide la langue soninké à grandir : échange avec nous, contribue ou participe au projet.</p><span class="go">Ouvrir →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block on-light" style="background:var(--sand)" aria-labelledby="gal-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Héritage · Mémoire</p>
+        <h2 id="gal-title">La langue des anciens, portée par la jeunesse</h2>
+      </div>
+      <div class="gallery three">
+        <figure class="shot wide">
+          <img src="xa-ia/img/transmission.jpg" width="1100" height="600" loading="lazy" alt="Un ancien assis sous un arbre au village raconte et enseigne à un cercle d'enfants qui écrivent sur des ardoises">
+          <figcaption class="q">
+            <span class="t">Transmission</span>
+            <span class="s">Leminu n moxo ?</span>
+            <span class="f">Comment vont tes enfants ?</span>
+            <span class="s">I wa jam.</span>
+            <span class="f">Ils vont bien.</span>
+          </figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="xa-ia/img/heritage.jpg" width="1100" height="613" loading="lazy" alt="Un jeune homme en grand boubou doré, la main sur le cœur, devant une assemblée lors d'une rencontre sur l'héritage soninké">
+          <figcaption class="q">
+            <span class="t">Famille</span>
+            <span class="s">Ka-dunko n moxo ?</span>
+            <span class="f">Comment va la famille ?</span>
+            <span class="s">I wa jam.</span>
+            <span class="f">Ils vont bien.</span>
+          </figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/xa-ia-avatar.jpeg" width="1080" height="1080" loading="lazy" alt="XA IA, le caméléon explorateur avec son chapeau, pouces levés">
+          <figcaption class="q">
+            <span class="t">Langue</span>
+            <span class="s">An wa Soninke n mukku ?</span>
+            <span class="f">Parles-tu soninké ?</span>
+            <span class="s">Iyo, n wa Soninke n mukku fonne.</span>
+            <span class="f">Oui, je parle un peu soninké.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="parole" class="block" aria-labelledby="par-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Parole du jour</p>
+        <h2 id="par-title">Le soninké d’abord, le français ensuite</h2>
+      </div>
+      <div class="today">
+        <article class="big" id="quote" aria-live="polite"></article>
+        <aside class="word" id="word"></aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Une IA qui grandit avec sa communauté</p>
+        <h2 id="how-title">Comment XA IA apprend</h2>
+      </div>
+      <div class="learn">
+        <div><b>Des lexiques et des leçons</b><p>Des centaines de mots et de phrases du quotidien, de nombres et de salutations, relus et recoupés.</p></div>
+        <div><b>Des règles d’écriture</b><p>Alphabet soninké, voyelles longues et brèves, pronoms, pluriel, questions : XA IA les applique quand elle écrit.</p></div>
+        <div><b>Ta voix</b><p>Chaque mot proposé par la communauté est relu puis validé avant que XA IA ne l’utilise. <a href="xa-ia-soutenir.html#mots"><u>Proposer un mot</u></a>.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="xa-foot"></div>
+
+<script src="xa-ia/config.js"></script>
+<script src="xa-ia/engine.js"></script>
+<script src="xa-ia/data.js"></script>
+<script src="xa-ia/shell.js"></script>
+<script src="xa-ia/hub.js"></script>
 </body>
 </html>
