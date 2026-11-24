@@ -28,7 +28,7 @@
   <section class="block" style="padding-bottom:10px">
     <div class="wrap">
       <div class="choices">
-        <a class="card" href="#geste"><span class="ic c6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.300-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.700-7 10-7 10Z"/></svg></span><h3>Un geste pour XA IA</h3><p>Discute avec nous, puis envoie ton geste avec Bankily ou Masrivi.</p><span class="go">Voir les étapes →</span></a>
+        <a class="card" href="#geste"><span class="ic c6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.300-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.700-7 10-7 10Z"/></svg></span><h3>Un geste pour XA IA</h3><p>Discute avec nous, puis envoie ton geste avec Bankily ou Masrvi.</p><span class="go">Voir les étapes →</span></a>
         <a class="card" href="#partenaires"><span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 19c.5-3.500 3-5 6-5s5.500 1.500 6 5M16 5a3 3 0 0 1 0 6M18 14c2 .6 3 2.200 3.200 5"/></svg></span><h3>Développeurs et partenaires</h3><p>Tu développes, tu finances ou tu représentes une organisation ? Parlons-en.</p><span class="go">Nous contacter →</span></a>
         <a class="card" href="#mots"><span class="ic c5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.800 2.800 0 0 0-4-4L4 16z"/><path d="m13.500 6.500 4 4"/></svg></span><h3>Proposer un mot</h3><p>Écris un mot ou une phrase en soninké avec sa traduction, nous la validons.</p><span class="go">Écrire →</span></a>
       </div>
@@ -47,21 +47,31 @@
         <article class="step">
           <h2>Choisis ton application</h2>
           <p>Touche l’application que tu utilises pour voir comment envoyer ton geste.</p>
-          <button type="button" class="pay" data-pay="bk" aria-expanded="false" aria-controls="d-bk">
-            <span class="logo bk" aria-hidden="true">Bankily</span><span><b>Bankily</b><small>Envoyer au <span class="num">+222 49037697</span></small></span>
-          </button>
-          <div class="pay-detail" id="d-bk" hidden>
-            <ol><li>Ouvre l’application Bankily.</li><li>Choisis « Transfert » ou « Envoyer de l’argent ».</li><li>Entre le numéro ci-dessous.</li><li>Entre le montant de ton choix et confirme avec ton code.</li></ol>
-            <div class="bigno">+222 49037697</div>
-            <div class="row2" style="margin-top:10px"><button type="button" class="btn night" data-copy>Copier le numéro</button><a class="btn line" href="https://play.google.com/store/search?q=bankily&amp;c=apps" target="_blank" rel="noopener">Ouvrir Bankily</a></div>
+          <div class="paycard" id="pc-bk">
+            <span class="logo bk" data-logo="xa-ia/img/logo-bankily.png"><span>Bankily</span></span>
+            <div class="info"><b>Bankily</b><small>Envoyer au <span class="num">+222 49037697</span></small></div>
+            <div class="acts">
+              <button type="button" class="btn gold" data-open="bk">Ouvrir Bankily</button>
+              <button type="button" class="btn line" data-pay="bk" aria-expanded="false" aria-controls="d-bk">Voir les étapes</button>
+            </div>
           </div>
-          <button type="button" class="pay" data-pay="ms" aria-expanded="false" aria-controls="d-ms">
-            <span class="logo ms" aria-hidden="true">Masrivi</span><span><b>Masrivi</b><small>Envoyer au <span class="num">+222 49037697</span></small></span>
-          </button>
-          <div class="pay-detail" id="d-ms" hidden>
-            <ol><li>Ouvre l’application Masrivi.</li><li>Choisis « Transfert » ou « Envoyer de l’argent ».</li><li>Entre le numéro ci-dessous.</li><li>Entre le montant de ton choix et confirme avec ton code.</li></ol>
+          <div class="pay-detail" id="d-bk" hidden>
+            <ol><li>Ouvre l’application Bankily.</li><li>Choisis « Transfert » ou « Envoyer de l’argent ».</li><li>Colle ou entre le numéro ci-dessous.</li><li>Entre le montant de ton choix et confirme avec ton code.</li></ol>
             <div class="bigno">+222 49037697</div>
-            <div class="row2" style="margin-top:10px"><button type="button" class="btn night" data-copy>Copier le numéro</button><a class="btn line" href="https://play.google.com/store/search?q=masrivi&amp;c=apps" target="_blank" rel="noopener">Ouvrir Masrivi</a></div>
+            <div class="row2" style="margin-top:10px"><button type="button" class="btn night" data-copy>Copier le numéro</button><a class="btn line" href="https://play.google.com/store/apps/details?id=mr.bpm.digitalbanking.consumer" target="_blank" rel="noopener">Télécharger Bankily</a></div>
+          </div>
+          <div class="paycard" id="pc-ms">
+            <span class="logo ms" data-logo="xa-ia/img/logo-masrvi.png"><span>Masrvi</span></span>
+            <div class="info"><b>Masrvi</b><small>Envoyer au <span class="num">+222 49037697</span></small></div>
+            <div class="acts">
+              <button type="button" class="btn gold" data-open="ms">Ouvrir Masrvi</button>
+              <button type="button" class="btn line" data-pay="ms" aria-expanded="false" aria-controls="d-ms">Voir les étapes</button>
+            </div>
+          </div>
+          <div class="pay-detail" id="d-ms" hidden>
+            <ol><li>Ouvre l’application Masrvi.</li><li>Choisis « Transfert » ou « Envoyer de l’argent ».</li><li>Colle ou entre le numéro ci-dessous.</li><li>Entre le montant de ton choix et confirme avec ton code.</li></ol>
+            <div class="bigno">+222 49037697</div>
+            <div class="row2" style="margin-top:10px"><button type="button" class="btn night" data-copy>Copier le numéro</button><a class="btn line" href="https://play.google.com/store/apps/details?id=com.tagpay.mwallet.masrvi" target="_blank" rel="noopener">Télécharger Masrvi</a></div>
           </div>
         </article>
         <article class="step">
@@ -111,6 +121,7 @@
 
 <div id="xa-foot"></div>
 
+<div class="pay-toast" id="pay-toast" role="status" aria-live="polite" hidden></div>
 <script src="xa-ia/config.js"></script>
 <script src="xa-ia/shell.js"></script>
 <script src="xa-ia/soutenir.js"></script>

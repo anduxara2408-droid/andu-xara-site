@@ -1,4 +1,4 @@
-/* XA IA — page Soutenir : WhatsApp, Bankily, Masrivi, partenaires, proposition de mots. */
+/* XA IA — page Soutenir : WhatsApp, Bankily, Masrvi, partenaires, proposition de mots. */
 (function () {
   'use strict';
   function $(id) { return document.getElementById(id); }
@@ -23,12 +23,59 @@
       if (open) d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   });
+  var toastEl = $('pay-toast');
+  function toast(t) { toastEl.textContent = t; toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, 4500); }
+  function copyNum() {
+    var raw = NUM;
+    return new Promise(function (ok, ko) {
+      function legacy() {
+        try {
+          var t = document.createElement('textarea'); t.value = raw; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+          document.body.appendChild(t); t.select(); t.setSelectionRange(0, 99);
+          var r = document.execCommand('copy'); document.body.removeChild(t); r ? ok() : ko();
+        } catch (e) { ko(); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(raw).then(ok, legacy); else legacy();
+    });
+  }
   Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'), function (b) {
     b.addEventListener('click', function () {
-      var done = function () { var o = b.textContent; b.textContent = 'Numéro copié'; setTimeout(function () { b.textContent = o; }, 1800); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(NUM).then(done, function () {});
-      else done();
+      copyNum().then(function () {
+        var o = b.textContent; b.textContent = 'Numéro copié'; setTimeout(function () { b.textContent = o; }, 1800);
+        toast('Numéro copié ! Collez-le dans l’application.');
+      }, function () { toast('Copie impossible. Note le numéro : ' + NUM); });
     });
+  });
+
+  /* Ouvrir l'application : copie du numéro, puis lancement Android avec repli vers la page de téléchargement */
+  var APPS = {
+    bk: { name: 'Bankily', pkg: 'mr.bpm.digitalbanking.consumer' },
+    ms: { name: 'Masrvi', pkg: 'com.tagpay.mwallet.masrvi' }
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-open]'), function (b) {
+    b.addEventListener('click', function () {
+      var app = APPS[b.dataset.open], android = /Android/i.test(navigator.userAgent);
+      var store = 'https://play.google.com/store/apps/details?id=' + app.pkg;
+      var open = $('d-' + b.dataset.open); if (open) { open.hidden = false; var t = document.querySelector('[data-pay="' + b.dataset.open + '"]'); if (t) t.setAttribute('aria-expanded', 'true'); }
+      copyNum().then(function () {
+        toast('Numéro copié ! Collez-le dans l’application.');
+      }, function () { toast('Note le numéro : ' + NUM); }).then(function () {
+        if (android) {
+          setTimeout(function () {
+            window.location.href = 'intent://#Intent;package=' + app.pkg + ';scheme=https;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+          }, 700);
+        } else {
+          toast('Numéro copié ! Ouvre l’application ' + app.name + ' sur ton téléphone et colle-le.');
+        }
+      });
+    });
+  });
+
+  /* Logos officiels : s'ils sont déposés dans xa-ia/img/, ils remplacent le monogramme */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-logo]'), function (box) {
+    var img = new Image(); img.alt = '';
+    img.onload = function () { box.textContent = ''; box.appendChild(img); };
+    img.src = box.dataset.logo;
   });
 
   /* Proposition de mots */

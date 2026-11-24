@@ -5,5 +5,7 @@
  * Tant que le serveur ne répond pas, XA IA continue avec sa base locale de soninké.
  */
 window.XA_IA_ENDPOINT = "https://xa-ia.microsansfiltre2408.workers.dev";
+/* Analyse d'image : mettre true seulement quand le serveur utilise une clé Anthropic (Groq ne lit pas les images). */
+window.XA_IA_IMAGE = false;
 window.XA_IA_WA = "22249037697";
 window.XA_IA_WA_TXT = "+222 49037697";

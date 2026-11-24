@@ -20,9 +20,11 @@
 
   /* ---------- Texte riche minimal (gras, listes), sans HTML injecté ---------- */
   function inline(el, text) {
-    var parts = String(text).split(/(\*\*[^*]+\*\*)/g);
+    var parts = String(text).split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`)/g);
     parts.forEach(function (p) {
       if (/^\*\*[^*]+\*\*$/.test(p)) { var b = h('strong'); b.textContent = p.slice(2, -2); el.appendChild(b); }
+      else if (/^\*[^*\s][^*]*\*$/.test(p)) { var i = h('em'); i.textContent = p.slice(1, -1); el.appendChild(i); }
+      else if (/^`[^`]+`$/.test(p)) { var c = h('code'); c.textContent = p.slice(1, -1); el.appendChild(c); }
       else if (p) el.appendChild(document.createTextNode(p));
     });
   }
@@ -32,20 +34,22 @@
     function flush() { para = null; list = null; }
     lines.forEach(function (ln) {
       var m;
-      if (!ln.trim()) { flush(); return; }
+      if (!ln.trim()) { para = null; return; }
+      if (/^\s*([-*_])\1{2,}\s*$/.test(ln)) { flush(); return; }
+      if ((m = ln.match(/^\s*#{1,4}\s+(.*)$/))) { flush(); var hd = h('h4', 'hd'); inline(hd, m[1].replace(/\*\*/g, '')); el.appendChild(hd); return; }
+      if ((m = ln.match(/^\s*>\s?(.*)$/))) { flush(); var qq = h('p', 'qt'); inline(qq, m[1]); el.appendChild(qq); return; }
       if ((m = ln.match(/^\s*[-*•]\s+(.*)$/))) {
         if (!list || list.tagName !== 'UL') { list = h('ul'); el.appendChild(list); para = null; }
         var li = h('li'); inline(li, m[1]); list.appendChild(li);
       } else if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))) {
         if (!list || list.tagName !== 'OL') { list = h('ol'); el.appendChild(list); para = null; }
-        var li2 = h('li'); inline(li2, m[1]); list.appendChild(li2);
+        var li2 = h('li'); li2.value = parseInt(ln, 10) || 1; inline(li2, m[1]); list.appendChild(li2);
       } else if ((m = ln.match(/^\s*\*\*([^*]+)\*\*\s*$/))) {
         flush(); var so = h('p', 'so'); so.textContent = m[1]; el.appendChild(so);
       } else if ((m = ln.match(/^\s*(?:→|->|=>)\s*(.*)$/))) {
         flush(); var tr = h('p', 'tr'); inline(tr, m[1]); el.appendChild(tr);
       } else {
         list = null;
-        ln = ln.replace(/^#{1,4}\s+/, '');
         if (!para) { para = h('p'); el.appendChild(para); } else para.appendChild(document.createElement('br'));
         inline(para, ln);
       }
@@ -276,8 +280,15 @@
       var on = !!modes[b.dataset.act]; b.setAttribute('aria-checked', String(on)); b.classList.toggle('on', on);
     });
   }
-  function clearImage() { image = null; $('attach').textContent = ''; $('file').value = ''; }
+  var IMAGE_ON = window.XA_IA_IMAGE === true;
+  if (!IMAGE_ON) {
+    var imBtn = menu.querySelector('[data-act="image"]'); if (imBtn) imBtn.remove();
+    var imFile = $('file'); if (imFile) imFile.remove();
+    plus.setAttribute('aria-label', 'Ajouter une recherche');
+  }
+  function clearImage() { image = null; $('attach').textContent = ''; if ($('file')) $('file').value = ''; }
   function setImage(file) {
+    if (!IMAGE_ON) return;
     if (!file || !/^image\//.test(file.type)) { showToast('Choisis une photo (JPEG, PNG ou WebP).'); return; }
     var url = URL.createObjectURL(file), img = new Image();
     img.onload = function () {
@@ -302,11 +313,11 @@
     b.addEventListener('click', function () {
       var act = b.dataset.act;
       toggleMenu(false);
-      if (act === 'image') $('file').click();
+      if (act === 'image' && $('file')) $('file').click();
       else { modes[act] = !modes[act]; if (act === 'deep' && modes.deep) modes.web = false; if (act === 'web' && modes.web) modes.deep = false; paintModes(); input.focus(); }
     });
   });
-  $('file').addEventListener('change', function (e) { setImage(e.target.files && e.target.files[0]); });
+  if ($('file')) $('file').addEventListener('change', function (e) { setImage(e.target.files && e.target.files[0]); });
 
   /* ---------- Micro : dictée gratuite du navigateur (Web Speech API, français) ---------- */
   (function () {
