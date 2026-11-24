@@ -231,7 +231,7 @@
     clearImage();
 
     lastUser = text;
-    var r = engine.reply(text, { hour: new Date().getHours(), first: turn === 0 });
+    var r = engine.reply(text, { hour: new Date().getHours(), first: turn === 0, n: turn });
     if (shot || wantsServer(r)) { setChips([]); streamReply(text, shot, r); return; }
     var wait = addMsg('bot', typingNode());
     setTimeout(function () { wait.row.remove(); renderLocal(r); done(); }, 300);

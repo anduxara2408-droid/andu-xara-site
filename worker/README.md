@@ -5,12 +5,11 @@ Sans lui, XA IA répond seulement avec sa base locale (dictionnaire, thèmes, qu
 
 Tout se fait depuis le navigateur, sans terminal.
 
-## 1. Mettre le code sur Cloudflare
+## 1. Créer le serveur sur Cloudflare
 
-1. Va sur dash.cloudflare.com, « Workers & Pages ».
-2. Ouvre ton worker existant `xa-ia-worker` (ou crée-en un avec ce nom), puis « Edit code ».
-3. Efface tout, colle le contenu de `worker/xa-ia-worker.js`, clique « Deploy ».
-4. L'adresse est du type `https://xa-ia-worker.TON-COMPTE.workers.dev`. Si elle diffère de celle écrite dans `xa-ia/config.js`, corrige `config.js`.
+1. Va sur dash.cloudflare.com, « Workers & Pages », « Create », « Create Worker ». Nomme-le `xa-ia`, clique « Deploy », puis « Edit code ».
+2. Efface tout, colle le contenu de `worker/xa-ia-worker.js`, clique « Deploy ».
+3. Note l'adresse du worker (`https://xa-ia.TON-SOUS-DOMAINE.workers.dev`) et écris-la dans `xa-ia/config.js`, à la ligne `XA_IA_ENDPOINT`.
 
 ## 2. Ajouter les clés (Settings, Variables and secrets)
 
@@ -22,8 +21,7 @@ Ne mets jamais une clé dans le code ni dans GitHub.
 
 ## 3. Stockage des mots proposés
 
-1. Cloudflare, « Storage & Databases », « KV », « Create a namespace » : nomme-le `xa-ia`.
-2. Dans le worker, « Settings », « Bindings », « Add », « KV namespace » : nom de variable `XA_KV`, namespace `xa-ia`. Enregistre.
+Le stockage `xa-ia` existe déjà dans ton compte Cloudflare (créé depuis Claude). Dans le worker : « Settings », « Bindings », « Add », « KV namespace », nom de variable `XA_KV`, namespace `xa-ia`. Enregistre.
 
 ## 4. Vérifier
 

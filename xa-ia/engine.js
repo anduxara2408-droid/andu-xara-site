@@ -298,12 +298,13 @@
     }
 
     // Aucune correspondance : XA IA continue la conversation en soninké (phrases vérifiées).
-    var STARTERS = ['Xori an wa jam', 'An moxo', 'Leminu n moxo', 'Ka-dunko n moxo', 'Golle n moxo', 'An wa Soninke n mukku'];
+    var STARTERS = ['Xori an wa jam', 'An moxo', 'Leminu n moxo', 'Ka-dunko n moxo', 'Golle n moxo', 'An wa Soninke n mukku', 'An toxo', 'An wa telle minna', 'Saxan na minna', 'Mani ni', 'Kaadunkon moxo', 'An faaba do an ma xa', 'An faten moxo', 'Xori toora ma wuyi'];
     function converse(q, ctx) {
       var h = 0, k = norm(q);
       for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 9973;
-      var pickedKey = STARTERS[h % STARTERS.length];
-      var it = pick(pickedKey) || pick('An moxo');
+      var n = (ctx && typeof ctx.n === 'number') ? ctx.n : 0, it = null, tries = 0;
+      while (!it && tries < STARTERS.length) { it = pick(STARTERS[(h + n + tries) % STARTERS.length]); tries++; }
+      if (!it) it = pick('An moxo');
       var intro = ctx && ctx.first === false ? 'Continuons en soninké :' :
         'Je suis XA IA, une IA conçue pour parler et enseigner le soninké. Je peux faire des erreurs. Continuons en soninké :';
       return { type: 'converse', query: q, text: intro, items: it ? [it] : [], chips: defaultChips() };
