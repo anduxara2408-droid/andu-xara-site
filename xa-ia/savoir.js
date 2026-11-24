@@ -10,6 +10,7 @@
     d.appendChild(h('div', 'son', it.son));
     if (it.ton && it.ton !== it.son) d.appendChild(h('div', 'ton', it.ton));
     d.appendChild(h('div', 'fr', it.fr));
+    if (it.audio) { var au = h('audio'); au.controls = true; au.preload = 'none'; au.src = it.audio; au.setAttribute('aria-label', 'Écouter ' + it.son); d.appendChild(au); }
     return d;
   }
   function nS(s) { return eng.norm(s).replace(/q/g, 'x'); }

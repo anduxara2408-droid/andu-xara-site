@@ -2163,7 +2163,10 @@ function clean(body) {
   // nombre de réponses déjà données dans toute la session (le site le fournit)
   let turn = Number.isFinite(body.turn) ? Math.max(0, Math.floor(body.turn)) : null;
   if (turn === null) turn = alt.filter((m) => m.role === 'assistant').length;
-  return { messages: alt, web: !!body.web, deep: !!body.deep, image, turn };
+  // extraits de la base locale trouvés par le site (facultatif) : lignes courtes « soninké = français »
+  const extracts = Array.isArray(body.extracts)
+    ? body.extracts.slice(0, 12).map((x) => cleanText(x, 200)).filter((x) => x.length > 2 && !spammy(x)) : [];
+  return { messages: alt, web: !!body.web, deep: !!body.deep, image, turn, extracts };
 }
 
 /* ------------------------------------------------------------------ */
@@ -2300,6 +2303,7 @@ async function systemParts(p, env) {
   let dyn = '';
   if (extra.length) dyn += '\nMOTS ET PHRASES VALIDÉS PAR LA COMMUNAUTÉ (à utiliser comme la liste vérifiée)\n' + listBlock(extra.slice(-300)) + '\n';
   if (near.length) dyn += '\nENTRÉES LES PLUS PROCHES DE LA QUESTION\n' + listBlock(near) + '\n';
+  if (p.extracts && p.extracts.length) dyn += '\nEXTRAITS TROUVÉS PAR LE SITE (même statut que la liste vérifiée)\n' + p.extracts.join('\n') + '\n';
   dyn += p.turn === 0 ? POLICY_FIRST : POLICY_NEXT;
   dyn += p.deep ? MODE_DEEP : p.web ? MODE_WEB : '';
   parts.push({ type: 'text', text: dyn });
@@ -2427,7 +2431,15 @@ async function chat(request, env, ctx, cors) {
   const useClaude = !!env.ANTHROPIC_API_KEY;
   const url = useClaude ? (env.UPSTREAM_URL || 'https://api.anthropic.com/v1/messages')
                         : (env.GROQ_URL || 'https://api.groq.com/openai/v1/chat/completions');
-  if (!useClaude) p.image = null; // le modèle de secours ne lit pas les images
+  if (!useClaude && p.image) { // le modèle de secours ne lit pas les images
+    const { readable, writable } = new TransformStream();
+    const w = writable.getWriter(); const send = sseWriter(w);
+    (async () => {
+      await send({ type: 'text', text: "Je ne peux pas regarder cette image avec le modèle actuel.\n\nDécris-la-moi en quelques mots et je te donne son nom en soninké.\n" });
+      await send({ type: 'done' }); await w.close();
+    })();
+    return new Response(readable, { headers: { ...cors, 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
   let upstream;
   try {
     upstream = await fetch(url, {
@@ -2464,7 +2476,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     if (origin && !allowed.includes(origin)) return json({ error: 'origin' }, 403, cors);
 
-    if (path === '/' && request.method === 'GET') {
+    if ((path === '/' || path === '/chat') && request.method === 'GET') {
       return json({ ok: true, service: 'xa-ia', model: env.ANTHROPIC_API_KEY ? 'claude' : (env.GROQ_API_KEY ? 'groq' : 'none'), contributions: !!env.XA_KV }, 200, cors);
     }
     if (path === '/approved' && request.method === 'GET') {
@@ -2473,7 +2485,7 @@ export default {
     }
     if (path === '/contribute' && request.method === 'POST') return contribute(request, env, cors);
     if (path.startsWith('/admin/')) return admin(request, env, cors, path);
-    if (path === '/' && request.method === 'POST') return chat(request, env, ctx, cors);
-    return json({ error: 'route' }, path === '/' ? 405 : 404, cors);
+    if ((path === '/' || path === '/chat') && request.method === 'POST') return chat(request, env, ctx, cors);
+    return json({ error: 'route' }, path === '/' || path === '/chat' ? 405 : 404, cors);
   },
 };

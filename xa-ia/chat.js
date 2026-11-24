@@ -58,6 +58,7 @@
     d.appendChild(h('div', 'son', it.son));
     if (it.ton && it.ton !== it.son) d.appendChild(h('div', 'ton', it.ton));
     d.appendChild(h('div', 'fr', it.fr));
+    if (it.audio) { var au = h('audio'); au.controls = true; au.preload = 'none'; au.src = it.audio; au.setAttribute('aria-label', 'Écouter ' + it.son); d.appendChild(au); }
     return d;
   }
 
@@ -141,7 +142,7 @@
   function askServer(payload, handlers) {
     var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, payload.deep ? 120000 : 60000);
-    return fetch(ENDPOINT, {
+    return fetch(ENDPOINT + (/\/chat$/.test(ENDPOINT) ? '' : '/chat'), {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload), signal: ctl ? ctl.signal : undefined
     }).then(function (res) {
@@ -166,6 +167,23 @@
   }
   function done() { busy = false; sendBtn.disabled = !input.value.trim() && !image; }
 
+  function extractsFor(text) {
+    var out = [], seen = {};
+    function add(list) {
+      list.forEach(function (r) {
+        if (r.fuzzy || out.length >= 6) return;
+        var k = r.son + '|' + r.fr; if (seen[k]) return; seen[k] = 1; out.push(r.son + ' = ' + r.fr);
+      });
+    }
+    try {
+      add(engine.search(text));
+      if (out.length < 6) {
+        String(text).split(/[\s,;:.!?'’"«»()]+/).filter(function (w) { return w.length > 2; }).forEach(function (w) { add(engine.search(w)); });
+      }
+    } catch (e) {}
+    return out;
+  }
+
   function streamReply(text, shot, fallback) {
     var mode = { web: modes.web || modes.deep, deep: modes.deep };
     var msgs = history.slice(-10).concat([{ role: 'user', content: text }]);
@@ -178,7 +196,7 @@
       if (keep && !got) bubble.insertBefore(keep, bubble.firstChild);
       scroller.scrollTop = scroller.scrollHeight;
     }
-    askServer({ messages: msgs, turn: turn, web: mode.web, deep: mode.deep, image: shot ? { media_type: shot.media_type, data: shot.data } : null }, function (ev) {
+    askServer({ messages: msgs, message: text, extracts: extractsFor(text), turn: turn, web: mode.web, deep: mode.deep, image: shot ? { media_type: shot.media_type, data: shot.data } : null }, function (ev) {
       if (ev.type === 'text') { got = true; acc += ev.text; if (!raf) raf = requestAnimationFrame(paint); }
       else if (ev.type === 'status') {
         if (!got) { bubble.textContent = ''; statusEl = h('div', 'status', ev.text); bubble.appendChild(statusEl); }
@@ -289,6 +307,33 @@
     });
   });
   $('file').addEventListener('change', function (e) { setImage(e.target.files && e.target.files[0]); });
+
+  /* ---------- Micro : dictée gratuite du navigateur (Web Speech API, français) ---------- */
+  (function () {
+    var mic = $('mic'), SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!mic) return;
+    if (!SR) { mic.hidden = true; return; }
+    var rec = null, on = false, base = '';
+    function stop() { on = false; mic.classList.remove('rec'); mic.setAttribute('aria-pressed', 'false'); mic.setAttribute('aria-label', 'Dicter ton message'); }
+    mic.addEventListener('click', function () {
+      if (on && rec) { try { rec.stop(); } catch (e) {} return; }
+      try {
+        rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = false;
+        base = input.value ? input.value.replace(/\s+$/, '') + ' ' : '';
+        rec.onresult = function (e) {
+          var t = ''; for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+          input.value = base + t; grow();
+        };
+        rec.onerror = function (e) {
+          stop();
+          if (e && (e.error === 'not-allowed' || e.error === 'service-not-allowed')) showToast('Autorise le micro dans ton navigateur pour dicter.');
+          else if (e && e.error === 'no-speech') showToast('Je n’ai rien entendu. Réessaie.');
+        };
+        rec.onend = function () { stop(); input.focus(); };
+        rec.start(); on = true; mic.classList.add('rec'); mic.setAttribute('aria-pressed', 'true'); mic.setAttribute('aria-label', 'Arrêter la dictée');
+      } catch (e) { stop(); showToast('La dictée n’est pas disponible sur ce navigateur.'); }
+    });
+  })();
 
   /* ---------- Saisie ---------- */
   function grow() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 160) + 'px'; sendBtn.disabled = busy || (!input.value.trim() && !image); }

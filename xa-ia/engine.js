@@ -91,6 +91,7 @@
         }
         if (m.srcs.indexOf(r.x.e.src) < 0) m.srcs.push(r.x.e.src);
         if (r.x.e.ton && !m.ton) m.ton = r.x.e.ton;
+        if (r.x.e.audio && !m.audio) m.audio = r.x.e.audio;
         if (r.x.e.src === 'pdot') { m.son = r.x.e.son; m.fr = r.x.e.fr; } // forme de référence
         m.ids.push(r.x.e.id);
         if (!r.fuzzy) m.fuzzy = false;
