@@ -124,35 +124,82 @@
   }
 
   /* ---------- Serveur (flux) ---------- */
+  /* Lit une réponse du Worker quel que soit son format : flux SSE, lignes JSON, JSON simple, texte brut. */
+  function pick(o) {
+    if (o == null) return null;
+    if (typeof o === 'string') return o;
+    var t = o.type;
+    if (t === 'status' && o.text) return { status: o.text };
+    if (t === 'source' && o.url) return { source: o };
+    if (t === 'error' || (o.error && typeof o.error === 'string')) return { error: String(o.error || o.text || o.message || 'error') };
+    if (t === 'done') return null;
+    if (o.choices && o.choices[0]) {
+      var c = o.choices[0], d = c.delta && c.delta.content;
+      if (typeof d === 'string') return d;
+      if (c.message && typeof c.message.content === 'string') return c.message.content;
+      if (typeof c.text === 'string') return c.text;
+    }
+    if (o.content && Array.isArray(o.content)) { return o.content.map(function (x) { return x && x.text ? x.text : ''; }).join(''); }
+    if (o.delta && typeof o.delta === 'object' && typeof o.delta.text === 'string') return o.delta.text;
+    var keys = ['text', 'delta', 'reply', 'response', 'answer', 'output', 'message', 'content', 'result'];
+    for (var i = 0; i < keys.length; i++) { var v = o[keys[i]]; if (typeof v === 'string' && v) return v; }
+    if (o.data && typeof o.data === 'object') return pick(o.data);
+    return null;
+  }
+  function feed(o, on) {
+    var r = pick(o);
+    if (r == null) return;
+    if (typeof r === 'string') on({ type: 'text', text: r });
+    else if (r.status) on({ type: 'status', text: r.status });
+    else if (r.source) on({ type: 'source', url: r.source.url, title: r.source.title });
+    else if (r.error) { var e = new Error('server ' + r.error); e.fromServer = true; throw e; }
+  }
   function readStream(res, on) {
+    var ct = String(res.headers.get('content-type') || '');
+    if (!res.body || !res.body.getReader || (/json|text\/plain/i.test(ct) && !/event-stream|x-ndjson/i.test(ct))) {
+      return res.text().then(function (txt) {
+        var o = null; try { o = JSON.parse(txt); } catch (e) { o = txt; }
+        if (typeof o === 'string' && /^\s*(data:|\{)/m.test(o)) { o.split(/\r?\n/).forEach(function (ln) { lineIn(ln, on); }); }
+        else feed(o, on);
+      });
+    }
     var reader = res.body.getReader(), dec = new TextDecoder(), buf = '';
     function pump() {
       return reader.read().then(function (x) {
-        if (x.done) return;
+        if (x.done) { if (buf.trim()) lineIn(buf, on); return; }
         buf += dec.decode(x.value, { stream: true });
         var cut;
-        while ((cut = buf.indexOf('\n\n')) >= 0) {
-          var chunk = buf.slice(0, cut); buf = buf.slice(cut + 2);
-          chunk.split('\n').forEach(function (line) {
-            if (line.indexOf('data: ') !== 0) return;
-            try { on(JSON.parse(line.slice(6))); } catch (e) {}
-          });
+        while ((cut = buf.search(/\r?\n/)) >= 0) {
+          var m = buf.slice(cut).match(/^\r?\n/)[0].length;
+          var line = buf.slice(0, cut); buf = buf.slice(cut + m);
+          lineIn(line, on);
         }
         return pump();
       });
     }
     return pump();
   }
+  function lineIn(line, on) {
+    line = String(line).trim();
+    if (!line || line === 'data: [DONE]' || line === 'data:[DONE]' || /^(event|id|retry):/.test(line)) return;
+    if (line.indexOf('data:') === 0) line = line.slice(5).trim();
+    if (!line || line === '[DONE]') return;
+    var o; try { o = JSON.parse(line); } catch (e) { return; }
+    feed(o, on);
+  }
+  var DEBUG = /[?&]debug\b/.test(location.search);
+  function why(msg) { try { console.warn('[XA IA] serveur indisponible :', msg); } catch (e) {} window.XA_IA_LAST = msg; if (DEBUG) showToast('Serveur : ' + msg); }
   function askServer(payload, handlers) {
     var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, payload.deep ? 120000 : 60000);
+    payload.question = payload.message;
     return fetch(ENDPOINT + (/\/chat$/.test(ENDPOINT) ? '' : '/chat'), {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload), signal: ctl ? ctl.signal : undefined
     }).then(function (res) {
-      if (!res.ok || !res.body) throw new Error('http ' + res.status);
+      if (!res.ok) return res.text().then(function (t) { throw new Error('http ' + res.status + ' ' + String(t).slice(0, 120)); });
       return readStream(res, function (ev) { clearTimeout(timer); timer = setTimeout(function () { if (ctl) ctl.abort(); }, 60000); handlers(ev); });
-    }).then(function () { clearTimeout(timer); }, function (e) { clearTimeout(timer); throw e; });
+    }).then(function () { clearTimeout(timer); }, function (e) { clearTimeout(timer); why(String(e && e.message || e)); throw e; });
   }
 
   function serverUsable() { return !!ENDPOINT && Date.now() > deadUntil; }
@@ -207,7 +254,7 @@
       } else if (ev.type === 'source') { sources.push(ev); }
     }).then(function () {
       if (raf) cancelAnimationFrame(raf);
-      if (!acc.trim()) throw new Error('empty');
+      if (!acc.trim()) { why('réponse vide ou format non reconnu'); throw new Error('empty'); }
       failures = 0;
       renderRich(bubble, acc);
       if (sources.length) {
