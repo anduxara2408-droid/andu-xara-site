@@ -1,7 +1,7 @@
-/* XA IA - Worker compact (Groq). Version 7.0. A coller en entier dans l'editeur Cloudflare, puis Deploy.
+/* XA IA - Worker compact (Groq). Version 7.1. A coller en entier dans l'editeur Cloudflare, puis Deploy.
    Variables : GROQ_API_KEY (secret). Liaison KV : XA_KV (facultative, pour les mots proposes). */
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama-3.3-70b-versatile";
+const MODEL = "openai/gpt-oss-120b"; // llama-3.3-70b-versatile est arrete chez Groq depuis aout 2026
 const ORIGINS = ["https://andu-xara.com", "https://www.andu-xara.com", "https://andu-xara.store", "https://www.andu-xara.store"];
 
 const SYSTEM = `Tu es XA IA, une intelligence artificielle conçue pour parler, écrire et enseigner le soninké (sooninkanxanne). Tu as été imaginée et développée par Cheikhou Diabira, fondateur d'Andu-Xara, une marque afro-urbaine née à Nouakchott (Mauritanie). Sur le plan technique, tu reposes sur les modèles de langage modernes (traitement automatique du langage et grands modèles de langage), adaptés au soninké avec des lexiques, des leçons, des phrases vérifiées, des règles d'écriture et les mots validés par la communauté, et complétés par de vastes connaissances générales (sciences, histoire, culture, vie pratique). Tu parles avec chaleur, calme et fierté, sans hésiter.
@@ -95,7 +95,7 @@ async function chat(req, env, ctx, h) {
   const up = await fetch(GROQ_URL, {
     method: "POST",
     headers: { "Authorization": "Bearer " + env.GROQ_API_KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: MODEL, stream: true, temperature: 0.4, max_tokens: 900, messages: [{ role: "system", content: sys }].concat(p.messages) })
+    body: JSON.stringify({ model: env.GROQ_MODEL || MODEL, stream: true, temperature: 0.4, reasoning_effort: "low", include_reasoning: false, max_completion_tokens: 1600, messages: [{ role: "system", content: sys }].concat(p.messages) })
   });
   if (!up.ok || !up.body) { const t = await up.text().catch(() => ""); return json({ error: "groq " + up.status + " " + t.slice(0, 160) }, 502, h); }
   const ts = new TransformStream(), w = ts.writable.getWriter(), enc = new TextEncoder(), dec = new TextDecoder();
@@ -125,7 +125,7 @@ export default {
   async fetch(req, env, ctx) {
     const h = corsHeaders(req), path = new URL(req.url).pathname.replace(/\/+$/, "") || "/";
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
-    if (req.method === "GET" && (path === "/" || path === "/chat")) return json({ ok: true, status: "ok", service: "XA IA", version: "7.0-compact", groq_configured: !!env.GROQ_API_KEY, kv_configured: !!env.XA_KV }, 200, h);
+    if (req.method === "GET" && (path === "/" || path === "/chat")) return json({ ok: true, status: "ok", service: "XA IA", version: "7.1-compact", groq_configured: !!env.GROQ_API_KEY, kv_configured: !!env.XA_KV }, 200, h);
     if (req.method === "GET" && path === "/approved") return json({ items: await approvedList(env) }, 200, h);
     if (req.method === "POST" && path === "/contribute") return contribute(req, env, h);
     if (req.method === "POST" && (path === "/" || path === "/chat")) return chat(req, env, ctx, h);

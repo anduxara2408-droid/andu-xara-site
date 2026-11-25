@@ -2333,8 +2333,8 @@ async function buildRequest(p, env) {
 async function buildGroqRequest(p, env) {
   const sys = (await systemParts(p, env)).map((x) => x.text).join('\n');
   return {
-    model: env.GROQ_MODEL || 'llama-3.3-70b-versatile',
-    stream: true, max_tokens: 1400, temperature: 0.4,
+    model: env.GROQ_MODEL || 'openai/gpt-oss-120b',
+    stream: true, max_completion_tokens: 1800, temperature: 0.4, reasoning_effort: 'low', include_reasoning: false,
     messages: [{ role: 'system', content: sys }].concat(p.messages.map((m) => ({ role: m.role, content: m.content }))),
   };
 }
