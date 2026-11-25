@@ -2429,8 +2429,10 @@ async function chat(request, env, ctx, cors) {
   if (p.error) return json({ error: p.error }, 400, cors);
 
   const useClaude = !!env.ANTHROPIC_API_KEY;
-  const url = useClaude ? (env.UPSTREAM_URL || 'https://api.anthropic.com/v1/messages')
-                        : (env.GROQ_URL || 'https://api.groq.com/openai/v1/chat/completions');
+  // Une adresse mal saisie dans les variables est ignorée : on retombe sur l'adresse officielle.
+  const okUrl = (u, def) => { try { const x = new URL(String(u || '')); return x.protocol === 'https:' && /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(x.hostname) ? x.href : def; } catch (e) { return def; } };
+  const url = useClaude ? okUrl(env.UPSTREAM_URL, 'https://api.anthropic.com/v1/messages')
+                        : okUrl(env.GROQ_URL, 'https://api.groq.com/openai/v1/chat/completions');
   if (!useClaude && p.image) { // le modèle de secours ne lit pas les images
     const { readable, writable } = new TransformStream();
     const w = writable.getWriter(); const send = sseWriter(w);
