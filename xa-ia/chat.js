@@ -46,6 +46,8 @@
         var li2 = h('li'); li2.value = parseInt(ln, 10) || 1; inline(li2, m[1]); list.appendChild(li2);
       } else if ((m = ln.match(/^\s*\*\*([^*]+)\*\*\s*$/))) {
         flush(); var so = h('p', 'so'); so.textContent = m[1]; el.appendChild(so);
+      } else if ((m = ln.match(/^\s*(?:Se lit|Lecture|Prononciation)\s*:\s*(.*)$/i))) {
+        flush(); var rd = h('p', 'rd'); rd.appendChild(h('span', 'k', 'Se lit : ')); rd.appendChild(document.createTextNode(m[1].replace(/^[«"\s]+|[»"\s]+$/g, ''))); el.appendChild(rd);
       } else if ((m = ln.match(/^\s*(?:→|->|=>)\s*(.*)$/))) {
         flush(); var tr = h('p', 'tr'); inline(tr, m[1]); el.appendChild(tr);
       } else {
@@ -55,6 +57,58 @@
       }
     });
   }
+
+
+  /* ---------- Garde-fou : aucun soninké non vérifié n'est affiché ---------- */
+  var GUARD = null;
+  function gnorm(t) { return String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[ɲñŋ]/g, 'n').replace(/q/g, 'x'); }
+  function gtok(t) { return gnorm(t).split(/[^a-z0-9]+/).filter(Boolean); }
+  var PRON = { n: 1, an: 1, a: 1, o: 1, xa: 1, i: 1, wa: 1, do: 1, su: 1, ya: 1 };
+  function buildGuard(corpus) {
+    var g = { vocab: {}, big: {}, exact: {} };
+    ((corpus && corpus.entries) || []).forEach(function (e) {
+      [e.son, e.ton].forEach(function (v) {
+        if (!v) return;
+        var t = gtok(v); if (!t.length) return;
+        g.exact[t.join(' ')] = 1;
+        t.forEach(function (w, i) { g.vocab[w] = 1; if (i < t.length - 1) g.big[w + ' ' + t[i + 1]] = 1; });
+      });
+    });
+    Object.keys(PRON).forEach(function (w) { g.vocab[w] = 1; });
+    GUARD = g;
+  }
+  function validSon(line, userTok) {
+    if (!GUARD) return true;
+    var t = gtok(line); if (!t.length) return true;
+    var known = function (w) { return GUARD.vocab[w] || userTok[w]; };
+    for (var i = 0; i < t.length; i++) if (!known(t[i])) return false;
+    if (t.length === 1 || GUARD.exact[t.join(' ')]) return true;
+    for (var j = 0; j < t.length - 1; j++) {
+      var a = t[j], b = t[j + 1];
+      if (GUARD.big[a + ' ' + b] || userTok[a] || userTok[b]) continue;
+      if ((PRON[a] && GUARD.vocab[b]) || (PRON[b] && GUARD.vocab[a])) continue;
+      return false;
+    }
+    return true;
+  }
+  var BOLD = /^\s*\*\*(.+?)\*\*\s*$/;
+  function guard(text, final) {
+    if (!GUARD) return final ? text : text.replace(/(^|\n)\s*\*\*[^\n]*$/, '$1');
+    var userTok = {}; gtok(lastUser).forEach(function (w) { userTok[w] = 1; });
+    var lines = String(text).replace(/\r/g, '').split('\n'), out = [], i = 0;
+    while (i < lines.length) {
+      var m = lines[i].match(BOLD);
+      if (!m) { out.push(lines[i]); i++; continue; }
+      var j = i + 1;
+      while (j < lines.length && lines[j].trim() && !BOLD.test(lines[j])) j++;
+      if (j >= lines.length && !final) break; // bloc encore en cours d'écriture
+      if (validSon(m[1], userTok)) out.push.apply(out, lines.slice(i, j));
+      else if (DEBUG_ON) { try { console.warn('[XA IA] soninké retiré :', m[1]); } catch (e) {} }
+      i = j;
+    }
+    return out.join('\n').replace(/\n{3,}/g, '\n\n');
+  }
+  var DEBUG_ON = /[?&]debug\b/.test(location.search);
 
   /* ---------- Fiches de mots (sans mention de source) ---------- */
   function entryNode(it) {
@@ -222,13 +276,13 @@
     var out = [], seen = {};
     function add(list) {
       list.forEach(function (r) {
-        if (r.fuzzy || out.length >= 6) return;
+        if (r.fuzzy || out.length >= 10) return;
         var k = r.son + '|' + r.fr; if (seen[k]) return; seen[k] = 1; out.push(r.son + ' = ' + r.fr);
       });
     }
     try {
       add(engine.search(text));
-      if (out.length < 6) {
+      if (out.length < 10) {
         String(text).split(/[\s,;:.!?'’"«»()]+/).filter(function (w) { return w.length > 2; }).forEach(function (w) { add(engine.search(w)); });
       }
     } catch (e) {}
@@ -243,7 +297,7 @@
     function paint() {
       raf = 0;
       var keep = statusEl;
-      renderRich(bubble, acc);
+      renderRich(bubble, guard(acc, false));
       if (keep && !got) bubble.insertBefore(keep, bubble.firstChild);
       scroller.scrollTop = scroller.scrollHeight;
     }
@@ -255,6 +309,8 @@
     }).then(function () {
       if (raf) cancelAnimationFrame(raf);
       if (!acc.trim()) { why('réponse vide ou format non reconnu'); throw new Error('empty'); }
+      acc = guard(acc, true);
+      if (!acc.trim()) { why('soninké non vérifié retiré'); throw new Error('guarded'); }
       failures = 0;
       renderRich(bubble, acc);
       if (sources.length) {
@@ -271,7 +327,7 @@
       done();
     }).catch(function () {
       if (raf) cancelAnimationFrame(raf);
-      if (acc.trim()) { renderRich(bubble, acc); remember(text, acc); done(); return; }
+      if (acc.trim()) { acc = guard(acc, true); renderRich(bubble, acc); remember(text, acc); done(); return; }
       noteFail();
       out.row.remove();
       if (shot) {
@@ -405,7 +461,7 @@
   /* ---------- Démarrage ---------- */
   paintModes();
   XAData.ready.then(function (d) {
-    engine = d.engine;
+    engine = d.engine; buildGuard(d.corpus);
     sendBtn.disabled = !input.value.trim();
     var q = (location.search.match(/[?&]q=([^&]+)/) || [])[1];
     if (q) { try { send(decodeURIComponent(q.replace(/\+/g, ' '))); } catch (e) {} }
